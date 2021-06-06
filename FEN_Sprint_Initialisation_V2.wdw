@@ -1,0 +1,749 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_Sprint_Initialisation_V2
+ major_version : 25
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_Sprint_Initialisation_V2
+ identifier : 0x2eb43cd140b70c38
+ internal_properties : BQAAAAUAAADVLkOBDPNr8DjrPrLX9gz0/YI+bkIDHkaJQjaqlC0fdKDVKQEXsgsVvsCTcX6MBkExX1xyx1DtYgi3bx6PxcLqhHF2M8ox96z+pTtj1Qk+/as9f89a8XZfDyA8en1WPiJODWwn5N+vxvRI/BQeoqaKM8yNwjEON9bCmITeKvrIDDaNu2fuPVZZPyjswrRaPDGLx5ty1805sS74ZX6CToEtwdL0SoPJJrGzgWrH+MHt+wOkY5BqDkW0pwjH6q8aHnhnPzxm4BzJqGv+LBi/ble8l17WlOT+cvYvKfOtOpTp9UdEFr5wJHUF6V3AIJuJRgGGJhiXK4D/AJcRmwCemICCPy+yQ5zw8X+Cy9ouRZd0fX/BqLbTwpFG6MWXYvxBvJl9IsTT2maMijoRdH7qbY6k/xJmqpGI4cQboDeNmnIoatjgWEaQWiZ6jBOWspLCcgBrefyiF4qdIyWtIDUj8mZzp1ROXpUe3szUismcNM7XDPoMgafHkBLUF/96B6OsifA3AHS3x5L9hOPdDop4Om/roDCsngcmUjwxG/LndEORP41SQJFZKZMg/vmMgT0AYFvQ4BSoSt12elhQGYRAccxihxc9YLRr7FK0+PcW9CwarWLLCskhdEV6jt9s21gr90gYqKhvBV7aRApbnt7Y+NETaNGsM2w6ZzLqPUve3LFJEq53CV16QJNs/CX6srD2p04G6xayUwM/ojmSSuKTTA1ryqnWcSqx
+ controls :
+  -
+    name : TBL_Taches
+    identifier : 0x2eb43cd140b80c38
+    internal_properties : BQAAAAUAAAB0BhZjiDFMkAs/En4EY7dupwECVvmxNQpV+RERuDn7Ie4X+GZsQMR+VGzkNbblC1kE/IF2KPnchQqch9zE4ldAUMG2T3fKI6Kwaj8E5eJtf+BBhLQM7ZuPM5yVOnj61tScvZXQW6CNNU3jN8V/3PZfkzWKhXVbKSnWv1zvQMORdvbrt0fl+90X3Efy99BaF93dccXoV1XoAhUcciiDKO03l6hH4Sz2r3fyiVmRkgv5qmZXdAEjSbgp71lhDBqOyX+nO+CfLkaswuspMgQsGGKrig8yLDPRHyEcHpGXB1yFRp0dqEbNbSF0/Lv05C/HF0b9r+4CyyIyiSXc6KfqYH1Hw8I+infrFKZscZy+AnVY/+d22syKBHAgUZ5SGECfvrbah7FH62YClLgqIfbBHVzgtkfozRV49O1Mr0s2Zj3M9q9cawJnsS5bwaYWYfBHFWSatPGun+vQeZO4Hc3fum2qL2IJAFozB6pzbzsBxqZ/7/SW7slOwTpcd1uUZ7c7rRhbZG3chFqJgJZLtoB8hDpf4Zl/CuArblEDicwrr1gFjchvqBHSZ2o0wJJCuJ/MxjZ9Q8KIXHGx1oaaKIy/m1c/IKF/Pi4gQdbPDZeHqLkbudoY8hSrIUz9WeduA41FadmSfLAE7fOKtg3MNO3eu0bYHoBr7A3JxspZc0Re3SQ/Bs8MxDWD4+cdx/Pfw+Vk1ue93dNK66W95v2jtCAdA7LqSev4DSL08IgiI8gRDZsYFlkp5va+bEv/UUxXZDX6eqOCvWAaAYkEyr0pedaGiZnt90vraDVpeMLfhXXMUhi1Ah0oW7FtO75sWWZxPPXXBQx2wm75Eyo93XLHAsgmvFMHX3ed6e5nV50FH+mkXtjtAlhjGO6MICfcr9JQQZphgiFM5IN39/vBsC2cN+EefmWgZTc9DDAZuDzdHUkEISW5YTJOUlNcDoCpppGmp+UMHjZ75sNVFfhXJswYr0RokTKzuXrpz1aAZ1kKBQV0q7mZjNia+t5MM/28RH/QaTEGJSiY4hFaujrLrKvtUB/rndXUtsd9GJnKW9RRYHxRTmAWmrK9od3zYsniV6m05hlRaVC8gHU/eRQ5rFO2TMdxl+Sjbzmyz4hkU7UTuqFYzK6/3a6wavv+gEJ4HaMrDSU6/6jktZIjkLe1tRp3SxM2PTG9WkY51C91NuyYMIH0C+uO8LHOMIvULAaGarn2fvr5KmquAixDZZp/7D5EOAc1+vPSYYfiTx1j6gV99H6t2yZFh2cb9jIrPrjCrJvmyRyMBiFtkSwVkef9stSDhGu9MG1YIo62LoxIEzvocj/4zXc7tMX/RTBH9D1AfIVi72DXN/WTL9FYoIG494E5LZCNOkh/LCxKoVFS7Uk57///49yyAqn1UBuoOIZKPmgG7ZpD9xx88/5cV38fcmmX43ylK0D+iIuHxkUwaKPGBbKgSuTN3VPnqqmzi+Lk29m8OglaA0uXbMP3DSBmb4wVY98+x7GpJOQXJLZcJSX1PfUBiLWlOhGul8SbVzjw4ZFlu26mfJ1tvGXL8v6BeoHkvI7PFfuP7oace4wsnxbwJ08bnsipW3ASnMHxtdOw/tibwPv4DXT+IF2sGHk160igqXWfL+2sD4kkerr4OxM1vhOJgA81JOm9vzqbobzVO46ow5KvPKaHWADTQzUnpljRN539kC2pspvmASZpq5NqYyVB8Rxkyeafd1YOEvPVtYL7vjSpoqtdlkTFdoDqL1+c1wr5rBBg/5eLucBNwEveiXh6WYugV+ZAsc0UjdkQD8LxRMsJ1/VL1FGbQB2jpjKrESOLzbL5uGqR8OQrQkA70eMZKYQYBFi0kR5r0wWlU12HTrw8rK9URCfVttNwfLM30QnqhXvcsXzhreZiFgZ5GNCshd/lz6HEpduQRs2Od89Cxur8AyCJcmB01S6t0HgXwBiLDb3VC1im8/AhFJG6m2tmr0qPzZSv7M0qUi0jnirFrtD5oLGwM94hr4EhzPiH0ESXvfLuNSOPXUMAANRl3YrZRgUwsq4ana1oyRQpY3bYjN1b/eD3kK0cpgxmUv5e5nZ3seYgftCL3TfRIdVNfj2ho2s1tvO9+PB7irtKhJLtFNIgh8Y3G5coWfU/hGC4k8Bmo55Q94s9ycXObBowZf45BB0M0Ud2HqM6zVtnifTFzT14e4XEgLHR5gSbYFIxRd4hw8LIcTOY/iqkaxvzhO+N8FHhrSM6OmuweVltcX5KS5oUVCCnJeJirnE4o0b6gB0Lz0euaS9jkboqb+GIejnguILKwPrfdGahVb1F92x69gDzn53rLA741uLmKrhgPfjPelzK5u6/ltphnbk8DxQBORhrCL1dffESFDwfgtsSNl5xkKRe74wCNIuf8dWqATuHB6GjsMzL0o7FgZrMHoJ+E16b8x63A3+phOUw7TalcbigzXV4LcMPGr7kiMaxpeprquVGXHjhkF0XlDRtWzqfPc4mjeHNPCwD76ipBL4Cju6kUrhfjjrNQtCRIFFEN5q/khh/jbHJ+3wIUtt3UuKBrBm1xGrSJFjRo5SnuQ33Gv22BLdwvoTt39p5ygTD26WyLtksjXzfzl4QCqfDJkYeTg+mLDKSdACC6/JeXiT9NPPQzohyCYvMW+qbOYM5vnPMoWUN2+SDJZA2Gaufk0sFc1Gmws6+dXD+KxmT2zLype4oG68OvnB6Qr9OS7waD2V80jBGwmJpvUv/ljS1rcxxPwltDfbeSnAT3U8d4gR4Oi5xJknopTYNNUQLretGNO4zksYjlug4ht5OngURgiAglo7g0fx6Rz+w7vImQqGtytD5PQoOslGz283sy2RQJr9sIO2NJ01NvopizUkQBFRK4h1XPn50sXTsODvVLEVPsw+acWE7bfdDL3JLmztPMfKALt1omZBFHuQnoclxUmWQRn94O8V8BP6PJXmzTaOnlUq4jvSYB4WPTbsacHwmE6L6s25GuGAY0A+7PewHB0lHXz+GegpVtvmmrN7mqL3n3DX+mveym5oMMn+3hGZTt97rm6UKPAfLaGLl2fBFji+X82PPBh5hyzLnolGJxg+kZSrJlBI7sQOPOlt4vMxUesY/7MT8P1oRruieoWfsjb2KYzQCrq1kR5taHmByIQ/jZuEzfYu6ygi7Hsxw7rNP90eeRcNJVc1U8VbC60Rmlc4D6JyEuEkncbGqjkA8yqXiAtB3kQy+YTY9j2ZHin+pGPbu/j+7IlxNIXokwP963vaPJ/VJfghgfLk0Q2vGQFLhdf022P1TdWwOd5Z2RbqUKx+N219L+rTH2Zz7wbPTdeCOMvlXA3Xj+DP2sSpM2256Bx3qJbLbK519woOyBdeZ6jbdAMWZ+HQWeqTD+TvZO+4rtHp90NSLx1N6rwpxl0IqnJpVVsz3vlNFneZ+hTjcI9Q5qGnwtnHpEI5VK4uU8pB54gqh7vPzWcGXVSTZlD8sRzrSdKqRdGeU4jSjyZzTRoacr+5Wv1ZzTO4j2xUImM5cEm1g10uCBpzVJxtHR4dlCbvhTpSoa3JyqJURKJcCvb+LUOuomvvDBbo+uG/+zrwwAO/xBvC+D+qYu5fRErxVxUg+p3JwA08WDuV7wp6J5GfAtQJ+RzwkpPdVKc04gKZZK4hAAzhOy+5zWJVpXgV3UctM+iXm7qbTz/il8JC1zzDYjpoa7No6e15d2vyk9EG8aFa40ee2eDMAYkSz+ILgNEXxEscBcDEKgZg3iJ2eVnciydyiimnNkqxBpPAigjFNH2CmLRa1Aj1H4XEaO4GtJn7q32vqchPMdTIiYRJCqQKgMUzfY0PfsJTYyOugrIU6U+XmpKnCMYnTCnklODIFnWWaJ5mgZ6PE7M3trLwZcBvxIOj6mEv3rCP7kpVQdxES1o8Oc1z5Zm9BTffFqkTv+waCc6WPlpqf8VtzEuOVTrq8TUz1PSi8FGIKwh+Mbay1WqAaxEysUdTRBGEgEX1peUsxdyqd4DIcWBDEfYj0qw+WvvRAHnh0uW2g9j50ZhE2AIwUEycgacR1NkkhbvgUqBtoYY2BjN99ijwcZZ6y7Se9Sg4gsM7X90buYjXxIPezjlFT+qYBULuL1A5hFVLtIUEOFilux2GENuH/PT4cFiiFd8rj44Uxjig88safBkS6Pjs7bB1RN2mxEqj8aPgF9lwBXdr3GKMl84mG3lxg2WGJOnlMHfExNoVlkWS5tOp6EIB+fAn6D7S1I61LNEkqqf9BCTRe5ALJ7xCVYdJmTlG3b1IVTLcALiHmGWor6ysVetIPONNVKAwWhI6EYwzCTUCfA/k8G5/axDwvZDW/HWAH4DWHz88rxHw0IDTnRdkWXZh8wwHsCyjlF6rS9Y+y2gi2kvROcDikofpc19Z97JVQ/U5W3MKh9dyxFUrM3mI1ScG+36Ij9tQbQI4BvgC2m2ZnG37vX7oH6XdJ77JlrOoFfVlsp7+w4axv58AFN1gvbgw8BcJv+s0XqDRCX6FxLX9gTWjhepVpt279lMSkch7zgUCYQti1G6gm26NfPXFtcpGoNphbT0sWvMkv23iThM3FtUN5J3U1loofZDHw7igBr6hhgdtdXbBJtQaCDdqjhjesuVs41P18JvM1jegD0LQTJxGoejC9u39u8x/ppyxhm8WVkgwh32RKdw1YahGpfS4WkForY7RPnokJRL5WJBfbL7hTshd9cvyAOLiSvXmo8Ghkp3SB/j6tJCwIkFrvdlTqQef57aNxzxMlneXiSYPyDQ4mdDL9uhn7jkkagJixQ+CZlu2uNIaRMOa+XMle0KtAavuASInTPYl0hI1Z1XIHhpW0GytFaM/Vd4LfJcbwYKraet7uGmF6Dx1NxXaIV8nUFhHM6jLGgbus6rMPqUKrxzP+ptqCNQ/+6yaReumPUU1bqEbbFLJhXazKVNFpm6JAH5RpvTsMnjbJzihXOPviBvIcAlXjlHbD7dYK2T88tB6E/BKcTnKRBCsw1223GpbGWaVpjILysym1ZRoKKFzL+AkCSVk/pevXsxfVKyn8kA/04+vhF0C/98j8lbU2P/brlY4M/GAB6TKXyzVqSUK/xj7xaEhw+QdrR6hm9BsjYdDB5rsJ/GOrS9jt9ypTuwEkiNEy7jiDjBrFGOqg32uEe29NU22Eo2amiGtJWQSbDZ4SaValpQFBCKmoMOWn6ufvXA5X8riE0IvBYTaG6qaOyqxJ+SfqqeHKZl5xt1K4ux3Z+8MFNetIaS6DaqUyaXqJ91U4DNUVqLExCX9qHaxNoIfsQuW+kv36WKdmlFeYQAoZ1oBMW/2mo+ioRaf7OK7htiHMpFpE1YXgYdMUb8IIYBpL9ntc1Huuz9LMEgikq//N1znC1gADzC+MqOGWGoBwt/KLlF9TSqIonrBZYHAdQ046Qq9EY5JstkeVbbETgyDLwiwvKXzFguZtXHa54uStLLjglq52x37IBnMsJIn4D4JYCQ7gAGrfLJxrCWP51AWSo4xtgLSbpQWfLw1TCY573m4Wd90IkWD1wio6fHk5Om4OgTeJPV1BKjRcW9wPVzzVSZHQsB7Av8MLFSWYu46UmWUJooiFuM1QZw84kh92Q7Ya+WzHZ+NNhHC4dVFiQ7CHxTG3Fhrii+cCCeGlblP00vXEzIR8IQYTS0NcqniDLQJA3z8yYmZmsJAjJpp+glIim4OdrBbdiwEtA2fLu0cZKRV0BYOVgGcrOIdBMTGPoiKiLDOaLGgfKjTR9PVWK7Cs9OezopHfvaWhtwz1VLv77p/1SgH+4qi2jXBozqiZ79NiY38RRb1lZnA9GmixSLXeILeVfIn+mESakrMLbw==
+    columns :
+     -
+       name : COL_Code
+       identifier : 0x2eb43cd140b90c38
+       internal_properties : BQAAAAUAAAD1RU8w7j2Rnz4R78tspr0zcuS1ubXD8nXzAvGySi+Uip9r3nPEwV/cOQ2GDILuG5AliluMgXhsdF2zQC3v4mu16d1k7po9bKebg+wrnR8B9daKPZWtvUHerKluJXr2yJuyMRuSIqXK746++EgmtVI7bz9dMlxkeeuM8XICzfP+5arOOPD6Hpd9b3If42dqmlk=
+       type : 2
+       content :
+        internal_properties : BQAAAAUAAAAyaXVrnpYVbw9YKnsl6S6JoqRFk9cV0OD8G/knEkNufX1tkY+g4ZILlVQvOXgyby27uXLOCEBZcjQoOWArFoC7gVXnIIT1+cK2XYFWZAkKiMEiJO1v7OQmE7/REs9LBD07PFfO227Rgn275uiK6fY1qYTM1Z2DkJDHr9aoKEcobSpEt9Ka6lw/u2De46lvBWi+2J7cFdP9c5Jxp+I6avmGoLFNgwXk7YHtaRqMxlK2fX44qiCMZ6hwi46wSJw6kLMnZAvXi1GqdlpxqI2y0HZeb6/bNJBmCAZiVWQY2SDhIbMF3D7vOe3+JTet5/fZ6kwRkBortgSoCTQiaPP8lkzD4Cmi031hiu71wyj16w73OL5D6KsHt+kK2HJvIlFxgqNCXEEgqIVXNYRcWFeEVr4on3+1bSACFhxsMFSLiwC9qEpXcTRu1tzFhREDAKA0jZ0bBL9JU1lml9249CkcKPPL3J4EcJAaqwrEDXH9921qGgmEotXEA1bXyLUJm4mtSZfMv97teJbFuf6OMGTna5ICVW6n5eBudvnbeJCNne4puSt7rHcwO0TdUNdm41m4Z83Jt/6S/IQQWgS94n8GwieUl3NxFQKcP8R4+Lhj77feegPcuG6lpQMFpWn7HVXPjmsAe7n9RvRmii3z7mHU8Hdn+sPAGvHAu6MM1N3w5FyNtHqE+s9lbkeoZhBs0MnoZ/L/gj+GpKr5lbgvPgjxftdcTmR+AgkkRPsXuD8SGvY9Pg==
+        type : 2
+       code_elements :
+        internal_properties : BQAAAAUAAAC2bNIn1V6I836LS1ilEa1aAZnSkmjDSrav710RNhbyM/oKPNOGEtUsNF+qKmSFWRrxWIciwCuPllXtvGOmH9IjMg==
+        type_code : 3
+        p_codes :
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+     -
+       name : COL_Projet
+       identifier : 0x2eb43cd140ba0c38
+       internal_properties : BQAAAAUAAABvevMD6ZZcxJfLPAvbetNq1j878UahJN45+FawgSKocBNS2p+88aZqoqSvGlTCtQDJhViRJYn9/eIXNkS3jpqMocIg9iqv1olWwRmU6IBkN7vx71vpJe5y7oCLgTkVbbQZU9wGCjfmZfZFYBO1Ar6n1Y4l/pykWb5hOqbK/AmOnAYKnrXdEeT8yJu5Jg==
+       type : 2
+       content :
+        internal_properties : BQAAAAUAAAAyaXVrnpYVbw9YKnsl6S6JoqRFk9cV0OD8G/knEkNufX1tkY+g4ZILlVQvOXgyby27uXLOCEBZcjQoOWArFoC7gVXnIIT1+cK2XYFWZAkKiMEiJO1v7OQmE7/REs9LBD07PFfO227Rgn275uiK6fY1qYTM1Z2DkJDHr9aoKEcobSpEt9Ka6lw/u2De46lvBWi+2J7cFdP9c5Jxp+I6avmGoLFNgwXk7YHtaRqMxlK2fX44qiCMZ6hwi46wSJw6kLMnZAvXi1GqdlpxqI2y0HZeb6/bNJBmCAZiVWQY2SDhIbMF3D7vOe3+JTet5/fZ6kwRkBortgSoCTQiaPP8lkzD4Cmi031hiu71wyj16w73OL5D6KsHt+kK2HJvIlFxgqNCXEEgqIVXNYRcWFeEVr4on3+1bSACFhxsMFSLiwC9qEpXcTRu1tzFhREDAKA0jZ0bBL9JU1lml9249CkcKPPL3J4EcJAaqwrEDXH9921qGgmEotXEA1bXyLUJm4mtSZfMv97teJbFuf6OMGTna5ICVW6n5eBudvnbeJCNne4puSt7rHcwO0TdUNdm41m4Z83Jt/6S/IQQWgS94n8GwieUl3NxFQKcP8R4+Lhj77feegPcuG6lpQMFpWn7HVXPjmsAe7n9RvRmii3z7mHU8Hdn+sPAGvHAu6MM1N3w5FyNtHqE+s9lbkeoZhBs0MnoZ/L/gj+GpKr5lbgvPgjxftdcTmR+AgkkRPsXuD8SGvY9Pg==
+        type : 2
+       code_elements :
+        internal_properties : BQAAAAUAAAAEfXdxvzQadzvB+1nfBxi2rny4i5dUOZAFKqpUBLh916+QYdsw8WEikK8mrQSyyKW/KLpym8A=
+        type_code : 3
+        p_codes :
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+     -
+       name : COL_Description
+       identifier : 0x2eb43cd140bb0c38
+       internal_properties : BQAAAAUAAAACXMEhX/EoGJavrt6lrw2cklv4x1OVFVppuHPVb86Gn4YhuZts4VQ85iQafWcLFykiHeV71qGAtRpdkqwS0a13meauw9zbj6H/r0U7eTBl6OqJJIgcR+ENcouIWP2NgDUjKwXfTui6auilBdJUadrIlPN8UBJBBoaZJaYrYKOMLz3WDGLQnwGsDZsMbWMP7OjkMMmR8uIXCV2Lgw==
+       type : 2
+       content :
+        internal_properties : BQAAAAUAAADAehz9zXi0aq35VMbG6ODRgnTF+tHGHbi2Y8egBH/2OHI60TqbjSlbbuezjjfVn9yZ6erNLvV3pecBnyg0bOGIHvGuptgfDiZ4qYofTdIAb13LENRgMVRjS6+0fykwakAoyLEcUdlLMC3NHcZl4L0tQ2YZm9RMR6Mak3Mhuv/I2KfDi+LSzmS1xFARMD0nXPag2dZvLp2WUkjHzpFPzygNmaGSgocyl24wEAY3Hu7VDuOaYxdJToaj6nI32FDBFGRtN33cBgEi2EiXseI4cRU10FPXkA0oEYEhnYR9iQcPjXqvfpeU9A1IJc3lsDNJ30G9YzM0F83tDIb2JNsysdNHZIePiaul5Xgg7aUTe715MJiLQbelP4CA+uSHHXbT9jq411JayW758xKmYAmXSClhG9knbmvXmMBgSm/HsScWmhxGnb2IhF5n6i+6/DeEqripyCaFdyK42WNGjJf5PXm6dc9dkvXeiZlvJ4Leku4OHvWurkIJ1kjOWkUw/8uWoJ4Sx7qtuDxzxlGsgCmtzCPFZf2ozSmXCj2VQjMnrXGBA6OkEuyIyV1vGrHwzwAx3SRV5/DNeU/UfVkC1t1C4ixGBSkZyj/t6weqvMgDq08dTIAOZ/E35+Mr5WfiKUuX4dfFta4aEvONqeseSlHDRjS27+v+19xqV/nDJQNgmyxseTocoV108VK8CwqjcfVNgbVUCQe1hyeQgxjvVeBaK3HdqXEDjiYYsEMUvxqF
+        type : 2
+       code_elements :
+        internal_properties : BQAAAAUAAACvMqYPNr9zQHR/dJZJIXnx/yIE5WsN2RMhgYCgUSNQ46EQf4wRVtDM1iUf0RFwxLk0F6KzC5an+xgvr0mz7grMVHGYTnAMtDY1/erlGI8=
+        type_code : 3
+        p_codes :
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+     -
+       name : COL_Poids
+       identifier : 0x2eb43cd140bc0c38
+       internal_properties : BQAAAAUAAADADLPtc8nZL0EJcVr5TZleu7JjJy2ib5LGchB9G8b23J7G3HzYgH3CjQcDwT/dl+7RwkTVMrAIedxjx4tDxGxAaqjGtTRHo1Lyq4R+zSo5feB88unbmtSHA0IimMjlT1lse7g2iXnsJo8rjqowyKfZbX+KS4gLrhUsqbjBlJStHT2svVnAeF4nEFR2izts
+       type : 2
+       content :
+        internal_properties : BQAAAAUAAAClLNPUwxecAT3PEPxrtZUAbx7US2uAOfgfYKD/632MaQs7XtwYfLWcNXU/v4gdtrJ67kgLw3ShABwqQp2+I9PBJwmgkZqnUocSoCRYbEzev8IC/glAE6d2OoN8ripEZGlVRigPniuHeE26Lz5NUM8OyCS1tJqr7/ONOyfHaTbr6MTo4oheMzNsmxWVVUyMq7Km33bau+F/uj/OYn2Mk/D5AOjcJGN+D1eOmgmOJ4Ck5DA3EjvWdG5PRP2ynV+XfArCAmLAOTkuwd93G7UBdyd1pW02ZG2srcMHfAoXMLO7s7ndErTaz5XvSvNJLHbQCU7iVjJ3lUs05I9Cxp7nUYSR5sMZ8naKoAdAK676iyWk1x7j4rZmhXSOQCmcegJ6Pprwzac25JxCPjaBIFy4DB3lw8qbIwA1D3cgAVJS8bi2+aTufQzMRY00vT6hdw7EWuCTrbl7J4L3yp0BHpToumCohPu6nvjD9v9QTgNOJzMhBd+BAEOU7n2iMHgpbiULAjhGBsx7mMWs/KDxRFNPBa+Hs33HmaZVsVrvk2rQ2RBIdmNuDFvW6rcSfC58KkHetnQ11HiUlHvt7T4agMa8Eow35YaxobSdWjcSeSpeo1XvAdFnWuDt5GSoofpPLnWRVerGAEM3FnslFQ+mwggMgp4y2tJGkI1TrIoUx2EhJBq+qdqlJAlxlUxnetEAN/Fq3iOHF2ydPm/T/OhrWmA8XgserCSKTbKD2cyR+QCJxSc3oSJEj6+LAEc+BDfxcz6o0g==
+        type : 2
+       code_elements :
+        internal_properties : BQAAAAUAAACIEc5lW06E9uPCdwZqX872s32pjOC9A+WnbM5veOocEdAJFpDIHFIB8XwAsCRwbHxTEhxGXgg3mXQmgkrrrA==
+        type_code : 3
+        p_codes :
+         -
+           code : |1-
+            
+           type : 15
+         -
+           code : |1-
+            
+           type : 16
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+         -
+           code : |1-
+            
+           type : 17
+     -
+       name : COL_Sprint
+       identifier : 0x2eb43cd140bd0c38
+       internal_properties : BQAAAAUAAAApqeOkgqECcojpZ4e8CLPho5eaHXSKbGUcwA+T9Uz/uknWaaIde0/y+Y56A4I21rQpDzGoNUh8p5iJ9thGHWa3hHWp1/pCu8/SDwQaQqZYM/R8J7Kv+XHxp4JWCG+TJPvCGVyM3bziyy7O1FVW5rZdGXoVSzZ3w265jrwRJC/Vmbzu9oYg9F1p4uaLf/vGxgU=
+       type : 2
+       content :
+        internal_properties : BQAAAAUAAABgaZgRBqvE65t1PuDVISMWV6xkub3QjU5JImLeCR8m27LtIrbyxAnek2Mhg6IBpAQWNPjxNfRNprLIjPVU09VL/8vsCxwnBmXM4nqwWtSsLWp0fpc6K2NAcMleToiM0t/9NHBd3HfvWs+k/foHVEkEND6hruwjI81TObG7u+L1toSqImb0h5tGZdfbOfaoJajOWfYIOR2nePmYHEUSAwIfeIqYlu3WyyFolAsKSWxKlkhNvm3kcNY50tuEtaX/EjjyRNYC781eE9V93cHruwlbPWtiLpug9Wmx3nQz+j+R0T3rEqJIo+3NKAFHJFwgD1g+lK7Zj3MoWuHkmKpxTRZzOhndLFj6jJleoVACAaV+JUrN7hj4BchwrscextQuuGujbsC9T28ZrbkCscGtN3q+KkcYljt4RorPzp8LsvNv1rOLim9zeJzTXOveqGfXWx0+5mpKSoHKVVDaV8kldRklMzAnYX/GJfKHs4hLLALiinIieQo/YQQBq9HSP/ZCV8nJ/3WCxwz3B3cOcWiUlMDU/taggPmMxG3yBOtVbjuh067H1SL97bYRd9eF3z7dk638Ef0/Px6MOLWPdU9VnRX00OdayG8w8RpxlicnXIQwxpSoU1eMky/ThJvQq4JsEssp0azebYoozDZjP42JEQujrTMnr3Cu4wHf4Ap+afUPPvGiYZyUUAvqMaZlnPadP/j6kC28OXL6i7tUo12ZgY0UUkIwCN1CpB8kStH6dpZArsHJBMpuZ6KZu3y2tnltlw==
+        type : 2
+       code_elements :
+        internal_properties : BQAAAAUAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
+        type_code : 3
+        p_codes :
+         -
+           code : |1-
+            
+           type : 14
+         -
+           code : |1-
+            
+           type : 15
+         -
+           code : |1-
+            
+           type : 16
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+         -
+           code : |1-
+            
+           type : 17
+     -
+       name : COL_PoidsPrevisionnel
+       identifier : 0x2eb43cd140be0c38
+       internal_properties : BQAAAAUAAAATI3kyb28h6IR16uKIUwuh9u/IWATlP7wmf2ciq8720z0IcJgce8LvTWVKO3vArQd7/+G+VNOvsQz4Wf2qKsoQwyV+bclMXTrynnqZFCFVJ+CXBmt1UbFC7dkDmzoA39v8AlHH5wwsvrzX9yszyRf7GhVst6Q0sAvQCaQcTOFSQ9ER426ZRVoPWosUcrozLUmAyI43lwmPCZG5
+       type : 2
+       content :
+        internal_properties : BQAAAAUAAABNEXVNH8qEGwbDUbXnm+HROAvesBNjFGbRlvux73wCmcmUg7dJxmNUjAmqfjgw1y0dBj97MNbtBTrTy3Wfbgw5b9iRPsPJqr0N+OPx6jLK9hTASOsJ+XinXmbrmVTygFDgc6Gh3JXlUQ9fwN2+cK3UICGINRF2bV0sUhvms7W3khrcT5mfzDN4qavmObLTd4zg6MLmK12b5FmbyJbqYF4BQlZ+V675uePIEHBbCxgi2e+yLC5gi/WAvrHdSdd8gq7eY5CPiEvsLUn1BlWKP2klDnJCgADkt5BAo1mqEWKNhFuUp2GLW12EB4EDMNRWtlBYiRnsIoXy+ZzzeJ0xP7jAAlt6DZCizLSGjrbnLHP6UhuIzGRkJyTsw1zRzi9XPl5UQIubcH/TFDNDlIB3p8j5pwkJYMbe2PEBPaie9IslO8aBeW8wwjrQOPx1SxOlCdj7ajV0FQ3E2LRfZggDhT8Cvq5syTpKTw/B6sHeYJBs/bfQJuBU3ageFaJZlJrI+UBOIwJSHKBFqPcHkHmAltJVcWDr8KTIysj+o5AcOl2jWPWflpSIoYYoubBUSJJ7D0Jz0+jrOhTAX0fYfHStF7VNK6FTorBIZ0OJUcheukCc4YHwev/xT5Ms2gbZnKa6lhy4vbcqYKCYy+hu9OZph/l8lGN7Gj8IDHnfhUgOidkbikDE9aNQjHBKpiWwlf0UmxdsJ3TGoLfPjZluReAFK6DdsQb9DBR3J8J57X7XsOn/kwGxDmUtsMW3J3qJAg==
+        type : 2
+       code_elements :
+        internal_properties : BQAAAAUAAABlSx9CXMBWSm00ZveG4BC/jVtewifNxORexKty1oSszTHUMV3UfBMQgqnaG7Kl5it2ObFfR3V4yKrTXQvp3Cop
+        type_code : 3
+        p_codes :
+         -
+           code : |1-
+            
+           type : 15
+         -
+           code : |1-
+            oTache_tmp est un ClTache <- zaoTaches[TBL_Taches.COL_ID]
+            
+            SI PAS ClTache.Controlle_Poids(MoiMême) ALORS
+            	Info("Poids non valide.")
+            	MoiMême = oTache_tmp.p_nPoids_Previsionnel
+            sinon
+            	oTache_tmp.p_nPoids_Previsionnel	= moimeme
+            	oTache_tmp.Enregistre()
+            FIN
+            
+            PoidsTotal_sur_VelociteMoyenne()
+            ChargeCbo()
+            GestAffLigne()
+           type : 16
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+     -
+       name : COL_SprintPrevisionnel
+       identifier : 0x2eb43cd140bf0c38
+       internal_properties : BQAAAAUAAABAng9rZSJfe7mq6LIOFnGVFbYUrk4Gh5v3DQQQrzalTIj+GQiC0qSUI28NYP9CWF+bg1C92A0OcnUboNe7y7uPsnFLoCmyibYNuWLNHwlx9VvA1/V+bSgCU7BkVzlqAdct8YbjApngF5Pl0e+t9vLQ2A1Mr4jPiRUEBQJgek9iyqifQdhULAmozprfThU3qllYqFdN9ihRwxvJQQ==
+       type : 2
+       content :
+        internal_properties : BQAAAAUAAABUBkyUVoqWfbbjE9URFUXtrNceIp9LZhChZkCXy5iCjhUSdavvHMfcDs8OoPDguU9n8IG/5phV3UgNn9uLevJ/IYrDUs3LqrEH9vMbAhpkkI6CTusXX3wTjBDXL3DuFmbmOQcxRgt5mZGFmG86/AdWmqMOtZtwbV0WuMs0Y41VKAjiQaUlUqeYm2liD/qrvXqu3uRq8TezeAMhTFwawHibzJiYi/QTgeOy/nS5AxAESxHMfvqODcW0FJu943fEuKxcIR7nbo203Y9XekvC94cDfLik1DLuXzT6+VG8Acq7Uk1eCXXBfRUEtbPXmmACLP6ye+PQ3OOG1a7BdG/Rh+LChNXo/QK09MAMEEJd7EsQeIUibsBKiXy4kZ6RyJfvybNrc0xQx9go69ioTQUynOte+pjyfX2nrcTSDokDVzjkNDEk4vTXI6+nwU0ybNpuNEWGvYKluGqVOy2QM3my5mJnhen5gh230K4qe1qrM10vysKPfx3LrnV9thN+/aGhpO39dssvS3GKfwQU0dY7W5WinB+QQV8NoyMfhO29uV6mpRBWQx3TJo/T6kn1LX1gJpuatqGAkfWteqhp9eHQ9Gz+enC8Ny/J5D6KUslTtVWf5pSfq8zgkMA73zMysZFfcXk3mPRL4+1JWnnfJUuUbJCVr+L0n76JifREMvlLzGaaAztjLsCHFYVhi5p5MvARmhAHmsVTN2CM6LJvfmervXo7CRH2JSMgmGXSRnNk/zo+jOisV67UyQ5+/oGACw==
+        type : 2
+       code_elements :
+        internal_properties : BQAAAAUAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
+        type_code : 3
+        p_codes :
+         -
+           code : |1-
+            
+           type : 15
+         -
+           code : |1+
+            oTache_tmp est un ClTache <- zaoTaches[TBL_Taches.COL_ID]
+            
+            SI PAS ClSprint.Controlle_Sprint(MoiMême) ALORS
+            	Info("Numéro de sprint non valide")
+            	MoiMême = oTache_tmp.p_nNum_Sprint_Previsionnel
+            SINON
+            	oTache_tmp.p_nNum_Sprint_Previsionnel	= MoiMême
+            	oTache_tmp.Enregistre()
+            FIN
+            
+            PoidsTotal_sur_VelociteMoyenne()
+            ChargeCbo()
+            GestAffLigne()
+           type : 16
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+         -
+           code : |1-
+            
+           type : 17
+     -
+       name : COL_ID
+       identifier : 0x2eb43cd140c10c38
+       internal_properties : BQAAAAUAAADDL2vKwaDeBzeEyu6zL3cr/UvRwOyNtXfrhaiclgq23Gra85AgG9dEye11e980IMo/eCv6pIbXY0kYV4PPUkGo8euUYu6YlHjUb3DY++h8HAvsBXX9hjZ1cucBz45fqrsquq7hptPnRq62UYB/OCdKTmHkAdpst+60BEK4fgVL/42zAr0T1I3X2wPsmMw=
+       type : 2
+       content :
+        internal_properties : BQAAAAUAAACQxJHczj5V2f1myzvWzMxXg3WRhmvix/NXmvMNbQ2wS3JvKkQVKy+i2aw4UrPcDD2rPqN6L9gb+lGd/S0TrmAY06jxJowNSV2eF3aALQV9S/sYKoCfxlPL3HCk5h+FkbocEIz8uBYneV/GJXo5ZJ+AMMT19JwgEYVydv2N9TRL27ZjZEwrJ+928XXUIZrYc5fMzmpO1zM3eclkFuVhg6SwFcZB24MR0kiH4zUjbDGwz+TSJ5R8b2JKj7K6IBdX1AasiMvh3wzka7rtdhSTcxPeqlAnrqczjz1K/ZX3+JwLNJUMiMQP59FOcXCWpn6dAiFYleGJUg4r8NqfMTcPCO0wcHO3KC9i7oQzOYZTlYmAe6/Br/Q48ulogkNAo+5UmNxziojfYuZlxMdu/X8DK1v9Dr2GKVTvkEtRmitDIp1e40ch6L6AkdIybKEkotnvZI5CNjqbbdw6LPQybzXBZy56LTg/9l7N+fPl3cLDJLy9q7QwT3EYeDI2bT0OD+ZMYLLlT8XF4IWH6IXUd6hEsu1jNPBK+eyfLt6YNMvpUjUI9IQndS94kkaCa+VjSWAdINjQu1eSXIHsUT3/pSFHbcoJbB/aW1iHfduJBkc96kD70/oYi0715Hu61DEWqTjoj9yXofQD/CPwHeKxLa2B71Iqe3fr7u0jV+ZLBO5kL9VeS488i0ORrV917RoZ7JZn4j9sVHG9QHPgSlXwrw9jaYXZ3pDkN4VEEHvNdyqfm360OzjBWF+qpyiSYmuFjuHtI1LtTPRUkppu0rg=
+        type : 2
+       code_elements :
+        internal_properties : BQAAAAUAAADsXMK6SDFTk3L883Lcm0kU6h2zyWgL6ycNc925KLohSahIQqsY9KjuLadKiiDTsE8n1ZMrke82lF5Awu4qI3mxjmW7Nbdtvmauhg==
+        type_code : 3
+        p_codes :
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+    type : 9
+    controls : []
+    code_elements :
+     type_code : 9
+     p_codes :
+      -
+        code : |1+
+         ListeTaches()
+         PoidsTotal_sur_VelociteMoyenne()
+        type : 14
+      -
+        type : 35
+        enabled : false
+      -
+        code : |1-
+         
+        type : 20
+      -
+        code : |1-
+         GestAffLigne()
+        type : 21
+      -
+        type : 22
+        enabled : false
+      -
+        type : 24
+        enabled : false
+      -
+        type : 23
+        enabled : false
+      -
+        type : 25
+        enabled : false
+      -
+        type : 230
+        enabled : false
+      -
+        type : 241
+        enabled : false
+      -
+        type : 263
+        enabled : false
+      -
+        type : 262
+        enabled : false
+      -
+        type : 222
+        enabled : false
+      -
+        type : 223
+        enabled : false
+      -
+        type : 224
+        enabled : false
+  -
+    name : LIB_Poids_Velocité_moyenne
+    identifier : 0x2eb43cd140c30c38
+    internal_properties : BQAAAAUAAABgXuzE6p1MEjXW/Q+br4Vl7VtBIGauSMTtSFxx1fBWC9LGydrP2oxl0wcrI9Nz6Gdp2nZ9LfhpNA1wBEvhrMYDTIbypbLgYDftrnBIzzHP/o/sV41kwTjReFcKY71sYnJV5Amp2pyhDZL3HVisdcxmzU0UwySGtbeIRcNp0l+I3Rbah8TtbQPxadwjXP5JaLva0WV+qN2CqLyPsuwZdgnbDrytzuTzG/XYP6Zl1jKiYJrwno5u2kC2j31IMatdZ3I1UaKlBMJBP6cwlYzNNalCtOb37jywN7VupgSGi25ccoesei1Pzjvu6B5ZonBeSACy214oVG+m11yuN5bGoV2XEQJx7LVDY99sUgwLoQjeeRS2pVf7udEDQnRdx4vVps8ehaZeUdHfWE4MHz3EifKIwFUygSawW4yode4BfkXr2StjjPILf5oTFM4Gv2BMTSj7ZQcpzNxb
+    type : 3
+    code_elements :
+     type_code : 2
+     p_codes : []
+  -
+    name : JAUGE_Jauge
+    identifier : 0x2eb43cd140c40c38
+    internal_properties : BQAAAAUAAACDYXoiNo8ZJet66Sl23GOFFF5onNTqixVWiziTMlyjF5eVrOCmOvvzXz+q1LcDEDd/shiE4vzgsVvMuOuhBeV9DofOuK/Vo+m2rqcSi6UDA71W0j6OvSR9qsaClZCvk0mJs2FG6JMpGmM6LpGXbBnGP4ZQppT2FGyFhGBz5nBp2UkOGynlw1seaEOziDkr/xOq6bgdjC6JtTU+bMV3+CBvu9uXqMcZmutyJQ/V3i2KZV0JrNb3yoo2Nf95dcRyWJfr96VqD01c+rB6jF4clyTOYLmSTKK1U8CtcJt7iyTlVvbno58Cd7hLUGL6Dq7GCZ7nylsBf7J/Bu4PYPwLxgZUhennjNGXuTHXerxzjOne6C0p/CZSQAbvmL/lvNWmAw4oe8YtfIeKfVnmfwNFB2xe3I7nS+j6IwbnTIFiEb2M2WOmJUFUcwDR9qExSzue13c4eLF/3917PCJlEQpLa2CO1eGpMa7fnzliLyMUQxAF/1G0JDs8fx2MuOUelnj130sLLzWAGp1e7acG7k6lg+BGQQl2NtRs2PsV8EnzmZLoPrTA2zh/3D1pInA6LwJzjeLqhFLCsUJ3SskniZYnZmrAkP8uoM03gvhBed3Nyb2YCZzSuIjoB6BX5XReNzG+NLf8hxC+PbYNfNXDYBSRVltsY296sS+3wpWQ5lTodcwqhTLAZREhIxf12Rp6At/fWiKtbtwCWLp9CYr7w7Em2DYwZUBLsjiTu59W4Jh7beg6UgAJnMOevdJVIY0FlzUnK/R9EYu5bVnm56c2+PBcl6tzJZInB1uHFjaqbrS3PFVCibShl8Y3V+zGtNk7/QYevobZMLg72bIHxpgWD0EfvsH0RpZ8DZRUTPhICaEuFPyjPoA4AxYWug9BP+RVtLA0xW4MS5avLNc01imbG4AOtQ==
+    type : 10
+    code_elements :
+     type_code : 17
+     p_codes :
+      -
+        code : |1+
+         JAUGE_Jauge..BorneMin = 0
+         JAUGE_Jauge..BorneMax = goApp.m_nVelociteMoyenne
+         
+         
+        type : 14
+  -
+    name : BTN_Valider
+    identifier : 0x2eb43cd140c50c38
+    internal_properties : BQAAAAUAAACLH9Hvl4VTCFjabJ2Dgir839HMj/mkRSCerA3+nCbVaqlGF0/b942BQQ4q/HH88htiJXDCl7h8irI3pblsxiweJ5f7p8hw6aUIUDy2zSDHQqkvdFTpSmM3OQddo3kInLPk/7jFQj3gbeqJBKP8hf4yKNsfzRc3SWqUhtFbvmQSsoEQdQx3Wq1q+5VeJPPZE0Ky6WqoUU1r6LWMU/CZl4lTdTFEGPUcpPqkuD4Wt8u0XWaKZAKlJJ9p8XhckS7pr4b0XL4QZPJSRGDksher0Xu6MIkJbAYhbAfD5mOu3gku4OSC4U57DTtA84AU5TFg8kJVwGmW0LWq8/E/d6t/I0vjt2tcJghPAetk9ykbqYWKw7tS3syGydbqWhiRFVRdAEVzL2+85KdqXHjdgYAgn5FKpwaebYrUPWXq+K8Gur8QLGgBMhj7JFGLtS9/PTGOfXry0+KRRMgOQCY0br63p/R6ZeFWgW+b2wJerInH0KMZ53ljbjLxRVvE+f+kF84kvp7dzIX4r33NxMPJhr3B1RJ9nPp+jsWnidxuxjkwvxFkZoDp4C9KXzwJfdO+F/Nx6yETTA3FYjcBKiYeu4utks/fqAt7loQi0JaSj5J9JR9IeHGb6Axze69YSMOENb0KEJBXNWtlBujvcHNRfDu+MM3JahX+TTQiUyRWOGoTxXM46ystbvSKYeANIZt4v9kKyN4ajgExM3L/ODNvLuEXmoCEgIM53hvu3XcLycVToe9/gvxsahkmto+YWqy/CbDvq4OtV5IbWld24HcCrGg6Zte+bw==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         oTache_tmp est un ClTache dynamique
+         nIndTbl est un entier
+         nInd est un entier
+         bErreur est un booléen
+         	oSpr est un ClSprint dynamique
+         
+         
+         Pour toute ligne nInd de TBL_Taches
+         	nIndTbl = TBL_Taches[nInd].COL_ID
+         	oTache_tmp <- zaoTaches[nIndTbl]
+         	
+         	oTache_tmp.p_nPoids						= oTache_tmp.p_nPoids_Previsionnel
+         	oTache_tmp.p_nNum_Sprint_Realisation	= oTache_tmp.p_nNum_Sprint_Previsionnel
+         	quand exception dans
+         		oTache_tmp.Enregistre()
+         	FAIRE
+         		erreur("Tache : " + oTache_tmp.p_sCodeTache + rc + ExceptionInfo(errMessage))
+         		sortir
+         	FIN
+         FIN
+         
+         si pas bErreur ALORS
+         	oSpr <- ClSprint.GetObj(goApp.m_nNumeroDuSprintActuel)
+         	oSpr.p_bTop_Termine = vrai
+         	
+         	quand exception dans
+         		oSpr.Enregistre()
+         	FAIRE
+         		erreur(ExceptionInfo(errMessage))
+         		bErreur = vrai
+         	FIN
+         FIN
+         	
+         SI PAS bErreur ALORS
+         	goApp.m_nNumeroDuSprintActuel++ 
+         	oSpr <- ClSprint.GetObj(goApp.m_nNumeroDuSprintActuel + 1)
+         	Info("Le Sprint " + NumériqueVersChaîne(oSpr.Get_IdUnique()) + " a bien été initialisé." + rc + "Dates : " + oSpr.sSprint_Date())
+         	Ferme()
+         FIN
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : CBO_Sprint
+    identifier : 0x2eb43cd140c60c38
+    internal_properties : BQAAAAUAAABMS/QW7S4bpI0Gx4eQb7rXuuH3G06gRzUQ6DDgoQlaCWbRdxocZhguStzcXzgAT6uPwg73PBHA7fJCizA6H1WaTLWNQ0h4c8umkC/6XhLyqmFmyHjUZ7X8irEp2IVS400dfJ+yEd3IsU7TH05Ua9gcsn94UBv5QE3ODYsp6FWBkMjYZn+E/hy1lNbTuvEetKFnUvznmJAMRTcOeL1D668WR06o0o90RH/Q/wO9u0FC1haGRpRTuwG/4yTRjMoxUBt2Yf29o9UnK2ijYoO19SzW8y6tW3nV1W7Q66fUeoNsSHP6zDfTLGzCEcAuko+2H6nBCvIbG6RtYzeZMSFcSBGrgtgEietwY9OCix3QjpgV3ir5agel0XbF8YP1wm1Kcbw223HQzNQfqQlXeDgpc9/sj1Si9KwY1L0ZVOIqyMJE47qxiRmD4BQyW+AHLtRuu40RGA94wFSODOTEwNny0KX1Kddwk6I7aHAUjsSaG/RWzY8En2FA3g7PjXwWOEdE+bbB2mK7QU44i+LqwtGm2jrXz2AgoMuLLg66moCxabg2RdYCxWnzva2ZW7AZN7X71aXHMjZakW0KzlmWVhgptwIlfv23TbDfF0IErEwGJZAyJ1zgN+GfoQgE+pkP8FVdlxbtmp8OGBP1/3SmMujiiQm8FqK42V6Q+VboKfFQ6kAwNqseJyD2dY1nLLQGrBfnT+yNx3mvWKZcQpeK/zd58ld0kPXR/X6Sv4IwPXtYfLaQJUtdzbOSagDLfz/hEI/OrnOAJ3iZUlKmeQ67QMMbwIeqjP08vA3kB8zyXB0yKR2t3qicM2Ah0JvI3h4YJMgEnIlVcF+njuU4Yfcz3Nj80OTYuUV3McDSDQYkmo4pnmtiRdYuD42y6hGey+2vTpr+pw1r+aSlPqZAQk+e9O0UG+YM5NFZfdPkspE8um9C5sFQfmaLssy2b4aJqlWGJyy3WFfdAyjdEMo4+m15qFLxNSIfRIy2sYqmJV1WL7pTd986j3MxLEDRX+4u+6HJWHAcqcok8ykTXYfQAWvgBWU87fSwFPXKWsOeKQFa/rrhpDACulEwGbs6Z1wl5Oj+auJikZVi7StTvCeEFKWeApRwOCfKuGfXjRBNCnya8YxDmeCPkCnNVK77NCo7T5vfJSW+FhKKh2L8ELxUw5+pVECnbAtlDyVZWtKujf5JWSObJj1IyO+VaawjrhsKIgIuwaCecQlaHz/LCyGyfcRX6ErU5NJelOrK2DmPWPJRcvwMRpjWbwvrPsAKMcqBvPUnUV1WWEnOmRPtE0Hh5tD73tQkQBULqfnYHC8nsOa/D5o/ZB/4yOH9pzsS66mlw5cZ7QbZzXVK8eKSWo1AtItEZ0jIsLIaexsuPPOcqbOfDevt3hSYfCpnj32lui1zt2YybKpFyrVupc5bAJaqjRwxxVVl6h2BtgHb/7KC0Yl7+nuKnv9qGi2+rzThDNwyuU1kks32
+    dropdown :
+     internal_properties : BQAAAAUAAADPHP0YhHIC5DIkhys4KYxdZSB4wRDTP2hcaojfKnIyZOiV47h5yvk4X9SjwOTKm+dpDvIDOHUSvonOwbmw6guW2j2g2mZdVJFuRM/EqPSw5r/8yn5iZQX5xTCtsoju7AN5zB4izXxPltky8foKLMQ82UOW7hM6xYgWFms6uluj5wt4TedBqCW/mmNzbVxqwsDyzFLld/M4lzcun0+1owZn9DSpYOW857xNMMdRDsP1Umv0I5kzWvDDyDAyzltrjJCJvkbQ4GbRbumbSnMsI2j00r7RgqDQvERlUg/E6W4WbGmc+N0cUSyZuSjjlwJf+CGzo3HjDysp915+Ek1NdJx1DbUYL8Ji5uvRJT+yHm6dXID0XHE0kdyQPAeSZLPJHQBlc0yPKzvfrXQz3RUbiJDPVB3KolklYU5X6XX74UTkTac7P+yNWHuHqSZOEwmVHqUY1yG1ztBlhuPjL9kpYCeOy7xJBxooyZ01GBwrbze25+DpmwteoD327NfY4vAWCzdcJ0Ej6CAz26tBy2kmbK45Rt6ZORyGQcpH62cQ5qhp3BZygAJFrs1Fz1e4Q8XWky8rB0bioyMrZW+Qp6jhLySdsv7wd4cxL/KjXU6hY3280V7Z2W3g1AvGkmRQNEY9/2Qx7n92V8bhF83CEh6jVZESQWMO8iOngK9F5vIS3A/1sAd6Ie2HiIEQcBWy0o5r4CM=
+     type : 7
+    type : 14
+    code_elements :
+     type_code : 23
+     p_codes :
+      -
+        type : 35
+        enabled : false
+      -
+        code : |1-
+         AppFilte()
+        type : 33
+      -
+        type : 17
+        enabled : false
+  -
+    name : BTN_Fermer
+    identifier : 0x2f4a5255019af851
+    internal_properties : BQAAAAUAAABMpwG8ja9SzDLBR0bLgViqH//lXMK48rSrnSFiIEzvlkk+0BLJlXysQnaQxDeAlj0XjB8XQlICVjwe1m/vpe/MZvWYrflgrwg/Qi83Lv7Wa/aSj4ywbJkwtOT9lgFISHqaksYIo5L1TY/mV6L881ev3s7NgJ03hcr6ci2NOtpWykuJ5KIUqLkWaoavomQ28TicN43PuYAAr0/VGWA2hpobjxyxYSw/KORRUQCKzxNEmuy0ePTHqiP7xATuZLxzh0nfufmET5kchTF/L3SqmwguNL5HkwiWSPtlWbMiqaJr2VrN0hgzcCkyA3Qcz4McSrn3meGkawwklI17+cOKd5vXjIzES6Xa+01B6jn70G2u89+SDt/ZK4u136h4uhcxFMgemeTulaVd7SE0PNXt/+ifVMrOv12pjFGi66YgLdaSTnBqr4DxzqOUHL7/Bgslmx1g38VPqk0QdmcTx9AQiUb1lHTfVoJmwoPv/BpsAUwHpYNLvkdp4pIdQMiSyCKz3Jl8flb7j8jCnUehZB9wlZSEThluc5CGHQX93d7oC6Y15ygdeaVZlaJkk493/sXjbDBbTlcwkITdX+Msh/M7NiTRaI517h1mLpHeBmxxYbK92Dtg15TSdmv8WPUEa7uNs95BpKgu4/nf6P6yzRrd59602+ezNuUxWbR6roiypeXWyUnhedZ87RkmQrsIebIps4RVYxbcG3kdNnkOf9TDtUVZyA==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         ferme()
+        type : 18
+      -
+        type : 161
+        enabled : false
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BQAAAAUAAABd4biPtdLQOwfUFiqrit8H4xfGqKyz9t6VLxCUnNZRQiLPVs82PZNE+UVdKRzjizyeuKyRur85gNMUfqplpmtNDnQWQla9zo+GH9+1EfUJ6w17Dn/egD/gv+Hhywk8c9unIdzEp7EHgaAqD28w7Agveg4u19PBcKGZtQ==
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BQAAAAUAAABqPQh6HC8RxAVkp2SqPYLuZrfVhd+1KX4lx22hIT8uqEpE6yP7Sbc2rmVqdmL816EWzXOkEe9ijOtYwchZKAfpy3B1cNqhpJgsnbUs
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE FEN_Sprint_Initialisation_V2()
+      
+      constant
+      	zcst_sprint_futur	= -2
+      	zcst_sprint_sans	= -3
+      fin
+      
+      zaoTaches est un tableau de ClTache dynamique <- ClTache.Taches_a_faire(ClTache.Toutes)
+   -
+     code : |1+
+      ListeTaches()
+      
+      
+     type : 34
+   -
+     code : |1+
+      
+      
+     type : 2
+   -
+     code : |1+
+      
+      
+     type : 40
+   -
+     code : |1+
+      
+      
+     type : 234
+   -
+     code : |1+
+      
+      
+     type : 165
+   -
+     code : |1+
+      
+      
+     type : 177
+   -
+     code : |1+
+      
+      
+     type : 180
+   -
+     type : 230
+     enabled : false
+  procedures :
+   -
+     name : ListeTaches
+     procedure_id : 2212460186108890168
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ListeTaches ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	nNumSprint_p (entier) : <indiquez ici le rôle de nnumSprint>
+      PROCEDURE ListeTaches()
+      
+      nLigne est un entier
+      oTache_tmp est un ClTache dynamique
+      nIndTbl est un entier
+      
+      TableSupprimeTout(TBL_Taches)
+      TBL_Taches..AffichageActif = faux
+      
+      POUR TOUT element oTache_tmp, nIndTbl de zaOTaches 
+      	nLigne = TableAjouteLigne(TBL_Taches)
+      	TBL_Taches[nLigne].COL_ID					= nIndTbl
+      	
+      	//On affiche le code de la tache si elle en a un
+      	Si oTache_tmp.p_sCodeTache <> "" alors
+      		TBL_Taches[nLigne].COL_Code				= oTache_tmp.p_sCodeTache
+      	sinon //Au cas ou elle n'a pas de code, on affiche son ID
+      		TBL_Taches[nLigne].COL_Code				= oTache_tmp.Get_IdUnique()
+      	fin
+      	TBL_Taches[nLigne].COL_Description			= oTache_tmp.p_sDescription
+      	TBL_Taches[nLigne].COL_Description..Bulle	= oTache_tmp.sBulleTache()
+      	TBL_Taches[nLigne].COL_Poids				= oTache_tmp.p_nPoids
+      	TBL_Taches[nLigne].COL_PoidsPrevisionnel	= oTache_tmp.p_nPoids_Previsionnel
+      	TBL_Taches[nLigne].COL_Sprint				= oTache_tmp.p_nNum_Sprint_Realisation
+      	TBL_Taches[nLigne].COL_SprintPrevisionnel	= oTache_tmp.p_nNum_Sprint_Previsionnel
+      	TBL_Taches[nLigne].COL_Projet				= oTache_tmp.p_oUserStoryParent.p_oProjetParent.p_sNom
+      	
+      FIN
+      TBL_Taches..AffichageActif = vrai
+      
+      
+      
+      ChargeCbo()
+      	
+     type : 458752
+   -
+     name : PoidsTotal_sur_VelociteMoyenne
+     procedure_id : 2212460186108955704
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // PoidsTotal_sur_VelociteMoyenne ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE PoidsTotal_sur_VelociteMoyenne()
+      
+      nPoidsTotal est un entier = 0
+      nVelociteMoyenne est un entier = goApp.m_nVelociteMoyenne
+      oTache_tmp est un ClTache dynamique
+      nSprintRef est un entier
+      
+      //Si on est sur 'tous les sprints', on prend le sprint en cours
+      si CBO_Sprint..ValeurMémorisée <= 0 ALORS
+      	nSprintRef = goApp.m_nNumeroDuSprintActuel + 1
+      sinon
+      	nSprintRef = CBO_Sprint..ValeurMémorisée
+      FIN
+      
+      //On cumule tous les poids prévisionnel du sprint retenu
+      POUR TOUT ELEMENT oTache_tmp DE zaoTaches
+      	si nSprintRef = oTache_tmp.p_nNum_Sprint_Previsionnel alors
+      		nPoidsTotal += oTache_tmp.p_nPoids_Previsionnel
+      	fin
+      FIN
+      
+      
+      //On actualise l'affichage de la jauge
+      LIB_Poids_Velocité_moyenne..Couleur = Noir
+      JAUGE_Jauge..CouleurJauge = VertFoncé
+      LIB_Poids_Velocité_moyenne = ChaîneConstruit("Sprint %3 - Poids / Vélocité Moyenne : %1/%2",...
+      	nPoidsTotal, ...
+      	nVelociteMoyenne, ...
+      	nSprintRef)
+      
+      JAUGE_Jauge = nPoidsTotal
+      
+      SI nPoidsTotal > nVelociteMoyenne alors
+      	LIB_Poids_Velocité_moyenne..Couleur = RougeClair
+      	JAUGE_Jauge..CouleurJauge = RougeClair
+      FIN
+      
+      
+      si nSprintRef = (goapp.m_nNumeroDuSprintActuel + 1) ALORS
+      	BTN_Valider..Visible = vrai
+      sinon
+      	BTN_Valider..Visible = faux
+      FIN
+     type : 458752
+   -
+     name : ChargeCbo
+     procedure_id : 2212517180344993832
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // ChargeCbo ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE ChargeCbo()
+      
+      
+      nNumSprintActuel est un entier = goApp.m_nNumeroDuSprintActuel
+      nNumSprintSel est un entier = CBO_Sprint..ValeurMémorisée
+      oTache_tmp est un ClTache dynamique
+      nNumSprint est un entier
+      anLstSprint est un tableau d'entiers
+      
+      TableauAjoute(anLstSprint,nNumSprintActuel)
+      
+      POUR TOUT ELEMENT oTache_tmp DE zaoTaches 
+      	SI TableauCherche(anLstSprint,tcLinéaire,oTache_tmp.p_nNum_Sprint_Previsionnel) = -1 et oTache_tmp.p_nNum_Sprint_Previsionnel <> 0 ALORS
+      		TableauAjoute(anLstSprint,oTache_tmp.p_nNum_Sprint_Previsionnel)
+      	FIN
+      FIN
+      
+      TableauTrie(anLstSprint)
+      
+      
+      
+      ListeSupprimeTout(CBO_Sprint)
+      //Ajout du choix Tous les sprints
+      ListeAjoute(CBO_Sprint,"<Tous>" + gLien(0))
+      ListeAjoute(CBO_Sprint,"<Futur>" + gLien(zcst_sprint_futur))
+      ListeAjoute(CBO_Sprint,"<Sans sprint>" + gLien(zcst_sprint_sans))
+      POUR TOUT nNumSprint DE anLstSprint
+      	ListeAjoute(CBO_Sprint, "Sprint " + nNumSprint + gLien(nNumSprint))
+      FIN
+      
+      
+      
+      nIndiceSprintActuel est un entier
+      nIndiceSprintActuel = ListeCherche(CBO_Sprint, nNumSprintSel)
+      SI nIndiceSprintActuel = -1 ALORS
+      	nIndiceSprintActuel = ListeCherche(CBO_Sprint, nNumSprintActuel)
+      	SI nIndiceSprintActuel = -1 ALORS
+      		ListeSelectPlus(CBO_Sprint,1)
+      	SINON
+      		ListeSelectPlus(CBO_Sprint,nIndiceSprintActuel)
+      	FIN
+      SINON
+      	ListeSelectPlus(CBO_Sprint,nIndiceSprintActuel)
+      FIN
+      //ExécuteTraitement(CBO_Sprint,trtSélection)
+      
+      
+      
+      AppFilte()
+     type : 458752
+   -
+     name : GestAffLigne
+     procedure_id : 2212517584072013531
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // GestAffLigne ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE GestAffLigne()
+      
+      
+      SI TBL_Taches.COL_Poids <> TBL_Taches.COL_PoidsPrevisionnel ALORS
+      	TBL_Taches[TBL_Taches].COL_Poids..CouleurFond	= JauneClair
+      SINON
+      	TBL_Taches[TBL_Taches].COL_Poids..CouleurFond	= iTransparent
+      FIN
+      SI TBL_Taches.COL_Sprint <> TBL_Taches.COL_SprintPrevisionnel ALORS
+      	TBL_Taches[TBL_Taches].COL_Sprint..CouleurFond	= JauneClair
+      SINON
+      	TBL_Taches[TBL_Taches].COL_Sprint..CouleurFond	= iTransparent
+      FIN
+     type : 458752
+   -
+     name : AppFilte
+     procedure_id : 2212520929857887175
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // AppFilte ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE AppFilte()
+      
+      
+      selon CBO_Sprint..ValeurMémorisée
+      	cas 0
+      		TableDésactiveFiltre(TBL_Taches.COL_SprintPrevisionnel)
+      	cas zcst_sprint_futur
+      		TableActiveFiltre(TBL_Taches.COL_SprintPrevisionnel,filtreSupérieur,goApp.Sprint_Num_Actuel())
+      	cas zcst_sprint_sans
+      		TableActiveFiltre(TBL_Taches.COL_SprintPrevisionnel,filtreEgal,0)
+      	AUTRE CAS
+      		TableActiveFiltre(TBL_Taches.COL_SprintPrevisionnel,filtreEgal,CBO_Sprint)
+      FIN
+      
+      TableTrie(TBL_Taches,TBL_Taches.COL_Sprint..Nom,TBL_Taches.COL_Projet..Nom)
+      
+      
+      PoidsTotal_sur_VelociteMoyenne()
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAAwjDLmDSZ0H1P68nJIeNfqR9EvRjU/K+sVcM1T6rhVNr+VTV1mZ/rmoweYbFDZUhBGcv8UsxlDxVCOnb2U/SQOvlGWzNby3/w/V+ppSymxv+Vh
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x1eb43cd130ba0c48
+  internal_properties : BQAAAAUAAAAa2Zm8J9E/zh+/WIrVvz1fER/So3PB0gjQuxc1xKQVWY4ZDm5lfg==
+custom_note :
+ internal_properties : BQAAAAUAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BQAAAAUAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

@@ -1,0 +1,221 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : Col_Test
+ major_version : 25
+ minor_version : 0
+ type : 7
+ description : ""
+ subtype : 0
+procedure_set :
+ identifier : 0x1e8b69de10b1d62e
+ internal_properties : BQAAAAUAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ code_elements :
+  type_code : 31
+  p_codes : []
+  procedures :
+   -
+     name : Init_typesInter
+     procedure_id : 2200969387118385699
+     type_code : 15
+     code : |1+
+      PROCEDURE Init_typesInter()
+      
+      
+      sType est une chaine = [
+      Action manuelle
+      Action par intervenant
+      Action automatique
+      Attente
+      Sous process
+      Condition
+      ]
+      
+      POUR TOUTE CHAÎNE sLigne de sType separee par RC
+      	HRAZ(Scr_Process_Metier_Intervenant_Type)
+      	Scr_Process_Metier_Intervenant_Type.Libelle = sLigne
+      	HAjoute(Scr_Process_Metier_Intervenant_Type)
+      FIN
+     type : 458752
+   -
+     name : Init_usrTest
+     procedure_id : 2200969473017816702
+     type_code : 15
+     code : |1+
+      PROCEDURE Init_usrTest()
+      
+      
+      //Création de l'utilisateur de test dans les données
+      HRAZ(Scr_Usr)
+      Scr_Usr.Nom						= "Compte dev"
+      Scr_Usr.EMail					= ""
+      Scr_Usr.Service					= ""
+      Scr_Usr.Login_AD				= "1234"
+      Scr_Usr.Top_Equip_Informatique	= Vrai
+      HAjoute(Scr_Usr)
+     type : 458752
+   -
+     name : InitAll
+     procedure_id : 2200969970978089667
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //InitAll ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE InitAll()
+      		
+      	HFerme("*")
+      
+      	// connexion local aux fichiers
+      	sRep est une chaîne
+      	sRep = sRepFicTestAuto()
+      	SI PAS fSupprime(sRep + "*.*") ALORS
+      		ExceptionDéclenche(1,"Impossible de réinitialiser le jeu de données de test")
+      	FIN
+      	HSubstRep(fRepExe(), sRep)
+      	HChangeRep("*", sRep)
+      	SI PAS HCréationSiInexistant("*") ALORS
+      		ExceptionDéclenche(1,"Impossible d'ouvrir les tables locales de la base de données.")
+      	FIN
+      
+      
+      
+      
+      ////////////////////////////////////////////////////////
+      
+      
+      
+      Init_EtatsComposantsCritereAccept()
+      Init_TypesComposantsCritereAccept()
+      Init_typesInter()
+      Init_Sprint()
+      Init_usrTest()
+     type : 458752
+   -
+     name : Init_Sprint
+     procedure_id : 2201363063924521266
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // Init_Sprint ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE Init_Sprint()
+      
+      nInd est un entier
+      bFini est un booléen
+      dDteRef est une date
+      dDteTmp est une date
+      dDteTmp2 est une date
+      
+      dDteRef..Jour -= 60
+      
+      pour nInd = 1 a 10
+      	dDteTmp = dDteRef
+      	dDteTmp..Jour += 7 * nInd
+      	
+      	dDteTmp2 = dDteTmp
+      	dDteTmp2 += 6
+      	
+      	bFini = (dDteTmp2 <= DateSys())
+      	
+      	hraz(Scr_Sprint)
+      	Scr_Sprint.Num_Sprint			= nInd
+      	Scr_Sprint.DateDebut			= dDteTmp
+      	Scr_Sprint.NoteDebutDeSprint	= ""
+      	Scr_Sprint.NbreSemaines			= 1
+      	Scr_Sprint.DateFin				= dDteTmp2
+      	Scr_Sprint.Top_Termine			= bFini
+      	Scr_Sprint.NbPointsRealise		= 5 * nInd * bFini
+      	Scr_Sprint.VelociteMoyenneRes	= 0
+      	HAjoute(Scr_Sprint)
+      FIN
+     type : 458752
+   -
+     name : Init_TypesComposantsCritereAccept
+     procedure_id : 2203192152126405242
+     type_code : 15
+     code : |1+
+      PROCEDURE Init_TypesComposantsCritereAccept()
+      
+      sType est une chaine = [
+      Etant donné que	1
+      Au moment de	2
+      J'attend que	3
+      ]
+      POUR TOUTE CHAÎNE sLigne de sType separee par RC
+      	HRAZ(Scr_CritereAccept_Composant_Type)
+      	Scr_CritereAccept_Composant_Type.Libelle	= ExtraitChaîne(sLigne,1,tab)
+      	Scr_CritereAccept_Composant_Type.Ordre		= ExtraitChaîne(sLigne,2,tab)
+      	HAjoute(Scr_CritereAccept_Composant_Type)
+      FIN
+     type : 458752
+   -
+     name : Init_EtatsComposantsCritereAccept
+     procedure_id : 2203531984919892013
+     type_code : 15
+     code : |1+
+      PROCEDURE Init_EtatsComposantsCritereAccept()
+      
+      sType est une chaine = [
+      En cours de rédaction
+      Validé
+      Abandonné
+      Doublon
+      ]
+      POUR TOUTE CHAÎNE sLigne de sType separee par RC
+      	HRAZ(Scr_CritereAccept_Etat)
+      	Scr_CritereAccept_Etat.Libelle	= sLigne
+      	HAjoute(Scr_CritereAccept_Etat)
+      FIN
+     type : 458752
+   -
+     name : sRepFicTestAuto
+     procedure_id : 2210854293609299532
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sRepFicTestAuto ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE sRepFicTestAuto():chaîne
+      
+      renvoyer fRepExe() + "\TestAuto\"
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : COL_SansNom1
+resources :
+ string_res :
+  identifier : 0x1e8b69d810afc19c
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

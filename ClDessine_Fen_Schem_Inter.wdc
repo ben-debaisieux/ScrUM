@@ -1,0 +1,295 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDessine_Fen_Schem_Inter
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1f6615325fb92c88
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDessine_Fen_Schem_Inter est une Classe, abstraite
+      
+      	m_oDessinSch est un ClDessine_Fen_Schem dynamique
+      	m_oInter est un ClSchem_Inter dynamique
+      protege
+      	m_nOrdre est un entier
+      	m_nAxe est un entier
+      	
+      	m_sNomBox est une chaîne 
+      fin
+      
+      
+      CONSTANTE
+      	cstOffsetHaut							= 45
+      	
+      	cstLargeurBox							= 130
+      	cstHauterurBox							= 200
+      	cstMargeHBox							= 30
+      	cstMargeVBox							= 25
+      	cstCoteBtn								= 20
+      	cstArrondiBox							= 12
+      	
+      	cstNomBox								= "btnBox"
+      	cstSuffix_prev							= "_prev"
+      	cstSuffix_suiv							= "_suiv"
+      	cstSuffix_Up							= "_up"
+      	cstSuffix_Down							= "_down"
+      	
+      	cstEvt_ClicBox							= 1
+      	cstEvt_ClicDroitBox						= 2
+      	cstEvt_ClicPrev							= 3
+      	cstEvt_ClicSuiv							= 4
+      	cstEvt_ClicUp							= 5
+      	cstEvt_ClicDown							= 6
+      FIN
+       
+      STR_Coordonnees est une Structure
+      	nX est un entier
+      	nY est un entier
+      	nLarg est un entier
+      	nHaut est un entier
+      FIN
+      
+      STR_CallBack est une Structure
+      	nTypeEvt est un entier
+      	nPos est un entier
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2262519168898837640
+     type_code : 27
+     code : |1+
+      procédure Constructeur(oDessinSch_p est un ClDessine_Fen_Schem dynamique, oInter_p est un ClSchem_Inter dynamique, nOrdre_p est un entier, nAxe_p est un entier)
+      
+      
+      :M_oDessinSch	<- oDessinSch_p
+      :M_oInter		<- oInter_p
+      :M_nOrdre		= nOrdre_p
+      :M_nAxe			= nAxe_p
+      
+      //Nom unique de la boite.
+      :m_sNomBox		= ::cstNomBox + "_" + DonneIdentifiant()
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2262519168898903176
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : oBoxModele
+     procedure_id : 2262520182511289116
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oBoxModele ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	champ : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	oInter_p (ClSchem_Inter) : <indiquez ici le rôle de oInter_p>
+      //	nOrdre_P (entier) : <indiquez ici le rôle de nOrdre_P>
+      FONCTION protege oBoxModele()
+      
+      oBox est un champs
+      sNomCompletBox est une chaîne
+      sModeleProcEvt est une chaîne
+      stCoord est un STR_Coordonnees
+      
+      
+      sModeleProcEvt = ChaîneConstruit([
+      	ClProcess_Metier_Intervenant._evt_clic(%1, %2, "%3")
+      	], :m_nOrdre, "%1", :m_oDessinSch.p_sNomFen)
+      
+      
+      //Mémorisation du nom complet de la boite.
+      sNomCompletBox = :m_oDessinSch.sCheminChamps(:m_sNomBox)
+      
+      //Récupération des coordonnées de la boite à créer
+      stCoord = :stCoordBox(::cstNomBox)
+      
+      oBox <- ChampCrée(sNomCompletBox, typLibellé, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      oBox..PoliceTaille			= 10
+      oBox..CadrageVertical		= chCentre
+      oBox..CadrageHorizontal		= cvMilieu
+      oBox..Cadre..Epaisseur		= 2
+      oBox..Cadre..Couleur		= Noir
+      oBox..Cadre..Arrondi		= ::cstArrondiBox
+      
+      //Procédure d'événement clic sur la boite
+      oBox..Traitement[trtClic]	= compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicBox))
+      
+      
+      si :m_oDessinSch.p_bModeEdition alors
+      	///////////////////////////////////////////
+      	//Bouton précédent
+      	oPrev est un champ
+      	stCoord = :stCoordBox(::cstSuffix_prev)
+      	oPrev <- ChampCrée(sNomCompletBox + ::cstSuffix_prev, typBouton, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      	oPrev..Libellé = "<"
+      	
+      	//Procédure d'événement clic sur le bouton précédent
+      	oPrev..Traitement[trtClic] = Compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicPrev))
+      	
+      	
+      	///////////////////////////////////////////
+      	//Bouton suivant
+      	oSuiv est un champ
+      	stCoord = :stCoordBox(::cstSuffix_suiv)
+      	oSuiv <- ChampCrée(sNomCompletBox + ::cstSuffix_suiv, typBouton, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      	oSuiv..Libellé = ">"
+      	
+      	//Procédure d'événement clic sur le bouton suivant
+      	oSuiv..Traitement[trtClic] = Compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicSuiv))
+      	
+      	
+      	///////////////////////////////////////////
+      	//Bouton monter
+      	oUp est un champ
+      	stCoord = :stCoordBox(::cstSuffix_Up)
+      	oUp <- ChampCrée(sNomCompletBox + ::cstSuffix_Up, typBouton, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      	oUp..Libellé = "/\"
+      	
+      	//Procédure d'événement clic sur le bouton monter
+      	oUp..Traitement[trtClic] = Compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicUp))
+      	
+      	
+      	///////////////////////////////////////////
+      	//Bouton descendre
+      	oDown est un champ
+      	stCoord = :stCoordBox(::cstSuffix_Down)
+      	oDown <- ChampCrée(sNomCompletBox + ::cstSuffix_Down, typBouton, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      	oDown..Libellé = "\/"
+      	
+      	//Procédure d'événement clic sur le bouton monter
+      	oDown..Traitement[trtClic] = Compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicDown))
+      fin
+      
+      
+      RENVOYER oBox
+     type : 458752
+   -
+     name : oGenBox
+     procedure_id : 2262522239800644914
+     type_code : 12
+     code : |1+
+      procédure abstraite oGenBox()
+      
+     type : 458752
+   -
+     name : stCoordBox
+     procedure_id : 2262522420189378757
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] stCoordBox (<sTypeBox_P> est chaîne)
+      //
+      // Paramètres :
+      //	sTypeBox_P (chaîne ANSI) : <indiquez ici le rôle de sTypeBox_P>
+      // Valeur de retour :
+      // 	STR_Coordonnees : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION PROTÉGÉE stCoordBox(sTypeBox_P est une chaîne):STR_Coordonnees
+      
+      stRetour est un STR_Coordonnees
+      stRetour.nX = (:m_nOrdre) * (::cstLargeurBox + 2 * ::cstMargeVBox) + ::cstMargeVBox
+      stRetour.ny = ::cstOffsetHaut + (:m_nAxe - 1) * (::cstHauterurBox + 2 * ::cstMargeHBox) + ::cstMargeHBox
+      
+      si sTypeBox_P = ::cstNomBox ALORS
+      	stRetour.nLarg = ::cstLargeurBox
+      	stRetour.nHaut = ::cstHauterurBox
+      sinon
+      	stRetour.nLarg = ::cstCoteBtn
+      	stRetour.nHaut = ::cstCoteBtn
+      FIN
+      
+      selon sTypeBox_P
+      	cas ::cstNomBox
+      		//pas de changements
+      		
+      	cas ::cstSuffix_prev
+      		stRetour.nX -= ::cstCoteBtn
+      		stRetour.nY += ::cstHauterurBox / 2 + ::cstCoteBtn / 2
+      
+      	cas ::cstSuffix_suiv
+      		stRetour.nX += ::cstLargeurBox
+      		stRetour.nY += ::cstHauterurBox / 2 + ::cstCoteBtn / 2
+      
+      	CAS ::cstSuffix_Up
+      		stRetour.nX += ::cstLargeurBox / 2 + ::cstCoteBtn / 2
+      		stRetour.nY -= ::cstCoteBtn
+      		
+      	CAS ::cstSuffix_Down
+      		stRetour.nX += ::cstLargeurBox / 2 + ::cstCoteBtn / 2
+      		stRetour.nY += ::cstHauterurBox
+      		
+      	autres cas
+      		dbgAssertion(Faux, "Paramètre non valide : " + sTypeBox_P)
+      		
+      fin
+      
+      RENVOYER stRetour
+     type : 458752
+   -
+     name : Get_IdUnique
+     procedure_id : 2262599815539109608
+     type_code : 12
+     code : |1-
+      procédure Get_IdUnique()
+      renvoyer :m_oInter.Get_IdUnique()
+     type : 458752
+   -
+     name : sPaternBoites
+     procedure_id : 2262992099050937305
+     type_code : 12
+     code : |1+
+      procédure protege sPaternBoites(sType_P est une chaîne, sMsg_P est une chaîne):chaîne
+      renvoyer sType_P + rc + repete("-",20) + rc + rc + sMsg_P
+      
+     type : 458752
+  properties :
+   -
+     name : p_sNomBox
+     identifier : 0x1f665fab621b1474
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomBox() : chaîne
+         renvoyer :m_sNomBox
+        type : 1966080
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1f6615275fb30067
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

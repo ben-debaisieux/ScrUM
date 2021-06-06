@@ -1,0 +1,561 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClProcess_Metier
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1e2db4fe0c4b9cb8
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClProcess_Metier est une Classe
+      		hérite de ClObjDB
+      	PUBLIC
+      		m_sLibelle est une chaîne <MAPPING=Libelle>
+      		m_sCMTR est une chaîne <MAPPING=CMTR>
+      		
+      		m_bModeEdition est un booléen
+      		m_aoAxes est un tableau de 1 objet ClProcess_Metier_Axe dynamique
+      	prive
+      		m_oProjet est un objet ClProjet dynamique
+      		m_sNomFen est une chaîne
+      FIN
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2174593198310857912
+     type_code : 27
+     code : |1+
+      PROCEDURE VIRTUELLE Constructeur(LOCAL sNomFen_P est une chaîne , nID_P est un entier = 0)
+      
+      //Déclaration du constructeur de la classe d'accès aux données.
+      Ancêtre.Constructeur(Scr_Process_Metier..Nom, Scr_Process_Metier.IDScr_Process_Metier..Nom, nID_P)
+      
+      
+      oAxeTmp est un ClProcess_Metier_Axe dynamique
+      
+      //Mémorisation du nom de la fenêtre conteneur
+      :m_sNomFen = sNomFen_P
+      
+      Dimension(:m_aoAxes, 0)
+      
+      
+      //Chargement des données dans l'instance.
+      :Charge()
+      
+      
+      si nID_P <> 0 ALORS
+      	HLitRecherche(Scr_Process_Metier_Axe,IDScr_Process_Metier,nID_P,hIdentique+hLimiteParcours)
+      	tantque HTrouve(Scr_Process_Metier_Axe)
+      		oTmp est un ClProcess_Metier <- objet	//Transfert de la référence dans un autre objet pour contourner bug windev
+      		oAxeTmp = allouer un ClProcess_Metier_Axe(oTmp, Scr_Process_Metier_Axe.IDScr_Process_Metier_Axe)
+      		HLitSuivant(Scr_Process_Metier_Axe,IDScr_Process_Metier)
+      	FIN
+      	
+      	:m_oProjet <- ClProjet.GetObj(Scr_Process_Metier.IDScr_Projet)
+      //	:m_oProjet <- allouer un ClProjet(Scr_Process_Metier.IDScr_Projet)
+      FIN
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2174593198310923448
+     type_code : 28
+     code : |1+
+      
+      
+      PROCEDURE Destructeur()
+      oInter est un ClProcess_Metier_Intervenant dynamique
+      pour tout element oInter de :aoIntervenants()
+      	liberer oInter
+      FIN
+      
+      oAxe est un ClProcess_Metier_Axe dynamique
+      POUR TOUT ELEMENT oAxe DE :m_aoAxes
+      	libérer oAxe
+      FIN
+      
+     type : 655360
+   -
+     name : Affiche
+     procedure_id : 2174676331749111742
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Affiche ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      //	sConteneur_P (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de sConteneur_P>
+      PROCEDURE Affiche()
+      
+      
+      oAxe est un champs
+      oInterTmp est un ClProcess_Metier_Intervenant dynamique
+      
+      //Réinitialisation de l'état de la fenetre
+      {:m_sNomFen, indFenêtre}..AffichageActif		= Faux
+      {:m_sNomFen, indFenêtre}..LargeurInitiale	= {:m_sNomFen, indFenêtre}..Largeur
+      {:m_sNomFen, indFenêtre}..HauteurInitiale	= {:m_sNomFen, indFenêtre}..Hauteur
+      :Efface()
+      
+      
+      //Représentation des axes :
+      oAxeTmp est un ClProcess_Metier_Axe dynamique
+      nPosY est un entier
+      POUR TOUT oAxeTmp DE :m_aoAxes
+      	
+      	nPosY = (oAxeTmp.Ordre - 1) * (ClProcess_Metier_Intervenant.cstHauterurBox + ClProcess_Metier_Intervenant.cstMargeHBox * 2) + ClProcess_Metier_Intervenant.cstMargeVBox
+      	
+      	oAxe <- ChampCrée(:sCheminChamps("btnAxe" + oAxeTmp.Ordre), ...
+      		typLibellé, ...
+      		ClProcess_Metier_Intervenant.cstMargeHBox, ...
+      		nPosY, ...
+      		100, ...
+      		ClProcess_Metier_Intervenant.cstHauterurBox)
+      	
+      	oAxe..CadrageVertical		= chCentre
+      	oAxe..CadrageHorizontal		= cvMilieu
+      	oAxe..CouleurFond			= GrisFoncé
+      	oAxe..Couleur				= Blanc
+      	oAxe..Libellé				= oAxeTmp.Libelle
+      FIN
+      
+      
+      //Dessin des boites
+      pour tout element oInterTmp DE :aoIntervenants()
+      	oInterTmp.GenBox()
+      FIN
+      
+      
+      
+      //Jonction entre les boites
+      STR_LienPrec est une structure
+      	sNomChamps est une chaîne
+      	bCondition est un booléen
+      fin
+      
+      sChampsPrec est une chaîne
+      oFil est un champ
+      aBox est un tableau de STR_LienPrec
+      stBoxTmp est un STR_LienPrec
+      oTmpCondition est un ClProcess_Metier_Intervenant_Condition dynamique
+      bPrecEstCondition est un booléen
+      
+      POUR TOUT element oInterTmp DE :aoIntervenants()
+      	
+      	si Dimension(aBox) < oInterTmp.OrdreAbsolu ALORS
+      		Dimension(aBox, oInterTmp.OrdreAbsolu)
+      	FIN
+      	
+      	VariableRAZ(stBoxTmp)
+      	stBoxTmp.sNomChamps				= oInterTmp.m_sNomBox
+      	stBoxTmp.bCondition				= bPrecEstCondition
+      	aBox[oInterTmp.OrdreAbsolu]		= stBoxTmp
+      	
+      	//Est on sur un intervenant de type 'condition' ?
+      	si oInterTmp..classe = ClProcess_Metier_Intervenant_Condition ALORS
+      		//Oui : On dessine ses liens
+      		oTmpCondition <- oInterTmp
+      		oTmpCondition.GenLiens()
+      		
+      		bPrecEstCondition = vrai
+      	sinon
+      		bPrecEstCondition = faux
+      	FIN
+      fin
+      
+      
+      pour tout stBoxTmp de aBox
+      	
+      	si sChampsPrec <> "" ALORS
+      		//Dessin du fil, entre l'intervenant précédent et celui en cours.
+      		oFil <- ChampCrée(:sCheminChamps("fil_" + sChampsPrec + "_" + DonneIdentifiant()), typFil)
+      		oFil..ChampDépart	= :sCheminChamps(sChampsPrec)
+      		oFil..ChampArrivée	= :sCheminChamps(stBoxTmp.sNomChamps)
+      		
+      		si stBoxTmp.bCondition ALORS
+      			oFil..Couleur	= VertClair
+      		FIN
+      	FIN
+      	
+      	
+      	sChampsPrec = stBoxTmp.sNomChamps
+      FIN
+      
+      
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //Reparamétrage de la fenetre, pour gérer les ascendeurs.
+      nZoneAffiche_Largeur est un entier
+      nZoneAffiche_hauteur est un entier
+      nNbBox est un entier
+      nNbBox = Dimension(:aoIntervenants())
+      
+      //Calcul de la largeur des la zone de dessin.
+      nZoneAffiche_Largeur = (nNbBox + 1) * (ClProcess_Metier_Intervenant.cstLargeurBox + 2 * ClProcess_Metier_Intervenant.cstMargeVBox) + ClProcess_Metier_Intervenant.cstMargeVBox
+      {:m_sNomFen, indFenêtre}..LargeurInitiale	= Max({:m_sNomFen, indFenêtre}..Largeur, nZoneAffiche_Largeur)
+      
+      //Calcul de la hauteur des la zone de dessin.
+      nZoneAffiche_hauteur = (Dimension(:m_aoAxes) + 1) * (ClProcess_Metier_Intervenant.cstHauterurBox + ClProcess_Metier_Intervenant.cstMargeVBox)
+      {:m_sNomFen, indFenêtre}..HauteurInitiale	= Max({:m_sNomFen, indFenêtre}..Hauteur, nZoneAffiche_hauteur)
+      
+      
+      {:m_sNomFen, indFenêtre}..AffichageActif		= vrai
+      
+     type : 458752
+   -
+     name : aoIntervenants
+     procedure_id : 2177209572103546425
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //aoIntervenants ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION aoIntervenants()
+      
+      aoRetour est un tableau de ClProcess_Metier_Intervenant dynamique
+      oAxeTmp est un ClProcess_Metier_Axe dynamique
+      oInterTmp est un ClProcess_Metier_Intervenant dynamique
+      
+      POUR TOUT element oAxeTmp DE :m_aoAxes
+      	POUR TOUT ELEMENT oInterTmp DE oAxeTmp.m_aoIntervenants
+      		AjouteRéférence(aoRetour,oInterTmp)
+      	FIN
+      FIN
+      TableauTrie(aoRetour, ttMembre, "OrdreAbsolu")
+      
+      
+      renvoyer aoRetour
+     type : 458752
+   -
+     name : Efface
+     procedure_id : 2177235702734568441
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Efface ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE PRIVÉE Efface()
+      
+      sChamps est une chaîne
+      
+      POUR TOUT element oAxeTmp DE :m_aoAxes
+      	sChamps = :sCheminChamps("btnAxe" + oAxeTmp.Ordre)
+      	
+      	SI ChampExiste(sChamps) ALORS
+      		ChampSupprime(sChamps)
+      	FIN
+      FIN
+      
+      oInterTmp est un objet dynamique ClProcess_Metier_Intervenant
+      POUR TOUT element oInterTmp DE :aoIntervenants()
+      	
+      	//Le champs est il déclaré ?
+      	si oInterTmp.m_sNomBox <> "" ALORS
+      		//Oui : récupération du nom complet.
+      		sChamps = :sCheminChamps(oInterTmp.m_sNomBox)
+      				
+      		//Si le champs existe dans l'interface, on le supprime.
+      		SuppChampsSiExiste(sChamps)
+      		SuppChampsSiExiste(sChamps + ClProcess_Metier_Intervenant.cstSuffix_prev)
+      		SuppChampsSiExiste(sChamps + ClProcess_Metier_Intervenant.cstSuffix_suiv)
+      		SuppChampsSiExiste(sChamps + ClProcess_Metier_Intervenant.cstSuffix_Up)
+      		SuppChampsSiExiste(sChamps + ClProcess_Metier_Intervenant.cstSuffix_Down)
+      	FIN
+      FIN
+      
+      	Procédure interne SuppChampsSiExiste(sChamps_p est une chaîne)
+      		SI ChampExiste(sChamps_p) ALORS
+      			ChampSupprime(sChamps_p)
+      		FIN
+      	fin
+     type : 458752
+   -
+     name : sCheminChamps
+     procedure_id : 2186790600499002816
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //sCheminChamps ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      //	sChamps_P (chaîne ANSI) : <indiquez ici le rôle de sChamps_P>
+      FONCTION sCheminChamps(sChamps_P est une chaîne)
+      
+      //Retourne le chemin complet du champ (en prenant en compte le conteneur)
+      SI :m_sNomFen = "" ALORS
+      	RENVOYER sChamps_P
+      SINON
+      	RENVOYER :m_sNomFen + "." + sChamps_P
+      FIN
+     type : 458752
+   -
+     name : Enregistre
+     procedure_id : 2186800509286166545
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE Enregistre()
+      
+      oAxeTmp est un ClProcess_Metier_Axe dynamique
+      oInterTmp est un ClProcess_Metier_Intervenant dynamique
+      
+      
+      quand Exception dans
+      	
+      	:m_bEnregistrementEnCours = vrai
+      	
+      	si pas :m_bEstSupprime ALORS
+      		//Enregistrement du process.
+      		Ancêtre.Enregistre()
+      		
+      		
+      		POUR TOUT ELEMENT oAxeTmp DE :m_aoAxes
+      			oAxeTmp.Enregistre()
+      		FIN
+      		
+      		
+      		POUR TOUT ELEMENT oInterTmp DE :aoIntervenants()
+      			oInterTmp.Enregistre()
+      		FIN
+      	sinon
+      		
+      		//Suppression de tous les intervenants.
+      		POUR TOUT ELEMENT oInterTmp DE :aoIntervenants()
+      			oInterTmp.Supprimer()
+      			oInterTmp.Enregistre()
+      		FIN
+      		
+      		//Suppression de tous les axes.
+      		POUR TOUT ELEMENT oAxeTmp DE :m_aoAxes
+      			oAxeTmp.Supprimer()
+      			oAxeTmp.Enregistre()
+      		FIN
+      		
+      		
+      		//Enregistrement du process.
+      		Ancêtre.Enregistre()
+      	FIN
+      	
+      	
+      	:m_bEnregistrementEnCours = faux
+      FAIRE
+      	:m_bEnregistrementEnCours = faux
+      //	VersPressePapier(ExceptionInfo(errComplet))
+      	ExceptionPropage(ExceptionInfo(errMessage))
+      FIN
+     type : 458752
+   -
+     name : _nPosInterLibre
+     procedure_id : 2193445807190123448
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //_nPosInterLibre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION _nPosInterLibre()
+      
+      nRetour est un entier
+      
+      oAxe est un ClProcess_Metier_Axe dynamique
+      pour tout element oAxe de :m_aoAxes
+      	nRetour += oAxe.m_aoIntervenants..Occurrence
+      FIN
+      renvoyer nRetour
+     type : 458752
+   -
+     name : oInterDePosition
+     procedure_id : 2194656111954233718
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //oInterDePosition ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	nPosition_P (entier) : <indiquez ici le rôle de nPosition_P>
+      FONCTION oInterDePosition(nPosition_P est un entier)
+      
+      oAxe est un ClProcess_Metier_Axe dynamique
+      oInter est un ClProcess_Metier_Intervenant dynamique
+      oRetour est un ClProcess_Metier_Intervenant dynamique
+      
+      pour tout element oAxe de :m_aoAxes
+      	pour tout element oInter de oAxe.m_aoIntervenants
+      		//Est on sur la position demandée ?
+      		si oInter.OrdreAbsolu = nPosition_P ALORS
+      			oRetour <- oInter
+      		FIN
+      	FIN
+      FIN
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : nNbreInter
+     procedure_id : 2194686894035264614
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //nNbreInter ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION nNbreInter()
+      
+      nNbre est un entier
+      oAxe est un ClProcess_Metier_Axe dynamique
+      
+      pour tout element oAxe de :m_aoAxes
+      	nNbre += Dimension(oAxe.m_aoIntervenants)
+      FIN
+      
+      renvoyer nNbre
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 2200607984744423377
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE VIRTUELLE pre_enregistre()
+      
+      Scr_Process_Metier.IDScr_Projet	= :m_oProjet.Get_IdUnique()
+     type : 458752
+  properties :
+   -
+     name : p_oProjet
+     identifier : 0x1f5dc96c0536264e
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oProjet() : ClProjet
+         
+         renvoyer :m_oProjet
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oProjet(oValeur est ClProjet)
+         
+         :m_oProjet <- oValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sNomFen
+     identifier : 0x1f5dcadb053dc228
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomFen() : chaîne
+         
+         renvoyer :m_sNomFen
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sNomFen(sValeur est une chaîne)
+         
+         :m_sNomFen=sValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+resources :
+ string_res :
+  identifier : 0x1e2d8d7b013e4742
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

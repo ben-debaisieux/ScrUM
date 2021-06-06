@@ -1,0 +1,744 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClCritereAccept
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1e9321fe43a0201e
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : BQAAAAUAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClCritereAccept est une Classe
+      	Hérite de ClObjDB
+      		m_sTitre est une chaîne <MAPPING=Titre>
+      		m_sCommentaireDemandeur est une chaîne <MAPPING=CommentaireDemand>
+      		m_sCommentaireDev est une chaîne <MAPPING=CommentaireDev>
+      		m_dDateCreation est une date <MAPPING=DateCreation>
+      		m_dDateValidation est une date <MAPPING=DateValidation>
+      		m_dDateDesactivation est une date <MAPPING=DateDesactivation>
+      		m_sCommentaireDesactivation est une chaîne <MAPPING=CommentaireDesactivation>
+      		
+      		m_aoComposants est un tableau de 0 objet ClCritereAccept_Composant dynamique
+      	prive
+      		m_oUserStoryParente est un objet ClUserStory dynamique
+      		
+      		m_nEtat est un entier <MAPPING=IDScr_CritereAccept_Etat>
+      		m_oUsrRedacteur est un objet ClUsr dynamique
+      		m_oUsrValideur est un objet ClUsr dynamique
+      		m_oUserDesactivateur est un objet ClUsr dynamique
+      		m_bInitComposants est un booléen
+      FIN
+       
+       
+      constante
+      	cst_Critere_En_cours_de_rédaction	= 1
+      	cst_Critere_Validé_a_implémenter	= 2
+      	cst_Critere_Validé					= 3
+      	cst_Critere_Regression				= 4
+      	cst_Critere_Abandonné				= 5
+      	cst_Critere_Doublon					= 6
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2203142018654412830
+     type_code : 27
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur ( [<nID_P> est entier])
+      //
+      // Paramètres :
+      //	nID_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nID_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	oUserStory (ClUserStory) : <indiquez ici le rôle de oUserStory>
+      PROCEDURE Constructeur(local nID_P est un entier = 0)
+      
+      ancetre.constructeur(Scr_CritereAccept..nom,Scr_CritereAccept.IDScr_CritereAccept..nom,nID_P)
+      
+      Dimension(:m_aoComposants, 0)
+      
+      :charge()
+      
+      :m_oUserStoryParente		<- ClUserStory.GetObj(Scr_CritereAccept.IDScr_UserStory)
+      
+      
+      si pas Scr_CritereAccept.IDSrc_Usr_Redacteur..null ALORS
+      	:m_oUsrRedacteur		<- ClUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Redacteur)
+      FIN
+      
+      SI PAS Scr_CritereAccept.IDSrc_Usr_Valideur..Null ALORS
+      	:m_oUsrValideur			<- ClUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Valideur)
+      FIN
+      
+      SI PAS Scr_CritereAccept.IDSrc_Usr_Desactivation..Null ALORS
+      	:m_oUserDesactivateur	<- ClUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Desactivation)
+      FIN
+      
+      si :bModeAjout() ALORS
+      	:m_nEtat				= ::cst_Critere_En_cours_de_rédaction
+      FIN
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2203142018654478366
+     type_code : 28
+     code : |1+
+      
+      
+      PROCEDURE Destructeur()
+      
+      oCompoTmp est un ClCritereAccept_Composant dynamique
+      pour tout element oCompoTmp de :m_aoComposants
+      	liberer oCompoTmp
+      FIN
+     type : 655360
+   -
+     name : Get_aoEtantDonneQue
+     procedure_id : 2203150913548171641
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_aoEtantDonneQue ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION Get_aoEtantDonneQue():tableau de ClCritereAccept_Composant dynamique
+      aoRetour est un tableau de ClCritereAccept_Composant dynamique
+      aoRetour = :aoChargeComposants(ClCritereAccept_Composant.cst_EtantDonneQue)
+      RENVOYER aoRetour
+     type : 458752
+   -
+     name : Get_sAuMomentDe
+     procedure_id : 2203150913548237177
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_sAuMomentDe ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION Get_sAuMomentDe():chaîne 
+      
+      sRésultat est une chaîne
+      aoCritCompo est un tableau de ClCritereAccept_Composant dynamique
+      
+      aoCritCompo <- :aoChargeComposants(ClCritereAccept_Composant.cst_AuMomentDe)
+      si aoCritCompo..Occurrence > 0 ALORS
+      	sRésultat = aoCritCompo[1].m_sDescription
+      FIN
+      
+      RENVOYER sRésultat
+     type : 458752
+   -
+     name : Get_aoJAttendsQue
+     procedure_id : 2203150913548302713
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_aoJAttendsQue ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION Get_aoJAttendsQue():tableau de ClCritereAccept_Composant dynamique
+      aoRetour est un tableau de ClCritereAccept_Composant dynamique
+      aoRetour = :aoChargeComposants(ClCritereAccept_Composant.cst_JattendQue)
+      RENVOYER aoRetour
+     type : 458752
+   -
+     name : post_enregistre
+     procedure_id : 2203483851082993615
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //post_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE post_enregistre()
+      
+      
+      oComposant est un ClCritereAccept_Composant dynamique
+      
+      pour tout element oComposant de :m_aoComposants
+      	oComposant.Enregistre()
+      FIN
+      
+      
+      nInd est un entier
+      POUR nInd = :m_aoComposants..Occurrence a 1 pas -1
+      	si :m_aoComposants[nInd].Get_est_supprime() ALORS
+      		TableauSupprime(:m_aoComposants,nInd)
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 2203483851083059151
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE pre_enregistre()
+      
+      
+      SI :m_bEstSupprime ALORS
+      	
+      	
+      	pclTmpCompo est un ClCritereAccept_Composant dynamique
+      	pour tout element pclTmpCompo de :aoChargeComposants()
+      		pclTmpCompo.Supprimer()
+      		pclTmpCompo.Enregistre()
+      	FIN
+      	
+      	
+      sinon
+      	
+      	//Enregistrement du récacteur
+      	si :m_oUsrRedacteur = null _ou_ :m_oUsrRedacteur.Get_IdUnique() = 0 ALORS
+      		:m_oUsrRedacteur							<- goapp.m_oUsrCnx
+      	FIN
+      	Scr_CritereAccept.IDSrc_Usr_Redacteur			= :m_oUsrRedacteur.Get_IdUnique()
+      	
+      	
+      	//Enregistrement du valideur
+      	si :m_oUsrValideur = Null _OU_ :m_oUsrValideur.Get_IdUnique() = 0 ALORS
+      		Scr_CritereAccept.IDSrc_Usr_Valideur..null	= vrai
+      	sinon
+      		Scr_CritereAccept.IDSrc_Usr_Valideur		= :m_oUsrValideur.Get_IdUnique()
+      	FIN
+      	
+      	
+      	//Enregistrement du desactivateur
+      	SI :m_oUserDesactivateur = Null _OU_ :m_oUserDesactivateur.Get_IdUnique() = 0 ALORS
+      		Scr_CritereAccept.IDSrc_Usr_Desactivation..Null	= Vrai
+      	SINON
+      		Scr_CritereAccept.IDSrc_Usr_Desactivation	= :m_oUserDesactivateur.Get_IdUnique()
+      	FIN
+      	
+      	
+      	
+      	
+      	
+      	
+      	
+      	//Controle de la présence d'une user storie
+      	si :m_oUserStoryParente = null ALORS
+      		ExceptionDéclenche(1,"Aucune user storie n'est associée au critère d'acceptation.")
+      	sinon
+      		//Enregistrement de la User story
+      		Scr_CritereAccept.IDScr_UserStory			= :m_oUserStoryParente.Get_IdUnique()
+      	FIN
+      	
+      	//Controle des conditions minimales requises : Un 'au moment de'
+      	si :Get_sAuMomentDe() = "" ALORS
+      		ExceptionDéclenche(1,"Un et un seul événement de type ""au moment de..."" est obligatoire.")
+      	FIN
+      	
+      	//Controle des conditions minimales requises : Au moins un 'J'attend que'
+      	si dimension(:Get_aoJAttendsQue()) = 0 ALORS
+      		ExceptionDéclenche(1,"Au moins un événement de type ""J'attend que..."" est obligatoire.")
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : AjouteComposant
+     procedure_id : 2203548314451547694
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //AjouteComposant (<nType_p> est entier, <sDescription_P> est chaîne)
+      //
+      // Paramètres :
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      //	sDescription_P (chaîne ANSI) : <indiquez ici le rôle de s>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE AjouteComposant(nType_p est un entier , sDescription_P est une chaîne)
+      
+      
+      //Si on a pas encore chargé la liste des composants, on le fait avant l'ajout d'un nouveau composant
+      si pas :m_bInitComposants ALORS
+      	:aoComposants()
+      FIN
+      
+      oComposant est un ClCritereAccept_Composant()
+      oComposant.m_oCritere_Parent	<- objet
+      oComposant.m_sDescription		= sDescription_P
+      oComposant.m_nTypeCompo			= nType_p
+      TableauAjouteRéférence(:m_aoComposants,oComposant)
+     type : 458752
+   -
+     name : aoChargeComposants
+     procedure_id : 2203603902932062946
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoChargeComposants ( [<nFiltre_p> est entier])
+      //
+      // Paramètres :
+      //	nFiltre_p (entier - valeur par défaut=0) : <indiquez ici le rôle de nFiltre_p>
+      // Valeur de retour :
+      // 	tableau : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bForce_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForce_P>
+      FONCTION PRIVÉE aoChargeComposants(nFiltre_p est un entier = 0):tableau de ClCritereAccept_Composant dynamique
+      
+      
+      //A t on un filtre sur un type de composant ?
+      si nFiltre_p = 0 ALORS
+      	//Non  : On renvoi tout
+      	RENVOYER :m_aoComposants
+      sinon
+      	aRésultat est un tableau de ClCritereAccept_Composant dynamique
+      	oCritCompo est un ClCritereAccept_Composant dynamique
+      	
+      	//Parcourt de tous les composants du critère
+      	POUR TOUT ELEMENT oCritCompo DE :aoComposants()
+      		//Si le composant est du type demandé..
+      		SI oCritCompo.m_nTypeCompo = nFiltre_p ALORS
+      			//On l'ajoute au jeu de données de retour
+      			TableauAjouteRéférence(aRésultat,oCritCompo)
+      		FIN
+      	FIN
+      	
+      	renvoyer aRésultat
+      FIN
+      
+     type : 458752
+   -
+     name : Get_sEtat
+     procedure_id : 2205462305417193104
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_sEtat ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE Get_sEtat():chaîne
+      
+      HLitRecherche(Scr_CritereAccept_Etat,IDScr_CritereAccept_Etat,:m_nEtat,hIdentique+hLimiteParcours)
+      si pas HTrouve(Scr_CritereAccept_Etat) ALORS
+      	ExceptionDéclenche(1, "Erreur de la valeur de l'état du critère")
+      FIN
+      
+      RENVOYER Scr_CritereAccept_Etat.Libelle
+     type : 458752
+   -
+     name : aoComposants
+     procedure_id : 2205476668075142963
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoComposants ( [<bForce_P> est booléen])
+      //
+      // Paramètres :
+      //	bForce_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForce_P>
+      // Valeur de retour :
+      // 	tableau : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE aoComposants(local bForce_P est un booléen = faux)
+      
+      
+      
+      sdCompsantsDeCritere est une Source de Données
+      sReq est une chaîne
+      oCritere est un ClCritereAccept dynamique
+      
+      si pas :m_bInitComposants ou bForce_P alors
+      	
+      	TableauSupprimeTout(:m_aoComposants)
+      	
+      	sReq = ChaîneConstruit([
+      		SELECT
+      			Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant
+      		
+      		FROM Scr_CritereAccept_Composant
+      		
+      		WHERE Scr_CritereAccept_Composant.IDScr_CritereAccept = %1
+      	], :Get_IdUnique())
+      	
+      	SI goApp.Rsql(sdCompsantsDeCritere,sReq) ALORS
+      		POUR TOUT sdCompsantsDeCritere
+      			oCritere <- objet
+      			TableauAjouteRéférence(:m_aoComposants, ClCritereAccept_Composant.GetObj(sdCompsantsDeCritere.IDScr_CritereAccept_Composant))
+      		FIN
+      		:m_bInitComposants = vrai
+      	FIN
+      FIN
+      
+      HAnnuleDéclaration(sdCompsantsDeCritere)
+      
+      renvoyer :m_aoComposants
+     type : 458752
+   -
+     name : Get_aoAuMomentDe
+     procedure_id : 2214755231225238791
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_aoAuMomentDe ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION Get_aoAuMomentDe():tableau de ClCritereAccept_Composant dynamique
+      
+      RENVOYER :aoChargeComposants(ClCritereAccept_Composant.cst_AuMomentDe)
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 2241649763060357888
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetObj (<nIdUnique_P> est entier)
+      //
+      // Paramètres :
+      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      // Valeur de retour :
+      // 	ClCritereAccept : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClCritereAccept
+      
+      renvoyer ClObjDB.GetObj("ClCritereAccept", nIdUnique_P)
+     type : 458752
+   -
+     name : Combo_Charge_Etats
+     procedure_id : 2259267228553964862
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Combo_Charge_Etats (<sNomFenetre_P> est chaîne, <sNomCombo_P> est chaîne)
+      //
+      // Paramètres :
+      //	sNomFenetre_P (chaîne ANSI) : <indiquez ici le rôle de sNomFenetre_P>
+      //	sNomCombo_P (chaîne ANSI) : <indiquez ici le rôle de sNomCombo_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	sNomFenetre_P (chaîne ANSI) : <indiquez ici le rôle de sNomFenetre_P>
+      //	sNomCombo_P (chaîne ANSI) : <indiquez ici le rôle de sNomCombo_P>
+      //	sNomFenetre_P (chaîne ANSI) : <indiquez ici le rôle de sNomFenetre_P>
+      //	sNomCombo_P (chaîne ANSI) : <indiquez ici le rôle de sNomCombo_P>
+      //	aOProjets_p (tableau) : <indiquez ici le rôle de aOProjets>
+      PROCEDURE GLOBAL Combo_Charge_Etats(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne)
+      
+      sdListeEtatsCrit est une Source de Données
+      sReq est une chaîne
+      
+      sReq = ChaîneConstruit([
+      	
+      	SELECT
+      		Scr_CritereAccept_Etat.IDScr_CritereAccept_Etat,
+      		Scr_CritereAccept_Etat.Libelle
+      	
+      	FROM
+      		Scr_CritereAccept_Etat
+      	
+      	ORDER BY
+      		Scr_CritereAccept_Etat.IDScr_CritereAccept_Etat
+      	
+      ])
+      
+      SI goapp.RSQL(sdListeEtatsCrit,sReq) ALORS
+      
+      	ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
+      	POUR TOUT sdListeEtatsCrit
+      		ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, sdListeEtatsCrit.Libelle + gLien(sdListeEtatsCrit.IDScr_CritereAccept_Etat))
+      	FIN
+      FIN
+      
+      HAnnuleDéclaration(sdListeEtatsCrit)
+      
+      
+      
+      
+      
+     type : 458752
+   -
+     name : aoCriteres_de_utilisateur_selon_etat
+     procedure_id : 2259592739849527505
+     type_code : 12
+     code : |1-
+      procédure publique globale aoCriteres_de_utilisateur_selon_etat(oUsr_p est un clusr, nFilteEtat_p est un entier = 0):tableau de ClCritereAccept
+      
+      aoRetour est un tableau de ClCritereAccept
+      sdMesCriteres est une Source de Données
+      sReq est une chaîne
+      
+      sReq = ChaîneConstruit([
+      	
+      	SELECT DISTINCT
+      		Scr_CritereAccept.IDScr_CritereAccept
+      		
+      	FROM Scr_CritereAccept
+      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_CritereAccept.IDScr_UserStory)
+      		
+      	WHERE (
+      			Scr_UserStory.IDScr_Usr_Valideur = %1
+      			OR
+      			Scr_CritereAccept.IDSrc_Usr_Redacteur = %1
+      			OR
+      			Scr_CritereAccept.IDSrc_Usr_Valideur = %1
+      			OR
+      			Scr_CritereAccept.IDSrc_Usr_Desactivation = %1
+      			)
+      		
+      		AND (
+      			Scr_CritereAccept.IDScr_CritereAccept_Etat = %2
+      			OR
+      			0 = %2
+      			)
+      		
+      ], oUsr_p.Get_IdUnique(), ...
+      	nFilteEtat_p)
+      SI goapp.RSQL(sdMesCriteres,sReq) ALORS
+      	POUR TOUT sdMesCriteres
+      		TableauAjouteRéférence(aoRetour,ClCritereAccept.GetObj(sdMesCriteres.IDScr_CritereAccept))
+      	FIN
+      FIN
+      HAnnuleDéclaration(sdMesCriteres)
+      
+      renvoyer aoRetour
+     type : 458752
+   -
+     name : sExport
+     procedure_id : 1156464917205101909
+     type_code : 12
+     code : |1+
+      procédure sExport():JSON
+      
+      sRetour est un JSON
+      nInd est un entier
+      oCritCompo est un ClCritereAccept_Composant dynamique
+      oMsg est un ClMessage dynamique
+      
+      sRetour.id					= :m_nIdUnique
+      sRetour.user_writer			= :m_ousrredacteur.sExport()
+      sRetour.date_create			= :m_ddatecreation
+      sRetour.user_validator		= :m_ousrvalideur.sExport()
+      sRetour.date_validator		= :m_ddatevalidation
+      
+      
+      nInd = 0
+      pour tout element oCritCompo de :Get_aoEtantDonneQue()
+      	nInd++
+      	sRetour.given[nInd]		= oCritCompo.sExport()
+      FIN
+      
+      nInd = 0
+      pour tout element oCritCompo de :Get_aoAuMomentDe()
+      	nInd++
+      	sRetour.when[nInd]		= oCritCompo.sExport()
+      FIN
+      
+      nInd = 0
+      pour tout element oCritCompo de :Get_aoJAttendsQue()
+      	nInd++
+      	sRetour.then[nInd]		= oCritCompo.sExport()
+      FIN
+      
+      nInd = 0
+      POUR TOUT ELEMENT oMsg DE ClMessage.aoListeMessage(objet)
+      	nInd++
+      	sRetour.message[nInd] = oMsg.sExport()
+      FIN
+      
+      
+      RENVOYER sRetour
+     type : 458752
+  properties :
+   -
+     name : p_nEtat
+     identifier : 0x1f5a8d0f02c659be
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_nEtat() : entier
+         
+         renvoyer :m_nEtat
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_nEtat(nValeur est un entier)
+         
+         :m_nEtat = nValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUseDesactivateur
+     identifier : 0x1f5a8fc002c7df87
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUseDesactivateur() : ClUsr
+         
+         renvoyer :m_oUserDesactivateur
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUseDesactivateur(oValeur est ClUsr)
+         
+         :m_oUserDesactivateur <- oValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUsrRedacteur
+     identifier : 0x1f5a901602c82fe4
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUsrRedacteur() : ClUsr
+         
+         renvoyer :m_oUsrRedacteur
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUsrRedacteur(oValeur est ClUsr)
+         
+         :m_oUsrRedacteur <- oValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUsrValideur
+     identifier : 0x1f5a902302c9624f
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUsrValideur() : ClUsr
+         
+         renvoyer :m_oUsrValideur
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUsrValideur(oValeur est ClUsr)
+         
+         :m_oUsrValideur <- oValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUserStoryParente
+     identifier : 0x1f5a908e02cc0502
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUserStoryParente() : ClUserStory
+         
+         renvoyer :m_oUserStoryParente
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUserStoryParente(oValeur est ClUserStory)
+         
+         :m_oUserStoryParente <- oValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+resources :
+ string_res :
+  identifier : 0x1e9321fe43a1201e
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -1,0 +1,326 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClSchem_Inter
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1f5fcc420bce3ba5
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClSchem_Inter est une Classe, abstraite
+      PUBLIC
+      	hérite de ClObjDB
+      	m_sReference est une chaîne						<MAPPING=référence>
+      	m_sDescription est une chaîne					<MAPPING=description>
+      	m_oAxe est un ClSchem_Axe dynamique
+      protege
+      	m_nOrdreAbsolu est un entier sur 2 octets		<MAPPING=OrdreAbsolu>
+      fin
+      
+      constante
+      	cstTypeInter_Action_manuelle			= 1
+      	cstTypeInter_Action_par_intervenant		= 2
+      	cstTypeInter_Action_automatique			= 3
+      	cstTypeInter_Attente					= 4
+      	cstTypeInter_Sous_process				= 5
+      	cstTypeInter_Condition					= 6
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2260750122001316773
+     type_code : 27
+     code : |1+
+      procédure Constructeur(local nID_P est un entier = 0)
+      
+      //Déclaration du constructeur de la classe d'accès aux données.
+      Ancêtre.Constructeur(Scr_Process_Metier_Intervenant..Nom, Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant..Nom, nID_P)
+      
+      
+      :Charge()
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2260750122001382309
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : oGetTypeInter
+     procedure_id : 2261479699533281526
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oGetTypeInter (<oAxe_P> est ClSchem_Axe, <nType_p> est entier [, <nID_p> est entier])
+      //
+      // Paramètres :
+      //	oAxe_P (ClSchem_Axe) : <indiquez ici le rôle de oAxe_P>
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      //	nID_p (entier - valeur par défaut=0) : <indiquez ici le rôle de nID_p>
+      // Valeur de retour :
+      // 	ClSchem_Inter : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION GLOBAL oGetTypeInter(nType_p est un entier, nID_P est un entier = 0):ClSchem_Inter
+      
+      oRésultat est un objet ClSchem_Inter dynamique 
+      
+      selon nType_p
+      	cas ::cstTypeInter_Action_manuelle
+      		oRésultat <- ClSchem_Inter_Manu.getobj(nID_P)
+      	CAS ::cstTypeInter_Action_par_intervenant
+      		oRésultat <- ClSchem_Inter_Operateur.GetObj(nID_P)
+      	CAS ::cstTypeInter_Action_automatique
+      		oRésultat <- ClSchem_Inter_Auto.GetObj(nID_P)
+      	CAS ::cstTypeInter_Attente
+      		oRésultat <- ClSchem_Inter_Attente.GetObj(nID_P)
+      	CAS ::cstTypeInter_Sous_process
+      		oRésultat <- ClSchem_Inter_SousProcess.GetObj(nID_P)
+      	CAS ::cstTypeInter_Condition
+      		oRésultat <- ClSchem_Inter_Condition.GetObj(nID_P)
+      fin
+      
+      RENVOYER oRésultat
+     type : 458752
+   -
+     name : aListeLiens
+     procedure_id : 2261771466481977758
+     type_code : 12
+     code : |1+
+      procédure aListeLiens():tableau de ClSchem_Inter dynamique
+      aoInter est un tableau de ClSchem_Inter dynamique
+      aRetour est un tableau de ClSchem_Inter dynamique
+      aoInter <- :m_oAxe.m_oSchemParent.m_aoInter
+      
+      si :m_nOrdreAbsolu < Dimension(aoInter) ALORS
+      	tableauajoute(aRetour, aoInter[:m_nOrdreAbsolu + 1])
+      FIN
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 2261865929993774483
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.GetObj
+      PROCÉDURE GLOBALE GetObj(nIdUnique_P est un entier):ClSchem_Inter
+      
+      oRetour est un ClSchem_Inter dynamique
+      sdGetTypeInter est une Source de Données
+      sReq est une chaîne
+      
+      sReq = ChaîneConstruit([
+      SELECT	
+      	Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant_Type
+      FROM
+      	Scr_Process_Metier_Intervenant
+      WHERE
+      	Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant = %1
+      	
+      	
+      ],nIdUnique_P)
+      SI goapp.RSQL(sdGetTypeInter,sReq) ALORS
+      
+      	HLitPremier(sdGetTypeInter)
+      	si pas HEnDehors(sdGetTypeInter) ALORS
+      		oRetour <- ClSchem_Inter.oGetTypeInter(sdGetTypeInter.IDScr_Process_Metier_Intervenant_Type, nIdUnique_P)
+      	sinon
+      		ExceptionDéclenche(1,"Intervenant inexistant")
+      	FIN
+      	
+      FIN
+      
+      HAnnuleDéclaration(sdGetTypeInter)
+      
+      renvoyer oRetour
+      
+     type : 458752
+   -
+     name : nTypeInter
+     procedure_id : 2262529554130669321
+     type_code : 12
+     code : |1+
+      procédure abstraite nTypeInter()
+      
+     type : 458752
+   -
+     name : ChangeOrdre
+     procedure_id : 2264098280762266403
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ChangeOrdre (<nNouvelle_Pos_P> est entier)
+      //
+      // Paramètres :
+      //	nNouvelle_Pos_P (entier) : <indiquez ici le rôle de nNouvelle_Pos_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE ChangeOrdre(nNouvelle_Pos_P est un entier)
+      
+      //Le déplacement demandé est il dans une plage valide ? 
+      si 1 <= nNouvelle_Pos_P <= :m_oAxe.m_oSchemParent.nNbreInter() alors
+      	TableauDéplace(:m_oAxe.m_oSchemParent.m_aoInter,:m_nOrdreAbsolu,nNouvelle_Pos_P,tdDéplace)
+      fin
+     type : 458752
+   -
+     name : ChangeAxe
+     procedure_id : 2264101175580334326
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ChangeAxe (<nNouvel_Axe_P> est entier)
+      //
+      // Paramètres :
+      //	nNouvel_Axe_P (entier) : <indiquez ici le rôle de nNouvelle_Pos_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE ChangeAxe(nNouvel_Axe_P est un entier)
+      
+      
+      nMemoAxeActu est un entier
+      
+      //Mémorisation de l'axe auquel l'intervenant est rattaché.
+      nMemoAxeActu = :m_oAxe.m_nOrdre
+      
+      //Le déplacement demandé est il dans une plage valide ? 
+      si 1 <= nNouvel_Axe_P <= dimension(:m_oAxe.m_oSchemParent.m_aoAxes) et nMemoAxeActu <> nNouvel_Axe_P alors
+      	:m_oAxe	<- :m_oAxe.m_oSchemParent.m_aoAxes[nNouvel_Axe_P]
+      fin
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 2264102876390925207
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.pre_enregistre
+      PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre()
+      
+      :m_nOrdreAbsolu = :get_pos_inter()
+      
+     type : 458752
+   -
+     name : aoUS_Associees
+     procedure_id : 2265507854744299057
+     type_code : 12
+     code : |1+
+      procédure aoUS_Associees():tableau de ClUserStory
+      
+      
+      sdUsdeInter est une Source de Données
+      sReq est une chaîne
+      aoRetour est un tableau de ClUserStory
+      
+      sReq = ChaîneConstruit([
+      	SELECT
+      		Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_UserStory
+      		
+      	FROM Scr_UserStory_Scr_Process_Metier_Intervenant
+      	
+      	WHERE Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant = %1
+      	
+      ], :Get_IdUnique())
+      
+      SI goapp.RSQL(sdUsdeInter,sReq) ALORS
+      	POUR TOUT sdUsdeInter
+      		TableauAjouteRéférence(aoRetour,ClUserStory.GetObj(sdUsdeInter.IDScr_UserStory))
+      	FIN
+      FIN
+      
+      HAnnuleDéclaration(sdUsdeInter)
+      
+      
+      renvoyer aoRetour
+     type : 458752
+   -
+     name : AjouteUS
+     procedure_id : 2265591439111297058
+     type_code : 12
+     code : |1-
+      procédure AjouteUS(oUS_P est un ClUserStory)
+      
+      HRAZ(Scr_UserStory_Scr_Process_Metier_Intervenant)
+      Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant	= :Get_IdUnique()
+      Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_UserStory					= oUS_P.Get_IdUnique()
+      SI PAS HAjoute(Scr_UserStory_Scr_Process_Metier_Intervenant) ALORS
+      	ExceptionDéclenche(1,ExceptionInfo(errMessage))
+      FIN
+     type : 458752
+   -
+     name : RetireUS
+     procedure_id : 2265593599482119200
+     type_code : 12
+     code : |1+
+      procédure RetireUS(oUS_P est un ClUserStory)
+      
+      HLitRecherche(Scr_UserStory_Scr_Process_Metier_Intervenant,...
+      	IDScr_UserStory_IDScr_Process_Metier_Intervenant, ...
+      	[oUS_P.Get_IdUnique(), :Get_IdUnique()], ...
+      	hIdentique+hLimiteParcours)
+      
+      si HTrouve(Scr_UserStory_Scr_Process_Metier_Intervenant) ALORS
+      	SI PAS HAjoute(Scr_UserStory_Scr_Process_Metier_Intervenant) ALORS
+      		ExceptionDéclenche(1,ExceptionInfo(errMessage))
+      	FIN
+      sinon
+      	ExceptionDéclenche(1, "Association user story / intervenant introuvable.")
+      FIN
+     type : 458752
+   -
+     name : get_pos_inter
+     procedure_id : 2271881195324602407
+     type_code : 12
+     code : |1-
+      procédure get_pos_inter():entier
+      
+      oInterTmp est un objet ClSchem_Inter dynamique
+      nInd est un entier
+      nRetour est un entier
+      
+      //Parcourt de tous les intervenants.
+      POUR TOUT ELEMENT oInterTmp, nInd DE :m_oAxe.m_oSchemParent.m_aoInter
+      	//L'intervenant en cours est il l'instance actuelle ?
+      	SI &oInterTmp = &objet ALORS
+      		//Oui : mémorisation de la position.
+      		nRetour = nInd
+      		SORTIR
+      	FIN
+      FIN
+      
+      renvoyer nRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1f5fcc2b0bc8e279
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

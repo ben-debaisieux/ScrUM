@@ -1,0 +1,385 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDessine_Fen_Schem
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1f6614d35fa3b902
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDessine_Fen_Schem est une Classe
+      	
+      	m_oSchem est un ClSchem
+      prive
+      	m_sNomFen est une chaîne
+      	m_bModeEdition est un booléen
+      	
+      	m_aoInterDessin est un tableau de ClDessine_Fen_Schem_Inter dynamique
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2262518760875735298
+     type_code : 27
+     code : |1+
+      procédure Constructeur(m_oSchem_P est un ClSchem, m_sNomFen_P est une chaîne)
+      :M_oSchem	<- m_oSchem_P
+      :M_sNomFen	= m_sNomFen_P
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2262518760875800834
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : Affiche
+     procedure_id : 2262518760875866370
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Affiche ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      //	sConteneur_P (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de sConteneur_P>
+      PROCEDURE Affiche()
+      
+      
+      oAxe		est un champs
+      oInterTmp	est un ClSchem_Inter dynamique
+      
+      //Réinitialisation de l'état de la fenetre
+      {:m_sNomFen, indFenêtre}..AffichageActif	= Faux
+      {:m_sNomFen, indFenêtre}..LargeurInitiale	= {:m_sNomFen, indFenêtre}..Largeur
+      {:m_sNomFen, indFenêtre}..HauteurInitiale	= {:m_sNomFen, indFenêtre}..Hauteur
+      :Efface()
+      
+      
+      //Représentation des axes :
+      oAxeTmp		est un ClSchem_Axe dynamique
+      nPosY		est un entier
+      
+      oDesInter	est un ClDessine_Fen_Schem_Inter dynamique
+      nInd		est un entier
+      nIndAxe		est un entier
+      
+      
+      POUR TOUT element oAxeTmp DE :m_oSchem.m_aoAxes
+      	
+      	nPosY = ClDessine_Fen_Schem_Inter.cstOffsetHaut + (oAxeTmp.m_nOrdre - 1) * ...
+      		(ClDessine_Fen_Schem_Inter.cstHauterurBox + ClDessine_Fen_Schem_Inter.cstMargeHBox * 2) + ...
+      		ClDessine_Fen_Schem_Inter.cstMargeHBox
+      	
+      	oAxe <- ChampCrée(:sCheminChamps("btnAxe" + oAxeTmp.Get_IdUnique()), ...
+      		typLibellé, ...
+      		ClDessine_Fen_Schem_Inter.cstMargeHBox, ...
+      		nPosY, ...
+      		100, ...
+      		ClDessine_Fen_Schem_Inter.cstHauterurBox)
+      	
+      	oAxe..CadrageVertical		= chCentre
+      	oAxe..CadrageHorizontal		= cvMilieu
+      	oAxe..CouleurFond			= COL_Scrum.gnCouleur_Gris_TFonce
+      	oAxe..Couleur				= Blanc
+      	oAxe..Libellé				= oAxeTmp.m_sLibelle
+      	oAxe..policegras			= vrai
+      	oAxe..Policetaille			= 12
+      	oAxe..cadre..Epaisseur		= 0
+      FIN
+      
+      TableauSupprimeTout(:m_aoInterDessin)
+      
+      
+      //Dessin des boites
+      pour tout element oInterTmp DE :m_oSchem.m_aoInter
+      	nInd++
+      	nIndAxe = oInterTmp.m_oAxe.m_nOrdre
+      	
+      	selon oInterTmp.nTypeInter()
+      		cas ClSchem_Inter.cstTypeInter_Action_automatique
+      			oDesInter = allouer un ClDessine_Fen_Schem_Inter_Action_automatique(objet, oInterTmp, nInd, nIndAxe)
+      		cas ClSchem_Inter.cstTypeInter_Action_manuelle
+      			oDesInter = allouer un ClDessine_Fen_Schem_Inter_Action_manuelle(objet, oInterTmp, nInd, nIndAxe)
+      		cas ClSchem_Inter.cstTypeInter_Action_par_intervenant
+      			oDesInter = allouer un ClDessine_Fen_Schem_Inter_Action_par_intervenant(objet, oInterTmp, nInd, nIndAxe)
+      		cas ClSchem_Inter.cstTypeInter_Attente
+      			oDesInter = allouer un ClDessine_Fen_Schem_Inter_Attente(objet, oInterTmp, nInd, nIndAxe)
+      		cas ClSchem_Inter.cstTypeInter_Condition
+      			oDesInter = allouer un ClDessine_Fen_Schem_Inter_Condition(objet, oInterTmp, nInd, nIndAxe)
+      		cas ClSchem_Inter.cstTypeInter_Sous_process
+      			oDesInter = allouer un ClDessine_Fen_Schem_Inter_Sous_process(objet, oInterTmp, nInd, nIndAxe)
+      		AUTRE CAS
+      			ExceptionDéclenche(1,"Type non implémenté")
+      	FIN
+      	
+      	oDesInter.oGenBox()
+      	
+      	TableauAjouteRéférence(:m_aoInterDessin,oDesInter)
+      FIN
+      
+      
+      //Génération des liens entre les boites
+      :GenLiens()
+      
+      
+      
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //Reparamétrage de la fenêtre, pour gérer les ascendeurs.
+      nZoneAffiche_Largeur	est un entier
+      nZoneAffiche_hauteur	est un entier
+      nNbBox					est un entier
+      
+      nNbBox					= Dimension(:m_oSchem.m_aoInter)
+      
+      //Calcul de la largeur des la zone de dessin.
+      nZoneAffiche_Largeur	= (nNbBox + 1) * (ClDessine_Fen_Schem_Inter.cstLargeurBox + 2 * ClDessine_Fen_Schem_Inter.cstMargeVBox) + ClDessine_Fen_Schem_Inter.cstMargeVBox
+      {:m_sNomFen, indFenêtre}..LargeurInitiale	= Max({:m_sNomFen, indFenêtre}..Largeur, nZoneAffiche_Largeur)
+      
+      
+      //Calcul de la hauteur des la zone de dessin.
+      nZoneAffiche_hauteur = (Dimension(:m_oSchem.m_aoAxes) + 1) * (ClDessine_Fen_Schem_Inter.cstHauterurBox + ClDessine_Fen_Schem_Inter.cstMargeVBox)
+      {:m_sNomFen, indFenêtre}..HauteurInitiale	= Max({:m_sNomFen, indFenêtre}..Hauteur, nZoneAffiche_hauteur)
+      
+      
+      {:m_sNomFen, indFenêtre}..AffichageActif	= vrai
+      
+     type : 458752
+   -
+     name : sCheminChamps
+     procedure_id : 2262518760875931906
+     type_code : 12
+     code : |1-
+      procédure sCheminChamps(local sNomChamps_P est une chaîne):chaîne 
+      renvoyer :m_sNomFen + "." + sNomChamps_P
+     type : 458752
+   -
+     name : Efface
+     procedure_id : 2262518760875997442
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Efface ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE PRIVÉE Efface()
+      
+      sChamps est une chaîne
+      
+      POUR TOUT element oAxeTmp DE :m_oSchem.m_aoAxes
+      	sChamps = :sCheminChamps("btnAxe" + oAxeTmp.Get_IdUnique())
+      	
+      	SI ChampExiste(sChamps) ALORS
+      		ChampSupprime(sChamps)
+      	FIN
+      FIN
+      
+      
+      oInterTmp est un ClDessine_Fen_Schem_Inter dynamique
+      pour tout element oInterTmp de :m_aoInterDessin
+      	
+      	//Le champs est il déclaré ?
+      	si oInterTmp.p_sNomBox <> "" ALORS
+      		//Oui : récupération du nom complet.
+      		sChamps = :sCheminChamps(oInterTmp.p_sNomBox)
+      				
+      		//Si le champs existe dans l'interface, on le supprime.
+      		SuppChampsSiExiste(sChamps)
+      		SuppChampsSiExiste(sChamps + ClDessine_Fen_Schem_Inter.cstSuffix_prev)
+      		SuppChampsSiExiste(sChamps + ClDessine_Fen_Schem_Inter.cstSuffix_suiv)
+      		SuppChampsSiExiste(sChamps + ClDessine_Fen_Schem_Inter.cstSuffix_Up)
+      		SuppChampsSiExiste(sChamps + ClDessine_Fen_Schem_Inter.cstSuffix_Down)
+      	FIN
+      FIN
+      
+      	Procédure interne SuppChampsSiExiste(sChamps_p est une chaîne)
+      		SI ChampExiste(sChamps_p) ALORS
+      			ChampSupprime(sChamps_p)
+      		FIN
+      	fin
+     type : 458752
+   -
+     name : oGet_DesinInterDeInter
+     procedure_id : 2262598866351247467
+     type_code : 12
+     code : |1-
+      procédure oGet_DesinInterDeInter(oInter_P est un ClSchem_Inter):ClDessine_Fen_Schem_Inter
+      oRetour est un ClDessine_Fen_Schem_Inter dynamique
+      oInterTmp est un ClDessine_Fen_Schem_Inter dynamique
+      
+      pour tout element oInterTmp de :m_aoInterDessin
+      	si oInterTmp.Get_IdUnique() = oInter_P.Get_IdUnique() ALORS
+      		oRetour <- oInterTmp
+      	FIN
+      FIN
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : GenLiens
+     procedure_id : 2262601503462435883
+     type_code : 12
+     code : |1+
+      procédure GenLiens()
+      
+      
+      
+      oFil est un champ
+      oDesInterDebut est un ClDessine_Fen_Schem_Inter dynamique
+      sChampDebut est une chaîne
+      oDesInterFin est un ClDessine_Fen_Schem_Inter dynamique
+      sChampFin est une chaîne
+      oInter est un ClSchem_Inter dynamique
+      nPoint1 est un entier
+      nPoint2 est un entier
+      sCleOffset est une chaîne
+      
+      nCouleur est un entier
+      bPrem est un booléen
+      
+      anOffSetLiensrouge est un tableau associatif d'entiers
+      
+      IdPointAttacheDépart est un entier
+      IdPointAttacheArrivée est un entier
+      nSens est un entier = 1
+      
+      pour tout element oDesInterDebut de :m_aoInterDessin
+      	bPrem = vrai
+      	pour tout element oInter de oDesInterDebut.m_oInter.aListeLiens()
+      		
+      		oDesInterFin		<- :oGet_DesinInterDeInter(oInter)
+      		oFil				<- ChampCrée(:sCheminChamps("fil_" + oDesInterDebut.p_sNomBox + "_" + oDesInterFin.p_sNomBox + "_" + DonneIdentifiant()), typFil)
+      		
+      		
+      		sChampDebut = :sCheminChamps(oDesInterDebut.p_sNomBox)
+      		sChampFin = :sCheminChamps(oDesInterFin.p_sNomBox)
+      		
+      		si Dimension(oDesInterDebut.m_oInter.aListeLiens()) = 1 ALORS
+      			nCouleur				= GrisFoncé
+      			IdPointAttacheDépart	= PointDAttacheAjoute(sChampDebut, 100, 50)
+      			IdPointAttacheArrivée	= PointDAttacheAjoute(sChampFin, 0, 50)
+      			
+      		sinon
+      			si bPrem ALORS
+      				nCouleur				= RGB(57,183,36)
+      				IdPointAttacheDépart	= PointDAttacheAjoute(sChampDebut, 100, 50)
+      				IdPointAttacheArrivée	= PointDAttacheAjoute(sChampFin, 0, 50)
+      				bPrem					= faux
+      			sinon
+      				sCleOffset = oInter.m_oAxe.Get_IdUnique()
+      				si anOffSetLiensrouge[sCleOffset]..Vide ALORS
+      					anOffSetLiensrouge[sCleOffset] = 1
+      				sinon
+      					anOffSetLiensrouge[sCleOffset]++
+      				FIN
+      				
+      				nCouleur	= RGB(184,0,0)
+      				
+      				
+      				nSens		= nSens * -1
+      				si nSens = 1 ALORS
+      					IdPointAttacheDépart	= PointDAttacheAjoute(sChampDebut, 40, 100)
+      					IdPointAttacheArrivée	= PointDAttacheAjoute(sChampFin, 60, 100)
+      				sinon
+      					IdPointAttacheDépart	= PointDAttacheAjoute(sChampDebut, 40, 0)
+      					IdPointAttacheArrivée	= PointDAttacheAjoute(sChampFin, 60, 0)
+      				FIN
+      				
+      				
+      				nPoint2 = (oDesInterFin.m_oInter.get_pos_inter() - oDesInterDebut.m_oInter.get_pos_inter()) * ...
+      					(ClDessine_Fen_Schem_Inter.cstLargeurBox + ClDessine_Fen_Schem_Inter.cstMargeHBox) + 15
+      				
+      				nPoint1 = (4 * anOffSetLiensrouge[sCleOffset] + 6)	* nSens
+      				
+      				oFil..PointDePassage = ...
+      					"0," + nPoint1 + "," + ...				//1er point en dessous de la boite de départ
+      					nPoint2 + ", " + nPoint1			//2eme point, juste avant la boite d'arrivée
+      			FIN
+      		FIN
+      		
+      		oFil..ChampDépart			= sChampDebut
+      		oFil..ChampArrivée			= sChampFin
+      		oFil..Couleur				= nCouleur
+      		oFil..Epaisseur				= 3
+      		
+      		oFil..PointDAttacheDépart	= IdPointAttacheDépart
+      		oFil..PointDAttacheArrivée	= IdPointAttacheArrivée
+      	FIN
+      FIN
+     type : 458752
+  properties :
+   -
+     name : p_sNomFen
+     identifier : 0x1f6614d35fa4b902
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomFen() : chaîne
+         
+         renvoyer :m_sNomFen
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sNomFen(sValeur est une chaîne)
+         
+         :m_sNomFen=sValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_bModeEdition
+     identifier : 0x1f6614d35fa5b902
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bModeEdition() : booléen
+         
+         renvoyer :m_bModeEdition
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_bModeEdition(bValeur est un booléen)
+         
+         :m_bModeEdition=bValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1f6357dd55bd95c1
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

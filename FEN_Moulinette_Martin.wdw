@@ -1,0 +1,1660 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_Moulinette_Martin
+ major_version : 25
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_Moulinette_Martin
+ identifier : 0x2e1c3aef00b4b13a
+ internal_properties : BQAAAAUAAACmdhbAM00LLlHa0zCZ3WL+E6pdK8EWmQx432QfUdNJbmWc8NPH8xN18XavNCWus2b6sQTFCXDaPwU130U02s6dDHJlcqc2bP6nNslqpxtFgMnxKttK+yBM7WSc8uOnqHsTa4LlAjHsRMdbA2GI3l+IUY/GwWHae8jMVkcftyx84I1/5TXkHnSRoUtM+WIzcEDfueHqAMT77IvGrBrVvu2GWVQ4rPBbx0JxrHqPQ/P2Yyn7hkkPghMP1Dg+AZ+MRBoo7kfW/D4cFK5c/Za1jb6DRf9QTkxyNcQ8bGa3ZZvHW3ELEHXacRymW4+d1AFpUh36qrxv0hRgecNT+lkA2sDXIVEVvjrk0/kawwYyjg9rSappUExxV9gBwohK1r8veocMiiUn7em9H1DfGofSDVZjRGaURSY6dXgIMrdIUbYyJ1+/5NNuW9YLsiJaKIyyPH//zh/4nI5HPKklKIBrTvZSAwBDfJbgtG+p7wV43fCzwvzSmlOIvSiResOcbdaHghSeVto0m7dDx9C7ZIjOaZKx9TJQ7u9Dj5gSsLtksyFxng7XVif6DddWv2n52jD3q3/NPywF7CO7Wk1NVBLTCu7Yknody01bEmFP0KR9xYyz8VHxiItbL+YL6ACpl32EV1i5KlmoizLH9pd/Pj6bpsdAwqNlrOFM79a2FCVxNjZGsrj52cabrtiOS7bFsATJOyNN5FOzN1b36zKcfMYmtRcwVaopUWOVEPuQmbzYV3r9kuydtAuuQDUbniueHxHWQOdnVqfCX46LxI4SI5tEYSVKErLRf2UeJcihSAlyBU1q/3EDIWxA+j0=
+ controls :
+  -
+    name : BTN_SupprimerAll
+    identifier : 0x2e1c691d03217373
+    internal_properties : BQAAAAUAAAChL071MBb5z5uTvsWCJkrOJkxoJZkUr5/GAso6eKhMNsufo3M2N6wm+XnhARh/dUoZCOLVitu0jisAksd4v7mZOIqnBoZtpoQUbmFmB1gfImzPT1vGF0IRonfr237AQ6B7Mj3LMcDyNwmfYqNcaj7XtP+SBcJDLJZoQRaqL0WDxtXHeFiZW8Ae0ReqrVml2Y6RlZY9pGOsjBfzzyJBkIWrZ54WriRASyn5kBDr2P1LxW56d7DExst05oC/3OfAFDn+wdW45ziHlhuqLN6Bbjqrk08z8hC7PH6k/ZJ3nwRvaMGgrBNLdD5T8MynsumSrOwQrIVrDY0dBKkpMqNx/Tcyw1dp1IEY4pq2lGsjPPXAl7GEqmMrhNYnNUlajEpVNETJdfK4Pcuy83FEZpFMIcW2Lrq/2wW4HMr4Ee1u+gANmODeTna5XwsSJRXoqyp0b0YajDFinIJ9ZSi4qAk8WiQOEKEvqGUWGpIfOgp5ftOC8ySP9VUKnN7MbtpspeReAUGT4HuqSCnbzgfG33XsQcOSqm8p+/OoNbiYxPPCvrtiEFHDAVYv9TeRmECY/+2opxtkxNUblK9cJRKCp+gDiG3JbGDKpfm00EoCdx1ebISJfw+udrWOVZL8VZQIvIjjAYg5vSs7Wm3iERT+ynTnkC8FG2/HtoXhN6Vahr7bW3jFxVv/mQh+9MeeVTdqUPsgDwk6UZseL6UZqePibLfO0x4FqGkQDFHVz0El0xS/G9qN8O++lqOIr6gz0urObYe2F/jPzkeXdZGS63NoCrebhxBfqLTHSb7xkH7VThh/snfwX/6v2zGGC30FNmf7edXBIlh1hpo=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         
+         //contrôle des tables a vider au préalable
+         HSupprimeTout(Scr_CritereAccept_Composant)
+         //on vérifie que tout se passe bien
+         SI ErreurDétectée() ALORS
+         	Info(ErreurInfo())
+         	RETOUR
+         ELSE
+         	Trace("Vidage Préalable de la table des Critères D'acceptations des composants")
+         FIN
+         //-----
+         
+         
+         HSupprimeTout(Scr_CritereAccept)
+         //on vérifie que tout se passe bien
+         SI ErreurDétectée() ALORS
+         	Info(ErreurInfo())
+         	RETOUR
+         ELSE
+         	Trace("Vidage Préalable de la table des Critères D'acceptations")
+         FIN
+         //-----
+         
+         HSupprimeTout(Scr_CritereAccept_Etat)
+         
+         //on vérifie que tout se passe bien
+         SI ErreurDétectée() ALORS
+         	Info(ErreurInfo())
+         	retour
+         ELSE
+         	Trace("Vidage de la table Critère d'Acceptation de la liste des États ")
+         FIN
+         
+         
+         HSupprimeTout(Scr_CritereAccept_Composant_type)
+         
+         //on vérifie que tout se passe bien
+         si ErreurDétectée() alors
+         	info(ErreurInfo())
+         else
+         	Trace("Vidage de la table Critère d'Acceptation des composants types")
+         FIN
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_RemplirLesTables
+    identifier : 0x2e1c6dbb05957d7d
+    internal_properties : BQAAAAUAAAAqwNPoN9OObffuZtNd2MA1y8HduB5/8XBqVQ1w/jmOSgOPYWvX4y5GiORNfCz3eXk1E+xZLjoYtiK2+23mueGMBYvPUOprkBMTDVJD0Z8LdGSLuguBLtSvsZ7Bxt312dG6f9aIqLVkQ4LjM8l4kBmNYYoKTLrv46PmSP/ITSHuDOLK8Rdah2b8hs6kr3/ISaM94nf2RQwSjkl33ur4Iv4U+gcTNd4/M4/ispyjTpB3P9VV2x3n4LT2MfOL4PZKAojK65gikS8q9R4CXb624e/jEF7AlP4afcU7jBkGTF2xT9mqq2eQVL8xsAS2iJuaar6Ukcodg+mMruunIcn47RVLYc8H+H4fcj349CocUqjzDoLmcIHcT9ywRQ4lzvQc+KVj31r01A3036TgUfstkJWEjsyhHGaRIjG9o/sb/tE/za4wNUQRYN6YnVSTjDIuAxUuRgBhPXa1nxUYl0Qyi4iBqPiI1CSD8I0KPnYp7A2f+S3H0y23D8+62cQNRnlKWnmtyzbBw6Tn4OGLzeinVnBnrcNeukFkq1qL1BhMIA5LCaENTdIBOoj+4Vjd0jE+F+PvVEZt9LbAldRjjlKTJQz2lBLak2uzzNWS87enRxzsFMYsK18iTQx/vukfyaMJObFZLTkkVYzn3OSfiUgmnZQ4k9AaiaiGdsYlGjeiBWiBt+mlj876G8jh/p6ibndaSBD6qNQ7fERKn92M5NrqiCY5YbfFZi26xufwREq3eJVjE/1JAahr1gtA3WFv6wP2ZPwlICpFzMaGWUDdyAqtsLHGRoMT/o0JKq15wws=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         
+         IDfichierXLS est un xlsDocument
+         nNbdeLigne est un entier
+         
+         nNUmeroFeuilleEtat est un entier = 1
+         
+         
+         sResNomFichier est une chaine = "L:\Service informatique\Service Développement\Stagiaires Développements\ScrUM\Etats critères A.xlsx"
+         
+         si sResNomFichier <>"" alors
+         	IDfichierXLS = xlsOuvre(sResNomFichier)
+         	Si ErreurDétectée = faux alors
+         	
+         	//on définit le nombre de lignes.
+         	nNbdeLigne = xlsNbLigne(IDfichierXLS, true)
+         		
+         	//on récupère le nom de la feuille en cours
+         	sNomFeuille est une chaine = xlsFeuilleEnCours(IDfichierXLS)
+         	
+         	//Je charge la feuille des états.
+         	 xlsFeuilleEnCours(IDfichierXLS, nNUmeroFeuilleEtat)
+         		POUR i= 2 _A_ nNbdeLigne
+         
+         			//-------------- Manipulation Jauge -----------------
+         			Jauge(i, nNbdeLigne, "Importation de la feuille : "+IDfichierXLS..NomFeuille)	
+         					
+         			//--------------Fin Manipulation Jauge -----------------
+         			
+         			// Import des données de la feuille État			
+         			HRAZ(Scr_CritereAccept_Etat)			
+         				Scr_CritereAccept_Etat.Libelle = xlsDonnée(IDfichierXLS, i, 1)
+         				HAjoute(Scr_CritereAccept_Etat, hEcritureDéfaut)											
+         		FIN
+         		
+         		
+         		
+         		//On fait un changement de feuille pour Composant Type
+         		nNumFeuille est un entier = xlsFeuilleEnCours(IDfichierXLS, 2)
+         		nNbdeLigne = xlsNbLigne(IDfichierXLS, vrai)
+         		pour nIndex = 2 _a_ nNbdeLigne
+         			//---------------- Manipulation Jauge -----------------------		
+         			Jauge(nIndex, nNbdeLigne, "Importation de la feuille : "+IDfichierXLS..NomFeuille)
+         			SI nIndex = nNbdeLigne ALORS
+         				Jauge(nIndex, nNbdeLigne, "Importation Terminée")
+         			FIN
+         			//-------------Fin Manipulation Jauge----------------------
+         			
+         			//Import Données de la seconde feuille.
+         			HRAZ(Scr_CritereAccept_Composant_Type)
+         			Scr_CritereAccept_Composant_Type.Libelle = xlsDonnée(IDfichierXLS, nIndex, 1)
+         			Scr_CritereAccept_Composant_Type.Ordre = xlsDonnée(IDfichierXLS, nIndex, 2)
+         			HAjoute(Scr_CritereAccept_Composant_Type)
+         		FIN
+         	FIN
+         else
+         		Info(ErreurInfo())
+         FIN
+         
+         jauge()
+         
+         
+         
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_AfficheCriteresEtatsListe
+    identifier : 0x2e1dbd15091d3499
+    internal_properties : BQAAAAUAAADLsixYlVuUNEUvuvbgguYYQ659l9ai0GAtzWubjFhV2CLh5B1vvGdQjaDi+P64EgOm39nTss27WpXM2q/GKnoExhYildR5fO6gucZ0cyNXN66LMsQ4nWxbp+VBecs7L/HqIERCtCLl1ebBV0qcIwNou3Wp/14IRXTxAUFfY3+VKlwgQdyIa65qDG1qV+lkfI1Qbo0lEapW4D3G/D3yhyC7WEjPWeB2i9TGz+rUiNS+tIl23cCBPHRZ4HB5bfv6+rU8cgg/tiMuNxtiv4YdgahJwHafRuZWL8ZF1+SpOxOEGBzfGEC92okNTe9KTt9YrvsNGy0K2PdHuYWLcTswv10QZ35wDxKWMfjYgHkqAiWZECE3jW15uU5ubUvcptm2J2zH1O6wWJFATZofn44T6wzKZlnaW9lY79k7AqDci8TuCUifpv+wUdkgY//OVSdnZH/Gp5+qipO8Q3tTpM8hfLWJziVF0wcmeetGJ1toh9K8sVugGhC+yog2h8Fu/14lNfs1chvIZqusulFUULWI2ZPvJzQ5fXh74Jzz9+P7o0m6f/lRtq9KY6sO6YtAa2Y5Bh+hFbkaLTdrhaaOHQx5r+4ZoxiMbaEvcubcEBTkYAGFsGTvKGrJtJFBHkzGjozywC2v3ppcyQBxjqyYNtha25Rujx3BKemlBtuwAoRzShkaMc1Vb8Yf0sk3okJmF/JjQwLQsMo8nGEW8NZ1n1CvM/hLvXpHpcCDWTyfXmivxo74eT7kKA==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         ouvre(FEN_Critere_Etat_Liste)
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_AfficheCriteresComposantType
+    identifier : 0x2e1dbd94095323c7
+    internal_properties : BQAAAAUAAADMwJv57X3yL7GTH5mP4pwiirY/AMh8BMJn1M/+D6N3mSiP7SYy6VV2Zh6O36eDaZtmiOV2BIWJLny1sUbIgKhQgtE5FDdzTV+nv9qlJa+fOmEGma8OqlRqVgOq/i/ZB5ZCuco52ICBb5wJMV2UeU5qbGOWMm2NCNSat1+V6VJXspNuC2yFVBU/Pfzgvd0uw3N2ZFh1TVh+KPZxzbYpLE8oWImTmyo2TIUK8Ct5oI1thqr0KIPcknACmWS2My/AN8rUsBfxK5pP8J1oc2Rte4sEz5aLI7B6hCegeQgc16sbYfhOKFffeq0t8fvJn4uAvh590JrVN6RWawqty4T52KB9jRDjhH8RMVSAJSIFWZCIhwUYOs1x2yokhRGBH6OwnE4BoDBNbeMHtyG/YWfV1v2djC0IHDo0svMuxsAX7RW1YNC9TjCBrdbAwI3K+CFCrXxSzaFFnZ+pR3rj4k4Hz0ogPnMF4gbI/m/Joxnb0xEJtFl4AO/9yLtMlE0C4tgWSDiZrC9JZ1uz/IZiRujS4h6GqWTTRrEBefomib9SIVh/SP13CHjTk0x2TvneGnyAJwKVZ1t1wLmA+08ojQxaW8xxbnGl/7P+WqNCvf1WM/FPdEmqTwTjT++StIHDNEEyTdCx4oTbaKLODuN+eKeS5Jtey8C2ui3wiUqAu7poXRdCmf4NS1m8UVUQksOoRSV/TLu5At7X1/sihQf05rsd6Ax7f+J4OxFksZnxsowFAQFK5ZxE8W9Uo60xsAVLzeW1OT4=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         ouvre(FEN_Critere_Composant_Type_Liste)
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_ImportExcelUserStorie
+    identifier : 0x2e1de11011c6c22a
+    internal_properties : BQAAAAUAAACpAmZ8LUdQVk2eABaSNCmiF+yCGaRB2Tv+NaQ/HniSEfHtE9ZMJ8UDbP+ysKGVWYqfTBpt1lPbl9BJt9eTFgqbTDR6OLTsGuXzmdWrkxnn7M7tslMaQezvX+pfCnK/ZYPC5wYaAjycz+1q4S1OFJMQSgHfw1XcEvpev/rCywAPdE24lqSpqyejytXKRNG2VgdU24tnFzsF3hKlGBc5HTE2DulJoTvyTAE1cjkl365jd5lvGqaldg8KK+zUtM6QQGi98VTPjq+kSzvrR9p6QRVwxG0MDXvP31omIx1oKGfFV3dce8e3IKiEMtmpGWNIEM08xGZG5ppJRXtX1sxr4l4Pn6CzntN0sLvGArS2DmiEnFaeSbLw5ZefVtzdVS6qHU9/xZcHdRQSDmXHiwQ/qo8gNYncADGjjZPFushP6y+VtS33JuhKapl0R4u8vjO4hR0VZeNb5NpeoWGrZAy5dSIBKZ3DvK/5NVOysfHDq6F/8zSOGI8+1b5ojf/CYm6oOAWeiCONHhJ8LjVEQBZKShDtlJz7ljIWrORv8+EwD5Ijr8Zu2pZghLPy7wMinjSY8W+eIdONXXLPVRYmPhn3L5UCSOkjZPwdhfXpNy0jq0dnXqm6aj5OeJgVNDga/KJ4KbMeCF3hoNTqNsIc7p8z/ref97CA73fnG800SPlnnUc0CdFRWVOerAFD6chmuNpy7DfjwWvu7hBlNW0hMI58dbeab72e2Pm1MAi7dgzwEoP6Um2XOkwyUvwozLEOj160M0TUSyV10yzcB9efRK3ZMfIbpJYjdC8tL6CDuw==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         
+        type : 14
+      -
+        code : |1+
+         
+         
+         
+         sCheminDuFichierDuplique est une chaine //= Dupplication_Fichier_Avant_Import("L:\Service informatique\Service Développement\Stagiaires Développements\ScrUM\User stories ScrUM.xlsx")
+         
+         nIDproject est une entier = 1
+         
+         // on apelle la procedure, avec les parametres nécéssaires
+         //COL_Criteres_Acceptations.Import_Des_Criteres_Acceptation(nIDproject, sCheminDuFichierDuplique)
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_OuvreCriteresAcceptation
+    identifier : 0x2e1ece58017bd376
+    internal_properties : BQAAAAUAAAAx7fxJBBXRrmAzBXmTKGnuh1zmxJgnw/m5BRYH8DECT40CRLe1S3bIBEA6/J/CZDszWrDnnybAwmjpQisoFLub9M/bGScRVsMbRWjw8BQjjjtkfNYBwBQ8WpJ85JuUHTTqUDgJ62q+L8rrqoqpIyVgX+2utEgrzpbmjMZR7lAOK2tUzzsgHjPyzLSdKAa1gjzp7/C177orFMCfLS4a0o+08pg6I7Yaof4QsmEG9sJBVn7FQ9c0fxgnvOo3zg3fuBbm4vtS97qfs3hi+azJcYctp7X7QnGzfcD0ONWUsp5lEr3rxusEJQ9O0FETvo5RnPKnnXQ+9UxVe7382UJOgwMeHxURqgmgYG6KeBGSaHXgDel1pzkS0CRG9aUhreZD+/I7sOFYlWh1cfxeGaIvk//z10wTBOFmTZnkwrG4V/UtFjO6B++7q1TQHidpyYTWgOOb//ISxB+V1AfSuha+XgQOBx/arQYDpoWy4AH4rNVv9JcpAAliLOr7lhwRRqDCKg9NEzeqUlX96kRIkQHxEf4qpHQ00yIKSNXE/4GpztM431OhbkoqDyHGH5yspNuX5ZSg4SmnD9mCceg3qE4uzCfSZnyPQ15j0AV9jEshNutnoftvR8ZOY2YTMqxhgy6DtI91M2x1N4jrlA2wHR2lKC2bXsaJQ+kJaoP8Sw3oGiX66BDrJfm++hpmJKQ+VGidxMHxYUjk5JQiCSjtUx7wO6yBRyt5p5N3td0fatZ18eiQuWlMS9mxHrPcKhm29rr9uBOvX4GclA==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         ouvre(FEN_Critère_Acceptation_UserStorie_Liste, 12)
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Enregistrer_utilisateurs
+    identifier : 0x2e2088d901a8150e
+    internal_properties : BQAAAAUAAACVhFVdGzbdk+Qx9uq8VLpj8owzPvNeHcgCUCVyqGM9jnA9Twm+h7AfFoxAydWKCw2IBmGw2Q7a3DTHYjqFeJFr8mjPL0gxgJxX5//Lfc50MmD3qRuw3gy7D3DNQ6TlnasodYENA/Uoo1daJPSiF0fzgORnfSyzFraxJcLId3QD+dLjnmC6RVwz0brpBHHh8gRZqQPxrzoEfWvBP0cJ/rPIALHJu6mYUQaYV7gY/wPr6gP/chqCeAMWB8AeQbJHFa0qrlVSlJamFJbufNdR+AO9cn08Dg/o/yuWABNa9QvERq/zoN8Ne1uLOoReOJr4uxtyIH4zBn9/RKKYsjcxalxggR30IyYz+VO1cM/Hu8Y7J4AHE8l5NGKMoeg4lsv1wKiu6TQce38bsZ3KSjUtPQKZXv7qh8VhCK3UxVjEmfj47LI0YV4f6BX8rnRliuf5ry3iHRvVUFcior0RDTiIATbt7soVtiJ2lq/f2jiSb/bV51UHUiONZtr/Bs6obJ41YjNKjuZdYY4Y+4crJqHSMzYSUF80ORbgwgvnARKt1uu+fo8+CiSQfkUnuB9HiDE6J4sPg7SmwwbSfa9t8s0v9qMn1FkwZ7Xjz79BZuBF7aU6EjP2Jsx8bNr/QT47HuzGNeO6/PnGiRPESMS7KpoH9VKwydM3BoNC1iSkkDkMJoFG2lrEsfZ7vBxXN4YU7LaDf10ibtRcBb6UEVNnpAhTjZ5jlCggrsVAnJrAcyypSVlKmo8=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         IdFichierXLS est un xlsDocument
+         Xlsnbligne_ est un entier
+         i est un entier
+         sFichier est une chaîne
+         
+         nPremiereligne est un entier = 2
+         
+         //Declatration Structure
+         stUsr est un STR_User
+         
+         nCol_login est un entier = 1
+         nCol_nom est un entier = 2
+         nCol_mail est un entier = 3
+         nCol_Service est un entier = 4
+         nCol_chef_de_projet est un entier = 5
+         nCol_equipe_dev est un entier = 6
+         
+         
+         
+         // Ouvre le sélecteur de fichiers
+         SI Droite(SysEnvironnement("USERNAME"),4) DANS ("2780","2821") ALORS
+         	sFichier = "L:\Service informatique\Service Développement\Stagiaires Développements\ScrUM\utilisateurs Scrum.xlsx"	
+         sinon
+         	sFichier = "L:\Service informatique\Service Développement\Test projet Scrum\utilisateurs Scrum.xlsx"		
+         fin
+         
+         //sFichier = "C:\Users\2780\Documents\Scrum\utilisateurs Scrum.xlsx"
+         //sFichier = fSélecteur("", "", "Sélectionnez un fichier...", "Tous les fichiers (*.*)" + TAB + "*.*" + RC + "Excel (*.xls)" + TAB + "*.xls;*.xlsx", "*.xls;*.xlsx")
+         
+         
+         HSupprimetout(Scr_Usr)
+         
+         
+         SI sFichier <> "" ALORS
+         	
+         	IdFichierXLS = xlsOuvre(sFichier,xlsEcriture)
+         	
+         	SI ErreurDétectée = Faux ALORS
+         		
+         		SI xlsFeuilleEnCours(IdFichierXLS, 1) ALORS	
+         			
+         			Xlsnbligne_ =xlsNbLigne(IdFichierXLS,Vrai)
+         			
+         			POUR i = nPremiereligne _À_ Xlsnbligne_
+         				
+         				SI xlsDonnée(IdFichierXLS,i,nCol_nom) <> "" ALORS
+         					stUsr.sLogin_AD = xlsDonnée(IdFichierXLS,i,nCol_login)
+         					stUsr.sNom = xlsDonnée(IdFichierXLS,i,nCol_nom)
+         					stUsr.sEMail =  xlsDonnée(IdFichierXLS,i,nCol_mail)
+         					stUsr.sService =  xlsDonnée(IdFichierXLS,i,nCol_Service)
+         					
+         					si xlsDonnée(IdFichierXLS,i,nCol_chef_de_projet) ~= "x" alors 
+         						stUsr.bChefProjet = 1
+         					sinon
+         						stUsr.bChefProjet = 0
+         					fin
+         					
+         					si xlsDonnée(IdFichierXLS,i,nCol_equipe_dev) ~= "x" alors
+         						stUsr.bTopEquipInformatique =  1
+         					sinon
+         						stUsr.bTopEquipInformatique =  0
+         					fin
+         					
+         					COL_Scrum.Utilisateur_Ajout_Deprecated(stUsr)
+         				FIN
+         			FIN
+         			
+         			xlsFerme(IdFichierXLS)
+         			
+         		SINON
+         			Erreur(ErreurInfo(errComplet))
+         		FIN
+         	SINON
+         		Erreur(ErreurInfo(errComplet))
+         	FIN	
+         FIN
+         
+         
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Lancer
+    identifier : 0x2e21a8800371bc83
+    internal_properties : BQAAAAUAAAB6Fgy/wzgmscBmjIC9Q4X5ObQ9P3KG+HRTxTHphQzopm0aEKEgpYBWe1PSb6OodMTuXJoC0JnPKSML7qX8ED8X9UT8Kpg+x1NyeAVmLSjJ33QxV+JvHe6kzaZ79Rqr5+oTRhLDpFJcUhzE5pZ2Ckf1+MrnHna0cfw8t64lGubdxiSG8YqoIrIrP+EfkRgbDprRxK0GUUJMB4gw7L86RURPcrAqePbhgRDILqe2Zbj6aTmM0398aoMgJsMafNgQxHZs8UYGyGhHrmbC6/PiYYSCn5AWBe2bPx2p2uU+Xlm05u/0ncQYFOm9Mvilp7YImvhAl0OUV8B1MuSmtS0rjmVNCBEbXfzCPCzgNHnPGJiQwU7pJwRPewPTJ3j1xgKqDVJCpeTXXN6dhENCX0/PApJ35n4q/gTG0o0IoB5ZMYbPTTVYRtklkoApFoyDhexi0c5+knp7VOFerspc1hAFBY7g9Qu9Jx6gowuivQrNTRdBCuz8guxc51gyqhwVzFNJOh/CDhoK5eI/cyWxfZtXqEa5KzWwoH5mkS2vf5vx0ouqPPIB3bcDopSmBfXcAbCqb/erhzlfBLC6ez5t2b/ZVSJKV+7I7/fHUqqlZjWFf3wbFKbUcByk3Bmrkp0hC0mAI81IC/8AQjK1oUclkU0cMiHBQm+VQX9OylzKuHGpJyfL/LlIfv7GxLW0i1rJkxsR32NVnZg85QbeBJhw
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         nPosActu est un entier = 0
+         nPosMax est un entier = 18
+         jauge(nInc(),nPosMax)
+         
+         ExécuteTraitement(BTN_SupprimerAll,trtClic)
+         
+         ExécuteTraitement(BTN_Vider_tt_les_tables,trtClic)
+         
+         //Import des utilisateurs.
+         Jauge(nInc(),nPosMax)
+         ExécuteTraitement(BTN_Enregistrer_utilisateurs,trtClic)
+         
+         //Paramétrage des types de messages
+         Jauge(nInc(),nPosMax)
+         ExécuteTraitement(BTN_Creer_les_types_de_message,trtClic)
+         
+         
+         // Paramétrage des états des critères et les composants type
+         Jauge(nInc(),nPosMax)
+         ExécuteTraitement(BTN_RemplirLesTables,trtclic)
+         
+         
+         //Chargement des sprints
+         Jauge(nInc(),nPosMax)
+         //ExécuteTraitement(BTN_Enregister_les_sprints,trtClic)
+         
+         //Intégration des projets
+         Jauge(nInc(),nPosMax)
+         ExécuteTraitement(BTN_Importer_credit_V3,trtClic)
+         
+         //Association des projets aux responsables de projets.
+         Jauge(nInc(),nPosMax)
+         ExécuteTraitement(BTN_Affecter_Projets,trtClic)
+         
+         Jauge(nInc(),nPosMax)
+         //ExécuteTraitement(BTN_Taches_MAJ_Str_et_Adaptation,trtClic)
+         
+         Jauge(nInc(),nPosMax)
+         ExécuteTraitement(BTN_Etat_US,trtClic)
+         
+         Jauge(nInc(),nPosMax)
+         ExécuteTraitement(BTN_Projet_terminés,trtClic)
+         
+         Jauge(nInc(),nPosMax)
+         ExécuteTraitement(BTN_ImportExcelUserStorie, trtClic)
+         
+         jauge()
+         
+         info("Chargement terminé.")
+         
+         
+         	Procédure interne nInc()
+         		nPosActu++
+         		renvoyer nPosActu
+         	fin
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Enregister_les_sprints
+    identifier : 0x2e21a8c40373c72d
+    internal_properties : BQAAAAUAAACiEuZS4F5jrLteXk2E5Id/bGcYADR4UBzIWj3UO1g/wpnahlrpegFNWs46ON9c6nG0m6LthfyHVofEdrX1+j86vAYhnZE/r89lWYD7NvJWA/vK5abSto6E53GIPWYky/s6vwZZEGQMO98+O2YfzH7SBZ1lMRR9/o9A5J5cCFDNHahxWrjxzPCvNHkg48ArYlVBuuCjxa8RjPHTKz2tBWoabtCueE9YYbhkXwd2JdegRsPhMUBH6oVjQPERYFe6HLPZ+AiHnzeujfGJNAuFJId1ECBi1dSthIdyM0gq7N/y9sedUOKh4/LnU+thzsO3LCwIJMr6BqrbjrYfuiSPaTzGrQheDv+xsxV7k7m6hh0mxQMq8MrJOKRuC1o972hiFNAHwrpABH/K+CT84Cfc8RazH1KDxI2Xb2meFSG7i+7nwtsNR2v0zrqSwyNwKDd2bzaImi0QR5eD2+FXP8r31BsdS5Co44zTgo4pUPri+75OQ93oDI5Peb8fn4yLzrGZtK0t+fkNsE/Rt2tSUug9y5VnuXFGrsG8UihG/n0YlNiH2ImHhaBnhZhJmIjAm+aVWF+ZH5UqLge0Y9CP6+HTBriUtm9dqrX9SylRDTKne+Z1bXnxxZA+zYqxqFFJ/BDFnbQulADAQR5o4LOV1x8I8MOc/cRxxXTCAsoX+wOUb+j9vLaqPPe4YEpgF8H2tBilse4pX1W00ZtSbBA+21hn8WSlB6i9yq6PXfOiROIHTYRQ3KJNgQ==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         IdFichierXLS est un xlsDocument
+         Xlsnbligne_ est un entier
+         i est un entier
+         sFichier est une chaîne
+         
+         nPremiereligne est un entier = 2
+         
+         //Declatration Structure
+         stSprint est un str_Sprint
+         
+         nCol_numSprint est un entier = 1
+         nCol_Date_Debut est un entier = 2
+         nCol_Date_Fin est un entier = 3
+         
+         duDuréeSprint est une durée 
+         
+         
+         // Ouvre le sélecteur de fichiers
+          
+         sFichier = "L:\Service informatique\Service Développement\Normes et procédures de dev\SCRUM.xlsx"
+         //sFichier = "L:\Service informatique\Service Développement\Test projet Scrum\Modele SCRUM.xlsx"
+         
+         
+         SI sFichier <> "" ALORS
+         	//identifiant du fichier
+         	IdFichierXLS = xlsOuvre(sFichier,xlsEcriture)
+         	
+         	SI ErreurDétectée = Faux ALORS //interception d'une erreur
+         		
+         		SI xlsFeuilleEnCours(IdFichierXLS, 4) ALORS	//on ouvre la 4eme feuille du fichier
+         			
+         			Xlsnbligne_ =xlsNbLigne(IdFichierXLS,Vrai) //nombre de ligne à parcourir
+         			
+         			POUR i = nPremiereligne _À_ Xlsnbligne_
+         				
+         				//si la ligne n'est pas vide on enregistre les données
+         				SI xlsDonnée(IdFichierXLS,i,nCol_Date_Debut) <> "" alors
+         					stSprint.nNum_Sprint = xlsDonnée(IdFichierXLS,i, nCol_numSprint)
+         					stSprint.dDateDebut = ChaîneVersDate(xlsDonnée(IdFichierXLS,i,nCol_Date_Debut))
+         					stSprint.dDateFin = ChaîneVersDate(xlsDonnée(IdFichierXLS,i,nCol_Date_Fin))
+         					
+         					//calcul de la durée du sprint
+         					duDuréeSprint = stSprint.dDatefin - stSprint.dDateDebut
+         					stSprint.nNbreSemaines = Arrondi(duDuréeSprint..Jour / 7)
+         					
+         					COL_Scrum.Sprint_Ajout_deprecated(stSprint) //procédure globale d'ajout du sprint dans la base
+         				FIN
+         			FIN
+         			
+         			xlsFerme(IdFichierXLS) // fermeture du fichier
+         
+         		SINON
+         			Erreur(ErreurInfo(errComplet))
+         		FIN
+         	SINON
+         		Erreur(ErreurInfo(errComplet))
+         	FIN	
+         FIN
+         
+         
+         
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Creer_les_types_de_message
+    identifier : 0x2e21a8c40375c73c
+    internal_properties : BQAAAAUAAACI0lLx+uWT1vvpuPYKeaRMI1lxRffOLUQgajtS6Jrh5qCXHpqPA2/VYJM3U/D/f7vdCovUIpPZUAodJENDPuwGy37l+tRqwBBHNnvS0uZJmX3KW1CR+/lbHCpzvrCUtr+Esyk0EEJPuUTeF/bhYa+lXr3lZDFoI5bTS6su9rkCDX6Hd2AYUSQaZrkAFJh2qDlHxUs5J/Cb7/pEL5+jh7fuPlzeuJUZYbvx664vFiqv3O7NAXlv+1Mq3b/sfJnsbWXuiJCCsBzis9IMkCw/2fO4IJ8w2JxIsvGqn63SP8rBjam4TMr8MTzvum8PlfHC+kwvl9Hx+HDX8HBOYbuIh/AxifzWQBaEzVzniRJOvFmwdW2Z7KJ8blN79zxYu84qofG2ZrVLm8NposSGwQFA+/P6pIDQb4y5/NvaB6Jlj0DssaAjLFxBoDn2iTXfsCG2Lj3JJHK3Wlm4daHb7kzPEjxkUFZnPtPFOdrr2KVOzXi3wurW8Qc8d1I7ZbYuJEFBkx6UMwygn6/iY02MrZLZI5C2/jFF89qwaTjcTnis/qbQ62plBEk02V8nDOwpafr9pWZwVOjVxUmvFXinAmt/eG+bZ/eGBXQB9CdlVTtxm5Cy3EY/JqETzQP1tmDdnx0kRxSm/Bl8mfmNkL52ZDOvzQv1nJIJ/oFPSvATDcgDr7Cgd8AX1L/EgKbpkgNbTRyBteH3Nu0Bgs5sr7uX0IPgLgJxQQQlZPmfnAbqKDdJ/3yz6kTV7F4YvAs=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         Hraz(Scr_Type_Cmtr)
+         
+         Scr_Type_Cmtr.Type_Cmtr = "Point(s) fort(s)"
+         Scr_Type_Cmtr.Top_Par_Defaut = 1
+         
+         HAjoute(Scr_Type_Cmtr)
+         
+         HRAZ(Scr_Type_Cmtr)
+         
+         Scr_Type_Cmtr.Type_Cmtr = "Point(s) faible(s)"
+         Scr_Type_Cmtr.Top_Par_Defaut = 1
+         
+         HAjoute(Scr_Type_Cmtr)
+         
+         HRAZ(Scr_Type_Cmtr)
+         
+         Scr_Type_Cmtr.Type_Cmtr = "Solutions"
+         Scr_Type_Cmtr.Top_Par_Defaut = 1
+         
+         HAjoute(Scr_Type_Cmtr)
+         
+         HRAZ(Scr_Type_Cmtr)
+         
+         Scr_Type_Cmtr.Type_Cmtr = "Test fonctionnel"
+         Scr_Type_Cmtr.Top_Par_Defaut = 1
+         
+         HAjoute(Scr_Type_Cmtr)
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Importer_credit_V3
+    identifier : 0x2e21a936037783c1
+    internal_properties : BQAAAAUAAABQtyB2z+AIft00O1COo3y5pNeS1GSxQMS9Hddwjfl+jiud9NOytQLRcY9ni5X/eWtHUQXkp3pA+zUTxRz5kk5ctPn3fQ62qtsZn2XayE51/vT2Fq0LwKep6kRDEn1S57uOtw3xFkG+Z2ozjK01l2RatVGQ5TS1fQW3AdWxIWcXF0WDZ3ptJEVyax1OV0s4k66+dCdKB4MDqCLmx34scK/B1+csJ8O/3/+k56+HLI+xJWZLJz5LQk/PBWtmEQrlfHqo9sN9I0k6uRcsh6KINGUTVCGX5oZVjWukElONCkVhNNl5bVw8rjWVVlwLb8Kwwbzt1P7vQQzidHxFwt2/CWCYp2cfonenCpPZd8EWNl9PK3E6BXlJGKPexZYvUCDZIck7YDxbv38DPBmIyPoACtky7d43ISIbHJkHRZHGfaFsH73R00yVdF36dJ0wp5ULTuU4eENHrjEw68BH+Zll9TJ0LwoeFj85O/5W3jA7Bcc1VsuwZEu829abKlAPC52GM1rfgUEaZbGgYWDwhvnvrj6Io+kC3WDafShFzA81ULXi/1Eh2YsqM7vr04o6yLTK/1oV49LUkJa0duj41HnUpJC2lbRYFL+6fZY3GqnzKMLzqwQe9DxCkma27oR61gkRQv+C0hi+m/N9RtWmEP0T25K/b+uQjpmDqrfZhBDU05fKg/pWaHRtoZqZcw1KkkkfOducOlY39bFyH/jsXlDIn/kqzZCZWwZo8DkIWBT8yVRf3A==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         IdFichierXLS est un xlsDocument
+         Xlsnbligne_ est un entier
+         i est un entier
+         sFichier est une chaîne
+         
+         nPremiereligne est un entier = 2
+         
+         //Declatration VAriables
+         nIdUS est un entier
+         nIdProjet est un entier
+         stTache est une STR_Tache
+         stUS est une STR_UserStorie
+         
+         nCol_codeUS est un entier = 1
+         nCol_codeTache est un entier = 2
+         nCol_numSprint est un entier = 4
+         nCol_Poids est un entier = 6
+         nCol_fin est un entier = 7
+         nCol_nom est un entier = 15
+         nCol_Besoin est un entier = 9 
+         nCol_Besoin2 est un entier = 15
+         nCol_commentaire est un entier = 17
+         
+         HLitRecherche(Scr_Projet,Nom,"Credit V3",hIdentique+hLimiteParcours)
+         
+         si htrouve(Scr_Projet)
+         	nIdProjet = Scr_Projet.IDScr_Projet
+         sinon
+         	HRAZ(Scr_Projet)
+         	//Scr_Projet.IDSrc_Usr = 1
+         	Scr_Projet.Nom = "Credit V3"
+         	Si pas Hajoute(Scr_Projet) alors
+         		info("erreur dans l'ajout du projet credit V3", ErreurInfo())
+         	FIN
+         	nIdProjet = Scr_Projet.IDScr_Projet //On recupère son ID
+         fin
+         nNumeroOrdre est une entier = 0
+         // Ouvre le sélecteur de fichiers
+         
+         //sFichier = Dupplication_Fichier_Avant_Import("L:\Service informatique\Service Développement\Stagiaires Développements\ScrUM\CDC V2 CREDIT Vdef2.xls")
+         //"L:\Service informatique\Service Développement\Test projet Scrum\Credit V3 scrum.xlsx"
+         //fSélecteur("", "", "Sélectionnez un fichier...", "Tous les fichiers (*.*)" + TAB + "*.*" + RC + "Excel (*.xls)" + TAB + "*.xls;*.xlsx", "*.xls;*.xlsx")
+         
+         SI sFichier <> "" ALORS
+         	
+         	IdFichierXLS = xlsOuvre(sFichier,xlsEcriture)
+         	
+         	SI ErreurDétectée = Faux ALORS 
+         		
+         		SI xlsFeuilleEnCours(IdFichierXLS, 3) ALORS	
+         			
+         			Xlsnbligne_ =xlsNbLigne(IdFichierXLS,Vrai)
+         			
+         			POUR i = nPremiereligne _À_ Xlsnbligne_
+         				
+         				//Si le champ code de la tache est vide => c'est une US
+         				Si xlsDonnée(IdFichierXLS,i,nCol_codeTache) = "" alors
+         					si xlsDonnée(IdFichierXLS,i,nCol_codeUS) <> "" alors
+         						VariableRAZ(stUS)
+         						stUS.sCodeUserStorie = "CC" + xlsDonnée(IdFichierXLS,i,nCol_codeUS)
+         						stUS.sEnTantQue = "Historique"
+         						stUS.sBesoinUserStorie = xlsDonnée(IdFichierXLS,i,nCol_Besoin) + " - " + xlsDonnée(IdFichierXLS,i,nCol_Besoin2)
+         						stUS.sAfindeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_nom)
+         						stUS.nIDProjet = nIdProjet
+         						stUS.nIDResponsable = 1
+         						
+         						Si xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" alors
+         							stUS.bAtester = vrai
+         							stUS.eEtatUserStorie = ClUserStory.ECompteNbUS.En_test_fonctionnel
+         						FIN
+         						
+         						nIdUS = COL_Scrum.User_Story_ajout(stUS)
+         						
+         						nNumeroOrdre = 0
+         					fin
+         				sinon //sinon c'est une tache
+         					
+         					si PAS (xlsDonnée(IdFichierXLS,i,nCol_nom) = SansEspace("") ET xlsDonnée(IdFichierXLS,i,nCol_numSprint) = SansEspace("")) alors
+         						VariableRAZ(stTache)
+         						stTache.sCodeTache = "CC" + xlsDonnée(IdFichierXLS,i,nCol_codeTache)
+         						stTache.nNumSprintCreation = xlsDonnée(IdFichierXLS,i,nCol_numSprint)
+         						stTache.nNumSprintRealisation = stTache.nNumSprintCreation
+         						stTache.nNumSprintPrevision = stTache.nNumSprintCreation
+         						//stTache.nNumSprintDemarage = stTache.nNumSprintCreation
+         						stTache.nIDUserStorie = nIdUS
+         						stTache.sDescription = xlsDonnée(IdFichierXLS,i,nCol_nom)
+         						
+         						//affectation du num d'ordre
+         						nNumeroOrdre++
+         						stTache.nOrdre = nNumeroOrdre
+         						
+         						SI (SansEspace(xlsDonnée(IdFichierXLS,i,nCol_Poids)) = "" _OU_ SansEspace(xlsDonnée(IdFichierXLS,i,nCol_numSprint)) = "") _et_ pas (xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "A") ALORS
+         							Trace(Scr_Projet.Nom,TAB,stTache.sCodeTache,TAB,stTache.sDescription,TAB,"Poids : " + xlsDonnée(IdFichierXLS,i,nCol_Poids),TAB,"Sprint : " + xlsDonnée(IdFichierXLS,i,nCol_numSprint))						
+         						FIN
+         						
+         						//Si le poids n'est pas indiqué --> null
+         						Si xlsDonnée(IdFichierXLS,i,nCol_Poids) <> "" alors
+         							stTache.nPoids = xlsDonnée(IdFichierXLS,i,nCol_Poids)
+         							stTache.nPoids_Prevision = stTache.nPoids
+         						sinon
+         							stTache.nPoids = null
+         							stTache.nPoids_Prevision = null
+         						fin
+         						
+         						Selon Vrai
+         							cas xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "x" 
+         								stTache.bDemarree = vrai
+         								stTache.bAnnulee = faux
+         								stTache.nNumSprintFin = stTache.nNumSprintCreation 
+         								stTache.nNumSprintDemarage = stTache.nNumSprintRealisation
+         							CAS xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "C" ou xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T"
+         								stTache.bDemarree = Vrai
+         								stTache.bAnnulee = Faux	
+         								stTache.nNumSprintFin = 0
+         								stTache.nNumSprintDemarage = stTache.nNumSprintRealisation
+         							cas xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "A"
+         								stTache.bAnnulee = vrai
+         								stTache.bDemarree = faux
+         								stTache.nNumSprintFin = 0
+         								stTache.nNumSprintDemarage = stTache.nNumSprintRealisation
+         							AUTRE CAS
+         								stTache.bAnnulee = Faux
+         								stTache.bDemarree = Faux
+         								stTache.nNumSprintFin = 0
+         								stTache.nNumSprintDemarage = 0
+         						FIN
+         						Col_Scrum.Taches_Ajout(stTache)
+         					fin
+         				FIN
+         				
+         			FIN
+         			
+         		SINON
+         			Erreur(ErreurInfo(errComplet))
+         		FIN
+         	sinon
+         		erreur(erreurinfo(errComplet))
+         	FIN
+         FIN
+         
+         xlsFerme(IdFichierXLS)
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_tt_les_tables
+    identifier : 0x2e21a95903790dd1
+    internal_properties : BQAAAAUAAAA9neBFugqVZR4E9SfvWrtS2eWqxH9A7laiIPQLESWeyFYjP/EoSlmkm7IkvInk9pdFDtL5d0zjQ02QvRzObT7w5b4A6WDHXKzj66KwdYRznGS5t7EZDMGnHGDCgygLIg9F3i1cj7M5V0rQQD4ERs0IrIp1YxkVYYvN27cPMNxSh8pMaPhrFLzTcEGg0dceyOwXD6gTHrxd1dpks8qYvvPOVdgQMB/8hqoA+fBxuBkG0CMCWBXYSIK3hUXwwJL1x/yfncRqwMLqY4dcGhvnEwVxbIT2MPUsN0H0T1hHwRYEwIrt+xIXThdSpuopy1uQGOMD9imdyINpe/imMXgcjpbYelAg/KKA6SCmejDI8dbw340pcFm2iU3fqNJcKWkpf4nuk/CGgcYbKuyiFf9R1GW09jfZ8BQuuHNyUfTtPOmSI8pmJePpDUMI35HTftCBOsu3z89SwNiCffkhzFzUsWQkKIOmBTlCM9wpyk9mZJnF8PD9cpaIQICPSRYmSrrG4ZasVrlhoXpGH0nK6wqoKmTstJpcQmAnnynZ003ZiXFMUbiIRY40lq+RetiFdw/UK1zEv+taEw79XxZPahG8xbtjr75HPlxMwTwO2Db8AaKBy1e5NglwgV725w6dDbo782bIeBfsiOnO4Q3pjH5OLkzfC8+j9oL3Dgbd56iY8xB1H74tWHPrFR23mIvIgD/8VNWHm1ySCIM1hXB0rWMFiQkK+GfxvL80YA4TcBZqng==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         ExécuteTraitement(BTN_Vider_Projets_Affectés,trtClic)
+         ExécuteTraitement(BTN_Vider_Historique_US,trtClic)
+         ExécuteTraitement(BTN_Vider_Table_Message,trtClic)
+         ExécuteTraitement(BTN_Vider_utilisateur,trtClic)
+         ExécuteTraitement(BTN_Vider_la_table_projet,trtClic)
+         ExécuteTraitement(BTN_Vider_la_table_US,trtClic)
+         ExécuteTraitement(BTN_Vider_la_table_tache,trtClic)
+         ExécuteTraitement(BTN_Vider_la_table_sprint,trtClic)
+         ExécuteTraitement(BTN_Vider_Commentaires,trtClic)
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_utilisateur
+    identifier : 0x2e21a959037b0dd1
+    internal_properties : BQAAAAUAAACCEm/WJ40kyNV5fuzOWzA1LAQD++BRu8Nv5zce7nz1EYe0tv6xQ745GDnvyxbnwTDuF+WO6MkAoCKXuEujPN3B7igVwG2IW8/lI6jSjwqV/sZXJS97Ww2XHEZsQ1g7JtHZ+N3y73VQP3wa3uDe2K8adjzPOUOj602HjfZkhi5A3VDesupxpnIdDhOaz5V4zlrlmbWf4naN5X4SMdacIs8k0Q74ircy8gbcp545mGHePj+INDOg7qbPjWcm1ObBb8pb80g4NHQmM3MaAN8zPyl3bGZ2yuWCW1GgfX5brY6QPtKvq+yPzJcmSmirw2PwNEnvFLWLxHFdS2wMy/QQ4qISOjKk8joaZfTiQL6cjdqEQTnPSBPO41bQqVHrCjx4Ljg//E2TiCU8P/E59CBcuwzzfwjSXZONWbSjGBOam5RpCttnomRUmMCJTASe5ytYbfZY+MT3B/ejdpY0f+0HgKffZfBnJuSFcP1uDeLPrwDcj9G+VzfD+wWUQhFhO5W9aB3tR/pCzDW7jMpJWku7WbdH0W/1sxNCvLaqpL2tsT34gYg4oaIcOlORGjhdE5c4ZxxEULkUbSzXSXxtAIMuc5W5DQzN0NaAyBMh1dsPSq9iFB5QjURZyrVKC/qJHZZb01rcpG+6As3C92HRhDkBm+l6/CgcdSlgfVdydI3rXuUetp9uwZLSZjTs/bh900qBScjArAVBN5T8OjUBamJQWr5RoXiuhw7hE4+Q/aPlEQ==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         SI PAS HSupprimeTout(Scr_Usr) ALORS
+         	Info("erreur", ErreurInfo())
+         FIN
+         
+         //HRAZ(Src_Usr)
+         //Src_Usr.nom = "Benjamin Debaisieux"
+         //Src_Usr.EMail = "benjamin.debaisieux@union-materiaux.fr "
+         //Src_Usr.Service ="Service Dev"
+         //Si PAS Hajoute(Src_Usr) alors
+         //	Info("erreur", ErreurInfo())
+         //FIN
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_la_table_projet
+    identifier : 0x2e21a959037d0de1
+    internal_properties : BQAAAAUAAAALS72fPQ5dhGMg0sM8bD+B6JGi4l+NQX2HgwHC78SftDGAeOwffmepcqDSskesdifgrfCX33RJghd2nrf9eg88yNg3M0dY4+tDBgQnTUL+aAm2hYwWfH4+Bw2W1eRafXuII14tKBJAeYHSoY4IG0CSx12tuSzvHinmJDSM7r7PTeTZgsgJPkzNrgnCm5YZqM0jXsATVYNc0P6JD5j9TcJ6VqguaN9YcTiMby8m7TewfhOxSWgvsg3LUCmxCEfCVEPxgNj3L/fO3amp3DtdxDed4HC63TyVfI+SaxgCXBdahm9VsEIhkwJXyytpvms37BRYVLKSHoIT1sY3CnxPMTRGtRDuLt9xo7WzM5F6Ds0W7VMKuIIx8Jx2e56Zk8wuwIRTno4cODNOTDDAPJtAffIX6/7HAMGrc+1qyb0f75qDVke5OyfYMm4Wr1cc3KuSWxr0RlF869uXf307Gx4LsDcxFyzsTxCnluKlZPb230o6t7mEoBqjLTPTG1DnkoUV0FFJpT1pVON1C+dGrixxB8Gbda16usWgVm/Vp98SfyXAkZBKgsVMnr9u9VMlfI9anZQc6jSBNSoJRvsUVkiy2W9Tx2jUQRyBPDhQCj2GWlGQhAaiPBe1QAfM26J2JWHqks/jTXdAaRbJJSzTlWVWI35TeoWUBLuJw40uOOJTLufsL7ujL46Hr6Orto7F40f04JWGgEC76JID78/lZvEwlMsIkDE4QSUW5nol2QneHNODkfkk6A==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         //HFerme(Scr_Projet)
+         //si pas hcreation(Scr_Projet) alors
+         //	Info("erreur", ErreurInfo())
+         //FIN
+         SI PAS HSupprimeTout(Scr_Projet) ALORS
+         	Info("erreur", ErreurInfo())
+         FIN
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_la_table_US
+    identifier : 0x2e21a959037f0de1
+    internal_properties : BQAAAAUAAABY+EVojV8Knos/SFqUkX6D6jqRdW7bAXntXbmcdPpzl9UalJhvfdTn/s/5wQztxzbs3aNI1otGZiitYolZahOPZL/m6yTmBJRXpQb+YxK5kuLXVWNHD6n/QP6IlxybSiWtqG12E7F0l0A64oSKGFNGCqTfbb+XTy1r9cIBKrZEb1hEckAR2Opd9jnc25lgRrxhE4Pnfoy9dRr0M9qY/nMOdSiQcC/8lpqweQAx6GnWINPi6CUYOAL35fWwcPLVZ7zfjUSqkIL6kzfcChuX47VBfAQGoNX8l6EU//j3YTaEAOp9e3KHrsfiNmp5q6tAiJOzVpktKPOp+9hW0Si8rjZY+kDgHDJAOZCW2qCIoeagD70JwOn2uXX3gPpEMSGhd/G2q0ge2a4DogSKvUepLB38fm9RiGzWoIuqGdzV1EEqS9L+vTuBVYvgl1kbZogZEhM/h0dquGBKNbHplITsqfysUDveXdHq29TB0ncOXJFdGJgVKm6gKCgnIb5ucpK+WR7UDtFZmYIO9wEyszKgQjzUXPJ02vhPx0Exv/J4CtJtdpcvpDmRtxZoDVU6oixJBLnrHtvyr66dq7IrdkkwdRs/i3KXBojSJgXXm6l9/BkIuuSOX1I7NBNMGVif+5idIRCaqu8c1uNkY/A9vcOL4SMwMuZCXzMeP5mwMsu1YOMYrJVkz4TsDN4WK5ZbPfz/y05GKovLuQp2tLOP+JyKEAAX58Z8SUiv5eEmQ3nPOw==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         SI PAS HSupprimeTout(Scr_UserStory) ALORS
+         	Info("erreur", ErreurInfo())
+         FIN
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_la_table_tache
+    identifier : 0x2e21a95903810de1
+    internal_properties : BQAAAAUAAABKwBdrZ8j9mAzXoh5NLa9TCi8svep98zaNMlwNXOMbUibEnjWfb/pIHDC6pNLiSZdpYQ/Jvj/QiT7aR+TrJVScyUNr9/p+XAJupmM7SfkEu0/Dx7CjUEbGWI/09DrYkDr0IPdBpDZMiHq8daXllrhPYvuyZh+N8WgJfGjh4lDWzpuASktphzVLLmjq3nmNqKyl3DUIXENZlkyhjFQsvq19M2FRW/968wllQu1pqHLfdqcCpYfIjIy8Fmp9MUcop5My2vD9qnD83vxNmzsD6528R0ZVcVqaV4PU46pxWGUm1vzoiB8FxOD1vE5678uHo/YQiuXZiNA6+WGh8UfdOT688ThG54n4hm9LARFa3DmIr2b9VucnNjAOOCQJ8gY3YvPGBh5VsChVqyhSigzkmqII2ObF5y9YSnioIRtQ39ulC5irzb7wa5FhIWUSuWWXGcv5WkPjMTiWTsPRhxf5NW00CsJewmzin7sXgkotMyW6PiywcAMZ3IDQfZaRlR2qeBoWmXe4NlpavAHmwKPdbBHS1G/+TXVT9wQBz9eJGXq+ys1wliquIfj3qW/7K7V1BdXfKeVlFqodzCY1LRQv/Q7lF8sl+5ewFOIPlQxcc8vTmBgZ1eemMDOuSP31KwRoyWHzfi7SKCDDDZOSj/yeZhyI9sx780VbzLH7aVmw84MVVbmaLExV/g5UtNaPh1pSoS3tMlz5Tc1yXuevTTd4WrSOwKo/3moa4sFpGDh4Qzl6w0fT
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         SI PAS HSupprimeTout(Scr_Tache) ALORS
+         	Info("erreur", ErreurInfo())
+         FIN
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_la_table_sprint
+    identifier : 0x2e21a95903830de1
+    internal_properties : BQAAAAUAAADftwkLSfqJEIeEdlcgQBOlBLXGJpMx9UFDT82OK7ArAHVcNPgLimO1dlTWpktQumuckbTbE0iNVtMiWnM5NptI3MTDF+WLycP9qs7zvxzMHC8yKTyCanpwza0kDabkR9tyaxYNeJSYL5+CH+6HpJIKzcn1nYxNAjsoYDocYMCJ7R7bbA+RvpwN1rmKaz75GAXTDtjL7cvUGNEHA/aVNXIkVqYwSrX8xyA4TRcAsXOwMDsfjy61KpeTkBN9Jr/iRKXVQi71OSuMmdWvFNX19A/vMGYUzw6FRgcavTz0WBP2RCtXzrx3dyC79+lBVIdrtIaMXnDA2LplBlYhql6DBShMQYqULN155SkfeY3wkklup5e0HlBH+F5uH2c0FpfJn1+kE7VnUy47S6NxT457AHGKrCPeA8ymKMDZxlyetkF61cRqFn7nIVeB0hRDMzoR6qnds3AfJvas0kDwQvXin8a80CEbWguqW+lIMd313tm1MgpJ/70OiICO0nHilbhwb2QitghQ8wLOEuqzFfvITnhSum61MUwvp85owPNum4lUncS+Tol4ugtqia/56OuOSWfDJ58UsLlamTYlXaudUPZW2M0vnDdv+bcf2zxRJfhb39OPR9rgZ2BX/mdhXFj1+bLMbsafCFkW8Oc4YChZnfoHjpGocE89f8lq5B4f8iMo6/dna8JTm5efuoLJ50Po9Km6vARnPEa/Kwuhor3E4AfELFXUJUEy+g6Jfa1y6Of3BU3wPA==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         SI PAS HSupprimeTout(Scr_Sprint) ALORS
+         	Info("erreur", ErreurInfo())
+         FIN
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_Table_Message
+    identifier : 0x2e21a95903850df0
+    internal_properties : BQAAAAUAAAAyCO8TPxdwIWnaR5v4mH4yreav2EgzMXjDiMJvwqnpZJhCaG9tDRDSis4AZsi4p/Fb3zHzDPX286wAXU6565I+2zktCWAkM5Y1+5AN3Y9ZJ54dESIlWpiIrqFSzqSKQjimwvHThrDe4rCmU2e3qHr9BE3EMFF3u+qv3r4rFMIgjOpCFSfx3xWP0pCOSkG1KMTBFNmURJthzzzXcJiWYFFRX+MNB82gTVOphAmVinznxv8oScsCVkICWsxZ5QmqqyeGVPC9VOqauPQj4wPZwclotxRZ/eQsXcUILbI1Kqdm1mR+rDN/lp5jJIS2R7k1n4pIYMVZHv4kp/0b5TOPQ6Zs3dp2j1cGUGln6+n6mi8UW/L/Xm+hKPYkPI82RaNqMzKHue/0AZfmCkkVl/eptYdLpfUaolyj79PJNMCrZCZKVkFODn0xaoLkLnTr2PYGMjpSLexKyu//AaigqP6SbC5zE9VPUc1BYIokoQs0FESfiVFfvTbWZ5Xr3gkWEBKlhQVzCNzDM6XfJxKp3U4SB3rhMf4ziDpWxBcWXjG365gQ+JeeYGBgb8rVy13NGV/blxKKg68bfAwLKmDf5xK9fwwXeQUPcT3Kmngxl07S2UXZ8iJTv53sqvEsym9HmQqSp2N1nykIiEyVRM8np+S6muj0Hvjzi6k/+BkTfaGoD5d58RHGxLT5yiIUXOrHTx6e1SENngxJ+dm2bhdrjfc8dpaEgtYJ9EI6QvlfOML2+3FCCw8b
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         SI PAS HSupprimeTout(Scr_Message) ALORS
+         	Info("erreur", ErreurInfo())
+         FIN
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_Commentaires
+    identifier : 0x2e21a95903870df0
+    internal_properties : BQAAAAUAAABIyal8+j3apvUx951M93E0pVlWOcwV+B9vw2h1tDcZYkzRIyVwawgHNlSAdaXu+wHAiqU0cRpCjJzH6k51/CHv0ry7qTABL4U6bgFNotDBtqLl4w9pELorpNN7yAg5cdrr6aOVMoQNpQqWMI2DTG2uTqbJM5mABIMdtPXvrs9vGTEW+fHq3B+9XxRV41+7oTx/B0Cd3uD4/iLofOPrNYiu4Dp8MylkoviAQEBcwxdn0sLwmnzieSlqz47KE7/l5axK2rRaBTa/X7xUGb0usejXMV0/t2/fJ22+nzWbJlm+NweibQ2sULJKWz/nd3Egd2j8E3LjZg9ZOJ3mVPMpGareYzbvP7ad5L07G1ns+inmJr3JhRFpYl6Drt4obtuVD2xyQtlHV92mOXjGgfwlHIl7jMRsg+iDvaA6kXwA/ONkHpRXmKRhjjyB9a1f4ezNwphJ8AbvwtM1GNGhZHtU55o5PPCpNJm55hGdDlOtwmlRMc76jSNACcGq3xSMZ05Ev404XXaME3GVdBPuT8HyDKabcLGV44oKKobDwUO6GzNOAFzDyjkkV9QYFPrnBDOqKXmwFj3eRn6bffUeidHPOMIP0jyjLNNYKh22zPoxOUgHon/a6ZCqSMXRbb6N5Bytjedqvqtb7g7P1acj5pa7qyw67z0pKBUwdNpiGvt2eF8gdDDWw/itAjKFHYiWfhZTJ72izrwEVU48l8OJThSnJ3RBSAaGWig3maDYPSS7W6mFV8o=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         SI PAS HSupprimeTout(Scr_Commentaire) ALORS
+         	Info("erreur", ErreurInfo())
+         FIN
+         
+         SI PAS HSupprimeTout(Scr_Type_Cmtr) ALORS
+         	Info("erreur", ErreurInfo())
+         FIN
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_Projets_Affectés
+    identifier : 0x2e21a95903890df0
+    internal_properties : BQAAAAUAAABCZMxjaHAUmU7EKycn9mvFOoj+dqsGdfTMVqBZr43+MR0cZe06KEIategcivd2ENp6h9YLZYD8EYeaBfoWcY6h2N61TTMtM8qVxmDpAYK4UyuA9QZjiV/JmrjhlFSJwHeeNak+FkanvdyYYYJLXcm52E+5UsPIl7LzWZVCGB28jVBZJ7JZb1JKlmFI7EDuAKHvLbPBP8ijB9L2fL9h482n5sSGyB3pMfMhM4aXBtq/fA5N0XFvgwuKJR/snDHEBY2WgJgS2AziS0KEiIQfCbMoMC+Q4Izw6pECvz0Ch7LpldGwZPo0UexXitc3PVEimhzfR8FJONi/YBi+ETtA/wgJ4UR+sI6kzZQnMWqG/MlgFW2p/Lp81ss7PwxIR1rmZd1a4jm/Ly8N5pjanU3MVxfmSDx0Q8CVsM9Oi24xWwyQ3UTPsECFHJ36HZkLLJ0yUumtcMb7TvV8mYX/miiLzvBg5LI7YrfRXf5fTFF6CSQLji4iZauAM6aPCRqKEH2tx5po/7D0I9s2NxHAWb4FjyTCkt2Zl07M/X0thU+FgFaAG/rllLn0Cf+nvExJObpd3aZOPCuU5BqMjuFKpYhcZV7S5HY1aAd6mbDC9FKq5K1FN3uW3eTWCjQSAzg3nTue1V7ghiMS05efojURbEpjPTnKG5NkZXMW4cFT93rhYRgmz/Axjg+M8DR95qE5n55tpzVr9APh8rKWd0MZqimWANRTu3qTCDX3LrpO+hk/xVh5LshHXuyOBlE=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         Si pas HSupprimeTout(Scr_Usr_Projet) alors
+         	erreur(ErreurInfo(errcomplet))
+         fin
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Vider_Historique_US
+    identifier : 0x2e21a959038b0df0
+    internal_properties : BQAAAAUAAABgpzBGf7HfQ9ybvrNTaCMI+x7LFSKvSlJLi74zljZN/ZoEXXwdll3KNAqOvoYMqL7yXIoJ8v/ThIgu1I8iLzkfm9DoIgsfnHZt1SMEbulMQqorcmt3KEl77oDjaj1a1ZuoiRPPMuUWKeJDfD0dz87m9+NSBxzVQV+H+X0BsdzLtathvfDzis94Rdt0nZmquTyMcr+3DT7LWEmE+bhejkNfQwsgs1XRydPCTeEVQimZh0KHf25djLlrP13si2STgCjYTtfJ5WNUVWV+EXiu9rEx1LkrAgRDEzvW9OU/TPvJpomp6Zj6hCtFfJ5J0TRuHfrF5G4PA16cED6vkOfpT6z+48NfYkW1SNdjddscxGFLIXmyiTWnVumeqnOKPd/iFj6w3b/QVAaCU2pZZzvPO+7nGnOyph9ya2TcqtxTTPKdyMZKWvWOZ8BlzSavAKioJya99d50wxS/djmAkDL4irP1ULtNJwhcel0TGxsgWLz+j4TZE8Q1VqHqd+1K8IS30KeMthw/snBvpFkxZTquV9+5dLppfoGxfLw9MPS4RJM8pTcf7+Uc8V1tUQioSjaYKVDr79fHo4Nxuxdv0USdO2PVdHutj3IHumv6VepC9b1GWk/RFRM5ywvbJb3VHwTUOsG46S6gyXXDZtNiPtn5lVQ/UdWQTilnLM9DJqBUScH02+xQUBz1bYyBFZdiuisFh5f6mCL7QYmy02hEumwiTQ8+4x4dx5rsWkEaKmSsuURv7A==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         SI PAS HSupprimeTout(Scr_Historique) ALORS
+         	Erreur(hErreurInfo(herrComplet))
+         FIN
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Affecter_Projets
+    identifier : 0x2e21ab5403adc93f
+    internal_properties : BQAAAAUAAACyMWpIU17/TEYcLZLJfgj7GeK4Xrs+/lyxbnDosxf37W8Imb1/bwjWJFkiwmEttlKu8S0qY+k8Vx+BgHPtJZ8bjBzm5nU8RsS1SV1YcMy53nJLISRX9kU1nBPXOeEcRpV5gE4XQT/B/9hErU8w5fQBfB8UDG8FTqcXUhEyPbhPjXFv1AYWcMuqegvlO80jr4tP/UvMQgsUAsu3VPEZ70Yc3RyB7SiIPbUvcpZTO7dnyR8f6felvMENK1oovRBHRYPqU2+BAncoy1zWV6InMNWNMWtQ9ulu9klWocwsauIxhOnRgd0otZLMSN/pN1l9oetxm74YYDwylc4eW6CUqH28AbcISsgo3QqclorjojwFgyNp+gy3s68tJxzPpJMbqGGpqgFMZfq6nN8SPtBPbDjOMfb+BNpysZ95E12WMBlJq99PYHmHd/KedLG8rwBbicfSLmQQ0ixveyr1F/9qNzWoyZBJvTF01k4OOi6ZdIVIRPM0dya81I1hvqBvT+iCKhxJH6Axd6oLVfKeRp0Y8EGOYQvvfgRndJbNiMPdk2eZ47MvztROjiofhxo4pieQgASJHWR8PTiI49fDNbR0BfbJQnX0qsL2s/3sOzKG1AnjZFO5SPZH4qLcqhhGcmAdoS3QzEkxT/6AjKG0GMMGvONdV57L3a3CZR17MuQcROHTawu8v4/NDa00WGaSx+FIaIqkEjFQ5PS9iRQZUQHSoloZgA84CuKxiuUnlSr6AWY=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         IdFichierXLS est un xlsDocument
+         Xlsnbligne_ est un entier
+         i est un entier
+         sFichier est une chaîne
+         
+         nPremiereligne est un entier = 2
+         
+         //Declatration Structure
+         stUsrProjet est un STR_Usr_Projet
+         
+         nCol_login est un entier = 1
+         nCol_nom est un entier = 2
+         nCol_Projet est un entier = 3
+         
+         nIdUsr est un entier
+         nIDProjet est un entier
+         
+         // Ouvre le sélecteur de fichiers
+         
+         si Droite(SysEnvironnement("USERNAME"),4) dans ("2780","2821") alors
+         	sFichier = "L:\Service informatique\Service Développement\Stagiaires Développements\ScrUM\utilisateurs Scrum.xlsx"	
+         sinon
+         	sFichier = "L:\Service informatique\Service Développement\Test projet Scrum\utilisateurs Scrum.xlsx"		
+         FIN
+         //fSélecteur("", "", "Sélectionnez un fichier...", "Tous les fichiers (*.*)" + TAB + "*.*" + RC + "Excel (*.xls)" + TAB + "*.xls;*.xlsx", "*.xls;*.xlsx")
+         
+         SI sFichier <> "" ALORS
+         	
+         	IdFichierXLS = xlsOuvre(sFichier,xlsEcriture)
+         	
+         	SI ErreurDétectée = Faux ALORS
+         		
+         		SI xlsFeuilleEnCours(IdFichierXLS, 2) ALORS	
+         			
+         			Xlsnbligne_ =xlsNbLigne(IdFichierXLS,Vrai)
+         			
+         			POUR i = nPremiereligne _À_ Xlsnbligne_
+         				
+         				SI xlsDonnée(IdFichierXLS,i,nCol_nom) <> "" ALORS
+         					
+         					//Recherche de l'ID de l'utilisateur
+         					HLitRecherche(Scr_Usr,Nom,xlsDonnée(IdFichierXLS,i,nCol_nom),hIdentique+hLimiteParcours)
+         					si Htrouve(Scr_Usr)
+         						nIdUsr = Scr_Usr.IDScr_Usr
+         					sinon
+         						erreur(xlsDonnée(IdFichierXLS,i,nCol_nom) + " Introuvable")
+         					fin
+         					//recherche de l'ID du projet
+         					HLitRecherche(Scr_Projet,Nom,xlsDonnée(IdFichierXLS,i,nCol_Projet),hIdentique+hLimiteParcours)
+         					SI HTrouve(Scr_Projet)
+         						nIDProjet = Scr_Projet.IDScr_Projet
+         					SINON
+         						Erreur(xlsDonnée(IdFichierXLS,i,nCol_Projet) + " Introuvable")
+         					FIN
+         					
+         					stUsrProjet.nIDProjet = nIDProjet
+         					stUsrProjet.nIDUsr = nIdUsr
+         					stUsrProjet.bChefdeProjet = 1
+         					stUsrProjet.bInvite = 0
+         					
+         					
+         					COL_Scrum.Affectation_Projet_Deprecated(stUsrProjet)
+         				FIN
+         			FIN
+         			
+         			xlsFerme(IdFichierXLS)
+         			
+         		SINON
+         			Erreur(ErreurInfo(errComplet))
+         		FIN
+         		
+         		sReq est une chaîne
+         		sdPrjNonAffectes est une source de données
+         		sReq = [
+         		SELECT
+         			Scr_Projet.Nom
+         		FROM Scr_Projet
+         			LEFT OUTER JOIN Scr_Usr_Projet ON (Scr_Usr_Projet.IDScr_Projet = Scr_Projet.IDScr_Projet)
+         		WHERE Scr_Usr_Projet.IDScr_Projet IS NULL
+         		]
+         		si goApp.Rsql(sdPrjNonAffectes,sReq) ALORS
+         			pour tout sdPrjNonAffectes
+         				trace(ChaîneConstruit("Le projet %1 n'est affecté à personne", sdPrjNonAffectes.Nom))
+         			FIN
+         		FIN
+         		
+         	SINON
+         		Erreur(ErreurInfo(errComplet))
+         	FIN	
+         FIN
+         
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Etat_US
+    identifier : 0x2e21ab5403afc93f
+    internal_properties : BQAAAAUAAABIow1oyVaso1bPIt0KdkE7xvi2o1DQHGQV5fHLoQi9QB+8XBabaYokDvo4HKlI5nNRppeZdKpgDkpCDndh3X8aHKw70zlcxjGmkHZ8LjY+5HWvd7SYDXS90ncjhM523lrAyEvcNY6NmfSQcjGB2+I7OwhJ3F2wi6FeY6ANfCogCU+DmA9F0WLMu2nFM/AF02cH73rqHeqcqDn+d4gcXMj1Z3BgolDCIE+bK9mUrBT+PMkx1FyhcbHZ2xe0ycTXus+NJCjHZPLg2/JTDR9jBEJHzLe2lloXabh2TBaseyVaIv2ZlqDiFypQSjZAggRAG/7eIpciWl1KIGkzHKEp/UgtW0zBmV/tViRnx88LlWBurP+2jrY4TvBwoMLElCFX3Q7kFjX7u8F2aXzEjxIjEIVHUm4GcyBbjfAcxyquQqNcCq4p+jDtihj3qRX/s07xJsw7DrRDfj9xdB0xTA02jWTDwrLrYhfrFJ0XoCVJdl19BXTMX9OYUflk+RCIQWDSKQd0V/h4L+3xyLkAUdfIXPZzetlNq7raavR3nagdpDxHA5P64S75upF3j1tAHTShSHa5W2oTE+k8HralQIS6NTcmIeFY9Qw3U6w7Y8n+/gsyT6ytNNUfk3If33ghKIrwMwN+f2PRBl4CZwel+LWwrpmZ0LIWUQDu1JsZa9VvaljV0ipgfuOhcL7DIaBlPn901vFgtuGR2JTuRE6Xv+jfqUldzA==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         //stUS est un STR_UserStorie
+         //stUSmaj est un STR_UserStorie
+         sdToutesLesUs est une source de données
+         sReq est une chaîne
+         
+         sReq = [
+         SELECT
+         	Scr_UserStory.IDScr_UserStory,
+         	Scr_UserStory.IDScr_Projet,
+         	Scr_UserStory.CodeUserStory,
+         	Scr_UserStory.EntantQue,
+         	Scr_UserStory.JAiBesoinDe,
+         	Scr_UserStory.AfinDe,
+         	Scr_UserStory.ATester,
+         	Scr_UserStory.Top_Termine,
+         	--Scr_UserStory.IDScr_Jalon,
+         	Scr_UserStory.IDScr_Usr,
+         	Scr_UserStory.Top_RepriseHisto,
+         	Scr_UserStory.CMTR_Mise_En_Prod
+         
+         FROM Scr_UserStory
+         ]
+         oUs est un ClUserStory dynamique
+         SI goApp.Rsql(sdToutesLesUs,sReq) alors
+         	pour TOUT sdToutesLesUs
+         		oUs <- Allouer un ClUserStory(sdToutesLesUs.IDScr_UserStory)
+         		oUs.User_Story_Etat()
+         		oUs.Enregistre()
+         	FIN
+         //	stUS.nIDUserStorie = sdToutesLesUs.IDScr_UserStory
+         //	stUS.nIDProjet = sdToutesLesUs.IDScr_Projet
+         //	stUS.sCodeUserStorie = sdToutesLesUs.CodeUserStory
+         //	stUS.sEnTantQue = sdToutesLesUs.EntantQue
+         //	stUS.sBesoinUserStorie = sdToutesLesUs.JAiBesoinDe
+         //	stUS.sAfindeUserStorie = sdToutesLesUs.AfinDe
+         //	stUS.bAtester = sdToutesLesUs.ATester
+         //	stUS.bEstTerminee = sdToutesLesUs.Top_Termine
+         //	//stUS.nIDJalonUserStorie = sdToutesLesUs.IDScr_Jalon
+         //	
+         //	
+         //	stUS.aTableau_Tache = COL_Scrum.Taches_Tableau(stUS.nIDUserStorie)
+         //	
+         //	stUSmaj = ClUserStory.User_Story_Etat(stUS)
+         //	
+         //	fin
+         //	
+         //	
+         //sinon
+         	//
+         FIN
+         
+         HAnnuleDéclaration(sdToutesLesUs)
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Projet_terminés
+    identifier : 0x2e21ab5403b1c94f
+    internal_properties : BQAAAAUAAACaCRIgy6Z3xM6UlWpRZuADcQoQhgPWhkSJ1oiQK69/ZdeAITWX9+CuTHEKGkkVDhrmeWVyq0FkH1eJmHuFPUfTtBTkx0GgzMvBYcQcEkIraeEjcUzM5u0l/DsfkTn8xhWJoKYvWTdR5zC0Td8wXZyJhAeEvD+VlkdnSjk5uRjY/3th3gBsmmnUJGUP8Q/14T278veDUIUvCmP/llOXb+Z8gVihXfq4VdULZkSFecd7vQMTVWvLkP2ZOyp+m8LbNRPqU9epPAewcxSemeDBjC3NUevQZvNm3vEOqRaaRD5hZEmxaZUW4WYE3EujwU8lCQMpkwI05ohibXa2sQZ+ZIWkiZfEtoJQcWoc3hg5lIhhl6PxXuCZ+7sWwpewg4YWcSiQyXAxoO3N8YYpw3ueY83x3BkZdelRQPSwqmZ1y4zevsKqu/Ie9nEnW6g5whs+jlpJZWNp/ccqdFGs6A55Jiaf8LfQLjRnubMxDXNk1+ARk7JzdvtvF+h61ccQ9q/Jb2ckcjNmRvHisp25Y4AP95rlKFIWs9O2U+aZWLK2oyFnLX1xiKpksEg94aSyLK0aDgUI+CiAUSREVwu3sdi4obKVjsHIPqbSj9Ew/44auDUfoH91nCo7/r6ArvWBR6WpEpxP1fKbnUxQn7hfGssOhJuVb7bTxbX6ndUjaqxUvJmbs/Okl6eldRWc8M4KT2nQ4AI8qlm4jAzVoXyx+VlqOsKBaHeQolo5Em2//YKi6Y4=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         aUserStory est un tableau de STR_UserStorie
+         
+         sdRechercheProjetTermine est une source de données
+         sReq est une chaîne
+         
+         sReq = [
+         	SELECT 
+         		Scr_UserStory.IDScr_Projet,
+         		COUNT(Scr_UserStory.IDScr_UserStory) as NbUSTermine
+         	FROM
+         		Scr_UserStory
+         	WHERE 
+         		Scr_UserStory.Top_Termine = 1
+         	GROUP BY
+         		Scr_UserStory.IDScr_Projet
+         			
+         ]
+         
+         SI goApp.Rsql(sdRechercheProjetTermine,sReq) alors
+         	pour TOUT sdRechercheProjetTermine
+         		aUserStory = COL_Scrum.User_Stories_Tableau_deprecated(sdRechercheProjetTermine.IDScr_Projet)
+         		Si TableauOccurrence(aUserStory) = sdRechercheProjetTermine.NbUSTermine ALORS
+         			HLitRecherche(Scr_Projet,IDScr_Projet,sdRechercheProjetTermine.IDScr_Projet,hIdentique+hLimiteParcours)
+         			si Htrouve(Scr_Projet) alors
+         				Scr_Projet.Top_Termine = 1
+         				si pas HModifie(Scr_Projet) ALORS
+         					Erreur(ErreurInfo(errComplet))
+         				FIN
+         			sinon
+         				Erreur(ErreurInfo(errComplet))
+         			FIN
+         		FIN
+         	FIN
+         FIN
+         
+         HAnnuleDéclaration(sdRechercheProjetTermine)
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Taches_MAJ_Str_et_Adaptation
+    identifier : 0x2e21aba903b3177a
+    internal_properties : BQAAAAUAAADfoOTIA89fUcrGxkNPounybZAmNm/BOdtaHa098onSKeTCEUWX+heKpk+JAkbuMWnWrI1kaZl/orXb0e+Ux/pmDbAxCsCLnH2I7s0gfgLRWjB/J5q8+BcUtPp3Oii9fhNL1ymYTbkoCJ0GyPszqPxP1i/LqyMxyv1wfbLDkUExe67zKaKAS+HeoT970V1mCNtCss43QRZ37696syRmgkaq0MVuoCO1VYdjlMKitgGhVX3O4Xukg1VQcNYP/aqbVLdJ9vZoeJW4pU/uQy/a5LwrpCv+utNLr/rkJeUt7NqCbGM8wK8bmc3c/WVsxYu8c7572GW9wMIetItPZ8NRT32WhlcEdfOReI9T1QmFe32HKGwUI8lLWNbYkli4332Mwk3DKR16XVfLX28RlZUped7uAZGwYPLp1oonsLbJMHYPW1WcwBdp1iEPgCCx9mSskdm0oRhKrp80xpzaUDKyYGdo3REb6fk5yzWQSeW+TlammEtTiZ4s1bqU+P0witoxrJA5kLxHdQfqGsYR3eJQzbtW8XJfCNQw75PZs0I6FYCPa8NStm6E19eCobObbycHBlAxUp7ABY+bTPEAWI0S5hg9+MZOLib9JOwQ3CNZlsS3llMQ2t59LZlqhZcpC0a7ReFaQ6Irnf8Vq61txYJe1tMrw4/tkUsqWCobxwlXinhPeMlYaLROZvhW+QVGOBCsWyZnUeXghb60g0WWsCY9iLJg1eXU1Zodvn/5cWu5yjqbu/vn3PNzTTmSHTU=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         stTacheMaj est une STR_Tache
+         stTacheAdaptation est une STR_Tache
+         
+         
+         
+         nIdProjet est un entier = 22
+         nIdUSMaj est un entier
+         nIDUSAdaptation est un entier
+         
+         
+         stUSMaj est un STR_UserStorie
+         stUSAdaptation est un STR_UserStorie
+         
+         stUSMaj.sEnTantQue = "Historique"
+         stUSAdaptation.sEnTantQue = "Historique"
+         
+         stUSMaj.sBesoinUserStorie = "Maj structures de données"
+         stUSAdaptation.sBesoinUserStorie= "Adaptations des taches exécutées dans l'assistant" 
+         
+         stUSMaj.nIDProjet = nIdProjet
+         stUSAdaptation.nIDProjet = nIdProjet
+         
+         stUSMaj.nIDResponsable = 1
+         stUSAdaptation.nIDResponsable = 1
+         
+         nIdUSMaj = COL_Scrum.User_Story_ajout(stUSMaj)
+         nIDUSAdaptation = col_scrum.User_Story_ajout(stUSAdaptation)
+         
+         POUR i = 1 _a_ 12
+         	 stTacheMaj.sCodeTache = "SM45" + "-" + NumériqueVersChaîne(i)
+         	 stTacheMaj.sDescription = "Maj structures de données"
+         	 stTacheMaj.nIDUserStorie = nIdUSMaj
+         	 stTacheMaj.nPoids = 5	
+          	 stTacheMaj.nPoids_Prevision = 5	
+          	 stTacheMaj.bDemarree = vrai
+          	
+         	 stTacheAdaptation.sCodeTache = "SA118" + "-" + NumériqueVersChaîne(i)
+         	 stTacheAdaptation.sDescription ="Adaptations des taches exécutées dans l'assistant"
+         	 stTacheAdaptation.nIDUserStorie = nIDUSAdaptation	
+         	 stTacheAdaptation.nPoids = 5
+         	 stTacheAdaptation.nPoids_Prevision = 5
+         	 stTacheAdaptation.bDemarree = vrai
+         	 
+         	SELON i
+         		cas 1 
+         			stTacheMaj.nNumSprintCreation = 1
+         			stTacheMaj.nNumSprintDemarage = 1
+         			stTacheMaj.nNumSprintPrevision = 1
+         			stTacheMaj.nNumSprintRealisation = 1
+         			stTacheMaj.nNumSprintFin = 1
+         			
+         			stTacheAdaptation.nNumSprintCreation = 4
+         			stTacheAdaptation.nNumSprintDemarage = 4
+         			stTacheAdaptation.nNumSprintPrevision = 4
+         			stTacheAdaptation.nNumSprintRealisation = 4
+         			stTacheAdaptation.nNumSprintFin = 4
+         			
+         		cas 2
+         			stTacheMaj.nNumSprintCreation = 1
+         			stTacheMaj.nNumSprintDemarage = 1
+         			stTacheMaj.nNumSprintPrevision = 1
+         			stTacheMaj.nNumSprintRealisation = 1
+         			stTacheMaj.nNumSprintFin = 1
+         			
+         			stTacheAdaptation.nNumSprintCreation = 5
+         			stTacheAdaptation.nNumSprintDemarage = 5
+         			stTacheAdaptation.nNumSprintPrevision = 5
+         			stTacheAdaptation.nNumSprintRealisation = 5
+         			stTacheAdaptation.nNumSprintFin = 5
+         		
+         		cas 3
+         			stTacheMaj.nNumSprintCreation = 2
+         			stTacheMaj.nNumSprintDemarage = 2
+         			stTacheMaj.nNumSprintPrevision = 2
+         			stTacheMaj.nNumSprintRealisation = 2
+         			stTacheMaj.nNumSprintFin = 2
+         			
+         			stTacheAdaptation.nNumSprintCreation = 5
+         			stTacheAdaptation.nNumSprintDemarage = 5
+         			stTacheAdaptation.nNumSprintPrevision = 5
+         			stTacheAdaptation.nNumSprintRealisation = 5
+         			stTacheAdaptation.nNumSprintFin = 5
+         		cas 4
+         			stTacheMaj.nNumSprintCreation = 2
+         			stTacheMaj.nNumSprintDemarage = 2
+         			stTacheMaj.nNumSprintPrevision = 2
+         			stTacheMaj.nNumSprintRealisation = 2
+         			stTacheMaj.nNumSprintFin = 2
+         			
+         			stTacheAdaptation.nNumSprintCreation = 5
+         			stTacheAdaptation.nNumSprintDemarage = 5
+         			stTacheAdaptation.nNumSprintPrevision = 5
+         			stTacheAdaptation.nNumSprintRealisation = 5
+         			stTacheAdaptation.nNumSprintFin = 5
+         		cas 5
+         			stTacheMaj.nNumSprintCreation = 3
+         			stTacheMaj.nNumSprintDemarage = 3
+         			stTacheMaj.nNumSprintPrevision = 3
+         			stTacheMaj.nNumSprintRealisation = 3
+         			stTacheMaj.nNumSprintFin = 3
+         			
+         			stTacheAdaptation.nNumSprintCreation = 5
+         			stTacheAdaptation.nNumSprintDemarage = 5
+         			stTacheAdaptation.nNumSprintPrevision = 5
+         			stTacheAdaptation.nNumSprintRealisation = 5
+         			stTacheAdaptation.nNumSprintFin = 5
+         			
+         		cas 6
+         			stTacheMaj.nNumSprintCreation = 4
+         			stTacheMaj.nNumSprintDemarage = 4
+         			stTacheMaj.nNumSprintPrevision = 4
+         			stTacheMaj.nNumSprintRealisation = 4
+         			stTacheMaj.nNumSprintFin = 4
+         			
+         			stTacheAdaptation.nNumSprintCreation = 6
+         			stTacheAdaptation.nNumSprintDemarage = 6
+         			stTacheAdaptation.nNumSprintPrevision = 6
+         			stTacheAdaptation.nNumSprintRealisation = 6
+         			stTacheAdaptation.nNumSprintFin = 6
+         			
+         		cas 7
+         			stTacheMaj.nNumSprintCreation = 5
+         			stTacheMaj.nNumSprintDemarage = 5
+         			stTacheMaj.nNumSprintPrevision = 5
+         			stTacheMaj.nNumSprintRealisation = 5
+         			stTacheMaj.nNumSprintFin = 5
+         			
+         			stTacheAdaptation.nNumSprintCreation = 6
+         			stTacheAdaptation.nNumSprintDemarage = 6
+         			stTacheAdaptation.nNumSprintPrevision = 6
+         			stTacheAdaptation.nNumSprintRealisation = 6
+         			stTacheAdaptation.nNumSprintFin = 6
+         			
+         		cas 8
+         			stTacheMaj.nNumSprintCreation = 5
+         			stTacheMaj.nNumSprintDemarage = 5
+         			stTacheMaj.nNumSprintPrevision = 5
+         			stTacheMaj.nNumSprintRealisation = 5
+         			stTacheMaj.nNumSprintFin = 5
+         			
+         			stTacheAdaptation.nNumSprintCreation = 7
+         			stTacheAdaptation.nNumSprintDemarage = 7
+         			stTacheAdaptation.nNumSprintPrevision = 7
+         			stTacheAdaptation.nNumSprintRealisation = 7
+         			stTacheAdaptation.nNumSprintFin = 7
+         			
+         		cas 9
+         			stTacheMaj.nNumSprintCreation = 5
+         			stTacheMaj.nNumSprintDemarage = 5
+         			stTacheMaj.nNumSprintPrevision = 5
+         			stTacheMaj.nNumSprintRealisation = 5
+         			stTacheMaj.nNumSprintFin = 5
+         			
+         			stTacheAdaptation.nNumSprintCreation = 7
+         			stTacheAdaptation.nNumSprintDemarage = 7
+         			stTacheAdaptation.nNumSprintPrevision = 7
+         			stTacheAdaptation.nNumSprintRealisation = 7
+         			stTacheAdaptation.nNumSprintFin = 7
+         			
+         		cas 10
+         			stTacheMaj.nNumSprintCreation = 6
+         			stTacheMaj.nNumSprintDemarage = 6
+         			stTacheMaj.nNumSprintPrevision = 6
+         			stTacheMaj.nNumSprintRealisation = 6
+         			stTacheMaj.nNumSprintFin = 6
+         			
+         			stTacheAdaptation.nNumSprintCreation = 7
+         			stTacheAdaptation.nNumSprintDemarage = 7
+         			stTacheAdaptation.nNumSprintPrevision = 7
+         			stTacheAdaptation.nNumSprintRealisation = 7
+         			stTacheAdaptation.nNumSprintFin = 7
+         			
+         		cas 11
+         			stTacheMaj.nNumSprintCreation = 6
+         			stTacheMaj.nNumSprintDemarage = 6
+         			stTacheMaj.nNumSprintPrevision = 6
+         			stTacheMaj.nNumSprintRealisation = 6
+         			stTacheMaj.nNumSprintFin = 6
+         			
+         			stTacheAdaptation.nNumSprintCreation = 8
+         			stTacheAdaptation.nNumSprintDemarage = 8
+         			stTacheAdaptation.nNumSprintPrevision = 8
+         			stTacheAdaptation.nNumSprintRealisation = 8
+         			stTacheAdaptation.nNumSprintFin = 8
+         			
+         		cas 12
+         			stTacheMaj.nNumSprintCreation = 8
+         			stTacheMaj.nNumSprintDemarage = 8
+         			stTacheMaj.nNumSprintPrevision = 8
+         			stTacheMaj.nNumSprintRealisation = 8
+         			stTacheMaj.nNumSprintFin = 8
+         			
+         			stTacheAdaptation.nNumSprintCreation = 8
+         			stTacheAdaptation.nNumSprintDemarage = 8
+         			stTacheAdaptation.nNumSprintPrevision = 8
+         			stTacheAdaptation.nNumSprintRealisation = 8
+         			stTacheAdaptation.nNumSprintFin = 8
+         	FIN
+         	
+         	COL_Scrum.Taches_Ajout(stTacheMaj)
+         	COL_Scrum.Taches_Ajout(stTacheAdaptation)
+         	 
+         FIN
+         
+         
+         
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_SansNom1
+    identifier : 0x2e284ef601e53abc
+    internal_properties : BQAAAAUAAADAxdDR2BheVD8ryYkcD2bJWSqE0FzUjonsX6Damghbod5WZGqfkmozcYrrUIBIjquz+sFm4YLFdrs06b/5qqXyyojYCCskqxm6VYBt1Fhb2Ye1J1gp6f9q7mz64VgWqBlOl+c/kw0k2v0ogS2eyhc1M1HoTuxIujsmWGLa71l979LvTtUgX9RrMJepB0xWXOHEPCVErM5hmhuZ4PYq/377yjXScScjtojkfOCB3Fw2StY2MYu02kXMlUzSQeLT8voFBm6AO+x/OR1Ltss8vL5L6JHoEXMMU+RRBf+2XKlNPQyXV2WEsh7piI5KSCWKhUoZK9BrBLtpm52GXB+D34D+O4J1a5n+V8n2DAV/isEPmnUaGRZquGuSKndkRoUvRllwYctUmz5k9o4JEEiVnySen6wpu4rZzzLPJlxiw85E7lZQFrn7/K3bPKjvpqY2C55TvI2Hn9LUDHimqUbz1UmGwXrsyCXj9NyDAughmeuFAkQChnA1J8T2ehtnn926pcYRHa3Gl3u09qCGl8l6M9x1zdIG1PL6LPoIPMKKSEe6mWw1it4WZlOTNWOj1XOIf7867xr6oSHg/nVEHMEQrNoBqaUBl3T8vKZVhUmjFUZtT0w7K4d+ON5sJTT6zLBYf3HKt9ok3g5pRxmrVb24hRbpjV3t9/8Iu13EpC2Gqe3W9nPxpcdJ44E/OrYwE+njEkwbc8kMZLmVDRc6xHlpdBQKfy9ujnpM2fBWsDZmc2kvP2FDfhFrRSuDAio=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         info("Test procedure GetDescription by ID CritereAccept : "+GetDescriptionById_CritereAccept(4))
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_BOUTON
+    identifier : 0x2e286702038926fc
+    internal_properties : BQAAAAUAAABrJc1ea7LiErUTbvOQ3TU4TLuLEAZMgeIMMZMEqBeN9DH29Q2EY2D99E08C1C0U/SNNam3WueN8YEH5rLvi6Gaz98IAOVivXxWtaE2ZBY4MJDJeNusn1HIQ/NLhqPIEny5kMz2Amm0aijdxzIn+muiby5j7WFoMN1daawAPh5bGfH1tTcHgZJFNloZw9Qd06oQL3nY6a02x8b/I76Bz+z71nEul4J5itd547oiVNC5twbf/kYbCKyq60BUCCkdEu7Jxj1krz3DOWTaXHKVTlgywvvynnbGbuX/oS3Wkky7xF50Un0y4klM6jKs9B10SVYEdUi3hQqFO2OeCNuWOxqJky6oxHR52rLUZccKqeXI3IjajYuC2XHhiDfQ3iFejKb3BVcwFPOZ8+tbR6kBv9E+ZyzaIvevB2JZjTlabGsHup52zl0HBEmzIYR/1ZIENjH8UCu0mFmIQu142+ln8guV9srGmkHNJXQyTnTGndWGKNARb2NvcBK7oSM6qPOefLr2DJbK22sNyHB6IbPe8Sfr9AdTOJTPfqSM5QWMR5bg8+zrbCQCnnHFjiEtRe1+FLjWcnA0gu0lYOhkAj9H12K+BqkzkXIbcj+bXqmnGAU5qSCG7uApI+ZTyRLLb6EDJvGIDGCVM01quZk2ZB9Mb+eYZ3DFfevvzugYDNfB3gKmr745N7HfKVZ766jvf6IUfkby6DQd54S3MLT8IlXk3UfVJm3T94uPf7fdNaNN5nZal5wycfLBkwLD
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         Info("test Procedure ID composant type :  "+IDComposantType("Au moment de"))
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_BOUTON1
+    identifier : 0x2e28679504056505
+    internal_properties : BQAAAAUAAADhXcirlPiNKLwHzxLtRx8DW9LRskxPOcB9jLNAz+194CzwyJjPFh1JqS8jlrhMCV4s4bM9QLIE1T9potYgsNmB8thwpBpYRxRGaCudfZnK+77us3dseEV1nheNmF/KFyA3g587JUva9quOHkl9LmZPJ/vbrZIpJy/RHHBZPv/VwuXotHZjwzrVROBXWTwCkiZuXmp7/Yd+DAl81ycturgICKiT2D+svVM2inOIsquF+hhmWnq1zTyPgJuHxCadlJMsN3TG8hQMtbMkdl7T9rjP3DX6/0KI6q3BugeQ5Qgz8X/HCKTeepdU09vf03hAp9mbFwzQdOCg5eEuXdyLlXYBwDyrCt13pWnwENjn0PY9X5H60tI91nCJDtC/5BzRA1Ie/fvcuK+b/GRtUa+OgH66lHAenjeP9QVWTWlq40q0HH8OLM/hIi2yptzzWVMFuamfEt+gePnuCVhWM1GsE34xE5DaNvtLJUPFfnaMqubdSPdF19uzdHxo8Bt6YJRftyTlwObKqwvnWY+0Ifu7giwph1c5EgrBklX7vaMmahX5qQuLffP9Ay7fcu4Yio9uPL/y9wmHLdY2qJO58ZF3hTO7pSjumvRAFe/J1NHzUpYrjzkIP9Gvd1wmgnbgGALozROFgiIHxRNAsWCKdPi5eu6Cb/8w3285nl+PG+cin8dJOYWMePCtpiassu4Rz5o6H89xCoC1HQYJK14MyPTTz8G54Vdur4EJc7kRkMAAW2HdOtxo
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         //Info("Test Procedure Recherche Etat :  "+COL_Criteres_Acceptations.RechercheEtatUserStorie("lide"))
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_SansNom2
+    identifier : 0x2e2867d0040c4c77
+    internal_properties : BQAAAAUAAAAHzjUcikoGYdbpFK1T1AgHErh+6mrp5xM6YCqgdakr40mecEQdghs8snRETOcNrJkA4JU2QAAMSb7isr2Gjyk43r5ELHxEIozY3fiagYn2/LLoUBw8+bHaFA54ZvWp4cgCsjnUAwvvhxZ52dreNYTmDKok3zlBMiPxdvt/pz5NJV3isT7CH2jnm11dQHy7/fb94NW7LrStnQF7oUS81CHDlYdwIzZJIIXF8Pw9AFJjkiCRg06paTXSwO57LFtkyU95gEtT2yp3e9d6UaTR9UEPx6z/2Pd3YfiK+liPeDEMikTRz6I/KWUC1UX5JXxBNnhLZ+ionjYSijQ1au95X60kxXDsT2189/8oMbmfqSjmck1BbsrepvwNObL8CYFFuWjiOSyLEizrY5QFDotnOSXS1gZfHYPyPWDUpb60gnHFluOKPxyb/x33UpaCKzT6QPtXThaZnIa6HAZkqH3Hams3O3p7Va0qrRTFUvWkN89sKHnlvGYlk1xJSAuDuLd6HD7h5DO9i1zlRHXMcBVUI3nzpwtM7wa8TITFr8ykE78pgoSqNdsin5VTqQ+s5TGeWBhPEovl2loXmtZCoz71dRGS9DsgaGkMxgukpbP6FgTB0KrfV+mc81EsP+fguUAgvWZU/dgB0r0PE1FLMtstUmjxJtQ5aW1bdI8uynYzhppvb86XtKRX+l0iX8viIOkZMXZPW/pIYabVmICGK1ncmxxLxtaMESKrlkKuxrsU4OdpnnQDUslsAKNR2g5h6dwKcA==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         Info("Test Procedure Recherche Id user Storie  :  "+RechercheIdUserStorie("CC10", 1))
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_SansNom3
+    identifier : 0x2e2867eb040fb6ba
+    internal_properties : BQAAAAUAAAChkLwRx7eK3Dn/gbv7ycsuwqSr1oDBRNPbF9pb+5bkw6uLnEvTZ5WdkJa2zpRVNB9SJVqRkFRtT07Zdl/NDiLmqhJJ9tS0W5z1HPKvhp7Gscvmu/Qxn4cntbj7UC4G+8s02xOU5ZlxvvOrrOnuYMtvlgFUme3Mj1n/MrNDmAEo1NFSlpuU9RgRvmeqm+eGIO8m3H1DYc/l/H6GpLoLcwD30hvTuwVZPMXIYWTHqCiiXlr02GPnSD+JUAwADrApN6zDJXFxyx9g6Hdf2+fZryFv+VTZY5GUC1IlxWwTnb3sCn7Ja96PXcbhQLtm7G6tT4ONFg8dIY0/+AhSpn1X3hukvGT0Bu89KQxalCDJJmmT41JNYhVNNjBCcRft+6j6ge6perHTEDs1hb1IFYqCdwA2DwGmR0vnT/JrDtvLLUs0fgpvoK6v8FEDOXnJCl/eVznEF4NNaitaNN3Lc15saFoXuOUKWSdTi27SU+qNhHHDkEAwE1DdNiSRFx5Ky04ik6oKy7aXL8uF5HKXXwDDrSLx9Nw5Yxj/ai7Y3pe5BMMCmh3r38TZg2AY0/eo75ehihddzqs2XVrgm0DIFebR5vP5bE1uR6aaNbTIm4WGTiUzuZDN4f4rT8oxuXkSe/7XHc0q18aU3+0McnuP+lUmV4qBlhv/0r/uWqjcQpMKxGVaKkYsOWz5LqJV0SC1jxlOugs2HPrIacJsX+PBDkS3sfrHGKqiOk/cdBNxzPfSEpperqM=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         Info("Test Procedure Recherche User  :   "+RechercheUSR(5909))
+        type : 18
+      -
+        type : 161
+        enabled : false
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BQAAAAUAAADiNkh1O6bsUdojdCyc5rvMKOb4KGdCuKthEpeb9YgToXKniNhTa74qqTWW/kn9AHiAwpYRHxIfmwB4rUjWCTsHt96kYeogf6aF/P/qLr5YC+/q/4GecKHBIXzFYdqjswEetQud+3e/nTe5+xoit8ijZM2EBaVaXCH6Yfad
+  options :
+   -
+     name : OPT_Menu
+     identifier : 0x2e1c6b0303f4dc7b
+     internal_properties : BQAAAAUAAADaVOK26igRTC8vPnYOA7hzsOilPVV19DTiPv7W91M8boHW3V/xmuBuhJBsV5YXpcDdgEyUUK2d/w1p4nhX1ZBKHF24fE83GmaCHeTEUZuQsUGiyNknJclMWQ86+hrQWsPED8oEVLc/lPXcw/EO1RBSMndpaso/Uf5q4pkNooRCpN0uOUiGJqE=
+     code_elements :
+      type_code : 26
+      p_codes :
+       -
+         code : |1-
+          
+         type : 32
+  code_elements :
+   type_code : 26
+   p_codes : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BQAAAAUAAABqPQh6HC8RxAVkp2SqPYLuZrfVhd+1KX4lx22hIT8uqEpE6yP7Sbc2rmVqdmL816EWzXOkEe9ijOtYwchZKAfpy3B1cNqhpJgsnbUs
+  controls :
+   -
+     name : CBM_SansNom
+     identifier : 0x2e1d818705d29787
+     internal_properties : BQAAAAUAAAC1Pqyb4kLIV1InvJiS80KRCzbv0kqeDggiotxyiaIW3IJc72jMfBXHrfjuW+QMD8hIDbNRn1lvq8a/9bexOhtkg85R++/qXJ0=
+     code_elements :
+      type_code : 62
+      p_codes :
+       -
+         type : 15
+         enabled : false
+       -
+         type : 16
+         enabled : false
+       -
+         type : 39
+         enabled : false
+       -
+         type : 17
+         enabled : false
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE fen_moulinette_martin()
+      
+   -
+     code : |1+
+      
+      
+     type : 34
+   -
+     code : |1+
+      
+      
+     type : 2
+   -
+     code : |1+
+      
+      
+     type : 40
+   -
+     code : |1+
+      
+      
+     type : 234
+   -
+     code : |1+
+      
+      
+     type : 165
+   -
+     code : |1+
+      
+      
+     type : 177
+   -
+     code : |1+
+      
+      
+     type : 180
+   -
+     type : 230
+     enabled : false
+  procedures :
+   -
+     name : RechercheIdUserStorie
+     internal_properties : BQAAAAUAAAAOerxmD41mX3iNw/XKQbWwm63N1WKqksNJrinKCRjcB0ZCZweLWRuyn1ePcpbiK32sCdHckcJhlSmCGrm4S/brIqL+k7H6Te3NR+ShpAR0dfd3KF8lVKfWT+SCu8exOGhwv4MOKZ4Fc42f4wOS3WBJsZsojL1c3Hmq15mJYne3t8aZJ+TcKv+YIPaWd/ktNugu6n+HOZDUK0wW31NTl89xv2xpzISLtSluatl+1vZ9cGOjMFlaFmSs7ehoTB0zexR7vnr8nybmt5MFNFt652OMKbp/NGfJyywV5ao5ElvcZR3Z8Km2YNpSJZAIebmAvQcfigJsjHoPuUhQlC5eK6jLfzGcId0w59a3GcPGfCV699updzVWG34TIy3vXYk=
+     procedure_id : 2170765222603745982
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //RechercheIdUserStorie (<sCode_User_Storie> est chaîne, <nIDScr_Projet> est entier)
+      //
+      // Paramètres :
+      //	sCode_User_Storie (chaîne ANSI) : <indiquez ici le rôle de sCode_User_Storie>
+      //	nIDScr_Projet (entier) : <indiquez ici le rôle de sNom_Projet>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE RechercheIdUserStorie(sCode_User_Storie est une chaine, nIDScr_Projet est un entier)
+      
+      nIDUserStorie est un entier
+      // déclaration de la requete
+      sdSource_Recherche_Utilisateur est une source de données
+      sRequete_Recherche_Utilisateur est une chaine = chaineconstruit([
+      SELECT 
+      	IDScr_UserStory 
+      
+      FROM Scr_UserStory 
+      
+      WHERE Scr_UserStory.CodeUserStory = '%1' 
+      AND Scr_UserStory.IDScr_Projet = %2
+      
+      ], sCode_User_Storie, nIDScr_Projet)
+      
+      
+      SI goApp.Rsql(sdSource_Recherche_Utilisateur, sRequete_Recherche_Utilisateur) = Vrai ALORS
+      	
+      	hlitpremier(sdSource_Recherche_Utilisateur)
+      	si htrouve(sdSource_Recherche_Utilisateur) alors// On lit le premier, s'il est trouvé, on l'affecte à la variable.
+      		nIDUserStorie = sdSource_Recherche_Utilisateur.IDScr_UserStory
+      	FIN
+      FIN
+      
+      HAnnuleDéclaration(sdSource_Recherche_Utilisateur)
+      // revoi de l'ID.
+      renvoyer nIDUserStorie
+     type : 458752
+   -
+     name : RechercheUSR
+     internal_properties : BQAAAAUAAACiTTMe0FrD211IGYRakOTqBgxN4K/+W8efwTsGRrsfEW+/j/m75nF+7g/+nMwDgdHR6Ble8iQBBW7BxTEyQjYLmNqDFuqlTy7PvkQ16purFJ2cAlRe9mBUK0531a0TLLSABuRPHr6dNFeSsGEA2yYS0c4m8ocomrGYbFji4Od1oorPsCdwFLN8QFX4rmFD+d1YSCk8PZsQHynsXKQwrZtRykd1oYq4yXsrgDqLk2ofUOxUbLQqpexOIKJ9lW6fwSpeCb4QRnEyyh5xhxbTkbKXTquirboE8ch95r5B4HLyE8JZTVDkpdaiEwmwAOrsp65tywR42TA3sKtJo3cF0DeEz7mW3deZieqmbd1BDYotLg==
+     procedure_id : 2170772665782164113
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] RechercheUSR (<sNom_redacteur> est chaîne)
+      //
+      // Paramètres :
+      //	sNom_redacteur (chaîne ANSI) : <indiquez ici le rôle de sNom_redacteur>
+      // Valeur de retour :
+      // 	entier : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE RechercheUSR(sNom_redacteur est une chaine)
+      
+      nID_Redac_Retour est un entier
+      
+      //GetID_Usr est une requête SQL = 
+      //[
+      //SELECT IDScr_Usr FROM Scr_Usr WHERE Login_AD = {NomUser}	
+      //]
+      ////chercher id valider		
+      //si HExécuteRequête(GetID_Usr, sNom_redacteur) = vrai alors
+      //	HLitPremier(GetID_Usr)
+      //	si HTrouve(GetID_Usr)alors
+      //		nID_Redac_Retour = GetID_Usr.IDScr_Usr
+      //	FIN
+      //FIN
+      //HAnnuleDéclaration(GetID_Usr)
+      //renvoyer nID_Redac_Retour
+      ...
+      
+      
+      //déclaration de la requete
+      Source_UserReaserch est une source de données
+      RequeteUser est une chaine = chaineconstruit([
+      SELECT 
+      	IDScr_Usr 
+      
+      FROM Scr_Usr 
+      
+      WHERE Login_AD = '%1'
+      ], sNom_redacteur)
+      
+      SI goApp.Rsql(Source_UserReaserch, RequeteUser) = Vrai ALORS
+      	
+      	hlitpremier(Source_UserReaserch)
+      	si htrouve(Source_UserReaserch) alors// on lit le premier, s'il est trouvé on l'affecte
+      		
+      		nID_Redac_Retour = Source_UserReaserch.IDScr_Usr
+      	FIN
+      	
+      	
+      FIN
+      
+      HAnnuleDéclaration(Source_UserReaserch)
+      //on revoi l'id
+      RENVOYER nID_Redac_Retour
+     type : 458752
+   -
+     name : IDComposantType
+     internal_properties : BQAAAAUAAABRohfyxDPtNY6HWnhr/60PCgCcF8oHSuu4Jku+OKUUV4R9jzJuLcQymbR67Q66sSi9GjSZenYu55Zf+MLRBBE83knV0ZcdeBe/NO44dgEWI7Aa8JMEr4H9+YHgoon1LtT9HC7GAqNEV4s/RuYUdikPD0AhG+5QUh94l/KaP73vulA7aiwq5pf6PPLQxyGMF9/nWLhEKdeCjVIsnXusgp1LUVOOOfasnQv8IrEs8atteCsGeRB6ORg0aawFMx4yXOOPeUsDi71+s66AVyVH7OgX5mQWOntvxyXc/jPiMDtYxWIWe5+HiVuJU6l79Te5TlXdjW5zuDcqJ/fxWLiE8M7bN0RR8DekveQTr8GHDK4ZDJFzvJNCrSo=
+     procedure_id : 2170859475661374885
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //IDComposantType (<sNomType> est chaîne)
+      //
+      // Paramètres :
+      //	sNomType (chaîne ANSI) : <indiquez ici le rôle de sNomType>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE IDComposantType(local sNomType est une chaîne)
+      sID est une chaine
+      //declaration
+      sdSourceIDType est une source de données
+      sReqID_type est une chaine = ChaîneConstruit([
+      
+      select IDScr_CritereAccept_Composant_Type from Scr_CritereAccept_Composant_Type where Libelle = '%1'
+      
+      ], sNomType)
+      
+      si goApp.Rsql(sdSourceIDType, sReqID_type) = vrai alors
+      	HLitPremier(sdSourceIDType) //on lit le premier, si on le trouve il est affecté a la variable
+      	si htrouve(sdSourceIDType) = vrai alors
+      		sID = sdSourceIDType.IDScr_CritereAccept_Composant_Type
+      	FIN
+      FIN
+      HAnnuleDéclaration(sdSourceIDType)
+      //renvoie de valeur
+      Renvoyer sID
+     type : 458752
+   -
+     name : GetDescriptionById_CritereAccept
+     internal_properties : BQAAAAUAAAAf6srBgod1MEZ4wh1Y+NEUc9f6dvq4Cjav3UsuAuAiGJ/sFXxB2GjkaWw+FsgiIaR8v6TfdtbObyOLZcj4E22hEKJIajqoLiKRhH8dgo8/XXkFoHxnbpN7LC7jw54onTPSByM/Oi8CY6P8dUuQFlquzFtou1vGxdqr5jdbyC/6DPbzryNVHHm0MQi3zI07gvcR94eilaMw8oZJRtBsqJMImUa8muVSAYYKl8Kpzy/rDXUdbSNfUVZ9eQu3Hua+FtYVEA1KVxWSzVfYB0xK5f/KdW4u7irgE1RsMN2Z31ve4qtqEJKGegGNVtXcWCBOJLJaM/aayAsXshad1NlOQWP6RZ9PUjez60olXdPQpOPt4ea8cArU6cbRi054nQIKiF1ugOzp5O8=
+     procedure_id : 2170874486572817346
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetDescriptionById_CritereAccept (<ID_Crit> est entier)
+      //
+      // Paramètres :
+      //	ID_Crit (entier) : <indiquez ici le rôle de ID_Crit>
+      // Valeur de retour :
+      // 	chaîne ANSI : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE GetDescriptionById_CritereAccept(local ID_Crit est un entier)
+      
+      //declaration requete
+      sDescriptionRetour est une chaîne
+      sdDescription est une source de données
+      
+      
+      GetDescription est une chaine = ChaîneConstruit([
+      select Description from Scr_CritereAccept_Composant where IDScr_CritereAccept = %1
+      ], ID_Crit)
+      
+      si goApp.Rsql(sdDescription, GetDescription)
+      	HLitPremier(sdDescription) // on lit le premier resultat
+      	si Htrouve(sdDescription) ALORS 
+      		sDescriptionRetour = sdDescription.Description // si on le trouve, on l'affecte a la variable
+      	FIN
+      FIN
+      HAnnuleDéclaration(sdDescription)
+      
+      renvoyer sDescriptionRetour //on renvoie la description
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAAwjDLmDSZ0H1P68nJIeNfqR9EvRjU/K+sVcM1T6rhVNr+VTV1mZ/rmoweYbFDZUhBGcv8UsxlDxVCOnb2U/SQOvlGWzNby3/w/V+ppSymxv+Vh
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x1e1c3ae2000580c4
+  internal_properties : BQAAAAUAAAAa2Zm8J9E/zh+/WIrVvz1fER/So3PB0gjQuxc1xKQVWY4ZDm5lfg==
+custom_note :
+ internal_properties : BQAAAAUAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BQAAAAUAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

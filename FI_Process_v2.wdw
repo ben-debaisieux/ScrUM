@@ -1,0 +1,448 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FI_Process_v2
+ major_version : 25
+ minor_version : 0
+ type : 8
+ description : ""
+ subtype : 0
+window :
+ name : FI_Process_v2
+ identifier : 0x2f62788168431641
+ internal_properties : BQAAAAUAAAC+afKa7n5ZUjOZf+3D1Ue7PRhEGpaLsGmivwn/+Jm2mvOCgeeYLqil4LnfOIIWphXLSfGIikf/kvPbkEORTb+pW277HicGdfiw/IhYGtA5JZFOYyWiuqAxQx07/DejfYBpB6Kk5beCXObN7lbj8SRbjcXDrNjhC1tGxrHH+i/1bhj56KfbzmFmfsefyCkDM9Ga+HW7vGV/7OCzJGbd3Y0vFfxdfI9WWHtIVz0a/wxiRvhL351CseNYbpFr+Cn3yMHTv7/ZrzhuBFevPz1e23CBdAH1s58+JkR3VDTg6ktkgQ0gIyWJpi53kSg2fBtiYG9I7xPF6QvokmSU3TqRCacbHaBLwAL51HnnRPCbq0DXcoUYQgeaymXGLRajJ41g1T/XOEwA4tc8UFB8t5K6wNJ1BCqzavtzEy/OgGZHC3znv7jMn9MvtwAgOfLhO+8EmsrS/2hFHRqCgoWexd9VSa0TQZvSyd03rinUx63F2A4iILdMiQ5bDlfpg0SfV8OZZnFTmD2mZdEZTZ4rjG2hgwUb8wp8FOudJ+m79d0eiGBvD5S0g0YKbTFw9PnTm3D4hqjJRb+dux+nmJeMMVY96ewEnzRiibG0//vM9jX2jKNlALW0CiHtPxbXMgQWWewnDRycC7DcAk7TJbzaMgOs6u56/cyOiaeJ2tweLIqi9JXUez5asUI=
+ controls :
+  -
+    name : FI_Process_v2
+    identifier : 0x2f627881684e1651
+    internal_properties : BQAAAAUAAADsKwJN9Ff++Qbd1/gpsOVNTOPY1vUftsPwoWYfIK0sKo21kotO64Kz4yHAYym6jr9r6zr9kSVwM9X7KryX2CO158/Mbu0hznbds8WU5+YAA246kTe5awwlNlctKbG7r73TIhA1OusZK296/6F0XVzbq8gDr6E3fKiI993HxFUZhn/KSUy4CMGC5Cai04S2hNw1f30PP05hRSEoCfw6EFN+L4myG4fNaWGgJHf1pu9x5oN/giW1shnzbbs2NhmfC0CVh+GuNMu6O0Fl9PFClDtr9nOb8ToqqfwVIKBIAtE6qobD1U3QRVeeNCFa0uetDDo4paHHC3fp1PZXCKDpSeGzLZCR73sTtzN1iTfE9wDUzpVbxxsd5yr0fSPcyXziih4WDocRaw4WzNFGGjMfYUmnr/UCctt4qEoxJ0yjUh38H8+CspntVjdGJH1A//E05ZasgmILHSO0JxANcoFiL7qtQLysfqSkZa6CXDFBzbO5k7dTp1+r
+    controls :
+     -
+       name : BTN_Init
+       identifier : 0x2f627881684f1651
+       internal_properties : BQAAAAUAAADFtTOQlVoksLCI5Pp36b6h8LIg3ILLLWQf8ZHWaxCbPB157Sp3w0S42MagWnT4PjnjLLBoyngOBOzHmOErX6Tcn3CPhLlKIINyTNLpg8v1ybaMOQmGTds52AFtBK0wpV3lqCnKdQxSQbBFcrlAW4mIn0aU42mJH2BJ9eXUxPgLwb3V08zU9HdBQ9MgfjRY9HURs8lFfKQKsNJnKTD5oTR6dMzz+QPe8yqw6xS96o+MjeqCJSTldrCnGrQccrW1bntAAQpG52ZMpC5y0vlV754Z9pg0Vl2h/scUpvTxLci8TYim2J1MYfKynIdvi+xVmMSj8qdN5Xj8pU7u8eUqaFES4hzy/kU43krcwhyTF8TAgDY78V4R5WRIgSrZjhaC9k9YX7axKjwSda8u8cm94NMM1kx+zu6Yo978xix/09CoXnU6gAuVfmEG8MxJYy5stOVic6YaIm5W+M5uw6N9zEbiuCSOnOuTVRXrPzPGBnrBtbIqEk8lzRHDWLJvtcXeMSLAspGC8Iy9uRHr973HnNOlQj6scn5klDSORpjL3Hk3M5TdK9MJ32DDr58c0srJ+eqbSC8U9dgLmy4sLhz+7sj2N9jartwY4WOnbb1VdHbHDSs+TkCI+GvNFcpE1p5vTpTk/qtkrjwF5T5kOgjyXyeR4ZqQfmReTZWN41K0VwS+u9ReMgMOsVZC1KAocLsdjiY5n/mKcer7d3UD1N42jbr00lI=
+       type : 4
+       code_elements :
+        type_code : 4
+        p_codes :
+         -
+           code : |1-
+            //hcreation(Scr_Process_Metier_Intervenant)
+            //hcreation(Scr_Process_Metier_Intervenant_Type)
+            //HCréation(Scr_Process_Metier_Axe)
+            //hcreation(Scr_Process_Metier)
+            //
+            //
+            //
+            //sType est une chaine = [
+            //Action manuelle
+            //Action par intervenant
+            //Action automatique
+            //Attente
+            //Sous process
+            //Condition
+            //]
+            //
+            //pour toute chaine sLigne de sType separee par RC
+            //	hraz(Scr_Process_Metier_Intervenant_Type)
+            //	Scr_Process_Metier_Intervenant_Type.Libelle = sLigne
+            //	HAjoute(Scr_Process_Metier_Intervenant_Type)
+            //FIN
+            //
+            //
+            ////ClProcess_Metier.gsNomVarProcess = MaFenêtre..NomComplet + "zpclProcess"
+            //zpclProcess = allouer un ClProcess_Metier(MaFenêtre..NomComplet + "." + zsNomFenInterne)
+            //zpclProcess.m_sLibelle	= "Optim UM"
+            //zpclProcess.m_sCMTR		= "Cmtr process"
+            //
+            //
+            //oProcessAxeAg est un ClProcess_Metier_Axe(zpclProcess)
+            //oProcessAxeAg.Libelle = "Achat agence"
+            //
+            //
+            //oProcessAxeOpt est un ClProcess_Metier_Axe(zpclProcess)
+            //oProcessAxeOpt.Libelle = "Cellule Optim UM"
+            //
+            //
+            //
+            //pclOInterTmp est un ClProcess_Metier_Intervenant dynamique
+            //
+            //
+            //pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Manu(oProcessAxeAg)
+            //pclOInterTmp.Reference = "1"
+            //pclOInterTmp.Description = "Saisie commande"
+            //
+            //
+            //pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Operateur(oProcessAxeAg)
+            //pclOInterTmp.Reference = "2"
+            //pclOInterTmp.Description = "Validation commande"
+            //
+            //
+            //pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Attente(oProcessAxeAg)
+            //pclOInterTmp.Reference = "3"
+            //pclOInterTmp.Description = "4h maxi"
+            //
+            //pclOInterCondition est un ClProcess_Metier_Intervenant_Condition dynamique
+            //pclOInterCondition = allouer un ClProcess_Metier_Intervenant_Condition(oProcessAxeOpt)
+            //pclOInterCondition.Reference = "4"
+            //pclOInterCondition.Description = "Délai expiré ?"
+            //pclOInterCondition.nPosBoxLienFaux = 6
+            //
+            //
+            //pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Auto(oProcessAxeOpt)
+            //pclOInterTmp.Reference = "5"
+            //pclOInterTmp.Description = "Envoi automatique au fournisseur"
+            //
+            //
+            //pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Operateur(oProcessAxeOpt)
+            //pclOInterTmp.Reference = "6"
+            //pclOInterTmp.Description = "Controle commande"
+            //
+            //
+            //pclOInterCondition = allouer un ClProcess_Metier_Intervenant_Condition(oProcessAxeOpt)
+            //pclOInterCondition.Reference = "7"
+            //pclOInterCondition.Description = "Commande validée ?"
+            //pclOInterCondition.nPosBoxLienFaux = 6
+            //
+            //
+            //pclOInterTmp = allouer un ClProcess_Metier_Intervenant_SousProcess(oProcessAxeAg)
+            //pclOInterTmp.Reference = "8"
+            //pclOInterTmp.Description = "Correction commande"
+            //
+            //
+            //
+            //zpclProcess.p_oProjet = ClProjet.GetObj(1)
+            ////zpclProcess.m_oProjet <- allouer un ClProjet(1)
+            //zpclProcess.Enregistre()
+            //zpclProcess.Affiche()
+            //
+           type : 18
+         -
+           type : 161
+           enabled : false
+     -
+       name : LIB_Titre
+       identifier : 0x2f6a58390931ff43
+       internal_properties : BQAAAAUAAAB79+2uNMPYRA0yVPnn48uq1Xo8MOsQay01bCjYIbuHEpqMVo3gxo4+jguNN78c7v01LOyTWX5Klpkywx0VZV1biwjI2Gq9vVqlttHGHYpwycpyRAXHgVbIdir0WmVr3MGhgURA0qsWUOadsB54JyZ3Pg8gPUbO7PRhVE/asyGQNHF4XvI1QhNXloyHIOX4pmVvbfZxkO8SE3bpzfSm1dErqRJ3JaoG+U59WnDroPYWDt0gremUpfxQZiSyGxvw3T4SIxW/XCnymxh54m6uHs2JEMsAZnh2/mdDk2W+5TXrE8xeAte7TruCuo3D9gEZqXPBdxVvA4h39jca7y2MNLSA4cBKa5srVoP0PLPmkV4M4fkz2xE9qxl6l7/uwU7GQYvrq9lsDPX3yG7wVLLns/aNZEtZw7hEFNVbGsXSg9kL+DEOuHTlO77QDvNiQZ76cvU=
+       type : 3
+       code_elements :
+        type_code : 2
+        p_codes : []
+    type : 32
+    code_elements :
+     type_code : 70
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE MaFenêtre()
+         
+         zoProcess est un ClDessine_Fen_Schem dynamique
+         zaEvtCall est un tableau dynamique de ClProcess_Metier_Intervenant.STR_CallBack
+         zsNomFenInterne est une chaîne
+         znPositionBoxCliqué est un entier
+      -
+        code : |1+
+         
+         TimerSys(CallBackTimer,10)
+        type : 14
+ menu :
+  name : _Menu
+  identifier : 0x2e58f0a100881347
+  internal_properties : BQAAAAUAAADiNkh1O6bsUdojdCyc5rvMKOb4KGdCuKthEpeb9YgToXKniNhTa74qqTWW/kn9AHiAwpYRHxIfmwB4rUjWCTsHt96kYeogf6aF/P/qLr5YC+/q/4GecKHBIXzFYdqjswEetQud+3e/nTe5+xoit8ijZM2EBaVaXCH6Yfad
+  options : []
+ popup_menus :
+  -
+    name : MNU_Fond_Process
+    identifier : 0x2f62788168501651
+    internal_properties : BQAAAAUAAACc6xPNEsJaUAHQBMHhkWCdd/fAO8pPiJWz+dBZNwkaiop47AXWZFNoj5Ina4Um4yyuMytRTkaCJgI9UFCVIXkHqA6ulxDLmxGZBmZAqFEEP/OoRPREMz5idgASqZfbIA6LRhzfykShk/aptiQLK3TNyJPZW42pcekSZ8qPa1Lb7RtrD8JDsJZgdTlvmwp6Z708bChWnz9RfgAjnn3v8boImEvjPAyEUboOe1d+vTzxQZO7bBdRl6Bbb+wX+P16aGr+lsgEA1g=
+    options :
+     -
+       name : OPT_Ajouter_un_axe
+       identifier : 0x2f62788168511651
+       internal_properties : BQAAAAUAAACBA/KiJdEz+aja0kwJ+yN7818OAUoqqpd6kV7i7etjsvSQlmvz4eHAKZn0dzDzUMCj+hxOjvGrBkf+UEO9ptOmDWrijCZlZoCL184eTMHiUshlserZUBlJQMarb9W7lToAbCkQhGfBKmfQjfyAIsYYvBpUkPF8/1dx3e8mOfyClAIS62UAHjwJs3U7waR/FysqBJl6MUx0UJlnn5q6CO90FSdRo1PO2gke2k9Gt4jkKMrLZ/V25nPX9PT2dfEEKJOE
+       code_elements :
+        type_code : 26
+        p_codes :
+         -
+           code : |1+
+            sNom est une chaîne
+            //1 : OK
+            //2 : Annuler
+            SELON Saisie(<§?1E70CCEA1C37A944§>,sNom)
+            	// OK
+            	CAS 1
+            		//oProcessAxeAg est un ClProcess_Metier_Axe(zpclProcess)
+            		oProcessAxeAg est un ClSchem_Axe()
+            		oProcessAxeAg.m_oSchemParent	= zoProcess
+            		oProcessAxeAg.m_sLibelle		= sNom
+            		oProcessAxeAg.m_nOrdre			= dimension(zoProcess.m_oSchem.m_aoAxes) + 1
+            		TableauAjouteRéférence(zoProcess.m_oSchem.m_aoAxes,oProcessAxeAg)
+            		zoProcess.Affiche() 
+            		zoProcess.m_oSchem.Enregistre()
+            	// Annuler
+            	CAS 2
+            		
+            FIN
+            
+            
+           type : 32
+     -
+       name : OPT_Ajouter_un_intervenant
+       identifier : 0x2f62788168521651
+       internal_properties : BQAAAAUAAACYTT0PXHVE+r3CQKlndDX7Jc12WJl3J6u+Tjhsnk11vjD/NAkQd6/zOkzqJOt544HOai7R/2TYqfYMUIDQu0YBX9QR4Jrp3ep0OYadvrjiFAuxK7BgZ6GasiOmpPEz/YlJtEWpdbjL0DSPdmSI+MXqIBN23JbauKsF6VB1hvNmOVG37BMi5vvtj8ExqGX4apkyp8RH9I9R/B+WKbGuAa6buYaIPTPo5YGq7NLrhHUal5QZlZfFa2LsMvhPy1wv4+35jfyi3wRD
+       code_elements :
+        type_code : 26
+        p_codes :
+         -
+           code : |1+
+            si Ouvre(FEN_Process_Ajout_Intervenant_v2,zoProcess.m_oSchem, Null) ALORS
+            	zoProcess.Affiche()
+            	zoProcess.m_oSchem.Enregistre()
+            FIN
+           type : 32
+     -
+       name : OPT_Mode_édition
+       identifier : 0x2f62788168531651
+       internal_properties : BQAAAAUAAABYszlqnaS4dF/1MpvrIz/NaI+bX1VqQ4H9CfCZQz1NPcv/tAjWIkawOHXqzJz3pqV+z7xBh/4qePGE2Qbf8Cc8tIvajCbrZcubEM1sx+MhcRxrDsIDyP1SfDf+2Uo3PgFTMdutpQ2dO/bXUYUq9okjQqJXShpmdpIZl7GXxeZn3n4HAZec1le1GMUnKz5cD9lM97GvmWS+YoGppIWuaLiMp4WeIzPo/k5NNrxdKE69xRDvxulteYDrIfObWBO7Ucw/xw==
+       code_elements :
+        type_code : 26
+        p_codes :
+         -
+           code : |1+
+            zoProcess.p_bModeEdition = pas zoProcess.p_bModeEdition
+            OPT_Mode_édition..Cochée = zoProcess.p_bModeEdition
+            zoProcess.Affiche()
+            zoProcess.m_oSchem.Enregistre()
+            
+           type : 32
+     -
+       name : OPT_Recharger
+       identifier : 0x2f62788168541651
+       internal_properties : BQAAAAUAAABhye7W4tsAVsVeEZJmChmU57nDMxYtjHprNGflE8EXVTeWdC8sbtZVCa/CzPIu4G///srAJzcpN2XgHtnXdhzxYIrFn6G93TvxAxWnZIrlrKAAeTL8uMxanOfuLQDa0UwMEP7ri3S6mDKLeSSPJBY9OsnqvOs4z2BsWJAdTM4qpAbaMm1Jhzps9K0xtEZTs5adk6nAK0HEx1k9TsEuKQ63iwYd+krS+KvOKoRv1H2S+embJp7ydzGS/kzwLwC6H/S7StY=
+       code_elements :
+        type_code : 26
+        p_codes :
+         -
+           code : |1-
+            zoProcess = allouer un ClDessine_Fen_Schem(zoProcess.m_oSchem, zoProcess.p_sNomFen)
+            zoProcess.Affiche()
+           type : 32
+    controls : []
+    code_elements :
+     type_code : 26
+     p_codes : []
+  -
+    name : MNU_Clic_Inter
+    identifier : 0x2f62788168551651
+    internal_properties : BQAAAAUAAAAnMfV7G0+dED4FhoCsLNWo2xAQAxF5JcQEk4KYypdvtzaqMJs7AeCCt7mL6u/myBSqojbunZ/cV5bmSQTjzmEXmMI6evzSz1V/ov3eJvUJYS9HUI43PC8EnUpeZeaL7yYW6Fm2q59MNo8lqqe4XRKwEnJxWlSIyKLEDQv19TjNhTnkyR1rCiRYUo12U35oZ/q9HtyEJXEDKHU611MOxbH/t4ORy0oWUMnzYcmbdHaQUfrdrXiV/Zlb3XIxvs8RYceUdNukcA==
+    options :
+     -
+       name : OPT_Modifier
+       identifier : 0x2f62788168561651
+       internal_properties : BQAAAAUAAABX0wHZaGPagvU2vK/+iekJEB2g/jYsIj62jwsRQBWzZGJXJoiW5I5OzEs9c1XlnHHKb6OkjfgndE0HVZk1LeydKhgNIrd3SV354dQuOi2CwQ8KQjMobA0E1T3mgiU/2XG/P+8AvwroovrwTJqkHwwzehBm6rL7mxvhzo13eBMYZ4BWXhaEOskkKdftc3Xr2IlP5EHzF123i/O7zpTEfMt3vK7UrpLZe+dWjhBMQ51AhS5E6syysl3e
+       code_elements :
+        type_code : 26
+        p_codes :
+         -
+           code : |1+
+            oInter est un ClSchem_Inter <- zoProcess.m_oSchem.oInterDePosition(znPositionBoxCliqué)
+            SI Ouvre(FEN_Process_Ajout_Intervenant_v2,zoProcess.m_oSchem, oInter) ALORS
+            	zoProcess.m_oSchem.Enregistre()
+            	zoProcess.Affiche()
+            FIN
+            
+           type : 32
+     -
+       name : OPT_users_stories
+       identifier : 0x2f62788168571651
+       internal_properties : BQAAAAUAAAChlcvVqE1p+AVdLpYDjKQvWNx9ZqDNVZ4lNVXxX73FXAvC39dw0GahhP2ojgZE4R+ljf9amfMkyngtdih65g3zsWmujcrAAtmBx2g278mDMSrU34Rvxz3IM5SXk+UKqWnhUZYUU6hL34D/ohNuUPivTpVQcXGAw5u2CTmvUIqMirD4xS+9ErB6hO3ROUHDEfmFFJnJNTeGsgAm4DlXqCs5jbnqT0Qmv4QqmngR5F/6lGS4pvgWHTXzY/XY6vLV
+       code_elements :
+        type_code : 26
+        p_codes :
+         -
+           code : |1+
+            oInter est un ClSchem_Inter <- zoProcess.m_oSchem.oInterDePosition(znPositionBoxCliqué)
+            ouvre(FEN_LIsteUsDeIntervenant, oInter)
+           type : 32
+    controls : []
+    code_elements :
+     type_code : 26
+     p_codes : []
+  -
+    name : MNU_SansNom3
+    identifier : 0x2f62788168581651
+    internal_properties : BQAAAAUAAACPGYUeKo0Ys0Xc9nC4lWazO1ssSAHuoc0K0h0HsFNPBMlS+kKWwRERE4ppB8P5t9aub98hiSk4wrpC9JE1el4kHdnP8oht7AYbYkF+wtTRnwENvYZUU6TZNO11NZAVlulPJUjeHWgHWGYHkX5K49igv0h7uQiZsz5pvQ4lqN+Y3a9/Eea1vE6hWTWeWwXQAfyqVOUA/TPjF1PlHWaWr8fqQMK1Pj8sCJbhV408TvqcFP53MLL4Vp0hmV1IrRA1MpmK
+    options :
+     -
+       name : OPT_SansNom1
+       identifier : 0x2f62788168591651
+       internal_properties : BQAAAAUAAADUX37Nn1UvZkfqPfeRkRMeB4VOeit9414GqzjAPUanrI6Q9PM92lupC2fl0Yf8tICjdIQotCUFMBZivILnw5c2a6lONl1230hR+19bN5T7rlXJKFtJ3eu8+bhOxwwuT0bVmdJ4aBHxeAKoX+7EV0MVX6tBuOzalFJEhxFeISoF2fi+BmP4JoKA0kNFzDYOJ2cPVsXBI+28d5Fzb2KEbzeQmZx86/KKx52q6LpyWWzgCiCgeRIdkmEhgLVN
+       code_elements :
+        type_code : 26
+        p_codes : []
+    controls : []
+    code_elements :
+     type_code : 26
+     p_codes : []
+ languages :
+  - fr-FR
+ message_bar : {}
+ code_elements :
+  type_code : 71
+  p_codes : []
+  procedures :
+   -
+     name : CallBack_ChangeAxe
+     procedure_id : 2261502458576377409
+     type_code : 14
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //CallBack_ChangeAxe (<nPosBox_P> est entier, <nOffSet_p> est entier)
+      //
+      // Paramètres :
+      //	nPosBox_P (entier) : <indiquez ici le rôle de nPosBox_P>
+      //	nOffSet_p (entier) : <indiquez ici le rôle de nSens_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE CallBack_ChangeAxe(local nPosBox_P est un entier, LOCAL nOffSet_p est un entier)
+      
+      oInter est un ClSchem_Inter <- zoProcess.m_oSchem.oInterDePosition(nPosBox_P)
+      oInter.ChangeAxe(oInter.m_oAxe.m_nOrdre + nOffSet_p)
+      zoProcess.Affiche()
+     type : 458752
+   -
+     name : CallBack_Deplace
+     procedure_id : 2261502458576442945
+     type_code : 14
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //CallBack_Deplace (<nPosBox_P> est entier, <nOffSet_p> est entier)
+      //
+      // Paramètres :
+      //	nPosBox_P (entier) : <indiquez ici le rôle de nPosBox_P>
+      //	nOffSet_p (entier) : <indiquez ici le rôle de nSens_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE CallBack_Deplace(LOCAL nPosBox_P est un entier, LOCAL nOffSet_p est un entier)
+      
+      oInter est un ClSchem_Inter <- zoProcess.m_oSchem.oInterDePosition(nPosBox_P)
+      oInter.ChangeOrdre(nPosBox_P + nOffSet_p)
+      zoProcess.Affiche()
+     type : 458752
+   -
+     name : CallBackTimer
+     procedure_id : 2261502458576508481
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //CallBackTimer ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE CallBackTimer()
+      
+      stTmp est un ClProcess_Metier_Intervenant.STR_CallBack
+      
+      si Dimension(zaEvtCall) alors
+      	
+      	stTmp = zaEvtCall[1]
+      	TableauSupprime(zaEvtCall, 1)
+      	
+      	SELON stTmp.nTypeEvt
+      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicBox
+      			znPositionBoxCliqué = stTmp.nPos
+      			OuvreMenuContextuel(MNU_Clic_Inter)
+      			
+      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicDroitBox
+      			
+      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicPrev
+      			CallBack_Deplace(stTmp.nPos,  -1)
+      			
+      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicSuiv
+      			CallBack_Deplace(stTmp.nPos, 1)
+      			
+      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicUp
+      			CallBack_ChangeAxe(stTmp.nPos, -1)
+      			
+      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicDown
+      			CallBack_ChangeAxe(stTmp.nPos, 1)
+      			
+      		AUTRE CAS
+      			dbgAssertion(Faux, "Type impossible : " + stTmp.nTypeEvt)
+      	FIN
+      fin
+      
+      //trace(zpclProcess._bModeEdition)
+     type : 458752
+   -
+     name : Init
+     procedure_id : 2261502458576574017
+     type_code : 14
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Init ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE Init(sNomFI_P est une chaîne)
+      zsNomFenInterne = sNomFI_P
+       
+      MaFenêtre..LargeurInitiale = 5000
+      {zsNomFenInterne,indChamp}..LargeurInitiale = 5000
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : FI_SansNom1
+resources :
+ string_res :
+  identifier : 0x1e58f0a10c5b1347
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+ dialogs :
+  -
+    identifier : 0x1e70ccea1c37a944
+    internal_properties : BQAAAAUAAABbuS9ykjDkTYzIlrar0MzQzXeB3mgEYE7dIeToX+XMFw8kyA==
+    label :
+     fr-FR : "Nom de l'axe :"
+    image : {}
+    cancel_button : 1
+    buttons :
+     -
+       label :
+        fr-FR : OK
+       image : {}
+       value : 1
+     -
+       label :
+        fr-FR : Annuler
+       image : {}
+       value : 2
+custom_note :
+ internal_properties : BQAAAAUAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BQAAAAUAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

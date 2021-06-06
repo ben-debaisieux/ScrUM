@@ -1,0 +1,110 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_ExportData
+ major_version : 25
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_ExportData
+ identifier : 0x200c7169418474a5
+ internal_properties : BQAAAAUAAADbPByivuAbWjpc+wjxalB5lEOvXT1pgC8ewSu+Jll0m39A7s8omtlQ9auHjmpT6SymjJ/D3iMdU9blCFa5bVr0ES+FFzQEKkp2peFPP4u4/HfQwCj81M2MVCqslCG1Jl52Rtxp9EWODUnn1pkGvY2eicJ2ALWL2GdR87mVsvoIpdjkN8GKwj8L8de2iXV2GQ3E19eQy4CgHsWWmrKVo1c9qCCuJTkCk+7OAAt0dHoLl+Ze8YDEg8O39/+gJF8muNQWRW4C1bO7bIPykv1uYNZYu8dIhnjS7cjYch3Rot9o9uae9zkYPEa74ZxIoC3aGRt6ckj8od0/730HilfHjIMsDYVGJu2DChA5khXlDNJNf4W7SOt8DgZo9lwsLRM9YAPc5gLBZWAPyyv4kPlAv+G+eN4Say7zRPLKUsfaRTLjJPB+ryl5UfVjUGC3dYL+U/3kju5wYlWuYZTEckiymBG2EEKnHP2pO+iKjhcwzzKRHx8gU4WyKuoRiXCE5fOC75hAkJNBR7RRmQwWb1Bcjsbn/+Z4COtUE/oGFZTR23qWlza5NTA171G5hv4a87S/QcmF25i74tlbxAnEZ+5Zo1gEq4FeuWIc8SIJwcCr/lo9iH6qps+Iq3gm3EBRaogMZpBr8a6dPO3V8pxcORwa0uSTj4itnzToHuwHBgTHgMwq
+ controls :
+  -
+    name : BTN_SansNom1
+    identifier : 0x200c71aa418a73e5
+    internal_properties : BQAAAAUAAAAS1VLK7yKGt1A/tlW8hs01TAKmnSo4ilRzvab/8gU29SZttR1ugBf7Ad17A3Qx2/hEQ1zUo8WRyaGxnWJw9rCn+z2vkY7DT/zzf+c2Cw90lU/vhRK2My1r5gtLuqlqsLnzc5LGkjnd2zKw0FvV52g3wS8x5JmgD23an/SVcFK8CYNjuMdrIVpW0a9JE5S9D68DZ7qiAaIg7BXy64AQRKz1oxiQeuSyjEOvN818eDwqbC2h9OxF+e39d6Mw2fh33pcpxEDnEMJ8f87HCYe3dKanqB9edp7fLQzCgFJcZy1mWkEhTpAeLx7M9jpEOogA3zaScv9KVj3eXH3vkCFtPfyV58RJ6ZuNqnBT+/M7kQAS/GEc5OTO0KrKwgCKIrchu1y2DBORERvog75i1aCBqnttXBQ8QW6Vz5L23ch8EHXi0LAXWFazHHJZk8tlqaSDjKodbBrZ1HGrpnfnOis0h5IxNMiB0OUFRk85bsu39F9La8by5VFWI6OG0wbmLxYMdwWePUam9aezihO2R/02TuwprG9boYikfNhJSbwxiqb1sZ2op9yPnCt5sXmm68qjxnsQSEveEtL3B6cUY9K1Cttd8xylapDdbabVz1hlZ36BVI9JZIQpOWPv+X/+Jx+qjPY/5Fj41Q+1GPCi5Qwvr6aABaP3BCv7K4g2fC5KHRXG7Rs9wyIgASWq3i+0lbavLUotmdyU05Hlt8s+Lke+gG8HFg==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         oPrj est un ClProjet dynamique
+         oUsr est un ClUsr dynamique
+         oSprint est un ClSprint dynamique
+         sGlobal est un json
+         nInd est un entier
+         
+         nInd = 0
+         pour tout element oUsr de ClUsr.aoListeUsr()
+         	nInd++
+         	sGlobal.Users[nInd] = oUsr.sExport()
+         FIN
+         
+         nInd = 0
+         pour tout element oSprint de ClSprint.aoListeSprint()
+         	nInd++
+         	sGlobal.Sprints[nInd] = oSprint.sExport()
+         FIN
+         
+         nInd = 0
+         pour tout element oPrj de ClProjet.aoListeProjets()
+         	nInd++
+         	sGlobal.Projets[nInd] = oPrj.sExport()
+         FIN
+         
+         fSauveTexte("C:\Mes Projets\ScrUM\Exe\ScrUM\Export.json", JSONVersChaîne(sGlobal,psdMiseEnForme))
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_XML
+    identifier : 0x2017205612edb495
+    internal_properties : BQAAAAUAAAAOd4AhpLHpSA0doAigEqGpUSw05NwUatCzAybtL2YZ6UNR4L8vNxbURR0ytLY3M7aCVqHvjXLFano/woAMkctiYjGpQvVEp/dvDT+daPQ2zbaWPi3XDSg+SqLK1PjcNdbF4qGYxyhlgQ4N5w5V7BAt8Qh8f8ffhGHVG0GVnyZYwdNafk9n0yMp9/6luX3+uMdygpOiP/tr30YGxNg6i2DQJOzAoyuo0Z4d5EjGmfqx6zxUxc8SuCudTAhztDp5idotrB7dsz5mSjy4i04AVtpGa9gnj+Tl1z0eoJXiIglY/RO+XmGj1gmZzzMe8yFo9Z7GWFz8AsCMvGj9kS9tPEwreBVlE1M3Y4p8qi+eujICFywv6mRHb/yRuwaUleemppYwNx3AFu0XAmpIa48tdVMqB2Dj6QUCXGSBoRob48gPCfdEi0OenbwFOwikdLe7W9kJNMrM9n8RhmVevDYhrBiFQc4o/3Wsfp4iTCWBL8jrOfJhod6aIjUlU4xUDj6D8J+kdzQs3PGP//3pWqZqnxzX1N8krdbvi7kptBmmb6OrjYignelyKQwB71qe7L6xVUkUxmRE5XsCqiBTzxq2FNAet/pmZgymGg7XSivyj9wT/00G3SajjOZUBOleJ85EytzpWsGJJMUByJnGqzTY2LLOAzaDxfYl7Uv/Wtdy3mu1BLfndvq+dJPBxAbO69vSQNaXke8ohd9K2OedERK2y+3yXX1hmPHq
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         oSprint est un ClSprint dynamique
+         sGlobal est un xmlDocument
+         nInd est un entier
+         
+         
+         nInd = 0
+         pour tout element oSprint de ClSprint.aoListeSprint()
+         	nInd++
+         	sGlobal.ListeSprint[nInd] = oSprint.sExport()
+         FIN
+         
+         
+         fSauveTexte("C:\Mes Projets\ScrUM\Exe\ScrUM\Export.xml", XMLConstruitChaîne(sGlobal))
+        type : 18
+      -
+        type : 161
+        enabled : false
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BQAAAAUAAABd4biPtdLQOwfUFiqrit8H4xfGqKyz9t6VLxCUnNZRQiLPVs82PZNE+UVdKRzjizyeuKyRur85gNMUfqplpmtNDnQWQla9zo+GH9+1EfUJ6w17Dn/egD/gv+Hhywk8c9unIdzEp7EHgaAqD28w7Agveg4u19PBcKGZtQ==
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BQAAAAUAAABqPQh6HC8RxAVkp2SqPYLuZrfVhd+1KX4lx22hIT8uqEpE6yP7Sbc2rmVqdmL816EWzXOkEe9ijOtYwchZKAfpy3B1cNqhpJgsnbUs
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE MaFenêtre()
+   -
+     type : 230
+     enabled : false
+ code_parameters :
+  internal_properties : BQAAAAUAAAAwjDLmDSZ0H1P68nJIeNfqR9EvRjU/K+sVcM1T6rhVNr+VTV1mZ/rmoweYbFDZUhBGcv8UsxlDxVCOnb2U/SQOvlGWzNby3/w/V+ppSymxv+Vh
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x100c714908a8fa16
+  internal_properties : BQAAAAUAAAAa2Zm8J9E/zh+/WIrVvz1fER/So3PB0gjQuxc1xKQVWY4ZDm5lfg==
+custom_note :
+ internal_properties : BQAAAAUAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BQAAAAUAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

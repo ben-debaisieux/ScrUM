@@ -1,0 +1,201 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ETAT_Plannification_des_taches
+ major_version : 25
+ minor_version : 0
+ type : 3
+ description : ""
+ subtype : 0
+report :
+ identifier : 0x5ccfebc7004ef0ea
+ internal_properties : BQAAAAUAAABYnCU7//OaDDND+UC2jmNQy+Szi/NXIA6o33MGpRVlZADWzWHc6w8ZLT5dYCwEt9LKBqeZuTA5AoSL01JFf36QoDK1j8Thhzuiw+8/9r2gSnMQuUwAgLZhlbc8iLieWqXgzZazEiHmCOVhA5JcTOzzh+MGOFmu0VrvvDAjzR6CAJdTTnqa5ugFsfOHVREU6FwMq5kCE36vNEwRw5j2dQozf/JelGgu498qNExe0PU/Il0u7M6mgC9I9WfQDGE2Wp1ucpj327lM0WJYzm7/d1INu/iPA7sddac2CskJm+ew8xAhjeY/ZwCzwfZppSXJ0LDR0BQiIp52qRW2XM5f68RsYtdewILFOvGxWFRDLx93p20OKG9W2DqYBLFpezCfqPWAWmJk22cttEfIQtNy9nKHWSH2TisoP2MdupO8LtIWI1Qw5b7HLBA06kR33VwvICGE4FPUHTbiqZVVRPoD68DmKKGErrqfMbQf8idEWmiYCGfbwLV/ZG5uLXoJzmEg1yRyRj53N1aiOvL8+VRTYlXkheetmJ3IVHJ+AHMTSsrv1JMQZ24p2CcRHqx4JSvj1j5W5FvAgGPh95925exlP29lyhu2fq1vOoKyvTw1kFPesEojn0QLYCbFCPJjMw5BaXa0nGE1QXZJkGTmwA5Cii6IoeROMfxF7xmqzkrjmmgS6v8EFv2lVYjrkiLS/BoKqmTGx8L/7KkvGsEx9IDCETXIDKzepUzAkPCisy9xUEyVMyXtwFN682m5h41UTcxPIVvQwL9Y/5Y2GvA=
+ languages :
+  - fr-FR
+ blocks :
+  -
+    name : DEBUT_DOCUMENT
+    identifier : 0x5ccfebc7004ff0ea
+    internal_properties : BQAAAAUAAABfHaWfMU6gWG0xN9fSWiwJfSUWLqxm3cG2tbsPM4Zf2BT7slSRXN0QZ2YDU93WJi7818jHGvxTyGjcTQxCgQ/CxsM/u1YPyXe6KGcyWrlfZSnebJcmXXa3Y+g+iQk4BEi15x+7bt9TMIGJx12horo4vNrhKcDjhoYrA9KDtyRzEXoW13oBfJJV+QG3+eWBTxjPrrlHLeoFtf8GG0+Gwb5MquwRKwfP52a2rci57a1rzqRnFzeUSgtZEF7a6P8IN3qVEp5CRAopaoqrssg8
+    code_elements :
+     type_code : 30
+     p_codes :
+      -
+        type : 327697
+        enabled : false
+  -
+    name : HAUT_DE_PAGE
+    identifier : 0x5ccfebc70050f0ea
+    internal_properties : BQAAAAUAAACEURw17nGu7xOuAU5KG4SQgUZi3ys1io+0lHyqCy7GUQcJbcXct9BmMclVnaIadAJEfPkzbzTnYN8lYKvnOpoyoEIDkldsJ9xWElpuxc8NYFU0Ya/iqNayu/fa9+UQV2eP3Xou9DC2IJnxwh3BLzxLpRbDYM481KisXeVnu4GgBFzZmn1cACmJ9/uJTDLznAPHoYecTHbUVjsrXn51VEXwcJfMgLRqAGezturnvs8dfiyZve3AE7BWccTF2yAuuIxtYw8ZC37s9C2Dgr2qpFaWUdQ9Exc=
+    controls :
+     -
+       name : LIB_Titre
+       identifier : 0x5cd0227200e97cb4
+       internal_properties : BQAAAAUAAADuGpIFfM6d6t7w/ICffEmt/h8YsXgaRvursUVD7OorFKHG6YivmyZTnlL38/GAdDCs0UQfMb6BS685jrNBDTkkQ71aMxpzjoh41v+QlzAe1cbncpxsOpYrTGUikwnHnVwQupfGOZ6n6sLYFj9KsjgSsradMytlAzVq5/77MKs5TEWdBBUXYioj9M068XKErH2J3i6w+yIZZJby1k6KCTTWyyIvHWWDbzBY+EW+rcmStApq/8Ch0p9JDrx4iELgF30w9BToVwsxnJH+NB2QNhG2Juzoaj4SeB2B7RciygLYJwPeNAn+gmeBCWcs4egbZCWRf26CU7YPaSRMIjvauO5LU5fGiDzWxkWa08ep5A+x/eNmss/pJv0x7vw0VvkIonELM2Ww5+/PVADBgMiZcjpBvbsSoyJUPxK+9uDCKAu7F7wIfbvtDS7vJmD69hEckYKChJyY4gE/y9XbK5Uc1spxDycVJYFquVG/K9IHnkzklft/
+       code_elements :
+        type_code : 29
+        p_codes :
+         -
+           code : |1+
+            LIB_Titre = "Planification des taches du Sprint " + NumériqueVersChaîne(znSprint) + " au Sprint " + NumériqueVersChaîne(znsprint + znNbSprint - 1)
+            
+            si znSelecteur = ClTache.ETypeCharge.Charge_prévisionelle alors
+            	LIB_Titre += " (Prévisionnel)"
+            FIN
+           type : 327694
+    code_elements :
+     type_code : 30
+     p_codes :
+      -
+        type : 327697
+        enabled : false
+  -
+    name : CORPS
+    identifier : 0x5ccfebc70051f0ea
+    internal_properties : BQAAAAUAAACIZUV+LdBLUb/LDabxSuizCBcRlG0irRR1SJ531WroINnzfDGCVELwpqKwk52/4xilinVW0gdSqAC63tWAmjKLTAy9NKeUxxn8Tznw4iSFVp7fYUMlz7eEexG+8KHlNiq7zcbn8ze3K4ULy4XfeZwXWsdosNy3e6fA7oxl3NoGl2pHOFastI1WGT4+i+IRFjqR1gAyV/nIJDfuZBFV/nu2aYY4JV36tp+itkgxDCAK4hTSC541PrEV0bNWEjLXrrV5cR8fX+Y7D3yzGGKbZbMdDA==
+    controls :
+     -
+       name : GRF_Planification
+       identifier : 0x5cd0192300131fbe
+       internal_properties : BQAAAAUAAABm6p2B0TTUPL254Yl9WuemW49nWgLJcPxFAhT5TyHtsxAUXVaRoDL+fCsF9jQjoUXMGnkuoDR6czgmF1ofBho7RpeTOTOeZQ8sCEP3wFQ/tk6DM4UvF++BetJph5SPgDOFfA1f2lFCtzDay36cciUYHy7rIH9WkcsdxphhrRsFXuNXIIBLYIrHfLz0VHVBTjmkciQ8M6An/pQmNUqBYo8yOvasvfbo/R1VND5i7tcrI/+YxLM2vvcdBsT2hjnKFfPjI4tcq96iD4ZjwyRfik45RWsavNcomICrMGLkKsrv/I5BFCK87vHkWJ2XwTqW0xiChT452mKgeLcAPDjDHhXwCPKc42Yb+VbJUl1njAbBDG3UkJte75hfTDb7jOMeiJatf7BtTSFLPKKi/T4myLcQfwyPQOvJHqH2sOXcYH3CLqBq5nXWyG+mehqktf5rpJKvlkG1+u86ZbH4bRmGdrBtSeUyYK/f1sZSf+y7VxUsZMZYOu2DI+HrN22NOoi8RIbWg0Oz73jeortFTbR+D0VPK+u3jJb+BNlc6oRwuOtCRlar60F0u2R8QMHL9LHIZbRt/mjjzq8KpQXIJQbnNtEUhCyq96xqh4Ch2VKJfKijUH4JDORFyIRoIvHPq/OO/Sx06yGVlBMf1gloDdRKgxGDyyQ7oi4BfSI3NrDL94K2+LGyJN6H52fwcsOnXjvCaPo9ua6u7W6DlOATGYKFzmUiYn/qIKPEJd1DRRWQ+4BgF/KmzRjVcoA+gu2cKUSq2K39EKKJZOUsq7igVOTfMluGf+dyKg9f2O7UvtmM/UMJ/k4JGvgBIfna2/u0DKQ5D0FtWlBx3rUAMciWKnlQzYUUk6OD3+bLHLVSMTzbWrAhF/hn+bPf6Qe3sryQsodWdFj3fYZIvu0sx7VFIQL578DejGVy4us/9Rpa/UhOBhYSLxhqWXfLX5/h0PWwKeLlNU9TiFmLce7g++xW5uQmic0ZHnb0Im0va9Lni+2F/wZrYjbJWdvpaDk6LjJAo+q8xdGt9S6zJfNh3cKoeKt9RnUqcFVF/Y+MbU7jfSEQo+6EzIE7rsznwpfqbbbDUVnQWzSkDwqIdYE/LxivDwMfgrGMrLuZKWlozYEpVKV8xcnNOXm0UJo+4iePjVFRohKNTInBCezLJVXo4cNRBoKj9mH2mGSbqseifooTSr5XeBja7EQ01b57uOpnolOhJY/i7x5zeVN2pQXdgGd0AkIizVdijrwOFargA63z/txcgFFNyrqizuBW1GG8neUtxlU41sjSpUpum+x0eaoC4ECOkAxwJlyiFSv55xiedu4AfRTbMUGOMj+hhzp8r4XwSd9cRQQTaZlBuvP9YC8Pxw==
+       code_elements :
+        type_code : 29
+        p_codes :
+         -
+           code : |1+
+            grSupprimeSérie(GRF_Planification)
+            
+            grLibellé(GRF_Planification, grAfficheEtiquette, Vrai)
+            pclSprint est un ClSprint dynamique
+            pclOPrj est un ClProjet dynamique
+            //stSprint est un STR_Sprint
+            //stSprint.nNum_Sprint = znSprint
+            sDateSprint est une chaine
+            
+            i,j sont des entiers
+            
+            nNumSprint est un entier = znsprint
+            
+            aTableauProjet est un tableau de STR_Projet = ClProjet.Projet_Dans_Graphe(nNumSprint, znNbSprint, znSelecteur)
+            nPoints est un entier
+            
+            
+            POUR i = 1 _À_ znNbSprint
+            	
+            	POUR j = 1 _À_ TableauOccurrence(aTableauProjet)
+            		pclOPrj	<- ClProjet.GetObj(aTableauProjet[j].nIdProjet) 
+            //		pclOPrj	<- allouer un ClProjet(aTableauProjet[j].nIdProjet) 
+            		nPoints = pclOPrj.Projet_Sprint_Points(nNumSprint,znSelecteur)
+            //		liberer pclOPrj
+            		grAjouteDonnée(GRF_Planification,j,nPoints)
+            		
+            		//nom du projet pour le nom de l'ettiquette 
+            		grEtiquetteSérie(GRF_Planification,j,aTableauProjet[j].sNomProjet)
+            		//donne une couleur à la serie
+            		grCouleurSérie(GRF_Planification, j, DonneCouleur(j,coulSérieDéfaut))
+            	FIN
+            	
+            	pclSprint <- ClSprint.GetObj(nNumSprint)
+            	sDateSprint = pclSprint.sSprint_Date()
+            	libérer pclSprint
+            
+            	grEtiquetteCatégorie(GRF_Planification,i,sDateSprint)
+            	nNumSprint ++
+            	
+            FIN
+            
+            //Affiche une ligne representant la vélocité moyenne actuelle
+            // - type de la série
+            grTypeSérie(GRF_Planification, (j+1), grDroiteConstante, goApp.m_nVelociteMoyenne)
+            // - étiquette
+            grEtiquetteSérie(GRF_Planification, (j+1), "velocite moyenne")
+            // - type de trait
+            grTypeTraitSérie(GRF_Planification,(j+1), TraitContinu)
+            // - épaisseur du trait
+            grEpaisseurTrait(GRF_Planification, (j+1), 2)
+            // - couleur
+            grCouleurSérie(GRF_Planification, (j+1),RougeClair)
+            
+            
+            
+            
+            
+            
+            
+           type : 327694
+    code_elements :
+     type_code : 30
+     p_codes :
+      -
+        type : 327697
+        enabled : false
+  -
+    name : BAS_DE_PAGE
+    identifier : 0x5ccfebc70052f0ea
+    internal_properties : BQAAAAUAAABHeHCKBAjUwKSsFyFeIT+XdXjHkTamwyviEP7lW3mn7IhuyYUsWNe7Ec6UcIFatBDllWV9Cv/KC/2Rolpb4gzNycmiu1GVGNwmpxIAfc9zqLXLQlVR5ACy6Pn51IjkjJ/8Q1fVxOAzhRSILQ8s+VrqBnE31Hfc9+7XrJRGxPgfxbKwbM60FDCWCI/pzEmCLM/FKwLWLHDCxbFjtPuuAVqaiN+V7A/T8kXw+UftIldCWHVwyK8Kg+eI4jUxEAXv5oM+1f94b7QyyMv3Jv9GIU2YfNlSDhyiEtM8SuL/
+    controls :
+     -
+       name : LIB_UM
+       identifier : 0x5cd01cd300bd8886
+       internal_properties : BQAAAAUAAABpJJhgGgn5A0xJ6V0IJZrFHyMZh/zFi7MH1kE78kGDcRK3hLMFml/kqbODEjF95KZpXX0I7UcHO+otEeBBNP6r+vd7TI4NsvROyDFPfA5+8OAxZflcxqHnHc8YrjGl49LjqlPxS1xWCnVC9NdqXBCirbNkKBMDrtlR7Cc2aT5r2MPPvwp4jrIgabLUCzn6cmz1fwBLUvdhJbH7KpOQnKVywZCOw3znyR4TkhyTYVtZC4xpqghf53EqGdTRYtGScFkRFQlJ/LTG3AfqfN3R4CTMhnGkMpLJehhPCCyeJGFsBuQFIBHZT0f5NMjWJmdRom57UEu9yMd9f2Gpvcio5NMKYgUeKgGqPrPJjoQ1DWk9CMBJEUrkAqirB1p2TGm7i4nAjaX8AMKrg3njbd+09trmqU+wlfI6BdWUZUOT1KENCxgEbyJAB/4irDTzceMU4UjcV34eoSCphEcLJ+B2i2zE2tHHf9ob10Xi2m1Qk2yZqmPLkT5ivomA5554QOTg9xIIbPUvIl5F2ZSBRS+nHW4I2WkfoT2vw9CLD5m1rmrYLrZP/dXHLypwpYE=
+       code_elements :
+        type_code : 29
+        p_codes : []
+     -
+       name : LIB_docUM
+       identifier : 0x5cd01cd300c28896
+       internal_properties : BQAAAAUAAACropFI6qohuUYmxnCl11IiPwmjZoYB3bNFrUJXq6o+Tx1SGKnY8K1E5RJrDbmduBiWSQdA8fFdZRZOjAYKWm2gQcZJBCqJQp8lWyqC7n2K60xtyAJwPaC0SJU2tTUpASLcPSmh2kBfnh4Z2a9VEDD/2XP5j2XqTp3AHXZ5cTKFFAZXXSSa6GgShFnO/1OYcH2BX9IuD9d+a1/Y3Akwl9wfP5kp/lcMVOtcjnxboVvH5B2NrLyDSkwQGRguZjLXZPZAIEh/EuqcwJ0IPkgxzJ5/1OI0d/sIPacfX8hNzFMjsEYZK1wc/olMCHZwso4MIU3sxc96tw9BsdDBlJIlceDNDUAiq/p0T9bAraEWjC2zkcLkPek5JXCCtZ7KdA+TkjsPBmbGp+5B9WwUHG/258QpxLKuDKPTIGZMZM93J8wHudV99JMEhqodNtXPLpiVMHuP39HHti/dVUFqJCAN/d5Y28bQ/oCnJj35wnlj2wFDVYgzO6Iw89pnvfrH9z1ZcX2U1XtMUlKblgK9V/1TpRL1ZPK8qg80w2xhU/KOurpiWUiAk35X4PqVXQ282Wam0UqwVTN0uop9HDbkH5ed4lELNoKMkdCK1XJ5/G8LT+1790ujkfUOaBI84PljhOQAZ7JH2scPgE5ai0dAkL/dFptr6BomrEqY2QjEYkARb2cadwgL0Yt6PD0xhhYIQZ+qlFuS9vJEHLoH82fRVMXzqp2vxwVqzQC05zqDzpJKCsvJYYNywjvxPrEoiVGGkl+FT0dz4URT6Rz8et/tlQz+68EDr+lkXDuTC9tHw4roXcT6z2Iw7QTDxAYMjpntVsk5A9dunJQEvPitTnFvWuxYjaSn
+       code_elements :
+        type_code : 29
+        p_codes : []
+     -
+       name : LIB_Page
+       identifier : 0x5cd01cd300c78896
+       internal_properties : BQAAAAUAAABG3zfFDgRA4lBa1PsIohdYwTlraf05BneqQ1xQImLe97RuKeSk1Wk5VOpiQ/Rbsj+CI+jvACzD/0I6icZsgOYVfB7n0VREqq7REvCsyLuz+siKsbY98PO6J1BQmhE/RgO3P+t1thDjmYZOgRSXS7fWzVHNkn6jchuYgc6cUa0KJ1gkACasV0g7WR3nRDFLZT737EXwrntEEXSokxD6c1c78mxHhK2IWtUq59aSJB5zwD7rLqPbN6hieQ+PysrvNET644mj4yE5hjzxOEdE9W/uc2g2zi+lbjGGVpbdel8/0kjjTISWSQOOucr3dH3DP0ViNc+rMXF4KqXyC+NigrZtEI163KFLzmkB3lpZfyPFec7U8rbPk4WMIo7q+n9H/UusS3py9vr1WBKTAoxD7sKxYOG0gY7ZfEIjV7bz6aMjCWMu/wp7t10faml1ArtP38umHhjJ1u1UE1t09Z3EW1XLLWvOmcIldBaIKFc6Nn5UvTJj87my3Qq3k966DkZJ7us/iF2guSI=
+       code_elements :
+        type_code : 29
+        p_codes : []
+     -
+       name : PREDEFINI5
+       identifier : 0x5cd01cd300cc8896
+       internal_properties : BQAAAAUAAAD7MsdTLNA5upNcmxfjPPJun2O7vcwkkCJTD56KBuFp/LkYDubMFHf5fWTHnka4VpG/LzP6ehATsHdtVXXBf0cGHlzgx6qvEhl296o49ZgaK0tvMM37/RONkdZxfE3rbcMm2kMpgufWauBxaPGA9yQFdW7HGWorcNi0FuGYJnMr0LzBPxAc03y37uLBTmh1i125a5ttTbrUNuurzwxe14waTus73Iim5LQ0E2bdQy9I9omVgA4mojBpOaz+KnE2EsX2Ry+2MknbUwBFEIYGQp1H/LlwbbNzwoJF5LiflTPG+qiUsBx2BakOfKNLNcsR5E+an0yAlQNt/MRhM8T7l4o4HeazxVV1EspMSQcd05879ieG802Y70WzcqRbKF27FmbWNea5WSjgUqBISpMchSl86goxwp6FdID0CajLr/dgdyqmzuMVK6W2s0rI9BhcE13NGKAsA5OxDG/atL5yP1RvmtIjIvGZ1lEGa+9zxOflbBn5HeGkyadYuZxp7LRbVM1Dds1pgXtxlRPysQbyV2FlhVmQXvaHCbp3tHrO9/roOb91gskv9rS/ae5DrAH0ifqNWJxQ1A==
+       code_elements :
+        type_code : 29
+        p_codes : []
+    code_elements :
+     type_code : 30
+     p_codes :
+      -
+        code : |1+
+         LIB_UM = "UNION MATERIAUX le : " + DateVersChaîne(DateDuJour) + " à " + Gauche(HeureVersChaîne(HeureSys()),5)
+        type : 327694
+      -
+        type : 327697
+        enabled : false
+  -
+    name : FIN_DOCUMENT
+    identifier : 0x5ccfebc70053f0ea
+    internal_properties : BQAAAAUAAABM8VUIuoHWrs5kX5YQcbnNVY+4IDDkoW00Z7MzdsygK2Zt8IZI87L4USIdRAJxD3iD5p7bM1ygP8ac6hPEi0tQo2w30yHTNltXKxV+qZvNJvmo9u6aT/q/1PUVTgQieVkxQQCcihftfRH2AOA/I9Al2KyTXn4wRsPMhO7cBVf5Ah00vcSnSgdbrrl4Bwrm1fjz3/uJVEpkEGbYmEpA/6QOO3+fP7UnCvZAFmBH8EIrK2hWM1LNJHtIGlQrqwlsfNZcagUG/86GboptIlQnrrFZROtLLy3VB04k
+    code_elements :
+     type_code : 30
+     p_codes :
+      -
+        type : 327697
+        enabled : false
+ controls : []
+ code_elements :
+  type_code : 13
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE ETAT_Plannification_des_taches(local znsprint est un entier, LOCAL znNbSprint est un entier, local znSelecteur est un ClTache.ETypeCharge)
+     type : 327680
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ETAT_SansNom1
+resources :
+ string_res :
+  identifier : 0x1ccfebbd0027c8b2
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=

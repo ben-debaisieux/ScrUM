@@ -1,0 +1,120 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClSchem_Inter_Condition
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1f6265040d96f3c7
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClSchem_Inter_Condition est une Classe
+      	Hérite de ClSchem_Inter
+      	
+      	//nPosBoxLienFaux est un entier
+      privé
+      	m_nIdIntervSuiv est un entier	<mapping=IDScr_Process_Metier_Intervenant_Controle_Renvoi>
+      FIN
+       
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2261481030975747015
+     type_code : 27
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur (<oAxeParent_P> est ClProcess_Metier_Axe [, <ID> est entier])
+      //
+      // Paramètres :
+      //	oAxeParent_P (ClProcess_Metier_Axe) : <indiquez ici le rôle de oAxeParent_P>
+      //	ID (entier - valeur par défaut=0) : <indiquez ici le rôle de ID>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      
+      
+      PROCEDURE Constructeur(LOCAL nID_P est un entier = 0)
+      
+      Ancêtre.Constructeur(nID_P)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2261481030975812551
+     type_code : 28
+     code : |1-
+      
+      
+      PROCEDURE Destructeur()
+     type : 655360
+   -
+     name : nTypeInter
+     procedure_id : 2261481030975943623
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] nTypeInter ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	entier : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION nTypeInter()
+      
+      renvoyer ::cstTypeInter_Condition
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 2261485626596608097
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClSchem_Inter.GetObj
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClSchem_Inter_Condition
+      
+      RENVOYER ClObjDB.GetObj("ClSchem_Inter_Condition", nIdUnique_P)
+     type : 458752
+   -
+     name : aListeLiens
+     procedure_id : 2262546317426073474
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClSchem_Inter.aListeLiens
+      PROCÉDURE aListeLiens():tableau de ClSchem_Inter dynamique
+      
+      aRetour est un tableau de ClSchem_Inter dynamique = Ancêtre.aListeLiens()
+      si :m_nIdIntervSuiv <> 0 alors
+      	TableauAjouteRéférence(aRetour,ClSchem_Inter.GetObj(:m_nIdIntervSuiv))
+      fin
+      
+      RENVOYER aRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ClProcess_Metier_Intervenant_Condition
+resources :
+ string_res :
+  identifier : 0x1f63558054c25808
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

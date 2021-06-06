@@ -1,0 +1,190 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClCritereAccept_Composant
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1e94177f42b02054
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClCritereAccept_Composant est une Classe
+      		Hérite de ClObjDB
+      		m_sDescription est une chaîne <MAPPING=Description>
+      		m_nTypeCompo est un entier sur 1 octet <MAPPING=IDScr_CritereAccept_Composant_Type>
+      		m_oCritere_Parent est un objet ClCritereAccept dynamique
+      	PRIVÉ
+      		LibTypeCompo est une chaîne = ""
+      FIN
+       
+      constante
+      	cst_EtantDonneQue	= 1
+      	cst_AuMomentDe		= 2
+      	cst_JattendQue		= 3
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2203411953038205012
+     type_code : 27
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur ( [<nId_P> est entier])
+      //
+      // Paramètres :
+      //	nId_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nID_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      //	oCritere_p (ClCritereAccept) : <indiquez ici le rôle de oCritere_p>
+      PROCEDURE Constructeur(local nId_P est un entier = 0)
+      
+      ancetre.constructeur(Scr_CritereAccept_Composant..nom,Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant..Nom,nId_P)
+      
+      //:m_oCritere_Parent <- oCritere_p
+      
+      //TableauAjouteRéférence(:m_oCritere_Parent.m_aoComposants, objet)
+      
+      
+      :charge()
+      si pas :bModeAjout() ALORS
+      	:m_oCritere_Parent <- ClCritereAccept.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept)
+      FIN
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2203411953038270548
+     type_code : 28
+     code : |1-
+      
+      PROCEDURE Destructeur()
+     type : 655360
+   -
+     name : Get_LibCompo
+     procedure_id : 2203411953038336084
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_LibCompo ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION Get_LibCompo()
+      
+      RENVOYER :LibTypeCompo
+     type : 458752
+   -
+     name : Enregistre
+     procedure_id : 2203582827376686458
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE Enregistre()
+      
+      //On enregistre le composant que si on est en train d'enregistrer le critère parent.
+      si :m_oCritere_Parent.m_bEnregistrementEnCours ALORS
+      	ancetre.enregistre()
+      sinon
+      	ExceptionDéclenche(1,"Les composant des critères d'acceptation ne peuvent s'enregistrer que via le critère lui-même")
+      FIN
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 2203602094688413883
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE pre_enregistre()
+      
+      Scr_CritereAccept_Composant.IDScr_CritereAccept	= :m_oCritere_Parent.Get_IdUnique()
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 2241676555229416140
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetObj (<nIdUnique_P> est entier)
+      //
+      // Paramètres :
+      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      // Valeur de retour :
+      // 	ClCritereAccept_Composant : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClCritereAccept_Composant
+      
+      renvoyer ClObjDB.GetObj("ClCritereAccept_Composant", nIdUnique_P)
+     type : 458752
+   -
+     name : sExport
+     procedure_id : 1156467670279386429
+     type_code : 12
+     code : |1+
+      procédure sExport():JSON
+      
+      sRetour est un JSON
+      
+      sRetour.id					= :m_nIdUnique
+      sRetour.description			= :m_sdescription
+      
+      RENVOYER sRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+resources :
+ string_res :
+  identifier : 0x1e932a0b4459941f
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

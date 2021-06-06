@@ -1,0 +1,221 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClSchem
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1f5fcbfe0bc433ab
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClSchem est une Classe
+      	hérite de ClObjDB
+      PUBLIC
+      	m_sLibelle est une chaîne <MAPPING=Libelle>
+      	m_sCMTR est une chaîne <MAPPING=CMTR>
+      	m_aoAxes est un tableau de ClSchem_Axe dynamique
+      	m_aoInter est un tableau de ClSchem_Inter dynamique
+      protege
+      PRIVÉ
+      	m_oProjet est un objet ClProjet dynamique
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2260749829942883243
+     type_code : 27
+     code : |1-
+      procédure Constructeur( nID_P est un entier = 0)
+      
+      //Déclaration du constructeur de la classe d'accès aux données.
+      Ancêtre.Constructeur(Scr_Process_Metier..Nom, Scr_Process_Metier.IDScr_Process_Metier..Nom, nID_P)
+      
+      :Charge()
+      
+      
+      si nID_P <> 0 ALORS
+      	:ChargeInter()
+      FIN
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2260749829942948779
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : ChargeInter
+     procedure_id : 2261060390440503186
+     type_code : 12
+     code : |1+
+      procédure ChargeInter()
+      
+      oAxeTmp est un ClSchem_Axe dynamique
+      oInterTmp est un ClSchem_Inter dynamique
+      //oInterPrec est un ClSchem_Inter dynamique
+      sdInterDeProcess est une Source de Données
+      sReq est une chaîne
+      //oSchTmp est un ClSchem <- objet		//Détournement de bug windev
+      aCorrestpOrdreAxe est un tableau associatif de ClSchem_Axe
+      //nOrdre est un entier
+      
+      
+      sReq = ChaîneConstruit([
+      	
+      	SELECT 
+      		Scr_Process_Metier_Axe.IDScr_Process_Metier_Axe,
+      		Scr_Process_Metier_Axe.Ordre
+      	
+      	FROM Scr_Process_Metier_Axe
+      	
+      	WHERE Scr_Process_Metier_Axe.IDScr_Process_Metier = %1
+      	
+      	ORDER BY 
+      		Scr_Process_Metier_Axe.Ordre
+      	
+      ], :Get_IdUnique())
+      SI goapp.RSQL(sdInterDeProcess,sReq) ALORS
+      POUR TOUT sdInterDeProcess
+      		oAxeTmp <- ClSchem_Axe.GetObj(sdInterDeProcess.IDScr_Process_Metier_Axe)
+              
+              TableauAjouteRéférence(:m_aoAxes, oAxeTmp)
+              
+              aCorrestpOrdreAxe[sdInterDeProcess.Ordre]	<- oAxeTmp
+              
+              oAxeTmp.m_oSchemParent <- objet
+      	FIN
+      FIN
+      HAnnuleDéclaration(sdInterDeProcess)
+      
+      
+      ////////////////////////////////////////////////////////////////////////////////////////////
+      
+      
+      sReq = ChaîneConstruit([
+      	
+      	SELECT 
+      		Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant,
+      		Scr_Process_Metier_Axe.Ordre,
+      		Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant_Type
+      	
+      	FROM Scr_Process_Metier_Axe
+      		INNER JOIN Scr_Process_Metier_Intervenant ON (Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Axe = Scr_Process_Metier_Axe.IDScr_Process_Metier_Axe)
+      	
+      	WHERE Scr_Process_Metier_Axe.IDScr_Process_Metier = %1
+      	
+      	ORDER BY Scr_Process_Metier_Intervenant.OrdreAbsolu
+      	
+      ], :Get_IdUnique())
+      
+      SI goapp.RSQL(sdInterDeProcess,sReq) ALORS
+      
+      	POUR TOUT sdInterDeProcess
+      		
+      		oInterTmp <- ClSchem_Inter.oGetTypeInter( ...
+      			sdInterDeProcess.IDScr_Process_Metier_Intervenant_Type, ...
+      			sdInterDeProcess.IDScr_Process_Metier_Intervenant)
+      		
+      		TableauAjouteRéférence(:m_aoInter,oInterTmp)
+      		
+      		oInterTmp.m_oAxe <- aCorrestpOrdreAxe[sdInterDeProcess.Ordre]
+      	FIN
+      FIN
+      
+      HAnnuleDéclaration(sdInterDeProcess)
+      
+      
+     type : 458752
+   -
+     name : oInterDePosition
+     procedure_id : 2262199734899658094
+     type_code : 12
+     code : |1-
+      procédure oInterDePosition(local nPos_P est un entier):ClSchem_Inter
+      
+      oInter est un ClSchem_Inter dynamique
+      SI nPos_P <= :m_aoInter..Occurrence ALORS
+      	oInter <- :m_aoInter[nPos_P]
+      FIN
+      renvoyer oInter
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 2262487265877087120
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetObj (<nIdUnique_P> est entier)
+      //
+      // Paramètres :
+      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      // Valeur de retour :
+      // 	ClSchem : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	oSchem_P (ClSchem) : <indiquez ici le rôle de oSchem_P>
+      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClSchem
+      RENVOYER ClObjDB.GetObj("ClSchem", nIdUnique_P)
+     type : 458752
+   -
+     name : nNbreInter
+     procedure_id : 2264098972255176528
+     type_code : 12
+     code : |1+
+      procédure nNbreInter():entier
+      renvoyer dimension(:m_aoInter)
+      
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 2278590849019547160
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.pre_enregistre
+      PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre()
+      
+      
+      Scr_Process_Metier.IDScr_Projet	 = :m_oProjet.Get_IdUnique()
+     type : 458752
+  properties :
+   -
+     name : p_oProjet
+     identifier : 0x1f9f2a50002077cd
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oProjet() : ClProjet
+         
+         renvoyer :m_oProjet
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oProjet(oValeur est ClProjet)
+         
+         :m_oProjet <- oValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1f5fcb2f0bbe0a77
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

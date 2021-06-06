@@ -1,0 +1,181 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClProcess_Metier_Axe
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1e2db5140c84f4da
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClProcess_Metier_Axe est une Classe
+      	PUBLIC
+      		Hérite de ClObjDB
+      		Libelle est une chaîne 					<MAPPING=Libellé>
+      		Ordre est un entier sur 2 octets		<MAPPING=Ordre>
+      		CMTR est une chaîne 					<MAPPING=CMTR>
+      		m_aoIntervenants est un tableau de 1 objet ClProcess_Metier_Intervenant dynamique
+      	prive
+      		m_oProcessParent est un objet ClProcess_Metier dynamique
+      FIN
+       
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2174593292803896554
+     type_code : 27
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur (<oProcessParent> est ClProcess_Metier [, <nID_P> est entier])
+      //
+      // Paramètres :
+      //	oProcessParent (ClProcess_Metier) : <indiquez ici le rôle de oProcessParent>
+      //	nID_P (entier - valeur par défaut=0) : <indiquez ici le rôle de ID>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE Constructeur(oProcessParent est ClProcess_Metier , nID_P est un entier = 0)
+      
+      //Déclaration du constructeur de la classe d'acces aux données.
+      Ancêtre.Constructeur(Scr_Process_Metier_Axe..Nom, Scr_Process_Metier_Axe.IDScr_Process_Metier_Axe..Nom, nID_P)
+      
+      oInterTmp est un ClProcess_Metier_Intervenant dynamique
+      
+      
+      //Referencement du parent (par adresse)
+      :m_oProcessParent <- oProcessParent
+      
+      TableauAjouteRéférence(:m_oProcessParent.m_aoAxes, Objet)
+      
+      //Initialisation de la liste de intervenants.
+      Dimension(:m_aoIntervenants, 0)
+      
+      
+      //Chargement des données dans l'instance.
+      :Charge()
+      
+      //Est on en création ?
+      si nID_P <> 0 ALORS
+      	//Non : Lecture des données
+      	
+      	HLitRecherche(Scr_Process_Metier_Intervenant,IDScr_Process_Metier_Axe,nID_P,hIdentique+hLimiteParcours)
+      	tantque HTrouve(Scr_Process_Metier_Intervenant)
+      		oAxe est un ClProcess_Metier_Axe <- Objet	//Transfert de la référence dans un autre objet pour contourner bug windev
+      		oInterTmp = ClProcess_Metier_Intervenant::oGetTypeInter(oAxe, ...
+      			Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant_Type, ...
+      			Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant)
+      		HLitSuivant(Scr_Process_Metier_Intervenant,IDScr_Process_Metier_Axe)
+      	FIN
+      sinon
+      	nPosLibre est un entier
+      	nInd est un entier
+      	
+      	nPosLibre = :m_oProcessParent.m_aoAxes..Occurrence
+      	POUR nInd = 1 _À_ :m_oProcessParent.m_aoAxes..Occurrence
+      		SI nPosLibre <= :m_oProcessParent.m_aoAxes[nInd].Ordre ALORS
+      			nPosLibre = :m_oProcessParent.m_aoAxes[nInd].Ordre + 1
+      		FIN
+      	FIN
+      	
+      	:Ordre = nPosLibre
+      FIN
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2174593292803962090
+     type_code : 28
+     code : |1-
+      
+      
+      PROCEDURE Destructeur()
+     type : 655360
+   -
+     name : Enregistre
+     procedure_id : 2186800509286232472
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE Enregistre()
+      
+      
+      si :m_oProcessParent.m_bEnregistrementEnCours ALORS
+      	Ancêtre.Enregistre()
+      sinon
+      	ExceptionDéclenche(1, "Impossible d'utiliser la procédure d'enregistrement autrement que par l'enregistrement du process.")
+      FIN
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 2200612825179787520
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE VIRTUELLE pre_enregistre()
+      
+      Scr_Process_Metier_Axe.IDScr_Process_Metier = :m_oProcessParent.Get_IdUnique()
+     type : 458752
+  properties :
+   -
+     name : p_oProcessParent
+     identifier : 0x1f5dcba80544e2e0
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oProcessParent() : ClProcess_Metier
+         
+         renvoyer :m_oProcessParent
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oProcessParent(oValeur est ClProcess_Metier)
+         
+         :m_oProcessParent <- oValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+resources :
+ string_res :
+  identifier : 0x1e2d8d7b013446e4
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

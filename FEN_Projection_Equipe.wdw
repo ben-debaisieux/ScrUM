@@ -1,0 +1,173 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_Projection_Equipe
+ major_version : 25
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_Projection_Equipe
+ identifier : 0x2cc2f3b603bf7724
+ internal_properties : BQAAAAUAAAAqyvFuLF+5utABqJahsjKm3VG+TTaEEUDcoFsQMhwWz9QWC/+njnM9ntJNOZmTHMitRWDyE239TwwhaW+/kyN4KyZ/H5w9SeM1BrO9yKJberxMyE3shdWVfDmytp0vBaffBNTTTSeHQvDE4dE4OrmshXddpiLVYXDcJdApZrgxPnvW5qWx8kCZMc+UsF/vKRG8nca3sTaVbIwkAWbGnHv0L1/kASmlGXPfQvSyhud5KYkrmnmrbx7xC5xIMUPiryoVRxNu9hbcmEPPxNwaPLfF+rzgX53swcOa/YbAigJl4JErAqMcdgcRSDo+pJv9cqxteGJ3e1JIK+AlFYOzB/fYWKRlR+/CKqzEvvWcbxlnQ7YpgAtLDVJpmygo+pwcEazjsvzE6sNRsa+uhzDATJ29eX58Va1t9AmU0ZIJdsdNTRh68MsagVddlaRhUjQVUycvAwDl0VtyRkAIHcX9o93sb2ZIY4ufSWlLsZqGNj0eFdAgHXQPO8E1TDwx+fmR/qtF/OhkGAAJcCu/CjMbM0sbozkVxtaq7Bdr4uO/JVDCDg1pAM8BQN+nS9RjVYxoXFdAGa3a8xFXoaHZcnuP3frNiafEQYldEY3WLRCd3Z43FshW5hwl7klIcusIXaXHE2H8wyNTNXsWEokhShm5JNX/lZ3fEtbtwgCEbUkaEpFuYs7YLkN+tiA4qEc72jCEMbHg624jYKBX473l9u0=
+ controls :
+  -
+    name : GRF_Projection
+    identifier : 0x2f42b43534917b53
+    internal_properties : BQAAAAUAAACRM1PtiE1M+1yB/9IhzFOSrl/TAQzKboh9efKMpBJqvLp0YWfd9YpG1Lu6+a6Vskkh5eWm8akxh/tKpOHRRIaE4mvZtOSuOUq7cVPuE2NpbWsEKOyQUEMyWxaNthmV5GQdMBnP/00N8TcX6XugQAVJdGbqSqRFNAj6ZUV4sva8b4B7fL3g/jLjqDRgZAeWAIuRCFIAL2qR6zFxztr4UNK3JhkzCNb1X+a2ivc8WzhZgdlJDa7XHVi3NAgEYljTTj8Xb02T+BnWV9xoE6bvNi2uaScqXb9BvZpvrhd+Avs3y4LdG9Ep8o36Ce9K5IqMl/gtS3IPNZwt+DufLQUPiBy7oJCaToiHXqpr3WbBhq/lgHbwRW8JflEUJKJMPUXVo0l2cFGzxDNraWgk3MqRb0uX5Cu/Aov/ZTQh1oWXlOjiLBVMgctNNbhVy4jXsnpe7SwxJgkbYqYjCXR6EuIPfzYOPZr9GCE1fRYBAXK/Ghp1Vz7kfS/I1hlVCII0gOGqbyU94yHfmO7/BxHJP3mUnRi6ZkK/S/m1n+cJWl5MA9ueX2yH4LphKrU0G5zt3BKssGRPLeMfT+YKibWSst0BeT81iwICVNlrTNjOqnC4Ssf+gQG8fg3gWfu7uZuFT7xF3rEXek424Fw3iFZMuqSjZX1GJ0SsABNv6iOm9sFEQZzuYMPVInQV/RJzEPZDVNWUWla4JxAARb38YMkbqYF1FCx9btwdiW1jsurgETQGvBhf3M/n6cUsXW0laivJT2dZIJO1v6xi4/zHtRG/WtDmj8ZPbUAVDKxjzSioDD6KfFJkRohrBjjzGsUmrJCVwDmpyGLDKe9ksJuX5q6XXBNM46/9/CULrb6inU9+bYrQ32Y63k8nGkjqfmlJR4IejSADdc5VYVXz6ZeJK8lhkykvyHla1fp+YFO53Y/3YQFBStMl3Ud8Z98WwyZCMA/F1wwz7K8UtaN9SIHJVp4eZbfGaqkPvvjGa1h9CN8xnhvbC3ROlddVF0owwJ1izbi1sL0KPk0wQK0PScY3wu+lemlJrmqJ5DEP82axGgEe/TYDugChNFUZIE6HTOIPrEUE9bnnE+80RMjyMfN26/u2mW8vaFARdOqo4Hgmr/w3dn+sTVCPuD5zdS8BBhWqq2fecki9gDpRzIxXLs9omiFsu1oAmpK6Q/JYE4pGVj9ZM1z2WbqJVBk0TVRhvfyoWj3sPCfWtSyEu3nUBgLUSjwFbhjI7kchpbbFkdalD321+ehC4bwrQTofcTU7NXi8Zu9tWK7NpZG+QHk58/xF1rq8bRwpCHC1XMIo2F5l
+    type : 33
+    code_elements :
+     type_code : 72
+     p_codes :
+      -
+        code : |1-
+         nInd est un entier
+         stRetour est un STR_Projection
+         stSp_Tmp est un STR_Projection_Spr
+         sSprint est une chaîne
+         
+         
+         stRetour = COL_Charge_UI.Graph_Projection()
+         nInd = 0
+         
+         grSupprimeSérie(GRF_Projection)
+         grLibellé(GRF_Projection, grAfficheEtiquette, Vrai)
+         
+         pour tout stSp_Tmp, sSprint de stRetour.aStSeries
+         	nInd++
+         	grAjouteDonnée(GRF_Projection, 1, nInd, stSp_Tmp.nReal)
+         	grAjouteDonnée(GRF_Projection, 2, nInd, stSp_Tmp.nProj)	
+         	grEtiquetteCatégorie(GRF_Projection,nInd,sSprint)
+         FIN
+         
+         grTitre(GRF_Projection,stRetour.sTitre)
+         
+         grEtiquetteSérie(GRF_Projection,1,"Points Restants")
+         grCouleurSérie(GRF_Projection,1,BleuClair)
+         grEpaisseurTrait(GRF_Projection,1,2)
+         
+         grEtiquetteSérie(GRF_Projection,2,"Projection Avancement")
+         grCouleurSérie(GRF_Projection,2,RougeClair)
+         grEpaisseurTrait(GRF_Projection,2,2)
+         
+         
+         //
+         //nNbrSprint est un entier = HNbEnr(Scr_Sprint)
+         //rNbSprintRestantEstime est un réel
+         //
+         //i est un entier
+         //nPointsTotal est un entier = ClTache.Charge_Totale()
+         //nPointsTotalProjection est un entier = nPointsTotal
+         //nVelociteMoyenne est un entier = goApp.m_nVelociteMoyenne
+         //oSprint est un ClSprint dynamique
+         //
+         //grSupprimeSérie(GRF_Projection)
+         //grLibellé(GRF_Projection, grAfficheEtiquette, Vrai)
+         //
+         //
+         //
+         //POUR i = 0 _À_ (nNbrSprint - 1)
+         //	
+         //	si i = 0 alors
+         //		grAjouteDonnée(GRF_Projection, 1, i, nPointsTotal)
+         //		grAjouteDonnée(GRF_Projection, 2, i, nPointsTotal)	
+         //	sinon
+         //		oSprint <- ClSprint.GetObj(i)
+         //		
+         //		si oSprint.p_bTop_Termine ALORS
+         //			nPointsTotal -= oSprint.nGetNbPointsRealises()
+         //		sinon
+         //			nPointsTotal -= nVelociteMoyenne
+         //		FIN
+         //		nPointsTotalProjection -= nVelociteMoyenne
+         //		
+         //		grAjouteDonnée(GRF_Projection,1,nPointsTotal)
+         //		grAjouteDonnée(GRF_Projection,2,nPointsTotalProjection)
+         //		
+         //		grEtiquetteCatégorie(GRF_Projection,i,NumériqueVersChaîne(i))
+         //		
+         //	fin
+         //FIN
+         //
+         //rNbSprintRestantEstime = abs(nPointsTotal / goApp.m_nVelociteMoyenne)
+         //
+         //grTitre(GRF_Projection,"Projection" + RC + " Nombre de sprints restants estimé : " + gauche(NumériqueVersChaîne(rNbSprintRestantEstime),4))
+         //
+         ////nom du projet pour le nom de l'ettiquette 
+         //grEtiquetteSérie(GRF_Projection,1,"Points Restants")
+         //grEtiquetteSérie(GRF_Projection,2,"Projection Avancement")
+         //
+         //grCouleurSérie(GRF_Projection,2,RougeClair)
+         //grCouleurSérie(GRF_Projection,1,BleuClair)
+         //
+         //grEpaisseurTrait(GRF_Projection,1,2)
+         //grEpaisseurTrait(GRF_Projection,2,2)
+         //
+         //
+        type : 14
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BQAAAAUAAABd4biPtdLQOwfUFiqrit8H4xfGqKyz9t6VLxCUnNZRQiLPVs82PZNE+UVdKRzjizyeuKyRur85gNMUfqplpmtNDnQWQla9zo+GH9+1EfUJ6w17Dn/egD/gv+Hhywk8c9unIdzEp7EHgaAqD28w7Agveg4u19PBcKGZtQ==
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BQAAAAUAAABqPQh6HC8RxAVkp2SqPYLuZrfVhd+1KX4lx22hIT8uqEpE6yP7Sbc2rmVqdmL816EWzXOkEe9ijOtYwchZKAfpy3B1cNqhpJgsnbUs
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE MaFenêtre()
+   -
+     code : |1+
+      
+      
+     type : 34
+   -
+     code : |1+
+      
+      
+     type : 2
+   -
+     code : |1+
+      
+      
+     type : 40
+   -
+     code : |1+
+      
+      
+     type : 234
+   -
+     code : |1+
+      
+      
+     type : 165
+   -
+     code : |1+
+      
+      
+     type : 177
+   -
+     code : |1+
+      
+      
+     type : 180
+   -
+     type : 230
+     enabled : false
+ code_parameters :
+  internal_properties : BQAAAAUAAAAwjDLmDSZ0H1P68nJIeNfqR9EvRjU/K+sVcM1T6rhVNr+VTV1mZ/rmoweYbFDZUhBGcv8UsxlDxVCOnb2U/SQOvlGWzNby3/w/V+ppSymxv+Vh
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x1cc2f3af005b5b20
+  internal_properties : BQAAAAUAAAAa2Zm8J9E/zh+/WIrVvz1fER/So3PB0gjQuxc1xKQVWY4ZDm5lfg==
+custom_note :
+ internal_properties : BQAAAAUAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BQAAAAUAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

@@ -1,0 +1,104 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_User_Story_Messages
+ major_version : 25
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_User_Story_Messages
+ identifier : 0x2d08b3300428c72d
+ internal_properties : BQAAAAUAAABCc1pZEzb9qHe4I0fESlU99c/lm6b1Hv7CBCZieqGRqNoDryp3d1XOdP/4zyKGJAflHYUCNi1PffXG6n5hzOB90XwOq3QWwqmXTdGgdDOoOKui7jLWT6cRf4sdSA9s3e6fQfVPNFc5z66+f5+taENfCWJ47CUBbrFBvm5dH9t7ZX8VI9VLi/sevakhbx/Up86tei3gkVEm8/KpPGLNb5tstNAN6+RPmqQFAoG4hG2nW17Hmd6Q065/DYO7n3DEKJ7f0hZthWEWCq7HeL3zC5K04cpWhRTLzE62t034iGmj0g41N5SMdJRoGQlrIXXsmj035Uy1hD0TEz2j7kLYCvaOkUpxvCw8Kr+rCBJsfAfljTDi+iRVdAM5SAI0UDvnIjTrdYirUpzA/QBK7aBlDbyJ9Y0Cgn0sgc+3T5Y9kboKIfwNbC6UGL5XCH4hllcUcvXtak5kiUp1JknKLZeuZPZ0p+WmwhFI2sN264oW9SgJm5YFUftTMGqlnVoFMyYibY9JjegHdF2qBlzzlAe0wjqrc3DnYW0Lk/X1AYDLT23duP0ihujdF3iyRVUaC1/rXwlrg+oGzs4ur+DrUFkY5sfqRN6aN8Wc6RJPjpw/3sMtNV2/o7nis3bCs6CfJhxBsvM2WWLhHCs7YjN5iJxXKq+Wuq4Di1Q4k0aTL8C5sxc9ezz9OVlQq1hdZMlOYIVYnkbm8GvtRWqwxxlVZuSfL5U=
+ controls :
+  -
+    name : FI_SansNom1
+    identifier : 0x2d08b3300429c72d
+    internal_properties : BQAAAAUAAAAXLzTMmZ+fTZ9IZKA2ozcJ6cv/ZtWmMhZ8batM/tWrbXPB8v2JGREmPr5ZRzwZoiD84KPVqDakdcjxiV96RQQeaCoV6qUjOhiBgRA8/pddpdnBUqmUfMV9L1Idd8DSyHV/a9aKyHMRpbgSW26SzePSmKafzI3f2II9ubo0BjSNqtd/9ObMlb6RVZDs/zwyjXtX8nQr6W8TTovC0KvrAAt45nbeeQlEubRkR7njCltFq6VlsMQm6whwPW4DPC3HJQi9PJZDLClb0AOZtPh0azyDWYxCEgukJo8DSdeFoWpqzEkCsgyJdpfxMZBv1d5Ip4dCQzQ0e6tY/NvcVEv5kFUfgeewYnxiu17czvSPJ/SUSC4j1vgj3R/mfOlPIg+R2EagI62+Fx5xqOSjMkH0/E9YaNAg6nKZYpzZ1I1PKx/A7ZXjvRTS9TNoFoU1h/AkDcPLmtV/PsFRJtc8uJ8EjGUbtnaHZ4QLR+5qTxKagjHb+GxalWSQ
+    controls : []
+    type : 31
+    code_elements :
+     type_code : 73
+     p_codes :
+      -
+        type : 33
+        enabled : false
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BQAAAAUAAABd4biPtdLQOwfUFiqrit8H4xfGqKyz9t6VLxCUnNZRQiLPVs82PZNE+UVdKRzjizyeuKyRur85gNMUfqplpmtNDnQWQla9zo+GH9+1EfUJ6w17Dn/egD/gv+Hhywk8c9unIdzEp7EHgaAqD28w7Agveg4u19PBcKGZtQ==
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BQAAAAUAAABqPQh6HC8RxAVkp2SqPYLuZrfVhd+1KX4lx22hIT8uqEpE6yP7Sbc2rmVqdmL816EWzXOkEe9ijOtYwchZKAfpy3B1cNqhpJgsnbUs
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE MaFenêtre(LOCAL znIDUS est un entier)
+   -
+     code : |1+
+      //ChangeFenêtreSource(FI_SansNom1,FI_Discussion,znIDUS,1)
+      
+     type : 34
+   -
+     code : |1+
+      
+      
+     type : 2
+   -
+     code : |1+
+      
+      
+     type : 40
+   -
+     code : |1+
+      
+      
+     type : 234
+   -
+     code : |1+
+      
+      
+     type : 165
+   -
+     code : |1+
+      
+      
+     type : 177
+   -
+     code : |1+
+      
+      
+     type : 180
+   -
+     type : 230
+     enabled : false
+   -
+     code : |1+
+      //ChangeFenêtreSource(FI_SansNom1,FI_Discussion,znIDUS,1)
+     type : 11
+ code_parameters :
+  internal_properties : BQAAAAUAAAAwjDLmDSZ0H1P68nJIeNfqR9EvRjU/K+sVcM1T6rhVNr+VTV1mZ/rmoweYbFDZUhBGcv8UsxlDxVCOnb2U/SQOvlGWzNby3/w/V+ppSymxv+Vh
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x1cc17aed0054bfb6
+  internal_properties : BQAAAAUAAAAa2Zm8J9E/zh+/WIrVvz1fER/So3PB0gjQuxc1xKQVWY4ZDm5lfg==
+  strings :
+   -
+     text :
+      fr-FR : Voulez-vous redémarrer Windows ?
+     index : 0
+   -
+     text :
+      fr-FR : "HH:MM"
+     index : 1
+custom_note :
+ internal_properties : BQAAAAUAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BQAAAAUAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

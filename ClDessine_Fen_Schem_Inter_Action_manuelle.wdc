@@ -1,0 +1,76 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDessine_Fen_Schem_Inter_Action_manuelle
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1f66224c5ff05759
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDessine_Fen_Schem_Inter_Action_manuelle est une Classe
+      	hérite de ClDessine_Fen_Schem_Inter
+      
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2262533574222763865
+     type_code : 27
+     code : |1+
+      procédure Constructeur(oDessinSch_p est un ClDessine_Fen_Schem dynamique, oInter_p est un ClSchem_Inter dynamique, nOrdre_p est un entier, nAxe_p est un entier)
+      Ancêtre.Constructeur(oDessinSch_p, oInter_p, nOrdre_p, nAxe_p)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2262533574222829401
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : oGenBox
+     procedure_id : 2262540910034118753
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //oGenBox ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE oGenBox()
+      
+      oBtn est un champ <- :oBoxModele()
+      oBtn..Libellé = :sPaternBoites("Action manuelle", :m_oInter.m_sDescription)
+      oBtn..CouleurFond = rgb(237, 220, 210)
+      //oBtn..CouleurFond = VertClair
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1f6622475fea44bb
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

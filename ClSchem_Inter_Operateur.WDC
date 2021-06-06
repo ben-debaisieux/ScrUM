@@ -1,0 +1,102 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClSchem_Inter_Operateur
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1f6265aa0dbd7e0c
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClSchem_Inter_Operateur est une Classe
+      		Hérite de ClSchem_Inter
+      FIN
+       
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2261481743942843916
+     type_code : 27
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur (<oAxeParent_P> est ClProcess_Metier_Axe [, <ID> est entier])
+      //
+      // Paramètres :
+      //	oAxeParent_P (ClProcess_Metier_Axe) : <indiquez ici le rôle de oAxeParent_P>
+      //	ID (entier - valeur par défaut=0) : <indiquez ici le rôle de ID>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      
+      
+      PROCEDURE Constructeur(LOCAL nID_P est un entier = 0)
+      
+      Ancêtre.Constructeur(nID_P)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2261481743942909452
+     type_code : 28
+     code : |1-
+      
+      
+      PROCEDURE Destructeur()
+     type : 655360
+   -
+     name : nTypeInter
+     procedure_id : 2261481743943040524
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] nTypeInter ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	entier : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION nTypeInter()
+      
+      renvoyer ::cstTypeInter_Action_par_intervenant
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 2261485682431457995
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClSchem_Inter.GetObj
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClSchem_Inter_Operateur
+      
+      RENVOYER ClObjDB.GetObj("ClSchem_Inter_Operateur", nIdUnique_P)
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ClProcess_Metier_Intervenant_Operateur
+resources :
+ string_res :
+  identifier : 0x1f63552d54b7146c
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

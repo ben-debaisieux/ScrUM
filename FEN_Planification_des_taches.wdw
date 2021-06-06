@@ -1,0 +1,451 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_Planification_des_taches
+ major_version : 25
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_Planification_des_taches
+ identifier : 0x2caf276f00bb510f
+ internal_properties : BQAAAAUAAADmORuLBvuKvhHiyOJebKaUSEprq91NgVB0tYn9EoSuAxuawYkRI1fi2G7sUVfA2TLdkN6vF2TXJwSBhHkyY4+PvuV7hsa/ZITOWcFOqjy8QgXo7mVU4rLJYlr8A6RGVn2qmay3x3hhtw7yL+smQ211TZ6rN8Vv2F0sQPN5ktupt2RaD1PyK5b2UNeNg4dcF2jlxuT46RSlemGFoJHmR/+yxz+wGyUurnabCUSfbNnMFilZfJ+aWGe28wMZdVrFeCikaA1T1sV3/u4/Xg0FQkEj/iNzUBpixyzg22eHKbsRrkldV5uFuk8JUfwDvkxtxnND/GSlMjKk/aBkuXhmhPbH6QmY9PjOvS0p0Kp+LzXzsL8pNd4ROkT+nYDPCSgv19JLiw0fWKJFzhGWKn9owZXpWyk3yrd2WjDkf9UAkGxBfeLHBQZuTl2u+1TUDbLWuwtBfDMy3Y5iZTAiKCzPIMFE5U+JmtMI/XDz3x9NAAJ0GyDNDCHDDt8uWiTc7l3+7hfn1Q9XsRb0BtRO/NlaMh4kZO85737vNCMD3LDigTD9+ZR09VZdTMI9YVG25pCddha1C78i3wDrt/wvRWyV+OooNxNXldBbzdRcM4M0pE5j+xX/78lPnuIMtykHlo2+IMzawSlnDgnIml1Q1swjZadRsVfsWnVBq4DoIfCPMfueh/zazM1hqQmO/ZK4CzH6KaWhz1SExoQ6cI2yH28n/4KR4VoWXsX+LtRu72c=
+ controls :
+  -
+    name : CBO_Sprint
+    identifier : 0x2cb095260248e58d
+    internal_properties : BQAAAAUAAAD+2HL6bEAL73umt0Yv9RQeUM0JHIDeEbk/IrCNEHyDWa1i9puXAirEMC66JmKRdzvy6K+oa6Ol7l91L4PL5SCyhZ0Pc3lvST97l2xPVOZ4zLxfQ/cipK3Jmcl41ElRTvb1qJtosSjbtipXr7swdGbazt2tuHHueHG7q4Ycy0oPSR0Yj39SPe9m5SecZfgXnd8YlJ0TndfiY6x/fku0qa2vtga9DSyLbGnFemZvtiGFTgj7KnuknTl8n46tB4tbM6lENCjJb2saTBD6FD0nzI0AuLOFf47bTxWTOBBj3UFfrjeZ55JPJngMVSVT3SAB4DJv66X1aspZ8ye4IH5pAdyk0htipHTh23u95XSn044+OqmxEf736RVm04Ad26CIh7v4ga+OReNHcSkXwrMgwVyotjBnA9aglIS/zUzaahvRVVXI17i0H2F6FSz0gZ70plYzNeSX8f5pkKWTUt5Y675et6qyFGuuEU53Puh3qTteT/03zRkkfiCJaKPlL+0765MPkAvpcvk02xnHIrEgRJvrFxbbKGlwckH43QSTC8IlpcmplKbPosthXtwDGFbKQKfVtOmhLhMOCowpQV2unY4dqVTrhp6jt3zjhCpDgEdKQdrHfj2W8pa6/Sq7qJL1rfZSQC9pyJnVIbYuH8lQUQ87I1q93QKBk1TXorqKf+/OnRFCjGL8hl0lsWNt5urpz88Ln3yLRLU8iluLv9vicXyhdECeTMYg3OJzm3NOJr+cmc+yWwDuFpqjrLNlisSHF2CPKQBd1AN14FUof2g34sbB04yAKDDEMmgfUQqyMFOgyaIz1ZrOT85cutiZPwQyu5/3zdiPJizTTP3f0BsvxRcD0vRGQVmr+C2oNRjB5HxyUmKACvI7Qo7ulxqUoWtMH/8ia3MVaygIQpc+i38QkY/oi7ikpbiv2Ws23UVXidvev0+gNYHRTNMyfjYir/cpauYVGcM4y4kS4x5ELsT6IDLVueUOmqF1lkyatHlGL7orxFJjWRHbLA7tq484kW9vzGzRqBSOri7Czzyr8OA0tmMV8aMnsIo0w8QBvQu/r1pVo541vGC4tw56Lm12zCL1gWydGa2t3Vg/Vjtqb+BviH2zOpm1Th5Y9lmtob6xcXS0aUDvUAU49glVx+4vbWs57lPGPuNz01+01EngyNSa7/7Ij0skpxORYSKP0ZGWHRx+IC1hGpp+QT+y8eG09R0vr5F4BRmv8uB6bR7aZy46Ha2VfY4pUz7Sn7J+OM5ff991BRWogSNuJ/WMXZdsScZmwTbzSU/MF0iKTu5kwvUTN0RUkNYxlDwEpBSN0lMXRnrtKku04hfZVxlqRKPK5752JBDYPNzouRAn5u34mzo/yaKhyGFYmbOMVd07JLkD5dwvOPFzeqJg68DlAl79uqoWTqy1SO6VnMwu+LrBJgmwV8R4cZjkko85DXCQZ0RPgXBbQZmbHuVvd2LXV6zjkoPvbRBZBhDVdVeculQ=
+    dropdown :
+     internal_properties : BQAAAAUAAADPHP0YhHIC5DIkhys4KYxdZSB4wRDTP2hcaojfKnIyZOiV47h5yvk4X9SjwOTKm+dpDvIDOHUSvonOwbmw6guW2j2g2mZdVJFuRM/EqPSw5r/8yn5iZQX5xTCtsoju7AN5zB4izXxPltky8foKLMQ82UOW7hM6xYgWFms6uluj5wt4TedBqCW/mmNzbVxqwsDyzFLld/M4lzcun0+1owZn9DSpYOW857xNMMdRDsP1Umv0I5kzWvDDyDAyzltrjJCJvkbQ4GbRbumbSnMsI2j00r7RgqDQvERlUg/E6W4WbGmc+N0cUSyZuSjjlwJf+CGzo3HjDysp915+Ek1NdJx1DbUYL8Ji5uvRJT+yHm6dXID0XHE0kdyQPAeSZLPJHQBlc0yPKzvfrXQz3RUbiJDPVB3KolklYU5X6XX74UTkTac7P+yNWHuHqSZOEwmVHqUY1yG1ztBlhuPjL9kpYCeOy7xJBxooyZ01GBwrbze25+DpmwteoD327NfY4vAWCzdcJ0Ej6CAz26tBy2kmbK45Rt6ZORyGQcpH62cQ5qhp3BZygAJFrs1Fz1e4Q8XWky8rB0bioyMrZW+Qp6jhLySdsv7wd4cxL/KjXU6hY3280V7Z2W3g1AvGkmRQNEY9/2Qx7n92V8bhF83CEh6jVZESQWMO8iOngK9F5vIS3A/1sAd6Ie2HiIEQcBWy0o5r4CM=
+     type : 7
+    type : 14
+    code_elements :
+     type_code : 23
+     p_codes :
+      -
+        code : |1+
+         
+         //nIndiceSprintActuel est un entier
+         //nNumSprintActuel est un entier = goApp.m_nNumeroDuSprintActuel
+         //
+         //sNomCboComplet est une chaîne = "CBO_Sprint"
+         //
+         //ListeSupprimeTout(CBO_Sprint)
+         //
+         //sdSource_Liste_Sprint est une Source de Données
+         //sReq_Liste_Sprint est une chaîne
+         //
+         //sReq_Liste_Sprint = [
+         //	SELECT
+         //		Scr_Sprint.Num_Sprint
+         //	
+         //	FROM Scr_Sprint
+         //	
+         //	ORDER BY Scr_Sprint.Num_Sprint DESC
+         //	
+         //]
+         //
+         //SI goApp.Rsql(sdSource_Liste_Sprint,sReq_Liste_Sprint) ALORS
+         //	POUR TOUT sdSource_Liste_Sprint
+         //		ListeAjoute(CBO_Sprint, "Sprint " + sdSource_Liste_Sprint.Num_Sprint+gLien(sdSource_Liste_Sprint.Num_Sprint))
+         //	FIN
+         //FIN
+         //
+         //HAnnuleDéclaration(sdSource_Liste_Sprint)
+         
+         oSpr est un ClSprint
+         aoSpr est un tableau de ClSprint
+         nInd est un entier
+         nIndiceSprintActuel est un entier
+         
+         
+         
+         ListeSupprimeTout(CBO_Sprint)
+         
+         aoSpr = ClSprint.aoListeSprint()
+         POUR nInd = aoSpr..Occurrence a 1 pas -1
+         	oSpr <- aoSpr[nInd]
+         	ListeAjoute(CBO_Sprint, "Sprint " + oSpr.Get_IdUnique() + gLien(oSpr.Get_IdUnique()))
+         FIN
+         
+         nIndiceSprintActuel = ListeCherche(CBO_Sprint,goApp.m_nNumeroDuSprintActuel)
+         
+         ListeSelectPlus(CBO_Sprint,nIndiceSprintActuel)
+         
+        type : 14
+      -
+        type : 35
+        enabled : false
+      -
+        type : 17
+        enabled : false
+  -
+    name : SAI_Nombre_de_sprints
+    identifier : 0x2cb435b300b4bd6f
+    internal_properties : BQAAAAUAAABlEwC4mIcjiThGBmC94PmiLa4tkaF+tU0GQizhkdIFJid71WAXd7lXrDq0kv0YZR6ypUa1zeNhc3gCulSr2dwiDjA0AuQrkxw6boKKac3djw4aVlbfQ/A/WuUUWHFIbguL5fosrWVbt4MMpJZAqo00LCcErsrGf6LlvYpAlseYXJKSxaD5D2m8CCmorwt2R50QXT3Zhpb4pUnhoZ183rx6g3YH5Y+vATeie3paaeLDdLDK81cIr1AxDUddqvSr4SuYVRZPNVAh26dWeAHKg8HPnoX6y0vbfdT5dbocOv83LLIoQuJ1HjF/AUb5tCkvu7zrc5RcwMP2YGI+kZYzP7BxVG+HSDj98jWke5cTu3bRd75s9hlCzh4xJ3D3wLkrb/Lr2lOCj/Zo86n5/WOnGIGqGK1L3PCfLQiE/Z0cguf8elsqW/tiPwLEI0qImWiclAwUdafqUUvKGwgtb7h/B/CQ7AiU0v2faSEc3dTJ/TNdQEbDOxHqZKBbPl3gd8Mu7hqxK71nQ0yk7kqmzoFy0vy1GBj8yyHWou6ZSw9KPdT8egbqNj7K595cAv0KmrZInN2RHIQU+lmMyU42ZDWxn/qauEz7ifclNxy4G9Jxp3dIyQ/4Qc72FPn7Q2E4wRdOzDUGfxl3WxGL3k9jSgvZFJirdse272Xt1bx3RqEctDfVig29snc6SF85KZ9nxxLvUcWIvjkDNFfX93etXnXhH+qi1tRGr4WgPvTfD2abRK+UbbWsPBVYGlvxngAqyu63CYpXjxb+Z9zCANfOKe1ZASjcrXB60lwnObMDgKB4gYcOthH182nKYO89/769JJe0mNnf7SjIX9XtCU7ooLRlN/eKK/7wZKnRettH4jwZYYaDYZL0B77WmKFVSecN9rV4c7a5KkcwITXfnTO37j7ijs/qNuZcsOJh1EghnNhAQc7Vigf2fm7yMgpSLYl+jPSssYZ+GSNJJnrc3nFUEvsYPFiPNAACKbyKNMnXigMnq7uOOkkc4MScp5BX2ctDXtj8s5Z4+AtgCRvQsnXEJOagRM+ERHiqtS0vQn2IQKJdiL70Lf8yALzdN9/JdeUXNk/tROfdk2kv9PIZbHV9Lc/eGC/rGeFx4kkcgsZqp19q5xQKyQ==
+    type : 2
+    code_elements :
+     type_code : 3
+     p_codes :
+      -
+        code : |1+
+         //znNbSprint = SAI_Nombre_de_sprints..ValeurInitiale
+        type : 14
+      -
+        code : |1+
+         //znNbSprint = SAI_Nombre_de_sprints
+        type : 16
+      -
+        type : 276
+        enabled : false
+      -
+        type : 277
+        enabled : false
+      -
+        type : 278
+        enabled : false
+      -
+        code : |1+
+         //znNbSprint = SAI_Nombre_de_sprints
+         
+        type : 17
+  -
+    name : SPIN_SpinEntier
+    identifier : 0x2cb435b300b6bd6f
+    internal_properties : BQAAAAUAAABUuwzu6xcY05el2aVfRLJTzbWEWOlpn9zKgHEgVoqfmkWkYjWD3NZEL6pD+h/7OgZt49pbiMYhSHFzXq9G+XiSRcwg5eV6hPkd12SfL0jHp9bU9+58KPOCiuH0jH1dZpmwxjaazQzt80krB5ugtBQa3rx/saIS+bdVlh+wLgbarjZJkGKDzUTsV5Tn4nTR95OXXp9Jry3TElxBnRFu/fzs2zbN/cJvaKQoBnSfMKmlsjgMXjB+cBCcJFLD41le70NNuIkmg2OhuFQXibBXzjuAq/BJKnd0ibzrhQRQpet4FcP/qW5VIGvIvvF2hCVZDKpd68Hs5FWe7UOZZyZXomq2h40KO/DGaMnUU4pfqG4izEbU+NPZFf9e5R8O4HB7U4wsvKJh2RgryMYKi0m0bIcuIfCCrzm31k+x54nu9lBb2A==
+    type : 11
+    code_elements :
+     type_code : 18
+     p_codes :
+      -
+        code : |1-
+         Si SAI_Nombre_de_sprints < 10 alors
+         	SAI_Nombre_de_sprints++
+         //	znNbSprint = SAI_Nombre_de_sprints
+         fin
+         	
+        type : 26
+      -
+        code : |1-
+         si SAI_Nombre_de_sprints > 1
+         	SAI_Nombre_de_sprints--
+         //	znNbSprint = SAI_Nombre_de_sprints
+         fin
+        type : 27
+  -
+    name : BTN_Actualiser_le_Graphique
+    identifier : 0x2cb4379c026533f5
+    internal_properties : BQAAAAUAAAAvAzlGAiNduopFuvK3Ar0i2CLifAjHN+njYTsVFFSd5fXBUT9PXmYS0gdoroY3hZf3DHEuVLgLS0Co6e7+0VG+aeVtMU1EOPgm2mnj6z3nhS8B9CnaXFXCkkOajFLHDOwI7Bz8qdEe74XCHvWOHM3S7zWLnrc+HeswsgkR+9zWQhACEhtj0pfpDxhJ8As+WeHZfB2iogKaxBUHoB9F3rItWpYCIxTYdmMH8LGP4Uj4PRx9oormqfzkFw+Cor9yx5VmdUsmgMuipHy1ucQos6Gsdwj9Xds9wds2cB7Dpczy/OkLLNy3ixpbiiyODUuZhamDW1i8yKF1jcP7GnSUM1KO5dSTqHOJq6ogfdVGuU0CJYa46kunJgWkvz/hGATfpUDRZ1yg91Hj0bWfl9A7dC66F2Of8CYUkwgFdg1cHl+x660dSwQypYSqKIb/bSUHeeQJxg5CwmsHOjcmqts+rzN2kIe8XFFpwr2TF0q0huEmMnU8kjLPjD++KzioQr+0qCP15JRBiwsuFwacIGAQZe1MZYB+duejYseSbY/11L+SSdgTxJd26XSsydnZlUvVRfIr6Sxq6t1zQae8a/TRP9OKKM3pXKmRElX0I+v1pbJMKm9afLqetO8AkR09N3JW1/kDBhB71jvQ/VZWFbKMCkRKVwCg2pFlhKmrS7LPtIb/h6SYxHP1IvCwgmEqE8CJPq2lfTP2zl5Zc025p+U4jGP+UjLT6aoJJo0SCdVjeYwebJuOtKqfsjShSZvFXzVxHkfFtE7izbBfegYEnyTHd3IrYKvdHxCOsNm9lppZR/XSjb7VNzAMyggMDHSYdzBY0qnAC7Ka40ns3mNm+rLs4plQkbPbUGkVm3fenmE6zLne78nZm9ajDhlxNEHl/fegCBs=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         eSelecteur est un ClTache.ETypeCharge
+         selon SEL_Production_Prevision
+         	// Production
+         	CAS "1"
+         		eSelecteur = ClTache.ETypeCharge.Charge_réelle
+         	// Prévisionnel
+         	CAS "2"
+         		eSelecteur = ClTache.ETypeCharge.Charge_prévisionelle
+         FIN
+         
+         actualise(CBO_Sprint, SAI_Nombre_de_sprints, eSelecteur, SAI_Impond)
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : SEL_Production_Prevision
+    identifier : 0x2cb877f102cf5647
+    internal_properties : BQAAAAUAAABGl83nY/FBur9O1YIJD8y+Hat480upLHX1xmcDpoKyMmSmNWrEpT/DOPouaUTw7p3Sqk+c3s3PAlwDFk28khvS5ZexcEWMmx7PAv6TG+LSDs5RWTwjo4BS9ElzN4leZkodwrcIKOEFT7nWKTiAJo8jNPIaDUU1ISXCya25YXrLYkH9Ci6SE5yJDiOjo6yD+loVNLTmMnnkO4ZAOHSt8jtB45YFz8H2HQW3rkssQ5nVxG3JGXCKN/5ApfJBuBVwq9C20rU/LmZcI61FGVLQU+Tn0MoidC4QD9UiCv6E/AvnVF5TqVAu+W0JWfcahlqGcIdLd8DAqzjmdHrkr5jqo505/TM6H712EtiUMWpxfjEcK0CuYHdHYjM2CUcZ4f+59bzwgbYv/kmwmNizjaln9GgqUEzxbUKXkzx4pEDzpGtSuiaqLYXzfFRubagHsUyuaVgVGkbEZ398nuvJmxwUFpP3oL13sEBP5xfVwvjKjJAf8fCYgtTSS3ZQYfhSsipEmgiv/dZz99EmzjFmvKI3BGFRst1PrPRIgN8rgqlw4beOfE3mqw2se/6Cv3U6G5+1wOaDAeUDWnM1Js+9PobDNRZWHg6nomyM3ofH5w4ZgNFx29qz/VIgOEDRvErHEZ/23/v8UGYF5w3bY0SkPBizUwfnOR44YUMD+DBgBKN27NUi5jY9pADxJymF1FB8zJ+nIOc+1TCnJCTVZ4Ku8cF/RdmReoLsyK49WtbTffLCknL+1DqWkM/n/YAbylfjiaP8RIoxm7w/GDwuUX5DL62Wj4ZHbyC7zniHhHo45RuRUd5DnnU2WnMiwISCE8kfTFmNgar8R8RsvYgw9+RGk22kEcL0iU0EIEeaYAmErA==
+    options :
+     -
+       internal_properties : BQAAAAUAAAD27qpC0UeX4yCypu7Sjh3tMukP7i98kHRYk3tltrbeyRZ9pwq08LgJhx+ik7kphLQOSrGqzx7xngwmu+C9Ab9j5itzNqVF3KuP+VT3o1plbXl9F9bjowtHnWKpwgpZFp7MfP7M8V2ZkDHy03u1jePNzyXXSkgqbQ==
+     -
+       internal_properties : BQAAAAUAAACdEHw31nGT0Ha9ymoee4o8kB/hH9yQHgsYQoxU3jKA2v4hRD//ei1cWJ2493LQDkmhlIXUDhSCFJ6uI+E4yUuoQn1uelsvTHsxkcvad0Pv0uEH/RYmaTnfHBdJFWDGmpAF8879CowfMZClVK8B/GeLa4kvk0yUj4T87BPIAtAq
+    type : 6
+    controls : []
+    code_elements :
+     type_code : 6
+     p_codes :
+      -
+        code : |1+
+         ExécuteTraitement(BTN_Actualiser_le_Graphique,trtClic)
+        type : 17
+  -
+    name : BTN_Fermer
+    identifier : 0x2f175606028957f3
+    internal_properties : BQAAAAUAAACPjlTGQUbLXxDEIrEpaAZdS1iPm5bi5NJs041MWqkg6cCC+GFY2QqwlW3f4p/y/KxUW9BF7W05rFrFeUjzWUfRm770cHfunp3u/kRSSlInnyHfXwQGn6hRfbWAEZMcFhUcYeJWzXn60sUml/dcCzYvPV1NYvs5mjGkKabpq1NWYe7oGpvhgutZFDy7M02L04d5Yrg/OECX3GdslkA/jp4J4HQmDVTDg+MGJ9dWVGT8sp9W9w+0SpCUCTX9mlEUvybM3oDMZKWgNY+O47W/wT6EV/kja7Dgx40c0jpzXdcGqhgwDxgk/EvTnggtXSHzl0qXbgC1tb01Zeait+RMjzBtkGN4Gy6n7Ilj3dV2KQnu721GXJh95NNbCI6eRLo/y23j5KOnZG7RqyMiKdZGlesbFoDV7FIOm1ylcTCQyCo7QX1bE2gtqmi/K+VlSoY7rL7IUtSfwxYSl72vThQsOKucTa5GVbjBKupKhZScaWz8XKPjXhLdcRl07cIuXxrV3A2y4Kmn/983Ac0acLI1NkBU8ReSaJSUd6+Bt4aHh9wc8UmM3yyx3I93WRNDJgqzHvWdvsA6/ycyumxG5JpbkgBGIvkqcP4DTE86bgKi+ZfkemF6Xea21IRr7LsQTMOAWpzeugRJCHcf8PvXagDOIsjG2KUVkqFdIYQuDs+kvrXa3l+o6RbjGYeGkr3ZtDqXareE/QQwimp2OYLzrCEk5OBGnU8/2X3Xrwa8X8p3v9ZIlIk=
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         Ferme()
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : GRF_Planification
+    identifier : 0x2f9ddb6985153eb6
+    internal_properties : BQAAAAUAAACvDsPi4s//CIsjL1sQDtZPu1F8rifOr1F7p2472fHvPh4otS5H3O5v0gPThFOx/GFV6E9u94gDqDrOls+bxVzYNjOpN5+N8co048aVRAl+BNtvnHjAfhN27C6/MqUbM+mEgrQqZcHBOvA6B/Ifo4oFCj++eCvsrlSXnj84YCnCfFT3qoXLmjf6MFxHH0HTUOlOUT1Paz2ABog1ykAjROQAuQoED/rIwU4Eq90G67APs+zN1zx2FubYJ24G3W+gxFP3ZX3+8pgRW3kpryey+lN4gJPyLEWcCVt6F6e0gIf32DC+ONWfJGvNNDPGjQpcBwojJtS+5sEuuWITmeHSQErpYyHXwiSY+f/kW0CEoTCMSfaLZ6ip4Fj6ohg/8LsAOL0stLCzC9JM/KClSW8Q/pHbxbS3iu1PKnM9J08807JGRSmyAJFSXZ7VKI1PxhsF527lgPVMjc+CnpBA+M92swTGnPg9PK5+DuDjPk1Z0oPsgX4fWn6C36ANH8xLYp8IJ0rsLqoNACVrDYURzVetbpaP09D1VOAreCvI2nJqujCXS89ca7qW4ECrMaDYahwGBmLyioNnUspZNkKzdFdTmSfhKXMOExjkXsOBTSh5+pZvdW+/zHfM2e8Rw8SJGd59y+32kB0fUGfnuFOTnck3TyQNqoGyHuJM3NB9xPtoaXFb25b0qxj/Vhv66EmaZrWywYnBe3PunMBYsiKqWRODz/iPbAJ20MVWyz0dG9IwVPw3/a/O+VFeRJtkEFRvsUavfZfKvCZGuQcBl7HHrEmaKuPHVUPo2xpysA7bKsb8U8f1+k4SgsH1xV/47TWAPs6koYmvq4UB9cPV+lbt+6InIY9WnkYMN/LzvrKsUHQrROjSZneX/ILNN3ItyTJodCmolI9M55DiURkj34NbdQXymdRvlapqnjO/pxjE4/unOoodmpHqrqWXfth7NyCslKyDOJey1rE0bLQlRDR3FQ71j6dM7vqkLMYWwDXrSjNS9n5qIUaVYXdMDEucaIS5uRC25cCqNlaiKlioLwANNTl4/OUOKGC+/32MRi1g66lfB+foDTu6uxpKxdSdbG9fvc9K8RVuxeHETH0/B+HpPX+mewLUD04MecrK/L63cg7LzevSn8fAFJyCCjHf1v6g9lQNViFIQ0nBay9a8tMKvW/RN7HC9iKtpgxkljfKEzY25ibYi6YkoPw7U53O3pPbtp/P/KUjLf7BGPrB0ZlJajP5s/OX1vt69W9DK/AZoLDcbx70QmMioMGJCChLIHNVrVcfRWXEqyG+OQpLbGaDAdIgL4O6+YRF1Tv+hGe5DvcJLnsVavY7A44/EGLFc+poKKhogkeYD8MQvto9aniEzTwHhL7/gibu55BCHMb+7Fbnq1foN7KKeyYny5OCuaBPyV6eS6nshCe1ZeTE0w5liiBbeCbvyNMPjYIMoKU=
+    type : 33
+    code_elements :
+     type_code : 72
+     p_codes :
+      -
+        code : |1+
+         //Actualise()
+         
+         
+         
+        type : 14
+  -
+    name : SAI_Impond
+    identifier : 0x200ead1e922cb2ba
+    internal_properties : BQAAAAUAAAAViVOIA2/eECzHWipXQ4ghhpW861UCs9V6FG8F0OG8zkq1ip/EivE3ECSkExqPRBh+2dQ4YKklSgu3vidxyCUGeZFAX3cd5pHkPVzCSn42MUNoYKVIFKlLkkQTClnGo5PAPgjSPDMsDHzd8sf5VYWgWk6h610FE1FTuji+mxIV741mzvn0t2yGc4ai/S2Ry+qNayFqmEzVLjSuYc2ucbpfFhTykbR1bhlqK7rT2Y+9hNBsbwqgaRyuN9UL8DAmLoePrCMZ3We17NAogB0LvIvbOUW/QNr9fimNSvXsR3JfizQu0LhUMw3kLMCoFocpvLJIXOu68hOLQYzfGVHkl7hq7b4V4dSPltogcUC2wYjG4NAM8TikzSA7OQgT6wljO2jljvuuUH7qpuNw9fX2AbeCHXxhG8mTOWMbNQ+FEDap6+K07wvTsng05KfV+TtBYCjk7YwIIezRCiPy321XFjxF1zHI9xz2Kf0xxtJwj4nWvJ10RW3ngm6mY9HwWqQhEWWBcAyIpkStaI8zJHSOmAEMnIPG8FQfvuEUJ6W6TSrXoHp5k2NGlSib45NPIchm5YylqN4RoaDLIvgbfZ5LdAcXGmyemFtGDokxQjvCNndDVaTNTlwMr3nYWbwiNUGvLIQJZSMCzmc/Qh1Bl9HHvBLUYY+duFdfUtz7oQp0CJJEa4nFBnvVcObiKH67u66jluJEvjNMqkLnzeOZoKFy8kUfP4XYEIlIADVYkKa/c7FpDDeSFllZjYh4td3T8VWmUey/ByNku3/OS71IgfaubNMFfnUeGj+/F9mbhrF6sZeiR3K7IsICdesDcPSCEUQb0lW8oiV9yPIpzyfXWz1jq25dzCcS3FcL747f3mW7+jj+1ofEHlTiaOt7Dq2HxdM8ZCmM+qPFaeMQi7dIeZo1q5ptXRgvqNt/YA5HGmQXOSMjOHsVyCWADTj+840PoLWwtBEScojQabdkTJVT9WZPSKmy0a2lVVAJqWg2n1qOJmrIQvwoZdT78KtewGgkqSIYXDkq3BJGGtERGdGobmiMCx5OmC2UPUVjlOOAFmySnUBYW1bHkldszSqc0VeJT46cEBc=
+    type : 2
+    code_elements :
+     type_code : 3
+     p_codes :
+      -
+        code : |1+
+         moimeme = 2
+        type : 14
+      -
+        code : |1+
+         //znNbSprint = SAI_Nombre_de_sprints
+        type : 16
+      -
+        type : 276
+        enabled : false
+      -
+        type : 277
+        enabled : false
+      -
+        type : 278
+        enabled : false
+      -
+        code : |1+
+         //znNbSprint = SAI_Nombre_de_sprints
+         
+        type : 17
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BQAAAAUAAABd4biPtdLQOwfUFiqrit8H4xfGqKyz9t6VLxCUnNZRQiLPVs82PZNE+UVdKRzjizyeuKyRur85gNMUfqplpmtNDnQWQla9zo+GH9+1EfUJ6w17Dn/egD/gv+Hhywk8c9unIdzEp7EHgaAqD28w7Agveg4u19PBcKGZtQ==
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BQAAAAUAAABqPQh6HC8RxAVkp2SqPYLuZrfVhd+1KX4lx22hIT8uqEpE6yP7Sbc2rmVqdmL816EWzXOkEe9ijOtYwchZKAfpy3B1cNqhpJgsnbUs
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1-
+      PROCEDURE MaFenêtre()
+   -
+     code : |1-
+      ExécuteTraitement(BTN_Actualiser_le_Graphique,trtClic)
+     type : 34
+   -
+     code : |1-
+      
+     type : 2
+   -
+     code : |1+
+      
+      
+     type : 40
+   -
+     code : |1-
+      
+     type : 234
+   -
+     code : |1+
+      
+      
+     type : 165
+   -
+     code : |1-
+      
+     type : 177
+   -
+     code : |1+
+      
+      
+     type : 180
+   -
+     type : 230
+     enabled : false
+  procedures :
+   -
+     name : Actualise
+     procedure_id : 2278218561562896903
+     type_code : 14
+     code : |1-
+      procédure Actualise(LOCAL znSprint est un entier, ...
+      	LOCAL znNbSprint est un entier, ...
+      	LOCAL znSelecteur est un ClTache.ETypeCharge,...
+      	LOCAL nChargeReccurcive est un entier)
+      		
+      		
+      stGraphe est un col_charge_ui.STR_Charge		
+      sStPrj est une col_charge_ui.STR_Charge_InfoPrj
+      stSpr est une col_charge_ui.STR_Charge_Spr
+      nInd est un entier
+      nInd2 est un entier
+      
+      stGraphe = col_charge_ui.Graphe_Charge_Sprints(znSprint, znNbSprint, znSelecteur, nChargeReccurcive)
+      
+      
+      grSupprimeSérie(GRF_Planification)
+      grLibellé(GRF_Planification, grAfficheEtiquette, Vrai)
+      
+      GRF_Planification..Titre = stGraphe.sTitre
+      nInd = 0
+      POUR TOUT ELEMENT sStPrj DE stGraphe.aStProjets
+      	nInd++
+      	//nom du projet pour le nom de l'étiquette 
+      	grEtiquetteSérie(GRF_Planification,nInd, sStPrj.sNom)
+      	//donne une couleur à la série
+      	grCouleurSérie(GRF_Planification, nInd , sStPrj.nCouleur)
+      	
+      	nInd2 = 0
+      	//parcours les projets compris dans l'intervalle de sprints
+      	POUR TOUT stSpr DE sStPrj.aSpr
+      		nInd2++
+      		//ajout des donnée dans le graphe
+      		grAjouteDonnée(GRF_Planification, nInd, nInd2, stSpr.nPts)
+      	FIN
+      FIN
+      
+      sSpr est une chaîne
+      nInd = 0
+      pour TOUT sSpr de stGraphe.aStListeSprints
+      	nInd++
+      	grEtiquetteCatégorie(GRF_Planification,nInd,sSpr)
+      FIN
+      
+      
+      
+      nInd++
+      
+      //Affiche une ligne representant la vélocité moyenne actuelle
+      // - type de la série
+      grTypeSérie(GRF_Planification, nInd, grDroiteConstante, stGraphe.nVelocite)
+      // - étiquette
+      grEtiquetteSérie(GRF_Planification, nInd, "Vélocité moyenne")
+      // - type de trait
+      grTypeTraitSérie(GRF_Planification, nInd, TraitContinu)
+      // - épaisseur du trait
+      grEpaisseurTrait(GRF_Planification, nInd, 2)
+      // - couleur
+      grCouleurSérie(GRF_Planification, nInd,RougeClair)
+      
+      grDessine(GRF_Planification)
+      //
+      //
+      ////a faire : Déplacer dans la collection globale
+      //
+      //
+      //oPrj			est un ClProjet dynamique
+      //oSprint			est un ClSprint dynamique
+      //i,j				sont des entiers
+      //nNumSprint		est un entier				= znSprint
+      //aTableauProjet	est un tableau de ClProjet	= ClProjet.aoProjets_sur_periode(nNumSprint, znNbSprint, znSelecteur)
+      //nPoints			est un entier
+      //
+      //SELON znSelecteur
+      //	CAS ClTache.ETypeCharge.Charge_réelle
+      //		GRF_Planification..Titre += " en production"
+      //	CAS ClTache.ETypeCharge.Charge_prévisionelle
+      //		GRF_Planification..Titre += " prévisionnel"	
+      //FIN
+      //
+      //
+      //grSupprimeSérie(GRF_Planification)
+      //grLibellé(GRF_Planification, grAfficheEtiquette, Vrai)
+      //
+      //POUR i = 1 _À_ znNbSprint //pour chaque sprint on effectue la boucle suivante
+      //	j = 0
+      //	//parcours les projets compris dans l'intervalle de sprints
+      //	POUR TOUT ELEMENT oPrj DE aTableauProjet
+      //		j++
+      //		//recuperation du nb de la charge du projet
+      //		nPoints = oPrj.Projet_Sprint_Points(nNumSprint,znSelecteur)
+      //		
+      //		//ajout des donnée dans le graphe
+      //		grAjouteDonnée(GRF_Planification,j,nPoints)
+      //		
+      //	FIN
+      //	
+      //	
+      //	si nNumSprint > goapp.m_nNumeroDuSprintActuel ALORS
+      //		//ajout des donnée dans le graphe
+      //		grAjouteDonnée(GRF_Planification, j + 1, nChargeReccurcive * (nNumSprint - goApp.m_nNumeroDuSprintActuel))
+      //	sinon
+      //		grAjouteDonnée(GRF_Planification, j + 1, 0)
+      //	FIN
+      //	
+      //	
+      //	//affichage des dates du sprint en graduation
+      //	oSprint <- ClSprint.GetObj(nNumSprint)
+      //	
+      //	grEtiquetteCatégorie(GRF_Planification,i,oSprint.sSprint_Date())
+      //	
+      //	nNumSprint++
+      //FIN
+      //
+      //j = 0
+      ////parcours les projets compris dans l'intervalle de sprints
+      //POUR TOUT ELEMENT oPrj DE aTableauProjet
+      //	j++
+      //	//nom du projet pour le nom de l'étiquette 
+      //	grEtiquetteSérie(GRF_Planification,j,oPrj.p_oUsr_ChefProjet.m_sNom + RC + oPrj.p_sNom)
+      //	//donne une couleur à la série
+      //	grCouleurSérie(GRF_Planification, j, DonneCouleur(j, coulSérieDéfaut))
+      //FIN
+      //
+      ////nom du projet pour le nom de l'étiquette 
+      //grEtiquetteSérie(GRF_Planification,j+1,"Charge récursive" + RC + "(Impondérables)")
+      ////donne une couleur à la série
+      //grCouleurSérie(GRF_Planification, j+1, COL_Scrum.gnCouleur_Gris)
+      //
+      //
+      //
+      ////Affiche une ligne representant la vélocité moyenne actuelle
+      //// - type de la série
+      //grTypeSérie(GRF_Planification, (j+2), grDroiteConstante, goApp.m_nVelociteMoyenne)
+      //// - étiquette
+      //grEtiquetteSérie(GRF_Planification, (j+2), "Vélocité moyenne")
+      //// - type de trait
+      //grTypeTraitSérie(GRF_Planification,(j+2), TraitContinu)
+      //// - épaisseur du trait
+      //grEpaisseurTrait(GRF_Planification, (j+2), 2)
+      //// - couleur
+      //grCouleurSérie(GRF_Planification, (j+2),RougeClair)
+      //
+      //grDessine(GRF_Planification)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAAwjDLmDSZ0H1P68nJIeNfqR9EvRjU/K+sVcM1T6rhVNr+VTV1mZ/rmoweYbFDZUhBGcv8UsxlDxVCOnb2U/SQOvlGWzNby3/w/V+ppSymxv+Vh
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x1caf273f00199580
+  internal_properties : BQAAAAUAAAAa2Zm8J9E/zh+/WIrVvz1fER/So3PB0gjQuxc1xKQVWY4ZDm5lfg==
+custom_note :
+ internal_properties : BQAAAAUAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BQAAAAUAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

@@ -1,0 +1,84 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClSchem_Axe
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1f5fcdaa0bd9ba62
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClSchem_Axe est une Classe
+      PUBLIC
+      	hérite de ClObjDB
+      	m_sLibelle est une chaîne				<MAPPING=Libelle>
+      	m_sCMTR est une chaîne 					<MAPPING=CMTR>
+      	m_nOrdre est un entier sur 2 octets		<MAPPING=Ordre>
+      	m_oSchemParent est un ClSchem dynamique
+      protege
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2260751668190296674
+     type_code : 27
+     code : |1+
+      procédure Constructeur(nID_P est un entier = 0)
+      
+      //Déclaration du constructeur de la classe d'accès aux données.
+      Ancêtre.Constructeur(Scr_Process_Metier_Axe..Nom, Scr_Process_Metier_Axe.IDScr_Process_Metier_Axe..Nom, nID_P)
+      
+      :Charge()
+      
+      //SI nId_P <> 0 ALORS
+      //	:m_oSchemParent <- ClSchem.GetObj(Scr_Process_Metier_Axe.IDScr_Process_Metier)
+      //FIN
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2260751668190362210
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 2261063792054738383
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetObj (<nIdUnique_P> est entier)
+      //
+      // Paramètres :
+      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      // Valeur de retour :
+      // 	ClSchem_Axe : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClSchem_Axe
+      
+      renvoyer ClObjDB.GetObj("ClSchem_Axe", nIdUnique_P)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1f5fcda10bd39a18
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

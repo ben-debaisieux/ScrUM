@@ -1,0 +1,232 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClHistorique
+ major_version : 25
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1f4964720d00ba25
+ internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClHistorique est une Classe
+      	
+      prive
+      	m_asHistorique est un tableau de chaîne
+      fin
+      
+      STR_Histo est une structure
+      	dhEvt est un dateheure
+      	sDateEct_en_chaine est une chaîne 
+      	nIdUsr est un entier
+      	sNomUsr est une chaîne
+      	sDetail est une chaîne
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 2254443529482910245
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 2254443529482975781
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : AjouteHistorique
+     procedure_id : 2254444070653502499
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //AjouteHistorique (<sHistorique_P> est chaîne)
+      //
+      // Paramètres :
+      //	sHistorique_P (chaîne ANSI) : <indiquez ici le rôle de sHistorique_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE AjouteHistorique(sHistorique_P est une chaîne)
+      TableauAjoute(:m_asHistorique, sHistorique_P)
+     type : 458752
+   -
+     name : EnregHisto
+     procedure_id : 2254444409955998039
+     type_code : 12
+     code : |1-
+      procédure protégée EnregHisto()
+      
+      
+      sHistorique est une chaîne
+      POUR TOUT ELEMENT sHistorique DE :m_asHistorique
+      	HRAZ(Scr_Historique)
+      	
+      	//Affectation de la clé étrangère, correspondant à l'objet en cours
+      	SELON objet..Classe
+      		CAS "ClUserStory"
+      			Scr_Historique.IDScr_UserStory	= :Get_IdUnique()
+      		CAS "ClTache"
+      			Scr_Historique.IDScr_Tache		= :Get_IdUnique()
+      		AUTRE CAS
+      			ExceptionDéclenche(1, ChaîneConstruit(...
+      				"La classe %1 n'est pas paramétré pour l'enregistrement des historique.",...
+      				Objet..Classe))
+      	FIN
+      	
+      	Scr_Historique.Date_Evt			= DateHeureSys()
+      	Scr_Historique.IDScr_Usr		= goApp.m_oUsrCnx.Get_IdUnique()
+      	Scr_Historique.CMTR				= sHistorique
+      	SI PAS HAjoute(Scr_Historique) ALORS
+      		ExceptionDéclenche(1,HErreurInfo())
+      	FIN
+      FIN
+      TableauSupprimeTout(:m_asHistorique)
+     type : 458752
+   -
+     name : Get_IdUnique
+     procedure_id : 2254444663359127737
+     type_code : 12
+     code : |1+
+      procédure abstraite Get_IdUnique()
+      //Les classes qui héritent, doivent obligatoirement cette procédure pour gérer l'ID unique.
+     type : 458752
+   -
+     name : CleanHisto
+     procedure_id : 2254445659800422849
+     type_code : 12
+     code : |1+
+      procédure protégée CleanHisto()
+      
+      
+      sReq est une chaîne
+      sdDelHisto est une source de données
+      
+      sReq = ChaîneConstruit([
+      DELETE FROM Scr_Historique
+      WHERE %1 = %2
+      ], :sNomCleEtrangereDeClasseActu(),...
+      	:Get_IdUnique())
+      
+      goApp.Rsql(sdDelHisto,sReq)
+      HAnnuleDéclaration(sdDelHisto)
+     type : 458752
+   -
+     name : aoGetHisto
+     procedure_id : 2254450010673364712
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoGetHisto ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE aoGetHisto():tableau de 0 STR_Histo
+      
+      sdHistoUS est une Source de Données
+      sReq est une chaîne
+      stEvt est un STR_Histo
+      aStListeEvt est un tableau de 0 STR_Histo
+      oUsr est un ClUsr dynamique
+      
+      sReq = ChaîneConstruit([
+      	
+      	SELECT
+      		Scr_Historique.Date_Evt,
+      		Scr_Historique.IDScr_Usr,
+      		Scr_Historique.CMTR
+      		
+      	FROM Scr_Historique
+      	
+      	WHERE
+      		Scr_Historique.%1 = %2
+      	
+      	ORDER BY
+      		Scr_Historique.Date_Evt desc
+      	
+      ], :sNomCleEtrangereDeClasseActu(),...
+      	:Get_IdUnique())
+      
+      SI goapp.RSQL(sdHistoUS,sReq) ALORS
+      
+      	POUR TOUT sdHistoUS
+      		VariableRAZ(stEvt)
+      		
+      		stEvt.dhEvt					= sdHistoUS.Date_Evt
+      		stEvt.nIdUsr				= sdHistoUS.IDScr_Usr
+      		stEvt.sDetail				= sdHistoUS.CMTR
+      		
+      		stEvt.sDateEct_en_chaine	= DateVersChaîne(stEvt.dhEvt..PartieDate) + " " + ...
+      										HeureVersChaîne(stEvt.dhEvt..PartieHeure,"HH:MM:SS")
+      		
+      		oUsr						<- ClUsr.GetObj(stEvt.nIdUsr)
+      		stEvt.sNomUsr				= oUsr.p_sNom
+      		
+      		TableauAjoute(aStListeEvt,stEvt)
+      	FIN
+      	
+      FIN
+      
+      HAnnuleDéclaration(sdHistoUS)
+      
+      
+      renvoyer aStListeEvt
+     type : 458752
+   -
+     name : sNomCleEtrangereDeClasseActu
+     procedure_id : 2254450410106006236
+     type_code : 12
+     code : |1+
+      procédure privée sNomCleEtrangereDeClasseActu():chaine
+      
+      sCle est une chaîne
+      
+      //Récupération du nom de la clé étrangère (dans la table des historiques), correspondant à l'objet en cours
+      SELON objet..Classe
+      	CAS "ClUserStory"
+      		sCle	= Scr_Historique.IDScr_UserStory..Nom
+      	CAS "ClTache"
+      		sCle	= Scr_Historique.IDScr_Tache..Nom
+      	AUTRE CAS
+      		ExceptionDéclenche(1, ChaîneConstruit(...
+      			"La classe %1 n'est pas paramétré pour l'enregistrement des historique.",...
+      			objet..Classe))
+      FIN
+      
+      renvoyer sCle
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1f4964580cfa55ce
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

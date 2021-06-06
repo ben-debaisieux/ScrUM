@@ -1,0 +1,673 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FI_Discussion
+ major_version : 25
+ minor_version : 0
+ type : 8
+ description : ""
+ subtype : 0
+window :
+ name : FI_Discussion
+ identifier : 0x2cd950f70328bc44
+ internal_properties : BQAAAAUAAABnsfWKRLxP/fwXEOfmNXfbQhpGWdlVHtM0+XsJJ6OPQkw9AppiIJbB1KeFJ3PpWq1TcKpEIBmpXmVo/MawlvDEi4lBEYJRtCvfyN9hBw5rMgfFoqG4+WA6cQ+CRByhHOSnALzVxwRz1C1vlZoKsRnPDGEGrGStyvXnKaRow+Q1IHtqafi9KzZk8QC8mnq0Rk7vWvu4EV1bsiQTyROxbC2bqFzLpiPT28tD/Py7Yu8k7tXL31DSohn/2g0lqxc6a33rTdVelyjA+CPn+ktmmtQVdlunvzZO8Ajm1TKyrA0MWHJfgMNsMfJ2Jvcv89WBGJ/xp3aoIGO++b1k96KQrXOD/oYLUbFvDi3g6ExalevFZMkhd47Cd9pd0UN8BMYSM3FtfL5bi1zsPlOpstIrY8bdPdluUCKsfB8cf7Wd+jbEQHLaC/DKjjISOqwrQB5NG3jnT5h6hQ9eaIoe5GDU/qj7gkAG5B1wtGShimrorQcKck48CJCu1IJChDTjGr7zMJ2FF3Mr+3lpASn8QmrcZSdjOPAtW8rarvCQfHhUTtI1hxRbiAsx2eOOYqwYioBwszFoLalZVbY0/rAivm94nL7JDzlqlpptSyXM8Jh0JlHoWyd6bdkpNXO/Qez+IqCdnxHjTuDq/rrZgLcx8wiHgWSXUWFYhID9p5gLoyvZYGqIrry3UEPl5A8pVOhge32fVE5y9g==
+ controls :
+  -
+    name : FI_Discussion
+    identifier : 0x2cd950f70329bc44
+    internal_properties : BQAAAAUAAAA+o+UpQI1BWMy7aSyazQ2Ew2ILzUnif68AAu3M+xuiwK59y7YB+BAc7Y07oCnKMXzhJZPeS/b1Y+zXEPci2fGXliv9V2Ne1qSPi2g5UT+B/Tucnsi62hkfaGS6d4CeNXrO0xMqAakWc+CiTEW1bQ5nRtcArx7bQNvkr67EA1sz6e9Ft7DzsYfid6wlrIs1AbXGdtNJQAAbPpGvscy9yMl3NfjaOERXWxcCFE+5JACNUzzG0esxy8qMNjGUmLl2W+g6KB5N43WC46/oGRPbGcSXFAIcLd6z0N7M6DIC96KQckU00vNn6hMSLDgbSh8/SaVUc774TCrBMZy8jsJg3svYVBvI4/nbxk0EOYCHCyEcqHhc4eFNEID6VAC3/SyHYKEq0FnfmCrt24YKMWJLkqcI7hDbGUEVLKnPlAXZjOp+nqHoXeoRLN8dHbmC34IgvRMy
+    controls :
+     -
+       name : ZR_Messages_UserStory
+       identifier : 0x2cd9511803833ada
+       internal_properties : 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
+       controls :
+        -
+          name : LIB_Utilisateur
+          identifier : 0x2cd95118038f3ada
+          internal_properties : BQAAAAUAAAAhbdpfC6PDyzAoqs79CEi9+TjV3XXzMsaw81qQlyfh1N6PRlUdNrAbEYXak3BxmpUOt8f6HhJN1RDi5stnM5KPyecccm/KCNWH4V9nV+MdAWrIz1L2yMso58BOW7SpAI/iriBeNyZllnf3J3UlhOL13jCs82KFYIu5uNzUw3ukru8zXtl5CS/yiPe116kb/5WMW92E4VPY7DiheQSr50VyAqjFdwQQxAJZzMuLUADNLepjU6N1GPmkJJwFz/l2JGrtsHDCdL03RQsWuz+a6NIYzughYV0UX2T4GYwkMZN7mFhz6gNO5a3H2skYVvtGlLgZzqRmHDRdELaDaZgaGKTAlNGNOOpzG9vvk8uDNtBNPUbewsVanzsS9STegLIt48xNCiqyUhrp0Tg3ihFdRB4ZuRx2+ye5+dB/IPvk
+          type : 3
+          code_elements :
+           type_code : 2
+           p_codes : []
+        -
+          name : LIB_Date
+          identifier : 0x2cd9511803903ada
+          internal_properties : BQAAAAUAAABVaLUViJI1eACncfBVz9xjEoWq9g31DWSQrcqR8Ig7rAN2z52OA66tI24oIL8ULV6xV6wHYB2xGOjkQJ4WjZs63LEUNn7whDkBvA1IHXKuZhHmqcqracvZnMjOFALHPrnw/nFr7sAJSFf9AOzTr+6F7quu5Za2izShByFG2mtD+1NAo58eSn+qcuihugsDEISkPdjkXGxeCnBHjf+LptDDRqr2RHfBRcmF/oiADSfYBl5pfqCCZ4x9cJboGmq5H0OrlIUl1Sh2biX2QEahHe0hzNg8ekrLXA+QA78voja4dxpDBSZPCGw4tiPXFYSpe+3hCOWlt614cWDzGieVQR+XmNPue/TkkZ4AStrvXaO/cSiUUh3+Tg4wMjcqDm0pdeGLrYrgbUOxnjZe9lmn7lQ6RRE4Dw==
+          type : 3
+          code_elements :
+           type_code : 2
+           p_codes : []
+        -
+          name : LIB_Commentaire
+          identifier : 0x2cd9511803913ada
+          internal_properties : BQAAAAUAAABpeB0OWgddnTAhR8B1iVGf6LmagGtRh86zRDrFgSfTkC5xkKj83cGbTnQ5bX+d9+iq4mqlT5nQnBoQN4KvR7PJAEd3sjmPkiZD7vjJygcvqfnNcSspywcW7LdiZPWMDTrb5ccHW918ANyu+GRDiZ9LOf+UfGNzPQJUUVionFI58K+8LJIPIEEeuuOl2yc37rm+daWee7zg93jDVvSW8q3TPOeT3EQYjT/eIKasAKRiORDYO460HzM9pnoeZHfTPLMu45ewuPKK5KKXEJg8TDMq/70XpkmOeIn52WgIgF9VEqdqUhcWZOvjOE/L6PQYCpNrEK/UxoUz2H3p/+9vR5H+M55m2lyHij/jHZMOZsRu2Uew87aOAt3BEf6Jjikxd8/iy9ctOhJXN2r4pbjO6Tuy8agufIVBtYKhcmwmCIv7eWFQFdMU+OXGNOHZkqH1p1f+vRkSPCiLQ3olYlA8ykWH18tiEQ==
+          type : 3
+          code_elements :
+           type_code : 2
+           p_codes : []
+        -
+          name : LIB_IDMessage
+          identifier : 0x2cd9511803923ada
+          internal_properties : BQAAAAUAAAA/yoGBfUaSquIDkTk1Agw4zhS+aW2NBh+xTbIX7ESN4rdEXinl109mayPJ7w5wKimE2C74TLeFQJc1tM57p0mEUi+qVncg7drdyBMKmRZ3Duh6+0V4puUq4GHBPKrGML4TdQ9QY9GFSm/H9ifhJZjaJTSjCwBBqr4ISUod1CQF///Hi3VNXxRFVHdSxt4jikmTSn9lvDGb0h9173u/a0keOxoMYohaNyDVRHMZ0fAFuit7jT4/XElaxPO3cwHDcPOTkkQxQrNGv7PQ7PGblCWYCOWT9hbdkYN0iWfa7TQz/BeyRv6bZOTXooG0/rRCix9a2YtXX6bYPfuTvBTzrq+usUGXNmM9OCQNacfg8bp1DSRC1HFRsGrFQrfG8WLO9jcPVU5ZxyQ3oMU9yNxD9AdyjyIkwoPaOY02xMpBjOs=
+          type : 3
+          code_elements :
+           type_code : 2
+           p_codes : []
+        -
+          name : BTN_Repondre
+          identifier : 0x2cd9511803933ada
+          internal_properties : BQAAAAUAAAD3v9BZDe7a0PIO3pr52x4Bl5EzxxEakAFIsJuym5cA9cJnhCvfkKrhW3XLzGy0VlLsxpDI0u8oPvfCvYtMgqzlf32TpBvU1eNlgvCmZDxm9tBkPokdpqGOHokt/pdAbY1cxSmLiPzNeMj0vD4mgQ+LmdPphHyRqn0lh/aFaWor/XmylwpdYxBww0IDkOM6OsI4vldgd3AtGdK88qVXscod7o438Vqhk+sSkwbcHn0Wl/thbE9SH25E6wh0k2kBw4xDzfTxdfkkfQDXurVz6soiOyXrsvd321e/10eCubIYpOOwmezIoOs5NnmtMDpCyQA61J7M+fjEnEmVil1dLfJqJJj2S3XZLH3gC9tOoTJV78z6B5DN1YvefC5Vbqh1LMkkpJ7VMKjVG0AGMGaqpB6MXByvHeskbkxUm5nKZXUF87Qtb5wQC+FlD4nq2csBMevdVKmNieimXksBE0PzK3ciaIz0LPYYSbmfDDzzG02Kxmh2igkNYGwwk3Ctuev8Lgy0KZ0CAk42lCnUGknbTrVenLEenRWzZ1hf1aVbMENpR3RNlylNrd+BRyOPLhSOEgFksgkbvQiYIBSZvcm1xImHzy0DV+uXnwQhG2bgLKuMRC65e0LIJhrlgd0l+9Sq9MmaIbplvyMOgK0Ty3/lXKbSqOEPb3+70FJu6MPCJU5Wswt1OWwX76gElO6kvE1rtpZ9oTdM/VThs0dz5AhUuxP+3GQ=
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1+
+               
+               nIDParent est un entier = LIB_Id_Parent
+               Ouvre(FEN_Message_Saisie,znID,nIDParent,znType)
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : IMG_fleche
+          identifier : 0x2cd9511803943ada
+          internal_properties : BQAAAAUAAAAGsTvoGaBF8vgDiZIWQGDEd8CmbJ+UyR61/N8P7GYy7xWx2tl1zspj7a9aXMxNUkHEB6Jsp28/g30738aIv0PHkImqo1R+CUNPhsZqp0yyTInb+EZ2uiNI45nira/naNrppSSKELDkV9ggNAYBF+VdcQNfXQurF7cM7LVDfgr21GC9FW4wSLHK06VGTC5JadSCS5O020QBH9lteRu35nmwA09uq7rpU1iuWhwUDxBsc1BSPpyKM0FlC+waNGb/Lfgd7EXjlOFYvZgNKUm1WSYzW4bNBbZj6Nk+4uPo0g9vCBPnA930QvJa3XjMqipvhTWlEBjdLRGOzE5+6wj2LXlgV64aYi6ksQS1hjH9GBvaZsjUJbueWl8eZ/zbazzaVO4bm03VYvoPZHC77JVY7jiXR/cznlpXXnpsOI6VtFyTDbUgyLFkEFyNfF0OVHRiI+2SxX8dnqpGqDGCFU1X17uJw1GSCjZou136rPiPP/Ry8FUXU0p7Cwnm5v+TCarP0bYixsd0tmTEJdtlqQLVGMxON6/SF21+9HjohuO0Rs9OLXPkLP1xYOBpJiwgRtx5W9+Q4cnSRfME6cBq+WrO9LztiqoaCcw4sW8iUxeucsJhWO5nJ5ScbX2GxhC2UuyEvAP/cLI39+atCOQ17W7laCH8FcT8hg/sxFYTCd9rh4+swF/Lasu1ZstUo+0jE/y8i316JK6CDhA2PsJK0LTCgI6L9UederL+Kng1Zm7kO+LXAS3bHKowAlHlr1EXDD/xxxnawBCk87uM2o145vISjT4goYVo8rWllHlqijY07PHPZop4oiSRDiSYrsUZh121tboNFQ==
+          type : 8
+          code_elements :
+           type_code : 8
+           p_codes : []
+        -
+          name : BTN_Lien
+          identifier : 0x2ce3b5a702f2e66c
+          internal_properties : BQAAAAUAAAB22cTeYeEdLwF9KHElmrS8m1kT7+koaa5Aa2ZdD8ngWvE6aWKeKP1BfhXoDvFGp8Qow0RxmKwyztXx5zisjBqR27vFok6xXev5hk3L/hw3UbBSYxe8587ulixdN5yyz4QK5wqaCdAEe7IrPjhkLs9niyvu7mMV3TO8M9+VdavlII5QEKq2grlV3MlCeGQjRlidWAO3vmH+PSUAEjT1HmiAt1Zldu1aZ1FYEjc77eJFl0Ulol1oTayDpYwhW9e75Hg6wcyHFjoonvOdwszYjqkg1qnLHHyNuQVLwBzMjZKRPdvua98jwsKjPVGahGJxxD8XPz3gMpya0WKXD9HrB4WJgFD2KNfos+WanUqc1ZakwBOOWvGkfPoIQi8/+6HK4NGaqsGTW6k1J0Kh6RVfwqxjJzXzQJnNL7FqeXq98wv7JK13fOEchDoT5MKKOeNRPdczdyKrX8NWPkvmkPV+OF6c6+jEdczYPqP6a0g8R7Qa97jg612OYzgvP0dI6odXjLyavo7x9lSJVVT6AYvACfNAKme6yU4IUnkvz2rUifRiTfnUF3S7Bk1qtyhvHfAb521wyp4vLgcQJXiIFUEqX0wzSIkwvgmp0VuA71dfgYr6+kZOAhFe/NCuEsoXB4QrZQLUw2rZYLbtzPWnlnQrU5vypeOa7M/KTQ==
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1+
+               
+               Ouvre(FEN_Message_Image,ZR_Messages_UserStory.LIB_IDMessage)
+               
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : IMG_Image
+          identifier : 0x2ce3bfa60506f1b9
+          internal_properties : BQAAAAUAAAD7kVH/7r7+B1wxri8q2fu+GLGP0ID+xhXhoo1mmcDaSJzs2qY4IzFGH0vyYWIhwu4q7HeqD/FgXoYMvTT+2xlYi5ke7JpW/NXfMTAko0FRsuQS/FndfP1NxlRein/memY2wJr9UKSsmXOJ+yP8JAvS23EYQADW/yeLYgek0K04UqUkO05rFsHwfByGwCfpzSUy6vZCJkrTCF/3tYU8ATDlSV3SasnKxYdimOTlfmrZpglnyuZEisv3hv/80xDB+PPxMJX2ZeMDO/d85LVejCJrleOBDDqbImnn1uSPmPJFJ+TY3dgX/rZeZ8VwqgSxqrBW6L6FTWRTzxIQBF2QfOyi03LJFYfiFPYUIqYgm8oFF3J8VZD5eFFyJbEyGYlrC+Emna+5td/0qFPumy6zfACpE7XQLgY1SgHiQr+XhpX8WSuVO5hdFI2iU84nia5m/oTMBeFCM8aOrk/3UFqX9ok40xYfbtLtkOhVqkDR+gVKq2HMqvD0dhaS+xHs2U3ZpiWlHn7oHwB0Sc8DqRLO4CYTKpkKz4xjEHhLIMgpJo5N1Kz8BiIDQ4HxLwEwJ3qr/GgujBfN6npazn18jCebesN7dXLkiAW29iCMnr4mE1+Eyx6nYjUWa2rhnX15xpItLYiXlFg=
+          type : 8
+          code_elements :
+           type_code : 8
+           p_codes :
+            -
+              code : |1+
+               
+               
+              type : 14
+            -
+              code : |1-
+               Ouvre(FEN_Message_Image,LIB_IDMessage)
+              type : 18
+            -
+              code : |1+
+               
+               
+              type : 31
+        -
+          name : LIB_Id_Parent
+          identifier : 0x2ce546a8018759e5
+          internal_properties : BQAAAAUAAAD/oOHeGEwwoo5z1GBiixuhNZGocof+8AvHv7yYQMyuI3xLioRsWe7yJfppRkF/OTGG8j+nd8c+Bco2TtRH8lb5Cvj4Vpu5iGUgB1Fid+kHz01AbzP4s29NhSmQaAZKDxTPjCKON2PMb+wix4ye/kQEqjH2Y2S8CWqXkDcxj/qvRsDtYva9xpv5S4bJs9MgdNqAp4SI5dLOoQUAsggLCdGH9zJgNGoyV/0kUwJKgRTVfoGkptU8OGOwU+EI8o9AzmqvpzwwNYQxLwGAVbrJjhLJidPgiIDRigfANkiv7nYIWLkNGxeDFUKCR/LBxCqqBCw7vTkizDnBNLwWmcYLR48hFPu4At43n2MDL1Wl52P7FQzSWZUGiIdJjkaO8k6OnxId0fBdl8EtEsSgRtXU8s3SRrf+RlWIYC37JXS3wJAC5QsAMb08J5I1S1HAJJEC+INWinoSP6sUDfJfB9q0+AY=
+          type : 3
+          code_elements :
+           type_code : 2
+           p_codes : []
+       columns :
+        -
+          name : ATT_Utilisateur
+          identifier : 0x2cd9511803843ada
+          internal_properties : BQAAAAUAAABx16u2o7mAvZUZM0GJdqm4a6BlA9MBv69X6mbAELbp4FKbBwH6t2B0L62Hki/DN6+8N7qB+C8jzXRb76AKoxbCLgzNC16g64BxYgk7VWfNXFubg9vcou+iIp0DFH0b8lo4bOZbS80234URwZ6Or338
+          type : 3
+          content :
+           identifier : 0x2f4c039711a6651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_Date
+          identifier : 0x2cd9511803853ada
+          internal_properties : BQAAAAUAAAAGNODjvS/SHiobfL3IpybsstKA1SflBRWkpAbk4znDnZu5/RE7I7amr0I2RAXeJ5uwiJTFlO99kHHkuLOCAXX77feGjiSMSq9Y5T7yx4sGxWqW2liaIhiRdVwEZj9xt2G0jEubknAJDA==
+          type : 3
+          content :
+           identifier : 0x2f4c039711a8651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_Message
+          identifier : 0x2cd9511803863ada
+          internal_properties : BQAAAAUAAABdIuN3GjSetCrP5/gCIz6xfoQCgakhgmmIn0eBNeehC+auL6OlI+UIbDyfSgHsYFcNq2r2+89XeB7ov1vIuZjblDKzA9UiuTcAyydUcVLjadeUHi0H4hhIMFM2WnGuXNldvVSwXaQVvTriE5lOaQ==
+          type : 3
+          content :
+           identifier : 0x2f4c039711aa651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_IDMessage
+          identifier : 0x2cd9511803873ada
+          internal_properties : BQAAAAUAAADP4UMOghHNd8tX/93C8k6OViGOp8JTSBJarxgBP9ZPysh32LbltJeTyyOSTaows0NRynQi3Uo6pROJ2V07TIlLOHjGzRS+QCImCNumszSZBgcgkQo0p3h6NoxxZtPkcScplhsZ4jNNdT8e5kJGSXRvr7hE
+          type : 3
+          content :
+           identifier : 0x2f4c039711ac651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_XUtilisateur
+          identifier : 0x2cd9511803883ada
+          internal_properties : BQAAAAUAAACBMUK6TGUElAn/Pfj6X5w/wv3uys3/Xk/hiFSgLRy46gGqj/PW45Q7NC/3BE5oiXwvBkwsMyVyZEIen4fu7kcSVu9/dOth8TzVs+3e6ziwtDl2tfDt8xeGGhSfw2GgBQ7QUYBsIDrmVVuKN4fixTuOgw==
+          type : 3
+          content :
+           identifier : 0x2f4c039711ae651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_XDate
+          identifier : 0x2cd9511803893ada
+          internal_properties : BQAAAAUAAADFJzIrgfxYeHpIN99qJiNWvqKO2Vw5tjWLRUbIub8tvgrV1RkiDDZ1bPkafeD4UMDlsNHwFa9b/y7Wa12o6aTA8hl9Ol0a8r6/p83+N+G/Gps2Qc7NtgL4ooLplmuvRiqVFpifQS+be2E=
+          type : 3
+          content :
+           identifier : 0x2f4c039711b0651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_XMessage
+          identifier : 0x2cd95118038a3ada
+          internal_properties : BQAAAAUAAAC83r81j1DRI1QqomYn07F1YSaZ2QlvT7i4+a2pCJdPA+SLvuI9iGm0EwikDfkzXMGqt1+3JiZzZMKeHwV88qtKYLe3SkEL47RT6228mWT0AIciWWo/YVE6lHA75qnug/wMVsOCXDsTADbVgnyfOE6jtg==
+          type : 3
+          content :
+           identifier : 0x2f4c039711b2651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_Fleche
+          identifier : 0x2cd95118038b3ada
+          internal_properties : BQAAAAUAAADNCuwEcb2u1ehoWNaMOXqQcobZGDEPxiET4TmSDgoYHbYgWap1ZnF9oB53+9yLoob8b2/pCkEdX12+sgi/w/gnBN8E185rhWYmIaQ5Xicza51y7idm2Yui+/er3ZOmy9pNFYUj+8ftR/sUPA==
+          type : 3
+          content :
+           identifier : 0x2f4c039711b4651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_BTN_Repondre
+          identifier : 0x2cd95118038c3ada
+          internal_properties : BQAAAAUAAAAJOxcprAJUp6yutQp9thW+jpmjgGu6e91f67ekc1YntrvPq+H9HYRJFSpj9mNTDH84uxajkLsYzBrS+/Lc4ImLRlSGqTNSkmuPJ/mF4dIiyZV9ui0fipY798KN3tqNvvyd+qUJAaPtgcwJMLbS
+          type : 3
+          content :
+           identifier : 0x2f4c039711b6651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_taille
+          identifier : 0x2cd95118038e3ada
+          internal_properties : BQAAAAUAAACIykswi5oB2bwENHiDXdthTbb7UbGFs6LM5y8X+J29EwzriO4Vpp3CEy5SG9k5Zk1C+4HXatCDAEnzLD61P4yRC3hwB56WQK1m+GINOsFBh06v7sMQcK6XF9WQb9LXsKMHV1wPwQ7QwfX263mcPEKXig==
+          type : 3
+          content :
+           identifier : 0x2f4c039711b8651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_Image
+          identifier : 0x2ce3aa7401952743
+          internal_properties : BQAAAAUAAAAkssdfmozRyJrQ7vx+Ci/wXyAykR1/lJdTKhWsEZOMhHFsqBzfZAOpfDz41fCglv9BpZSsjlVMLf+kpkIalgyeNalOc449sVxDNrutdS/C8G84bTijv2ila51j5DsWcclip8J1T+fIc6/D9YKogCIn
+          type : 3
+          content :
+           identifier : 0x2f4c039711ba651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_BTN_Voir_image
+          identifier : 0x2ce3b7fb03d0fdef
+          internal_properties : BQAAAAUAAACo0oy0Lsgcrc+YS4LJhe6tUJhVaozsQcXztM5St50tHXfn0fDTdARdmuVlJZEBkUWmEy8a50ifnPWlWYPmCpJd6BvBwagMZYyhzLMI3koXkdN66HHJfYsyWI7DgfNZRYfb7hl/q8fFg+QK66r6d915ma0=
+          type : 3
+          content :
+           identifier : 0x2f4c039711bc651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_XImage
+          identifier : 0x2ce3dee8036c0975
+          internal_properties : BQAAAAUAAACFlWaOUJcC7h/x7fBWO7nI4oJHTKi6sYmOUCk6njn6kOZYlSQVMLseWu+XImN03J5AuWQLlmpdHugq8xK1zW14XNga2G0Pkd6KzOYvjnmu3B5LUhyamuzphRQ7ASUtSt0SXkAqoNTGTXeSN7PW8Rfqfw==
+          type : 3
+          content :
+           identifier : 0x2f4c039711be651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_Id_Parent
+          identifier : 0x2ce546c901c4da6f
+          internal_properties : BQAAAAUAAAAzu103/uvSHujw8bzSqMaM9uVBxa5829+tVq9jiULEDOaU2T9TdgsD60Dlk/3TqJc64aFbnT4UL6PX9yJWy7VGIayueirXOynYtL9XMeM9UcYUlZ9m2DON2FRLk7n9e85AtLrqWxjkMJN+BJuSuigEAhY=
+          type : 3
+          content :
+           identifier : 0x2f4c039711c0651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+        -
+          name : ATT_Image_Visible
+          identifier : 0x2ce6a19407e68c8f
+          internal_properties : BQAAAAUAAADYYjyE3nnpYJZxjolmOzltGpOvdcjjdmLWWj/nQPmxRlyx1pw6M8SJPV1+qo3r2zz7TVRFns3byFgla5GXMqFbUL7R5PqOFCKH7SroMPzynoVIajTRv3lQoLthGI1xudCqRGQ+D1Pt2w7iIXyKxw0pKT0=
+          type : 3
+          content :
+           identifier : 0x2f4c039711c2651e
+           internal_properties : BQAAAAUAAAB7VBvqndCyuGhX7ge6KewHyrIOFb8bXYmNsZ5HClvIhtswde+I4ttopSWvlif2e/RFvf31Wa4SlMvjCHiddxk64bQGzJF99YgwBqFL6k0/4zUOU9sI4Nff4afL92G4gAooDTjqGbYN1Gtr/PQE08P0a2teGKX/EyChsc8ee2nGlHZ8SZ2LxtSN5l/SIViIrm5IZ7yI9sPhPaflSy4oPeBe7w==
+           type : 3
+          code_elements :
+           type_code : 46
+           p_codes : []
+       type : 30
+       code_elements :
+        type_code : 42
+        p_codes :
+         -
+           code : |1+
+            Selon znType
+            	cas 1 
+            		ZoneRepete_MessageUS(znID)
+            	cas 2
+            		ZoneRepete_MessageTache(zniD)	
+            	AUTRE CAS
+            		
+            FIN
+           type : 14
+         -
+           type : 35
+           enabled : false
+         -
+           type : 22
+           enabled : false
+         -
+           type : 24
+           enabled : false
+         -
+           type : 23
+           enabled : false
+         -
+           type : 25
+           enabled : false
+         -
+           type : 230
+           enabled : false
+         -
+           type : 241
+           enabled : false
+         -
+           type : 222
+           enabled : false
+         -
+           type : 223
+           enabled : false
+         -
+           type : 224
+           enabled : false
+     -
+       name : BTN_Nouveau_Message
+       identifier : 0x2ce3c275053de81e
+       internal_properties : BQAAAAUAAADftayfkrgdl29NSWAVRBILdTgDyDWwg8dBIguKqlVGjFZjl/03Yj0ZlV8920lH1LSc4pfAjmJqwlGn8ZkjiixhxDZPuzDgQUPadKk8JxDOj01oVf8HHbOB0hDQf+YOtT8A2Yu0uCICEtQpVMioN5asSD0ARL+/eQyvZdshzuIOfI9c5CLdCeAmboGp4WX826yRlGjhX6LwAhBuVF7pU+AhLbU1B2BGE3WMrDALCU3axQojv1TllMx7FrjtNVrInQYIecFkSJ32VrtT/T/Ytvuy1Fg0S0lv7gIXhKKjXF5oMLI7HmbpgmYVrUGAeih/dFlrwNKOZXBDTm50k+1Si+L4N5ghn1VQblo91htB3EUvgCyI4kZDtHT0wpSVRjjGuOxFsfvuz/d2PXkcuuJO0evaYKqHObreNUlqXwEiwI5Rp+gm2w/zvYEayFxNOXCfa1HejJ60M1+ssZCEqZv4UhoTIk50L4g8h/Ovdg464raVP8fv41BJLiCAguxdYzMf9jGhlcwww6liHoL/1xM7NeirWQsINXfV2nQoHKSJBrcB1+ulgiIQOBWeMoZFn8ULYwu3jE4OCINzpSevJg7kyEtV1lmtlskshGoQucBegOpaeFxDKBFU8vBjpApYop/EQQV/VlTX+9XOtGQw/E+xuYPtxpN0aZVMJOa+TPzWfDhm9JjxoXd71KoW6Ngx6IFTvJNKw29jd+VSxl8ryBr4nXebfxXqpJN178HtIfSGT8EHirJG
+       type : 4
+       code_elements :
+        type_code : 4
+        p_codes :
+         -
+           code : |1-
+            si znType = 2 alors
+            	Ouvre(FEN_Message_Saisie,znID,0,znType)
+            sinon
+            	ouvre(FEN_User_Story_Message_Test,znID)
+            fin
+           type : 18
+         -
+           type : 161
+           enabled : false
+    type : 32
+    code_elements :
+     type_code : 70
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE MaFenêtre(LOCAL znID est un entier, LOCAL znType est un entier)
+      -
+        code : |1-
+         
+        type : 17
+ menu :
+  name : _Menu
+  identifier : 0x2cd950f00325a1a8
+  internal_properties : BQAAAAUAAADiNkh1O6bsUdojdCyc5rvMKOb4KGdCuKthEpeb9YgToXKniNhTa74qqTWW/kn9AHiAwpYRHxIfmwB4rUjWCTsHt96kYeogf6aF/P/qLr5YC+/q/4GecKHBIXzFYdqjswEetQud+3e/nTe5+xoit8ijZM2EBaVaXCH6Yfad
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar : {}
+ code_elements :
+  type_code : 71
+  p_codes : []
+  procedures :
+   -
+     name : ZoneRepete_MessageUS
+     procedure_id : 2078782102764000323
+     type_code : 14
+     code : |1-
+      // Résumé : Rempli la zone répétée avec les commentaires de l'US
+      // Syntaxe :
+      //ZoneRepete_MessageUS (<nIDUS_p> est entier)
+      //
+      // Paramètres :
+      //	nIDUS_p (entier) : <indiquez ici le rôle de nIDUS>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE ZoneRepete_MessageUS(LOCAL nIDUS_p est un entier)
+      
+      //aMessagesFils est un tableau de STR_Message
+      //
+      ////Booleens pour l'affichage du bouton répondre et le trait de séparation 
+      //bRepondre est un booléen
+      //
+      //iImageMessage est une image
+      //
+      //i est un entier
+      //nLigne est un entier
+      //nIDParent est un entier
+      //
+      //sdRechercheMessage est une source de données 
+      //sReq est une chaîne
+      //
+      //sReq = chaineconstruit([
+      //	SELECT 
+      //		Scr_Message.IDScr_Message,
+      //		Scr_Message.DteCreation,
+      //		Scr_Message.CMTR,
+      //		Scr_Message.Image,
+      //		Scr_Usr.Nom
+      //	FROM
+      //		Scr_Message
+      //		INNER JOIN Scr_Usr ON (Scr_Message.IDScr_Usr = Scr_Usr.IDScr_Usr)
+      //	WHERE
+      //		Scr_Message.IDScr_UserStory = %1 AND Scr_Message.IDScr_Message_Parent = 0
+      //	ORDER BY
+      //		Scr_Message.DteCreation DESC
+      //],nIDUS_p)
+      //nTaille est un entier
+      //ZoneRépétéeSupprimeTout(ZR_Messages_UserStory)
+      //
+      //SI goApp.Rsql(sdRechercheMessage,sReq) ALORS
+      //	POUR TOUT sdRechercheMessage
+      //		
+      //		LIB_Utilisateur..X = LIB_Utilisateur..XInitial
+      //		LIB_Date..X = LIB_Date..XInitial
+      //		LIB_Commentaire..X = LIB_Commentaire..XInitial
+      //		nTaille = 1 + ChaîneOccurrence(sdRechercheMessage.CMTR,RC)
+      //		nLigne = ZoneRépétéeAjouteLigne(ZR_Messages_UserStory)
+      //		
+      //		ZR_Messages_UserStory[nLigne]..Hauteur = ZR_Messages_UserStory[nLigne]..Hauteur + (nTaille * 15)
+      //		
+      //		ZR_Messages_UserStory[nLigne].ATT_Utilisateur = "De : " +  sdRechercheMessage.Nom
+      //		ZR_Messages_UserStory[nLigne].ATT_Date = "Le : " + DateVersChaîne(sdRechercheMessage.DteCreation) 
+      //		ZR_Messages_UserStory[nLigne].ATT_Message = sdRechercheMessage.CMTR
+      //		ZR_Messages_UserStory[nLigne].ATT_IDMessage = sdRechercheMessage.IDScr_Message
+      //		ZR_Messages_UserStory[nLigne].ATT_XUtilisateur = LIB_Utilisateur..XInitial
+      //		ZR_Messages_UserStory[nLigne].ATT_XDate = LIB_Date..XInitial
+      //		ZR_Messages_UserStory[nLigne].ATT_XMessage = LIB_Commentaire..XInitial
+      //		ZR_Messages_UserStory[nLigne].ATT_Fleche = Faux
+      //		ZR_Messages_UserStory[nLigne].ATT_BTN_Repondre = Faux
+      //		ZR_Messages_UserStory[nLigne].ATT_taille = nTaille*15
+      //		ZR_Messages_UserStory[nLigne].ATT_Id_Parent = sdRechercheMessage.IDScr_Message
+      //		
+      //		
+      //		iImageMessage = sdRechercheMessage.Image
+      //		
+      //		SI iImageMessage.Valide =Faux ALORS
+      //			ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Faux
+      //			
+      //		SINON
+      //			ZR_Messages_UserStory[nLigne].ATT_Image = iImageMessage
+      //			ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Vrai
+      //		FIN
+      //		
+      //		nIDParent = sdRechercheMessage.IDScr_Message
+      //		aMessagesFils = COL_Scrum.Message_Fils(nIDParent)
+      //		
+      //		SI TableauOccurrence(aMessagesFils) > 0 ALORS
+      //			POUR i = 1 _À_ TableauOccurrence(aMessagesFils)
+      //				
+      //				SI i = TableauOccurrence(aMessagesFils) ALORS
+      //					bRepondre = Vrai
+      //				SINON
+      //					bRepondre = Faux
+      //				FIN
+      //				
+      //				nTaille = 1 + ChaîneOccurrence(aMessagesFils[i].sCMTR,RC)
+      //				nLigne = ZoneRépétéeAjouteLigne(ZR_Messages_UserStory)
+      //				ZR_Messages_UserStory[nLigne]..Hauteur = ZR_Messages_UserStory[nLigne]..Hauteur + (nTaille * 15)
+      //				
+      //				ZR_Messages_UserStory[nLigne].ATT_Utilisateur = "De : " + aMessagesFils[i].sNomUtilisateur
+      //				ZR_Messages_UserStory[nLigne].ATT_Date = "Le : " + DateVersChaîne(aMessagesFils[i].dDteCreation) 
+      //				ZR_Messages_UserStory[nLigne].ATT_Message = aMessagesFils[i].sCMTR
+      //				ZR_Messages_UserStory[nLigne].ATT_IDMessage = aMessagesFils[i].nIDMessage
+      //				ZR_Messages_UserStory[nLigne].ATT_XUtilisateur = LIB_Utilisateur..XInitial + 30
+      //				ZR_Messages_UserStory[nLigne].ATT_XDate = LIB_Date..XInitial + 30
+      //				ZR_Messages_UserStory[nLigne].ATT_XMessage = LIB_Commentaire..XInitial + 30
+      //				ZR_Messages_UserStory[nLigne].ATT_Fleche = Vrai
+      //				ZR_Messages_UserStory[nLigne].ATT_BTN_Repondre = bRepondre
+      //				ZR_Messages_UserStory[nLigne].ATT_taille = nTaille*15
+      //				ZR_Messages_UserStory[nLigne].ATT_Id_Parent = nIDParent
+      //				
+      //				SI aMessagesFils[i].iImage.Valide = Faux ALORS
+      //					ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Faux
+      //				SINON
+      //					
+      //					ZR_Messages_UserStory[nLigne].ATT_Image = aMessagesFils[i].iImage
+      //					ZR_Messages_UserStory[nLigne].ATT_XImage = IMG_Image..XInitial + 30
+      //					ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Vrai
+      //				FIN
+      //			FIN
+      //		SINON		
+      //			//ZoneRépétéeModifieLigne(ZR_Messages_UserStory,nLigne,"De : " +  sdRechercheMessage.Nom,"Le : " + DateVersChaîne(sdRechercheMessage.DteCreation) ,sdRechercheMessage.CMTR,sdRechercheMessage.IDScr_Message, LIB_Utilisateur..XInitial,LIB_Date..XInitial,LIB_Commentaire..XInitial,Faux,Vrai)
+      //			ZR_Messages_UserStory[nLigne].ATT_BTN_Repondre = Vrai
+      //		FIN
+      //	FIN
+      //FIN
+      //
+      //
+      //HAnnuleDéclaration(sdRechercheMessage)
+     type : 458752
+   -
+     name : ZoneRepete_MessageTache
+     procedure_id : 2078784211593040427
+     type_code : 14
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZoneRepete_MessageTache (<nIDTache_p> est entier)
+      //
+      // Paramètres :
+      //	nIDTache_p (entier) : <indiquez ici le rôle de nIDTache_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE ZoneRepete_MessageTache(LOCAL nIDTache_p est un entier)
+      //
+      //bRepondre est un booléen
+      //aMessagesFils est un tableau de STR_Message
+      //
+      //iImageMessage est une image
+      //i est un entier
+      //nLigne est un entier
+      //nIDParent est un entier
+      ////nLigneReponse est un entier
+      //
+      //sdRechercheMessage est une source de données 
+      //sReq est une chaîne
+      //
+      //sReq = ChaîneConstruit([
+      //	SELECT 
+      //		Scr_Message.IDScr_Message,
+      //		Scr_Message.DteCreation,
+      //		Scr_Message.CMTR,
+      //		Scr_Message.Image,
+      //		Scr_Usr.Nom
+      //	
+      //	FROM Scr_Message
+      //	INNER JOIN Scr_Usr ON (Scr_Message.IDScr_Usr = Scr_Usr.IDScr_Usr)
+      //	
+      //	WHERE
+      //		Scr_Message.IDScr_Tache = %1 AND Scr_Message.IDScr_Message_Parent = 0
+      //	
+      //	ORDER BY Scr_Message.DteCreation DESC
+      //],nIDTache_p)
+      //nTaille est un entier
+      //ZoneRépétéeSupprimeTout(ZR_Messages_UserStory)
+      //
+      //SI goApp.Rsql(sdRechercheMessage,sReq) ALORS
+      //	POUR TOUT sdRechercheMessage
+      //		
+      //		LIB_Utilisateur..X = LIB_Utilisateur..XInitial
+      //		LIB_Date..X = LIB_Date..XInitial
+      //		LIB_Commentaire..X = LIB_Commentaire..XInitial
+      //		nTaille = 1 + ChaîneOccurrence(sdRechercheMessage.CMTR,RC)
+      //		nLigne = ZoneRépétéeAjouteLigne(ZR_Messages_UserStory)
+      //		
+      //		ZR_Messages_UserStory[nLigne]..Hauteur = ZR_Messages_UserStory[nLigne]..Hauteur + (nTaille * 15)
+      //		
+      //		ZR_Messages_UserStory[nLigne].ATT_Utilisateur = "De : " +  sdRechercheMessage.Nom
+      //		ZR_Messages_UserStory[nLigne].ATT_Date = "Le : " + DateVersChaîne(sdRechercheMessage.DteCreation) 
+      //		ZR_Messages_UserStory[nLigne].ATT_Message = sdRechercheMessage.CMTR
+      //		ZR_Messages_UserStory[nLigne].ATT_IDMessage = sdRechercheMessage.IDScr_Message
+      //		ZR_Messages_UserStory[nLigne].ATT_XUtilisateur = LIB_Utilisateur..XInitial
+      //		ZR_Messages_UserStory[nLigne].ATT_XDate = LIB_Date..XInitial
+      //		ZR_Messages_UserStory[nLigne].ATT_XMessage = LIB_Commentaire..XInitial
+      //		ZR_Messages_UserStory[nLigne].ATT_Fleche = Faux
+      //		ZR_Messages_UserStory[nLigne].ATT_BTN_Repondre = Faux
+      //		ZR_Messages_UserStory[nLigne].ATT_taille = nTaille*15
+      //		ZR_Messages_UserStory[nLigne].ATT_Id_Parent = sdRechercheMessage.IDScr_Message
+      //		
+      //		
+      //		iImageMessage = sdRechercheMessage.Image
+      //		
+      //		SI iImageMessage.Valide =faux ALORS
+      //			ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Faux
+      //			
+      //		SINON
+      //			ZR_Messages_UserStory[nLigne].ATT_Image = iImageMessage
+      //			ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Vrai
+      //		FIN
+      //		
+      //		nIDParent = sdRechercheMessage.IDScr_Message
+      //		aMessagesFils = COL_Scrum.Message_Fils(nIDParent)
+      //		
+      //		SI TableauOccurrence(aMessagesFils) > 0 ALORS
+      //			POUR i = 1 _À_ TableauOccurrence(aMessagesFils)
+      //				
+      //				SI i = TableauOccurrence(aMessagesFils) ALORS
+      //					bRepondre = Vrai
+      //				SINON
+      //					bRepondre = Faux
+      //				FIN
+      //				
+      //				nTaille = 1 + ChaîneOccurrence(aMessagesFils[i].sCMTR,RC)
+      //				nLigne = ZoneRépétéeAjouteLigne(ZR_Messages_UserStory)
+      //				ZR_Messages_UserStory[nLigne]..Hauteur = ZR_Messages_UserStory[nLigne]..Hauteur + (nTaille * 15)
+      //				
+      //				ZR_Messages_UserStory[nLigne].ATT_Utilisateur = "De : " + aMessagesFils[i].sNomUtilisateur
+      //				ZR_Messages_UserStory[nLigne].ATT_Date = "Le : " + DateVersChaîne(aMessagesFils[i].dDteCreation) 
+      //				ZR_Messages_UserStory[nLigne].ATT_Message = aMessagesFils[i].sCMTR
+      //				ZR_Messages_UserStory[nLigne].ATT_IDMessage = aMessagesFils[i].nIDMessage
+      //				ZR_Messages_UserStory[nLigne].ATT_XUtilisateur = LIB_Utilisateur..XInitial + 30
+      //				ZR_Messages_UserStory[nLigne].ATT_XDate = LIB_Date..XInitial + 30
+      //				ZR_Messages_UserStory[nLigne].ATT_XMessage = LIB_Commentaire..XInitial + 30
+      //				ZR_Messages_UserStory[nLigne].ATT_Fleche = Vrai
+      //				ZR_Messages_UserStory[nLigne].ATT_BTN_Repondre = bRepondre
+      //				ZR_Messages_UserStory[nLigne].ATT_taille = nTaille*15
+      //				ZR_Messages_UserStory[nLigne].ATT_Id_Parent = nIDParent
+      //				
+      //				SI aMessagesFils[i].iImage.Valide = faux ALORS
+      //					ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Faux
+      //				SINON
+      //					
+      //					ZR_Messages_UserStory[nLigne].ATT_Image = aMessagesFils[i].iImage
+      //					ZR_Messages_UserStory[nLigne].ATT_XImage = IMG_Image..XInitial + 30
+      //					ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Vrai
+      //				FIN
+      //			FIN
+      //		SINON		
+      //			//ZoneRépétéeModifieLigne(ZR_Messages_UserStory,nLigne,"De : " +  sdRechercheMessage.Nom,"Le : " + DateVersChaîne(sdRechercheMessage.DteCreation) ,sdRechercheMessage.CMTR,sdRechercheMessage.IDScr_Message, LIB_Utilisateur..XInitial,LIB_Date..XInitial,LIB_Commentaire..XInitial,Faux,Vrai)
+      //			ZR_Messages_UserStory[nLigne].ATT_BTN_Repondre = Vrai
+      //		FIN
+      //	FIN
+      //FIN
+      //
+      //
+      //HAnnuleDéclaration(sdRechercheMessage)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : FI_SansNom1
+resources :
+ string_res :
+  identifier : 0x1cd950f000afa1a8
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BQAAAAUAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

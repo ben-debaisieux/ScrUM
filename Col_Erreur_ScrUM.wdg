@@ -1,0 +1,338 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : Col_Erreur_ScrUM
+ major_version : 25
+ minor_version : 0
+ type : 7
+ description : ""
+ subtype : 0
+procedure_set :
+ identifier : 0x1d70bb4a058e2d38
+ internal_properties : BQAAAAUAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ code_elements :
+  type_code : 31
+  p_codes :
+   -
+     code : |1-
+      
+      // Collection de procédure partagée
+      
+      constante
+      	// Différents niveaux pour les erreurs
+      	cst_NiveauErreur_Message = 1 
+      	cst_NiveauErreur_Debug = 2
+      	cst_NiveauErreur_Erreur = 3
+      	cst_NiveauErreur_Critique = 4
+      	cst_NiveauErreur_Log = 5
+      	
+      //	//Groupements d'erreurs
+      //	cst_GoupeErreur_BaseLog = "Base logistique"
+      //	cst_GoupeErreur_Inventaire = "Inventaire"
+      //	cst_GoupeErreur_Suivi_Exploitation = "Suivi exploitation"
+      //	cst_GoupeErreur_Facturation = "Facturation"
+      //	cst_GoupeErreur_Cerebro = "Cerebro"
+      //	cst_GoupeErreur_PackMetre = "Pack Métré"
+      //	cst_GroupeErreur_ManoMano = "Mano Mano"
+      fin
+      gStErreur_precedente est un WS_Gestion_Erreur.STR_Erreur // Structure en Xml
+      
+      //Str_PackMetre_Interface_Erreur est une structure
+      //	sNumArticle est une chaîne
+      //	sNomArticle est une chaine
+      //	sNomAgence est une chaine
+      //	sMessageErreur est une chaîne
+      //FIN
+      
+      //gsErreur_TRACEERR est une chaine			// Conservé pour compatibilité avec ancienne Erreur 
+     type : 720896
+  procedures :
+   -
+     name : Recuperation_Fichier_Erreur_Local
+     procedure_id : 2121401351086746936
+     type_code : 15
+     code : |1-
+      PROCEDURE Recuperation_Fichier_Erreur_Local()
+      
+      //récupération d'une erreur sur un problème de connexion
+      sUn_fichier_err est une chaine = ""
+      liste_fichier_err est une chaine = flistefichier(fExtraitChemin(ExeInfo(exeNom),fDisque+fRépertoire+fFichier)+"_*.err",frNonRécursif)
+      
+      sMessage_erreur est une chaine
+      
+      POUR TOUTE CHAÎNE un_fichier DE liste_fichier_err SEPAREE PAR RC
+      	sMessage_erreur = fChargeTexte(un_fichier)
+      	
+      	Erreur_WebService(sMessage_erreur,cst_NiveauErreur_Erreur,"",Faux,Vrai)
+      	
+      	si pas fSupprime(un_fichier) alors
+      		// si pas de suppression par manque de droit, on affiche pas l'erreur (il sera supprimé une autre fois)
+      		//Col_Erreur.MsgErreur("Erreur suppression fichier :"+sMessage_erreur)	
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : Erreur_WebService
+     procedure_id : 2121401351086812472
+     type_code : 15
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Erreur_WebService (<sMessage_Erreur_p> est chaîne, <Niveau_Erreur_P> est entier [, <sRegroupement_P> est chaîne [, <bRecupImage_p> est booléen [, <bRecupFicherLocal_p> est booléen]]])
+      //
+      // Paramètres :
+      //	sMessage_Erreur_p (chaîne ANSI) : <indiquez ici le rôle de Message_Erreur_p>
+      //	Niveau_Erreur_P (entier) : <indiquez ici le rôle de Niveau_Erreur_P>
+      //	sRegroupement_P (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de bAffichage_erreur>
+      //	bRecupImage_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bRecupImage_p>
+      //	bRecupFicherLocal_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bRecupFicherLocal_p>
+      // Valeur de retour :
+      // 	xsdEntité : // 	Aucune
+      
+      PROCEDURE Erreur_WebService(LOCAL sMessage_Erreur_p est une chaîne,LOCAL Niveau_Erreur_P est un entier, sRegroupement_P est une chaîne = "", LOCAL bRecupImage_p est un booleen = faux,LOCAL bRecupFicherLocal_p est un booleen = faux)
+      
+      stErreur_Specifique est un WS_Gestion_Erreur.STR_Erreur
+      stReponse_Webservice est un WS_Gestion_Erreur.Str_REPONSE
+      
+      sPile_Appel_local est un chaîne
+      ImageMemoire est une Image, utile
+      
+      
+      stErreur_Specifique.ID_Traceerr = 0 // ne sert que lorsque de la récupération des erreurs pour l'analyse
+      
+      stErreur_Specifique.dDATE_Erreur = DateHeureSys()
+      
+      stErreur_Specifique.nNIV_Erreur = Niveau_Erreur_P
+      stErreur_Specifique.sLIB_ERREUR = sMessage_Erreur_p
+      
+      
+      stErreur_Specifique.sMessage_erreur = "" // Paramètre de sortie lors de la récupération des erreurs pour l'analyse
+      stErreur_Specifique.sNOM_Config = ProjetInfo(piConfiguration)
+      
+      SI PAS EnModeService() ET PAS EnModeWebservice() ALORS
+      	stErreur_Specifique.sNOM_Fenetre_Erreur = FenEnCours()
+      FIN
+      
+      stErreur_Specifique.sNOM_Regroupement = sRegroupement_P
+      stErreur_Specifique.sNUM_Version = ExeInfo(exeVersion)
+      
+      quand exception dans
+      	sPile_Appel_local = dbgInfo(dbgPile)
+      faire
+      	sPile_Appel_local = ""
+      fin
+      stErreur_Specifique.sPILE_Appel = sPile_Appel_local
+      
+      // Enregistrement de l'image de l'écran	
+      SI bRecupImage_p = Vrai ALORS
+      	<COMPILE SI TypeConfiguration=Android>
+      	<SINON>
+      		ImageMemoire = dCopieImageEcran()
+      		stErreur_Specifique.IMG_Erreur = dSauveImageJPEG(ImageMemoire,enMémoire)
+      	<FIN>
+      FIN
+      
+      // Sauvegarde de l'erreur 
+      gStErreur_precedente = stErreur_Specifique
+      
+      stReponse_Webservice = WS_Gestion_Erreur.WS_Enregistre_Erreur(stErreur_Specifique)
+      
+      SI stReponse_Webservice.CODE_REPONSE <> cstReponseWS_Ok ALORS
+      	// Enregistrement de l'erreur dans un fichier texte en attente d'un enregistrement local de l'erreur (sauf si on essaie d'enregistrer un fichier local)	
+      	si pas bRecupFicherLocal_p alors
+      		Enregistrement_Fichier_Erreur(sMessage_Erreur_p)
+      	FIN
+      FIN
+      
+      RENVOYER stReponse_Webservice.CODE_REPONSE
+     type : 458752
+   -
+     name : Enregistrement_Fichier_Erreur
+     procedure_id : 2121401351086878008
+     type_code : 15
+     code : |1+
+      // Résumé :  Enregistrement de l'erreur dans un fichier texte en attente d'un enregistrement local de l'erreur (sauf si on essaie d'enregistrer un fichier local)	
+      // Syntaxe :
+      //Enregistrement_Fichier_Erreur (<sMessage_Erreur_p> est chaîne [, <nSType_Erreur> est entier])
+      //
+      // Paramètres :
+      //	sMessage_Erreur_p (chaîne ANSI) : <indiquez ici le rôle de sMessage_Erreur_p>
+      //	nSType_Erreur (entier - valeur par défaut=3) : <indiquez ici le rôle de nSType_Erreur>
+      // Valeur de retour :
+      // 	Aucune
+      PROCEDURE Enregistrement_Fichier_Erreur(LOCAL sMessage_Erreur_p est une chaine,nSType_Erreur est un entier = cst_NiveauErreur_Erreur)
+      
+      nSType_Erreur_Local est un entier = nSType_Erreur
+      
+      
+      sNom_Fic est une chaîne = fExtraitChemin(ExeInfo(exeNom),fDisque+fRépertoire+fFichier)+"_"+DateSys()+"_"+HeureSys()+".err"	
+      	
+      nf est un entier = fOuvre(sNom_Fic,foCréation)
+      SI nf<>-1 ALORS
+      	fEcritLigne(nf,"##"+ProjetInfo(piConfiguration)+"## "+sMessage_Erreur_p)
+      	fEcritLigne(nf,DateVersChaîne(DateSys())+" "+HeureVersChaîne(HeureSys))
+      	fEcritLigne(nf,"Serveur/Poste : "+NetAdresseIP+";"+goapp.m_oUsrCnx.p_sLogin_AD+";"+SysEnvironnement("USERNAME"))
+      	
+      	fFerme(nf)
+      FIN
+      	
+      RENVOYER sNom_Fic
+     type : 458752
+   -
+     name : MsgErreur
+     procedure_id : 2121401351086943544
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //MsgErreur (<sMessage_P> est chaîne [, <sRegroupement_P> est chaîne [, <bImg_P> est booléen]])
+      //
+      // Paramètres :
+      //	sMessage_P (chaîne ANSI) :<indiquez ici le rôle de sMessage_P>
+      //	sRegroupement_P (chaîne ANSI - valeur par défaut="") :<indiquez ici le rôle de sRegroupement_P>
+      //	bImg_P (booléen - valeur par défaut=0) :<indiquez ici le rôle de bImg_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE MsgErreur(sMessage_P est une chaîne, sRegroupement_P est une chaîne = "", bImg_P est un booléen = faux)
+      
+      sInfoErreurComplémentaire est une chaîne = sMessage_P
+      
+      //On complète les infos d'erreur qu'on trace dans la base de données.
+      si HErreurInfo() <> "" ALORS
+      	sInfoErreurComplémentaire += [rc + rc] + "Erreur hyper file : " + HErreurInfo(hErrComplet)
+      FIN
+      SI ExceptionInfo(errNumEnr) <> 0 ALORS
+      	sInfoErreurComplémentaire += [RC + RC] + "Erreur exception : " + ExceptionInfo(errComplet)
+      FIN
+      SI ErreurInfo(errNumEnr) <> 0 ALORS
+      	sInfoErreurComplémentaire += [RC + RC] + "Erreur : " + Erreurinfo(errComplet)
+      FIN
+      
+      //On mémorise l'erreur
+      Erreur_WebService(sInfoErreurComplémentaire,cst_NiveauErreur_Erreur,sRegroupement_P,bImg_P)
+      
+     type : 458752
+   -
+     name : MsgInfo
+     procedure_id : 2121401351087009080
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //MsgInfo (<sMessage_P> est chaîne [, <sRegroupement_P> est chaîne [, <bImg_P> est booléen [, <bAfficheMessage_P> est booléen]]])
+      //
+      // Paramètres :
+      //	sMessage_P (chaîne ANSI) : Message à écrire dans le WS
+      //	sRegroupement_P (chaîne ANSI - valeur par défaut="") : Chaine permettant de rechercher les logs par "thème"
+      //	bImg_P (booléen - valeur par défaut=0) : 
+      //	bAfficheMessage_P (booléen - valeur par défaut=1) : Un message d'info apparaît à l'écran ?
+      // Valeur de retour :
+      // 	Aucune
+      
+      PROCEDURE MsgInfo(sMessage_P est une chaîne, sRegroupement_P est une chaîne = "", bImg_P est un booléen = faux, bAfficheMessage_P est un booléen <utile> = vrai)
+      
+      //ON mémorise l'erreur
+      Erreur_WebService(sMessage_P,cst_NiveauErreur_Message,sRegroupement_P,bImg_P)
+      
+      //Affichage de l'erreur à l'utilisateur.
+      si bAfficheMessage_P ALORS
+      	// Délai de 5 minutes
+      	ErreurAvecDélai(30000,sMessage_P)  
+      FIN
+      
+     type : 458752
+   -
+     name : MsgLog
+     procedure_id : 2121401351087074616
+     type_code : 15
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //MsgLog (<sMessage_P> est chaîne [, <sRegroupement_P> est chaîne [, <bImg_P> est booléen [, <bAffichageLog_P> est booléen]]])
+      //
+      // Paramètres :
+      //	sMessage_P (chaîne ANSI) :<indiquez ici le rôle de sMessage_P>
+      //	sRegroupement_P (chaîne ANSI - valeur par défaut="") :<indiquez ici le rôle de sRegroupement_P>
+      //	bImg_P (booléen - valeur par défaut=0) :<indiquez ici le rôle de bImg_P>
+      // 	bAffichageLog_P (booléen - valeur par défaut=1) : <indiquez ici le rôle de bAffichageLog_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	sMessage_P (chaîne ANSI) :<indiquez ici le rôle de sMessage_P>
+      //	sRegroupement_P (chaîne ANSI - valeur par défaut="") :<indiquez ici le rôle de sRegroupement_P>
+      //	bImg_P (booléen - valeur par défaut=0) :<indiquez ici le rôle de bImg_P>
+      PROCEDURE MsgLog(sMessage_P est une chaîne, sRegroupement_P est une chaîne = "", bImg_P est un booléen = faux, bAffichageLog_P est un booleen = vrai)
+      
+      //ON mémorise l'erreur
+      Erreur_WebService(sMessage_P,cst_NiveauErreur_log,sRegroupement_P,bImg_P)
+      
+      //Affichage de l'erreur à l'utilisateur.
+      si bAffichageLog_P = vrai alors 
+      	InfoAvecDélai(30000,sMessage_P) 
+      FIN
+     type : 458752
+   -
+     name : Erreur_Pistolet
+     procedure_id : 2121401351087140152
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Erreur_Pistolet (<sMessage_Erreur_p> est chaîne [, <nNiveau_Erreur_P> est entier])
+      //
+      // Paramètres :
+      //	sMessage_Erreur_p (chaîne ANSI) : <indiquez ici le rôle de sMessage_Erreur_p>
+      // 	nNiveau_Erreur_P (entier - valeur par défaut=3) : <indiquez ici le rôle de nNiveau_Erreur_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      
+      PROCEDURE Erreur_Pistolet(LOCAL sMessage_Erreur_p est une chaîne, LOCAL nNiveau_Erreur_P est un entier = cst_NiveauErreur_Erreur)
+      
+      //On complète les infos d'erreur qu'on trace dans la base de données.
+      <compile si TypeConfiguration<>Android>
+      	SI HErreurInfo(hErrNumEnr) <> 0 ALORS
+      		sMessage_Erreur_p += [RC + RC] + "Erreur hyper file : " + HErreurInfo(hErrComplet)
+      	FIN
+      <fin>
+      
+      SI ExceptionInfo(errNumEnr) <> 0 ALORS
+      	sMessage_Erreur_p += [RC + RC] + "Erreur exception : " + ExceptionInfo(errComplet)
+      FIN
+      SI ErreurInfo(errNumEnr) <> 0 ALORS
+      	sMessage_Erreur_p += [RC + RC] + "Erreur : " + ErreurInfo(errComplet)
+      FIN
+      
+      Erreur_WebService( sMessage_Erreur_p, nNiveau_Erreur_P)
+     type : 458752
+   -
+     name : ExceptionDéclenche
+     procedure_id : 2254767619002474688
+     type_code : 15
+     code : |1+
+      procédure ExceptionDéclenche(nNum_p Est un entier, sMessage_P est une chaine)
+      
+      //si EnModeTestAutomatique() alors stop
+      STOP
+      wl.ExceptionDéclenche(nNum_p, sMessage_P)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : COL_SansNom1
+resources :
+ string_res :
+  identifier : 0x17e2450a11eb3e72
+  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
