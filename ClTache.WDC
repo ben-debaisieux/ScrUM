@@ -2,16 +2,16 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClTache
- major_version : 25
+ major_version : 26
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x1e85e352228e3dbc
- internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
-  internal_properties : BQAAAAUAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  internal_properties : BgAAAAYAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
   type_code : 10
   p_codes :
    -
@@ -77,7 +77,7 @@ class :
      name : Constructeur
      procedure_id : 2199413934947057084
      type_code : 27
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //Constructeur ( [<nId_P> est entier])
@@ -116,19 +116,19 @@ class :
       
       SI PAS Scr_Tache.IDScr_Usr_createur..Null ALORS
       	:m_ousr_createur			<- ClUsr.GetObj(Scr_Tache.IDScr_Usr_createur)
-      //	:m_ousr_createur			<- allouer un ClUsr(Scr_Tache.IDScr_Usr_createur)
       FIN
       
       SI PAS Scr_Tache.IDScr_UserStory..Null ALORS
       	:m_oUserStoryParent			<- ClUserStory.GetObj(Scr_Tache.IDScr_UserStory)
-      //	m_oUserStoryParent			<- allouer un ClUserStory(Scr_Tache.IDScr_UserStory)
       FIN
       
       SI PAS Scr_Tache.IDScr_Usr_Dev..Null ALORS
       	:m_oUsr_Dev					<- ClUsr.GetObj(Scr_Tache.IDScr_Usr_Dev)
-      //	:m_oUsr_Dev					<- allouer un ClUsr(Scr_Tache.IDScr_Usr_Dev)
       FIN
       
+      si :m_nStatut = 0 ALORS
+      	:m_nStatut = :get_staut_tache()
+      FIN
      type : 589824
    -
      name : Destructeur
@@ -672,6 +672,7 @@ class :
       sinon
       	si :m_bAnnule ALORS
       		nRetour = ::cstStatut_Annulee
+      	sinon
       		si :bCotationAFaire() ALORS
       			nRetour = ::cstStatut_a_coter
       		sinon
@@ -816,6 +817,38 @@ class :
       renvoyer (:m_nNum_Sprint_Fin <> 0 et :m_bEstRealise)
       
      type : 458752
+   -
+     name : sLibDeStatut
+     procedure_id : 1218044371492447721
+     type_code : 12
+     code : |1-
+      procédure sLibDeStatut():chaine
+      
+      sRetour est une chaîne 
+      
+      selon :m_nStatut
+      	
+      	cas ::cstStatut_Brouillon
+      		sRetour = "Brouillon"
+      	CAS ::cstStatut_a_coter
+      		sRetour = "A coter"
+      	CAS ::cstStatut_a_faire
+      		sRetour = "A faire"
+      	cas ::cstStatut_en_cours
+      		sRetour = "En cours"
+      	CAS ::cstStatut_realise
+      		sRetour = "Réalisé"
+      	CAS ::cstStatut_Annulee
+      		sRetour = "Annulée"
+      	CAS ::cstStatut_Suspendu
+      		sRetour = "Suspendue"
+      	AUTRE CAS
+      		ExceptionDéclenche(1, "Statut non prévu")
+      FIN
+      
+      
+      renvoyer sRetour
+     type : 458752
   properties :
    -
      name : p_oUsr_Dev
@@ -865,10 +898,13 @@ class :
          renvoyer :m_oUsr_createur
         type : 1966080
       -
-        code : |1-
+        code : |1+
          procédure publique p_oUsr_createur(oValeur est ClUsr)
          
-         :m_oUsr_createur <- oValeur
+         si :m_oUsr_createur.Get_IdUnique() <> oValeur.Get_IdUnique() ALORS
+         	:EstModif()
+         	:m_oUsr_createur <- oValeur
+         FIN
         type : 2031616
      template_refs : []
    -
@@ -885,9 +921,13 @@ class :
       -
         code : |1-
          procédure publique p_bAnnule(bValeur est un booléen)
-         :EstModif()
          
-         :m_bAnnule=bValeur
+         si :m_bAnnule <> bValeur alors
+         	:EstModif()
+         	
+         	:m_bAnnule = bValeur
+         	:m_nStatut = ::cstStatut_Annulee
+         fin
         type : 2031616
      template_refs : []
    -
@@ -904,9 +944,13 @@ class :
       -
         code : |1-
          procédure publique p_bBrouillon(bValeur est un booléen)
-         :EstModif()
          
-         :m_bBrouillon=bValeur
+         si :m_bBrouillon <> bValeur alors
+         	:EstModif()
+         	
+         	:m_bBrouillon = bValeur
+         	:m_nStatut = ::cstStatut_Annulee
+         fin
         type : 2031616
      template_refs : []
    -
@@ -923,9 +967,13 @@ class :
       -
         code : |1-
          procédure publique p_bEstRealise(bValeur est un booléen)
-         :EstModif()
          
-         :m_bEstRealise=bValeur
+         si :m_bEstRealise <> bValeur alors
+         	:EstModif()
+         	
+         	:m_bEstRealise = bValeur
+         	:m_nStatut = ::cstStatut_Annulee
+         fin
         type : 2031616
      template_refs : []
    -
@@ -942,9 +990,12 @@ class :
       -
         code : |1-
          procédure publique p_bTache_tech(bValeur est un booléen)
-         :EstModif()
          
-         :m_bTache_tech=bValeur
+         si :m_bTache_tech <> bValeur alors
+         	:EstModif()
+         	
+         	:m_bTache_tech = bValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -961,9 +1012,12 @@ class :
       -
         code : |1-
          procédure publique p_nNum_Sprint_Creation(nValeur est un entier)
-         :EstModif()
          
-         :m_nNum_Sprint_Creation=nValeur
+         si :m_nNum_Sprint_Creation <> nValeur alors
+         	:EstModif()
+         	
+         	:m_nNum_Sprint_Creation = nValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -980,9 +1034,12 @@ class :
       -
         code : |1-
          procédure publique p_nNum_Sprint_Demarrage(nValeur est un entier)
-         :EstModif()
          
-         :m_nNum_Sprint_Demarrage=nValeur
+         si :m_nNum_Sprint_Demarrage <> nValeur alors
+         	:EstModif()
+         	
+         	:m_nNum_Sprint_Demarrage=nValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -999,9 +1056,12 @@ class :
       -
         code : |1-
          procédure publique p_nNum_Sprint_Fin(nValeur est un entier)
-         :EstModif()
          
-         :m_nNum_Sprint_Fin=nValeur
+         si :m_nNum_Sprint_Fin <> nValeur alors
+         	:EstModif()
+         	
+         	:m_nNum_Sprint_Fin=nValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1018,9 +1078,12 @@ class :
       -
         code : |1-
          procédure publique p_nNum_Sprint_Previsionnel(nValeur est un entier)
-         :EstModif()
          
-         :m_nNum_Sprint_Previsionnel=nValeur
+         si :m_nNum_Sprint_Previsionnel <> nValeur alors
+         	:EstModif()
+         	
+         	:m_nNum_Sprint_Previsionnel=nValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1075,9 +1138,12 @@ class :
       -
         code : |1-
          procédure publique p_nOrdre(nValeur est un entier)
-         :EstModif()
          
-         :m_nOrdre=nValeur
+         si :m_nOrdre <> nValeur alors
+         	:EstModif()
+         	
+         	:m_nOrdre = nValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1141,14 +1207,21 @@ class :
         code : |1-
          procédure publique p_nStatut() : entier
          
+         //si :m_nStatut = 0 ALORS
+         //	:m_nStatut = :get_staut_tache()
+         //FIN
+         
          renvoyer :m_nStatut
         type : 1966080
       -
         code : |1-
          procédure publique p_nStatut(nValeur est un entier)
-         :EstModif()
          
-         :m_nStatut=nValeur
+         si :m_nStatut <> nValeur alors
+         	:EstModif()
+         	
+         	:m_nStatut = nValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1165,9 +1238,12 @@ class :
       -
         code : |1-
          procédure publique p_sCMTR(sValeur est une chaîne)
-         :EstModif()
          
-         :m_sCMTR=sValeur
+         si :m_sCMTR <> sValeur alors
+         	:EstModif()
+         	
+         	:m_sCMTR=sValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1184,9 +1260,12 @@ class :
       -
         code : |1-
          procédure publique p_sCMTR_Blocage(sValeur est une chaîne)
-         :EstModif()
          
-         :m_sCMTR_Blocage=sValeur
+         si :m_sCMTR_Blocage <> sValeur alors
+         	:EstModif()
+         	
+         	:m_sCMTR_Blocage=sValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1203,9 +1282,12 @@ class :
       -
         code : |1-
          procédure publique p_sCodeTache(sValeur est une chaîne)
-         :EstModif()
          
-         :m_sCodeTache=sValeur
+         si :m_sCodeTache <> sValeur alors
+         	:EstModif()
+         	
+         	:m_sCodeTache = sValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1222,18 +1304,21 @@ class :
       -
         code : |1-
          procédure publique p_sDescription(sValeur est une chaîne)
-         :EstModif()
          
-         :m_sDescription=sValeur
+         si :m_sDescription <> sValeur alors
+         	:EstModif()
+         	
+         	:m_sDescription=sValeur
+         fin
         type : 2031616
      template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
 resources :
  string_res :
   identifier : 0x1e85e352228f3dbc
-  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

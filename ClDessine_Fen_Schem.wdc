@@ -2,14 +2,14 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClDessine_Fen_Schem
- major_version : 25
+ major_version : 26
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x1f6614d35fa3b902
- internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
   p_codes :
@@ -153,7 +153,8 @@ class :
       
       //Calcul de la largeur des la zone de dessin.
       nZoneAffiche_Largeur	= (nNbBox + 1) * (ClDessine_Fen_Schem_Inter.cstLargeurBox + 2 * ClDessine_Fen_Schem_Inter.cstMargeVBox) + ClDessine_Fen_Schem_Inter.cstMargeVBox
-      {:m_sNomFen, indFenêtre}..LargeurInitiale	= Max({:m_sNomFen, indFenêtre}..Largeur, nZoneAffiche_Largeur)
+      {:m_sNomFen, indFenêtre}..LargeurInitiale	= nZoneAffiche_Largeur
+      //{:m_sNomFen, indFenêtre}..LargeurInitiale	= Max({:m_sNomFen, indFenêtre}..Largeur, nZoneAffiche_Largeur)
       
       
       //Calcul de la hauteur des la zone de dessin.
@@ -375,11 +376,11 @@ class :
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
   original_name : Classe1
 resources :
  string_res :
   identifier : 0x1f6357dd55bd95c1
-  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

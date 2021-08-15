@@ -2,16 +2,16 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClProjet
- major_version : 25
+ major_version : 26
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x1e8595a90ed4e230
- internal_properties : BQAAAAUAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
-  internal_properties : BQAAAAUAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  internal_properties : BgAAAAYAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
   type_code : 10
   p_codes :
    -
@@ -350,42 +350,35 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      //	nIDProjet_p (entier) : <indiquez ici le rôle de nIDProjet_p>
-      //	nNumSprint_p (entier) : <indiquez ici le rôle de nIDSprint_p>
-      //	nSelecteur (entier) : <indiquez ici le rôle de nSelecteur>
-      //	nNumSprint_p (entier) : <indiquez ici le rôle de nNumSprint_p>
-      //	nSelecteur (ClTache.ETypeCharge) : <indiquez ici le rôle de nSelecteur>
-      FONCTION Projet_Sprint_Points(LOCAL nNumSprint_p est un entier , LOCAL nSelecteur est un ClTache.ETypeCharge):entier
+      FONCTION Projet_Sprint_Points(LOCAL nNumSprint_p est un entier, LOCAL nSelecteur est un ClTache.ETypeCharge):entier
       
       nPoints est un entier
-      
-      //On choisis si on veut en prod ou previsionnel 
-      sChoixSprint est une chaîne
-      sChoixPoids est une chaine
-      Selon nSelecteur
-      	CAS ClTache.ETypeCharge.Charge_réelle
-      		sChoixSprint = "Scr_Tache.Num_Sprint_Realisation"
-      		sChoixPoids = "Scr_Tache.Poids" 
-      	CAS ClTache.ETypeCharge.Charge_prévisionelle
-      		sChoixSprint = "Scr_Tache.Num_Sprint_Previsionnel"
-      		sChoixPoids = 	"Scr_Tache.Poids_Previsionnel"
-      fin
-      
-      
       sdRechechePointProjetSprint est une source de données
       sReq est une chaîne
       
+      //On choisi si on veut en prod ou previsionnel 
+      sChoixSprint est une chaîne
+      sChoixPoids est une chaine
+      
+      Selon nSelecteur
+      	CAS ClTache.ETypeCharge.Charge_réelle
+      		sChoixSprint	= Scr_Tache.Num_Sprint_Realisation..nom
+      		sChoixPoids		= Scr_Tache.Poids..Nom
+      	CAS ClTache.ETypeCharge.Charge_prévisionelle
+      		sChoixSprint	= Scr_Tache.Num_Sprint_Previsionnel..Nom
+      		sChoixPoids		= Scr_Tache.Poids_Previsionnel..Nom
+      fin
+      
+      
       sReq = ChaîneConstruit([
       	SELECT 
-      		SUM(%1) as SommePoids
+      		SUM(Scr_Tache.%1) as SommePoids
       	
-      	FROM Scr_Sprint
-      		INNER JOIN Scr_Tache ON (Scr_Sprint.Num_Sprint = %2)
+      	FROM Scr_Tache
       		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
       	
-      	WHERE
-      		Scr_UserStory.IDScr_Projet = %3 
-      		AND Scr_Sprint.Num_Sprint = %4
+      	WHERE Scr_UserStory.IDScr_Projet = %3 
+      		AND Scr_Tache.%2 = %4
       		AND Scr_Tache.Top_Brouillon = 0
       		AND Scr_Tache.Top_Annule = 0
       	
@@ -393,7 +386,7 @@ class :
       
       si goApp.Rsql(sdRechechePointProjetSprint,sReq) alors
       	HLitPremier(sdRechechePointProjetSprint,SommePoids)
-      	SI Htrouve(sdRechechePointProjetSprint) alors
+      	SI pas HEnDehors(sdRechechePointProjetSprint) alors
       		nPoints = sdRechechePointProjetSprint.SommePoids
       	FIN
       FIN
@@ -1655,10 +1648,10 @@ class :
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BQAAAAUAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
 resources :
  string_res :
   identifier : 0x1e8595a90ed5e230
-  internal_properties : BQAAAAUAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BQAAAAUAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
