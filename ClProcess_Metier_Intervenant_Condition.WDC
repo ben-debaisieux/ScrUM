@@ -88,7 +88,7 @@ class :
       
       oBtn est un champ <- :oBoxModele()
       //oBtn..Libellé = "Oui / Non"
-      oBtn..CouleurFond = OrangeClair
+      oBtn..CouleurFond = COL_Scrum.gnCouleur_OrangeVif
       
      type : 458752
    -
@@ -141,7 +141,7 @@ class :
       	oFil <- ChampCrée(:p_oAxeParent.p_oProcessParent.sCheminChamps("fil_" + oInterTmpLiée.m_sNomBox + "_" + DonneIdentifiant()), typFil)
       	oFil..ChampDépart	= :p_oAxeParent.p_oProcessParent.sCheminChamps(:m_sNomBox)
       	oFil..ChampArrivée	= :p_oAxeParent.p_oProcessParent.sCheminChamps(oInterTmpLiée.m_sNomBox)
-      	oFil..Couleur		= RougeClair
+      	oFil..Couleur		= COL_Scrum.gnCouleur_Rougeclair
       FIN
      type : 458752
   procedure_templates : []

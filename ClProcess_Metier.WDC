@@ -132,7 +132,7 @@ class :
       	
       	oAxe..CadrageVertical		= chCentre
       	oAxe..CadrageHorizontal		= cvMilieu
-      	oAxe..CouleurFond			= GrisFoncé
+      	oAxe..CouleurFond			= COL_Scrum.gnCouleur_Gris_TFonce
       	oAxe..Couleur				= Blanc
       	oAxe..Libellé				= oAxeTmp.Libelle
       FIN
@@ -191,7 +191,7 @@ class :
       		oFil..ChampArrivée	= :sCheminChamps(stBoxTmp.sNomChamps)
       		
       		si stBoxTmp.bCondition ALORS
-      			oFil..Couleur	= VertClair
+      			oFil..Couleur	= COL_Scrum.gnCouleur_VertVif
       		FIN
       	FIN
       	

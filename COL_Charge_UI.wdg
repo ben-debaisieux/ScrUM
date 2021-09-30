@@ -53,6 +53,19 @@ procedure_set :
       
       
       //////////////////////////////////////////////////////////////////////////
+      STR_Anticipation_Charge_Projet_Spr est une Structure
+      	nCharge			est un entier
+      	nChargeAnnulee	est un entier
+      	sEtiquette		est une chaîne
+      FIN
+      
+      STR_Anticipation_Charge_Projet est une structure
+      	sTitre		est une chaîne
+      	aStSeries	est un tableau associatif de STR_Anticipation_Charge_Projet_Spr
+      fin
+      
+      
+      //////////////////////////////////////////////////////////////////////////
       STR_Projection_Spr est une Structure
       	nProj		est un entier
       	nReal		est un entier
@@ -360,6 +373,38 @@ procedure_set :
       stRetour.nVelocite = goApp.m_nVelociteMoyenne
       
       
+      
+      renvoyer stRetour
+     type : 458752
+   -
+     name : Graphe_anticipation_de_charge
+     procedure_id : 1248657017128854909
+     type_code : 15
+     code : |1-
+      procédure Graphe_anticipation_de_charge(local znIdProjet_P est un entier):STR_Anticipation_Charge_Projet
+      
+      stRetour		est un STR_Anticipation_Charge_Projet
+      oTache			est un ClTache dynamique
+      oPrj			est un ClProjet dynamique
+      nAnticipation	est un entier
+      
+      
+      stRetour.sTitre	= "Analyse de l'anticipation de la charge du projet" + rc
+      
+      
+      oPrj <- ClProjet.GetObj(znIdProjet_P)
+      stRetour.sTitre += oPrj.p_sNom
+      POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches()
+      	si (oTache.p_bEstRealise ou oTache.p_bAnnule) et oTache.p_nNum_Sprint_Realisation <> 0 alors
+      		nAnticipation = oTache.p_nNum_Sprint_Realisation - oTache.p_nNum_Sprint_Creation
+      		stRetour.aStSeries[nAnticipation].sEtiquette = nAnticipation
+      		si pas oTache.p_bAnnule ALORS
+      			stRetour.aStSeries[nAnticipation].nCharge	+= oTache.p_nPoids
+      		sinon
+      			stRetour.aStSeries[nAnticipation].nChargeAnnulee	+= oTache.p_nPoids
+      		FIN
+      	fin
+      FIN
       
       renvoyer stRetour
      type : 458752

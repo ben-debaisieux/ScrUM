@@ -126,9 +126,9 @@ class :
       	:m_oUsr_Dev					<- ClUsr.GetObj(Scr_Tache.IDScr_Usr_Dev)
       FIN
       
-      si :m_nStatut = 0 ALORS
-      	:m_nStatut = :get_staut_tache()
-      FIN
+      //si :m_nStatut = 0 ALORS
+      //	:m_nStatut = :get_statut_tache()
+      //FIN
      type : 589824
    -
      name : Destructeur
@@ -271,6 +271,10 @@ class :
       	FIN
       	
       	
+      	
+      	si pas :m_nStatut dans (0, ::cstStatut_Suspendu) ALORS
+      		:m_nStatut = :get_statut_tache()
+      	FIN
       	
       	
       	////////////////////////////////////////////////
@@ -658,14 +662,14 @@ class :
       renvoyer bRetour
      type : 458752
    -
-     name : get_staut_tache
+     name : get_statut_tache
      procedure_id : 2276358711767589644
      type_code : 12
-     code : |1+
-      procédure get_staut_tache():entier
+     code : |1-
+      procédure get_statut_tache():entier
       
       nRetour est un entier
-      
+      bUsTermine est un booléen
       
       si :m_bBrouillon ALORS
       	nRetour = ::cstStatut_Brouillon
@@ -676,21 +680,29 @@ class :
       		si :bCotationAFaire() ALORS
       			nRetour = ::cstStatut_a_coter
       		sinon
-      			si :m_nNum_Sprint_Demarrage <> 0 ALORS
-      				si :m_nNum_Sprint_Fin <> 0 ALORS
+      			
+      			//On vérifie si l'US parente est terminée ou non.
+      			bUsTermine = faux
+      			si :m_oUserStoryParent <> Null ALORS
+      				si :m_oUserStoryParent.p_bTermine ALORS
+      					bUsTermine = vrai
+      				FIN
+      			FIN
+      			
+      			SI :m_nNum_Sprint_Fin <> 0 ou :m_bEstRealise ou bUsTermine ALORS
+      				nRetour = ::cstStatut_realise
+      			SINON
+      				si :m_nNum_Sprint_Demarrage <> 0 ALORS
       					nRetour = ::cstStatut_en_cours
-      				sinon
-      					nRetour = ::cstStatut_realise
+      				SINON
+      					nRetour = ::cstStatut_a_faire
       				fin
-      			sinon
-      				nRetour = ::cstStatut_a_faire
       			FIN
       		FIN
       	FIN
       FIN
       
       renvoyer nRetour
-      
      type : 458752
    -
      name : GetObj_de_code
