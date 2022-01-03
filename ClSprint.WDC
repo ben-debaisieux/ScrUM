@@ -833,6 +833,18 @@ class :
          :m_bTop_Termine=bValeur
         type : 2031616
      template_refs : []
+   -
+     name : p_nNbPointsRealise
+     identifier : 0x117810d4060ef077
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_nNbPointsRealise() : entier
+         
+         renvoyer :m_nNbPointsRealise
+        type : 1966080
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

@@ -28,6 +28,7 @@ class :
       	m_nChargeProvisionelle	est un entier sur 2 octets	<mapping=ChargeProvisionelle>
       	m_sGroupement			est une chaîne				<mapping=Groupement>
       	m_nOrdreGrp				est un entier sur 2 octets	<mapping=Ordre>
+      	m_sCode					est une chaine 				<mapping=PrefixeUS>
       	
       	m_bTop_Prioritaire		est un booléen
       	m_sCmtrsituation		est une chaîne
@@ -1643,6 +1644,24 @@ class :
          procédure publique p_sNom(sValeur est une chaîne)
          :EstModif()
          :m_sNom = sValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sCode
+     identifier : 0x1160617c02e7a25a
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sCode() : chaîne
+         
+         renvoyer :m_sCode
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sCode(sValeur est une chaîne)
+         :EstModif()
+         :m_sCode = sValeur
         type : 2031616
      template_refs : []
   procedure_templates : []

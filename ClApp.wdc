@@ -82,7 +82,16 @@ class :
       		// connexion local aux fichiers
       		HVérifieStructure(hCompatible)   //pour fonctionner même si modif analyse
       		
+      		
+      		//:m_cnxBDD..Provider = hAccèsNatifSQLite
+      		//:m_cnxBDD..Serveur = "Scrum.db"
+      		
       		:m_cnxBDD..Provider = hAccèsHF7
+      		:m_cnxBDD..Utilisateur = "cnx_scrum"
+      		:m_cnxBDD..MotDePasse = "cnx_scrum"
+      		
+      		:m_cnxBDD..Accès = hOLectureEcriture
+      		
       		HOuvreConnexion(:m_cnxBDD)
       		HChangeConnexion("*",:m_cnxBDD)
       		

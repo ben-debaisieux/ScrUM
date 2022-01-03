@@ -46,7 +46,7 @@ window :
            p_codes :
             -
               code : |1+
-               SI PAS ClTache.Controlle_Poids(MoiMême) ALORS
+               SI PAS ClTache.Controle_Poids(MoiMême) ALORS
                	Info("Poids non valide !")
                	MoiMême = ""
                	sai_Poids_Prévisionnel = ""
@@ -75,7 +75,7 @@ window :
            p_codes :
             -
               code : |1+
-               SI PAS ClTache.Controlle_Poids(MoiMême) ALORS
+               SI PAS ClTache.Controle_Poids(MoiMême) ALORS
                	Info("Poids non valide !")
                	MoiMême = ""
                FIN

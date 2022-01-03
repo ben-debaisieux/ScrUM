@@ -67,6 +67,7 @@ class :
       	
       	
       	m_bPresenceTacheFiniesNonVaidées	est un booléen			//Utile pour la migration (il faut distinguer les taches en test et celles validées)
+      	m_bPresenceTacheBloquee				est un booléen			//Permet d'identifier si on a une tache bloquer dans l'US.
       FIN
       
       
@@ -236,9 +237,7 @@ class :
       sReq est une chaîne
       m_EnrUsOrigine est un Enregistrement de Scr_UserStory
       m_EnrUsActu est un Enregistrement de Scr_UserStory
-      
-      
-      
+      oTache est un ClTache dynamique
       
       
       SI :m_bEstSupprime ALORS
@@ -249,6 +248,12 @@ class :
       	], :Get_IdUnique())
       	goApp.Rsql(sdDelUserStoresHisto,sReq)
       	HAnnuleDéclaration(sdDelUserStoresHisto)
+      	
+      	//Suppression de toues les taches si encore présentes.
+      	POUR TOUT Element oTache de :aoListeTaches(Vrai)
+      		oTache.Supprimer()
+      		oTache.Enregistre()
+      	FIN
       	
       sinon
       	
@@ -586,9 +591,10 @@ class :
       :m_nNbreTacheEnCours	= 0
       :m_nNbreTacheAnnulee	= 0
       :m_nNbreTacheTerminee	= 0
-      :m_bPresenceTacheFiniesNonVaidées = faux
+      :m_bPresenceTacheFiniesNonVaidées	= faux
+      :m_bPresenceTacheBloquee			= faux
       
-      //Definition de l'etat de l'us (finie, commencée, pas commencée, annullée)
+      //Definition de l'etat de l'us (finie, commencée, pas commencée, annulée)
       Si TableauOccurrence(:aoListeTaches()) > 0 alors
       	pour tout element oTache de :aoListeTaches()
       		
@@ -606,7 +612,6 @@ class :
       				
       			SINON
       				si pas oTache.bEstDemarree() ALORS
-      //				si oTache.m_nNum_Sprint_Demarrage <= goapp.m_nNumeroDuSprintActuel et pas oTache.bEstDemarree() ALORS
       					//Si une tache est commencée mais pas terminée, US -> commencée et on sort de la boucle
       					:m_nNbreTacheAfaire++
       				sinon
@@ -614,6 +619,11 @@ class :
       					:m_nNbreTacheEnCours++
       				FIN
       			FIN
+      			
+      			si oTache.p_nStatut = ClTache::cstStatut_Suspendu ALORS
+      				:m_bPresenceTacheBloquee			= vrai
+      			FIN
+      			
       		FIN
       	FIN
       fin
@@ -741,7 +751,9 @@ class :
       	FROM Scr_Tache
       		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
       	WHERE Scr_Tache.Num_Sprint_Fin = %1
-      		AND Scr_UserStory.Top_Termine = 1
+      		--AND Scr_UserStory.Top_Termine = 1
+      		AND Scr_Tache.Top_Annule = 0
+      		AND Scr_Tache.Top_Brouillon = 0
       ],nSprint_p)
       
       Si goApp.Rsql(sdRechercheNbPointRealise,sReq) ALORS
@@ -1332,6 +1344,18 @@ class :
       ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, cst_StatutUS_En_Test + gLien(cst_StatutUS_En_Test))
       ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, cst_StatutUS_Terminée + gLien(cst_StatutUS_Terminée))
       ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, cst_StatutUS_Annulée + gLien(cst_StatutUS_Annulée))
+     type : 458752
+   -
+     name : bPresenceTacheBloquee
+     procedure_id : 1253962774961227967
+     type_code : 12
+     code : |1+
+      procédure bPresenceTacheBloquee()
+      
+      :User_Story_Etat()
+      
+      renvoyer :m_bPresenceTacheBloquee
+      
      type : 458752
   properties :
    -

@@ -170,7 +170,7 @@ window :
            code : |1-
             oTache_tmp est un ClTache <- zaoTaches[TBL_Taches.COL_ID]
             
-            SI PAS ClTache.Controlle_Poids(MoiMême) ALORS
+            SI PAS ClTache.Controle_Poids(MoiMême) ALORS
             	Info("Poids non valide.")
             	MoiMême = oTache_tmp.p_nPoids_Previsionnel
             sinon

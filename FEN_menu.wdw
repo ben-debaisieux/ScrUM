@@ -398,8 +398,8 @@ window :
                   		2 AS Type,
                   		Scr_Tache.IDScr_Tache AS Id
                   	FROM Scr_Tache
-                  	WHERE match(Scr_Tache.CodeTache, Scr_Tache.Description, Scr_Tache.CMTR, Scr_Tache.CMTR_Blocage)
-                  		AGAINST ('%1')
+                  	WHERE match(Scr_Tache.CodeTache, Scr_Tache.Description, Scr_Tache.CMTR, Scr_Tache.CMTR_Blocage) AGAINST ('%1')
+                  		--OR Scr_Tache.NumTicketIncident = '%1'
                   
                   		
                   	], sRech)

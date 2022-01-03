@@ -145,6 +145,7 @@ procedure_set :
       
       	//Projet en cours
       	POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches()
+      		//trace(ChaîneConstruit("Début*%1*Fin*%2*poids*%3*code%4", oTache.p_nNum_Sprint_Demarrage, oTache.p_nNum_Sprint_Fin, oTache.p_nPoids, oTache.p_sCodeTache))
       		SI oTache.p_nNum_Sprint_Demarrage <> 0 ALORS
       			stRetour.aStSeries[oTache.p_nNum_Sprint_Demarrage].nDemarre += oTache.p_nPoids
       		FIN

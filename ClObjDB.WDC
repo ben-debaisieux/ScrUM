@@ -120,7 +120,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       
-      PROCEDURE VIRTUELLE Enregistre()
+      PROCEDURE Enregistre()
       
       bLeverTopEnreg est un booléen
       
@@ -138,7 +138,7 @@ class :
       	FIN
       	
       	
-      	//A t on déja le top 'en cours d'enregistrement actif ? (en cas de dérivation de la procédure d'enregistrement)
+      	//A t on déja le top 'en cours d'enregistrement' actif ? (en cas de dérivation de la procédure d'enregistrement)
       	si pas :m_bEnregistrementEnCours ALORS
       		//Non : On le passe à vrai
       		:m_bEnregistrementEnCours = vrai
@@ -151,15 +151,14 @@ class :
       		//Non : Repositionnement, mais sans actualisation des membres de l'instance.
       		:Charge(Vrai)
       	FIN
-      	
-      	MémoireVersFichier(objet,:m_sNomTable)
-      	
-      	
-      	SI :bModeAjout() ALORS
       		
+      	SI :bModeAjout() ALORS
+      
       		//Traitements précédent l'enregistrement
       		:pre_enregistre()
       		
+      		MémoireVersFichier(objet,:m_sNomTable)
+      			
       		SI :m_bEstSupprime ALORS
       			//Rien a faire : l'élément n'était pas enregistré
       		SINON
@@ -175,9 +174,6 @@ class :
       		
       	SINON
       		
-      		//Traitements précédent l'enregistrement
-      		:pre_enregistre()
-      		
       		SI :m_bEstSupprime ALORS
       			
       			SI PAS HSupprime(:m_sNomTable) ALORS
@@ -191,6 +187,11 @@ class :
       			FIN
       			
       		SINON
+      			
+      			//Traitements précédent l'enregistrement
+      			:pre_enregistre()
+      			
+      			MémoireVersFichier(objet,:m_sNomTable)
       			
       			SI PAS HModifie(:m_sNomTable) ALORS
       				ExceptionDéclenche(1, "Echec de l'enregistrement : " + RC + HErreurInfo(hErrComplet))

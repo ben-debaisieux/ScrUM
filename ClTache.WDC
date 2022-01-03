@@ -126,8 +126,9 @@ class :
       	:m_oUsr_Dev					<- ClUsr.GetObj(Scr_Tache.IDScr_Usr_Dev)
       FIN
       
-      //si :m_nStatut = 0 ALORS
-      //	:m_nStatut = :get_statut_tache()
+      //si :m_nStatut = 0 et nId_P <> 0 ALORS
+      //	stop
+      //	//:m_nStatut = :get_statut_tache()
       //FIN
      type : 589824
    -
@@ -166,20 +167,29 @@ class :
       	:CleanHisto()
       	
       SINON
-      	
-      	//Si on est en modif, on actualise les données en mémoire, pour générer l'historique.
       	SI PAS :bModeAjout() ALORS
+      		//En modification :
+      		
+      		//On actualise les données en mémoire, pour générer l'historique.
       		m_EnrActu = Scr_Tache
       		:Charge(Vrai)
       		m_EnrOrigine = Scr_Tache
       		Scr_Tache = m_EnrActu
+      	sinon
+      		//En mode ajout :
+      		
+      		// Si on a pas de staut, on le calcule, en fonction des infos de la tache.
+      		si :m_nStatut = 0 ALORS
+      			:m_nStatut = :get_statut_tache()
+      			SI :m_nStatut = 0 ALORS
+      				ExceptionDéclenche(1,"Identification du statut de la tache impossible.")
+      			FIN
+      		FIN
       	FIN
       	
       	
-      	
-      	//Enregistrement de l'utisateur rédacteur (par défaut l'utilisateur courant)
+      	//Enregistrement de l'utilisateur rédacteur (par défaut l'utilisateur courant)
       	Scr_Tache.IDScr_Usr_createur				= :m_oUsr_createur.Get_IdUnique()
-      	
       	
       	
       	si :m_oUserStoryParent = Null ALORS
@@ -223,7 +233,7 @@ class :
       		Scr_Tache.Num_Sprint_Fin				= :m_nNum_Sprint_Fin
       		
       		si pas :m_bAnnule alors
-      			//Si on a un sprint de fin, les taches doivent etres réalisées
+      			//Si on a un sprint de fin, les taches doivent êtres réalisées
       			si pas :m_bEstRealise ALORS
       				ExceptionDéclenche(1,"Impossible d'enregistrer un sprint de fin, sur une tache, qui n'est pas réalisée")
       			FIN
@@ -262,6 +272,13 @@ class :
       			], :m_nNum_Sprint_Realisation, :m_nNum_Sprint_Fin))
       	FIN
       	
+      	si :m_nNum_Sprint_Demarrage > :m_nNum_Sprint_Fin ET :m_nNum_Sprint_Fin <> 0 et pas :m_bAnnule alors
+      		exceptiondeclenche(1, ChaîneConstruit([
+      			Enregistrement impossible :
+      			Le sprint de fin (%2) ne peut pas être antérieur au sprint de démarrage (%1)
+      			], :m_nNum_Sprint_Demarrage, :m_nNum_Sprint_Fin))
+      	FIN
+      	
       	si :m_nNum_Sprint_Demarrage <> 0 et :m_oUsr_Dev = null ALORS
       		ExceptionDéclenche(1, ChaîneConstruit([
       			Enregistrement impossible :
@@ -271,11 +288,20 @@ class :
       	FIN
       	
       	
-      	
-      	si pas :m_nStatut dans (0, ::cstStatut_Suspendu) ALORS
-      		:m_nStatut = :get_statut_tache()
+      	//En création ou en modification, son s'assure que le code article n'est pas pris.
+      	si :bModeAjout() _ou_ m_EnrOrigine.CodeTache <> :m_sCodeTache ALORS
+      		si pas :bCodeTacheDispo(:m_sCodeTache) ALORS
+      			ExceptionDéclenche(1, ChaîneConstruit([
+      				Enregistrement impossible :
+      				Le code tache ""%1"" est déjà utilisé.
+      				], :m_sCodeTache))
+      		FIN
       	FIN
       	
+      	
+      	SI PAS :m_nStatut DANS (0, ::cstStatut_Suspendu) ALORS
+      		:m_nStatut = :get_statut_tache()
+      	FIN
       	
       	////////////////////////////////////////////////
       	//Historisation de modifications
@@ -392,13 +418,13 @@ class :
       fin
      type : 458752
    -
-     name : Controlle_Poids
+     name : Controle_Poids
      procedure_id : 2201703616945380860
      type_code : 12
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] Controlle_Poids (<nPoids_p> est entier)
+      //[ <Résultat> = ] Controle_Poids (<nPoids_p> est entier)
       //
       // Paramètres :
       //	nPoids_p (entier) : <indiquez ici le rôle de nPoids_p>
@@ -408,7 +434,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION GLOBAL Controlle_Poids(LOCAL nPoids_p est un entier):booléen
+      FONCTION GLOBAL Controle_Poids(LOCAL nPoids_p est un entier):booléen
       
       bPoidsValide est un booléen
       
@@ -861,6 +887,47 @@ class :
       
       renvoyer sRetour
      type : 458752
+   -
+     name : bCodeTacheDispo
+     procedure_id : 1280241888829805518
+     type_code : 12
+     code : |1-
+      procédure privée bCodeTacheDispo(sCodeTache_P est une chaîne):booléen
+      
+      
+      sdRechCodeTache est une Source de Données
+      sReq est une chaîne
+      bRetour est un booléen
+      
+      sReq = ChaîneConstruit([
+      	
+      	SELECT
+      		COUNT(*) as Nbre
+      	
+      	FROM Scr_Tache
+      	
+      	WHERE Scr_Tache.CodeTache = '%1'
+      		AND Scr_Tache.IDScr_Tache <> %2
+      	
+      ], sCodeTache_P, :Get_IdUnique())
+      
+      SI goApp.RSQL(sdRechCodeTache,sReq) ALORS
+      
+      	HLitPremier(sdRechCodeTache)
+      	si pas HEnDehors(sdRechCodeTache) ALORS
+      		
+      		bRetour = (sdRechCodeTache.Nbre = 0)
+      		
+      	FIN
+      	
+      FIN
+      
+      HAnnuleDéclaration(sdRechCodeTache)
+      
+      
+      
+      renvoyer bRetour
+     type : 458752
   properties :
    -
      name : p_oUsr_Dev
@@ -1173,7 +1240,7 @@ class :
         code : |1-
          procédure publique p_nPoids(nValeur est un entier)
          
-         SI ::Controlle_Poids(nValeur) ALORS
+         SI ::Controle_Poids(nValeur) ALORS
          	si :m_nPoids <> nValeur alors
          		:EstModif()
          		:m_nPoids = nValeur
@@ -1199,7 +1266,7 @@ class :
          procédure publique p_nPoids_Previsionnel(nValeur est un entier)
          
          
-         si ::Controlle_Poids(nValeur) ALORS
+         si ::Controle_Poids(nValeur) ALORS
          	
          	si :m_nPoids_Previsionnel <> nValeur alors	
          		:EstModif()
