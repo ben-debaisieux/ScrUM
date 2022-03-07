@@ -203,14 +203,9 @@ window :
             	
             	oTache est un ClTache <- ClTache.GetObj(TBL_A_faire.COL_IdTache)
             	oUs est un ClUserStory <- oTache.p_oUserStoryParent
-            	SI oTache.p_oUserStoryParent <> Null ALORS
-            		SI Ouvre(FEN_User_Story_Detail_v2, oUs, oTache.Get_IdUnique()) ALORS
-            			Actualise()
-            		FIN
-            //	SINON
-            //		SI Ouvre(FEN_Tache_Detail_V2, oTache) ALORS
-            //			Actualise()
-            //		FIN
+            	
+            	SI Ouvre(FEN_User_Story_Detail_v2, oUs, oTache.Get_IdUnique()) ALORS
+            		Actualise()
             	FIN
             FIN
            type : 18

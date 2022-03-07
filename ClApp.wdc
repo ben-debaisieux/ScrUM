@@ -44,7 +44,7 @@ class :
       HSurErreur("*",hErrTout,"")
       
       si pas EnModeTestAutomatique() alors
-      	SI Droite(SysEnvironnement("USERNAME"),4) PAS DANS ("2780", "x2777") ou pas EnModeTest() ALORS 
+      	SI Droite(SysEnvironnement("USERNAME"),4) PAS DANS ("x2777") ou pas EnModeTest() ALORS 
       		
       		:m_sMsgCnx = "Connexion : HF/CS"
       		
@@ -127,10 +127,18 @@ class :
       	HLitRecherche(Scr_Usr,Login_AD,sLoginAD,hIdentique+hLimiteParcours)
       	//Si on le trouve alors on rempli le reste des inforamtion dans la structure
       	SI pas HTrouve(Scr_Usr) ALORS
-      		//Sinon on bloque l'acces à l'application en fermant le programme
-      		Info("vous n'avez pas accès à cette application. (" + sLoginAD + " / " + :m_cnxBDD..Serveur + ")")
-      		STOP
-      		FinProgramme()
+      		
+      		si HNbEnr(Scr_Usr) = 0 alors
+      			hraz(Scr_Usr)
+      			Scr_Usr.Login_AD				= sLoginAD
+      			Scr_Usr.Top_Equip_Informatique	= vrai
+      			HAjoute(Scr_Usr)
+      		sinon
+      			//Sinon on bloque l'acces à l'application en fermant le programme
+      			Info("vous n'avez pas accès à cette application. (" + sLoginAD + " / " + :m_cnxBDD..Serveur + ")")
+      			STOP
+      			FinProgramme()
+      		FIN
       	FIN	
       sinon
       	Col_Test.InitAll()

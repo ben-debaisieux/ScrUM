@@ -29,14 +29,9 @@ window :
            code : |1+
             si TableOccurrence(TBL_MesTaches) >= 1 alors
             	oTache est un ClTache <- ClTache.GetObj(TBL_MesTaches.COL_IdTache)
-            	si oTache.p_oUserStoryParent <> Null ALORS
-            		SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
-            			Actualise()
-            		FIN
-            	sinon
-            		SI Ouvre(FEN_Tache_Detail_V2, oTache) ALORS
-            			Actualise()
-            		FIN
+            	
+            	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
+            		Actualise()
             	FIN
             FIN
            type : 18

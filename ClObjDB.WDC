@@ -123,6 +123,7 @@ class :
       PROCEDURE Enregistre()
       
       bLeverTopEnreg est un booléen
+      bMemoModeAjout est un booléen
       
       
       goapp.TranDebut()
@@ -151,14 +152,18 @@ class :
       		//Non : Repositionnement, mais sans actualisation des membres de l'instance.
       		:Charge(Vrai)
       	FIN
-      		
-      	SI :bModeAjout() ALORS
+      	
+      	
+      	bMemoModeAjout = :bModeAjout()
       
-      		//Traitements précédent l'enregistrement
-      		:pre_enregistre()
-      		
-      		MémoireVersFichier(objet,:m_sNomTable)
-      			
+      	MémoireVersFichier(objet,:m_sNomTable)
+      	
+      	//Traitements précédent l'enregistrement
+      	:pre_enregistre()
+      	
+      	
+      	SI bMemoModeAjout ALORS
+      
       		SI :m_bEstSupprime ALORS
       			//Rien a faire : l'élément n'était pas enregistré
       		SINON
@@ -168,9 +173,6 @@ class :
       				:m_nIdUnique = {:m_sNomTable + "." + :m_sNom_Col_Id_Auto,indRubrique}
       			FIN
       		FIN
-      		
-      		//Traitements post enregistrement
-      		:post_enregistre()
       		
       	SINON
       		
@@ -188,19 +190,15 @@ class :
       			
       		SINON
       			
-      			//Traitements précédent l'enregistrement
-      			:pre_enregistre()
-      			
-      			MémoireVersFichier(objet,:m_sNomTable)
-      			
       			SI PAS HModifie(:m_sNomTable) ALORS
       				ExceptionDéclenche(1, "Echec de l'enregistrement : " + RC + HErreurInfo(hErrComplet))
       			FIN
       		FIN
       		
-      		//Traitements post enregistrement
-      		:post_enregistre()
       	FIN
+      	
+      	//Traitements post enregistrement
+      	:post_enregistre()
       	
       	goapp.TranFin()
       	

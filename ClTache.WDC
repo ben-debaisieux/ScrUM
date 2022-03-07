@@ -299,7 +299,7 @@ class :
       	FIN
       	
       	
-      	SI PAS :m_nStatut DANS (0, ::cstStatut_Suspendu) ALORS
+      	SI PAS :m_nStatut DANS (::cstStatut_Suspendu) ALORS
       		:m_nStatut = :get_statut_tache()
       	FIN
       	
@@ -307,7 +307,7 @@ class :
       	//Historisation de modifications
       	
       	SI :bModeAjout() ALORS
-      		:AjouteHistorique("Création de la user story")
+      		:AjouteHistorique("Création de la tache")
       	SINON
       		
       		//User storie parente

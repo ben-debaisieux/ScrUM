@@ -34,32 +34,33 @@ window :
          -
            code : |1-
             si CBO_Projet <> 0 alors
-            	oPrjTmp		est un ClProjet dynamique <- ClProjet.GetObj(CBO_Projet)
-            	
-            	//Récupération des valeurs :
-            	nFinies est un entier = oPrjTmp.Get_StatUS(ClUserStory.ECompteNbUS.Terminee)
-            	nATester est un entier = oPrjTmp.Get_StatUS(ClUserStory.ECompteNbUS.En_test_fonctionnel)
-            	nAnnulee est un entier = oPrjTmp.Get_StatUS(ClUserStory.ECompteNbUS.Annulée)
-            	nAFaire est un entier = oPrjTmp.Get_StatUS(ClUserStory.ECompteNbUS.Toutes) - (nFinies + nATester + nAnnulee)
-            	
-            	
-            	//Affichage des infos dans le graphe :
-            	grSupprimeTout(GRF_AvancementPrj)
-            	
-            	grSMNAjouteDonnée(GRF_AvancementPrj, zcst_Developpe + TAB + zcst_Teste, nFinies)
-            	grSMNCouleurPortion(GRF_AvancementPrj,zcst_Developpe, COL_Scrum.gnCouleur_VertVif)
-            	grSMNCouleurPortion(GRF_AvancementPrj,zcst_Developpe + TAB + zcst_Teste, COL_Scrum.gnCouleur_BleuPale)
-            	
-            	grSMNAjouteDonnée(GRF_AvancementPrj, zcst_Developpe + TAB + zcst_Non_Teste, nATester)
-            	grSMNCouleurPortion(GRF_AvancementPrj,zcst_Developpe + TAB + zcst_Non_Teste, COL_Scrum.gnCouleur_RougeOrange)
-            	
-            	grSMNAjouteDonnée(GRF_AvancementPrj, zcst_A_Faire, nAFaire)
-            	grSMNCouleurPortion(GRF_AvancementPrj,zcst_A_Faire, COL_Scrum.gnCouleur_JauneVif)
-            	
-            	grSMNAjouteDonnée(GRF_AvancementPrj, zcst_Annule, nAnnulee)
-            	grSMNCouleurPortion(GRF_AvancementPrj,zcst_Annule, COL_Scrum.gnCouleur_Gris)
-            	
-            	grDessine(GRF_AvancementPrj)
+            	COL_Graphes.InfoProjet(GRF_AvancementPrj..NomComplet, ClProjet.GetObj(CBO_Projet))
+            //	oPrjTmp		est un ClProjet dynamique	<- ClProjet.GetObj(CBO_Projet)
+            //	
+            //	//Récupération des valeurs :
+            //	nFinies		est un entier				= oPrjTmp.Get_StatUS(ClUserStory.ECompteNbUS.Terminee)
+            //	nATester	est un entier				= oPrjTmp.Get_StatUS(ClUserStory.ECompteNbUS.En_test_fonctionnel)
+            //	nAnnulee	est un entier				= oPrjTmp.Get_StatUS(ClUserStory.ECompteNbUS.Annulée)
+            //	nAFaire		est un entier				= oPrjTmp.Get_StatUS(ClUserStory.ECompteNbUS.Toutes) - (nFinies + nATester + nAnnulee)
+            //	
+            //	
+            //	//Affichage des infos dans le graphe :
+            //	grSupprimeTout(GRF_AvancementPrj)
+            //	
+            //	grSMNAjouteDonnée(GRF_AvancementPrj, zcst_Developpe + TAB + zcst_Teste, nFinies)
+            //	grSMNCouleurPortion(GRF_AvancementPrj,zcst_Developpe, COL_Scrum.gnCouleur_VertVif)
+            //	grSMNCouleurPortion(GRF_AvancementPrj,zcst_Developpe + TAB + zcst_Teste, COL_Scrum.gnCouleur_BleuPale)
+            //	
+            //	grSMNAjouteDonnée(GRF_AvancementPrj, zcst_Developpe + TAB + zcst_Non_Teste, nATester)
+            //	grSMNCouleurPortion(GRF_AvancementPrj,zcst_Developpe + TAB + zcst_Non_Teste, COL_Scrum.gnCouleur_RougeOrange)
+            //	
+            //	grSMNAjouteDonnée(GRF_AvancementPrj, zcst_A_Faire, nAFaire)
+            //	grSMNCouleurPortion(GRF_AvancementPrj,zcst_A_Faire, COL_Scrum.gnCouleur_JauneVif)
+            //	
+            //	grSMNAjouteDonnée(GRF_AvancementPrj, zcst_Annule, nAnnulee)
+            //	grSMNCouleurPortion(GRF_AvancementPrj,zcst_Annule, COL_Scrum.gnCouleur_Gris)
+            //	
+            //	grDessine(GRF_AvancementPrj)
             fin
            type : 33
          -
@@ -68,7 +69,7 @@ window :
      -
        name : GRF_AvancementPrj
        identifier : 0x20b9346c02e060c7
-       internal_properties : BgAAAAYAAAB6bXK1EqRncPmslpFbC82mxlQmdQjmCZSFYAMRmrLOdXrw3QgWT1p4jZcJEq+GH2rARPQgcqSTW6bvEOZDF5uE0ZU47UOy0UM3mM4TzykRc1FBd4+OvIRIquwFUUkXoBNI3Z26qzJWo2JOx0paSid6nM/dSMlnz98aJO0Eikoqz70J1Gx3LFPTSqOBVqb7icHWIdVmXmc8ghY8/mPAy8oFI87MB/2qwxdqHGIGUriTltyoYxCr6r6pizGoa51pVYY+94sYU608I5bfQ4btPm7NMwi7C1pQSaD1/Za1dl1OhGttSa9PMRdrJGMlYKeFFmv65ELGwaJVnvPJb9pqddlH+SYsbbmYSjzURFSvJDo+eayDBMB9zu4OwD5AbsGC1BsmTVg/FdMz6xdJpa7WZ5vUCdiwNrM+B98AIVvTwozm6CnhYyppQiZYa54PPl0sklnMOBYpBhb8XU0R5g9mJavzVvK4nZjzrsyHEKXdg12YDzOrN31kQJy147IfUceGo5De3fmKDn59RR52xmFqdO2AvNE6xSmp96fg31+P64yeweAhG8mtzL9GRmMJS0YSvuS+9bABAO/BRSOa5zPd0eXYYIVEauKPKLu4jV4TkM6KXKD83gSmK8CMG69OuscIvne6t7HRPJZcQrprPp+9K1T5bzoAAZE+k2FKlFyloN8nkJFLHTDc962dCBKDAlSecmAKRuetXHyx8oPj+4cIGxn8EN8FSKLYCgW4ytFDWCWGFpSY4wDG43Ork/bqqRzeY+npZch2DfHanrTu97mQJWKBeQOU7nuxl9JjCRqKGUr9sKWjhzNcRCuZKcgJD8oBo4vLEw+WzcY1A/xo11i+TlyP2WyjFYxgOWXSEIKlpyLxYK7WcnwXD4LYRgSk2KAYejcHVrm1Q8LVdaxh5dBgt0gVMQTlZgaVpkmeFn0cDeEtE9iiYzreUXzhwjwolONrs3bTWnAU7oZANqLQjb5PVOo1eKIC6pd7cE3MGra1HHQEUNtY3cuQhf5nuPyUT2ltPLY+wvOVVrffNJSi9dQTVpXEo//7YMVb6La712S71ysyOyJ+nOlS1vpZEHPiGS7sZeBkM7klkBLjH297TP9Kf8wr2CPCM19lX6PbuUZ0OmYZgzOwCh3F7tIVyeQpOlWjGGObBHsd1kzn/oayicAYHrv/PqxjRjwILzW6D0yUnh9G18vjYuyc8y7GmHmAdXZfozTCzUA73uiNFOQT6eeUFrKzKhT5mVLmdVzKoAEIpdCrmMZB1usGCfBvXl1Lbmcd94gLIFPGQbLpcQgUyiOukHpWTBRkwpOLoAnJhMTToBXTUdkE2Um6Q3bDeUVUhkOLmsMoVFqak1yiybL4snvvIMEkVJJfuWxJctsZSQZjWyuDhcfehIdw4eR4HYf8GkdXLaT+TueoEdZM9fRr+KNKQUCY6qxDkDYmjaQo1VSsDYKUKR9+E0VrnDclPU34/Y096E9l/BxD8LgGh1BHXEMppFz5t9rt1CYlG5xe4yYYsP/hK4q8qVZ1xgIFscZMCMnXbQ==
+       internal_properties : BgAAAAYAAAC1R3tDf706lUdcshT9AS/JQatm10dMf6cKP/Uspsdbllq9dL3xXZJ2ldak6KPGcrGTFgpi5CdC3Okugu3qQnwbIEPB/6vhZt7+C1a+psJnXf6bMU8AzMVuMKP1IBYX4dFGZL7mA5ay8gKkLQCG/4lyqTdrYGuVZbFLAXc0/ebgaxRwjDrpJojzHIR+Pn2HJTBgxC/vKVvxRdE0Uxlckt2HSqMxsgfx0rEBkqNTGF6+LetkEYtJQd12IlAYPNkCPHJthY4IpMlVGfdRwHFMXQKjzAVC8lINrFCOB79FoZSqpazrEbb9Zi56c0ryjuug9/6ILpJqa2vor2DTIpyaZIimweTissTLnSWfjkzMq3UpFlakFOA4qVk1vJPDkpSfxDgwAtUvPUWvqNtkR67d4PkekjAULhyAxA6RXGDi9E+9nqXyQ8hgrqwQC2H0+Uk+1VcUCAxAk9CQQeY4xLBQl9k2pyVaOyYnkNIzAElAd07uHeA/TJkOHm5m+CQsY+JPzUMHP/F5oKp8Dd2S4jLb+iXGTRUSY/McE/wyBVcJjFLyRoC5Yu1REKlQ67uDIEjfgE8m0RXF19eI3XcNTd5SgaAORM1FKHJJOalmgHxGeoSoBTVUrGT+TKMXGnWmuaZdI860i2VknA7pzlva0ttFC+SHomqE8Ocm7XMd55V5oq+0NTxrf/ZgWZuWRhoSry3G1jxlmj+bkjXCcpQocldGscUT6NZcrE8aoKeYA9FE5DDRz83JXe7ZTeuidDlGjrZYq9WZJP2kgOZegpS2UxRA3ppd8TTzusgOkQs65RjoesirRgZbJlpnKaPs/o+PZoyRhZzUBU29Y65mrR3NgqQoj4RmbVoRWzxkGh8MX+q9fOakTRWqlk5dzZek2TdkuqMWjRgMtHVpisEy+xaYHcYDyBL4DUJ5VPC7VmHVUywA/bQ0lbUgl5bKMRTjpwilByz92An92QaLa9PKFaGF8H3gG7yR+KdZ9Bb8zIaRIztBl5YXv915Oclw4YaJunPKfmcN/1HjhmOtIZVQIyc3XBXyRNFd20KWM3n931ZuFhfeM1Sh1vARAQ3h7j4e82ZqGJrOYY33eTJktng3MLlXRTmnv7vgMeCqgOaJb8C3voFtfpMXdCt9LB2qQBcpKaF8gZkQhEen5glD/cEfqcxsrSwi/NoOqKNqVahZNntqhIeQ/O+kwiu4brYdaKQfx7GR5v3kRwKrr4Lyt4nrBBmTfSspuCFJneB51qEuHq62DSK8gV0Z1OADeF4r3PmZz9XuIKJ8usU0o6dgfTjJxzyP6Z/psWRpzUfa6Wa/bf6vpO+rfXqVah2WY2PMSMRb6OwIE9uEMejL0oWc2eRpfhMdvmozNxNCtOu3mD9Sz2SiIMm1PzaSJZ1TbXOn6oDnWwJXZGv9KKFDdiYhaGsKVFDWQsMgZ8dtlWbZTdrwugFZCMtI5M9wCUt3isnMsdO1Ubu63PuiITmXW2JgsQLIhImUaEhpZh8S+ZqtTtYUPbGwkcjOQFqjpsWmisgJU82SxuH0yi4=
        type : 33
        code_elements :
         type_code : 72
