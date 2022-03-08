@@ -356,12 +356,13 @@ window :
       
       TableSupprimeTout(TBL_taches)
       
-      
       SI CBO_ChefDeProjet..ValeurMémorisée = 0 ALORS
+      	// Pas de filtre utilisateur
       	POUR TOUT ELÉMENT stTacheTmp DE zaLstTaches
       		AddLigne(stTacheTmp)
       	FIN
       SINON
+      	// On ne prend que les taches de l'utilisateur
       	aLst = zaTachesDeUsr[CBO_ChefDeProjet..ValeurMémorisée].aLstTache
       	POUR TOUT nId DE aLst
       		AddLigne(zaLstTaches[nId])
@@ -376,8 +377,7 @@ window :
       
       
       PROCÉDURE INTERNE AddLigne(stTache_P est un STR_TacheSuspendue)
-      	nNumLigne est un entier
-      	nNumLigne									= TableAjouteLigne(TBL_taches)
+      	nNumLigne est un entier						= TableAjouteLigne(TBL_taches)
       	TBL_taches[nNumLigne].COL_idTache			= stTache_P.nIdTache
       	TBL_taches[nNumLigne].COL_Projet			= stTache_P.sNomProjet
       	TBL_taches[nNumLigne].COL_US				= stTache_P.sUS

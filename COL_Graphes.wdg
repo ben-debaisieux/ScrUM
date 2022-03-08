@@ -1,0 +1,126 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : COL_Graphes
+ major_version : 26
+ minor_version : 0
+ type : 7
+ description : ""
+ subtype : 0
+procedure_set :
+ identifier : 0x11dff08f06a11b31
+ internal_properties : BgAAAAYAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ code_elements :
+  type_code : 31
+  p_codes : []
+  procedures :
+   -
+     name : InfoProjet
+     procedure_id : 1288012627202703584
+     type_code : 15
+     code : |1+
+      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClProjet)
+      
+      
+      zcst_Teste		est une chaîne	= "Testé"
+      zcst_Developpe	est une chaîne	= "Développé"
+      zcst_Non_Teste	est une chaîne	= "Non testé"
+      zcst_A_Faire	est une chaîne	= "A faire"
+      zcst_Annule		est une chaîne	= "Annulé"
+      
+      
+      //Récupération des valeurs :
+      nFinies		est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Terminee)
+      nATester	est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.En_test_fonctionnel)
+      nAnnulee	est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Annulée)
+      nAFaire		est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Toutes) - (nFinies + nATester + nAnnulee)
+      
+      
+      //Affichage des infos dans le graphe :
+      graphe est un champ <- {sChamp_P, indChamp}
+      
+      grSupprimeTout(graphe)
+      grType(graphe,grSecteurMultiniveau)
+      
+      grTitre(graphe, ChaîneConstruit("Avancement du projet %1", oProjet_P.p_sNom))
+      
+      grMAJAutomatiqueEtiquetteCatégorie(graphe, vrai)
+      
+      grSMNAjouteDonnée(graphe, zcst_Developpe + TAB + zcst_Teste, nFinies)
+      grSMNCouleurPortion(graphe,zcst_Developpe, COL_Scrum.gnCouleur_VertVif)
+      grSMNCouleurPortion(graphe,zcst_Developpe + TAB + zcst_Teste, COL_Scrum.gnCouleur_BleuPale)
+      
+      grSMNAjouteDonnée(graphe, zcst_Developpe + TAB + zcst_Non_Teste, nATester)
+      grSMNCouleurPortion(graphe,zcst_Developpe + TAB + zcst_Non_Teste, COL_Scrum.gnCouleur_RougeOrange)
+      
+      grSMNAjouteDonnée(graphe, zcst_A_Faire, nAFaire)
+      grSMNCouleurPortion(graphe,zcst_A_Faire, COL_Scrum.gnCouleur_JauneVif)
+      
+      grSMNAjouteDonnée(graphe, zcst_Annule, nAnnulee)
+      grSMNCouleurPortion(graphe,zcst_Annule, COL_Scrum.gnCouleur_Gris)
+      
+      grDessine(graphe)
+     type : 458752
+   -
+     name : EvolCharge
+     procedure_id : 1288167898864427811
+     type_code : 15
+     code : |1+
+      procédure EvolCharge(sChamp_P est une chaîne, oProjet_P est un ClProjet, bAvecImpond_P est un booléen)
+      
+      
+      //Affichage des infos dans le graphe :
+      graphe est un champ <- {sChamp_P, indChamp}
+      
+      grSupprimeTout(graphe)
+      
+      
+      stAnalyse		est un COL_Charge_UI.STR_Evol_Charge_Projet
+      stSprint_Tmp	est un COL_Charge_UI.STR_Evol_Charge_Projet_Spr
+      nCle			est un entier
+      
+      stAnalyse = COL_Charge_UI.Graphe_Evol_Charge_projet(oProjet_P.Get_IdUnique())
+      
+      grSupprimeSérie(graphe)
+      grLibellé(graphe, grAfficheEtiquette, Vrai)
+      grTitre(graphe, stAnalyse.sTitre)
+      
+      POUR TOUT stSprint_Tmp DE stAnalyse.aStSeries
+      	nCle++
+      	grEtiquetteCatégorie(graphe,nCle,stSprint_Tmp.sEtiquette)
+      	grAjouteDonnée(graphe,1, nCle,stSprint_Tmp.nCharge)
+      	grAjouteDonnée(graphe,2, nCle,stSprint_Tmp.nChargeCumul)
+      	SI bAvecImpond_P ALORS
+      		grAjouteDonnée(graphe,3, nCle,stSprint_Tmp.nChargeImpond)
+      		grAjouteDonnée(graphe,4, nCle,stSprint_Tmp.nChargeEngage)
+      	FIN
+      FIN
+      
+      grEtiquetteSérie(graphe,1,"Charge ajoutée")
+      grCouleurSérie(graphe,1,COL_Scrum.gnCouleur_OrangeVif)
+      
+      grEtiquetteSérie(graphe,2,"Charge cumulée")
+      grCouleurSérie(graphe,2,COL_Scrum.gnCouleur_BleuVif)
+      
+      SI bAvecImpond_P ALORS
+      	grEtiquetteSérie(graphe,3,"Charge avec proj. impond.")
+      	grCouleurSérie(graphe,3,COL_Scrum.gnCouleur_Gris)
+      	grTypeSérie(graphe,3,grCourbe)
+      	
+      	grEtiquetteSérie(graphe,4,"Charge engagée")
+      	grCouleurSérie(graphe,4,COL_Scrum.gnCouleur_VertVif)
+      FIN
+      
+      grDessine(graphe)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : COL_SansNom1
+resources :
+ string_res :
+  identifier : 0x11dff087069ffd68
+  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
