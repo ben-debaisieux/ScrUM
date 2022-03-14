@@ -1,0 +1,76 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_test
+ major_version : 26
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_test
+ identifier : 0x222f43e7041184b1
+ internal_properties : BgAAAAYAAABPSJzp6P/cVDRVSVLttB+/tG+hZfRMq3MzefVQHQaOeBzWo0H22w/3XhNbNqNc0wcWy82/1jxn/6a4A3m0xvbKQTaGXWz1/0F/upqMnM2+3MpsKQbPQ7EFql/IyLuWWlVLN3uqTiklo1g0pJ2Xbv/06q6FTr98LkTApEu41bBxCqohiJBvYkGV5gnmG1enFRbnoty+V+zRTprWTpnkEgkOvRUT5PBXy4u5rSsb1YKAkl1MDbeQWSrojny9wWxOsdnGtrI+bT86UECSE4CoK2/R/WhH05P/gKCgpznCynZNoA2F0Ji40kkSYC4Xp4SKTk4ptmGOM73VedzQKDjuLWTjNQwk+HaD8UsreruBxKYtY5mPEPxl3NzILrY9zyOGQfTMasERnZcHlCg0yHolk+Jmq1pjBWcxSbc+K9Vcp+o4PVVnI+89tTiY7rMweIig7HBH/Zb+zOs/OQgzCTg65E7653BQmlmPD8qKGhJ8v7LC59Y4xnqOQIinItd/fo4SjN2mJFiUfX/3uLIuhtINaYTfjJp41IDTTF1Xjqp+IlnT53MKa+GB2GUMLLrNUe2sr5EUAn4cAMBLbhajxX3yOIVKxwj8nEoeYFNYOJvHOKzwJZkGo9cwcuf2iuPzqcyjFRtKshRpDixmpw==
+ controls :
+  -
+    name : BTN_SansNom1
+    identifier : 0x222f43ee0459a28a
+    internal_properties : BgAAAAYAAADGKYI2izgup2gH5Fk4GvHZqOYKMS7UJnif4Xp+QdaDPDcMzma/DyJ2Hkhu4l3mCGstUiVFiCDgWNpYBG+uURkCLJyggh+ikE++gc2mZ3c9PjqhT8U3Qig3FLQIChSDNRZhYjVF4DNoD008Wr+TU09hSNjRlCmqDA0pIuFvPSJmafbZOuFY/y/bMKsuw+UsfnDW1cpIc/dKnFetkmH1+niyzgBzvdURai3Oh1tA2EGH6bd3UxP2t9rHQ0l6Az5tx7QSw4pBr93q1Y7pc86omS7fla2odHqrvZSQAmHRSts4X3v7ZC9mD6x03ZSrQOm/DxFUP3KzWjUyC4taftCvv4cfoQRLIm0sG+bMKCvWFP6lwdsWxl/4OEbIcFWVmxCo28UijuwUGBCA7iGg08AAKHHHDL1Frslpyy+/G7xQLMtnWzOSQ3bT3Apm3enLT5IbDH5/ymgBZNEHamP3ih02jZzvvLL7ZmvfXGUvdMlhXsfzV8acH5XatxseSawcZx6WPSMK42zxuLTy07I7mt73F41IQeBUA89/puS1Z4haldYBo0bMyYYVgibpEDiowzqLiRijKlMLaAlH+NQqPxsdkCGpiH0G/dtLk8JuGUBvaULNw4aKkuqPwyFVHeVch1/sWiQ/mha8acOtjngUl1Br4azuxendHAtbh8pKGkzq7adEAyMbIbLQcY2a9u88DQ7PpfpdaSzEa/mTbbEQOM8+qLvTQg==
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         vZzzz2 est un variant = null
+         sVar est une requête SQL = [
+         	select * <§cs:3§>
+         	from Scr_Commentaire<§cs:3§>
+         	where  = '[%DateVersChaîne(DateSys())%]' + [%vZzzz2%]<§cs:3§>
+         ]
+         
+         
+         
+         si vZzzz2 = 10 ALORS
+         	nTest est un entier = 12
+         sinon
+         	Info(ntest)
+         FIN
+         
+         info(sVar..CodeSQL)
+         
+         
+        type : 18
+      -
+        type : 161
+        enabled : false
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BgAAAAYAAABd4biPtdLQOwfUFiqrit8H4xfGqKyz9t6VLxCUnNZRQiLPVs82PZNE+UVdKRzjizyeuKyRur85gNMUfqplpmtNDnQWQla9zo+GH9+1EfUJ6w17Dn/egD/gv+Hhywk8c9unIdzEp7EHgaAqD28w7Agveg4u19PBcKGZtQ==
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BgAAAAYAAAA67fgqjL+BlNW0l7RVb9QHekfVEUcR8SpB62EFBVueAPYoi1/j/aXUAO/gLLyCTVuQazFai314Ui0SG0rWW0oZm0BFICoRFAhcTeX8
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE MaFenêtre()
+   -
+     type : 230
+     enabled : false
+ code_parameters :
+  internal_properties : BgAAAAYAAAAwjDLmDSZ0H1P68nJIeNfqR9EvRjU/K+sVcM1T6rhVNr+VTV1mZ/rmoweYbFDZUhBGcv8UsxlDxVCOnb2U/SQOvlGWzNby3/w/V+ppSymxv+Vh
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x122f43e3002875bd
+  internal_properties : BgAAAAYAAAAa2Zm8J9E/zh+/WIrVvz1fER/So3PB0gjQuxc1xKQVWY4ZDm5lfg==
+custom_note :
+ internal_properties : BgAAAAYAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BgAAAAYAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

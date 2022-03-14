@@ -21,6 +21,14 @@ class :
       prive
       	m_oProjet		est un ClProjet dynamique
       	m_sNom			est une chaîne ANSI	<mapping=Nom>
+      	m_nOrdre		est un entier sur 2 octets <MAPPING=Ordre>
+      fin
+      
+      constante
+      	cst_posPrem	= -2
+      	cst_posPrec	= -1
+      	cst_posSuiv	= 1
+      	cst_posFin	= 2
       fin
      type : 131072
   procedures :
@@ -70,25 +78,54 @@ class :
       
       si pas :m_bEstSupprime alors
       	
-      	//On s'assure qu'il y a bien un projet associé à l'epic.
+      	//On s'assure qu'il y ait bien un projet associé à l'epic.
       	si :m_oProjet = Null ALORS
       		ExceptionDéclenche(1, "Enregistrement du groupe impossible : Aucun projet n'y est affecté")
       	sinon
       		Scr_Epic.IDScr_Projet = :m_oProjet.Get_IdUnique()
       	FIN
       	
-      sinon
+      	si :m_nOrdre = 0 ALORS
+      		//Si aucun ordre n'a été définit, on ajoute le groupe en dernier
+      		:m_nOrdre		= nNbEpicsDePrj() + 1
+      		Scr_Epic.Ordre	= :m_nOrdre
+      	FIN
       	
+      sinon
       	//Si on supprime l'epic, on retire la référence dans les US qui y sont rattachés.
-      	sReq = ChaîneConstruit([
+      	sReq = [
       		UPDATE Scr_UserStory
       		SET IDScr_Epic = Null
-      		WHERE IDScr_Epic = %1
-      		], :Get_IdUnique())
+      		WHERE IDScr_Epic = [%:Get_IdUnique()%]
+      		]
       	goapp.RSQL(sdSuppRefEpic,sReq)
       	HAnnuleDéclaration(sdSuppRefEpic)
-      	
       fin
+      
+      
+      	procedure interne nNbEpicsDePrj():entier
+      		sdNbEpicDePrj est une Source de Données
+      		sReqCnt est une chaîne
+      		nRetour est un entier
+      		
+      		sReqCnt = [
+      			SELECT COUNT(*) AS Nbre
+      			FROM Scr_Epic
+      			WHERE Scr_Epic.IDScr_Projet = [%:m_oProjet.Get_IdUnique()%]
+      		]
+      		
+      		SI goapp.RSQL(sdNbEpicDePrj, sReqCnt) ALORS
+      			HLitPremier(sdNbEpicDePrj)
+      			si pas HEnDehors(sdNbEpicDePrj)
+      				nRetour = sdNbEpicDePrj.Nbre
+      			FIN
+      		FIN
+      		
+      		HAnnuleDéclaration(sdNbEpicDePrj)
+      		
+      		renvoyer nRetour
+      	
+      	FIN
      type : 458752
    -
      name : Get_EpicDeNom
@@ -140,6 +177,57 @@ class :
       
       RENVOYER sRetour
      type : 458752
+   -
+     name : Deplace_Grp
+     procedure_id : 1309169029155736491
+     type_code : 12
+     code : |1-
+      procédure Deplace_Grp(nSens_p est un entier)
+      
+      nMemoPos est un entier = :m_nOrdre
+      nNouvPos est un entier
+      bDeplaceAmont est un booléen
+      
+      selon nSens_p
+      	cas ::cst_posPrem
+      		bDeplaceAmont = vrai
+      		nNouvPos = 1
+      		
+      	CAS ::cst_posPrec
+      		bDeplaceAmont = Vrai
+      		nNouvPos = :m_nOrdre - 1
+      		
+      	CAS ::cst_posSuiv
+      		bDeplaceAmont = faux
+      		nNouvPos = :m_nOrdre + 1
+      		
+      	CAS ::cst_posFin
+      		bDeplaceAmont = Faux
+      		nNouvPos = Dimension(:m_oProjet.aoEpics())
+      		
+      	AUTRE CAS
+      		ExceptionDéclenche(1,ChaîneConstruit("Paramètre incompatible ""%1"". Pile : %2", nSens_p, dbgInfo(dbgPile)))
+      FIN
+      
+      
+      oEpic_Tmp est un ClEpic dynamique
+      pour tout element oEpic_Tmp de :m_oProjet.aoEpics()
+      	
+      	si oEpic_Tmp = objet alors
+      		:p_nOrdre = nNouvPos
+      		:Enregistre()
+      	sinon
+      		si pas bDeplaceAmont et nMemoPos < oEpic_Tmp.m_nOrdre <= nNouvPos ALORS
+      			oEpic_Tmp.p_nOrdre--
+      			oEpic_Tmp.Enregistre()
+      		FIN
+      		si bDeplaceAmont et nNouvPos <= oEpic_Tmp.m_nOrdre < nMemoPos ALORS
+      			oEpic_Tmp.p_nOrdre++
+      			oEpic_Tmp.Enregistre()
+      		FIN
+      	FIN
+      FIN
+     type : 458752
   properties :
    -
      name : p_sNom
@@ -169,6 +257,24 @@ class :
          procédure publique p_oProjet(oValeur est ClProjet)
          :EstModif()
          :m_oProjet <- oValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_nOrdre
+     identifier : 0x122bc74ab5d7112b
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_nOrdre() : entier
+         
+         renvoyer :m_nOrdre
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_nOrdre(nValeur est un entier)
+         
+         :m_nOrdre=nValeur
         type : 2031616
      template_refs : []
   procedure_templates : []

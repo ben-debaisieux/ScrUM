@@ -595,7 +595,7 @@ window :
                jauge(nInc(),nPosMax)
                ExécuteTraitement(BTN_Taches_MAJ_Str_et_Adaptation,trtClic)
                
-               //Chargement des rétrospecives.
+               //Chargement des rétrospectives.
                Jauge(nInc(),nPosMax)
                ExécuteTraitement(BTN_Import_retrospective,trtClic)
                
@@ -1035,6 +1035,9 @@ window :
                FIN
                
                
+               SI PAS HSupprimeTout(Scr_Epic) ALORS
+               	Erreur(ErreurInfo(errComplet))
+               FIN
                SI PAS HSupprimeTout(Scr_Projet_Situation) ALORS
                	Erreur(ErreurInfo(errComplet))
                FIN
@@ -8713,7 +8716,6 @@ window :
       i						est un entier
       sFichier				est une chaîne
       nPremiereligne			est un entier	= 2
-      //Declatration VAriables
       nIdUS					est un entier
       stTache					est une STR_Tache
       stUS					est une STR_UserStorie
@@ -8733,13 +8735,19 @@ window :
       nCol_commentaire_Test	est un entier	= 12
       
       
-      //oPrj est un ClProjet <- oProjetDeNom("Menuiserie FP")
       
-      nNumeroOrdre est une entier = 0
+      
+      nNumeroOrdre est une entier
       // Ouvre le sélecteur de fichiers
       sFichier = Dupplication_Fichier_Avant_Import(sFicImport_P)
       
+      
+      
       SI sFichier <> "" ALORS
+      	
+      	//Importer les epics, avant le chargement
+      	Import_Epics(oPrj_P, sFichier)
+      	
       	
       	IdFichierXLS = xlsOuvre(sFichier,xlsEcriture)
       	
@@ -8770,7 +8778,7 @@ window :
       							stUS.eEtatUserStorie = ClUserStory.ECompteNbUS.En_test_fonctionnel
       						FIN
       						
-      						//Ajout de l'epic, si présent
+      						//Ajout de l'epic, si pas présent
       						stUS.nIdEpic = nCreeEpicSiBesoin(oPrj_P, xlsDonnée(IdFichierXLS,i,nCol_Epic))
       						
       						nIdUS = User_Story_ajout(stUS)
@@ -8785,7 +8793,6 @@ window :
       							stTache.nNumSprintCreation		= xlsDonnée(IdFichierXLS,i,nCol_numSprintCrea)
       							stTache.nNumSprintRealisation	= xlsDonnée(IdFichierXLS,i,nCol_numSprint)
       							stTache.nNumSprintPrevision		= stTache.nNumSprintRealisation
-      							//stTache.nNumSprintDemarage = stTache.nNumSprintCreation
       							stTache.nIDUserStorie			= nIdUS
       							stTache.sDescription			= xlsDonnée(IdFichierXLS,i,nCol_nom)
       							stTache.sCommentaire			= xlsDonnée(IdFichierXLS,i,nCol_commentaire)
@@ -8852,6 +8859,184 @@ window :
       
       Import_Des_Criteres_Acceptation(oPrj_P.Get_IdUnique(), sFichier)
       Import_Process(oPrj_P.Get_IdUnique(), sFichier)
+      Import_Blocages(oPrj_P.Get_IdUnique(), sFichier)
+      
+     type : 458752
+   -
+     name : Import_Blocages
+     internal_properties : BgAAAAYAAADYuPST6CP+T+K2ZU37o7g3n8Kew/nVjSZD5G6OyRuT2Yo67DV/AZmlWI7RE7NW48hb
+     procedure_id : 1308599542259847443
+     type_code : 14
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Import_Blocages (<nIDScr_Projet> est entier, <Chemin_fichier> est chaîne)
+      //
+      // Paramètres :
+      //	nIDScr_Projet (entier) : <indiquez ici le rôle de nIDScr_Projet_p>
+      //	Chemin_fichier (chaîne ANSI) : <indiquez ici le rôle de FileName_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE Import_Blocages(local nIDScr_Projet est un entier, local Chemin_fichier est une chaine)
+      
+      
+      nIDfichierXLS est un xlsDocument
+      nNumFeuille_Critere_Acceptation est un entier
+      sNom_Onglet_Blocage est une chaine = "Blocages"
+      
+      nNbLignes est un entier // Nombre de ligne total de la feuille
+      nLigne est un entier	// Numéro de ligne de la feuille
+      sCodeTache est une chaîne
+      oTache est un ClTache dynamique
+      
+      //------------------------------------------Numero--Des--Colonnes---------------------------------------------------
+      nCol_codeTache est un entier = 1
+      nCol_IndoBlocage est un entier = 2
+      
+      
+      //------------------------------------------------------------------------------------------------------------------
+      
+      //Faire une requete pour aller chercher tous les composants types et remplir le tableau avec
+      
+      
+      
+      //------------------------------------------------------------------------------------------------------------------
+      
+      SI Chemin_fichier <>"" ALORS
+      	nIDfichierXLS = xlsOuvre(Chemin_fichier,xlsEcriture)
+      	SI ErreurDétectée = Faux ALORS
+      		
+      		// Recherche de la feuille des critères d'acceptation
+      		
+      		POUR i= 1 _A_ nIDfichierXLS..NombreFeuille
+      			xlsFeuilleEnCours(nIDfichierXLS, i)
+      			SI nIDfichierXLS..NomFeuille = sNom_Onglet_Blocage ALORS
+      				nNumFeuille_Critere_Acceptation = i
+      				SORTIR		// Une feuille à été trouvé				
+      			FIN	
+      		FIN		
+      		
+      		// Traitement de la feuille des critères d'acceptation
+      		SI nNumFeuille_Critere_Acceptation <> 0 ALORS		
+      			
+      			// on Sélectionne la feuille qui correspond aux critères d'acceptation
+      			xlsFeuilleEnCours(nIDfichierXLS, nNumFeuille_Critere_Acceptation)
+      			
+      			// Parcours de la feuilles Excel des critères sur nNbLignes
+      			nNbLignes = xlsNbLigne(nIDfichierXLS, Vrai)
+      			
+      			// on lit pas la première ligne
+      			POUR nLigne = 2 _À_ nNbLignes
+      				
+      				sCodeTache  = xlsDonnée(nIDfichierXLS,nLigne,nCol_codeTache)
+      				SI sCodeTache <> "" ALORS
+      					HLitRecherche(Scr_Tache,CodeTache,sCodeTache,hIdentique+hLimiteParcours)
+      					SI HTrouve(Scr_Tache) ALORS
+      						oTache <- ClTache.GetObj(Scr_Tache.IDScr_Tache)
+      						SI PAS oTache.p_nStatut DANS(ClTache.cstStatut_Annulee, ClTache.cstStatut_realise) ALORS
+      							oTache.p_nStatut		= ClTache.cstStatut_Suspendu
+      							oTache.p_sCMTR_Blocage	= xlsDonnée(nIDfichierXLS,nLigne,nCol_IndoBlocage)
+      							oTache.Enregistre()
+      						SINON
+      							Trace("Tache en suspend, mais dans un mauvais statut clôturé : " + oTache.p_sCodeTache)
+      						FIN
+      					sinon
+      						Trace("Tache non trouvée : " + oTache.p_sCodeTache)
+      					FIN
+      				FIN
+      			FIN
+      			
+      			
+      			
+      		FIN
+      		xlsFerme(nIDfichierXLS)
+      	SINON
+      		Info(ErreurInfo())
+      	FIN
+      fin
+      
+      
+      
+     type : 458752
+   -
+     name : Import_Epics
+     internal_properties : BgAAAAYAAADYuPST6CP+T+K2ZU37o7g3n8Kew/nVjSZD5G6OyRuT2Yo67DV/AZmlWI7RE7NW48hb
+     procedure_id : 1310453736740040819
+     type_code : 14
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Import_Epics (<nIDScr_Projet> est entier, <Chemin_fichier> est chaîne)
+      //
+      // Paramètres :
+      //	nIDScr_Projet (entier) : <indiquez ici le rôle de nIDScr_Projet_p>
+      //	Chemin_fichier (chaîne ANSI) : <indiquez ici le rôle de FileName_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE Import_Epics(oPrj_P est un ClProjet, local Chemin_fichier est une chaine)
+      
+      nIDfichierXLS est un xlsDocument
+      nNumFeuille_Critere_Acceptation est un entier
+      sNom_Onglet est une chaine = "Groupements"
+      
+      nNbLignes est un entier // Nombre de ligne total de la feuille
+      nLigne est un entier	// Numéro de ligne de la feuille
+      
+      oEpic est un ClEpic dynamique
+      
+      //------------------------------------------Numero--Des--Colonnes---------------------------------------------------
+      nCol_Ordre est un entier = 1
+      nCol_Nom est un entier = 2
+      //------------------------------------------------------------------------------------------------------------------
+      
+      nIDfichierXLS = xlsOuvre(Chemin_fichier,xlsEcriture)
+      SI ErreurDétectée = Faux ALORS
+      	
+      	// Recherche de la feuille des critères d'acceptation
+      	
+      	POUR i= 1 _A_ nIDfichierXLS..NombreFeuille
+      		xlsFeuilleEnCours(nIDfichierXLS, i)
+      		SI nIDfichierXLS..NomFeuille = sNom_Onglet ALORS
+      			nNumFeuille_Critere_Acceptation = i
+      			SORTIR		// Une feuille à été trouvé				
+      		FIN	
+      	FIN		
+      	
+      	// Traitement de la feuille des critères d'acceptation
+      	SI nNumFeuille_Critere_Acceptation <> 0 ALORS
+      		sNom est une chaîne
+      		// on Sélectionne la feuille qui correspond aux critères d'acceptation
+      		xlsFeuilleEnCours(nIDfichierXLS, nNumFeuille_Critere_Acceptation)
+      		
+      		// Parcours de la feuilles Excel des critères sur nNbLignes
+      		nNbLignes = xlsNbLigne(nIDfichierXLS, Vrai)
+      		
+      		// on lit pas la première ligne
+      		POUR nLigne = 2 _À_ nNbLignes
+      			sNom = xlsDonnée(nIDfichierXLS,nLigne,nCol_Nom)
+      			si pas sNom dans ("", "-") alors
+      				oEpic			= allouer un ClEpic()
+      				oEpic.p_oProjet	= oPrj_P
+      				oEpic.p_nOrdre	= xlsDonnée(nIDfichierXLS,nLigne,nCol_Ordre)
+      				oEpic.p_sNom	= sNom
+      				oEpic.Enregistre()
+      			FIN
+      		FIN
+      	FIN
+      	xlsFerme(nIDfichierXLS)
+      SINON
+      	Info(ErreurInfo())
+      FIN
+      
+      
       
      type : 458752
   procedure_templates : []

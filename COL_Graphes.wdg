@@ -26,6 +26,7 @@ procedure_set :
       zcst_Developpe	est une chaîne	= "Développé"
       zcst_Non_Teste	est une chaîne	= "Non testé"
       zcst_A_Faire	est une chaîne	= "A faire"
+      sZcst_En_Cours	est une chaîne	= "En cours"
       zcst_Annule		est une chaîne	= "Annulé"
       
       
@@ -33,7 +34,8 @@ procedure_set :
       nFinies		est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Terminee)
       nATester	est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.En_test_fonctionnel)
       nAnnulee	est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Annulée)
-      nAFaire		est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Toutes) - (nFinies + nATester + nAnnulee)
+      nEnCOurs	est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.EnCours)
+      nAFaire		est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.EnCours)
       
       
       //Affichage des infos dans le graphe :
@@ -52,6 +54,9 @@ procedure_set :
       
       grSMNAjouteDonnée(graphe, zcst_Developpe + TAB + zcst_Non_Teste, nATester)
       grSMNCouleurPortion(graphe,zcst_Developpe + TAB + zcst_Non_Teste, COL_Scrum.gnCouleur_RougeOrange)
+      
+      grSMNAjouteDonnée(graphe, sZcst_En_Cours, nEnCOurs)
+      grSMNCouleurPortion(graphe,sZcst_En_Cours, COL_Scrum.gnCouleur_Orange_pale)
       
       grSMNAjouteDonnée(graphe, zcst_A_Faire, nAFaire)
       grSMNCouleurPortion(graphe,zcst_A_Faire, COL_Scrum.gnCouleur_JauneVif)

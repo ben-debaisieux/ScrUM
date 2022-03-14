@@ -51,7 +51,7 @@ class :
       fin
       
       constante
-      	cstTauxImponderable		= 0.20
+      	cstTauxImponderable		= 0.40
       fin
      type : 131072
   procedures :
@@ -1444,6 +1444,7 @@ class :
       	SELECT IDScr_Epic
       	FROM Scr_Epic
       	WHERE IDScr_Projet = %1
+      	ORDER BY Ordre
       ], :Get_IdUnique())
       
       SI goapp.RSQL(sdEpics,sReq) ALORS
