@@ -2,33 +2,33 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClApp
- major_version : 26
+ major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x1e88f2392f2e7685
- internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
-  internal_properties : BgAAAAYAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  internal_properties : BwAAAAcAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
   type_code : 10
   p_codes :
    -
      code : |1-
       ClApp est une Classe
       	public
-      		m_oUsrCnx est un objet ClUsr dynamique
-      		m_nVelociteMoyenne est un entier = 0
-      		m_nNumeroDuSprintActuel est un entier = 0
-      		
-      		m_sMsgCnx est une chaîne
-      	prive
-      		m_cnxBDD est une connexion
-      		m_nNbreTrsOuverte est un entier
-      		m_bAnnulationDemande est un booléen
-      		
-      		m_bUsrDev est un booléen
+      	m_oUsrCnx				est un objet ClUsr dynamique
+      	m_nVelociteMoyenne		est un entier
+      	m_nNumeroDuSprintActuel	est un entier
+      	
+      	m_sMsgCnx				est une chaîne
+      prive
+      	m_cnxBDD				est une connexion
+      	m_nNbreTrsOuverte		est un entier
+      	m_bAnnulationDemande	est un booléen
+      	
+      	m_bUsrDev				est un booléen
       FIN
        
      type : 131072
@@ -38,80 +38,65 @@ class :
      procedure_id : 2200274745389184645
      type_code : 27
      code : |1+
-      PROCEDURE Constructeur( )
+      PROCEDURE Constructeur()
+      
+      sMsgErrCnx est une chaîne
       
       // ************************************** Connexion à la base de données ******************************************//
       HSurErreur("*",hErrTout,"")
+      HGèreIntégrité(Vrai)
+      
       
       si pas EnModeTestAutomatique() alors
-      	SI Droite(SysEnvironnement("USERNAME"),4) PAS DANS ("x2777") ou pas EnModeTest() ALORS 
+      	
+      	HVérifieStructure(hCompatible)   //pour fonctionner même si modif analyse
+      	
+      	SI pas enmodetest() ou PAS Droite(SysEnvironnement("USERNAME"),4) DANS ("x2777", "5045") ALORS 
       		
-      		:m_sMsgCnx = "Connexion : HF/CS"
+      		:m_sMsgCnx					= "Connexion : HF/CS"
       		
       		// Paramètres de la connexion
-      		:m_cnxBDD..Provider = hAccèsHFClientServeur
-      		:m_cnxBDD..Accès = hOLectureEcriture
-      		:m_cnxBDD..Utilisateur = "cnx_scrum"
-      		:m_cnxBDD..MotDePasse = "cnx_scrum"
-      		:m_cnxBDD..Serveur = "prod-vm-ast02"
+      		:m_cnxBDD..Provider			= hAccèsHFClientServeur
+      		:m_cnxBDD..Accès			= hOLectureEcriture
+      		:m_cnxBDD..Utilisateur		= "cnx_scrum"
+      		:m_cnxBDD..MotDePasse		= "cnx_scrum"
+      		:m_cnxBDD..Serveur			= "prod-vm-ast02"
       		
-      		:m_cnxBDD..BaseDeDonnées = "SCRUM-BDD"
-      		:m_cnxBDD..Cryptage = hCryptageNon
-      		:m_cnxBDD..OptionsCurseur = hCurseurClient
+      		:m_cnxBDD..BaseDeDonnées	= "SCRUM-BDD"
+      		:m_cnxBDD..Cryptage			= hCryptageNon
+      		:m_cnxBDD..OptionsCurseur	= hCurseurClient
       		
-      		HVérifieStructure(hCompatible)   //pour fonctionner même si modif analyse
-      		// Ouverture de la nouvelle connexion
-      		SI HOuvreConnexion(:m_cnxBDD) ALORS
-      			
-      			HChangeConnexion("*",:m_cnxBDD)
-      			
-      			SI PAS HCréationSiInexistant("*") ALORS
-      				Info(ChaîneConstruit("Impossible d'ouvrir les tables de la base de donnés sur le serveur : %1.", ...
-      					:m_cnxBDD..Serveur))
-      				stop
-      				FinProgramme()
-      			FIN		
-      		SINON
-      			Info(ChaîneConstruit("Impossible d'ouvrir l'accès à la base de donnés sur le serveur : %1.", :m_cnxBDD..Serveur))
-      			stop
-      			FinProgramme()
-      		FIN
+      		sMsgErrCnx					= "Impossible d'ouvrir les tables de la base de donnés sur le serveur : [%:m_cnxBDD..Serveur%]."
       	SINON
       		:m_sMsgCnx = "Connexion : HF local"
       		
-      		// connexion local aux fichiers
-      		HVérifieStructure(hCompatible)   //pour fonctionner même si modif analyse
-      		
-      		
-      		//:m_cnxBDD..Provider = hAccèsNatifSQLite
-      		//:m_cnxBDD..Serveur = "Scrum.db"
-      		
-      		:m_cnxBDD..Provider = hAccèsHF7
-      		:m_cnxBDD..Utilisateur = "cnx_scrum"
-      		:m_cnxBDD..MotDePasse = "cnx_scrum"
-      		
-      		:m_cnxBDD..Accès = hOLectureEcriture
-      		
-      		HOuvreConnexion(:m_cnxBDD)
-      		HChangeConnexion("*",:m_cnxBDD)
-      		
-      		SI PAS HCréationSiInexistant("*") ALORS
-      			Info("Impossible d'ouvrir les tables locales de la base de données.")
-      			FinProgramme()
-      		FIN		
-      		
+      		// connexion locale aux fichiers
+      		:m_cnxBDD..Provider			= hAccèsHF7
+      		sMsgErrCnx					= "Impossible d'ouvrir les tables locales de la base de données."
       	FIN
       SINON
       	// connexion local aux fichiers
       	HVérifieStructure(hidentique)
-      	HGèreIntégrité(vrai)
-      	
-      	:m_cnxBDD..Provider = hAccèsHF7
-      	HOuvreConnexion(:m_cnxBDD)
-      	HChangeConnexion("*",:m_cnxBDD)
+      	:m_cnxBDD..Provider				= hAccèsHF7
+      	sMsgErrCnx						= "Impossible d'ouvrir les tables locales de la base de données."
       FIN
       
       
+      // Ouverture de la nouvelle connexion
+      SI HOuvreConnexion(:m_cnxBDD) ALORS
+      	
+      	HChangeConnexion("*",:m_cnxBDD)
+      	
+      	SI PAS HCréationSiInexistant("*") ALORS
+      		Info(sMsgErrCnx)
+      		STOP
+      		FinProgramme()
+      	FIN		
+      SINON
+      	Info(sMsgErrCnx)
+      	STOP
+      	FinProgramme()
+      FIN
       
       
       
@@ -189,7 +174,7 @@ class :
      type : 458752
    -
      name : Rsql
-     internal_properties : BgAAAAYAAABi7hm9i7KpV7ImaJiXE0yAv/lCt7qfnFr9clIPQeK148MNBUJR0RNmbsuBC9xFcykAE065Rjnl7bSylWBOiVLbEmiVfZN+4Ld3sTKc+3S5X01znpGnhTCWIeOy6jTnXbFy8u6Httxc+k9TSisBxeZ4tFOMxEDGyVdN5chsvCP7uQVge8Rz//FjIQ/LK0hbRlHiWaWXeCZx
+     internal_properties : BwAAAAcAAABi7hm9i7KpV7ImaJiXE0yAv/lCt7qfnFr9clIPQeK148MNBUJR0RNmbsuBC9xFcykAE065Rjnl7bSylWBOiVLbEmiVfZN+4Ld3sTKc+3S5X01znpGnhTCWIeOy6jTnXbFy8u6Httxc+k9TSisBxeZ4tFOMxEDGyVdN5chsvCP7uQVge8Rz//FjIQ/LK0hbRlHiWaWXeCZx
      procedure_id : 2203050552823197080
      type_code : 12
      code : |1+
@@ -324,7 +309,7 @@ class :
      type : 458752
    -
      name : sFormateTexteSQL
-     internal_properties : BgAAAAYAAADYuPST6CP+T+K2ZU37o7g3n8Kew/nVjSZD5G6OyRuT2Yo67DV/AZmlWI7RE7NW48hb
+     internal_properties : BwAAAAcAAADYuPST6CP+T+K2ZU37o7g3n8Kew/nVjSZD5G6OyRuT2Yo67DV/AZmlWI7RE7NW48hb
      procedure_id : 2277711467686255264
      type_code : 12
      code : |1-
@@ -371,10 +356,10 @@ class :
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
 resources :
  string_res :
   identifier : 0x1e88f2332f2b5f44
-  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

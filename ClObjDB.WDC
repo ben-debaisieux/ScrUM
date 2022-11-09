@@ -2,20 +2,21 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClObjDB
- major_version : 26
+ major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x1e494c4397e0b0e1
- internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
+  internal_properties : BwAAAAcAAACmAwaRPJNXOHKYPshT259864CQwLZHS2h01Pc8ZH0ILg5alXbi7xQp2jaYVRxVtkKa6si1eonG/tRv/ad9n/86N969zfMRB63kTA==
   type_code : 10
   p_codes :
    -
      code : |1+
-      ClObjDB est une Classe
+      ClObjDB est une Classe, abstraite
       	PROTÉGÉ
       		m_nIdUnique est un entier
       		m_bEstSupprime est un booléen
@@ -97,9 +98,8 @@ class :
       PROCEDURE Destructeur()
       
       si :m_bModif ALORS
-      	trace(ChaîneConstruit("Libération d'un objet non enregistré : %1 ID : %2", ...
-      		:m_sNomTable,...
-      		:m_nIdUnique))
+      	trace("Libération d'un objet non enregistré : [%:m_sNomTable%] ID : [%:m_nIdUnique%]")
+      	stop si pas EnModeTestAutomatique()
       FIN
      type : 655360
    -
@@ -132,10 +132,10 @@ class :
       	
       	//On s'assure qu'on enregistre bien l'instance d'origine.
       	si pas :bVerifPointeur() alors
-      		ExceptionDéclenche(1,ChaîneConstruit([
-      			Erreur : la référence de l'objet "%1" est différente de celle d'origine.
+      		ExceptionDéclenche(1,[
+      			Erreur : la référence de l'objet "[%objet..Classe%]" est différente de celle d'origine.
       			L'objet a été dupliqué.
-      			], objet..Classe))
+      			])
       	FIN
       	
       	
@@ -290,11 +290,9 @@ class :
       	
       	HLitRecherche(:m_sNomTable, :m_sNom_Col_Id_Auto, :Get_IdUnique(), hIdentique+hLimiteParcours)
       	SI PAS HTrouve(:m_sNomTable) ALORS
-      		ExceptionDéclenche(1, ChaîneConstruit([
-      			Enregistrement introuvable : %1.%2 = %3
-      			], :m_sNomTable, ...
-      			:m_sNom_Col_Id_Auto, ...
-      			:Get_IdUnique()))
+      		ExceptionDéclenche(1, [
+      			Enregistrement introuvable : [%:m_sNomTable%].[%:m_sNom_Col_Id_Auto%] = [%:Get_IdUnique()%]
+      			])
       		
       	FIN
       FIN
@@ -386,51 +384,55 @@ class :
       PROCEDURE globale GetObj(sClasse_P est une chaîne, nIdUnique_P est un entier):ClObjDB
       
       
+      sCle est une chaîne = sClasse_P + nIdUnique_P
       
       //A t on déja instancié cet objet ?
-      si pas ::gaoInstances[sClasse_P + nIdUnique_P]..Vide ALORS
-      	//Oui : on retourne l'objet
-      	RENVOYER ::gaoInstances[sClasse_P + nIdUnique_P]
-      sinon
+      si ::gaoInstances[sCle]..Vide ALORS
       	selon sClasse_P
       		cas "ClUsr"
-      			RENVOYER = allouer un ClUsr(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClUsr(nIdUnique_P)
       		cas "ClProjet"
-      			RENVOYER = allouer un ClProjet(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClProjet(nIdUnique_P)
       		cas "ClEpic"
-      			RENVOYER = allouer un ClEpic(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClEpic(nIdUnique_P)
       		cas "ClUserStory"
-      			RENVOYER = allouer un ClUserStory(nIdUnique_P)
+      			::gaoInstances[sCle] <-allouer un ClUserStory(nIdUnique_P)
       		cas "ClTache"
-      			RENVOYER = allouer un ClTache(nIdUnique_P)
+      			::gaoInstances[sCle] <-allouer un ClTache(nIdUnique_P)
       		cas "ClSprint"
-      			RENVOYER = allouer un ClSprint(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClSprint(nIdUnique_P)
       		cas "ClCritereAccept"
-      			RENVOYER = allouer un ClCritereAccept(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClCritereAccept(nIdUnique_P)
       		cas "ClCritereAccept_Composant"
-      			RENVOYER = allouer un ClCritereAccept_Composant(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClCritereAccept_Composant(nIdUnique_P)
       		cas "ClSchem"
-      			RENVOYER = allouer un ClSchem(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClSchem(nIdUnique_P)
       		cas "ClSchem_Axe"
-      			RENVOYER = allouer un ClSchem_Axe(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClSchem_Axe(nIdUnique_P)
       		cas "ClSchem_Inter_Attente"
-      			RENVOYER = allouer un ClSchem_Inter_Attente(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClSchem_Inter_Attente(nIdUnique_P)
       		cas "ClSchem_Inter_Auto"
-      			RENVOYER = allouer un ClSchem_Inter_Auto(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClSchem_Inter_Auto(nIdUnique_P)
       		cas "ClSchem_Inter_Condition"
-      			RENVOYER = allouer un ClSchem_Inter_Condition(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClSchem_Inter_Condition(nIdUnique_P)
       		cas "ClSchem_Inter_Manu"
-      			RENVOYER = allouer un ClSchem_Inter_Manu(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClSchem_Inter_Manu(nIdUnique_P)
       		cas "ClSchem_Inter_Operateur"
-      			RENVOYER = allouer un ClSchem_Inter_Operateur(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClSchem_Inter_Operateur(nIdUnique_P)
       		cas "ClSchem_Inter_SousProcess"
-      			RENVOYER = allouer un ClSchem_Inter_SousProcess(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClSchem_Inter_SousProcess(nIdUnique_P)
       		cas "ClMessage"
-      			RENVOYER = allouer un ClMessage(nIdUnique_P)
+      			::gaoInstances[sCle] <- allouer un ClMessage(nIdUnique_P)
       		AUTRE CAS
-      			RENVOYER null
+      			ExceptionDéclenche(1, "La classe [%sClasse_P%] n'est pas déclarée dans ClObjDB.GetObj")
       	FIN
       FIN
+      
+      si ::gaoInstances[sCle] = null ALORS
+      	ExceptionDéclenche(1, "Récupération impossible de l'objet  [%sClasse_P%]; ID  [%nIdUnique_P%].")
+      FIN
+      
+      RENVOYER ::gaoInstances[sCle]
      type : 458752
    -
      name : sGetNomInstance
@@ -450,7 +452,6 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       PROCEDURE prive sGetNomInstance()
-      
       renvoyer objet..Classe + :Get_IdUnique()
      type : 458752
    -
@@ -499,13 +500,13 @@ class :
       TableauSupprimeTout(ClObjDB.gaoInstances)
      type : 458752
    -
-     name : Purge_cache_obj
+     name : Purge_cache_ob_old
      procedure_id : 2245475530661232052
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Purge_cache_obj ()
+      //Purge_cache_ob_old ()
       //
       // Paramètres :
       //	Aucun
@@ -515,8 +516,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale Purge_cache_obj()
-      
+      PROCEDURE globale Purge_cache_ob_old()
       TableauSupprimeTout(::gaoInstances)
      type : 458752
    -
@@ -576,10 +576,10 @@ class :
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
 resources :
  string_res :
   identifier : 0x1e494c4397e1b0e1
-  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

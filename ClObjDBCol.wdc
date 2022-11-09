@@ -1,0 +1,123 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClObjDBCol
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13696d180aab8ac8
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClObjDBCol est une Classe, abstraite
+      	
+      PROTEGE
+      //	m_aoCollection est un tableau de ClObjDB dynamique
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1398769109300972232
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1398769109301037768
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : addItem
+     procedure_id : 1398769594632390570
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //addItem (<oEntite_p> est ClObjDB)
+      //
+      // Paramètres :
+      //	oEntite_p (ClObjDB) : <indiquez ici le rôle de oEntite_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure addItem(oEntite_p est un ClObjDB)
+      
+      si :recherche(oEntite_p.Get_IdUnique()) = Null ALORS
+      	TableauAjouteRéférence(:get_col(),oEntite_p)
+      FIN
+     type : 458752
+   -
+     name : recherche
+     procedure_id : 1398770028424253049
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] recherche (<nIdUnique_p> est entier)
+      //
+      // Paramètres :
+      //	nIdUnique_p (entier) : <indiquez ici le rôle de nIdUnique_p>
+      // Valeur de retour :
+      // 	ClObjDB : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure recherche(nIdUnique_p est un entier):ClObjDB
+      
+      //oTmp est un ClObjDB dynamique
+      
+      pour tout element oTmp de :get_col()
+      	si oTmp.get_idunique() = nIdUnique_p ALORS
+      		renvoyer oTmp
+      	FIN
+      FIN
+      
+      renvoyer null
+     type : 458752
+   -
+     name : get_col
+     procedure_id : 1398776621204192217
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] get_col ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau (ClObjDB dynamique) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure abstraite get_col():tableau de ClObjDB dynamique
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13696d040aa53da2
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -2,26 +2,27 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClCritereAccept_Composant
- major_version : 26
+ major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x1e94177f42b02054
- internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
   p_codes :
    -
-     code : |1-
+     code : |1+
       ClCritereAccept_Composant est une Classe
-      		Hérite de ClObjDB
-      		m_sDescription est une chaîne <MAPPING=Description>
-      		m_nTypeCompo est un entier sur 1 octet <MAPPING=IDScr_CritereAccept_Composant_Type>
-      		m_oCritere_Parent est un objet ClCritereAccept dynamique
-      	PRIVÉ
-      		LibTypeCompo est une chaîne = ""
+      	Hérite de ClObjDB
+      	
+      	m_sDescription		est une chaîne				<MAPPING=Description>
+      	m_nTypeCompo		est un entier sur 1 octet	<MAPPING=IDScr_CritereAccept_Composant_Type>
+      	m_oCritere_Parent	est un objet ClCritereAccept dynamique
+      PRIVÉ
+      	LibTypeCompo		est une chaîne
       FIN
        
       constante
@@ -53,11 +54,6 @@ class :
       PROCEDURE Constructeur(local nId_P est un entier = 0)
       
       ancetre.constructeur(Scr_CritereAccept_Composant..nom,Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant..Nom,nId_P)
-      
-      //:m_oCritere_Parent <- oCritere_p
-      
-      //TableauAjouteRéférence(:m_oCritere_Parent.m_aoComposants, objet)
-      
       
       :charge()
       si pas :bModeAjout() ALORS
@@ -181,10 +177,10 @@ class :
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
 resources :
  string_res :
   identifier : 0x1e932a0b4459941f
-  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -2,26 +2,111 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : COL_Graphes
- major_version : 26
+ major_version : 27
  minor_version : 0
  type : 7
  description : ""
  subtype : 0
 procedure_set :
  identifier : 0x11dff08f06a11b31
- internal_properties : BgAAAAYAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ internal_properties : BwAAAAcAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
  code_elements :
   type_code : 31
-  p_codes : []
+  p_codes :
+   -
+     code : |1+
+      
+      CONSTANTE
+      	cstObjectifChargeCumule	= 4
+      	cstObjectifChargeCumuleTies	= 1.5
+      FIN
+      
+      
+      
+      //////////////////////////////////////////////////////////////////////////
+      STR_Temps_validation_Spr est une Structure
+      	nDemarre	est un entier
+      	nFin		est un entier
+      	nCumul		est un entier
+      	nObjectif	est un entier
+      	sEtiquette	est une chaîne
+      FIN
+      
+      STR_Temps_validation est une Structure
+      	sTitre		est une chaîne
+      	aStSeries	est un tableau associatif de STR_Temps_validation_Spr
+      FIN
+      
+      
+      //////////////////////////////////////////////////////////////////////////
+      STR_Evol_Charge_Projet_Spr est une Structure
+      	nCharge			est un entier
+      	nChargeCumul	est un entier
+      	nChargeImpond	est un entier
+      	nChargeEngage	est un entier
+      	sEtiquette		est une chaîne
+      FIN
+      
+      STR_Evol_Charge_Projet est une Structure
+      	sTitre		est une chaîne
+      	aStSeries	est un tableau associatif de STR_Evol_Charge_Projet_Spr
+      FIN
+      
+      
+      //////////////////////////////////////////////////////////////////////////
+      STR_Anticipation_Charge_Projet_Spr est une Structure
+      	nCharge			est un entier
+      	nChargeAnnulee	est un entier
+      	sEtiquette		est une chaîne
+      FIN
+      
+      STR_Anticipation_Charge_Projet est une Structure
+      	sTitre		est une chaîne
+      	aStSeries	est un tableau associatif de STR_Anticipation_Charge_Projet_Spr
+      FIN
+      
+      
+      //////////////////////////////////////////////////////////////////////////
+      STR_Projection_Spr est une Structure
+      	nProj		est un entier
+      	nReal		est un entier
+      FIN
+      
+      STR_Projection est une Structure
+      	sTitre		est une chaîne
+      	aStSeries	est un tableau associatif de STR_Projection_Spr
+      FIN
+      
+      
+      //////////////////////////////////////////////////////////////////////////
+      STR_Charge_Spr est une Structure
+      	nPts		est un entier
+      FIN
+      
+      STR_Charge_InfoPrj est une Structure
+      	sNom		est une chaîne
+      	nCouleur	est un entier
+      	aSpr		est un tableau associatif de STR_Charge_Spr
+      FIN
+      
+      STR_Charge est une Structure
+      	sTitre		est une chaîne
+      	nVelocite	est un entier
+      	aStProjets	est un tableau associatif de STR_Charge_InfoPrj
+      	aStListeSprints est un tableau associatif de chaîne
+      FIN
+      
+     type : 720896
   procedures :
    -
      name : InfoProjet
      procedure_id : 1288012627202703584
      type_code : 15
      code : |1+
-      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClProjet)
+      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClProjet, oEpic_P est un ClEpic = Null)
       
-      
+      sTitre			est une chaîne
+      bAPrendre		est un booléen
       zcst_Teste		est une chaîne	= "Testé"
       zcst_Developpe	est une chaîne	= "Développé"
       zcst_Non_Teste	est une chaîne	= "Non testé"
@@ -29,22 +114,75 @@ procedure_set :
       sZcst_En_Cours	est une chaîne	= "En cours"
       zcst_Annule		est une chaîne	= "Annulé"
       
+      nFinies			est un entier
+      nATester		est un entier
+      nAnnulee		est un entier
+      nEnCours		est un entier
+      nAFaire			est un entier
       
-      //Récupération des valeurs :
-      nFinies		est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Terminee)
-      nATester	est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.En_test_fonctionnel)
-      nAnnulee	est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Annulée)
-      nEnCOurs	est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.EnCours)
-      nAFaire		est un entier				= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.EnCours)
-      
+      //si oEpic_P = null alors
+      //	//Récupération des valeurs :
+      //	nFinies		= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Terminee)
+      //	nATester	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.En_test_fonctionnel)
+      //	nAnnulee	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Annulée)
+      //	nEnCours	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.EnCours)
+      //	nAFaire		= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.A_faire)
+      //sinon
+      	oUS est un ClUserStory dynamique
+      	
+      	pour tout element oUS de oProjet_P.aoListeUS()
+      		bAPrendre = vrai
+      		
+      		si oEpic_P <> null alors
+      			si oUS.p_oEpic = null ALORS
+      				bAPrendre = faux
+      			sinon
+      				
+      				SI oUS.p_oEpic.Get_IdUnique() <> oEpic_P.Get_IdUnique() ALORS
+      					bAPrendre = Faux
+      				FIN
+      			FIN
+      		sinon
+      			si oUS.p_oEpic <> null alors
+      				SI oUS.p_oEpic.p_sNom DANS ("Statistiques (post lancement)", "Poseurs (post lancement)", "Signature électronique (post lancement)", "Base Lunel fournisseur (post lancement)", "") ALORS
+      					bAPrendre = Faux
+      					Trace("Groupement ignoré : " + oUS.p_oEpic.p_sNom)
+      				FIN
+      			FIN
+      		fin
+      		
+      		si bAPrendre ALORS
+      			oUS.User_Story_Etat()
+      			selon oUS.Get_EtatUS()
+      				cas ClUserStory.ECompteNbUS.Terminee
+      					nFinies++
+      				cas ClUserStory.ECompteNbUS.En_test_fonctionnel
+      					nATester++
+      				cas ClUserStory.ECompteNbUS.Annulée
+      					nAnnulee++
+      				cas ClUserStory.ECompteNbUS.EnCours
+      					nEnCours++
+      				cas ClUserStory.ECompteNbUS.A_faire
+      					nAFaire++
+      				AUTRE CAS
+      					
+      			FIN
+      		FIN
+      	FIN
+      //fin
       
       //Affichage des infos dans le graphe :
       graphe est un champ <- {sChamp_P, indChamp}
       
+      sTitre = "Avancement du projet " + oProjet_P.p_sNom
+      si oEpic_P <> Null ALORS
+      	sTitre += rc + oEpic_P.p_sNom
+      FIN
+      
       grSupprimeTout(graphe)
       grType(graphe,grSecteurMultiniveau)
       
-      grTitre(graphe, ChaîneConstruit("Avancement du projet %1", oProjet_P.p_sNom))
+      grTitre(graphe, sTitre)
       
       grMAJAutomatiqueEtiquetteCatégorie(graphe, vrai)
       
@@ -55,7 +193,7 @@ procedure_set :
       grSMNAjouteDonnée(graphe, zcst_Developpe + TAB + zcst_Non_Teste, nATester)
       grSMNCouleurPortion(graphe,zcst_Developpe + TAB + zcst_Non_Teste, COL_Scrum.gnCouleur_RougeOrange)
       
-      grSMNAjouteDonnée(graphe, sZcst_En_Cours, nEnCOurs)
+      grSMNAjouteDonnée(graphe, sZcst_En_Cours, nEnCours)
       grSMNCouleurPortion(graphe,sZcst_En_Cours, COL_Scrum.gnCouleur_Orange_pale)
       
       grSMNAjouteDonnée(graphe, zcst_A_Faire, nAFaire)
@@ -80,11 +218,11 @@ procedure_set :
       grSupprimeTout(graphe)
       
       
-      stAnalyse		est un COL_Charge_UI.STR_Evol_Charge_Projet
-      stSprint_Tmp	est un COL_Charge_UI.STR_Evol_Charge_Projet_Spr
+      stAnalyse		est un col_graphes.STR_Evol_Charge_Projet
+      stSprint_Tmp	est un col_graphes.STR_Evol_Charge_Projet_Spr
       nCle			est un entier
       
-      stAnalyse = COL_Charge_UI.Graphe_Evol_Charge_projet(oProjet_P.Get_IdUnique())
+      stAnalyse = col_graphes.Graphe_Evol_Charge_projet(oProjet_P.Get_IdUnique())
       
       grSupprimeSérie(graphe)
       grLibellé(graphe, grAfficheEtiquette, Vrai)
@@ -118,14 +256,330 @@ procedure_set :
       
       grDessine(graphe)
      type : 458752
+   -
+     name : Graph_Projection
+     procedure_id : 1394688817552830202
+     type_code : 15
+     code : |1+
+      procédure Graph_Projection()<ui>:STR_Projection
+      
+      stRetour				est un STR_Projection
+      stSp_Tmp				est un STR_Projection_Spr
+      
+      rNbSprintRestantEstime	est un réel
+      nPointsTotal			est un entier	= ClTache.Charge_Totale()
+      nVelociteMoyenne		est un entier	= goApp.m_nVelociteMoyenne
+      oSprint					est un ClSprint dynamique
+      nNbPointsRestant		est un entier
+      
+      
+      stSp_Tmp.nProj = nPointsTotal
+      stSp_Tmp.nReal = nPointsTotal
+      
+      pour tout element oSprint de ClSprint.aoListeSprint()
+      	
+      	SI oSprint.p_bTop_Termine ALORS
+      		stSp_Tmp.nReal -= oSprint.nGetNbPointsRealises()
+      		nNbPointsRestant = stSp_Tmp.nReal
+      	SINON
+      		stSp_Tmp.nReal -= nVelociteMoyenne
+      	FIN
+      	
+      	stSp_Tmp.nProj -= nVelociteMoyenne
+      	
+      	
+      	stSp_Tmp.nProj = max(stSp_Tmp.nProj, 0)
+      	stSp_Tmp.nReal = max(stSp_Tmp.nReal, 0)
+      	
+      	stRetour.aStSeries[oSprint.sSprint_Date()] = stSp_Tmp
+      	
+      	si stSp_Tmp.nProj = 0 ALORS
+      		sortir
+      	FIN
+      FIN
+      
+      rNbSprintRestantEstime = Abs(nNbPointsRestant / nVelociteMoyenne)
+      
+      stRetour.sTitre = "Projection" + RC + " Nombre de sprints restants estimé : " + Gauche(NumériqueVersChaîne(rNbSprintRestantEstime),4)
+      
+      renvoyer stRetour
+     type : 458752
+   -
+     name : Graphe_anticipation_de_charge
+     procedure_id : 1394688821847863596
+     type_code : 15
+     code : |1-
+      procédure Graphe_anticipation_de_charge(local znIdProjet_P est un entier)<UI>:STR_Anticipation_Charge_Projet
+      
+      stRetour		est un STR_Anticipation_Charge_Projet
+      oTache			est un ClTache dynamique
+      oPrj			est un ClProjet dynamique
+      nAnticipation	est un entier
+      
+      
+      stRetour.sTitre	= "Analyse de l'anticipation de la charge du projet" + rc
+      
+      
+      oPrj <- ClProjet.GetObj(znIdProjet_P)
+      stRetour.sTitre += oPrj.p_sNom
+      POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches()
+      	si (oTache.p_bEstRealise ou oTache.p_bAnnule) et oTache.p_nNum_Sprint_Realisation <> 0 alors
+      		nAnticipation = oTache.p_nNum_Sprint_Realisation - oTache.p_nNum_Sprint_Creation
+      		stRetour.aStSeries[nAnticipation].sEtiquette = nAnticipation
+      		si pas oTache.p_bAnnule ALORS
+      			stRetour.aStSeries[nAnticipation].nCharge	+= oTache.p_nPoids
+      		sinon
+      			stRetour.aStSeries[nAnticipation].nChargeAnnulee	+= oTache.p_nPoids
+      		FIN
+      	fin
+      FIN
+      
+      renvoyer stRetour
+     type : 458752
+   -
+     name : Graphe_Charge_Sprints
+     procedure_id : 1394688821847929304
+     type_code : 15
+     code : |1-
+      procédure Graphe_Charge_Sprints(LOCAL nSprint_p est un entier, ...
+      	LOCAL nNbSprint_p est un entier, ...
+      	LOCAL eSelecteur_p est un ClTache.ETypeCharge,...
+      	LOCAL nChargeReccurcive_p est un entier)<UI>:STR_Charge
+      		
+      
+      
+      
+      oPrj			est un ClProjet dynamique
+      oSprint			est un ClSprint dynamique
+      nCptSpr			est un entier
+      nNumPrj			est un entier
+      nNumSprint		est un entier
+      aTableauProjet	est un tableau de ClProjet	= ClProjet.aoProjets_sur_periode(nSprint_p, nNbSprint_p, eSelecteur_p)
+      nPoints			est un entier
+      stRetour		est un STR_Charge
+      stProjet_Tmp	est un STR_Charge_InfoPrj
+      
+      
+      stRetour.sTitre = "Planification des taches"
+      SELON eSelecteur_p
+      	CAS ClTache.ETypeCharge.Charge_réelle
+      		stRetour.sTitre += " en production"
+      	CAS ClTache.ETypeCharge.Charge_prévisionelle
+      		stRetour.sTitre += " prévisionnel"	
+      FIN
+      
+      
+      nNumPrj = 0
+      //parcours les projets compris dans l'intervalle de sprints
+      POUR TOUT ELEMENT oPrj DE aTableauProjet
+      	nNumPrj++
+      	VariableRAZ(stProjet_Tmp)
+      	//donne une couleur à la série
+      	stProjet_Tmp.nCouleur			= DonneCouleur(nNumPrj, coulSérieDéfaut)
+      	//nom du projet pour le nom de l'étiquette 
+      	stProjet_Tmp.sNom				= oPrj.p_oUsr_ChefProjet.p_sNom + RC + oPrj.p_sNom
+      	stRetour.aStProjets[nNumPrj]	= stProjet_Tmp
+      FIN
+      
+      si nChargeReccurcive_p > 0 alors
+      	nNumPrj++
+      	VariableRAZ(stProjet_Tmp)
+      	//nom du projet pour le nom de l'étiquette 
+      	stProjet_Tmp.sNom				= "Charge récursive" + RC + "(Impondérables)"
+      	//donne une couleur à la série
+      	stProjet_Tmp.nCouleur			= COL_Scrum.gnCouleur_Gris
+      	stRetour.aStProjets[nNumPrj]	= stProjet_Tmp
+      fin
+      
+      
+      nNumSprint = nSprint_p
+      POUR nCptSpr = 1 _À_ nNbSprint_p //pour chaque sprint on effectue la boucle suivante
+      	
+      	//affichage des dates du sprint en graduation
+      	oSprint <- ClSprint.GetObj(nNumSprint)
+      	//Récupération des étiquettes des sprints
+      	stRetour.aStListeSprints[nNumSprint] = oSprint.Get_IdUnique() + rc + oSprint.sSprint_Date()
+      	
+      	nNumPrj = 0
+      	//parcours des projets compris dans l'intervalle de sprints
+      	POUR TOUT ELEMENT oPrj DE aTableauProjet
+      		nNumPrj++
+      		
+      		//Récupération du nb de points du projet, sur le sprint
+      		nPoints = oPrj.Projet_Sprint_Points(nNumSprint,eSelecteur_p)
+      		
+      		//ajout des donnée dans le graphe
+      		si stRetour.aStProjets[nNumPrj].aSpr[nNumSprint]..Vide ALORS
+      			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint] = allouer un STR_Charge_Spr
+      		FIN
+      		stRetour.aStProjets[nNumPrj].aSpr[nNumSprint].nPts = nPoints
+      	FIN
+      	
+      	//A t on un charge prévisionelle récursive ?
+      	SI nChargeReccurcive_p > 0 ALORS
+      		nNumPrj++
+      		
+      		SI stRetour.aStProjets[nNumPrj].aSpr[nNumSprint]..Vide ALORS
+      			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint] = allouer un STR_Charge_Spr
+      		FIN
+      		
+      		si nNumSprint > goapp.m_nNumeroDuSprintActuel ALORS
+      			//ajout des donnée dans le graphe
+      			nPoints = nChargeReccurcive_p * (nNumSprint - goApp.m_nNumeroDuSprintActuel)
+      			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint].nPts = nPoints
+      		sinon
+      			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint].nPts = 0
+      		FIN
+      	FIN
+      		
+      	nNumSprint++
+      FIN
+      
+      stRetour.nVelocite = goApp.m_nVelociteMoyenne
+      
+      
+      
+      renvoyer stRetour
+     type : 458752
+   -
+     name : Graphe_Evol_Charge_projet
+     procedure_id : 1394688821847995043
+     type_code : 15
+     code : |1-
+      procédure Graphe_Evol_Charge_projet(local znIdProjet_P est un entier)<UI>:STR_Evol_Charge_Projet
+      
+      stRetour		est un STR_Evol_Charge_Projet
+      nCumul			est un entier
+      nCumulEngage	est un entier
+      oSprint			est un ClSprint dynamique
+      oTache			est un ClTache dynamique
+      oPrj			est un ClProjet dynamique
+      sNumSprint		est une chaîne
+      
+      
+      stRetour.sTitre	= "Analyse de l'évolution de la charge du projet" + rc
+      
+      POUR TOUT ELEMENT oSprint DE ClSprint.aoListeSprint()
+      	sNumSprint										= oSprint.Get_IdUnique()
+      	
+      	stRetour.aStSeries[sNumSprint]					= allouer un STR_Evol_Charge_Projet_Spr
+      	stRetour.aStSeries[sNumSprint].sEtiquette		= sNumSprint + " - " + oSprint.sSprint_Date()
+      	
+      FIN
+      
+      
+      
+      oPrj <- ClProjet.GetObj(znIdProjet_P)
+      stRetour.sTitre += oPrj.p_sNom
+      POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches()
+      	stRetour.aStSeries[oTache.p_nNum_Sprint_Creation].nCharge			+= oTache.p_nPoids
+      	stRetour.aStSeries[oTache.p_nNum_Sprint_Realisation].nChargeEngage	+= oTache.p_nPoids
+      FIN
+      
+      
+      
+      POUR TOUT stSprint_Tmp, sCle de stRetour.aStSeries
+      	SI sCle = "0" ou Val(sCle) > goApp.m_nNumeroDuSprintActuel ou (nCumul = 0 et stSprint_Tmp.nCharge = 0) ALORS
+      		TableauSupprime(stRetour.aStSeries, sCle)
+      	sinon
+      		nCumul									+= stSprint_Tmp.nCharge
+      		nCumulEngage							+= stSprint_Tmp.nChargeEngage
+      		stRetour.aStSeries[sCle].nChargeCumul	= nCumul
+      		stRetour.aStSeries[sCle].nChargeEngage	= nCumulEngage
+      		stRetour.aStSeries[sCle].nChargeImpond	= nCumul * (1 + ClProjet.cstTauxImponderable * (nCumul - nCumulEngage) / nCumul)
+      	FIN
+      fin
+      
+      
+      
+      renvoyer stRetour
+     type : 458752
+   -
+     name : Graphe_Temps_validation
+     procedure_id : 1394688821848060767
+     type_code : 15
+     code : |1-
+      procédure Graphe_Temps_validation(local nIdProjet_P est un entier)<UI>:STR_Temps_validation
+      
+      stRetour		est un STR_Temps_validation
+      nCumul			est un entier
+      oSprint			est un ClSprint dynamique
+      oTache			est un ClTache dynamique
+      oPrj			est un ClProjet dynamique
+      sNumSprint		est une chaîne
+      
+      
+      stRetour.sTitre	= "Analyse des temps de mise en production des taches réalisées" + rc
+      
+      POUR TOUT ELEMENT oSprint DE ClSprint.aoListeSprint()
+      	sNumSprint										= oSprint.Get_IdUnique()
+      	
+      	stRetour.aStSeries[sNumSprint]					= allouer un STR_Temps_validation_Spr
+      	stRetour.aStSeries[sNumSprint].sEtiquette		= sNumSprint + " - " + oSprint.sSprint_Date()
+      	
+      	
+      	SI Val(sNumSprint) < goApp.m_nNumeroDuSprintActuel ALORS
+      		stRetour.aStSeries[sNumSprint].nObjectif	= oSprint.p_nVelociteMoyenneRes
+      	SINON
+      		stRetour.aStSeries[sNumSprint].nObjectif	= goApp.m_nVelociteMoyenne
+      	FIN
+      	
+      	SI nIdProjet_P = 0 ALORS
+      		stRetour.aStSeries[sNumSprint].nObjectif		= stRetour.aStSeries[sNumSprint].nObjectif * cstObjectifChargeCumule
+      	sinon
+      		stRetour.aStSeries[sNumSprint].nObjectif		= stRetour.aStSeries[sNumSprint].nObjectif * cstObjectifChargeCumuleTies
+      	FIN
+      FIN
+      
+      SI nIdProjet_P = 0 ALORS
+      	//Tous les projets
+      	POUR TOUT ELEMENT oSprint DE ClSprint.aoListeSprint()
+      		sNumSprint									= oSprint.Get_IdUnique()
+      		stRetour.aStSeries[sNumSprint].nDemarre		= oSprint.nGetNbPointsDemarre()
+      		stRetour.aStSeries[sNumSprint].nFin			= oSprint.nGetNbPointsRealises()
+      	FIN
+      	
+      	stRetour.sTitre += "Tout projets"
+      	
+      SINON
+      	oPrj <- ClProjet.GetObj(nIdProjet_P)
+      
+      	//Projet en cours
+      	POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches()
+      		//trace(ChaîneConstruit("Début*%1*Fin*%2*poids*%3*code%4", oTache.p_nNum_Sprint_Demarrage, oTache.p_nNum_Sprint_Fin, oTache.p_nPoids, oTache.p_sCodeTache))
+      		SI oTache.p_nNum_Sprint_Demarrage <> 0 ALORS
+      			stRetour.aStSeries[oTache.p_nNum_Sprint_Demarrage].nDemarre += oTache.p_nPoids
+      		FIN
+      		SI oTache.p_nNum_Sprint_Fin <> 0 ALORS
+      			stRetour.aStSeries[oTache.p_nNum_Sprint_Fin].nFin += oTache.p_nPoids
+      		FIN
+      	FIN
+      	
+      	stRetour.sTitre += oPrj.p_sNom
+      FIN
+      
+      
+      POUR TOUT stSprint_Tmp, sCle de stRetour.aStSeries
+      	SI sCle = "0" ou Val(sCle) > goApp.m_nNumeroDuSprintActuel ou (nCumul = 0 et stSprint_Tmp.nDemarre = 0) ALORS
+      		TableauSupprime(stRetour.aStSeries, sCle)
+      	sinon
+      		nCumul += stSprint_Tmp.nDemarre - stSprint_Tmp.nFin
+      		stRetour.aStSeries[sCle].nCumul = nCumul
+      	FIN
+      fin
+      
+      
+      
+      renvoyer stRetour
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
   original_name : COL_SansNom1
 resources :
  string_res :
   identifier : 0x11dff087069ffd68
-  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

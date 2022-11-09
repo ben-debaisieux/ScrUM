@@ -2,16 +2,16 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClUserStory
- major_version : 26
+ major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x1e8595b10ed8ff3d
- internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
-  internal_properties : BgAAAAYAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  internal_properties : BwAAAAcAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
   type_code : 10
   p_codes :
    -
@@ -19,8 +19,6 @@ class :
       ClUserStory est une Classe
       	Hérite de ClObjDB
       	Hérite de ClHistorique
-      	
-      	
       	
       PRIVÉ
       	m_sCodeUserStory			est une chaîne	<MAPPING=CodeUserStory>
@@ -122,6 +120,10 @@ class :
       //Déclaration du constructeur de la classe d'accès aux données.
       ClObjDB.Constructeur(Scr_UserStory..Nom, Scr_UserStory.IDScr_UserStory..Nom, nID_P)
       
+      
+      //STOP SI nID_P = 0
+      
+      
       //Chargement des données dans l'instance.
       :Charge()
       
@@ -188,17 +190,17 @@ class :
       
       	TableauSupprimeTout(:m_aoTaches)
       	
-      	sReq = ChaîneConstruit([
+      	sReq = [
       		SELECT 
       			Scr_Tache.IDScr_Tache
       			
       		FROM Scr_Tache
       		
-      		WHERE Scr_Tache.IDScr_UserStory = %1
+      		WHERE Scr_Tache.IDScr_UserStory = [%:Get_IdUnique()%]
       		
-      		ORDER BY Scr_Tache.Ordre
-      		
-      	], :Get_IdUnique())
+      		ORDER BY Scr_Tache.Ordre,
+      			Scr_Tache.CodeTache
+      	]
       	
       	SI goApp.Rsql(sdRechercheTache,sReq) ALORS
       		POUR TOUT sdRechercheTache 
@@ -206,7 +208,6 @@ class :
       		fin
       		:m_bTachesInit = vrai
       	fin
-      	
       fin
       
       
@@ -587,10 +588,10 @@ class :
       oTache est un ClTache dynamique
       
       
-      :m_nNbreTacheAfaire		= 0
-      :m_nNbreTacheEnCours	= 0
-      :m_nNbreTacheAnnulee	= 0
-      :m_nNbreTacheTerminee	= 0
+      :m_nNbreTacheAfaire					= 0
+      :m_nNbreTacheEnCours				= 0
+      :m_nNbreTacheAnnulee				= 0
+      :m_nNbreTacheTerminee				= 0
       :m_bPresenceTacheFiniesNonVaidées	= faux
       :m_bPresenceTacheBloquee			= faux
       
@@ -850,36 +851,6 @@ class :
       FIN
       RENVOYER :m_nNbrSprintRetard
       
-     type : 458752
-   -
-     name : Get_Sprint_Demarrage_Old
-     procedure_id : 2202865121884856687
-     type_code : 12
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //[ <Résultat> = ] Get_Sprint_Demarrage_Old ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	entier : // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      FONCTION Get_Sprint_Demarrage_Old()
-      
-      nSprintMin est un entier
-      oTache_Tmp est un ClTache dynamique
-      
-      pour tout element oTache_Tmp de :aoListeTaches()
-      	si nSprintMin = 0 ou oTache_Tmp.p_nNum_Sprint_Demarrage < nSprintMin ALORS
-      		nSprintMin = oTache_Tmp.p_nNum_Sprint_Demarrage
-      	FIN
-      FIN
-      
-      renvoyer nSprintMin
      type : 458752
    -
      name : aoListeCriteresAcceptation
@@ -1685,10 +1656,10 @@ class :
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
 resources :
  string_res :
   identifier : 0x1e8595b10ed9ff3d
-  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -2,14 +2,14 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClEpic
- major_version : 26
+ major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x10311e59001dd83e
- internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
   p_codes :
@@ -228,6 +228,47 @@ class :
       	FIN
       FIN
      type : 458752
+   -
+     name : aoUS
+     procedure_id : 1352545507149518475
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoUS ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      procédure aoUS():tableau de ClUserStory dynamique
+      
+      
+      aoRetour est un tableau de ClUserStory dynamique
+      sdUS est une Source de Données
+      sReq est une chaîne
+      
+      sReq = [
+      	SELECT IDScr_UserStory
+      	FROM Scr_UserStory
+      	WHERE IDScr_Epic = [%:Get_IdUnique()%]
+      ]
+      
+      SI goApp.Rsql(sdUS,sReq) ALORS
+      	POUR TOUT sdUS
+      		TableauAjouteRéférence(aoRetour,ClUserStory.GetObj(sdUS.IDScr_UserStory))
+      	FIN
+      FIN
+      
+      HAnnuleDéclaration(sdUS)
+      
+      
+      renvoyer aoRetour
+     type : 458752
   properties :
    -
      name : p_sNom
@@ -280,11 +321,11 @@ class :
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
   original_name : Classe1
 resources :
  string_res :
   identifier : 0x10311e4900179cbc
-  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

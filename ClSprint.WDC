@@ -2,34 +2,35 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClSprint
- major_version : 26
+ major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x1e8df41f3f4be8f8
- internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
-  internal_properties : BgAAAAYAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  internal_properties : BwAAAAcAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
   type_code : 10
   p_codes :
    -
      code : |1-
       ClSprint est une Classe
       		Hérite de ClObjDB
-      		m_sNoteDebutDeSprint est une chaîne <MAPPING=NoteDebutDeSprint>
-      	prive
-      		m_bTop_Termine est un booléen <MAPPING=Top_Termine>
-      		m_nVelociteMoyenneRes est un entier sur 2 octets <MAPPING=VelociteMoyenneRes>
-      		m_nNbreSemaines est un entier sans signe sur 1 octet <MAPPING=NbreSemaines>
-      		m_dDateDebut est une Date <MAPPING=DateDebut>
-      		m_dDateFin est une date <MAPPING=DateFin>
-      		m_nNbPointsRealise est un entier sur 2 octets <MAPPING=NbPointsRealise>
-      		m_nNumSprint est un entier
-      		
+      
+      	m_sNoteDebutDeSprint	est une chaîne							<MAPPING=NoteDebutDeSprint>
+      prive
+      	m_bTop_Termine			est un booléen							<MAPPING=Top_Termine>
+      	m_nVelociteMoyenneRes	est un entier sur 2 octets				<MAPPING=VelociteMoyenneRes>
+      	m_nNbreSemaines			est un entier sans signe sur 1 octet	<MAPPING=NbreSemaines>
+      	m_dDateDebut			est une Date							<MAPPING=DateDebut>
+      	m_dDateFin				est une date							<MAPPING=DateFin>
+      	m_nNbPointsRealise		est un entier sur 2 octets				<MAPPING=NbPointsRealise>
+      	m_nNumSprint			est un entier
+      	
       global
-      	mg_nNumSprint_max est un entier
+      	mg_nNumSprint_max		est un entier
       FIN
        
      type : 131072
@@ -57,7 +58,7 @@ class :
       PROCEDURE Constructeur(local nID_P est un entier = 0)
       
       ancetre.constructeur(Scr_Sprint..Nom, Scr_Sprint.Num_Sprint..nom,nID_P)
-      
+      //si nID_P = 0 alors stop
       :Charge()
      type : 589824
    -
@@ -98,7 +99,7 @@ class :
       sdToutLesSprint est une source de données
       sReq est une chaîne
       
-      sReq = ChaîneConstruit([
+      sReq = [
       	
       	SELECT
       		Scr_Sprint.Num_Sprint,
@@ -112,7 +113,7 @@ class :
       	GROUP BY Scr_Sprint.Num_Sprint,
       		Scr_Sprint.NbPointsRealise
       	
-      ],nNumSprintActuel)
+      ]
       
       //Recherche de tout les sprint avec le nb de point réalisé
       SI goApp.Rsql(sdToutLesSprint, sReq) ALORS
@@ -160,7 +161,6 @@ class :
       //
       
       PROCEDURE VIRTUELLE pre_enregistre()
-      
       
       
       //Pour les Sprint historique : On verifie que la date du sprint est inferieure à la date actuelle pour determiner si le sprint est términé ou pas
@@ -225,14 +225,12 @@ class :
       sdToutLesSprints est une source de Données
       sReq est une chaîne
       
-      
-      sReq = ChaîneConstruit([
+      sReq = [
       	SELECT Scr_Sprint.Num_Sprint,
       		   Scr_Sprint.VelociteMoyenneRes
       	FROM Scr_Sprint
       	WHERE Scr_Sprint.Top_Termine = 0
-      		--AND Scr_Sprint.DateDebut <= %1
-      ],dDateActuelle)
+      ]
       
       Si goApp.Rsql(sdToutLesSprints,sReq) ALORS
       	SI HLitPremier(sdToutLesSprints) > 0 
@@ -283,11 +281,11 @@ class :
       sReq est une chaîne
       
       //Recherche du nombre de points
-      sReq = chaineconstruit([
+      sReq = [
       	SELECT SUM(Scr_Tache.Poids) AS Total
       	FROM Scr_Tache
-      	WHERE Scr_Tache.Num_Sprint_Fin = %1
-      ],nSprint_p)
+      	WHERE Scr_Tache.Num_Sprint_Fin = [%nSprint_p%]
+      ]
       
       Si goApp.Rsql(sdRechercheNbPointRealise,sReq) ALORS
       	HLitPremier(sdRechercheNbPointRealise)
@@ -336,26 +334,26 @@ class :
       sChoixPoids est une chaine
       sChoixSprint est une chaîne
       SI nSelecteur = ClTache.ETypeCharge.Charge_réelle ALORS
-      	sChoixSprint = "Scr_Tache.Num_Sprint_Realisation"
-      	sChoixPoids ="Scr_Tache.Poids" 
+      	sChoixSprint	= "Scr_Tache.Num_Sprint_Realisation"
+      	sChoixPoids		= "Scr_Tache.Poids" 
       SINON
-      	sChoixSprint = "Scr_Tache.Num_Sprint_Previsionnel"
-      	sChoixPoids = "Scr_Tache.Poids_Previsionnel"	
+      	sChoixSprint	= "Scr_Tache.Num_Sprint_Previsionnel"
+      	sChoixPoids		= "Scr_Tache.Poids_Previsionnel"	
       FIN
       
       sdRecherchePointsRestant est une source de données
       sReq est une chaine
       
-      sReq = ChaîneConstruit([
+      sReq = [
       	SELECT
-      		SUM(%1) as Points
+      		SUM([%sChoixPoids%]) as Points
       	
       	FROM Scr_Tache
       	
       	WHERE
-      		%2 = %3
+      		[%sChoixSprint%] = [%:Get_IdUnique()%]
       		AND Scr_Tache.Top_Brouillon = 0
-      ],sChoixPoids,sChoixSprint, :Get_IdUnique())
+      ]
       
       SI goApp.Rsql(sdRecherchePointsRestant,sReq) ALORS
       	HLitPremier(sdRecherchePointsRestant)
@@ -423,7 +421,7 @@ class :
       sReq est une chaine
       sdRechercheTaches est une source de Données
       
-      sReq = ChaîneConstruit([
+      sReq = [
       	SELECT 
       		Scr_UserStory.JAiBesoinDe,
       		Scr_Tache.IDScr_Tache,
@@ -440,12 +438,12 @@ class :
       		end AS val_etat		
       	
       	FROM Scr_Tache
-      	INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
+      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
       	
-      	WHERE Scr_Tache.Num_Sprint_Demarrage = %1
+      	WHERE Scr_Tache.Num_Sprint_Demarrage = [%:Get_IdUnique()%]
       	
       	ORDER BY val_etat
-      ], :Get_IdUnique())
+      ]
       
       si goApp.Rsql(sdRechercheTaches,sReq) alors
       	
@@ -501,15 +499,15 @@ class :
       procédure nGetNbPointsRealises():entier
       
       nRetour est un entier
+      sdCountPoint est une Source de Données
+      sReq est une chaîne
       
       
       si :m_bTop_Termine ALORS
       	nRetour = :m_nNbPointsRealise
       sinon
-      	sdCountPoint est une Source de Données
-      	sReq est une chaîne
       	
-      	sReq = ChaîneConstruit([
+      	sReq = [
       		
       		SELECT
       			SUM(Scr_Tache.Poids) AS NbrPoints
@@ -517,10 +515,10 @@ class :
       		FROM Scr_Tache
       		
       		WHERE 
-      			Scr_Tache.Num_Sprint_Fin = %1
+      			Scr_Tache.Num_Sprint_Fin = [%:Get_IdUnique()%]
       			and Scr_Tache.Top_Brouillon = 0
       			and Scr_Tache.Top_Annule = 0			
-      	], :Get_IdUnique())
+      	]
       	
       	SI goapp.RSQL(sdCountPoint,sReq) ALORS
       		HLitPremier(sdCountPoint)
@@ -617,7 +615,7 @@ class :
       sdCountPoint est une Source de Données
       sReq est une chaîne
       
-      sReq = ChaîneConstruit([
+      sReq = [
       	
       	SELECT
       		SUM(Scr_Tache.Poids) AS NbrPoints
@@ -625,11 +623,11 @@ class :
       	FROM Scr_Tache
       	
       	WHERE 
-      		Scr_Tache.Num_Sprint_Demarrage = %1
+      		Scr_Tache.Num_Sprint_Demarrage = [%:Get_IdUnique()%]
       		and Scr_Tache.Top_Brouillon = 0
       		and Scr_Tache.Top_Annule = 0
       		
-      ], :Get_IdUnique())
+      ]
       SI goapp.RSQL(sdCountPoint,sReq) ALORS
       	HLitPremier(sdCountPoint)
       	si pas HEnDehors(sdCountPoint) ALORS
@@ -692,18 +690,17 @@ class :
       
       
       
-      sReq = ChaîneConstruit([
+      sReq = [
       	
       SELECT top 1
       	Scr_Sprint.Num_Sprint
       
       FROM Scr_Sprint
       
-      where Scr_Sprint.DateDebut <= '%1'
+      where Scr_Sprint.DateDebut <= '[%dDte_P%]'
       	
-      ORDER BY Scr_Sprint.Num_Sprint desc
-      	
-      ], dDte_P)
+      ORDER BY Scr_Sprint.Num_Sprint desc	
+      ]
       
       SI goapp.RSQL(sdNumSpr,sReq) ALORS
       	HLitPremier(sdNumSpr)
@@ -848,10 +845,10 @@ class :
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
 resources :
  string_res :
   identifier : 0x1e8df41f3f4ce8f8
-  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

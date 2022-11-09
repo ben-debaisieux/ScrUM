@@ -2,16 +2,16 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : ClTache
- major_version : 26
+ major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
  identifier : 0x1e85e352228e3dbc
- internal_properties : BgAAAAYAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
-  internal_properties : BgAAAAYAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  internal_properties : BwAAAAcAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
   type_code : 10
   p_codes :
    -
@@ -58,6 +58,11 @@ class :
       	cstStatut_realise					= 5
       	cstStatut_Annulee					= 6
       	cstStatut_Suspendu					= 7
+      	
+      	cstChangeOrdre_Premier				= 1
+      	cstChangeOrdre_Precedent			= 2
+      	cstChangeOrdre_Suivant				= 3
+      	cstChangeOrdre_Dernier				= 4
       fin
       
       ETypeCharge est une énumération
@@ -183,6 +188,8 @@ class :
       			:m_nStatut = :get_statut_tache()
       			SI :m_nStatut = 0 ALORS
       				ExceptionDéclenche(1,"Identification du statut de la tache impossible.")
+      			sinon
+      				Scr_Tache.Statut = :m_nStatut
       			FIN
       		FIN
       	FIN
@@ -249,7 +256,17 @@ class :
       		Scr_Tache.IDScr_Usr_Dev					= :m_oUsr_Dev.Get_IdUnique()
       	FIN
       	
-      	
+      	//Si l'ordre n'est pas définit, on ajoute la tache en dernier.
+      	si :m_nOrdre <= 0 ALORS
+      		trace("Pb ordre pour [%:m_sCodeTache%] : [%:m_nOrdre%]")
+      //		:changeOrdre(::cstChangeOrdre_Dernier)
+      	FIN
+      //	si pas 1 <= :m_nOrdre <= Dimension(:m_oUserStoryParent.aoListeTaches()) ALORS
+      //		ExceptionDéclenche(1, ChaîneConstruit([
+      //			Enregistrement impossible :
+      //			L'ordre de la tache "[%:m_nOrdre%]" doit être compris entre 1 et [%Dimension(:m_oUserStoryParent.aoListeTaches())%].
+      //			], :m_nNum_Sprint_Creation, :m_nNum_Sprint_Demarrage))
+      //	FIN
       	
       	si :m_nNum_Sprint_Creation > :m_nNum_Sprint_Demarrage et :m_nNum_Sprint_Demarrage <> 0 alors
       		exceptiondeclenche(1, chaineconstruit([
@@ -298,7 +315,6 @@ class :
       		FIN
       	FIN
       	
-      	
       	SI PAS :m_nStatut DANS (::cstStatut_Suspendu) ALORS
       		:m_nStatut = :get_statut_tache()
       	FIN
@@ -310,19 +326,15 @@ class :
       		:AjouteHistorique("Création de la tache")
       	SINON
       		
-      		//User storie parente
+      		//User story parente
       		si m_EnrOrigine.IDScr_UserStory <> :m_oUserStoryParent.Get_IdUnique() ALORS
       			:AjouteHistorique("Changement d'user story")
       		FIN
-      		
-      		//m_EnrUsActu.Num_Sprint_Creation
       		
       		//Ordre
       		si m_EnrOrigine.Ordre <> :m_nOrdre ALORS
       			:AjouteHistorique(ChaîneConstruit("Changement de l'ordre de la tache : nouvelle position : %1", :m_nOrdre))
       		FIN
-      		
-      		//m_EnrUsActu.CodeTache
       		
       		//Description de la tache
       		si m_EnrOrigine.Description <> :m_sDescription ALORS
@@ -386,9 +398,6 @@ class :
       			:AjouteHistorique(ChaîneConstruit("Changement du sprint de démarrage : %1", :m_nNum_Sprint_Demarrage))
       			
       		FIN
-      
-      		//m_EnrUsActu.Top_Realise
-      		//m_EnrUsActu.Num_Sprint_Fin
       		
       		si m_EnrOrigine.CMTR <> :m_sCMTR ALORS
       			:AjouteHistorique(ChaîneConstruit([
@@ -401,8 +410,6 @@ class :
       		si m_EnrOrigine.NumTicketIncident <> :m_nNumTicketIncident ALORS
       			:AjouteHistorique(ChaîneConstruit("Changement du N° de ticket d'incident : %1", :m_nNumTicketIncident))
       		FIN
-      		
-      		//m_EnrUsActu.IDScr_Usr_createur
       		
       		//Développeur associé à la tache.
       		si :m_oUsr_Dev = null alors
@@ -580,30 +587,31 @@ class :
       //
       PROCEDURE sBulleTache():chaine
       
-      renvoyer ChaîneConstruit([
-      	Projet : %1
+      sComBlocage est une chaîne = :m_sCMTR
+      
+      si m_nStatut = ClTache.cstStatut_Suspendu ALORS
+      	sComBlocage += rc + RC + [
+      	Commentaire de blocage :
+      	[%:m_sCMTR_Blocage%]
+      	]
+      FIN
+      
+      renvoyer [
+      	Projet : [%:m_oUserStoryParent.p_oProjetParent.p_sNom%]
       	-------------------------------------------------
-      	En tant que : %2
-      	J'ai besoin de : %3
-      	Afin de : %4
+      	En tant que : [%:m_oUserStoryParent.p_sEntantQue%]
+      	J'ai besoin de : [%:m_oUserStoryParent.p_sJaiBesoinDe%]
+      	Afin de : [%:m_oUserStoryParent.p_sAfinDe%]
       	-------------------------------------------------
-      	%9
-      	%5
+      	[%:m_sCodeTache%]
+      	[%:m_sDescription%]
       	
-      	Sprint : %6
-      	Poids : %7
+      	Sprint : [%:m_nNum_Sprint_Realisation%]
+      	Poids : [%:m_nPoids%]
       	-------------------------------------------------
       	Commentaire :
-      	%8
-      	], :m_oUserStoryParent.p_oProjetParent.p_sNom, ...
-      		:m_oUserStoryParent.p_sEntantQue, ...
-      		:m_oUserStoryParent.p_sJaiBesoinDe, ...
-      		:m_oUserStoryParent.p_sAfinDe, ...
-      		:m_sDescription, ...
-      		:m_nNum_Sprint_Realisation, ...
-      		:m_nPoids, ...
-      		:m_sCMTR, ...
-      		:m_sCodeTache)
+      	[%sComBlocage%]
+      	]
      type : 458752
    -
      name : bEstDemarree
@@ -928,6 +936,87 @@ class :
       
       renvoyer bRetour
      type : 458752
+   -
+     name : changeOrdre
+     procedure_id : 1385597479523394357
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //changeOrdre (<nChangePos_P> est entier)
+      //
+      // Paramètres :
+      //	nChangePos_P (entier) : <indiquez ici le rôle de nChangePos_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure changeOrdre(nChangePos_P est un entier)
+      
+      nPosInit est un entier
+      nNouvPos est un entier
+      nNbPos est un entier
+      aoLstTachesUS est un tableau dynamique de ClTache = :m_oUserStoryParent.aoListeTaches()
+      oTacheTmp est un ClTache dynamique
+      bModifTache est un booléen
+      nDecalage est un entier
+      
+      nPosInit = :p_nOrdre
+      nNbPos = Dimension(aoLstTachesUS)
+      
+      selon nChangePos_P
+      	cas cstChangeOrdre_Premier
+      		nNouvPos = 1
+      		nDecalage = 1
+      	CAS cstChangeOrdre_Precedent
+      		nNouvPos = max(1, nPosInit - 1)
+      		nDecalage = 1
+      	CAS cstChangeOrdre_Suivant
+      		nNouvPos = Min(nNbPos, nPosInit + 1)
+      		nDecalage = -1
+      	CAS cstChangeOrdre_Dernier
+      		nNouvPos = nNbPos
+      		nDecalage = -1
+      	autres cas:
+      		ExceptionDéclenche(1,"Erreur de paramètre : [%nChangePos_P%]")
+      fin
+      
+      
+      pour tout element oTacheTmp de aoLstTachesUS
+      	bModifTache = faux
+      	
+      	//Est on sur une autre tache que moimeme ?
+      	si oTacheTmp.Get_IdUnique() <> :Get_IdUnique() alors
+      		//Oui :
+      		
+      		si min(nPosInit, nNouvPos) <= oTacheTmp.p_nOrdre <= Max(nPosInit, nNouvPos) alors
+      			
+      			
+      			oTacheTmp.p_nOrdre += nDecalage
+      //			bModifTache = Vrai
+      //
+      //			si nNouvPos < oTacheTmp.p_nOrdre ALORS
+      //				oTacheTmp.p_nOrdre++
+      //				bModifTache = vrai
+      //			FIN
+      //			
+      //			SI nNouvPos > oTacheTmp.p_nOrdre ALORS
+      //				oTacheTmp.p_nOrdre--
+      //				bModifTache = Vrai
+      //			FIN
+      //			
+      //			si bModifTache alors
+      				oTacheTmp.Enregistre()
+      //			FIN
+      		FIN
+      	FIN
+      FIN
+      
+      :p_nOrdre = nNouvPos
+      :Enregistre()
+     type : 458752
   properties :
    -
      name : p_oUsr_Dev
@@ -1028,7 +1117,7 @@ class :
          	:EstModif()
          	
          	:m_bBrouillon = bValeur
-         	:m_nStatut = ::cstStatut_Annulee
+         	//:m_nStatut = ::cstStatut_Annulee
          fin
         type : 2031616
      template_refs : []
@@ -1051,7 +1140,7 @@ class :
          	:EstModif()
          	
          	:m_bEstRealise = bValeur
-         	:m_nStatut = ::cstStatut_Annulee
+         	//:m_nStatut = ::cstStatut_Annulee
          fin
         type : 2031616
      template_refs : []
@@ -1394,10 +1483,10 @@ class :
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
 resources :
  string_res :
   identifier : 0x1e85e352228f3dbc
-  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
- internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

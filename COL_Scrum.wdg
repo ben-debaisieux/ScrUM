@@ -2,32 +2,30 @@
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
  name : COL_Scrum
- major_version : 26
+ major_version : 27
  minor_version : 0
  type : 7
  description : ""
  subtype : 0
 procedure_set :
  identifier : 0x1ca5c304001ae845
- internal_properties : BgAAAAYAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ internal_properties : BwAAAAcAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
  code_elements :
-  internal_properties : BgAAAAYAAAC8Sl0pfseidXE9/kBmawagKU2LQSv8bn6/vNDKIJF1LaO5OrXnJBCSprdxyfnkeSCSHo4FglHTPzGvuw==
+  internal_properties : BwAAAAcAAAC8Sl0pfseidXE9/kBmawagKU2LQSv8bn6/vNDKIJF1LaO5OrXnJBCSprdxyfnkeSCSHo4FglHTPzGvuw==
   type_code : 31
   p_codes :
    -
      code : |1+
       CONSTANTe
-      	//etat des taches
-      	cstTacheACoter = 1
-      	cstTacheNonTerminee = 2
-      	cstTacheTerminee = 3
+      	cstReponseWS_Ok					= 200//OK 
+      
       	
-      	//Action pour l'historique des User Storie
-      	cst_Action_US_Passer_en_test	= 1
-      	cst_Action_US_Valider_test		= 2
-      	cst_Action_US_Message			= 3
-      	cst_Action_US_Creation			= 4
-      	cst_Action_US_Modification		= 5
+      //	//Action pour l'historique des User Storie
+      //	cst_Action_US_Passer_en_test	= 1
+      //	cst_Action_US_Valider_test		= 2
+      //	cst_Action_US_Message			= 3
+      //	cst_Action_US_Creation			= 4
+      //	cst_Action_US_Modification		= 5
       	
       	
       	//Statuts des US
@@ -35,7 +33,11 @@ procedure_set :
       	cst_StatutUS_Terminée	= "Terminée"
       	cst_StatutUS_Commencée	= "Commencée"
       	cst_StatutUS_En_Test	= "En Test"
-      	cst_StatutUS_A_faire	= "A faire"	
+      	cst_StatutUS_A_faire	= "A faire"
+      	
+      	
+      	// action de clique sur le bouton
+      	WM_LBUTTONDBLCLK = 515
       fin
       
       //Structure User Story
@@ -76,7 +78,9 @@ procedure_set :
       	sRealise est une chaine
       	sCommentaire est une chaîne
       
-      	sProjet est une  chaine
+      	sProjet est une chaine
+      	sGroupement est une chaine
+      	sTesteur est une  chaine
       	bDemarree est un booleen
       	bTermine est un booleen
       	bAnnulee est un booleen
@@ -115,20 +119,6 @@ procedure_set :
       	
       FIN
       
-      //STR_Message est une structure
-      //	nIDMessage est un entier
-      //    nIDUsr est un entier
-      //	nNum_Sprint est un entier
-      //    nIDScr_Tache est un entier
-      //    nIDUserStory est un entier
-      //    sCMTR est une chaine
-      //	nIDMessageParent est un entier
-      //	bTop_Visible est un booléen
-      //	dDteCreation est une dateheure
-      //	sNomUtilisateur est une chaine
-      //	iImage est une image 
-      //fin
-      
        STR_Synthese est une structure
        	nAnnulee est un entier
        	nTerminee est un entier
@@ -138,7 +128,7 @@ procedure_set :
        	nTotal est un entier
        fin
        
-       
+      
       //Couleurs
       gnCouleur_Vert_pale			est un entier	= rvb(87, 213, 59)
       gnCouleur_Orange_pale		est un entier	= rvb(255,203,96) 
@@ -273,15 +263,131 @@ procedure_set :
       	FIN
       FIN
      type : 458752
+   -
+     name : Fenetre_Visible
+     procedure_id : 1381129193110821231
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // Fenetre_Visible ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure Fenetre_Visible(MessageSouris)
+      
+      SI MessageSouris = WM_LBUTTONDBLCLK ALORS
+      	FEN_Moulinette_JSON..Visible = Vrai
+      FIN
+     type : 458752
+   -
+     name : dh_FormatRFC3339_Vers_DateHeure
+     procedure_id : 1383443175570597710
+     type_code : 15
+     code : |1+
+      // Résumé : Renvoie une valeur date/heure à partir d'une chaine date/heure du WS CreditSafe Ex : 2019-04-09T10:44:42.254Z
+      // Syntaxe :
+      //[ <Résultat> = ] dh_FormatRFC3339_Vers_DateHeure (<sDateHeureFormatWS> est chaîne)
+      //
+      // Paramètres :
+      //	sDateHeureFormatWS (chaîne ANSI) : <indiquez ici le rôle de sDateHeureFormatWS>
+      // Valeur de retour :
+      // 	dateheure : // 	Aucune
+      
+      PROCEDURE dh_FormatRFC3339_Vers_DateHeure(LOCAL sDateHeureFormatWS est une chaine) : DateHeure
+      
+      dhRésultat est une dateheure = ""
+      
+      si sDateHeureFormatWS<>"" ALORS
+      	sDate est une chaine = ExtraitChaîne(sDateHeureFormatWS,1,"T")
+      	dhRésultat..PartieDate  = 	ChaîneVersDate(sDate,"AAAA-MM-JJ")
+      	sHeure est une chaine = ExtraitChaîne(sDateHeureFormatWS,2,"T")
+      	sHeure = Gauche(sHeure,8) // On ne garde que HH:MM:SS
+      	dhRésultat..PartieHeure = ChaîneVersHeure(sHeure,"HH:MM:SS")
+      FIN
+      
+      
+      renvoyer dhRésultat
+     type : 458752
+   -
+     name : aoRechItems
+     procedure_id : 1394667832205745911
+     type_code : 15
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoRechItems (<sRech_p> est chaîne)
+      //
+      // Paramètres :
+      //	sRech_p (chaîne ANSI) : <indiquez ici le rôle de sRech_p>
+      // Valeur de retour :
+      // 	tableau (ClObjDB dynamique) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure aoRechItems(sRech_p est une chaîne):tableau de ClObjDB dynamique
+      
+      
+      sdRech		est une Source de Données
+      sReq		est une chaîne
+      aoRes		est un tableau de ClObjDB dynamique
+      
+      sReq = [
+      
+      SELECT
+      	1 AS Type,
+      	Scr_UserStory.IDScr_UserStory AS Id
+      FROM Scr_UserStory
+      WHERE match(Scr_UserStory.CodeUserStory, Scr_UserStory.EntantQue, Scr_UserStory.JaiBesoinDe, Scr_UserStory.AfinDe, Scr_UserStory.CMTR_Global, Scr_UserStory.CMTR_Mise_En_Prod, Scr_UserStory.CMTR_RetourDeTest)
+      	AGAINST ('[%sRech_p%]')
+      
+      UNION ALL
+      	
+      SELECT
+      	2 AS Type,
+      	Scr_Tache.IDScr_Tache AS Id
+      FROM Scr_Tache
+      WHERE match(Scr_Tache.CodeTache, Scr_Tache.Description, Scr_Tache.CMTR, Scr_Tache.CMTR_Blocage) AGAINST ('[%sRech_p%]')
+      
+      	
+      ]
+      
+      SI goApp.Rsql(sdRech,sReq) ALORS
+      	
+      	POUR TOUT sdRech
+      		
+      		SELON sdRech.type
+      			
+      			CAS 1
+      				TableauAjouteRéférence(aoRes,ClUserStory.GetObj(sdRech.Id))
+      			CAS 2
+      				TableauAjouteRéférence(aoRes,ClTache.GetObj(sdRech.Id))
+      			AUTRE CAS
+      				
+      		FIN
+      	FIN
+      FIN
+      
+      HAnnuleDéclaration(sdRech)
+      
+      renvoyer aoRes
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :
-  internal_properties : BgAAAAYAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
   original_name : COL_SansNom1
 resources :
  string_res :
   identifier : 0x1ca5c2ef00189543
-  internal_properties : BgAAAAYAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
   strings :
    -
      text :
@@ -299,4 +405,4 @@ resources :
      text : {}
      index : 4
 custom_note :
- internal_properties : BgAAAAYAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -1,0 +1,128 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_Moulinette_JSON
+ major_version : 27
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_Moulinette_JSON
+ identifier : 0x2332f4131c5dd12b
+ internal_properties : BwAAAAcAAAC9dkxbJWWKYFZrK3DmFr5UWUt0rlW60ZqCxEuL7tcaH09zYclI8Ob3X33Txad9oMJsbOPBF6YMqdVOrJDE5IJwomuPAJHk2Kswmq2QkArFaH7GjnE9Wx9OrculPHCEUc4/iYB9ZXoU5qo+wjvWWpz5Qg6T8yyLwg7ZW8nDbUEZEy1vY2L4QL1X1FaOQulx+LPsj8UG0poxHGDsR74+Nlmn0ko+q7fyNQ6hAm98MqJ1+ZpErK3WrrJSmwTFDnnygtvGPGNPohs3OyPGAqxYNOElKZf9r13ADzSmxbDeK6aq1MBFG1o9SNRw9Y7t9R1mTILPd4fp1v3kU5BULfoh0G48Kp8G6Xt1EyGuPbs1BxWxga7nn1dn33pUy870H2bczXEwoEyHAYCiLRjSdHyPkuIB5s0HRqAynlSgdzHiW6+6FayEDJLooiyFjb8RvILYJrxOPm6+sQcTqooF1jZUWPqa02xcNCsw2waousU1Tpx7iIy9651v4zMuFvrfoejGU+QWm97KjHNVL+oc1ivvyswn9CYISJqmS1DC73lqhwXRAmB2PgKI/jZwDNmT7OPxFzAoO1EjpGOOuBwbFKBROVFrVsO2WpanE1/66HwKpd860epN09iY/YmLm6Nl+1tydIfjmpjSSSuX/qmgFlTLbtCDt6PXH0LG0rnoigT56J8l53wgq4E+krS1
+ properties :
+  width : 363
+  height : 246
+  widthClient : 361
+  heightClient : 214
+ controls :
+  -
+    name : BTN_Icone_Caché
+    identifier : 0x2332f6c7440e602b
+    internal_properties : BwAAAAcAAAAgVa6nReMNiw3JQ0+7yTEL/JKFnpk+iiehzQeQHbqg1eomsKQu0P3SzuB7C3/C49/9+I8jpbbxaHbgOKH3fzoWD8hCcPJrrYEOajCpB9B6dQXQf/9W+0KPtCkCzmt7Tf9695JN+Bd/FnDhy6EO6yKrk4vxQhbmoW8Z1JwvYDtEGBixyzP2TyPrs5n8qg5IwbmrQKJSHpcP6b6Lv8yDQA08Z4roMGFyTWOFs1bFCUE8LxQyVG4XMRRhOiYMFHEeKo4Y6j/QATcXeuKLA8Ydk0df4xLefOP3mL1Y8z9iY1qWkkXy3ND9P26LOWW6oDuBjSmlbGj1uhXbc/f+CGI6emZTMYh29sAkPHgHP7pY233ebJY1eCCFz4pTY1k1AN4UVPLZfJ2/ZaQZpDs9p5bBTUCSyGWLDpqCNfevgDp5sCsHIUm5dO+pp2K+o9DnRNK7UZbCgYiy9HWGMII/Ok3Jr8ct2antdwcBQSNllFt2AmsqdYP9bfoUaebOKEbH0ySDNaGYL+lrk4YvRtntg41ne/A+HbKRv8swcLzqXV/Zf2nzWiaie/NyzYDi+tUUc+dxcMoiVYmQYrotbJmsmLzTxFwShDVt9oZTPG3CQjfvol6vN1MHAtBkH+DTSPLAsld7cnxRFfv82v9gFmIzCyz/vG+Bjm4VLsSSV6AVajG3NXOK9RCSTkuCqYsdV9ctY/z+GAJqqKD7FOr1t40DRePHu8b047KaxCjRN/RVZhW89Y/64D/9VgfjzBUpGBN/c2cAyFSNWcIGZtkkYo8qXC2Ay+YouNjT3wXaqZrgPLz7VpMYEWSGjRSMpaTGWgQcHpsM
+    properties :
+     x : 140
+     y : 158
+     width : 80
+     height : 24
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         FEN_Moulinette_JSON..Visible = Faux
+         SysIconeAjoute(fRepExe() + "\ActiviteEquipe_48_1.ico", Menu_Icone_Caché, "Message","Fenetre_Visible")
+        type : 18
+      -
+        type : 161
+        enabled : false
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BwAAAAcAAABHivBqFH8xYQq/QELUltmClIuqm9KM3lg0XSaBAQ41WqT06R9JfU0qGK5sHUl8/xHCuvP3y9tLeLLOVaAgM2FjnfwSCRBgXqneLsHogwTYpIXuB1zp2uXtmOXYyGd6i+ek6BBvtJ0ylgF/MxkRihdZ26pl/9Jf5c+sxo07G0ZzHfcLEu9WD07gTSld25EPGWjvi/e5TxaHOZSRE8C5Ig+YdJawYdK89l+x1ofEmw3pfCNLUe3tNoiwg4AbC1jLdufmJ97Xc0JHDAy7gJsHBzEWwcuroqy2By4PJ4c6Wg==
+  options : []
+ popup_menus :
+  -
+    name : MENU_Icone_Cache
+    identifier : 0x2332f4131c60d12b
+    internal_properties : BwAAAAcAAABxkf7LahiZHIJQmdbwe/DhLzS1zD1mAwXunwuDz1cHDF6K5o5lFJE7rfH/W93eQxYj7SxduMdHEPKMz5KA6bM3Q3qra5AWAwPT/fCO5Yd03w23HkmApLGqq3Icy+t2f8Iy/j1/TItU4TLRYj5sB5A/LvHnNtevSKBkNJ96cnmP2oYxDGNl4RpzI56tGUfUjfVqk/xHEBhTgUYXXwcdHyubniGNck0QCVZZMqYzyZ10ina1tOdvp77NKMDx1EG7gETSRuGZcyHnf1+AVAdl8DGm+0zsRBwjIsoctjM73bQ1tlhxXMFErxHmuRSdRsEqT5Km545Zs71FT+h4o8FLYEBLXIWEy7emfm6ayN6U4qAYrEYdw9FEEBfjHH29HA+WdBOMEoPp0IqGTs48KbSY4VTszUzc6w==
+    options :
+     -
+       name : OPT_SansNom2
+       identifier : 0x2332f4481c6b9e9c
+       internal_properties : BwAAAAcAAAB63GkCfX6M5pAPFRY/B+Qz5OpXRRoe/KUa4H5CZHT+Iv5cK1ycOueFEYmkFqKiFX3bNuakCg1Kp1HI2Wtds2ojxSg0DjQ3vUMSWJeSV4ZWRK0yUSfBK+Qan4uTRUz2gacST5Y93rTv5X0HH16+yqpcBdDgRTIyoXQlVxjbJc+wE24fC3TreV36gOy6H0HudM3wKBufnARuwCj4TjvpLeNJ5rhryzpGLsNhE3/hZ9twWs4NCSoyT8XEcNSSTTwinNITP9mjsX1Hv8cuX0c7dX6pI+V+HJ52CydaeUvYmsSZuTIh/hAxhgcgWBgvSs4bHVHML0ctYl1wLy3wplG5Bvcss2TpgzMGfQVUKzOrTZ0omP47SV1imWpyxfKhJorEdouEbrbhUN8g2cwE160Lji+paek=
+       code_elements :
+        type_code : 26
+        p_codes :
+         -
+           code : |1+
+            // récupère info de toutes les cartes trello sauf celle fini dans des sprints précédent 
+            ClTrello_req::JSON_Recup_Info_Trello(Faux)
+            // tout récupérer
+            ClTrello_req::JSON_Tout_Recup()
+           type : 32
+     -
+       name : OPT_Enreg_fini_sprint_précédent
+       identifier : 0x2332f4521c6dc6e5
+       internal_properties : BwAAAAcAAAAGIJsWPM8PYdiqrE55fKuJp9gA0omRiBw2C4D1FKfpERCv7aIjyLXGH9YN6umhf4loKEKSrSXJCwtlgCVrj47Y4gGMvrzFhsHZIsdJmS2uzLSb2YBLjKujcAAL8KOM83OhyOnSLv7ZMyjxpkUD8l32McpLPQcEmF5n4G97CnapYElrMgr+JytNZdNk1AsxKgWxK0RRssmA7NFM7FeuCW4Da1sS0d5nQ4CRSEMmNGRzv0B/ONXvJm+FbGGsEa2HuNLv1HwX4UfNbkUq89nj2gHyGqmHQ8khTNLZ+ntUqtf8rnFv3+tq0IlUfvCs5YHhw6yC5TGyJsIxacCW1gtPO6ez3UlG7p4pLiZYe7h+aKRCrJ81h4yqHnlJLj2r0ZLk5WqETcbKtSnQ0p4F8Vty1XVw5IRd3qOo1oPc1FVhlQ==
+       code_elements :
+        type_code : 26
+        p_codes :
+         -
+           code : |1+
+            // récupère info de toutes les cartes trello qui ont été fini dans des sprints précédent 
+            ClTrello_req::JSON_Recup_Info_Trello(vrai)
+            // tout récupérer
+            ClTrello_req::JSON_Tout_Recup()
+           type : 32
+     -
+       name : OPT_Fermer
+       identifier : 0x2332f4681c721ca6
+       internal_properties : BwAAAAcAAAAKdmebdZ29bfgtPp/whuof24C+zsi0WenO1UD2yk7jNKsN4/VlgdN/k8z9S8gfPygybCuIOWMe2BcFa31Qaqef6KkecF1ozmVlXW0Q1vxcZWZ5qy4xFenayVjRtMyUh0IQpbc/qpW9lFVlN2AlCBU27P7jDsiDtfO/4GvaZojkKlCKJjn9BFmKHjaWqUL7sC3aYRMwFpsfX6GwZG2SR2Pi3mVr86rBGo5Ai1VUavhh3av/MRG8bZb3OuY9DpGz3OKe7+afI+cbzmwihNt3NYUISRimme5hfWtfPwmxkYFPjsIXvVrVqS4iclYSMNW2KdCJ+hGSUdjoeW6WOU3wzjqjAcKpkpurZ+Lakf56SlSncKy+NOGVNLpn9a1+vFh2w9Xzyhbv
+       code_elements :
+        type_code : 26
+        p_codes :
+         -
+           code : |1-
+            // ferme la fenetre en cours et donc l'exe
+            ferme(FEN_Moulinette_JSON)
+           type : 32
+    controls : []
+    code_elements :
+     type_code : 26
+     p_codes : []
+ languages :
+  - fr-FR
+ message_bar :
+  internal_properties : BwAAAAcAAADG0006i3ptxMcUE+O5cGvDhb43eRlY9UEE1z/7izK93v/ToMiwACETQQw4eQhZuJRMFa6SBwwT+zSdDbdc5HEkXDob51ldPFNKsP+0MWY=
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1-
+      PROCEDURE MaFenêtre()
+      // cache la fenêtre 
+      ExécuteTraitement(BTN_Icone_Caché,trtClic)
+   -
+     code : |1-
+      
+     type : 34
+   -
+     type : 180
+     enabled : false
+   -
+     type : 230
+     enabled : false
+ code_parameters :
+  internal_properties : BwAAAAcAAAARaqIs1pWWTrjJkc2sbefp8NGAHSVvdRgpQIePRe9rhkbpERRVEF+Nx8mIqTxrVGdwHX99jtU=
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x1332f2b201c06db6
+  internal_properties : BwAAAAcAAAAZ++HSz2luvwiNhadWl8v3mh2d0Pq0fCIps02kogrcwVHmCg==
+custom_note :
+ internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BwAAAAcAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe
