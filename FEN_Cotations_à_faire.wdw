@@ -197,9 +197,9 @@ window :
             	
             	quand Exception dans
             		oTache.p_nPoids_Previsionnel = TBL_taches.COL_Poids_Previ
-            		bModif = oTache.bEstModifie()
+            		bModif = oTache.ZF_bEstModifie()
             		si bModif ALORS
-            			oTache.Enregistre()
+            			oTache.ZF_Enregistre()
             		FIN
             	FAIRE
             		info("Echec de l'enregistrement :" + rc + ExceptionInfo(errMessage))
@@ -289,7 +289,7 @@ window :
         code : |1+
          SI TableOccurrence(TBL_taches) >= 1 ALORS
          	oTache est un ClTache <- ClTache.GetObj(TBL_taches.COL_idTache)
-         	SI Ouvre(FEN_User_Story_Detail_v2, oTache.m_oUserStoryParent, oTache.Get_IdUnique()) ALORS
+         	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
          		AffTaches()
          	FIN
          FIN
@@ -363,10 +363,10 @@ window :
       TableSupprimeTout(TBL_taches)
       
       
-      POUR TOUT ELÉMENT oPrj DE ClProjet.aoListeProjets()
-      	POUR TOUT ELÉMENT oUs DE oPrj.aoListeUS()
+      POUR TOUT ELÉMENT oPrj DE ClProjet.aoListeProjets().aItems()
+      	POUR TOUT ELÉMENT oUs DE oPrj.aoListeUS().aItems()
       		
-      		POUR TOUT ELÉMENT oTache_Tmp DE oUs.aoListeTaches()
+      		POUR TOUT ELÉMENT oTache_Tmp DE oUs.aoListeTaches().aItems()
       			
       //			Trace("Tache : " + oTache_Tmp.p_sCodeTache)
       //			Trace("Aff" + oTache_Tmp:p_nPoids + "-" + oTache_Tmp:p_nPoids_Previsionnel + "-" + oTache_Tmp:p_bAnnule + "-" + oTache_Tmp.p_bBrouillon)

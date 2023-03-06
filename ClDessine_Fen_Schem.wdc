@@ -90,7 +90,7 @@ class :
       		(ClDessine_Fen_Schem_Inter.cstHauterurBox + ClDessine_Fen_Schem_Inter.cstMargeHBox * 2) + ...
       		ClDessine_Fen_Schem_Inter.cstMargeHBox
       	
-      	oAxe <- ChampCrée(:sCheminChamps("btnAxe" + oAxeTmp.Get_IdUnique()), ...
+      	oAxe <- ChampCrée(:sCheminChamps("btnAxe" + oAxeTmp.ZF_Get_IdUnique()), ...
       		typLibellé, ...
       		ClDessine_Fen_Schem_Inter.cstMargeHBox, ...
       		nPosY, ...
@@ -196,7 +196,7 @@ class :
       sChamps est une chaîne
       
       POUR TOUT element oAxeTmp DE :m_oSchem.m_aoAxes
-      	sChamps = :sCheminChamps("btnAxe" + oAxeTmp.Get_IdUnique())
+      	sChamps = :sCheminChamps("btnAxe" + oAxeTmp.ZF_Get_IdUnique())
       	
       	SI ChampExiste(sChamps) ALORS
       		ChampSupprime(sChamps)
@@ -237,7 +237,7 @@ class :
       oInterTmp est un ClDessine_Fen_Schem_Inter dynamique
       
       pour tout element oInterTmp de :m_aoInterDessin
-      	si oInterTmp.Get_IdUnique() = oInter_P.Get_IdUnique() ALORS
+      	si oInterTmp.Get_IdUnique() = oInter_P.ZF_Get_IdUnique() ALORS
       		oRetour <- oInterTmp
       	FIN
       FIN
@@ -295,7 +295,7 @@ class :
       				IdPointAttacheArrivée	= PointDAttacheAjoute(sChampFin, 0, 50)
       				bPrem					= faux
       			sinon
-      				sCleOffset = oInter.m_oAxe.Get_IdUnique()
+      				sCleOffset = oInter.m_oAxe.ZF_Get_IdUnique()
       				si anOffSetLiensrouge[sCleOffset]..Vide ALORS
       					anOffSetLiensrouge[sCleOffset] = 1
       				sinon

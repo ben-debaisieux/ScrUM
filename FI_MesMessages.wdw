@@ -295,7 +295,7 @@ window :
       	
       	nNumLigne = TableAjouteLigne(TBL_MesMessages)
       	
-      	TBL_MesMessages[nNumLigne].COL_IdMsg			= oMsg.Get_IdUnique()
+      	TBL_MesMessages[nNumLigne].COL_IdMsg			= oMsg.ZF_Get_IdUnique()
       	TBL_MesMessages[nNumLigne].COL_Msg				= sLib
       	TBL_MesMessages[nNumLigne].COL_Projet			= sPrj
       	TBL_MesMessages[nNumLigne].COL_Msg..Bulle		= oMsg.p_sCMTR

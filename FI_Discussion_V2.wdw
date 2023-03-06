@@ -203,9 +203,9 @@ window :
                
                si ouinon("Confirmez-vous la suppression du message ?") ALORS
                	oMsg <- ClMessage.GetObj(ZR_Messages_UserStory.ATT_IDMessage)
-               	oMsg.Supprimer()
+               	oMsg.ZF_Supprimer()
                	quand Exception dans
-               		oMsg.Enregistre()
+               		oMsg.ZF_Enregistre()
                	faire
                		erreur(ExceptionInfo(errMessage))
                	sinon
@@ -461,10 +461,10 @@ window :
             
             SELON zoEntite..Classe
             	CAS "ClTache"
-            		oNewMes.p_oTache = ClTache.GetObj(zoEntite.Get_IdUnique())
+            		oNewMes.p_oTache = ClTache.GetObj(zoEntite.ZF_Get_IdUnique())
             		
             	CAS "ClUserStory"
-            		oNewMes.p_oUserStory = ClTache.GetObj(zoEntite.Get_IdUnique())
+            		oNewMes.p_oUserStory = ClTache.GetObj(zoEntite.ZF_Get_IdUnique())
             	
             	AUTRE CAS
             		ExceptionDéclenche(1, ChaîneConstruit("Type de message non prévu pour l'entité ""%1"".", zoEntite..Classe))
@@ -484,7 +484,7 @@ window :
         code : |1-
          PROCEDURE MaFenêtre()
          
-         zoEntite est un ClObjDB dynamique
+         zoEntite est un ClZF_ObjDB dynamique
       -
         code : |1-
          
@@ -553,14 +553,14 @@ window :
       	ZR_Messages_UserStory[nLigne].ATT_Utilisateur	= oMsg_Tmp.p_oUsr.p_sNom
       	ZR_Messages_UserStory[nLigne].ATT_Date			= DateVersChaîne(oMsg_Tmp.p_dhDteCreation, sFormatDte)
       	ZR_Messages_UserStory[nLigne].ATT_Message		= oMsg_Tmp.p_sCMTR
-      	ZR_Messages_UserStory[nLigne].ATT_IDMessage		= oMsg_Tmp.Get_IdUnique()
+      	ZR_Messages_UserStory[nLigne].ATT_IDMessage		= oMsg_Tmp.ZF_Get_IdUnique()
       	ZR_Messages_UserStory[nLigne].ATT_XUtilisateur	= LIB_Utilisateur..XInitial
       	ZR_Messages_UserStory[nLigne].ATT_XDate			= LIB_Date..XInitial
       	ZR_Messages_UserStory[nLigne].ATT_XMessage		= LIB_Commentaire..XInitial
       	ZR_Messages_UserStory[nLigne].ATT_Fleche		= Faux
       	ZR_Messages_UserStory[nLigne].ATT_BTN_Repondre	= Faux
       	ZR_Messages_UserStory[nLigne].ATT_taille		= nTaille * nHauteur
-      	ZR_Messages_UserStory[nLigne].ATT_Id_Parent		= oMsg_Tmp.Get_IdUnique()
+      	ZR_Messages_UserStory[nLigne].ATT_Id_Parent		= oMsg_Tmp.ZF_Get_IdUnique()
       	
       	ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Faux
       	
@@ -585,14 +585,14 @@ window :
       		ZR_Messages_UserStory[nLigne].ATT_Utilisateur	= oMsgEnf_Tmp.p_oUsr.p_sNom
       		ZR_Messages_UserStory[nLigne].ATT_Date			= DateVersChaîne(oMsgEnf_Tmp.p_dhDteCreation, sFormatDte)
       		ZR_Messages_UserStory[nLigne].ATT_Message		= oMsgEnf_Tmp.p_sCMTR
-      		ZR_Messages_UserStory[nLigne].ATT_IDMessage		= oMsgEnf_Tmp.Get_IdUnique()
+      		ZR_Messages_UserStory[nLigne].ATT_IDMessage		= oMsgEnf_Tmp.ZF_Get_IdUnique()
       		ZR_Messages_UserStory[nLigne].ATT_XUtilisateur	= LIB_Utilisateur..XInitial + 30
       		ZR_Messages_UserStory[nLigne].ATT_XDate			= LIB_Date..XInitial + 30
       		ZR_Messages_UserStory[nLigne].ATT_XMessage		= LIB_Commentaire..XInitial + 30
       		ZR_Messages_UserStory[nLigne].ATT_Fleche		= Vrai
       		ZR_Messages_UserStory[nLigne].ATT_BTN_Repondre	= bRepondre
       		ZR_Messages_UserStory[nLigne].ATT_taille		= nTaille * nHauteur
-      		ZR_Messages_UserStory[nLigne].ATT_Id_Parent		= oMsg_Tmp.Get_IdUnique()
+      		ZR_Messages_UserStory[nLigne].ATT_Id_Parent		= oMsg_Tmp.ZF_Get_IdUnique()
       //
       //		SI aMessagesFils[i].iImage.Valide = Faux ALORS
       			ZR_Messages_UserStory[nLigne].ATT_Image_Visible = Faux
@@ -617,7 +617,7 @@ window :
      procedure_id : 1167100531772184018
      type_code : 14
      code : |1+
-      procédure SetSource(oEntite_P est un ClObjDB dynamique)
+      procédure SetSource(oEntite_P est un ClZF_ObjDB dynamique)
       
       zoEntite <- oEntite_P
       

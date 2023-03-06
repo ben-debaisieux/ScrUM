@@ -169,7 +169,7 @@ window :
       bOuvre est un booléen
       
       //Liste de tous les projets
-      pour tout element oPrj de ClProjet.aoListeProjets()
+      pour tout element oPrj de ClProjet.aoListeProjets().aItems()
       	bOuvre = faux
       	
       	//Ajout du projet dans la liste
@@ -178,7 +178,7 @@ window :
       	TBLH_SelUS[nLigneParent].COL_IdUS	= 0
       	
       	//Liste de toutes les user storues
-      	POUR TOUT ELEMENT oUS de oPrj.aoListeUS()
+      	POUR TOUT ELEMENT oUS de oPrj.aoListeUS().aItems()
       		
       		//Ajoue de l'User story dans la liste
       		nLigne = TableAjouteFils(TBLH_SelUS,nLigneParent)

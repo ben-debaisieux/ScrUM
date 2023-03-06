@@ -293,7 +293,7 @@ window :
             	SI OuiNon(Non, "Confirmez-vous le démarrage de la tache :" + RC + oTache.p_sDescription) ALORS
             		oTache.p_oUsr_Dev				= goApp.m_oUsrCnx
             		oTache.p_nNum_Sprint_Demarrage	= goApp.m_nNumeroDuSprintActuel
-            		oTache.Enregistre()
+            		oTache.ZF_Enregistre()
             		Actualise()
             	FIN
             FIN
@@ -354,10 +354,10 @@ window :
       
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
       	
-      	pour tout element oTache de ClTache.Taches_a_faire(ClTache.PasseEtActuelle)
+      	pour tout element oTache de ClTache.Taches_a_faire(ClTache.PasseEtActuelle).aItems()
       		
       		//Affichage des taches non attribuées, ou qui sont attribuées à l'utilisateur connecté.
-      		si oTache.p_oUsr_Dev = null _ou_ oTache.p_oUsr_Dev.Get_IdUnique() = goapp.m_oUsrCnx.Get_IdUnique() et oTache.p_nStatut <> ClTache.cstStatut_Suspendu ALORS
+      		si oTache.p_oUsr_Dev = null _ou_ oTache.p_oUsr_Dev.ZF_Get_IdUnique() = goapp.m_oUsrCnx.ZF_Get_IdUnique() et oTache.p_nStatut <> ClTache.cstStatut_Suspendu ALORS
       			
       			nNumLigne = TableAjouteLigne(TBL_A_faire)
       			TBL_A_faire[nNumLigne].COL_IdTache		= oTache.Get_IdUnique()

@@ -1,0 +1,805 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClTrello_SCRUM
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13f892d8178bb1cb
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClTrello_SCRUM est une Classe
+      	herite de ClTrello_req
+      fin
+      
+      constante
+      
+      //	sAuth								= "?key=5b1c38be737f85f556604d643b571003&token=0c6e5cd1de31ab1fe63b8919526ab4884dbb1d7def9b4d85739ac9098675ed1b"
+      	
+      	cst_List_ID_A_faire					= "5e6f30b2e199570356971064"
+      	cst_List_ID_Dev_en_cours			= "5e6f30c62a48854eb7642c3e"
+      	cst_List_ID_A_faire_tester_par_DEV2	= "5e6f30de31befa31788b71d5"
+      	cst_List_ID_Test_unitaire			= "5e6f30e807d6880a18b8314d"
+      	cst_List_ID_A_livrer_en_pré_prod	= "5e6f310d215ade036fad954c"
+      	cst_List_ID_Test_fonctionnel		= "5e6f30ec3182fc07d11df6d2"
+      	cst_List_ID_A_livrer_en_prod		= "5e6f30fc13de16288ca8955e"
+      	cst_List_ID_Fini					= "5e6f30ff28bd738d4e6a9e64"
+      	cst_List_ID_Fini_sprint_précédents	= "5e969a2a7ee6e164742a03bf"
+      	
+      	cst_Label_Prioritaire				= "5e6f30a17669b2254985944b"
+      	cst_Label_Suspend					= "5e6f30a17669b2254985944c"
+      	cst_Label_Attente					= "5e6f30a17669b22549859449"
+      	cst_Label_Comptabilise				= "5e6f30a17669b22549859465"
+      	
+      	cst_TableauScrum					= "AcWZ1BSV"
+      fin
+      
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1439061537750561227
+     type_code : 27
+     code : |1+
+      procédure Constructeur(sUrl_P est une chaîne)
+      Ancêtre.constructeur(sUrl_P)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1439061537750626763
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : JSON_Recup_Info_Trello
+     internal_properties : BwAAAAcAAADGLvhEj417wjOY53sfgb/R0CSSmEKCHf2OGrc9P2/gi8qq4vk+90h91lDYz4g7KLaGGD6GTFS+olD+ahWXOvi74GCTMvBWKt4AbyIhMLsbD5hpp52HHKHC64+H
+     procedure_id : 1439061537750757835
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //JSON_Recup_Info_Trello (<bUniquementList_ID_Fini_sprint_précédents> est booléen)
+      //
+      // Paramètres :
+      //	bUniquementList_ID_Fini_sprint_précédents (booléen) : <indiquez ici le rôle de bSans_List_ID_Fini_sprint_précédents>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale JSON_Recup_Info_Trello(LOCAL bUniquementList_ID_Fini_sprint_précédents est un booléen)
+      
+      // variables
+      sJson						est une chaîne
+      sJsonListe					est une chaîne
+      sJsonList_Tache				est une chaîne
+      sJson_Action				est une chaîne
+      sJsonTache					est une chaîne
+      vList						est un Variant
+      vList_tache					est un Variant
+      scrochetOuvrant				est une chaîne	= "["
+      sCrochetFermant				est une chaîne	= "]"
+      sEchappementCaractExclu		est une chaîne
+      sChaine_Json_Contenu_trello	est une chaîne
+      Json_Contenu_trello			est un JSON
+      vEvts						est un Variant
+      sJson_Action_Liste			est une chaîne
+      sTitreAction				est une chaîne
+      sCodeTache					est une chaîne
+      sLabel_id					est une chaîne
+      sList_Label					est une chaîne
+      sList_after					est une chaîne
+      sUser_Carte					est une chaîne
+      sList_IDMembres				est une chaîne
+      nIndice						est un entier
+      sListeGroupeExclu			est une chaine
+      bNouveauEnregistrement		est un booleen
+      
+      
+      //// recherche l'enregistrement de la table
+      HLitPremier(Scr_TrelloMemo)
+      
+      
+      SI HEnDehors(Scr_TrelloMemo) = Faux ALORS
+      	Json_Contenu_trello = Scr_TrelloMemo.JsonResultat
+      	
+      	// selon si on veux récupérer fini sprint précédent ou tout le reste
+      	SI pas bUniquementList_ID_Fini_sprint_précédents ALORS
+      		
+      		// supprime les enregistrements de tous les groupes de taches sauf ceux du groupe fini au sprint précédent
+      		POUR nIndice = 1 _À_ TableauOccurrence(Json_Contenu_trello.groupTache)
+      			SI Json_Contenu_trello.groupTache[nIndice].id <> cst_List_ID_Fini_sprint_précédents ALORS
+      				TableauSupprimeTout(Json_Contenu_trello.groupTache[nIndice].list)
+      			FIN
+      		FIN
+      		sListeGroupeExclu = cst_List_ID_Fini_sprint_précédents
+      	SINON
+      		
+      		// supprime les enregistrements du groupe fini au sprint précédent (et on exclu les autres)
+      		POUR nIndice = 1 _À_ TableauOccurrence(Json_Contenu_trello.groupTache)
+      			SI Json_Contenu_trello.groupTache[nIndice].id = cst_List_ID_Fini_sprint_précédents ALORS
+      				TableauSupprimeTout(Json_Contenu_trello.groupTache[nIndice].list)
+      			SINON
+      				sListeGroupeExclu += [RC] + Json_Contenu_trello.groupTache[nIndice].id
+      			FIN
+      		FIN
+      		
+      	FIN
+      SINON 
+      	// nouveau enregistrement
+      	bNouveauEnregistrement = vrai
+      FIN
+      
+      
+      // récupération structure trello en JSON 
+      oTrell						est un ClTrello_SCRUM(ChaîneConstruit("https://api.trello.com/1/boards/%1/lists", cst_TableauScrum))
+      // réinitialisation de l'indice
+      nIndice = 0
+      
+      POUR TOUT vList DE oTrell.get_json()
+      	
+      	nIndice += 1
+      	
+      	// vérifie que id n'existe pas dans la liste à ne pas toucher
+      	SI Contient(sListeGroupeExclu,vList.id) = Faux ALORS
+      		
+      		//trace(vList.id)
+      		
+      		//récupération des listes du tableau
+      		oTrell_Tache			est un ClTrello_SCRUM(ChaîneConstruit("https://api.trello.com/1/lists/%1/cards", vList.id))
+      		
+      		sJsonList_Tache		= ""
+      		sJson_Action_Liste	= ""
+      		POUR TOUT vList_tache DE oTrell_Tache.get_json()
+      			
+      			sList_Label		= ""
+      			sList_IDMembres	= ""
+      			
+      			// récupération du code de la tâche
+      			sCodeTache		= SansEspace(ExtraitChaîne(vList_tache.name,1,"-"))
+      			
+      			//trace(sCodeTache)
+      			
+      			POUR TOUT vLabel DE vList_tache.idLabels
+      				
+      				sLabel_id = [
+      					{
+      					"id":"[%vLabel%]"
+      					}
+      				]
+      				
+      				sList_Label  += [","] + [RC] + sLabel_id
+      				
+      			FIN
+      			
+      			SI vList_tache.idMembers[1] <> Null ALORS
+      				
+      				
+      				POUR i = 1 _À_ TableauOccurrence(vList_tache.idMembers)
+      					
+      					sUser_Carte = [
+      						{
+      						"id":"[%vList_tache.idMembers[i]%]"
+      						}
+      					]
+      					
+      					sList_IDMembres  += ["," + RC] + sUser_Carte
+      					
+      				FIN
+      				
+      			FIN
+      			
+      			// en json plusieurs caractères ne sont pas pris en compte tel quel il faux mettre un caractère d'échappement avant 
+      			sEchappementCaractExclu	= vList_tache.name
+      			sEchappementCaractExclu	= Remplace(sEchappementCaractExclu,"\","\\")
+      			sEchappementCaractExclu	= Remplace(sEchappementCaractExclu,Caract(34),"\"+Caract(34))
+      			sEchappementCaractExclu	= Remplace(sEchappementCaractExclu,[Caract(13),Caract(10)],"/n")
+      			
+      			
+      			
+      			//récupération des actions de la carte
+      			oTrell_Action est un ClTrello_SCRUM(ChaîneConstruit("https://api.trello.com/1/cards/%1/actions", vList_tache.id))
+      			
+      			
+      			sJson_Action_Liste	= ""
+      			POUR TOUT vEvts DE oTrell_Action.get_json()
+      				sTitreAction = ""
+      				SI vEvts.data.text <> Null ALORS
+      					sTitreAction = vEvts.data.text
+      				FIN
+      				
+      				
+      				SI vEvts.data.listAfter <> Null ALORS
+      					sList_after = vEvts.data.listAfter.id
+      				SINON 
+      					sList_after = ""
+      				FIN
+      				
+      				// en json plusieurs caractères ne sont pas pris en compte tel quel il faux mettre un caractère d'échappement avant 
+      				sTitreAction	= Remplace(sTitreAction,"\","\\")
+      				sTitreAction	= Remplace(sTitreAction,Caract(34),"\"+Caract(34))
+      				sTitreAction	= Remplace(sTitreAction,[Caract(13),Caract(10)],"/n")
+      				sTitreAction	= Remplace(sTitreAction,TAB,"/t")
+      				
+      				
+      				sJson_Action	= [
+      					{
+      					"id":"[%vEvts.data.listAfter.id%]",
+      					"titre":"[%sTitreAction%]",
+      					"date":"[%vEvts.date%]",
+      					"user":"[%vEvts.idMemberCreator%]",
+      					"listAfter":"[%sList_after%]"
+      					}
+      				]
+      				
+      				sJson_Action_Liste  += [","] + [RC] + sJson_Action
+      			FIN
+      			
+      			sJsonTache			= [
+      				{
+      				"code":"[%sCodeTache%]",
+      				"name":"[%sEchappementCaractExclu%]",
+      				"idLabels":[%scrochetOuvrant%]
+      				[%sList_Label%]
+      				[%sCrochetFermant%],
+      				"idMembers":[%scrochetOuvrant%]
+      				[%sList_IDMembres%]
+      				[%sCrochetFermant%],
+      				"list":[%scrochetOuvrant%]
+      				[%sJson_Action_Liste%]
+      				[%sCrochetFermant%]
+      				}
+      			]
+      			
+      			sJsonList_Tache += [","] + [RC] + sJsonTache
+      			
+      			// vérifie qu'il ne s'agit pas d'un nouveau enregistrement
+      			SI bNouveauEnregistrement = faux ALORS
+      				// enregistrement de la tache au format json dans le groupe
+      				TableauAjoute(Json_Contenu_trello.groupTache[nIndice].list,ChaîneVersJSON(sJsonTache))
+      			FIN
+      		FIN
+      		
+      		SI bNouveauEnregistrement = vrai ALORS
+      			sJsonListe = [
+      				{
+      				"id":"[%vList.id%]",
+      			 	"name":"[%vList.name%]",
+      			 	"list":[%scrochetOuvrant%]
+      			 			[%sJsonList_Tache%]
+      			 	[%sCrochetFermant%]
+      				}
+      			]
+      			sJson += [","] + sJsonListe
+      		FIN
+      	SINON 
+      		// group de taches qu'on ne souhaite pas récupéré
+      	FIN	
+      FIN
+      
+      SI bNouveauEnregistrement = Vrai ALORS
+      	sChaine_Json_Contenu_trello = [
+      	{
+      	"groupTache":[%scrochetOuvrant%]
+      		
+      			[%sJson%]
+      		
+      		[%sCrochetFermant%]
+      	}
+      
+      	]
+      	
+      	Json_Contenu_trello			= ChaîneVersJSON(sChaine_Json_Contenu_trello)
+      FIN
+      Scr_TrelloMemo.JsonResultat	= Json_Contenu_trello
+      Scr_TrelloMemo.Rapport		= ""
+      
+      SI bNouveauEnregistrement = VRAI ALORS
+      	HAjoute(Scr_TrelloMemo)
+      SINON
+      	HModifie(Scr_TrelloMemo)
+      FIN
+      
+      
+      ToastAffiche("Enregistrement du JSON terminé.",toastLong)
+     type : 458752
+   -
+     name : JSON_Tout_Recup
+     internal_properties : BwAAAAcAAADYuPST6CP+T+K2ZU37o7g3n8Kew/nVjSZD5G6OyRuT2Yo67DV/AZmlWI7RE7NW48hb
+     procedure_id : 1439061537750823371
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // JSON_Tout_Recup ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale JSON_Tout_Recup()
+      
+      STR_Action_Trello est une Structure
+      	sID_Action		est une chaîne
+      	sTitre			est une chaîne
+      	sUtilisateur	est une chaîne
+      	sDate_Action	est une chaîne
+      	sListAfter		est une chaîne
+      FIN
+      
+      STR_Tache_Trello est une Structure
+      	sNom_Tache_Trello	est une chaîne
+      	sCode				est une chaîne
+      	sID_Cartes			est une chaîne
+      	sID					est une chaîne
+      	sIDUsrDev			est une chaîne
+      	aIDLabel			est un tableau de chaîne
+      	aListe_Action		est un tableau de STR_Action_Trello
+      FIN
+      
+      STR_Groupe_Tache_Trello est une Structure
+      	sId_Groupe_Tache	est une chaîne
+      	sNom_Groupe_Tache	est une chaîne
+      	aliste_Tache_Trello	est un tableau de STR_Tache_Trello
+      FIN
+      
+      json_Trello				est un JSON
+      json_list_trello		est un JSON
+      json_action_trello		est un JSON
+      nLigne					est un entier
+      nLigne_Action			est un entier
+      sClé					est une chaîne
+      sCodeTache				est une chaîne
+      oTache					est un ClTache dynamique
+      nIdUs					est un entier
+      anUSARecalculer			est un tableau d'entiers
+      oUsrDev					est un ClUsr dynamique
+      aSprintDeDate			est un tableau associatif de ClSprint dynamique
+      
+      aLstTacheImportes est un tableau de chaînes
+      
+      // tableau avec toute les informations trello
+      aStInformation_Trello	est un tableau associatif de STR_Groupe_Tache_Trello
+      
+      // recherche enregistrement trello
+      HLitPremier(Scr_TrelloMemo)
+      SI HEnDehors(Scr_TrelloMemo) ALORS
+      	HRAZ(Scr_TrelloMemo)
+      	HAjoute(Scr_TrelloMemo)
+      FIN
+      
+      VariableRAZ(aLstTacheImportes)
+      
+      json_Trello = Scr_TrelloMemo.JsonResultat
+      
+      
+      //AnalyseurDébut()
+      
+      
+      // groupe des taches
+      POUR i = 1 _À_ TableauOccurrence(json_Trello.groupTache)
+      	
+      	//	oUsrDev = null
+      	sClé = json_Trello.groupTache[i].name
+      	
+      	// ajout nouveau groupement de taches
+      	SI aStInformation_Trello[sClé]..Vide = Vrai ALORS
+      		
+      		aStInformation_Trello[sClé]						= allouer un STR_Groupe_Tache_Trello
+      		aStInformation_Trello[sClé].sId_Groupe_Tache	= json_Trello.groupTache[i].id
+      		aStInformation_Trello[sClé].sNom_Groupe_Tache	= json_Trello.groupTache[i].name
+      		
+      	FIN
+      	json_list_trello = json_Trello.groupTache[i].list
+      	
+      	// liste des taches
+      	POUR j = 1 _À_ TableauOccurrence(json_list_trello)
+      		
+      		nLigne																		= TableauAjouteLigne(aStInformation_Trello[sClé].aliste_Tache_Trello)
+      		
+      		//		SI ChaîneCommencePar(json_list_trello[j].name, "T1212") ALORS STOP
+      		
+      		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sNom_Tache_Trello	= json_list_trello[j].name
+      		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sID_Cartes			= json_list_trello[j].idCartes
+      		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sID					= json_list_trello[j].id
+      		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sCode				= json_list_trello[j].code
+      		
+      		POUR m = 1 _À_ TableauOccurrence(json_list_trello[j].idLabels)
+      			TableauAjoute(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aIDLabel, json_list_trello[j].idLabels[m].id)
+      		FIN
+      		
+      		SI json_list_trello[j].idMembers[1].id <> Null ALORS
+      			
+      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sIDUsrDev		= json_list_trello[j].idMembers[1].id
+      		FIN
+      		
+      		json_action_trello		= json_list_trello[j].list
+      		
+      		// action lié aux taches
+      		POUR k = 1 _À_ TableauOccurrence(json_action_trello)
+      			nLigne_Action																						= TableauAjouteLigne(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action)	
+      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sID_Action		= json_action_trello[k].id
+      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sTitre			= json_action_trello[k].titre
+      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sUtilisateur	= json_action_trello[k].user
+      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sDate_Action	= json_action_trello[k].date
+      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sListAfter		= json_action_trello[k].listAfter
+      		FIN
+      	FIN
+      	
+      	goApp.TranDebut()
+      	
+      	POUR nLigne_Liste_Carte = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello)
+      		
+      		sCodeTache = SansEspace(ExtraitChaîne(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sNom_Tache_Trello,1,"-"))
+      		
+      		//SI sCodeTache DANS ("BLM031j") ALORS STOP
+      		
+      		// recup info tache
+      		oTache <- ClTache.GetObj_de_code(sCodeTache)
+      		
+      		
+      		////////////////////////////////////////////////////////
+      		//Vérification du blocage de la tache
+      		SI oTache = Null ALORS
+      			//TBL_Cartes[nLigne].COL_Id		= "!!!" + sCodeTache + "!!!"
+      			SI aStInformation_Trello[sClé].sId_Groupe_Tache  <> cst_List_ID_Fini_sprint_précédents ALORS
+      				Trace("Référence de tache non trouvée : [%sCodeTache%].")
+      			FIN
+      		SINON
+      			
+      			//On vérifie si on a pas déja synchronisé la tache
+      			SI TableauCherche(aLstTacheImportes,tcLinéaire,sCodeTache) > 0 ALORS
+      				Trace("Tache en doublon, dans trello : " + sCodeTache)
+      			SINON
+      				TableauAjoute(aLstTacheImportes,sCodeTache)
+      			FIN
+      			
+      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sID = oTache.Get_IdUnique()
+      			//TBL_Cartes[nLigne].COL_Id		= oTache.Get_IdUnique()
+      			
+      			
+      			SI oTache.p_bAnnule ALORS
+      				oTache = Null
+      			FIN
+      		FIN
+      		
+      		SI oTache <> Null ALORS
+      			
+      			bSuspendue est un booléen = Faux
+      			POUR nLigneLabel = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel)
+      				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel[nLigneLabel] DANS(cst_Label_Suspend, cst_Label_Attente) ALORS
+      					bSuspendue = Vrai
+      				FIN
+      			FIN
+      			
+      			//La tache est elle suspendue ?
+      			SI bSuspendue ALORS
+      				//Oui : on s'assure qu'il y ait le motif.
+      				SI oTache.p_sCMTR_Blocage = "" ALORS
+      					oTache.p_nStatut = ClTache.cstStatut_Suspendu
+      					Trace("La tache [%oTache.p_sCodeTache%] est suspendue dans trello, mais n'a pas de motif ([%oTache.p_sDescription%]).")
+      				FIN
+      			SINON
+      				//Non : On s'assure qu'il n'y ait plus de motif.
+      				SI oTache.p_sCMTR_Blocage <> "" ALORS
+      					oTache.p_nStatut = ClTache.cstStatut_Suspendu
+      					Trace("La tache [%oTache.p_sCodeTache%] n'est pas suspendue dans trello, mais a de motif de blocage ([%oTache.p_sDescription%]).")
+      				FIN
+      				
+      				
+      				SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_Dev_en_cours, cst_List_ID_A_faire_tester_par_DEV2, cst_List_ID_Test_unitaire) ALORS
+      					oTache.p_nStatut = ClTache.cstStatut_en_cours
+      				FIN
+      			FIN
+      			
+      			
+      			
+      			SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev <> "" ALORS
+      				HLitRecherche(Scr_Usr_Trello,IdTrello,aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev,hIdentique+hLimiteParcours)
+      				SI HTrouve(Scr_Usr_Trello) ALORS
+      					oUsrDev <- ClUsr.GetObj(Scr_Usr_Trello.IDScr_Usr)
+      				SINON
+      					STOP
+      				FIN
+      			SINON
+      				//Non : on prend l'utilisateur courant.
+      				oUsrDev = goApp.m_oUsrCnx
+      				
+      				SI aStInformation_Trello[sClé].sId_Groupe_Tache <> cst_List_ID_A_faire ALORS
+      					trace("La tache [%oTache.p_sCodeTache%] est démarrée, mais n'a pas de développeur associé.")
+      				fin
+      			FIN
+      			
+      			
+      			SI aStInformation_Trello[sClé].sId_Groupe_Tache = cst_List_ID_A_faire ALORS
+      				oTache.p_oUsr_Dev				= Null
+      				oTache.p_nNum_Sprint_Demarrage	= Null
+      				oTache.p_bEstRealise			= Faux
+      			SINON
+      				oTache.p_oUsr_Dev				= oUsrDev
+      				oTache.p_nNum_Sprint_Demarrage	= oTache.p_nNum_Sprint_Realisation
+      			FIN
+      			
+      			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_Test_fonctionnel, cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
+      				oTache.p_bEstRealise			= Vrai
+      			SINON
+      				oTache.p_bEstRealise			= Faux
+      			FIN
+      			
+      			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
+      				oTache.p_nNum_Sprint_Fin		= oTache.p_nNum_Sprint_Realisation
+      			FIN
+      			
+      			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_Fini_sprint_précédents) ALORS
+      				
+      				bComptaDansScrum est un booléen = Faux
+      				
+      				POUR nLigneLabel = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel)
+      					SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel[nLigneLabel] DANS(cst_Label_Comptabilise) ALORS
+      						bComptaDansScrum = Vrai
+      					FIN
+      				FIN
+      				
+      				SI PAS bComptaDansScrum ALORS
+      					Trace("La tache [%oTache.p_sCodeTache%] n'a pas été comptabilisée")
+      				FIN
+      			FIN
+      			
+      			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      			
+      			//			vEvts		est un Variant
+      			oMessage	est un ClMessage dynamique
+      			dhEvt		est une DateHeure
+      			oSpr		est un ClSprint dynamique
+      			
+      			//récupération des actions de la carte
+      			
+      			
+      			POUR nLigne_Action_Trello = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action)
+      				
+      				
+      				dhEvt = dh_FormatRFC3339_Vers_DateHeure(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sDate_Action)
+      				
+      				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre <> Null ALORS
+      					oMessage						= allouer un ClMessage()
+      					oMessage.p_oTache				= oTache
+      					oMessage.p_oUsr					= oUsrDev
+      					oMessage.p_sCMTR				= aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre
+      					oMessage.p_dhDteCreation		= dhEvt
+      					oMessage.ZF_Enregistre()
+      				FIN
+      				
+      				
+      				SI aSprintDeDate[dhEvt..PartieDate]..Vide ALORS
+      					aSprintDeDate[dhEvt..PartieDate] <- ClSprint.oGet_SprintDeDate(dhEvt..PartieDate)
+      				FIN
+      				oSpr <- aSprintDeDate[dhEvt..PartieDate]
+      				
+      				//				SI vEvts.data.listAfter <> Null ALORS
+      				//TBL_Actions[nLigne].COL_IdList	= vEvts.data.listAfter.id
+      				
+      				SELON aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sListAfter
+      					CAS cst_List_ID_Dev_en_cours
+      						//TBL_Actions[nLigne].COL_IdList = "En cours"
+      						
+      					CAS cst_List_ID_A_faire_tester_par_DEV2
+      						//TBL_Actions[nLigne].COL_IdList = "Dev 2"
+      						
+      					CAS cst_List_ID_Test_unitaire
+      						//TBL_Actions[nLigne].COL_IdList = "TU"
+      						
+      					CAS cst_List_ID_A_livrer_en_pré_prod
+      						//TBL_Actions[nLigne].COL_IdList = "Liv pré prod"
+      						
+      					CAS cst_List_ID_Test_fonctionnel
+      						//TBL_Actions[nLigne].COL_IdList = "TF"
+      						
+      						SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest < dhEvt..PartieDate ALORS
+      							oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = dhEvt..PartieDate
+      						FIN
+      						
+      					CAS cst_List_ID_A_livrer_en_prod
+      						//TBL_Actions[nLigne].COL_IdList = "Liv Prod"
+      						
+      						SI oTache.p_bEstRealise ALORS
+      							oTache.p_nNum_Sprint_Fin	= oSpr.ZF_Get_IdUnique()
+      						FIN
+      						
+      						SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest < dhEvt..PartieDate ALORS
+      							oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = dhEvt..PartieDate
+      						FIN
+      						
+      						SI oTache.p_oUserStoryParent.p_dDateMiseEnProd < dhEvt..PartieDate ALORS
+      							oTache.p_oUserStoryParent.p_dDateMiseEnProd = dhEvt..PartieDate
+      						FIN
+      						
+      					CAS cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents
+      						//TBL_Actions[nLigne].COL_IdList = "Fin"
+      						
+      						SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = "" ALORS
+      							oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = DateSys()
+      						FIN
+      						
+      						SI oTache.p_oUserStoryParent.p_dDateMiseEnProd < dhEvt..PartieDate ALORS
+      							oTache.p_oUserStoryParent.p_dDateMiseEnProd = dhEvt..PartieDate
+      						FIN
+      						
+      						SI oTache.p_bEstRealise ALORS
+      							oTache.p_nNum_Sprint_Fin	= oSpr.ZF_Get_IdUnique()
+      						FIN
+      						
+      						
+      					AUTRE CAS
+      						
+      				FIN
+      				//				FIN		
+      			FIN
+      			//Correction du N° de print de réalisation, si fini avant
+      			SI oTache.p_nNum_Sprint_Realisation > oTache.p_nNum_Sprint_Fin ET oTache.p_nNum_Sprint_Fin <> 0 ET PAS oTache.p_bAnnule ALORS
+      				oTache.p_nNum_Sprint_Realisation	= oTache.p_nNum_Sprint_Fin
+      				oTache.p_nNum_Sprint_Previsionnel	= oTache.p_nNum_Sprint_Fin
+      			FIN
+      			SI oTache.p_nNum_Sprint_Creation > oTache.p_nNum_Sprint_Realisation ET oTache.p_nNum_Sprint_Realisation <> 0 ALORS
+      				oTache.p_nNum_Sprint_Creation = oTache.p_nNum_Sprint_Realisation
+      			FIN
+      			//Cas d'une tache validé, qui a eu un retour : elle est comptée comme terminée
+      			SI oTache.p_bEstRealise = Faux ET oTache.p_nNum_Sprint_Fin <> 0 ALORS
+      				oTache.p_bEstRealise = Vrai
+      			FIN
+      			
+      			//			SI sCodeTache DANS ("BLM031j") ALORS STOP
+      			oTache.ZF_Enregistre()
+      			
+      			
+      			//On mémorise les US à recalculer
+      			nIdUs = oTache.p_oUserStoryParent.Get_IdUnique()
+      			SI TableauCherche(anUSARecalculer,tcLinéaire,nIdUs) = -1 ALORS
+      				//			si nIdUs = 684 alors stop
+      				TableauAjoute(anUSARecalculer,nIdUs)
+      			FIN
+      		FIN	
+      	FIN
+      	
+      	goApp.TranFin()
+      FIN
+      
+      
+      oUs est un ClUserStory dynamique
+      POUR TOUT nIdUs DE anUSARecalculer
+      	oUs <- ClUserStory.GetObj(nIdUs)
+      	
+      	SI oUs.p_bTermine ET oUs.p_dDateMiseEnProd = "" ALORS
+      		oUs.p_dDateMiseEnProd = DateSys()
+      		
+      	FIN
+      	SI PAS oUs.p_bEstTestéParLeDemandeur ET oUs.p_oEnvironnement_Test = Null ALORS
+      		oUs.p_oEnvironnement_Test = ClEnvironnement.GetObj(1)
+      	FIN
+      	//Trace(oUs.p_sCodeUserStory + "#" + oUs.p_dDateMiseEnProd)
+      	oUs.RecalcEtatUS()
+      FIN
+      
+      
+      ToastAffiche("Intégration du JSON terminé.",toastLong)
+     type : 458752
+   -
+     name : JSON_ListeTachesTrello
+     internal_properties : BwAAAAcAAADYuPST6CP+T+K2ZU37o7g3n8Kew/nVjSZD5G6OyRuT2Yo67DV/AZmlWI7RE7NW48hb
+     procedure_id : 1439061537750888907
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] JSON_ListeTachesTrello ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale JSON_ListeTachesTrello():tableau de chaînes
+      
+      STR_Action_Trello est une Structure
+      	sID_Action		est une chaîne
+      	sTitre			est une chaîne
+      	sUtilisateur	est une chaîne
+      	sDate_Action	est une chaîne
+      	sListAfter		est une chaîne
+      FIN
+      
+      STR_Tache_Trello est une Structure
+      	sNom_Tache_Trello	est une chaîne
+      	sCode				est une chaîne
+      	sID_Cartes			est une chaîne
+      	sID					est une chaîne
+      	sIDUsrDev			est une chaîne
+      	aIDLabel			est un tableau de chaîne
+      	aListe_Action		est un tableau de STR_Action_Trello
+      FIN
+      
+      STR_Groupe_Tache_Trello est une Structure
+      	sId_Groupe_Tache	est une chaîne
+      	sNom_Groupe_Tache	est une chaîne
+      	aliste_Tache_Trello	est un tableau de STR_Tache_Trello
+      FIN
+      
+      json_Trello				est un JSON
+      json_list_trello		est un JSON
+      nLigne					est un entier
+      sClé					est une chaîne
+      sCodeTache				est une chaîne
+      aLstTacheImportes est un tableau de chaînes
+      
+      // tableau avec toute les informations trello
+      aStInformation_Trello	est un tableau associatif de STR_Groupe_Tache_Trello
+      
+      // recherche enregistrement trello
+      HLitPremier(Scr_TrelloMemo)
+      SI HEnDehors(Scr_TrelloMemo) ALORS
+      	HRAZ(Scr_TrelloMemo)
+      	HAjoute(Scr_TrelloMemo)
+      FIN
+      
+      VariableRAZ(aLstTacheImportes)
+      
+      json_Trello = Scr_TrelloMemo.JsonResultat
+      
+      
+      
+      
+      // groupe des taches
+      POUR i = 1 _À_ TableauOccurrence(json_Trello.groupTache)
+      	
+      	//	oUsrDev = null
+      	sClé = json_Trello.groupTache[i].name
+      	
+      	json_list_trello = json_Trello.groupTache[i].list
+      
+      	// liste des taches
+      	POUR j = 1 _À_ TableauOccurrence(json_list_trello)
+      		
+      		nLigne																		= TableauAjouteLigne(aStInformation_Trello[sClé].aliste_Tache_Trello)
+      		
+      		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sNom_Tache_Trello	= json_list_trello[j].name
+      	FIN
+      	
+      	POUR nLigne_Liste_Carte = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello)
+      		
+      		sCodeTache = SansEspace(ExtraitChaîne(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sNom_Tache_Trello,1,"-"))
+      		TableauAjoute(aLstTacheImportes,sCodeTache)
+      	FIN
+      	
+      FIN
+      
+      
+      renvoyer aLstTacheImportes
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13f892d91792b768
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

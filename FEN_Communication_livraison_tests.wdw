@@ -106,54 +106,9 @@ window :
          
         type : 14
       -
-        code : |1+
+        code : |1-
          
-         sdUsEnTest est une Source de Données
-         sReq est une chaîne
-         oTache est un ClTache dynamique
-         oUs est un ClUserStory dynamique
-         oPrj est un ClProjet dynamique
-         sMsg est une chaîne
-         
-         sReq = ChaîneConstruit([
-         	
-         	SELECT Scr_UserStory.IDScr_UserStory,
-         		Scr_Projet.Nom,
-         		Scr_UserStory.CodeUserStory,
-         		Scr_UserStory.IDScr_Projet
-         	FROM Scr_UserStory
-         	
-         		INNER JOIN Scr_Projet ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)
-         	
-         	WHERE Scr_UserStory.DateMiseADispo_enTestFonctionnel BETWEEN '%1' AND '%2'
-         	ORDER BY Scr_Projet.Nom,
-         		Scr_UserStory.CodeUserStory
-         ], SAI_Du, SAI_Au)
-         
-         SI goApp.Rsql(sdUsEnTest,sReq) ALORS
-         	
-         	POUR TOUT sdUsEnTest
-         		
-         		si oPrj = null _ou_ oPrj.Get_IdUnique() <> sdUsEnTest.IDScr_Projet ALORS
-         			oPrj <- ClProjet.GetObj(sdUsEnTest.IDScr_Projet)
-         			
-         			sMsg += [RC + RC + RC] + oPrj.p_sNom + " - " + oPrj.p_oUsr_ChefProjet.p_sNom
-         		FIN
-         		
-         		oUs <- ClUserStory.GetObj(sdUsEnTest.IDScr_UserStory)
-         		sMsg += [rc + rc] + oUs.p_sCodeUserStory + " - " + DateVersChaîne(oUs.p_dDateMiseADispo_EnTest, "jj/mm/aaaa")
-         		sMsg += rc + oUs.sNommination_US()
-         		
-         		sMsg += RC + "Taches :"
-         		pour tout element oTache de oUs.aoListeTaches()
-         			sMsg += RC + ChaîneConstruit("> %1 (%2)", oTache.p_sDescription, oTache.sLibDeStatut())
-         		FIN
-         		
-         	FIN
-         	SAI_Tests_mis_à_disposition = sMsg
-         FIN
-         
-         HAnnuleDéclaration(sdUsEnTest)
+         SAI_Tests_mis_à_disposition = COL_Charge_UI.FEN_Communication_livraison_tests_Charger(SAI_Du, SAI_Au)
         type : 18
       -
         type : 161

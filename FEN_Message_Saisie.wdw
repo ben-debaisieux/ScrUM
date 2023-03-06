@@ -59,7 +59,7 @@ window :
          
          quand Exception dans
          	//Enregistrement du message.
-         	zoNewMes_P.Enregistre()
+         	zoNewMes_P.ZF_Enregistre()
          faire
          	erreur(ExceptionInfo(errMessage))
          sinon

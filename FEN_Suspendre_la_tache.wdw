@@ -37,7 +37,7 @@ window :
          zoTache_P.p_sCMTR_Blocage = SAI_Commentaire
          
          quand Exception dans
-         	zoTache_P.Enregistre()
+         	zoTache_P.ZF_Enregistre()
          FAIRE
          	erreur(ExceptionInfo(errMessage))
          sinon

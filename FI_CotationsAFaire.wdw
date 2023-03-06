@@ -295,13 +295,13 @@ window :
       TableSupprimeTout(TBL_TachesACoter)
       
       si goapp.m_oUsrCnx.p_bTop_Equip_Informatique alors
-      	pour tout element oPrj de ClProjet.aoListeProjets()
-      		pour tout element oUs de oPrj.aoListeUS()
+      	pour tout element oPrj de ClProjet.aoListeProjets().aItems()
+      		pour tout element oUs de oPrj.aoListeUS().aItems()s
       			
       			bAfficher	= faux
       			sBulle		= "Taches à coter :"
       			
-      			pour tout element oTache_Tmp de oUs.aoListeTaches()
+      			pour tout element oTache_Tmp de oUs.aoListeTaches().aItems()
       				si oTache_Tmp.bCotationAFaire() ALORS
       					bAfficher = vrai
       					sBulle += [rc] + oTache_Tmp.p_sCodeTache + " - " + oTache_Tmp.p_sDescription

@@ -464,7 +464,7 @@ window :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE ListeSprint()
+      PROCEDURE ListeSprint():vide
       
       nLigne est un entier
       oSprintTmp est un ClSprint dynamique
@@ -472,9 +472,9 @@ window :
       TBL_sprint..AffichageActif = faux
       TableSupprimeTout(TBL_Sprint)
       
-      Pour TOUT element oSprintTmp de ClSprint.aoListeSprint() 
+      Pour TOUT element oSprintTmp de ClSprint.aoListeSprint().aItems()
       	nLigne = TableAjouteLigne(TBL_sprint)
-      	TBL_sprint[nLigne].COL_Numéro			= oSprintTmp.Get_IdUnique()
+      	TBL_sprint[nLigne].COL_Numéro			= oSprintTmp.ZF_Get_IdUnique()
       	TBL_sprint[nLigne].COL_Durée			= NumériqueVersChaîne(oSprintTmp.p_nNbreSemaines) + " Semaines"
       	TBL_sprint[nLigne].COL_Date_de_début	= DateVersChaîne(oSprintTmp.p_dDateDebut)
       	TBL_sprint[nLigne].COL_Date_de_fin		= DateVersChaîne(oSprintTmp.p_dDateFin)

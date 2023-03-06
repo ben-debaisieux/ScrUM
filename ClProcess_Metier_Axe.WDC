@@ -17,7 +17,7 @@ class :
      code : |1-
       ClProcess_Metier_Axe est une Classe
       	PUBLIC
-      		Hérite de ClObjDB
+      		Hérite de ClZF_ObjDB
       		Libelle est une chaîne 					<MAPPING=Libellé>
       		Ordre est un entier sur 2 octets		<MAPPING=Ordre>
       		CMTR est une chaîne 					<MAPPING=CMTR>
@@ -52,7 +52,6 @@ class :
       //Déclaration du constructeur de la classe d'acces aux données.
       Ancêtre.Constructeur(Scr_Process_Metier_Axe..Nom, Scr_Process_Metier_Axe.IDScr_Process_Metier_Axe..Nom, nID_P)
       
-      oInterTmp est un ClProcess_Metier_Intervenant dynamique
       
       
       //Referencement du parent (par adresse)
@@ -65,33 +64,7 @@ class :
       
       
       //Chargement des données dans l'instance.
-      :Charge()
-      
-      //Est on en création ?
-      si nID_P <> 0 ALORS
-      	//Non : Lecture des données
-      	
-      	HLitRecherche(Scr_Process_Metier_Intervenant,IDScr_Process_Metier_Axe,nID_P,hIdentique+hLimiteParcours)
-      	tantque HTrouve(Scr_Process_Metier_Intervenant)
-      		oAxe est un ClProcess_Metier_Axe <- Objet	//Transfert de la référence dans un autre objet pour contourner bug windev
-      		oInterTmp = ClProcess_Metier_Intervenant::oGetTypeInter(oAxe, ...
-      			Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant_Type, ...
-      			Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant)
-      		HLitSuivant(Scr_Process_Metier_Intervenant,IDScr_Process_Metier_Axe)
-      	FIN
-      sinon
-      	nPosLibre est un entier
-      	nInd est un entier
-      	
-      	nPosLibre = :m_oProcessParent.m_aoAxes..Occurrence
-      	POUR nInd = 1 _À_ :m_oProcessParent.m_aoAxes..Occurrence
-      		SI nPosLibre <= :m_oProcessParent.m_aoAxes[nInd].Ordre ALORS
-      			nPosLibre = :m_oProcessParent.m_aoAxes[nInd].Ordre + 1
-      		FIN
-      	FIN
-      	
-      	:Ordre = nPosLibre
-      FIN
+      //:ZF_Charge()
      type : 589824
    -
      name : Destructeur
@@ -123,8 +96,8 @@ class :
       PROCEDURE VIRTUELLE Enregistre()
       
       
-      si :m_oProcessParent.m_bEnregistrementEnCours ALORS
-      	Ancêtre.Enregistre()
+      si :m_oProcessParent.p_bEnregistrementEnCours ALORS
+      	Ancêtre.ZF_Enregistre()
       sinon
       	ExceptionDéclenche(1, "Impossible d'utiliser la procédure d'enregistrement autrement que par l'enregistrement du process.")
       FIN
@@ -148,7 +121,45 @@ class :
       //
       PROCEDURE VIRTUELLE pre_enregistre()
       
-      Scr_Process_Metier_Axe.IDScr_Process_Metier = :m_oProcessParent.Get_IdUnique()
+      Scr_Process_Metier_Axe.IDScr_Process_Metier = :m_oProcessParent.ZF_Get_IdUnique()
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422517164583878795
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+      oInterTmp est un ClProcess_Metier_Intervenant dynamique
+      
+      
+      //Est on en création ?
+      SI pas :ZF_bModeAjout() ALORS
+      	//Non : Lecture des données
+      	
+      	HLitRecherche(Scr_Process_Metier_Intervenant,IDScr_Process_Metier_Axe,:ZF_Get_IdUnique(),hIdentique+hLimiteParcours)
+      	TANTQUE HTrouve(Scr_Process_Metier_Intervenant)
+      		oAxe est un ClProcess_Metier_Axe <- objet	//Transfert de la référence dans un autre objet pour contourner bug windev
+      		oInterTmp = ClProcess_Metier_Intervenant::oGetTypeInter(oAxe, ...
+      			Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant_Type, ...
+      			Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant)
+      		HLitSuivant(Scr_Process_Metier_Intervenant,IDScr_Process_Metier_Axe)
+      	FIN
+      SINON
+      	nPosLibre est un entier
+      	nInd est un entier
+      	
+      	nPosLibre = :m_oProcessParent.m_aoAxes..Occurrence
+      	POUR nInd = 1 _À_ :m_oProcessParent.m_aoAxes..Occurrence
+      		SI nPosLibre <= :m_oProcessParent.m_aoAxes[nInd].Ordre ALORS
+      			nPosLibre = :m_oProcessParent.m_aoAxes[nInd].Ordre + 1
+      		FIN
+      	FIN
+      	
+      	:Ordre = nPosLibre
+      FIN
+      
      type : 458752
   properties :
    -

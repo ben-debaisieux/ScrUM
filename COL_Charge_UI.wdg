@@ -13,6 +13,102 @@ procedure_set :
  code_elements :
   type_code : 31
   p_codes : []
+  procedures :
+   -
+     name : col_tbl_sprint
+     procedure_id : 1403605693270899558
+     type_code : 15
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //col_tbl_sprint (<sCol_p> est chaîne, <oSprint_P> est ClSprint)
+      //
+      // Paramètres :
+      //	sCol_p (chaîne ANSI) : <indiquez ici le rôle de sCol_p>
+      //	oSprint_P (ClSprint) : <indiquez ici le rôle de oSprint_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure col_tbl_sprint(local sCol_p est une chaîne, local nInd_p est un entier, oSprint_P est un ClSprint)<ui>:vide
+      
+      {sCol_p, indChamp}[nInd_p]..Valeur = oSprint_P.ZF_Get_IdUnique()
+      {sCol_p, indChamp}[nInd_p]..Bulle = oSprint_P.sSprint_Date()
+     type : 458752
+   -
+     name : FEN_Communication_livraison_tests_Charger
+     procedure_id : 1403967857868105793
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] FEN_Communication_livraison_tests_Charger (<dDebut_p> est date, <dFin_p> est date)
+      //
+      // Paramètres :
+      //	dDebut_p (date) : <indiquez ici le rôle de dDebut_p>
+      //	dFin_p (date) : <indiquez ici le rôle de dFin_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure FEN_Communication_livraison_tests_Charger(dDebut_p est une date, dFin_p est une Date) <métier>:chaine
+      
+      sRetour		est une chaîne
+      sdUsEnTest	est une Source de Données
+      sReq		est une chaîne
+      oTache		est un ClTache dynamique
+      oUs			est un ClUserStory dynamique
+      oPrj		est un ClProjet dynamique
+      
+      
+      sReq = [
+      	
+      	SELECT Scr_UserStory.IDScr_UserStory,
+      		Scr_Projet.Nom,
+      		Scr_UserStory.CodeUserStory,
+      		Scr_UserStory.IDScr_Projet
+      	FROM Scr_UserStory
+      	
+      		INNER JOIN Scr_Projet ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)
+      	
+      	WHERE Scr_UserStory.DateMiseADispo_enTestFonctionnel BETWEEN '[%dDebut_p%]' AND '[%dFin_p%]'
+      	ORDER BY Scr_Projet.Nom,
+      		Scr_UserStory.CodeUserStory
+      ]
+      
+      goApp.Rsql(sdUsEnTest,sReq)
+      
+      POUR TOUT sdUsEnTest
+      	
+      	SI oPrj = Null _OU_ oPrj.ZF_Get_IdUnique() <> sdUsEnTest.IDScr_Projet ALORS
+      		oPrj <- ClProjet.GetObj(sdUsEnTest.IDScr_Projet)
+      		
+      		sRetour += [RC + RC + RC] + oPrj.p_sNom + " - " + oPrj.p_oUsr_ChefProjet.p_sNom
+      	FIN
+      	
+      	oUs <- ClUserStory.GetObj(sdUsEnTest.IDScr_UserStory)
+      	sRetour += [RC + RC] + oUs.p_sCodeUserStory + " - " + DateVersChaîne(oUs.p_dDateMiseADispo_EnTest, "jj/mm/aaaa")
+      	sRetour += RC + oUs.sNommination_US()
+      	
+      	sRetour += RC + "Taches :"
+      	POUR TOUT ÉLÉMENT oTache DE oUs.aoListeTaches().aItems()
+      		sRetour += RC + ChaîneConstruit("> %1 (%2)", oTache.p_sDescription, oTache.sLibDeStatut())
+      	FIN
+      	
+      FIN
+      
+      HAnnuleDéclaration(sdUsEnTest)
+      
+      
+      renvoyer sRetour
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
  code_parameters :
   internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
   original_name : COL_SansNom1
@@ -22,3 +118,5 @@ resources :
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+associated_test :
+ name : TEST_COL_Charge_UI.wxt

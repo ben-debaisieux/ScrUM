@@ -82,7 +82,7 @@ class :
       // Redéfinition de la méthode ClSchem_Inter.GetObj
       PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClSchem_Inter_Manu
       
-      RENVOYER ClObjDB.GetObj("ClSchem_Inter_Manu", nIdUnique_P)
+      RENVOYER ClZF_ObjDB.ZF_GetObj("ClSchem_Inter_Manu", nIdUnique_P)
       
      type : 458752
   procedure_templates : []

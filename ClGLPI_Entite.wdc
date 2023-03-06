@@ -1,31 +1,27 @@
 #To edit and compare internal_properties, use WINDEV integrated tools.
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
- name : ClProjetCol
+ name : ClGLPI_Entite
  major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
- identifier : 0x136970a20afb601a
+ identifier : 0x1390680005dae43d
  internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
   p_codes :
    -
      code : |1+
-      ClProjetCol est une Classe
-      	hérite de ClObjDBCol
-      
-      PROTÉGÉ
-      	m_aoCollection est un tableau de ClProjet dynamique
+      ClGLPI_Entite est une Classe
       fin
      type : 131072
   procedures :
    -
      name : Constructeur
-     procedure_id : 1398773000546574362
+     procedure_id : 1409741032674550845
      type_code : 27
      code : |1+
       procédure Constructeur()
@@ -33,22 +29,12 @@ class :
      type : 589824
    -
      name : Destructeur
-     procedure_id : 1398773000546639898
+     procedure_id : 1409741032674616381
      type_code : 28
      code : |1+
       procédure Destructeur()
       
      type : 655360
-   -
-     name : get_col
-     procedure_id : 1398777067880895408
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClObjDBCol.get_col
-      PROCÉDURE  get_col():tableau de ClProjet dynamique
-      
-      renvoyer m_aoCollection
-     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :
@@ -56,7 +42,7 @@ class :
   original_name : Classe1
 resources :
  string_res :
-  identifier : 0x136970990af53d7f
+  identifier : 0x139067f305d4b07b
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

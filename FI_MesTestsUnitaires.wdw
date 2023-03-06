@@ -270,7 +270,7 @@ window :
             		%1
             		], oUs.p_sJaiBesoinDe)) ALORS
             		oUs.p_oUsr_Test_Dev	= goApp.m_oUsrCnx
-            		oUs.Enregistre()
+            		oUs.ZF_Enregistre()
             		Actualise()
             	FIN
             FIN
@@ -332,7 +332,7 @@ window :
       
       TableSupprimeTout(TBL_MesTests)
       
-      pour tout element oUs de goApp.m_oUsrCnx.aoMesUS_En_Test(ClUsr.test_unitaire)
+      pour tout element oUs de goApp.m_oUsrCnx.aoMesUS_En_Test(ClUsr.test_unitaire).aItems()
       	nNumLigne = TableAjouteLigne(TBL_MesTests)
       	TBL_MesTests[nNumLigne].COL_IdTache			= oUs.Get_IdUnique()
       	TBL_MesTests[nNumLigne].COL_US				= oUs.sNommination_US()

@@ -16,7 +16,7 @@ class :
    -
      code : |1+
       ClProcess_Metier est une Classe
-      		hérite de ClObjDB
+      		hérite de ClZF_ObjDB
       	PUBLIC
       		m_sLibelle est une chaîne <MAPPING=Libelle>
       		m_sCMTR est une chaîne <MAPPING=CMTR>
@@ -41,7 +41,6 @@ class :
       Ancêtre.Constructeur(Scr_Process_Metier..Nom, Scr_Process_Metier.IDScr_Process_Metier..Nom, nID_P)
       
       
-      oAxeTmp est un ClProcess_Metier_Axe dynamique
       
       //Mémorisation du nom de la fenêtre conteneur
       :m_sNomFen = sNomFen_P
@@ -50,20 +49,8 @@ class :
       
       
       //Chargement des données dans l'instance.
-      :Charge()
+      //:ZF_Charge()
       
-      
-      si nID_P <> 0 ALORS
-      	HLitRecherche(Scr_Process_Metier_Axe,IDScr_Process_Metier,nID_P,hIdentique+hLimiteParcours)
-      	tantque HTrouve(Scr_Process_Metier_Axe)
-      		oTmp est un ClProcess_Metier <- objet	//Transfert de la référence dans un autre objet pour contourner bug windev
-      		oAxeTmp = allouer un ClProcess_Metier_Axe(oTmp, Scr_Process_Metier_Axe.IDScr_Process_Metier_Axe)
-      		HLitSuivant(Scr_Process_Metier_Axe,IDScr_Process_Metier)
-      	FIN
-      	
-      	:m_oProjet <- ClProjet.GetObj(Scr_Process_Metier.IDScr_Projet)
-      //	:m_oProjet <- allouer un ClProjet(Scr_Process_Metier.IDScr_Projet)
-      FIN
      type : 589824
    -
      name : Destructeur
@@ -359,11 +346,11 @@ class :
       
       quand Exception dans
       	
-      	:m_bEnregistrementEnCours = vrai
+      //	:m_bEnregistrementEnCours = vrai
       	
-      	si pas :m_bEstSupprime ALORS
+      	si pas :ZF_Get_est_supprime() ALORS
       		//Enregistrement du process.
-      		Ancêtre.Enregistre()
+      		Ancêtre.ZF_Enregistre()
       		
       		
       		POUR TOUT ELEMENT oAxeTmp DE :m_aoAxes
@@ -378,25 +365,25 @@ class :
       		
       		//Suppression de tous les intervenants.
       		POUR TOUT ELEMENT oInterTmp DE :aoIntervenants()
-      			oInterTmp.Supprimer()
+      			oInterTmp.ZF_Supprimer()
       			oInterTmp.Enregistre()
       		FIN
       		
       		//Suppression de tous les axes.
       		POUR TOUT ELEMENT oAxeTmp DE :m_aoAxes
-      			oAxeTmp.Supprimer()
+      			oAxeTmp.ZF_Supprimer()
       			oAxeTmp.Enregistre()
       		FIN
       		
       		
       		//Enregistrement du process.
-      		Ancêtre.Enregistre()
+      		Ancêtre.ZF_Enregistre()
       	FIN
       	
       	
-      	:m_bEnregistrementEnCours = faux
+      //	:m_bEnregistrementEnCours = faux
       FAIRE
-      	:m_bEnregistrementEnCours = faux
+      //	:m_bEnregistrementEnCours = faux
       //	VersPressePapier(ExceptionInfo(errComplet))
       	ExceptionPropage(ExceptionInfo(errMessage))
       FIN
@@ -510,7 +497,30 @@ class :
       //
       PROCEDURE VIRTUELLE pre_enregistre()
       
-      Scr_Process_Metier.IDScr_Projet	= :m_oProjet.Get_IdUnique()
+      Scr_Process_Metier.IDScr_Projet	= :m_oProjet.ZF_Get_IdUnique()
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422517924798247829
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+      
+      oAxeTmp est un ClProcess_Metier_Axe dynamique
+      
+      SI pas :ZF_bModeAjout() ALORS
+      	HLitRecherche(Scr_Process_Metier_Axe,IDScr_Process_Metier,:ZF_Get_IdUnique(),hIdentique+hLimiteParcours)
+      	TANTQUE HTrouve(Scr_Process_Metier_Axe)
+      		oTmp est un ClProcess_Metier <- objet	//Transfert de la référence dans un autre objet pour contourner bug windev
+      		oAxeTmp = allouer un ClProcess_Metier_Axe(oTmp, Scr_Process_Metier_Axe.IDScr_Process_Metier_Axe)
+      		HLitSuivant(Scr_Process_Metier_Axe,IDScr_Process_Metier)
+      	FIN
+      	
+      	:m_oProjet <- ClProjet.GetObj(Scr_Process_Metier.IDScr_Projet)
+      //	:m_oProjet <- allouer un ClProjet(Scr_Process_Metier.IDScr_Projet)
+      FIN
      type : 458752
   properties :
    -

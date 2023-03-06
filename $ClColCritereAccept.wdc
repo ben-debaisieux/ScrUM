@@ -1,0 +1,86 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColCritereAccept
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13f7dc9c07b7d93f
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClColCritereAccept est une Classe
+      hérite de ClZF_ColObjDB
+      PRIVÉ
+      m_aoCritereAccept est un tableau ClCritereAccept dynamique
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1438861168670726463
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur()
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1438861168670791999
+     type_code : 28
+     code : |1+
+      PROCÉDURE Destructeur()
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 1438861168670857551
+     type_code : 12
+     code : |1+
+      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem(ClCritereAccept.GetObj(nId_P))
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 1438861168670923087
+     type_code : 12
+     code : |1+
+      PROCÉDURE aItems():tableau de ClCritereAccept dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :m_aoCritereAccept
+     type : 458752
+   -
+     name : Init
+     procedure_id : 1438861168670988623
+     type_code : 12
+     code : |1+
+      PROCÉDURE Init():Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:m_aoCritereAccept)
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 1438861168671054175
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données):Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un ClCritereAccept
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13f7dc9c07b4d93f
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -127,6 +127,7 @@ procedure_set :
        	nAfaire est un entier
        	nTotal est un entier
        fin
+      
        
       
       //Couleurs
@@ -199,47 +200,45 @@ procedure_set :
       		Scr_Tache.IDScr_Tache = %1
       ],nIDTache_p)
       
-      si goApp.Rsql(sdRechercheTache,sReq) alors
+      goApp.Rsql(sdRechercheTache,sReq)
+      
+      HLitPremier(sdRechercheTache)
+      si Htrouve(sdRechercheTache) alors
+      	stTache.nIDTache				= sdRechercheTache.IDscr_Tache
       	
-      	HLitPremier(sdRechercheTache)
-      	si Htrouve(sdRechercheTache) alors
-      		stTache.nIDTache				= sdRechercheTache.IDscr_Tache
-      		
-      		stTache.nNumSprintCreation		= sdRechercheTache.Num_Sprint_Creation
-      		stTache.nNumSprintRealisation	= sdRechercheTache.Num_Sprint_Realisation
-      		stTache.nNumSprintPrevision		= sdRechercheTache.Num_Sprint_Previsionnel
-      		stTache.nNumSprintFin			= sdRechercheTache.Num_Sprint_Fin
-      		stTache.nNumSprintDemarage		= sdRechercheTache.Num_Sprint_Demarrage
-      		
-      		stTache.sCodeTache				= sdRechercheTache.CodeTache
-      		stTache.sDescription			= sdRechercheTache.Description
-      		
-      		SI sdRechercheTache.Poids..Null ALORS
-      			stTache.nPoids = Null
-      		SINON
-      			stTache.nPoids = sdRechercheTache.Poids
-      		FIN
-      		
-      		SI sdRechercheTache.Poids_Previsionnel..Null ALORS
-      			stTache.nPoids_Prevision = Null	
-      		SINON
-      			stTache.nPoids_Prevision = sdRechercheTache.Poids_Previsionnel
-      		FIN
-      		
-      		stTache.nIDUserStorie	= sdRechercheTache.IDScr_UserStory
-      		stTache.nOrdre			= sdRechercheTache.Ordre
-      		
-      		stTache.bBrouillon		= sdRechercheTache.Top_Brouillon
-      		stTache.bDemarree		= (sdRechercheTache.Num_Sprint_Demarrage <> 0)
-      		stTache.bAnnulee		= sdRechercheTache.Top_Annule
-      		stTache.sCommentaire	= sdRechercheTache.CMTR
-      		
-      		stTache.sProjet			= sdRechercheTache.Nom
-      	sinon
-      		erreur("Cet identifiant ne correspond à aucune tache")
+      	stTache.nNumSprintCreation		= sdRechercheTache.Num_Sprint_Creation
+      	stTache.nNumSprintRealisation	= sdRechercheTache.Num_Sprint_Realisation
+      	stTache.nNumSprintPrevision		= sdRechercheTache.Num_Sprint_Previsionnel
+      	stTache.nNumSprintFin			= sdRechercheTache.Num_Sprint_Fin
+      	stTache.nNumSprintDemarage		= sdRechercheTache.Num_Sprint_Demarrage
+      	
+      	stTache.sCodeTache				= sdRechercheTache.CodeTache
+      	stTache.sDescription			= sdRechercheTache.Description
+      	
+      	SI sdRechercheTache.Poids..Null ALORS
+      		stTache.nPoids = Null
+      	SINON
+      		stTache.nPoids = sdRechercheTache.Poids
       	FIN
       	
-      fin
+      	SI sdRechercheTache.Poids_Previsionnel..Null ALORS
+      		stTache.nPoids_Prevision = Null	
+      	SINON
+      		stTache.nPoids_Prevision = sdRechercheTache.Poids_Previsionnel
+      	FIN
+      	
+      	stTache.nIDUserStorie	= sdRechercheTache.IDScr_UserStory
+      	stTache.nOrdre			= sdRechercheTache.Ordre
+      	
+      	stTache.bBrouillon		= sdRechercheTache.Top_Brouillon
+      	stTache.bDemarree		= (sdRechercheTache.Num_Sprint_Demarrage <> 0)
+      	stTache.bAnnulee		= sdRechercheTache.Top_Annule
+      	stTache.sCommentaire	= sdRechercheTache.CMTR
+      	
+      	stTache.sProjet			= sdRechercheTache.Nom
+      sinon
+      	erreur("Cet identifiant ne correspond à aucune tache")
+      FIN
       
       HAnnuleDéclaration(sdRechercheTache)
       
@@ -247,11 +246,11 @@ procedure_set :
       
      type : 458752
    -
-     name : TableauSupprimeRéférence
+     name : TableauSupprimeRéférence_deprecated
      procedure_id : 1169075615444123935
      type_code : 15
      code : |1-
-      procédure TableauSupprimeRéférence(aTableau est un tableau dynamique, oObj est un objet dynamique)
+      procédure TableauSupprimeRéférence_deprecated(aTableau est un tableau dynamique, oObj est un objet dynamique)
       
       nInd est un entier
       
@@ -332,12 +331,12 @@ procedure_set :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure aoRechItems(sRech_p est une chaîne):tableau de ClObjDB dynamique
+      procédure aoRechItems(sRech_p est une chaîne):tableau de ClZF_ObjDB dynamique
       
       
       sdRech		est une Source de Données
       sReq		est une chaîne
-      aoRes		est un tableau de ClObjDB dynamique
+      aoRes		est un tableau de ClZF_ObjDB dynamique
       
       sReq = [
       
@@ -359,19 +358,18 @@ procedure_set :
       	
       ]
       
-      SI goApp.Rsql(sdRech,sReq) ALORS
+      goApp.Rsql(sdRech,sReq)
+      
+      POUR TOUT sdRech
       	
-      	POUR TOUT sdRech
+      	SELON sdRech.type
       		
-      		SELON sdRech.type
+      		CAS 1
+      			TableauAjouteRéférence(aoRes,ClUserStory.GetObj(sdRech.Id))
+      		CAS 2
+      			TableauAjouteRéférence(aoRes,ClTache.GetObj(sdRech.Id))
+      		AUTRE CAS
       			
-      			CAS 1
-      				TableauAjouteRéférence(aoRes,ClUserStory.GetObj(sdRech.Id))
-      			CAS 2
-      				TableauAjouteRéférence(aoRes,ClTache.GetObj(sdRech.Id))
-      			AUTRE CAS
-      				
-      		FIN
       	FIN
       FIN
       

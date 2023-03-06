@@ -90,7 +90,7 @@ class :
       // Redéfinition de la méthode ClSchem_Inter.GetObj
       PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClSchem_Inter_Condition
       
-      RENVOYER ClObjDB.GetObj("ClSchem_Inter_Condition", nIdUnique_P)
+      RENVOYER ClZF_ObjDB.ZF_GetObj("ClSchem_Inter_Condition", nIdUnique_P)
      type : 458752
    -
      name : aListeLiens

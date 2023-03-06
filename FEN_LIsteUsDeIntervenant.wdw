@@ -264,7 +264,7 @@ window :
       
       //Parcourt de toutes les US
       POUR TOUT ELEMENT oUS DE zoInter_P.aoUS_Associees()
-      	nIdPrj = oUS.p_oProjetParent.Get_IdUnique()
+      	nIdPrj = oUS.p_oProjetParent.ZF_Get_IdUnique()
       	SI aOProjet[nIdPrj]..Vide ALORS
       		aOProjet[nIdPrj] = allouer un STR_Prj
       		aOProjet[nIdPrj].sProjet = oUS.p_oProjetParent.p_sNom

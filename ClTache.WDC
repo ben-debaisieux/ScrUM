@@ -17,10 +17,8 @@ class :
    -
      code : |1-
       ClTache est une Classe
-      		Hérite de ClObjDB
+      		Hérite de ClZF_ObjDB
       		Hérite de ClHistorique
-      PUBLIC
-      	m_oUserStoryParent			est un objet ClUserStory dynamique
       
       prive
       	m_sCodeTache				est une chaîne				<MAPPING=CodeTache>
@@ -42,9 +40,13 @@ class :
       	m_nNum_Sprint_Previsionnel	est un entier				<MAPPING=Num_Sprint_Previsionnel>
       	m_nNum_Sprint_Fin			est un entier				<MAPPING=Num_Sprint_Fin>
       	
+      	m_oUserStoryParent			est un objet ClUserStory dynamique
       	m_oUsr_Dev					est un objet ClUsr dynamique
       	m_oUsr_createur				est un objet ClUsr dynamique
       	
+      global
+      	m_oExPbPoidTache			est un objet ClZF_Exception dynamique
+      	m_oExPbPoidTachePrev		est un objet ClZF_Exception dynamique
       FIN
       
       constante
@@ -75,6 +77,9 @@ class :
       	Future
       	Toutes
       fin
+      
+      m_oExPbPoidTache		= allouer un ClZF_Exception("Valeur incorrecte, pour le poids de la tache")
+      m_oExPbPoidTachePrev	= allouer un objet ClZF_Exception("Valeur incorrecte, pour le poids prévisionnel")
        
      type : 131072
   procedures :
@@ -82,7 +87,7 @@ class :
      name : Constructeur
      procedure_id : 2199413934947057084
      type_code : 27
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //Constructeur ( [<nId_P> est entier])
@@ -96,45 +101,13 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       
-      
-      
-      //	oUS_Parente : <indiquez ici le rôle de oUS_Parente>
       PROCEDURE Constructeur(LOCAL nId_P est un entier = 0)
       
-      ClObjDB.constructeur(Scr_Tache..nom, Scr_Tache.IDScr_Tache..Nom, nId_P)
+      ClZF_ObjDB.constructeur(Scr_Tache..nom, Scr_Tache.IDScr_Tache..Nom, nId_P)
       
       
       //Chargement des données dans l'instance.
-      :Charge()
-      
-      
-      si :bModeAjout() ALORS
-      	:m_oUsr_createur			<- goApp.m_oUsrCnx
-      	:m_nNum_Sprint_Creation		= goApp.Sprint_Num_Actuel()
-      sinon
-      	//Si la tache a été enregistrée sans 'créateur' on l'affecte à l'utilisateur en cours.
-      	si :m_oUsr_createur = Null ALORS
-      		:m_oUsr_createur		= goApp.m_oUsrCnx
-      	FIN
-      FIN
-      
-      
-      SI PAS Scr_Tache.IDScr_Usr_createur..Null ALORS
-      	:m_ousr_createur			<- ClUsr.GetObj(Scr_Tache.IDScr_Usr_createur)
-      FIN
-      
-      SI PAS Scr_Tache.IDScr_UserStory..Null ALORS
-      	:m_oUserStoryParent			<- ClUserStory.GetObj(Scr_Tache.IDScr_UserStory)
-      FIN
-      
-      SI PAS Scr_Tache.IDScr_Usr_Dev..Null ALORS
-      	:m_oUsr_Dev					<- ClUsr.GetObj(Scr_Tache.IDScr_Usr_Dev)
-      FIN
-      
-      //si :m_nStatut = 0 et nId_P <> 0 ALORS
-      //	stop
-      //	//:m_nStatut = :get_statut_tache()
-      //FIN
+      //:ZF_Charge()
      type : 589824
    -
      name : Destructeur
@@ -162,22 +135,22 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE VIRTUELLE pre_enregistre()
+      PROCEDURE VIRTUELLE pre_enregistre():Vide
       
       m_EnrActu est un Enregistrement de Scr_Tache
       m_EnrOrigine est un Enregistrement de Scr_Tache
       
-      SI :m_bEstSupprime ALORS
-      	//On supprimer tous les historiques de la suer story
+      SI :ZF_Get_est_supprime() ALORS
+      	//On supprime tous les historiques de la user story
       	:CleanHisto()
       	
       SINON
-      	SI PAS :bModeAjout() ALORS
+      	SI PAS :ZF_bModeAjout() ALORS
       		//En modification :
       		
       		//On actualise les données en mémoire, pour générer l'historique.
       		m_EnrActu = Scr_Tache
-      		:Charge(Vrai)
+      		:ZF_Charge(Vrai)
       		m_EnrOrigine = Scr_Tache
       		Scr_Tache = m_EnrActu
       	sinon
@@ -188,15 +161,15 @@ class :
       			:m_nStatut = :get_statut_tache()
       			SI :m_nStatut = 0 ALORS
       				ExceptionDéclenche(1,"Identification du statut de la tache impossible.")
-      			sinon
-      				Scr_Tache.Statut = :m_nStatut
+      //			sinon
+      //				Scr_Tache.Statut = :m_nStatut
       			FIN
       		FIN
       	FIN
       	
       	
       	//Enregistrement de l'utilisateur rédacteur (par défaut l'utilisateur courant)
-      	Scr_Tache.IDScr_Usr_createur				= :m_oUsr_createur.Get_IdUnique()
+      	Scr_Tache.IDScr_Usr_createur				= :m_oUsr_createur.ZF_Get_IdUnique()
       	
       	
       	si :m_oUserStoryParent = Null ALORS
@@ -212,11 +185,6 @@ class :
       		si :m_oUsr_Dev = Null ALORS
       			ExceptionDéclenche(1,"Impossible de démarrer une tache, sans développeur associé.")
       		FIN
-      		
-      //		//On ne permet pas le démarrage d'une tache, sur un sprint terminé.
-      //		si ClSprint.GetObj(:m_nNum_Sprint_Demarrage).m_bTop_Termine ALORS
-      //			ExceptionDéclenche(1,ChaîneConstruit("Impossible de démarrer la tache, sur le sprint %1, car il est terminé.", :m_nNum_Sprint_Demarrage))
-      //		FIN
       	fin
       	
       	
@@ -253,7 +221,7 @@ class :
       	SI :m_oUsr_Dev = null ALORS
       		Scr_Tache.IDScr_Usr_Dev..Null			= Vrai
       	sinon
-      		Scr_Tache.IDScr_Usr_Dev					= :m_oUsr_Dev.Get_IdUnique()
+      		Scr_Tache.IDScr_Usr_Dev					= :m_oUsr_Dev.ZF_Get_IdUnique()
       	FIN
       	
       	//Si l'ordre n'est pas définit, on ajoute la tache en dernier.
@@ -270,43 +238,43 @@ class :
       	
       	si :m_nNum_Sprint_Creation > :m_nNum_Sprint_Demarrage et :m_nNum_Sprint_Demarrage <> 0 alors
       		exceptiondeclenche(1, chaineconstruit([
-      			Enregistrement impossible :
+      			Enregistrement impossible (Tache : %3) :
       			Le sprint de démarrage (%2) ne peut pas être antérieur au sprint de création (%1)
-      			], :m_nNum_Sprint_Creation, :m_nNum_Sprint_Demarrage))
+      			], :m_nNum_Sprint_Creation, :m_nNum_Sprint_Demarrage, :m_sCodeTache))
       	FIN
       	
       	si :m_nNum_Sprint_Creation > :m_nNum_Sprint_Realisation ET :m_nNum_Sprint_Realisation <> 0 alors
       		exceptiondeclenche(1, ChaîneConstruit([
-      			Enregistrement impossible :
+      			Enregistrement impossible (Tache : %3) :
       			Le sprint de réalisation (%2) ne peut pas être antérieur au sprint de création (%1)
-      			], :m_nNum_Sprint_Creation, :m_nNum_Sprint_Realisation))
+      			], :m_nNum_Sprint_Creation, :m_nNum_Sprint_Realisation, :m_sCodeTache))
       	FIN
       	
       	si :m_nNum_Sprint_Realisation > :m_nNum_Sprint_Fin ET :m_nNum_Sprint_Fin <> 0 et pas :m_bAnnule alors
       		exceptiondeclenche(1, ChaîneConstruit([
-      			Enregistrement impossible :
+      			Enregistrement impossible (Tache : %3) :
       			Le sprint de fin (%2) ne peut pas être antérieur au sprint de réalisation (%1)
-      			], :m_nNum_Sprint_Realisation, :m_nNum_Sprint_Fin))
+      			], :m_nNum_Sprint_Realisation, :m_nNum_Sprint_Fin, :m_sCodeTache))
       	FIN
       	
       	si :m_nNum_Sprint_Demarrage > :m_nNum_Sprint_Fin ET :m_nNum_Sprint_Fin <> 0 et pas :m_bAnnule alors
       		exceptiondeclenche(1, ChaîneConstruit([
-      			Enregistrement impossible :
+      			Enregistrement impossible (Tache : %3) :
       			Le sprint de fin (%2) ne peut pas être antérieur au sprint de démarrage (%1)
-      			], :m_nNum_Sprint_Demarrage, :m_nNum_Sprint_Fin))
+      			], :m_nNum_Sprint_Demarrage, :m_nNum_Sprint_Fin, :m_sCodeTache))
       	FIN
       	
       	si :m_nNum_Sprint_Demarrage <> 0 et :m_oUsr_Dev = null ALORS
       		ExceptionDéclenche(1, ChaîneConstruit([
-      			Enregistrement impossible :
+      			Enregistrement impossible (Tache : %3) :
       			Impossible de démarrer une tache sans développeur associé.
-      			]))
+      			], :m_sCodeTache))
       	
       	FIN
       	
       	
       	//En création ou en modification, son s'assure que le code article n'est pas pris.
-      	si :bModeAjout() _ou_ m_EnrOrigine.CodeTache <> :m_sCodeTache ALORS
+      	si :ZF_bModeAjout() _ou_ m_EnrOrigine.CodeTache <> :m_sCodeTache ALORS
       		si pas :bCodeTacheDispo(:m_sCodeTache) ALORS
       			ExceptionDéclenche(1, ChaîneConstruit([
       				Enregistrement impossible :
@@ -318,11 +286,12 @@ class :
       	SI PAS :m_nStatut DANS (::cstStatut_Suspendu) ALORS
       		:m_nStatut = :get_statut_tache()
       	FIN
+      	Scr_Tache.Statut = :m_nStatut
       	
       	////////////////////////////////////////////////
       	//Historisation de modifications
       	
-      	SI :bModeAjout() ALORS
+      	SI :ZF_bModeAjout() ALORS
       		:AjouteHistorique("Création de la tache")
       	SINON
       		
@@ -417,7 +386,7 @@ class :
       				:AjouteHistorique("Retrait du développeur, sur la tache.")
       			FIN
       		sinon
-      			si m_EnrOrigine.IDScr_Usr_Dev <> :m_oUsr_Dev.Get_IdUnique() ALORS
+      			si m_EnrOrigine.IDScr_Usr_Dev <> :m_oUsr_Dev.ZF_Get_IdUnique() ALORS
       				:AjouteHistorique(ChaîneConstruit("Changement du développeur : %1", :m_oUsr_Dev.p_sNom))
       			FIN
       		FIN
@@ -491,15 +460,12 @@ class :
       		AND Scr_Tache.Top_Brouillon = 0
       ]
       
-      si goApp.Rsql(sdChargeTotale,sReq) ALORS
-      	HLitPremier(sdChargeTotale)
-      	si Htrouve(sdChargeTotale) alors
-      		nTotal = sdChargeTotale.Total
-      	sinon
-      		nTotal = 0
-      	FIN
+      goApp.Rsql(sdChargeTotale,sReq)
+      HLitPremier(sdChargeTotale)
+      si Htrouve(sdChargeTotale) alors
+      	nTotal = sdChargeTotale.Total
       sinon
-      	erreur(erreurinfo(errcomplet))
+      	nTotal = 0
       FIN
       
       HAnnuleDéclaration(sdChargeTotale)
@@ -518,16 +484,16 @@ class :
       // Paramètres :
       //	eFiltre (ClTache.ETypeEtatTacheAFaire) : <indiquez ici le rôle de eFiltre>
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	ClColTaches : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale Taches_a_faire(eFiltre est un ETypeEtatTacheAFaire):tableau de ClTache dynamique
+      PROCEDURE globale Taches_a_faire(eFiltre est un ETypeEtatTacheAFaire):ClColTaches
       
-      sdTachesAFaire est une Source de Données
+      //sdTachesAFaire est une Source de Données
       sReq est une chaîne
-      aOTaches est un tableau de ClTache dynamique
+      oTaches est un ClColTaches
       
       sFilre est une chaîne
       
@@ -540,33 +506,25 @@ class :
       		
       FIN
       
-      sReq = ChaîneConstruit([
+      sReq = [
       	
       	SELECT
-      		Scr_Tache.IDScr_Tache
+      		Scr_Tache.*
+      		--Scr_Tache.IDScr_Tache
       		
       	FROM Scr_Tache
       	
       	where Scr_Tache.Num_Sprint_Demarrage is Null
-      		--AND Scr_Tache.IDScr_Usr_Dev is Null
       		AND Scr_Tache.Top_Annule = 0
       		AND Scr_Tache.Top_Brouillon = 0
       		AND Scr_Tache.Top_Realise = 0
-      		%1
+      		[%sFilre%]
       		
-      ], sFilre)
+      ]
       
-      SI goApp.RSQL(sdTachesAFaire,sReq) ALORS
-      	POUR TOUT sdTachesAFaire
-      		TableauAjouteRéférence(aOTaches, ClTache.GetObj(sdTachesAFaire.IDScr_Tache))
-      	FIN
-      FIN
+      oTaches.ZF_LoadSQL(sReq)
       
-      HAnnuleDéclaration(sdTachesAFaire)
-      
-      
-      
-      renvoyer aOTaches
+      renvoyer oTaches
      type : 458752
    -
      name : sBulleTache
@@ -617,7 +575,7 @@ class :
      name : bEstDemarree
      procedure_id : 2212400769432876719
      type_code : 12
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] bEstDemarree ()
@@ -632,7 +590,6 @@ class :
       //
       PROCEDURE bEstDemarree():booléen
       renvoyer pas (:m_oUsr_Dev = null)
-      
      type : 458752
    -
      name : GetObj
@@ -653,32 +610,29 @@ class :
       //
       PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClTache
       
-      renvoyer ClObjDB.GetObj("ClTache", nIdUnique_P)
+      renvoyer ClZF_ObjDB.ZF_GetObj("ClTache", nIdUnique_P)
      type : 458752
    -
      name : post_enregistre
      procedure_id : 2254447562539535354
      type_code : 12
-     code : |1+
+     code : |1-
       // Redéfinition de la méthode ClObjDB.post_enregistre
-      PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre()
+      PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre():Vide
       
       //Enregistrement de l'historique des modifications
       :EnregHisto()
-      
      type : 458752
    -
      name : Get_IdUnique
      procedure_id : 2254453068699376586
      type_code : 12
-     code : |1+
+     code : |1-
       // Redéfinition de la méthode ClObjDB.Get_IdUnique
       FONCTION Get_IdUnique():entier
       
       //redéfinition obligatoire à cause de la déclaration 'abstraite' de la méthode, dans la classe d'historique
-      RENVOYER ClObjDB.Get_IdUnique()
-      
-      
+      RENVOYER ClZF_ObjDB.ZF_Get_IdUnique()
      type : 458752
    -
      name : bCotationAFaire
@@ -759,43 +713,36 @@ class :
       
       HLitRecherche(Scr_Tache,CodeTache,sCode_P,hIdentique+hLimiteParcours)
       si HTrouve(Scr_Tache) ALORS
-      	RENVOYER ClObjDB.GetObj("ClTache", Scr_Tache.IDScr_Tache)
+      	RENVOYER ClZF_ObjDB.ZF_GetObj("ClTache", Scr_Tache.IDScr_Tache)
       sinon
       	RENVOYER null
       FIN
      type : 458752
    -
-     name : aoTachesSelonStatut
+     name : oTachesSelonStatut
      procedure_id : 2279324343658017766
      type_code : 12
      code : |1+
-      procédure publique globale aoTachesSelonStatut(nStatut_P est un entier):tableau de ClTache dynamique
+      procédure publique globale oTachesSelonStatut(nStatut_P est un entier):ClColTaches
       
       
-      sdMesBrouillons est une Source de Données
+      //sdMesBrouillons est une Source de Données
       sReq est une chaîne
-      aOTaches est un tableau de ClTache dynamique
+      oTaches est un ClColTaches
       
       	
       //Récupération des taches en brouillon, de l'utilisateur.
-      sReq = ChaîneConstruit([
+      sReq = [
       	SELECT
-      		Scr_Tache.IDScr_Tache
+      		Scr_Tache.*
+      		--Scr_Tache.IDScr_Tache
       	FROM Scr_Tache
-      	WHERE Scr_Tache.Statut = %1
-      	
-      ], nStatut_P)
+      	WHERE Scr_Tache.Statut = [%nStatut_P%]
+      ]
       
-      SI goApp.Rsql(sdMesBrouillons,sReq) ALORS
-      	POUR TOUT sdMesBrouillons
-      		TableauAjouteRéférence(aOTaches, ClTache.GetObj(sdMesBrouillons.IDScr_Tache))
-      	FIN
-      FIN
+      oTaches.ZF_LoadSQL(sReq)
       
-      HAnnuleDéclaration(sdMesBrouillons)
-      
-      
-      RENVOYER aOTaches
+      RENVOYER oTaches
      type : 458752
    -
      name : sExport
@@ -807,7 +754,7 @@ class :
       sRetour est un JSON
       nInd est un entier
       
-      sRetour.id							= :m_nIdUnique
+      sRetour.id							= :ZF_Get_IdUnique()
       sRetour.code						= :m_scodetache
       sRetour.description					= :m_sdescription
       sRetour.cancel						= :m_bannule
@@ -919,17 +866,15 @@ class :
       	
       ], sCodeTache_P, :Get_IdUnique())
       
-      SI goApp.RSQL(sdRechCodeTache,sReq) ALORS
+      GoApp.RSQL(sdRechCodeTache,sReq)
       
-      	HLitPremier(sdRechCodeTache)
-      	si pas HEnDehors(sdRechCodeTache) ALORS
-      		
-      		bRetour = (sdRechCodeTache.Nbre = 0)
-      		
-      	FIN
+      HLitPremier(sdRechCodeTache)
+      si pas HEnDehors(sdRechCodeTache) ALORS
+      	
+      	bRetour = (sdRechCodeTache.Nbre = 0)
       	
       FIN
-      
+      	
       HAnnuleDéclaration(sdRechCodeTache)
       
       
@@ -953,18 +898,18 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure changeOrdre(nChangePos_P est un entier)
+      procédure changeOrdre(nChangePos_P est un entier):Vide
       
-      nPosInit est un entier
-      nNouvPos est un entier
-      nNbPos est un entier
-      aoLstTachesUS est un tableau dynamique de ClTache = :m_oUserStoryParent.aoListeTaches()
-      oTacheTmp est un ClTache dynamique
-      bModifTache est un booléen
-      nDecalage est un entier
+      nPosInit		est un entier
+      nNouvPos		est un entier
+      nNbPos			est un entier
+      oLstTachesUS	est un ClColTaches	= :m_oUserStoryParent.aoListeTaches()
+      oTacheTmp		est un ClTache dynamique
+      bModifTache		est un booléen
+      nDecalage		est un entier
       
-      nPosInit = :p_nOrdre
-      nNbPos = Dimension(aoLstTachesUS)
+      nPosInit	= :p_nOrdre
+      nNbPos		= oLstTachesUS.ZF_nTaille()
       
       selon nChangePos_P
       	cas cstChangeOrdre_Premier
@@ -984,7 +929,7 @@ class :
       fin
       
       
-      pour tout element oTacheTmp de aoLstTachesUS
+      pour tout element oTacheTmp de oLstTachesUS.aItems()
       	bModifTache = faux
       	
       	//Est on sur une autre tache que moimeme ?
@@ -992,30 +937,36 @@ class :
       		//Oui :
       		
       		si min(nPosInit, nNouvPos) <= oTacheTmp.p_nOrdre <= Max(nPosInit, nNouvPos) alors
-      			
-      			
       			oTacheTmp.p_nOrdre += nDecalage
-      //			bModifTache = Vrai
-      //
-      //			si nNouvPos < oTacheTmp.p_nOrdre ALORS
-      //				oTacheTmp.p_nOrdre++
-      //				bModifTache = vrai
-      //			FIN
-      //			
-      //			SI nNouvPos > oTacheTmp.p_nOrdre ALORS
-      //				oTacheTmp.p_nOrdre--
-      //				bModifTache = Vrai
-      //			FIN
-      //			
-      //			si bModifTache alors
-      				oTacheTmp.Enregistre()
-      //			FIN
+      			oTacheTmp.ZF_Enregistre()
       		FIN
       	FIN
       FIN
       
       :p_nOrdre = nNouvPos
-      :Enregistre()
+      :ZF_Enregistre()
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1420660459097130492
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE Init_ObjBD()
+      
+      si pas :ZF_bModeAjout() alors
+      	SI PAS Scr_Tache.IDScr_Usr_createur..Null ALORS
+      		:m_oUsr_createur			<- ClUsr.GetObj(Scr_Tache.IDScr_Usr_createur)
+      	FIN
+      	
+      	SI PAS Scr_Tache.IDScr_UserStory..Null ALORS
+      		:m_oUserStoryParent			<- ClUserStory.GetObj(Scr_Tache.IDScr_UserStory)
+      	FIN
+      	
+      	SI PAS Scr_Tache.IDScr_Usr_Dev..Null ALORS
+      		:m_oUsr_Dev					<- ClUsr.GetObj(Scr_Tache.IDScr_Usr_Dev)
+      	FIN
+      FIN
      type : 458752
   properties :
    -
@@ -1031,9 +982,12 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUsr_Dev(oValeur est ClUsr)
+         procédure publique p_oUsr_Dev(oValeur est ClUsr):Vide
          
-         :m_oUsr_Dev <- oValeur
+         si PAS ZF_bObjEgal(:m_oUsr_Dev, oValeur) alors
+         	:ZF_EstModif()
+         	:m_oUsr_Dev <- oValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1049,9 +1003,12 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUserStoryParent(oValeur est ClUserStory)
+         procédure publique p_oUserStoryParent(oValeur est ClUserStory):Vide
          
-         :m_oUserStoryParent <- oValeur
+         si PAS ZF_bObjEgal(:m_oUserStoryParent, oValeur) alors
+         	:ZF_EstModif()
+         	:m_oUserStoryParent <- oValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1067,10 +1024,10 @@ class :
         type : 1966080
       -
         code : |1+
-         procédure publique p_oUsr_createur(oValeur est ClUsr)
+         procédure publique p_oUsr_createur(oValeur est ClUsr):Vide
          
-         si :m_oUsr_createur.Get_IdUnique() <> oValeur.Get_IdUnique() ALORS
-         	:EstModif()
+         si PAS ZF_bObjEgal(:m_oUsr_createur, oValeur) ALORS
+         	:ZF_EstModif()
          	:m_oUsr_createur <- oValeur
          FIN
         type : 2031616
@@ -1088,10 +1045,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_bAnnule(bValeur est un booléen)
+         procédure publique p_bAnnule(bValeur est un booléen):Vide
          
          si :m_bAnnule <> bValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_bAnnule = bValeur
          	:m_nStatut = ::cstStatut_Annulee
@@ -1111,13 +1068,12 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_bBrouillon(bValeur est un booléen)
+         procédure publique p_bBrouillon(bValeur est un booléen):Vide
          
          si :m_bBrouillon <> bValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_bBrouillon = bValeur
-         	//:m_nStatut = ::cstStatut_Annulee
          fin
         type : 2031616
      template_refs : []
@@ -1134,13 +1090,12 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_bEstRealise(bValeur est un booléen)
+         procédure publique p_bEstRealise(bValeur est un booléen):Vide
          
          si :m_bEstRealise <> bValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_bEstRealise = bValeur
-         	//:m_nStatut = ::cstStatut_Annulee
          fin
         type : 2031616
      template_refs : []
@@ -1157,10 +1112,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_bTache_tech(bValeur est un booléen)
+         procédure publique p_bTache_tech(bValeur est un booléen):Vide
          
          si :m_bTache_tech <> bValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_bTache_tech = bValeur
          fin
@@ -1179,10 +1134,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Creation(nValeur est un entier)
+         procédure publique p_nNum_Sprint_Creation(nValeur est un entier):Vide
          
          si :m_nNum_Sprint_Creation <> nValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_nNum_Sprint_Creation = nValeur
          fin
@@ -1201,10 +1156,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Demarrage(nValeur est un entier)
+         procédure publique p_nNum_Sprint_Demarrage(nValeur est un entier):Vide
          
          si :m_nNum_Sprint_Demarrage <> nValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_nNum_Sprint_Demarrage=nValeur
          fin
@@ -1223,10 +1178,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Fin(nValeur est un entier)
+         procédure publique p_nNum_Sprint_Fin(nValeur est un entier):Vide
          
          si :m_nNum_Sprint_Fin <> nValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_nNum_Sprint_Fin=nValeur
          fin
@@ -1245,11 +1200,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Previsionnel(nValeur est un entier)
+         procédure publique p_nNum_Sprint_Previsionnel(nValeur est un entier):Vide
          
          si :m_nNum_Sprint_Previsionnel <> nValeur alors
-         	:EstModif()
-         	
+         	:ZF_EstModif()
          	:m_nNum_Sprint_Previsionnel=nValeur
          fin
         type : 2031616
@@ -1267,10 +1221,12 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Realisation(nValeur est un entier)
-         :EstModif()
+         procédure publique p_nNum_Sprint_Realisation(nValeur est un entier):Vide
          
-         :m_nNum_Sprint_Realisation=nValeur
+         si :m_nNum_Sprint_Realisation <> nValeur alors
+         	:ZF_EstModif()
+         	:m_nNum_Sprint_Realisation=nValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1285,11 +1241,13 @@ class :
          renvoyer :m_nNumTicketIncident
         type : 1966080
       -
-        code : |1-
-         procédure publique p_nNumTicketIncident(nValeur est un entier)
-         :EstModif()
+        code : |1+
+         procédure publique p_nNumTicketIncident(nValeur est un entier):Vide
          
-         :m_nNumTicketIncident=nValeur
+         si :m_nNumTicketIncident <> nValeur ALORS
+         	:ZF_EstModif()
+         	:m_nNumTicketIncident=nValeur
+         FIN
         type : 2031616
      template_refs : []
    -
@@ -1305,10 +1263,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nOrdre(nValeur est un entier)
+         procédure publique p_nOrdre(nValeur est un entier):Vide
          
          si :m_nOrdre <> nValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_nOrdre = nValeur
          fin
@@ -1327,15 +1285,16 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nPoids(nValeur est un entier)
+         procédure publique p_nPoids(nValeur est un entier):Vide
          
          SI ::Controle_Poids(nValeur) ALORS
          	si :m_nPoids <> nValeur alors
-         		:EstModif()
+         		:ZF_EstModif()
          		:m_nPoids = nValeur
          	fin
          SINON
-         	ExceptionDéclenche(1, "Valeur incorrecte, pour le poids de la tache")
+         //	ExceptionDéclenche(1, "Valeur incorrecte, pour le poids de la tache")
+         	m_oExPbPoidTache.ZF_Declenche()
          FIN
         type : 2031616
      template_refs : []
@@ -1352,17 +1311,18 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nPoids_Previsionnel(nValeur est un entier)
+         procédure publique p_nPoids_Previsionnel(nValeur est un entier):Vide
          
          
          si ::Controle_Poids(nValeur) ALORS
          	
          	si :m_nPoids_Previsionnel <> nValeur alors	
-         		:EstModif()
+         		:ZF_EstModif()
          		:m_nPoids_Previsionnel=nValeur
          	fin
          sinon
-         	ExceptionDéclenche(1, "Valeur incorrecte, pour le poids prévisionnel")
+         //	ExceptionDéclenche(1, "Valeur incorrecte, pour le poids prévisionnel")
+         	m_oExPbPoidTachePrev.ZF_Declenche()
          FIN
         type : 2031616
      template_refs : []
@@ -1375,18 +1335,14 @@ class :
         code : |1-
          procédure publique p_nStatut() : entier
          
-         //si :m_nStatut = 0 ALORS
-         //	:m_nStatut = :get_staut_tache()
-         //FIN
-         
          renvoyer :m_nStatut
         type : 1966080
       -
         code : |1-
-         procédure publique p_nStatut(nValeur est un entier)
+         procédure publique p_nStatut(nValeur est un entier):Vide
          
          si :m_nStatut <> nValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_nStatut = nValeur
          fin
@@ -1405,10 +1361,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR(sValeur est une chaîne)
+         procédure publique p_sCMTR(sValeur est une chaîne):Vide
          
          si :m_sCMTR <> sValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_sCMTR=sValeur
          fin
@@ -1427,10 +1383,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR_Blocage(sValeur est une chaîne)
+         procédure publique p_sCMTR_Blocage(sValeur est une chaîne):Vide
          
          si :m_sCMTR_Blocage <> sValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_sCMTR_Blocage=sValeur
          fin
@@ -1449,10 +1405,10 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCodeTache(sValeur est une chaîne)
+         procédure publique p_sCodeTache(sValeur est une chaîne):Vide
          
          si :m_sCodeTache <> sValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_sCodeTache = sValeur
          fin
@@ -1471,13 +1427,65 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sDescription(sValeur est une chaîne)
+         procédure publique p_sDescription(sValeur est une chaîne):Vide
          
          si :m_sDescription <> sValeur alors
-         	:EstModif()
+         	:ZF_EstModif()
          	
          	:m_sDescription=sValeur
          fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUsr_createur_ID
+     identifier : 0x13fa90fe0dfe7ade
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUsr_createur_ID() <métier>:entier
+         
+         si :m_oUsr_createur = Null ALORS
+         	renvoyer 0
+         sinon
+         	RENVOYER :m_oUsr_createur.ZF_Get_IdUnique()
+         FIN
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUsr_createur_ID(nValeur_P est un entier):vide
+         
+         si nValeur_P = 0 ALORS
+         	:m_oUsr_createur = null
+         sinon
+         	:m_oUsr_createur = ClUsr.GetObj(nValeur_P)
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUsr_Dev_ID
+     identifier : 0x13fa91870ead90be
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUsr_Dev_ID() <métier>:entier
+         
+         SI :m_oUsr_Dev = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :m_oUsr_Dev.ZF_Get_IdUnique()
+         FIN
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUsr_Dev_ID(nValeur_P est un entier):vide
+         
+         SI nValeur_P = 0 ALORS
+         	:m_oUsr_Dev = Null
+         SINON
+         	:m_oUsr_Dev = ClUsr.GetObj(nValeur_P)
+         FIN
         type : 2031616
      template_refs : []
   procedure_templates : []

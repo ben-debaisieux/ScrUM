@@ -262,20 +262,20 @@ window :
       		
       ]
       
-      SI goApp.Rsql(sdRecherecheTypesCommentaires,sReq) ALORS
-      	TableSupprimeTout(TBL_Types_Commentaires)
-      	TBL_Types_Commentaires..AffichageActif = faux
-      	pour TOUT sdRecherecheTypesCommentaires 
-      		
-      		nLigne = TableAjouteLigne(TBL_Types_Commentaires)
-      		
-      		TBL_Types_Commentaires[nLigne].COL_ID = sdRecherecheTypesCommentaires.IDScr_Type_Cmtr
-      		TBL_Types_Commentaires[nLigne].COL_Type = sdRecherecheTypesCommentaires.Type_Cmtr
-      		TBL_Types_Commentaires[nLigne].COL_Par_Defaut = sdRecherecheTypesCommentaires.Top_Par_Defaut
-      		
-      	FIN
-      	TBL_Types_Commentaires..AffichageActif = vrai
+      goApp.Rsql(sdRecherecheTypesCommentaires,sReq)
+      TableSupprimeTout(TBL_Types_Commentaires)
+      TBL_Types_Commentaires..AffichageActif = faux
+      pour TOUT sdRecherecheTypesCommentaires 
+      	
+      	nLigne = TableAjouteLigne(TBL_Types_Commentaires)
+      	
+      	TBL_Types_Commentaires[nLigne].COL_ID = sdRecherecheTypesCommentaires.IDScr_Type_Cmtr
+      	TBL_Types_Commentaires[nLigne].COL_Type = sdRecherecheTypesCommentaires.Type_Cmtr
+      	TBL_Types_Commentaires[nLigne].COL_Par_Defaut = sdRecherecheTypesCommentaires.Top_Par_Defaut
+      	
       FIN
+      
+      TBL_Types_Commentaires..AffichageActif = vrai
       
       HAnnuleDéclaration(sdRecherecheTypesCommentaires)
      type : 458752

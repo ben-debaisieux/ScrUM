@@ -1,0 +1,239 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClAppScrum
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x138e54a9088eb5f5
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : BwAAAAcAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClAppScrum est une Classe
+      	herite de clZF_app
+      	
+      public
+      	m_oUsrCnx				est un objet ClUsr dynamique
+      	m_nVelociteMoyenne		est un entier
+      	m_nNumeroDuSprintActuel	est un entier
+      	
+      	m_sMsgCnx				est une chaîne
+      prive
+      	m_bUsrDev				est un booléen
+      GLOBAL
+      PUBLIC
+      	mg_oExPbCnx					est un ClZF_Exception dynamique
+      FIN
+       
+      mg_oExPbCnx					= allouer un ClZF_Exception("Connexion impossible à la base de données :" + rc + "%1", ClZF_Exception.cstInfoLogHF)
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1409156818383451637
+     type_code : 27
+     code : |1+
+      PROCEDURE Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1409156818383517173
+     type_code : 28
+     code : |1+
+      PROCEDURE Destructeur()
+      
+     type : 655360
+   -
+     name : Sprint_Num_Actuel
+     procedure_id : 1409156818383582709
+     type_code : 12
+     code : |1-
+      FONCTION Sprint_Num_Actuel():entier
+      
+      renvoyer :m_nNumeroDuSprintActuel
+     type : 458752
+   -
+     name : cnxBdd
+     procedure_id : 1409157677390349015
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClApp.cnxBdd
+      PROCÉDURE  cnxBdd()
+      
+      
+      sMsgErrCnx est une chaîne
+      
+      // ************************************** Connexion à la base de données ******************************************//
+      HGèreIntégrité(Vrai)
+      
+      
+      SI PAS EnModeTestAutomatique() ALORS
+      	
+      	//HVérifieStructure(hCompatible)   //pour fonctionner même si modif analyse
+      	
+      	SI PAS EnModeTest() OU PAS Droite(SysEnvironnement("USERNAME"),4) DANS ("x2777") ALORS 
+      		
+      //		:m_sMsgCnx						= "Connexion : SQlServer"
+      //		// Paramètres de la connexion
+      //		:m_ZF_cnxBDD..Provider			= hAccèsNatifSQLServer
+      //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      //		:m_ZF_cnxBDD..Utilisateur		= "sa"
+      //		:m_ZF_cnxBDD..MotDePasse		= "sa@sql2016"
+      //		:m_ZF_cnxBDD..Serveur			= "10.20.30.140"
+      //		
+      //		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM"
+      ////		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
+      //		:m_ZF_cnxBDD..InfosEtendues		= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
+      
+      		:m_sMsgCnx						= "Connexion : HF/CS"
+      		// Paramètres de la connexion
+      		:m_ZF_cnxBDD..Provider			= hAccèsHFClientServeur
+      		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      		:m_ZF_cnxBDD..Utilisateur		= "cnx_scrum"
+      		:m_ZF_cnxBDD..MotDePasse		= "cnx_scrum"
+      		:m_ZF_cnxBDD..Serveur			= "prod-vm-ast02"
+      		
+      		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM-BDD"
+      		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
+      		
+      		sMsgErrCnx						= "Impossible d'ouvrir les tables de la base de donnés sur le serveur : [%:m_ZF_cnxBDD..Serveur%]."
+      	SINON
+      		:m_sMsgCnx = "Connexion : HF local"
+      		
+      		// connexion locale aux fichiers
+      		:m_ZF_cnxBDD..Provider			= hAccèsHF7
+      		sMsgErrCnx						= "Impossible d'ouvrir les tables locales de la base de données."
+      	FIN
+      SINON
+      	// connexion local aux fichiers
+      	HVérifieStructure(hIdentique)
+      	:m_ZF_cnxBDD..Provider				= hAccèsHF7
+      	sMsgErrCnx							= "Impossible d'ouvrir les tables locales de la base de données."
+      FIN
+      
+      
+      // Ouverture de la nouvelle connexion
+      SI HOuvreConnexion(:m_ZF_cnxBDD) ALORS
+      	
+      	HChangeConnexion("*",:m_ZF_cnxBDD)
+      	
+      	SI PAS HCréationSiInexistant("*") ALORS
+      		mg_oExPbCnx.ZF_Declenche([sMsgErrCnx])
+      //		Info(sMsgErrCnx)
+      		STOP
+      		FinProgramme()
+      	FIN		
+      SINON
+      	mg_oExPbCnx.ZF_Declenche([sMsgErrCnx])
+      //	Info(sMsgErrCnx)
+      	STOP
+      	FinProgramme()
+      FIN
+      
+      
+      
+      
+      //***************************** Identification de l'utilisateur ***************************************************//
+      sLoginAD est une chaîne
+      
+      SI PAS EnModeTestAutomatique() ALORS
+      	
+      	//On rempli le login de la structure globale Utilisateur par le login de la session windows
+      	sLoginAD = Droite(SysEnvironnement("USERNAME"),4)
+      	
+      	HLitRecherche(Scr_Usr,Login_AD,sLoginAD,hIdentique+hLimiteParcours)
+      	//Si on le trouve alors on rempli le reste des inforamtion dans la structure
+      	SI PAS HTrouve(Scr_Usr) ALORS
+      		
+      		SI HNbEnr(Scr_Usr) = 0 ALORS
+      			HRAZ(Scr_Usr)
+      			Scr_Usr.Login_AD				= sLoginAD
+      			Scr_Usr.Top_Equip_Informatique	= Vrai
+      			HAjoute(Scr_Usr)
+      		SINON
+      			//Sinon on bloque l'acces à l'application en fermant le programme
+      			Info("vous n'avez pas accès à cette application. (" + sLoginAD + " / " + :m_ZF_cnxBDD..Serveur + ")")
+      			STOP
+      			FinProgramme()
+      		FIN
+      	FIN	
+      SINON
+      	Col_Test.InitAll()
+      	
+      	HLitPremier(Scr_Usr)
+      	sLoginAD = Scr_Usr.Login_AD
+      FIN
+      //*****************************************************************************************************************//
+      
+      
+      :m_nNumeroDuSprintActuel = ClSprint.Sprint_Num_Actuel() 
+      ClSprint.Calcul_Velocite_Moyenne()
+      
+      
+      //Enregistrement de l'utilisateur en cours, dans l'application.
+      :m_oUsrCnx <- ClUsr.nGetIdDeNumAD(sLoginAD)
+      
+      //On mémorise si l'utilisateur est de l'équipe de dev (isolé, pour gérer les cas d'usurpation d'identité)
+      :m_bUsrDev = :m_oUsrCnx.p_bTop_Equip_Informatique
+      
+      :m_sMsgCnx += [" - "] + :m_oUsrCnx.p_sNom
+     type : 458752
+   -
+     name : ExceptGenerale
+     procedure_id : 1434631227478614029
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_App.ExceptGenerale
+      PROCÉDURE GLOBALE  ExceptGenerale()
+      
+      sErreur_Encours est une chaîne
+      sErreur_Transaction est une chaîne
+      slib_err est une chaîne
+      
+      sErreur_Encours += " Erreur d'Exception : "+ExceptionInfo(errCode)+RC+ExceptionInfo(errComplet)+RC
+      sErreur_Encours += " Erreur Erreurinfo : "+RC+ErreurInfo(errComplet)+RC
+      sErreur_Encours += " Erreur Herreurinfo : "+RC+HErreurInfo(hErrComplet)+RC
+      
+      slib_err = RC + ExceptionInfo(errElément)+" : "+ExceptionInfo(errRésumé)+RC+ExceptionInfo(errComplet)
+      
+      
+      Col_Erreur_ScrUM.Erreur_WebService(sErreur_Transaction + slib_err + RC + sErreur_Encours,Col_Erreur_ScrUM.cst_NiveauErreur_Critique)
+      
+      DélaiAvantFermeture(1000)
+      Info("Suite à une erreur, le programme doit être relancé.")
+      FinProgramme(Faux)
+     type : 458752
+  properties :
+   -
+     name : p_bUsrDev
+     identifier : 0x138e54a9088fb5f5
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bUsrDev() : booléen
+         
+         renvoyer :m_bUsrDev
+        type : 1966080
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ClApp
+resources :
+ string_res :
+  identifier : 0x138e55f40981c04d
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

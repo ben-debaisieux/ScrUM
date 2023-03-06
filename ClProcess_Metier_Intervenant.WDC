@@ -17,7 +17,7 @@ class :
      code : |1-
       ClProcess_Metier_Intervenant est une Classe
       	PUBLIC
-      		Hérite de ClObjDB
+      		Hérite de ClZF_ObjDB
       		Reference est une chaîne					<MAPPING=Référence>
       		Description est une chaîne					<MAPPING=Description>
       		OrdreAbsolu est un entier sur 2 octets		<MAPPING=OrdreAbsolu>
@@ -74,7 +74,7 @@ class :
      name : Constructeur
      procedure_id : 2174549724459379206
      type_code : 27
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //Constructeur (<oAxeParent_P> est ClProcess_Metier_Axe dynamique [, <ID> est entier])
@@ -99,21 +99,9 @@ class :
       :m_oAxeParent <- oAxeParent_P
       
       //Chargement des données dans l'instance.
-      :Charge()
+      //:ZF_Charge()
       
       TableauAjouteRéférence(:p_oAxeParent.m_aoIntervenants,objet)
-      
-      //On mémorise tous les id de intervenants qu'on déclare pour s'assurer de ne pas ouvrir 2 fois le même
-      si TableauCherche(:m_aMemo_ref_ouvertes,tcLinéaire,ID) = -1 ALORS
-      	TableauAjoute(:m_aMemo_ref_ouvertes, ID)
-      sinon
-      	dbgAssertion(Faux, ChaîneConstruit("intervenant N° %1 déja déclaré", ID))
-      FIN
-      
-      
-      si :bModeAjout() ALORS
-      	:OrdreAbsolu	= :p_oAxeParent.p_oProcessParent._nPosInterLibre()
-      FIN
      type : 589824
    -
      name : Destructeur
@@ -407,8 +395,8 @@ class :
       
       PROCEDURE VIRTUELLE Enregistre()
       
-      SI :p_oAxeParent.p_oProcessParent.m_bEnregistrementEnCours ALORS
-      	Ancêtre.Enregistre()
+      SI :p_oAxeParent.p_oProcessParent.p_bEnregistrementEnCours ALORS
+      	Ancêtre.ZF_Enregistre()
       SINON
       	ExceptionDéclenche(1, "Impossible d'utiliser la procédure d'enregistrement autrement que par l'enregistrement du process.")
       FIN
@@ -540,8 +528,29 @@ class :
       //
       PROCEDURE pre_enregistre()
       
-      Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Axe					= :p_oAxeParent.Get_IdUnique()
+      Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Axe					= :p_oAxeParent.ZF_Get_IdUnique()
       Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant_Type	= :_nType()
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422517594082543496
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+      
+      //On mémorise tous les id de intervenants qu'on déclare pour s'assurer de ne pas ouvrir 2 fois le même
+      SI TableauCherche(:m_aMemo_ref_ouvertes, tcLinéaire, :ZF_Get_IdUnique()) = -1 ALORS
+      	TableauAjoute(:m_aMemo_ref_ouvertes, :ZF_Get_IdUnique())
+      SINON
+      	dbgAssertion(Faux, ChaîneConstruit("intervenant N° %1 déja déclaré", :ZF_Get_IdUnique()))
+      FIN
+      
+      
+      SI :ZF_bModeAjout() ALORS
+      	:OrdreAbsolu	= :p_oAxeParent.p_oProcessParent._nPosInterLibre()
+      FIN
      type : 458752
   properties :
    -

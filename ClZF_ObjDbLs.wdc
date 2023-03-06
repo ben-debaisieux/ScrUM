@@ -1,0 +1,419 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_ObjDbLs
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13f52f1000939f29
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_ObjDbLs est une Classe, abstraite
+      PROTÉGÉ
+      PRIVÉ
+      	m_ZF_nIdUnique					est un entier
+      	m_ZF_nPointeur					est un entier sur 8 octet
+      	m_ZF_sNom_Col_Id_Auto			est une chaîne
+      	m_ZF_sNomTable					est une chaîne
+      GLOBAL
+      public
+      	mg_oExPositionnementImpossible	est un ClZF_Exception dynamique
+      	mg_oExRecipObjetImpossible		est un ClZF_Exception dynamique
+      fin
+      
+      mg_oExPositionnementImpossible = allouer un ClZF_Exception("Enregistrement introuvable : %1.%2 = %3", ClZF_Exception.cstInfoLogSimple)
+      mg_oExRecipObjetImpossible = allouer un ClZF_Exception("Récupération impossible de l'objet %1; ID %2.", ClZF_Exception.cstInfoLogSimple)
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     internal_properties : BwAAAAcAAAB5o+hgABr8HbRTw0rHBJLn+rsEsO6LQsOAqJju9OtElQ+83fgNggykTfVjmwHQq1FfxuiugeEkU+C2eOi2ZYD02pCxiHpvx+ayCR4efhom2mJ/LKowAUbGfb4rVk5GT2hXO2exb/6x9744XstZvXtG/VZnttAs2+xQNrL/LIu8wIb+pe//x4n0KBFuqeeWEJfg8OSXPooUnmAWHbemKoBomPr013Z3SE6kXc7hWJQmAS4dFXl2XI2um/r20s3Gu/mGPmUGrNMPY32Kh/24MCK0GnU8rp4yOeOZc5X3MxU57WC9nJEmD3yqm/+zwV4u0OQpIHuAze952rZ1O7E7TFO9NMxQB/sLwga12xWUWbTO
+     procedure_id : 1438107401790463785
+     type_code : 27
+     code : |1+
+      procédure Constructeur(sNomTable_P est une chaîne , sNomColIdAuto_P est une chaîne , nId_P est un entier = 0)
+      
+      sRefObj est une chaîne
+      
+      
+      //Mémorisation des infos de l'entité de base de données
+      :m_ZF_sNomTable		= sNomTable_P
+      :m_ZF_sNom_Col_Id_Auto	= sNomColIdAuto_P
+      
+      
+      SI nId_P <> 0 ALORS
+      	//Mémorisation de l'ID unique
+      	:m_ZF_nIdUnique = nId_P
+      	
+      	//L’instance est elle déjà en mémoire ?
+      	sRefObj = :ZF_sGetNomInstance()
+      	SI ClZF_App.mg_aoInstances[sRefObj]..Vide ALORS
+      		//Non : On la mémorise
+      		ClZF_App.mg_aoInstances[sRefObj] <- objet
+      	SINON
+      		SI EnModeTest() ALORS Trace("Doublon : " + sRefObj)
+      	FIN
+      	
+      	:ZF_Charge()
+      FIN
+      
+      
+      //Mémorisation de l'adresse de l'objet
+      :ZF_SyncPointeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1438107401790529321
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : ZF_bVerifPointeur
+     procedure_id : 1438109536437678968
+     type_code : 12
+     code : |1-
+      procédure ZF_bVerifPointeur()<métier>:booléen
+      nRefObj est un entier sur 8 octets = &objet
+      renvoyer :m_ZF_nPointeur = nRefObj
+     type : 458752
+   -
+     name : ZF_Charge
+     procedure_id : 1438109536437744551
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Charge ( [<bSansRechargement_P> est booléen])
+      //
+      // Paramètres :
+      //	bSansRechargement_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bSansRechargement_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      pROCEDURE PROTÉGÉE ZF_Charge(bSansRechargement_P est un booléen = faux)<métier>:Vide
+      
+      	HLitRecherche(:m_ZF_sNomTable, :m_ZF_sNom_Col_Id_Auto, :ZF_Get_IdUnique(), hIdentique+hLimiteParcours)
+      	SI PAS HTrouve(:m_ZF_sNomTable) ALORS
+      		::mg_oExPositionnementImpossible.ZF_Declenche([:m_ZF_sNomTable, :m_ZF_sNom_Col_Id_Auto, :ZF_Get_IdUnique()])
+      	FIN
+      
+      si pas bSansRechargement_P ALORS
+      	FichierVersMémoire(objet, :m_ZF_sNomTable)
+      	//Chargement des objets enfants
+      	Init_ObjBD()
+      FIN
+      
+      
+      
+     type : 458752
+   -
+     name : ZF_Charge_source
+     procedure_id : 1438109536438924292
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Charge_source (<sdSource_p> est source de données)
+      //
+      // Paramètres :
+      //	sdSource_p (source de données) : <indiquez ici le rôle de bSansRechargement_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      pROCEDURE ZF_Charge_source(sdSource_p est une source de données)<métier>:Vide
+      
+      
+      HRAZ(:m_ZF_sNomTable)
+      HCopieEnreg(:m_ZF_sNomTable,sdSource_p,hCopieIDAuto)
+      
+      
+      //Mémorisation de l'ID unique
+      :m_ZF_nIdUnique = {:m_ZF_sNomTable + "." + :m_ZF_sNom_Col_Id_Auto,indRubrique}
+      
+      FichierVersMémoire(objet, :m_ZF_sNomTable)
+      
+      //Chargement des objets enfants
+      Init_ObjBD()
+      
+     type : 458752
+   -
+     name : ZF_Get_IdUnique
+     procedure_id : 1438109536440169554
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_Get_IdUnique ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	entier : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION ZF_Get_IdUnique()<métier>:entier
+      
+      RENVOYER :m_ZF_nIdUnique
+     type : 458752
+   -
+     name : ZF_GetObj
+     procedure_id : 1438109540739397237
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_GetObj (<sClasse_P> est chaîne, <nIdUnique_P> est entier)
+      //
+      // Paramètres :
+      //	sClasse_P (chaîne ANSI) : <indiquez ici le rôle de sClasse_P>
+      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      // Valeur de retour :
+      // 	ClZF_ObjDbLs : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      // 	sdSource_P (source de données - valeur par défaut=0) : <indiquez ici le rôle de sdSource_P>
+      PROCEDURE globale ZF_GetObj(sClasse_P est une chaîne, nIdUnique_P est un entier)<métier>:ClZF_ObjDBls
+      
+      bObjEnCache est un booléen
+      
+      sCle est une chaîne = ::ZF_sCleOdb(sClasse_P, nIdUnique_P)
+      
+      //A t on déja instancié cet objet ?
+      si ClZF_App.mg_aoInstances[sCle]..Vide ALORS
+      	//Non
+      	ClZF_App.mg_aoInstances[sCle] <- goapp.creeObj(sClasse_P,nIdUnique_P)
+      sinon
+      	bObjEnCache = vrai
+      FIN
+      
+      si ClZF_App.mg_aoInstances[sCle] = null ALORS
+      	mg_oExRecipObjetImpossible.ZF_Declenche([sClasse_P, nIdUnique_P])
+      FIN
+      
+      
+      //Métriques : Récupération du nombre de déclarations (avec ou sans cache)
+      goApp.m_aMetriques[1].nNbDeclarationObjBd++
+      si bObjEnCache ALORS
+      	goApp.m_aMetriques[1].nNbDeclarationObjBd_Cache++
+      sinon
+      	goApp.m_aMetriques[1].nNbDeclarationObjBd_NonCache++
+      FIN
+      
+      
+      RENVOYER ClZF_App.mg_aoInstances[sCle]
+     type : 458752
+   -
+     name : ZF_LibereInstancesMemo
+     procedure_id : 1438109540743985242
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_LibereInstancesMemo ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE globale ZF_LibereInstancesMemo()<métier>:Vide
+      
+      oInstance est un objet dynamique
+      POUR TOUT ELEMENT oInstance DE ClZF_App.mg_aoInstances
+      	liberer oInstance
+      FIN
+      TableauSupprimeTout(ClZF_App.mg_aoInstances)
+     type : 458752
+   -
+     name : ZF_sCleOdb
+     procedure_id : 1438109545040525527
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_sCleOdb (<sClasse_P> est chaîne, <nIdUnique_P> est entier)
+      //
+      // Paramètres :
+      //	sClasse_P (chaîne ANSI) : <indiquez ici le rôle de sClasse_P>
+      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale ZF_sCleOdb(sClasse_P est une chaîne, nIdUnique_P est un entier)<métier>:chaine
+      renvoyer sClasse_P + nIdUnique_P
+      
+     type : 458752
+   -
+     name : ZF_sGetNomInstance
+     procedure_id : 1438109545040984372
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_sGetNomInstance ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE protégée  ZF_sGetNomInstance()<métier>:chaine
+      renvoyer objet..Classe + :ZF_Get_IdUnique()
+     type : 458752
+   -
+     name : ZF_SyncPointeur
+     procedure_id : 1438109545041246595
+     type_code : 12
+     code : |1-
+      procédure ZF_SyncPointeur()<métier>:Vide
+      :m_ZF_nPointeur = &objet
+     type : 458752
+   -
+     name : ZR_Clone
+     procedure_id : 1438109545041377729
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZR_Clone ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	ClZF_ObjDB : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZR_Clone():objet ClZF_ObjDB
+      
+      nMemoID est un entier = :m_ZF_nIdUnique
+      :m_ZF_nIdUnique = 0
+      oMoiMeme est un ClZF_ObjDB dynamique = clone(objet)
+      :m_ZF_nIdUnique = nMemoID
+      
+      renvoyer oMoiMeme
+      
+      
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1438113745635780285
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Init_ObjBD ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure abstraite Init_ObjBD()<métier>:vide
+      
+     type : 458752
+  properties :
+   -
+     name : p_nPointeur
+     identifier : 0x13f5318d07695454
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_nPointeur() : entier sur 8 octets
+         
+         renvoyer m_ZF_nPointeur
+        type : 1966080
+     template_refs : []
+   -
+     name : p_sNomTable
+     identifier : 0x13f5320107e91afb
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure protégée  p_sNomTable() : chaîne
+         
+         renvoyer m_ZF_sNomTable
+        type : 1966080
+     template_refs : []
+   -
+     name : p_sNom_Col_Id_Auto
+     identifier : 0x13f5320a07eb3f2c
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure protégée  p_sNom_Col_Id_Auto() : chaîne
+         
+         renvoyer m_ZF_sNom_Col_Id_Auto
+        type : 1966080
+     template_refs : []
+   -
+     name : p_ZF_nIdUnique
+     identifier : 0x13f5353a0c56b04b
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure protégée  p_ZF_nIdUnique() : entier
+         
+         renvoyer m_ZF_nIdUnique
+        type : 1966080
+      -
+        code : |1-
+         procédure protégée  p_ZF_nIdUnique(nValeur est un entier)
+         
+         m_ZF_nIdUnique=nValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13f52ef8008d3e7b
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

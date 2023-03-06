@@ -1,0 +1,117 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_ProjectMap
+ major_version : 27
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_ProjectMap
+ identifier : 0x239387b41a3d1d45
+ internal_properties : BwAAAAcAAADVJhEQHDR5CCaMpFhIbT6jJq8XgM362xr1JUiqTnsV+Mraq4eaOI62TVAsLbFSwRppEDewI208ax7s974e1D5gz6JgeKAX50owNo4mgItyeIwXHZ+OzuiBzMA/J+wHHpXh31q8//lEA9sb/OEaj7CEk9rNHQwi0qxGDnLo/VFUafjgGQRzmMFumMYHTjEoX13uzWXdZNp+6z8fX8+rqKR2KsM2ik8/0l3++SaU+LpP9/2vCuTicYBi+S1jMhpr6UbnbR3QWotgKYrw1blWpPXTFlM+fibRMEg8ETsdVOLlC5DK8VxpVJXcQd2k+G8uX8oeKJcyx2SehuLcSTswX4lqJ555d/30V4L9qSe0kidAFodSVKj4SseU6lUFFGpuji/R135Q3aEApGUwWLEgF+tGkOZqwxVeodX/yHVr1l0xlHChg9WmK44srUs+80wZ/yFrbtpozve392Kcz4oYLClusus60t/ROL0U1XS6Af9c7GBQ/E33QoRJWetLqtYpBLOjd8bv2kX0P37Qa3grXoC5z2qdPsM+QaQlT05eWZNb3jPQT/W8e8I50Ai8JvPDjali8HqxE780iI3idCekczRpUrD2u9MUHd4GzPAkv4EKzuffG6GqX0/KrgsCQP3yLhZr828DjCBYOc0prT5dWDUoulYuhITeriBrffvShtYg
+ properties :
+  width : 1024
+  height : 768
+  widthClient : 1022
+  heightClient : 736
+ controls :
+  -
+    name : ORGA_SansNom1
+    identifier : 0x239387ea1a6df304
+    internal_properties : BwAAAAcAAABp+0XtezAtpvVR5ruUgRI4cIuY6mx8bOINsfahkA7LnnxrhRlFANBtNLuMAvTEUGQMHE1ld195qFznBHZTDZbDmb2CTpR5pFUbK0eyv2qr7BKf3m9u324pGNDLfMeAhLTE46+HPk2z/xIbimcDhcR/JwwU6DMdbbBk7HCL6mNolUs1rSXqiyG/LQ/4q8Zm9r/BMKuQzqzdzvCqbf/1NuFjBrpHRCj/yBzjC+vRufBnXuCIguNKnjmT26tCKO0sdSOU0+0bqwSgTI6BoXrvvBqjn14f35YYbYB7huLw7czWDucGS586/H+cMR0h9YopHeHOlywy94VlLOHwK1oFSAhuz6Rpd26jtdhY+GtoYT+As56qwDnge+XBlORVYDFEari77jv/EdwKfCURNM/1TELswZCoMwEVkCozdYImP+cvyDnWfUx1MXKTY/Cu4okBAWThQPsSHUu8e82FG61lWlW0oPBOfche+vm0oTMWq3bTru0GGPRA3kpVnzk7k/fVRyCBgJgEd5Gp0lvenlmknqMWWPsgvu44LR+3ZR7zClFUB1yjgjHhT6AWoZ+PqI/ZGBUpjNwndizWXelBmqMaUeHv3FsL4WeW4wMXuWSi9tz2Rvl8lzn5Dhb2xhQwhAlVlM7S5grFDY4n+wDCdLyT2SDg8H7/jwEOZEaUQkXOkfMIbAVTs7bMxnPZwA4ZCdV1FuoMChiK9XYrxgC0iUOxqxsLKmogOL95g4S0cv+ZESIL54zN9+kQwmOV/bb2OhRvPfB+SItrSQF6GIayUbk0mjqF2hOQ5LNihGMR0HQOlm5QezBjlJPZTc5ID/aHFK2KXSUsN6P/fYbaDayDqIXeXJaZVUDrmDUgiGiYTf+Ru73+ryOZiiY48462EiB3DueU6BGlYKNnAG7gswMyERYFC9AmHoo+tekCRhbkyz+RG460BwrqtJGLivoPsUM6jLeQl+qwH679cG5r9oviUOTzcN3gI4n28x4mnnE6sqKBAtOs/W/rHZOs2B+pHyKAsd+BoNCR8NAo6eQf6cRRn6EERCKWuoOzuqxjJNlL9Z954zyO6FFZkHF0JUPx1MCIslTkZOzOEt3/AxdlLsRWqPGT3QJIgho4eJyPiv1PR71hTL4/WHz4
+    properties :
+     x : 6
+     y : 6
+     width : 1010
+     height : 724
+    type : 86
+    code_elements :
+     type_code : 118
+     p_codes :
+      -
+        code : |1+
+         nRacine est un entier
+         nPrj est un entier
+         
+         nRacine = OrgaAjoute(ORGA_SansNom1,"racine","info")
+         //OrgaAjouteFils(ORGA_SansNom1,nRacine,"lvl1","info")
+         //OrgaAjouteFils(ORGA_SansNom1,nRacine,"lvl1","info")
+         //OrgaAjouteFils(ORGA_SansNom1,nRacine,"lvl1","info")
+         //nRacine = OrgaAjouteFils(ORGA_SansNom1,nRacine,"lvl1","info")
+         //
+         //OrgaAjouteFils(ORGA_SansNom1,nRacine,"lvl2","info")
+         //OrgaAjouteFils(ORGA_SansNom1,nRacine,"lvl2","info")
+         //OrgaAjouteFils(ORGA_SansNom1,nRacine,"lvl2","info")
+         //OrgaAjouteFils(ORGA_SansNom1,nRacine,"lvl2","info")
+         
+         
+         //oPrj			est un ClProjet dynamique
+         //bChangePrj		est un booléen
+         //oUs				est un ClUserStory dynamique
+         //bChangeUs		est un booléen
+         //oTache			est un ClTache dynamique
+         gOrgaElement	est un OrgaElément
+         
+         stParcourt		est un STR_compo_pr_us_ta
+         
+         //POUR TOUT ÉLÉMENT oPrj DE ClProjet.aoListeProjets().aItems()
+         //	
+         //	VariableRAZ(gOrgaElement)
+         //	gOrgaElement.Titre		= oPrj.p_sNom
+         //	gOrgaElement.Contenu	= oPrj.p_sCode
+         //	OrgaAjouteFils(ORGA_SansNom1, nRacine, gOrgaElement)
+         //FIN
+         nNivUS est un entier
+         
+         pour tout element stParcourt de COL_Compo.astCompo_pr_us_ta(ClProjet.aoListeProjets())
+         	
+         	si stParcourt.bChangePrj ALORS
+         		VariableRAZ(gOrgaElement)
+         		gOrgaElement.Titre = stParcourt.oPrj.p_sNom
+         		gOrgaElement.Contenu = stParcourt.oPrj.p_sCode
+         		nPrj = OrgaAjouteFils(ORGA_SansNom1, nRacine, gOrgaElement)
+         	FIN
+         	SI stParcourt.bChangeUs ALORS
+         		VariableRAZ(gOrgaElement)
+         		gOrgaElement.Titre = stParcourt.oUs.sNommination_US()
+         		gOrgaElement.Contenu = stParcourt.oUs.p_sCodeUserStory
+         		nNivUS = OrgaAjouteFils(ORGA_SansNom1, nPrj, gOrgaElement)
+         	FIN
+         	
+         FIN
+        type : 14
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BwAAAAcAAABHivBqFH8xYQq/QELUltmClIuqm9KM3lg0XSaBAQ41WqT06R9JfU0qGK5sHUl8/xHCuvP3y9tLeLLOVaAgM2FjnfwSCRBgXqneLsHogwTYpIXuB1zp2uXtmOXYyGd6i+ek6BBvtJ0ylgF/MxkRihdZ26pl/9Jf5c+sxo07G0ZzHfcLEu9WD07gTSld25EPGWjvi/e5TxaHOZSRE8C5Ig+YdJawYdK89l+x1ofEmw3pfCNLUe3tNoiwg4AbC1jLdufmJ97Xc0JHDAy7gJsHBzEWwcuroqy2By4PJ4c6Wg==
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BwAAAAcAAADG0006i3ptxMcUE+O5cGvDhb43eRlY9UEE1z/7izK93v/ToMiwACETQQw4eQhZuJRMFa6SBwwT+zSdDbdc5HEkXDob51ldPFNKsP+0MWY=
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE MaFenêtre()
+   -
+     type : 180
+     enabled : false
+   -
+     type : 230
+     enabled : false
+ code_parameters :
+  internal_properties : BwAAAAcAAAARaqIs1pWWTrjJkc2sbefp8NGAHSVvdRgpQIePRe9rhkbpERRVEF+Nx8mIqTxrVGdwHX99jtU=
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x139387980eeeb2d3
+  internal_properties : BwAAAAcAAAAZ++HSz2luvwiNhadWl8v3mh2d0Pq0fCIps02kogrcwVHmCg==
+custom_note :
+ internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BwAAAAcAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

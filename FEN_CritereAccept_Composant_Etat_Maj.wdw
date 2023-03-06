@@ -112,18 +112,18 @@ window :
          	
          ], ID_CritereAccept)
          //execution
-         SI goApp.Rsql(sdSourceCritereAccept, sReqetoileCritere) ALORS
-         	Scr_CritereAccept.IDScr_CritereAccept_Etat = sdSourceCritereAccept.IDScr_CritereAccept_Etat
-         	Scr_CritereAccept.DateDesactivation = sdSourceCritereAccept.DateDesactivation
-         	Scr_CritereAccept.CommentaireDesactivation = sdSourceCritereAccept.CommentaireDesactivation
-         	Scr_CritereAccept.CommentaireDev = sdSourceCritereAccept.CommentaireDev
-         	Scr_CritereAccept.DateValidation = sdSourceCritereAccept.DateValidation
-         	Scr_CritereAccept.CommentaireDemand = sdSourceCritereAccept.CommentaireDemand
-         	Scr_CritereAccept.DateCreation = sdSourceCritereAccept.DateCreation
-         	Scr_CritereAccept.IDSrc_Usr_Desactivation = sdSourceCritereAccept.IDSrc_Usr_Desactivation
-         	Scr_CritereAccept.IDSrc_Usr_Redacteur = sdSourceCritereAccept.IDSrc_Usr_Redacteur
-         	Scr_CritereAccept.CommentaireDemand = sdSourceCritereAccept.CommentaireDemand
-         FIN
+         goApp.Rsql(sdSourceCritereAccept, sReqetoileCritere)
+         Scr_CritereAccept.IDScr_CritereAccept_Etat	= sdSourceCritereAccept.IDScr_CritereAccept_Etat
+         Scr_CritereAccept.DateDesactivation			= sdSourceCritereAccept.DateDesactivation
+         Scr_CritereAccept.CommentaireDesactivation	= sdSourceCritereAccept.CommentaireDesactivation
+         Scr_CritereAccept.CommentaireDev			= sdSourceCritereAccept.CommentaireDev
+         Scr_CritereAccept.DateValidation			= sdSourceCritereAccept.DateValidation
+         Scr_CritereAccept.CommentaireDemand			= sdSourceCritereAccept.CommentaireDemand
+         Scr_CritereAccept.DateCreation				= sdSourceCritereAccept.DateCreation
+         Scr_CritereAccept.IDSrc_Usr_Desactivation	= sdSourceCritereAccept.IDSrc_Usr_Desactivation
+         Scr_CritereAccept.IDSrc_Usr_Redacteur		= sdSourceCritereAccept.IDSrc_Usr_Redacteur
+         Scr_CritereAccept.CommentaireDemand			= sdSourceCritereAccept.CommentaireDemand
+         
          
          HLitRecherche(Scr_CritereAccept, IDScr_CritereAccept, ID_CritereAccept,hIdentique+hLimiteParcours)
          si htrouve(Scr_CritereAccept) alors
@@ -140,12 +140,12 @@ window :
          		CAS 2 : // valider
          			Scr_CritereAccept.DateValidation = dDate
          			Scr_CritereAccept.CommentaireDemand += [RC] + SAI_Comm
-         			Scr_CritereAccept.IDSrc_Usr_Valideur = goApp.m_oUsrCnx.Get_IdUnique()
+         			Scr_CritereAccept.IDSrc_Usr_Valideur = goApp.m_oUsrCnx.ZF_Get_IdUnique()
          			
          		CAS 3 : // Désactivation		
          			Scr_CritereAccept.DateDesactivation = dDate
          			Scr_CritereAccept.CommentaireDesactivation += [RC] + SAI_Comm
-         			Scr_CritereAccept.IDSrc_Usr_Desactivation = goApp.m_oUsrCnx.Get_IdUnique()
+         			Scr_CritereAccept.IDSrc_Usr_Desactivation = goApp.m_oUsrCnx.ZF_Get_IdUnique()
          			
          		AUTRE CAS
          			
@@ -155,7 +155,7 @@ window :
          		Info(ErreurInfo(errComplet))
          	sinon
          		hraz(Scr_Message)
-         		Scr_Message.IDScr_Usr				= goApp.m_oUsrCnx.Get_IdUnique()
+         		Scr_Message.IDScr_Usr				= goApp.m_oUsrCnx.ZF_Get_IdUnique()
          		Scr_Message.Num_Sprint				= 0
          		Scr_Message.IDScr_UserStory			= Scr_CritereAccept.IDScr_UserStory
          		Scr_Message.IDScr_CritereAccept		= Scr_CritereAccept.IDScr_CritereAccept
@@ -315,12 +315,11 @@ window :
       
       ListeSupprime(CBO_Etat)
       // la on les remplis
-      SI goApp.Rsql(sdSource_Etat,sReq_Etat) ALORS
-      	POUR TOUT sdSource_Etat
-      		ListeAjoute(CBO_Etat,sdSource_Etat.Libelle + gLien(sdSource_Etat.IDScr_CritereAccept_Etat))
-      	FIN
-      	
+      goApp.Rsql(sdSource_Etat,sReq_Etat)
+      POUR TOUT sdSource_Etat
+      	ListeAjoute(CBO_Etat,sdSource_Etat.Libelle + gLien(sdSource_Etat.IDScr_CritereAccept_Etat))
       FIN
+      	
       
       sdEtatActuel est une source de données
       sReq_EtatActuel est une chaine = ChaîneConstruit([
@@ -333,11 +332,8 @@ window :
       	
       ], ID_CritereAccept)
       
-      si goApp.Rsql(sdEtatActuel, sReq_EtatActuel) alors
-      	nEtat est un entier = sdEtatActuel.IDScr_CritereAccept_Etat
-      
-      	CBO_Etat = nEtat
-      FIN
+      goApp.Rsql(sdEtatActuel, sReq_EtatActuel)
+      CBO_Etat = sdEtatActuel.IDScr_CritereAccept_Etat
       HAnnuleDéclaration(sdEtatActuel)
       FEN_CritereAccept_Composant_Etat_Maj..ValeurRenvoyée = vrai
      type : 34

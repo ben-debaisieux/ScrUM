@@ -423,9 +423,9 @@ window :
          //	
          //	SI TableauOccurrence(oUs.aoListeTaches()) = 0 alors
          	
-         	oUs.Supprimer()
+         	oUs.ZF_Supprimer()
          	QUAND EXCEPTION DANS
-         		oUs.Enregistre()
+         		oUs.ZF_Enregistre()
          	FAIRE
          		Erreur(ExceptionInfo(errMessage))
          	SINON
@@ -621,7 +621,7 @@ window :
          asComplément[cst_cbo_tous] = "<Tous>"
          
          si zoEpic_p <> null ALORS
-         	sInit = zoEpic_p.Get_IdUnique()
+         	sInit = zoEpic_p.ZF_Get_IdUnique()
          FIN
          
          zoProjet_p.Combo_Charge_Epic(MaFenêtre..Nom, CBO_Groupement..nom, sInit, asComplément)
@@ -730,7 +730,7 @@ window :
       TableSupprimeTout(TBL_Liste_User_Stories)
       TBL_Liste_User_Stories..AffichageActif = Faux
       
-      POUR tout element oUs de zoProjet_p.aoListeUS(vrai)
+      POUR tout element oUs de zoProjet_p.aoListeUS(vrai).aItems()
       	
       	bAffUs = vrai
       	//Soit on demande toutes les US, soit on affiche que celles qui ne sont pas terminées.
@@ -752,7 +752,7 @@ window :
       			//Oui
       			
       			//Est ce le bon ?
-      			si oUs.p_oEpic.Get_IdUnique() <> CBO_Groupement..ValeurMémorisée ALORS
+      			si oUs.p_oEpic.ZF_Get_IdUnique() <> CBO_Groupement..ValeurMémorisée ALORS
       				//Non
       				bAffUs = Faux
       			FIN
@@ -785,7 +785,7 @@ window :
       		TBL_Liste_User_Stories[nLigne].COL_Charge			= oUs.User_Story_Poids()
       		si oUs.p_oEpic <> Null ALORS
       			TBL_Liste_User_Stories[nLigne].COL_Groupement	= oUs.p_oEpic.p_sNom
-      			TBL_Liste_User_Stories[nLigne].COL_idGroupement	= oUs.p_oEpic.Get_IdUnique()
+      			TBL_Liste_User_Stories[nLigne].COL_idGroupement	= oUs.p_oEpic.ZF_Get_IdUnique()
       		sinon
       			TBL_Liste_User_Stories[nLigne].COL_Groupement	= ""
       			TBL_Liste_User_Stories[nLigne].COL_idGroupement	= 0

@@ -53,6 +53,8 @@ procedure_set :
       Scr_Usr.Login_AD				= "1234"
       Scr_Usr.Top_Equip_Informatique	= Vrai
       HAjoute(Scr_Usr)
+      
+      goApp.m_oUsrCnx <- ClUsr.GetObj(Scr_Usr.IDScr_Usr)
      type : 458752
    -
      name : InitAll
@@ -72,27 +74,27 @@ procedure_set :
       // Indiquez ici un exemple d'utilisation.
       //
       PROCEDURE InitAll()
-      		
-      	HFerme("*")
+      	
+      HFerme("*")
       
-      	// connexion local aux fichiers
-      	sRep est une chaîne
-      	sRep = sRepFicTestAuto()
-      	SI PAS fSupprime(sRep + "*.*") ALORS
-      		ExceptionDéclenche(1,"Impossible de réinitialiser le jeu de données de test")
-      	FIN
-      	HSubstRep(fRepExe(), sRep)
-      	HChangeRep("*", sRep)
-      	SI PAS HCréationSiInexistant("*") ALORS
-      		ExceptionDéclenche(1,"Impossible d'ouvrir les tables locales de la base de données.")
-      	FIN
+      // connexion local aux fichiers
+      sRep est une chaîne
+      sRep = sRepFicTestAuto()
+      SI PAS fSupprime(sRep + "*.*") ALORS
+      	ExceptionDéclenche(1,"Impossible de réinitialiser le jeu de données de test")
+      FIN
+      HSubstRep(fRepExe(), sRep)
+      HChangeRep("*", sRep)
+      SI PAS HCréationSiInexistant("*") ALORS
+      	ExceptionDéclenche(1,"Impossible d'ouvrir les tables locales de la base de données.")
+      FIN
       
       
       
       
       ////////////////////////////////////////////////////////
       
-      
+      ClZF_ObjDB.ZF_LibereInstancesMemo()
       
       Init_EtatsComposantsCritereAccept()
       Init_TypesComposantsCritereAccept()
@@ -207,6 +209,44 @@ procedure_set :
       
       renvoyer fRepExe() + "\TestAuto\"
       
+     type : 458752
+   -
+     name : testCharge
+     procedure_id : 1404867215458218796
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // testCharge ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure testCharge()
+      
+      
+      
+      sReq est une chaîne
+      sdRechercheTache est une Source de Données
+      m_oTaches est un ClColTaches
+      
+      sReq = [
+      	SELECT 
+      		Scr_Tache.IDScr_Tache
+      		
+      	FROM Scr_Tache
+      	
+      ]
+      
+      goApp.Rsql(sdRechercheTache,sReq)
+      POUR TOUT sdRechercheTache 
+      	m_oTaches.addItemById(sdRechercheTache.IDscr_Tache)
+      FIN
      type : 458752
   procedure_templates : []
   property_templates : []

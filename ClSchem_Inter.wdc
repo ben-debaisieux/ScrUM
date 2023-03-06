@@ -17,7 +17,7 @@ class :
      code : |1+
       ClSchem_Inter est une Classe, abstraite
       PUBLIC
-      	hérite de ClObjDB
+      	hérite de ClZF_ObjDB
       	m_sReference est une chaîne						<MAPPING=référence>
       	m_sDescription est une chaîne					<MAPPING=description>
       	m_oAxe est un ClSchem_Axe dynamique
@@ -46,7 +46,7 @@ class :
       Ancêtre.Constructeur(Scr_Process_Metier_Intervenant..Nom, Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant..Nom, nID_P)
       
       
-      :Charge()
+      //:ZF_Charge()
      type : 589824
    -
      name : Destructeur
@@ -118,7 +118,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.GetObj
-      PROCÉDURE GLOBALE GetObj(nIdUnique_P est un entier):ClSchem_Inter
+      PROCÉDURE GLOBALE GetObj(local nIdUnique_P est un entier):ClSchem_Inter
       
       oRetour est un ClSchem_Inter dynamique
       sdGetTypeInter est une Source de Données
@@ -134,15 +134,13 @@ class :
       	
       	
       ],nIdUnique_P)
-      SI goapp.RSQL(sdGetTypeInter,sReq) ALORS
+      goapp.RSQL(sdGetTypeInter,sReq)
       
-      	HLitPremier(sdGetTypeInter)
-      	si pas HEnDehors(sdGetTypeInter) ALORS
-      		oRetour <- ClSchem_Inter.oGetTypeInter(sdGetTypeInter.IDScr_Process_Metier_Intervenant_Type, nIdUnique_P)
-      	sinon
-      		ExceptionDéclenche(1,"Intervenant inexistant")
-      	FIN
-      	
+      HLitPremier(sdGetTypeInter)
+      si pas HEnDehors(sdGetTypeInter) ALORS
+      	oRetour <- ClSchem_Inter.oGetTypeInter(sdGetTypeInter.IDScr_Process_Metier_Intervenant_Type, nIdUnique_P)
+      sinon
+      	ExceptionDéclenche(1,"Intervenant inexistant")
       FIN
       
       HAnnuleDéclaration(sdGetTypeInter)
@@ -243,12 +241,11 @@ class :
       	
       	WHERE Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant = %1
       	
-      ], :Get_IdUnique())
+      ], :ZF_Get_IdUnique())
       
-      SI goapp.RSQL(sdUsdeInter,sReq) ALORS
-      	POUR TOUT sdUsdeInter
-      		TableauAjouteRéférence(aoRetour,ClUserStory.GetObj(sdUsdeInter.IDScr_UserStory))
-      	FIN
+      goapp.RSQL(sdUsdeInter,sReq)
+      POUR TOUT sdUsdeInter
+      	TableauAjouteRéférence(aoRetour,ClUserStory.GetObj(sdUsdeInter.IDScr_UserStory))
       FIN
       
       HAnnuleDéclaration(sdUsdeInter)
@@ -264,7 +261,7 @@ class :
       procédure AjouteUS(oUS_P est un ClUserStory)
       
       HRAZ(Scr_UserStory_Scr_Process_Metier_Intervenant)
-      Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant	= :Get_IdUnique()
+      Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant	= :ZF_Get_IdUnique()
       Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_UserStory					= oUS_P.Get_IdUnique()
       SI PAS HAjoute(Scr_UserStory_Scr_Process_Metier_Intervenant) ALORS
       	ExceptionDéclenche(1,ExceptionInfo(errMessage))
@@ -279,7 +276,7 @@ class :
       
       HLitRecherche(Scr_UserStory_Scr_Process_Metier_Intervenant,...
       	IDScr_UserStory_IDScr_Process_Metier_Intervenant, ...
-      	[oUS_P.Get_IdUnique(), :Get_IdUnique()], ...
+      	[oUS_P.Get_IdUnique(), :ZF_Get_IdUnique()], ...
       	hIdentique+hLimiteParcours)
       
       si HTrouve(Scr_UserStory_Scr_Process_Metier_Intervenant) ALORS
@@ -312,6 +309,15 @@ class :
       FIN
       
       renvoyer nRetour
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422515953398951964
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
      type : 458752
   procedure_templates : []
   property_templates : []

@@ -73,10 +73,10 @@ window :
          
          ListeSupprimeTout(CBO_Sprint)
          
-         aoSpr = ClSprint.aoListeSprint()
+         aoSpr = ClSprint.aoListeSprint().aItems()
          POUR nInd = aoSpr..Occurrence a 1 pas -1
          	oSpr <- aoSpr[nInd]
-         	ListeAjoute(CBO_Sprint, "Sprint " + oSpr.Get_IdUnique() + gLien(oSpr.Get_IdUnique()))
+         	ListeAjoute(CBO_Sprint, "Sprint " + oSpr.ZF_Get_IdUnique() + gLien(oSpr.ZF_Get_IdUnique()))
          FIN
          
          nIndiceSprintActuel = ListeCherche(CBO_Sprint,goApp.m_nNumeroDuSprintActuel)
@@ -93,7 +93,7 @@ window :
   -
     name : SAI_Nombre_de_sprints
     identifier : 0x2cb435b300b4bd6f
-    internal_properties : BwAAAAcAAACskQ8c3JAeDq0pyEu2lA+NEn7AZUr5sLoofDv8Rm4rGSnF0dGPDI/urmMH1Yf9pwmG+tJE5ciAWLC6Dc4ASbKCwO35I1H5VIMe5XswFOb0Ay612+uOyOCF0/CGXq3ylejcMbRIve+v5LLM3LoS/56bBMOKJz0Ai4R35HY7srhyQ9OwDRY/4+IH6C5VFtYIsxcXj6NCxREqwadQ/53WeeFKkCR+vb2wl7AUMKcDQJpxj7GA7e+JXiNM9WvStL0b2TqmQzz3e3r81gLYjx3vZ2OJcK8yGxKJWk78ppa0kNUgjGa1m2DCCm6ERywE2XqJ50eEq4HNG4apXOPjupMHewv82Kjo0HN85o1pG9biNKvEg+hi0XakGUemINfL/1qe5bxF62TPnURfYuBsTltDY3/ATtGeGr2zbB/sVUFCoVNBbcrsOCnBSbRss+NhAYulKtr/n/tKfAaQtKsC7CmC10/U/qU5Tzb0I6luC0JJ50enPCAX7/2aS1+TE8oLXeoGpZpt9dbecfqWiEhkKH20sFaR/DhuUwMzn7oz98kVO5V02D7Kn4JQhLrKv3u7BD6F/3VkTNFgi/dV7r60tBGK8WjCauK5MXdo6makjEm9eLY8fUvGXMV9SAJr/JeWRuBizopNVJQw0QeNBFlY1WuPZLJEm53WSTJm3cR4xmAn9QBXE74gsm5SrXGWpLPA5I15rF02w6K8/QyEy2xxxxAYwV3YkifLbCFa1WJIvbPWU/JQ6f8sXaAZWEkd85rCL6OEonHAyqIVosgvPYUYRh4O/JAunBbeejCPxntC3eFftuo8yDN3c1Ig1KbUQZfkkEyz5ClWvhfcujQL5sVFEIiPwVznPiV4yvlIXNCmc1zHNGhAfHwawDgIJT6UA5tvlSmzLEI+YhJOYHBGXHRAeISZ7saAV6wkREnwLs0gtz/lY1YbHx4sg431w5TbGZGcAnNvV4rJZAchGcaQOPxf6rZa7Fqz+jhJY7tFN6qmmmpCe0Hly37CFGDODQ6e36Kvd758JnglNn1AaavEjoVSkRu7ll2FOtM4y1w0N8vd6b+w77t/qLdeQwYJNl8yhhm8s3x5H6Ki+iG9N23Fv/dpfY52HctezzBNa/HiZ/CoTDDRvC5yzukLgMRToSJv+01OHLG5tsE1wRj9pn84HinU5+/UHghj4ZytJEqpsy2svSr+vTG57GG48e/unmI888jWGL4HtFel2nrqYRw07ZibnQNo7EzEkBJkK0okjTwURjWfEPnRhWVro2LuMiiqgW2h07po5+ZF8jCBZr8+zI7M31dZ6wvrLYNfNmD2aSkdm6b/zwvZwAKc6ipJh2Xek4Ob+1YApD/V6J0ISdGDmFXlBUAWn2/+uFLEnvlRnWRyleygRZKXFeg/NyUTS3jfbsY=
+    internal_properties : BwAAAAcAAABYTfvoeLx68gmVpFciQFvBVqJ0KY4NlAYcwK8AytJPBUUxDe3r6KsC+g8jsbOps73K7sZImcyUZKRecUJ0zUauvKmlbw2FEMf6MUds4PLQ18J5ny9S/NTxB8S6ItG2yTQe4aRcfU+P6D5sNJbqxwYrSJOaU62ge+gbzOZv2pASa+eA1VKnc3LzdE592v4IAwfbP5v+tSlCvQvw9xmecbmqDIwOwR2Qr3RYIBcvYOJJV+VYhUt5zlNgcYNC6DUzSToC49yT0+okCjaA15GnX5NJ/Kd6l/oJytKwNh7IkBUAlAplm4S6Gnawg3xUbaKR37+YQ9GRc0YxwP8Tume/4+u0XAggZOts/gmVW55+9Nsc43wyEdq8yceitG8zY9p2BWyJM4T7rbRXboQUZoeDI/eo8kH+/j3jrPvYTbFWmUshXZZ8ADW52Xy4X9uxtbNNcvITB/vG3B5YAHdaLA2ql4dUgo15m96EO4Vi25JdH6eXLCT3z9GiI7//x7IbAfIe1SpJhS7q6TLGzKQk8EHUqLa5oMjWpwP7dxb/30Hx2wVcsIpSj06Q5KI+K+uT+Bat590YLOmkM+9VCuLcJP2ysbAqFvo5vRcIQqoYpBFJkG5UFY8OpNkNODqvoB+WcjDCfjIplFxcmbd1UNXAxW+/1LpMj40eHZpWjfAUdjDjTYBPE4J4+iICXeGa+DtAEMVTKrMUHRg+W866gRprzQoO86OmwMFxNkcMCxg2r7nYqcyeT+0e0+IvQr/rQUQYEVH2QKfuhOhfUBp9O9v6fFBE9u5cCvAkpA655Fkwv8+p7KzSRulJIWQmLnzKT3Gi0oKtoq/UGN1GqGZB7IN3jhp168plHHfObDcKkoa8dXKZysr2SiJstjpur0Ry4U21/19tisAUZLAgJorc+toSVmaPoES2DTbiDney9GOecaX/QaChdRwu4Vcbleqhx6MCFEFx5Rj/fm1zP6h2FoIx0Iho/kih8BL3dTn3ZVBMzBB0gUtzaZzMwoqcf3TUxeSNwfwGvKZz4Fsi9yWytDNET9VhsGtbGD1W1XrGxakjm8XaxdX1JtUImXA3IM04nMvCNfKzNYiIjBf/jeez5d1rU8BcBzEkLbIjTb88Pd5e7hYr2gBATMdlbtZ5ewBNmafsLrdDbJ8769b3vEGG1IcW3fEimMZBPw6jPqgLkQN636BwIxunwt86d2Hc+DhKgZrkCqQZ6k0jZPBk97bCA+Yt48Uu9vrKDpwC9eAee2oKmOMp5lO/m7MlmXR8vEaAr6ltD/40kxIRxhyVUosCEMKwMztFH1+/Ad8j8qSqJWVZR9KLU5dVvB6w9h5Fg1nSh7dPD6LUSGP5lDHkbfWvRAFR8VxqK9tqBCYQwsWN0Rgm2aD0kSZ7eUybm0H3r+RLmrI=
     properties :
      x : 207
      y : 6
@@ -204,6 +204,10 @@ window :
      p_codes :
       -
         code : |1+
+         moimeme = 2
+        type : 14
+      -
+        code : |1+
          ExécuteTraitement(BTN_Actualiser_le_Graphique,trtClic)
         type : 17
   -
@@ -261,7 +265,7 @@ window :
      p_codes :
       -
         code : |1+
-         moimeme = 2
+         //moimeme = 2
         type : 14
       -
         code : |1+

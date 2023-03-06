@@ -86,18 +86,18 @@ window :
          
          TBLH_Taches_non_finies..AffichageActif = faux
          
-         pour tout element oPrj de ClProjet.aoListeProjets()
+         pour tout element oPrj de ClProjet.aoListeProjets().aItems()
          	
-         	si znIdProjet_P dans (0, oPrj.Get_IdUnique()) alors
+         	si znIdProjet_P dans (0, oPrj.ZF_Get_IdUnique()) alors
          		
          		nLignePrj = TableAjouteLigne(TBLH_Taches_non_finies)
          		TBLH_Taches_non_finies[nLignePrj].COL_Taches	= oPrj.p_sNom
          		
-         		POUR TOUT ELEMENT oUS DE oPrj.aoListeUS()
+         		POUR TOUT ELEMENT oUS DE oPrj.aoListeUS().aItems()
          			nLigneUS = TableAjouteFils(TBLH_Taches_non_finies,nLignePrj)
          			TBLH_Taches_non_finies[nLigneUS].COL_Taches	= oUS.p_sCodeUserStory + " - " + oUS.sNommination_US()
          			
-         			pour tout element oTache de oUS.aoListeTaches()
+         			pour tout element oTache de oUS.aoListeTaches().aItems()
          				si 0 < oTache.p_nNum_Sprint_Demarrage <= goapp.m_nNumeroDuSprintActuel et ...
          						pas oTache.p_bAnnule ET ...
          						PAS oTache.p_bBrouillon ET ...

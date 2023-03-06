@@ -17,7 +17,7 @@ class :
      code : |1+
       ClSchem_Axe est une Classe
       PUBLIC
-      	hérite de ClObjDB
+      	hérite de ClZF_ObjDB
       	m_sLibelle est une chaîne				<MAPPING=Libelle>
       	m_sCMTR est une chaîne 					<MAPPING=CMTR>
       	m_nOrdre est un entier sur 2 octets		<MAPPING=Ordre>
@@ -36,7 +36,7 @@ class :
       //Déclaration du constructeur de la classe d'accès aux données.
       Ancêtre.Constructeur(Scr_Process_Metier_Axe..Nom, Scr_Process_Metier_Axe.IDScr_Process_Metier_Axe..Nom, nID_P)
       
-      :Charge()
+      //:ZF_Charge()
       
       //SI nId_P <> 0 ALORS
       //	:m_oSchemParent <- ClSchem.GetObj(Scr_Process_Metier_Axe.IDScr_Process_Metier)
@@ -69,7 +69,25 @@ class :
       //
       PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClSchem_Axe
       
-      renvoyer ClObjDB.GetObj("ClSchem_Axe", nIdUnique_P)
+      renvoyer ClZF_ObjDB.ZF_GetObj("ClSchem_Axe", nIdUnique_P)
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422515824549313416
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 1437896422377688212
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDB.pre_enregistre
+      PROCÉDURE PROTÉGÉE  pre_enregistre()<métier>:Vide
+      
      type : 458752
   procedure_templates : []
   property_templates : []

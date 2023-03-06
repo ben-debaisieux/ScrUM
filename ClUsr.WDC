@@ -15,29 +15,45 @@ class :
   type_code : 10
   p_codes :
    -
-     code : |1-
+     code : |1+
       ClUsr est une Classe
-      	Hérite de ClObjDB
-      	
-      	
-      	prive
-      		m_sNom est une chaîne <MAPPING=Nom>
-      		m_sEMail est une chaîne <MAPPING=eMail>
-      		m_sService est une chaîne <MAPPING=Service>
-      		m_sLogin_AD est une chaîne <MAPPING=Login_AD>
-      		m_bTop_Equip_Informatique est un booléen <MAPPING=Top_Equip_Informatique>
+      	Hérite de ClZF_ObjDB
+      
+      prive
+      	m_sNom est une chaîne <MAPPING=Nom>
+      	m_sEMail est une chaîne <MAPPING=eMail>
+      	m_sService est une chaîne <MAPPING=Service>
+      	m_sLogin_AD est une chaîne <MAPPING=Login_AD>
+      	m_bTop_Equip_Informatique est un booléen <MAPPING=Top_Equip_Informatique>
+      GLOBAL
+      PUBLIC
+      	mg_oEx_IdAbsentAD				est un ClZF_Exception dynamique
+      	mg_oEx_UsrReferenceParPrj		est un ClZF_Exception dynamique
+      	mg_oEx_UsrReferenceParUS		est un ClZF_Exception dynamique
+      	mg_oEx_UsrReferenceParMessage	est un ClZF_Exception dynamique
       FIN
        
       ETypeUsr est une énumération
       	usr_tous
-      	usr_dev
+      	usr_invite
       	usr_chef_de_projet
       fin
+      ETypeInter est une énumération
+      	usr_tous
+      	usr_Dev
+      	usr_Fonc
+      FIN
+      
       ETypeTest est une énumération
       	test_unitaire
       	test_fonctionnel
       fin
        
+      
+      mg_oEx_IdAbsentAD				= allouer un ClZF_Exception("Identifiant AD introuvable : ""%1"".")
+      mg_oEx_UsrReferenceParPrj		= allouer un ClZF_Exception("Cet utilisateur est responsable ou invité d'un projet, impossible de le supprimer")
+      mg_oEx_UsrReferenceParUS		= allouer un ClZF_Exception("Cet utilisateur est responsable d'une User Story, impossible de le supprimer")
+      mg_oEx_UsrReferenceParMessage	= allouer un ClZF_Exception("Cet utilisateur a posté au moins un message, impossible de le supprimer")
      type : 131072
   procedures :
    -
@@ -47,10 +63,10 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Constructeur ( [<nId_P> est entier])
+      //Constructeur ( [<nID_P> est entier])
       //
       // Paramètres :
-      //	nId_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nId_P>
+      //	nID_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nId_P>
       // Valeur de retour :
       // 	Aucune
       //
@@ -60,14 +76,13 @@ class :
       
       
       
+      // 	sdSource_P (source de données - valeur par défaut=0) : <indiquez ici le rôle de sdSource_P>
       PROCEDURE Constructeur(LOCAL nID_P est un entier = 0)
       
       Ancêtre.Constructeur(Scr_Usr..Nom, Scr_Usr.IDScr_Usr..Nom, nID_P)
       
-      //stop si nID_P = 0
-      
       //Chargement des données dans l'instance.
-      :Charge()
+      //:ZF_Charge()
      type : 589824
    -
      name : Destructeur
@@ -95,13 +110,13 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION GLOBAL asListeUsr(filtre_p est un ETypeUsr = usr_tous)
+      FONCTION GLOBAL asListeUsr(filtre_p est un ETypeInter = ETypeInter.usr_tous)
       
       asRetour est un tableau associatif de chaînes
       oUsrTmp est un ClUsr dynamique
       
-      pour tout element oUsrTmp de ::aoListeUsr(filtre_p)
-      	asRetour[oUsrTmp.Get_IdUnique()] = oUsrTmp.m_sNom
+      pour tout element oUsrTmp de ::aoListeUsr(filtre_p).aItems()
+      	asRetour[oUsrTmp.ZF_Get_IdUnique()] = oUsrTmp.m_sNom
       FIN
       
       
@@ -119,70 +134,64 @@ class :
       // Paramètres :
       //	sNumAD_P (chaîne ANSI) : <indiquez ici le rôle de nNNumAD_P>
       // Valeur de retour :
-      // 	Type indéterminé : // 	Aucune
+      // 	ClUsr : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION GLOBAL nGetIdDeNumAD(LOCAL sNumAD_P est une chaîne)
-      
+      FONCTION GLOBAL nGetIdDeNumAD(LOCAL sNumAD_P est une chaîne)<métier>:clusr
       
       HLitRecherche(Scr_Usr,Login_AD,sNumAD_P,hIdentique+hLimiteParcours)
       si pas HTrouve(Scr_Usr) ALORS
-      	ExceptionDéclenche(1,"Identifiant AD introuvable.")
+      	mg_oEx_IdAbsentAD.ZF_Declenche([sNumAD_P])
+      	//ExceptionDéclenche(1,"Identifiant AD introuvable.")
       FIN
-      RENVOYER Scr_Usr.IDScr_Usr
+      
+      RENVOYER ::GetObj(Scr_Usr.IDScr_Usr)
      type : 458752
    -
-     name : aoTaches_MesTaches
+     name : oTaches_MesTaches
      procedure_id : 2202419580284796419
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] aoTaches_MesTaches ()
+      //[ <Résultat> = ] oTaches_MesTaches ()
       //
       // Paramètres :
       //	Aucun
+      
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	ClColTaches : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
       //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
-      FONCTION aoTaches_MesTaches()
+      FONCTION oTaches_MesTaches():ClColTaches
       
-      sdMesTaches est une Source de Données
+      //sdMesTaches est une Source de Données
       sReq est une chaîne
-      aoTachesEnDev est un tableau de ClTache dynamique
+      oTachesEnDev est un ClColTaches
       
       
       //Récupération des taches en cours, de l'utilisateur.
-      sReq = ChaîneConstruit([
+      sReq = [
       	SELECT
-      		Scr_Tache.IDScr_Tache
+      		Scr_Tache.*
+      		--Scr_Tache.IDScr_Tache
       	FROM Scr_Tache
       	WHERE Scr_Tache.Top_Brouillon = 0
       		AND Scr_Tache.Top_Annule = 0
       		AND Scr_Tache.Top_Realise = 0
       		AND Scr_Tache.Num_Sprint_Demarrage is not Null
-      		AND Scr_Tache.IDScr_Usr_Dev = %1
-      		AND Scr_Tache.Statut <> %2
-      		
-      ], :Get_IdUnique(), ...
-      	ClTache.cstStatut_Suspendu)
-      	
-      	SI goApp.Rsql(sdMesTaches,sReq,Vrai) ALORS
-      	POUR TOUT sdMesTaches
-      		TableauAjouteRéférence(aoTachesEnDev, ClTache.GetObj(sdMesTaches.IDScr_Tache))
-      	FIN
-      FIN
+      		AND Scr_Tache.IDScr_Usr_Dev = [%:ZF_Get_IdUnique()%]
+      		AND Scr_Tache.Statut <> [%ClTache.cstStatut_Suspendu%]
+      ]
       
-      HAnnuleDéclaration(sdMesTaches)
+      oTachesEnDev.ZF_LoadSQL(sReq)
       
-      
-      renvoyer aoTachesEnDev
+      renvoyer oTachesEnDev
      type : 458752
    -
      name : Utilisateur_Est_Chef_De_Projet
@@ -221,41 +230,41 @@ class :
       
       	GROUP BY Scr_Usr_Projet.IDScr_Usr
       	
-      ], :Get_IdUnique())
+      ], :ZF_Get_IdUnique())
       
-      si goApp.Rsql(sdRecherche,sReq) alors
+      goApp.Rsql(sdRecherche,sReq)
       	
-      	HLitPremier(sdRecherche)
-      	si pas HEnDehors(sdRecherche) alors
-      		si sdRecherche.NbProjets > 0 alors
-      			bChefdeProjet = vrai
-      		sinon
-      			bChefdeProjet = faux
-      		FIN
-      	fin
-      FIN
+      HLitPremier(sdRecherche)
+      si pas HEnDehors(sdRecherche) alors
+      	si sdRecherche.NbProjets > 0 alors
+      		bChefdeProjet = vrai
+      	sinon
+      		bChefdeProjet = faux
+      	FIN
+      fin
+      
       HAnnuleDéclaration(sdRecherche)
       
       renvoyer bChefdeProjet
      type : 458752
    -
-     name : User_Story_Dev_Prevu_Tout_Les_Projets
+     name : User_Story_Dev_Prevu_Tout_Les_Projets_old
      procedure_id : 2202877392611506817
      type_code : 12
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] User_Story_Dev_Prevu_Tout_Les_Projets ()
+      //[ <Résultat> = ] User_Story_Dev_Prevu_Tout_Les_Projets_old ()
       //
       // Paramètres :
       //	Aucun
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	tableau (STR_UserStorie) : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION GLOBAL User_Story_Dev_Prevu_Tout_Les_Projets()
+      FONCTION GLOBAL User_Story_Dev_Prevu_Tout_Les_Projets_old()
       
       aStUStableau est un tableau de STR_UserStorie
       
@@ -295,29 +304,28 @@ class :
       	
       ])
       
-      SI goApp.Rsql(sdRechercheUserStory,sReq) ALORS
-      	POUR TOUT sdRechercheUserStory 
-      		stUSTableau.nIDUserStorie = sdRechercheUserStory.IDScr_UserStory
-      		stUSTableau.sCodeUserStorie = sdRechercheUserStory.CodeUserStory
-      		stUSTableau.sBesoinUserStorie = sdRechercheUserStory.JAiBesoinDe
-      		stUSTableau.sProjet = sdRechercheUserStory.Nom
-      		
-      		stUSTableau.nSprint = sdRechercheUserStory.Sprint
-      		//Si le sprint = 0 alors la clef prend la valeur 0, sinon elle prend la valeur - numSprint
-      		SI stUSTableau.nSprint = 0 ALORS
-      			stUSTableau.nOrdre = 999999999
-      		SINON
-      			stUSTableau.nOrdre = stUSTableau.nSprint
-      		FIN
-      		
-      		pclSprint <- ClSprint.GetObj(sdRechercheUserStory.Sprint)
-      		stUSTableau.sNPeriodeDeDemarage = pclSprint.sSprint_Date()
-      		oUs <- ClUserStory.GetObj(sdRechercheUserStory.IDScr_UserStory)
-      		stUSTableau = oUs.User_Story_Poids()
-      		
-      		
-      		TableauAjoute(aStUStableau,stUSTableau)
+      goApp.Rsql(sdRechercheUserStory,sReq)
+      POUR TOUT sdRechercheUserStory 
+      	stUSTableau.nIDUserStorie = sdRechercheUserStory.IDScr_UserStory
+      	stUSTableau.sCodeUserStorie = sdRechercheUserStory.CodeUserStory
+      	stUSTableau.sBesoinUserStorie = sdRechercheUserStory.JAiBesoinDe
+      	stUSTableau.sProjet = sdRechercheUserStory.Nom
+      	
+      	stUSTableau.nSprint = sdRechercheUserStory.Sprint
+      	//Si le sprint = 0 alors la clef prend la valeur 0, sinon elle prend la valeur - numSprint
+      	SI stUSTableau.nSprint = 0 ALORS
+      		stUSTableau.nOrdre = 999999999
+      	SINON
+      		stUSTableau.nOrdre = stUSTableau.nSprint
       	FIN
+      	
+      	pclSprint <- ClSprint.GetObj(sdRechercheUserStory.Sprint)
+      	stUSTableau.sNPeriodeDeDemarage = pclSprint.sSprint_Date()
+      	oUs <- ClUserStory.GetObj(sdRechercheUserStory.IDScr_UserStory)
+      	stUSTableau = oUs.User_Story_Poids()
+      	
+      	
+      	TableauAjoute(aStUStableau,stUSTableau)
       FIN
       
       HAnnuleDéclaration(sdRechercheUserStory)
@@ -333,60 +341,59 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] aoListeUsr ( [<filtre_p> est ClUsr.ETypeUsr])
+      //[ <Résultat> = ] aoListeUsr ( [<eFiltre_p> est ClUsr.ETypeUsr])
       //
       // Paramètres :
-      //	filtre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de filtre_p>
+      //	eFiltre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de eFiltre_p>
+      
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	ClColUsr : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
       //	filtre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de filtre_p>
-      FONCTION GLOBAL aoListeUsr(filtre_p est un ETypeUsr = usr_tous)
+      //	filtre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de filtre_p>
+      FONCTION GLOBAL aoListeUsr(eFiltre_p est un ETypeInter = ETypeInter.usr_tous):ClColUsr
       
       
       
-      aoRetour est un tableau de ClUsr
-      sdSource_Liste_Usr est une Source de Données
-      sReq_Liste_Usr est une chaîne
-      sWhere est une chaîne
+      oRetour				est un ClColUsr
+      //sdSource_Liste_Usr	est une Source de Données
+      sReq_Liste_Usr		est une chaîne
+      sWhere				est une chaîne
       
-      selon filtre_p
-      	CAS usr_tous
+      selon eFiltre_p
+      	CAS ETypeInter.usr_tous
       		sWhere = ""
-      	CAS usr_dev
+      	CAS ETypeInter.usr_dev
       		sWhere = "WHERE Scr_Usr.Top_Equip_Informatique = 1"
-      	CAS usr_chef_de_projet
-      		sWhere = [
-      		WHERE Scr_Usr.IDScr_Usr in (
-      			SELECT DISTINCT Scr_Usr_Projet.IDScr_Usr
-      			FROM Scr_Usr_Projet
-      			WHERE Scr_Usr_Projet.Top_Chef_Projet = 1
-      			)
-      		]
+      	CAS ETypeInter.usr_Fonc
+      		sWhere = "WHERE Scr_Usr.Top_Equip_Informatique = 0"
+      //		sWhere = [
+      //		WHERE Scr_Usr.IDScr_Usr in (
+      //			SELECT DISTINCT Scr_Usr_Projet.IDScr_Usr
+      //			FROM Scr_Usr_Projet
+      //			WHERE Scr_Usr_Projet.Top_Chef_Projet = 1
+      //			)
+      //		]
       FIN
       
-      sReq_Liste_Usr = ChaîneConstruit([
+      sReq_Liste_Usr = [
       	SELECT
-      		Scr_Usr.IDScr_Usr,
-      		Scr_Usr.Nom
+      		Scr_Usr.*
+      		--Scr_Usr.IDScr_Usr--,
+      		--Scr_Usr.Nom
       	FROM Scr_Usr
       	
-      	%1
+      	[%sWhere%]
       	
       	ORDER BY Scr_Usr.Nom
-      ], sWhere)
+      ]
       
-      SI goApp.Rsql(sdSource_Liste_Usr,sReq_Liste_Usr) ALORS
-      	POUR TOUT sdSource_Liste_Usr
-      		TableauAjouteRéférence(aoRetour, ClUsr.GetObj(sdSource_Liste_Usr.IDScr_Usr))
-      //		TableauAjouteRéférence(aoRetour, allouer un ClUsr(sdSource_Liste_Usr.IDScr_Usr))
-      	FIN
-      FIN
+      oRetour.ZF_LoadSQL(sReq_Liste_Usr)
       
-      renvoyer aoRetour
+      renvoyer oRetour
      type : 458752
    -
      name : Combo_Charge_Usr
@@ -395,12 +402,12 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Combo_Charge_Usr (<sNomFen_p> est chaîne, <sNomChamps_p> est chaîne [, <eFiltre_p> est ClUsr.ETypeUsr [, <oUsr_P> est ClUsr]])
+      //Combo_Charge_Usr (<sNomFen_p> est chaîne, <sNomChamps_p> est chaîne [, <eFiltre_p> est ClUsr.ETypeInter [, <oUsr_P> est ClUsr]])
       //
       // Paramètres :
       //	sNomFen_p (chaîne ANSI) : <indiquez ici le rôle de sNomFen_p>
       //	sNomChamps_p (chaîne ANSI) : <indiquez ici le rôle de sNomChamps_p>
-      //	eFiltre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de eFiltre_p>
+      //	eFiltre_p (ClUsr.ETypeInter) : <indiquez ici le rôle de eFiltre_p>
       //	oUsr_P (ClUsr - valeur par défaut=0) : <indiquez ici le rôle de oUsr_P>
       // Valeur de retour :
       // 	Aucune
@@ -412,7 +419,7 @@ class :
       //	sNomChamps_p (chaîne ANSI) : <indiquez ici le rôle de sNomChamps_p>
       //	filtre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de filtre_p>
       // 	oUsr_P (ClUsr - valeur par défaut=0) : <indiquez ici le rôle de oUsr_P>
-      PROCEDURE GLOBAL Combo_Charge_Usr(sNomFen_p est une chaîne , sNomChamps_p est une chaîne , eFiltre_p est un ETypeUsr = usr_tous, oUsr_P est ClUsr = Null)
+      PROCEDURE GLOBAL Combo_Charge_Usr(sNomFen_p est une chaîne , sNomChamps_p est une chaîne , eFiltre_p est un ETypeInter = ETypeInter.usr_tous, oUsr_P est ClUsr = Null):vide
       
       nNumLigneSel est un entier
       oUsr est un ClUsr dynamique
@@ -421,18 +428,18 @@ class :
       ListeSupprimeTout(sNomComplet)
       ListeAjoute(sNomComplet, "<Aucun>" + gLien(0))
       
-      pour tout element oUsr de ClUsr.aoListeUsr(eFiltre_p)
+      pour tout element oUsr de ClUsr.aoListeUsr(eFiltre_p).aItems()
       	
-      	ListeAjoute(sNomComplet, oUsr.m_sNom + glien(oUsr.Get_IdUnique()))
+      	ListeAjoute(sNomComplet, oUsr.m_sNom + glien(oUsr.ZF_Get_IdUnique()))
       	
-      	si oUsr_P <> null _et_ oUsr.Get_IdUnique() = oUsr_P.Get_IdUnique() ALORS
+      	si oUsr_P <> null _et_ oUsr.ZF_Get_IdUnique() = oUsr_P.ZF_Get_IdUnique() ALORS
       		nNumLigneSel = ListeOccurrence(sNomComplet)
       	FIN
       fin
       
       //Si l'utilisateur n'a pas été trouvé, on l'ajoute à la liste
       SI oUsr_P <> Null et nNumLigneSel = 0 ALORS
-      	ListeAjoute(sNomComplet, oUsr_P.m_sNom + gLien(oUsr_P.Get_IdUnique()))
+      	ListeAjoute(sNomComplet, oUsr_P.m_sNom + gLien(oUsr_P.ZF_Get_IdUnique()))
       	nNumLigneSel = ListeOccurrence(sNomComplet)
       FIN
       
@@ -445,51 +452,44 @@ class :
       
      type : 458752
    -
-     name : aoTaches_MesBrouillons
+     name : oTaches_MesBrouillons
      procedure_id : 2205721558895358880
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] aoTaches_MesBrouillons ()
+      //[ <Résultat> = ] oTaches_MesBrouillons ()
       //
       // Paramètres :
       //	Aucun
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	ClColTaches : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
       //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
-      FONCTION aoTaches_MesBrouillons()
+      FONCTION oTaches_MesBrouillons():ClColTaches
       
-      sdMesBrouillons est une Source de Données
+      //sdMesBrouillons est une Source de Données
       sReq est une chaîne
-      aOTaches est un tableau de ClTache dynamique
+      oTaches est un ClColTaches
       
       	
       //Récupération des taches en brouillon, de l'utilisateur.
-      sReq = ChaîneConstruit([
+      sReq = [
       	SELECT
-      		Scr_Tache.IDScr_Tache
+      		Scr_Tache.*
+      		--Scr_Tache.IDScr_Tache
       	FROM Scr_Tache
       	WHERE Scr_Tache.Top_Brouillon = 1
-      		AND Scr_Tache.IDScr_Usr_createur = %1
-      	
-      ], :Get_IdUnique())
+      		AND Scr_Tache.IDScr_Usr_createur = [%:ZF_Get_IdUnique()%]	
+      ]
       
-      SI goApp.Rsql(sdMesBrouillons,sReq) ALORS
-      	POUR TOUT sdMesBrouillons
-      		TableauAjouteRéférence(aOTaches, ClTache.GetObj(sdMesBrouillons.IDScr_Tache))
-      //		TableauAjouteRéférence(aOTaches, allouer un ClTache(sdMesBrouillons.IDScr_Tache))
-      	FIN
-      FIN
-      
-      HAnnuleDéclaration(sdMesBrouillons)
+      oTaches.ZF_LoadSQL(sReq)
       
       
-      renvoyer aOTaches
+      renvoyer oTaches
      type : 458752
    -
      name : aoMesUS_En_Test
@@ -503,17 +503,17 @@ class :
       // Paramètres :
       //	eTypeTest_P (ClUsr.ETypeTest) : <indiquez ici le rôle de eTypeTest_P>
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	ClColUserStory : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
       //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
-      FONCTION aoMesUS_En_Test(eTypeTest_P est un ETypeTest)
+      FONCTION aoMesUS_En_Test(eTypeTest_P est un ETypeTest):ClColUserStory
       
       sdMestests est une Source de Données
       sReq est une chaîne
-      aoTachesEnDev est un tableau de ClUserStory dynamique
+      oUsEnDev est un ClColUserStory
       sWhere est une chaîne
       oUsTmp est un ClUserStory dynamique
       
@@ -527,7 +527,7 @@ class :
       			Scr_UserStory.IDScr_Usr_TestDev IS NULL
       			)
       			AND Scr_UserStory.EstTesteParEquipeDev = 0
-      		], :Get_IdUnique())
+      		], :ZF_Get_IdUnique())
       		
       	CAS test_fonctionnel
       		
@@ -535,124 +535,49 @@ class :
       		AND Scr_UserStory.IDScr_Usr_Valideur = %1
       		AND Scr_UserStory.EstTesteParEquipeDev = 1
       		AND Scr_UserStory.EstTesteParFonctionnel = 0
-      		], :Get_IdUnique())
+      		], :ZF_Get_IdUnique())
       		
       FIN
       
-      //Récupération des taches en brouillon, de l'utilisateur.
-      sReq = ChaîneConstruit([
-      	SELECT DISTINCT
-      		Scr_UserStory.IDScr_UserStory
+      
+      sReq = [
+      	SELECT 
+      		Scr_UserStory.*
+      		--Scr_UserStory.IDScr_UserStory
       	
       	FROM Scr_UserStory
-      		LEFT OUTER JOIN Scr_Tache AS tmpTachesSignificatives ON (tmpTachesSignificatives.IDScr_UserStory = Scr_UserStory.IDScr_UserStory
-      			AND tmpTachesSignificatives.Top_Realise = 0
-      			AND tmpTachesSignificatives.Top_Annule = 0
-      			AND tmpTachesSignificatives.Top_tache_tech = 0)
-      			
-      		LEFT OUTER JOIN Scr_Tache AS tmpTachesExiste ON (tmpTachesExiste.IDScr_UserStory = Scr_UserStory.IDScr_UserStory)
-      	
-      	WHERE Scr_UserStory.EstTesteParFonctionnel = 0
-      		AND tmpTachesSignificatives.IDScr_UserStory IS NULL		--On ne prend les US qui n'ont pas de taches non finies.
-      		AND tmpTachesExiste.IDScr_UserStory IS NOT NULL			--On ne prend que les US qui ont au moins une tache
-      		%1
-      ], sWhere)
+      	where Scr_UserStory.IDScr_UserStory IN (
+      		SELECT DISTINCT
+      			Scr_UserStory.IDScr_UserStory
+      		
+      		FROM Scr_UserStory
+      			LEFT OUTER JOIN Scr_Tache AS tmpTachesSignificatives ON (tmpTachesSignificatives.IDScr_UserStory = Scr_UserStory.IDScr_UserStory
+      				AND tmpTachesSignificatives.Top_Realise = 0
+      				AND tmpTachesSignificatives.Top_Annule = 0
+      				AND tmpTachesSignificatives.Top_tache_tech = 0)
+      				
+      			LEFT OUTER JOIN Scr_Tache AS tmpTachesExiste ON (tmpTachesExiste.IDScr_UserStory = Scr_UserStory.IDScr_UserStory)
+      		
+      		WHERE Scr_UserStory.EstTesteParFonctionnel = 0
+      			AND Scr_UserStory.Top_Termine = 0
+      			AND tmpTachesSignificatives.IDScr_UserStory IS NULL		--On ne prend les US qui n'ont pas de taches non finies.
+      			AND tmpTachesExiste.IDScr_UserStory IS NOT NULL			--On ne prend que les US qui ont au moins une tache
+      			[%sWhere%]
+      		)
+      ]
       
-      SI goApp.Rsql(sdMestests,sReq) ALORS
-      	POUR TOUT sdMestests
-      		oUsTmp <- ClUserStory.GetObj(sdMestests.IDScr_UserStory)
-      //		oUsTmp <- allouer un ClUserStory(sdMestests.IDScr_UserStory)
-      		si (oUsTmp.Get_NbreTache(ClUserStory.A_faire) + oUsTmp.Get_NbreTache(ClUserStory.EnCours)) = 0 ALORS
-      			TableauAjouteRéférence(aoTachesEnDev, oUsTmp)
-      		FIN
+      goApp.Rsql(sdMestests,sReq)
+      POUR TOUT sdMestests
+      	oUsTmp <- ClUserStory.GetObj(sdMestests.IDScr_UserStory)
+      	si (oUsTmp.Get_NbreTache(ClUserStory.A_faire) + oUsTmp.Get_NbreTache(ClUserStory.EnCours)) = 0 ALORS
+      		oUsEnDev.ZF_addItem(oUsTmp)
       	FIN
       FIN
       
       HAnnuleDéclaration(sdMestests)
       
       
-      renvoyer aoTachesEnDev
-     type : 458752
-   -
-     name : aoListeUsrDev
-     procedure_id : 2207527824020874047
-     type_code : 12
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      // [ <Résultat> = ] aoListeUsrDev ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	tableau : <indiquez ici les valeurs possibles ainsi que leur interprétation>
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      
-      FONCTION GLOBAL aoListeUsrDev()
-      
-      aRésultat est un tableau
-      RENVOYER aRésultat
-     type : 458752
-   -
-     name : aoMesProjets
-     procedure_id : 2209736251406291212
-     type_code : 12
-     code : |1+
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //[ <Résultat> = ] aoMesProjets ( [<eFiltre> est ClUsr.ETypeUsr])
-      //
-      // Paramètres :
-      //	eFiltre (ClUsr.ETypeUsr) : <indiquez ici le rôle de eFiltre>
-      // Valeur de retour :
-      // 	tableau : // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      PROCEDURE aoMesProjets(eFiltre est un ETypeUsr = usr_tous)
-      
-      aoProjets est un tableau de ClProjet
-      sdListProjetScrum est une Source de Données
-      sReq est une chaîne
-      sCond est une chaîne
-      
-      selon eFiltre
-      	CAS usr_tous
-      		//Pas de filtre
-      	CAS usr_dev
-      		sCond = "AND Scr_Usr_Projet.Top_Invite = 1"
-      	CAS usr_chef_de_projet
-      		sCond = "AND Scr_Usr_Projet.Top_Chef_Projet = 1"
-      FIN
-      
-      //Requete SQL
-      sReq = ChaîneConstruit([
-      	SELECT DISTINCT
-      		Scr_Usr_Projet.IDScr_Projet
-      	
-      	FROM Scr_Usr_Projet
-      	
-      	WHERE Scr_Usr_Projet.IDScr_Usr = %1
-      		%2
-      	
-      ], :Get_IdUnique(), ...
-      	sCond)
-      
-      //Execution de la requete
-      SI goApp.Rsql(sdListProjetScrum,sReq) ALORS
-      	pour tout sdListProjetScrum
-      		TableauAjouteRéférence(aoProjets, ClProjet.GetObj(sdListProjetScrum.IDScr_Projet))
-      //		TableauAjouteRéférence(aoProjets, allouer un ClProjet(sdListProjetScrum.IDScr_Projet))
-      	fin
-      fin
-      HAnnuleDéclaration(sdListProjetScrum)
-      
-      renvoyer aoProjets
-      
+      renvoyer oUsEnDev
      type : 458752
    -
      name : pre_enregistre
@@ -674,22 +599,25 @@ class :
       PROCEDURE virtuelle pre_enregistre()
       
       
-      si :m_bEstSupprime ALORS
+      si :ZF_Get_est_supprime() ALORS
       	
       	//verif si l'utilisateur n'est pas responsables de projets ou d'User Story, ou si il n'as pas posté de message
-      	HLitRecherche(Scr_Usr_Projet,IDScr_Usr,:Get_IdUnique(),hIdentique+hLimiteParcours)
+      	HLitRecherche(Scr_Usr_Projet,IDScr_Usr,:ZF_Get_IdUnique(),hIdentique+hLimiteParcours)
       	SI HTrouve(Scr_Usr_Projet) ALORS
-      		ExceptionDéclenche(1, "Cet utilisateur est responsable ou invité d'un projet, impossible de le supprimer")
+      		mg_oEx_UsrReferenceParPrj.ZF_Declenche()
+      //		ExceptionDéclenche(1, "Cet utilisateur est responsable ou invité d'un projet, impossible de le supprimer")
       	FIN
       	
-      	HLitRecherche(Scr_UserStory,IDScr_Usr_Valideur,:Get_IdUnique(),hIdentique+hLimiteParcours)
+      	HLitRecherche(Scr_UserStory,IDScr_Usr_Valideur,:ZF_Get_IdUnique(),hIdentique+hLimiteParcours)
       	SI HTrouve(Scr_UserStory) ALORS
-      		ExceptionDéclenche(1, "Cet utilisateur est responsable d'une User Story, impossible de le supprimer")
+      		mg_oEx_UsrReferenceParUS.ZF_Declenche()
+      //		ExceptionDéclenche(1, "Cet utilisateur est responsable d'une User Story, impossible de le supprimer")
       	FIN
       	
-      	HLitRecherche(Scr_Message,IDScr_Usr,:Get_IdUnique(),hIdentique+hLimiteParcours)
+      	HLitRecherche(Scr_Message,IDScr_Usr,:ZF_Get_IdUnique(),hIdentique+hLimiteParcours)
       	SI HTrouve(Scr_Message) ALORS
-      		ExceptionDéclenche(1, "Cet utilisateur a posté au moins un message, impossible de le supprimer")
+      		mg_oEx_UsrReferenceParMessage.ZF_Declenche()
+      //		ExceptionDéclenche(1, "Cet utilisateur a posté au moins un message, impossible de le supprimer")
       	FIN
       	
       FIN
@@ -705,6 +633,7 @@ class :
       //
       // Paramètres :
       //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      
       // Valeur de retour :
       // 	ClUsr : // 	Aucune
       //
@@ -713,7 +642,7 @@ class :
       //
       PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClUsr
       
-      renvoyer ClObjDB.GetObj("ClUsr", nIdUnique_P)
+      renvoyer ClZF_ObjDB.ZF_GetObj("ClUsr", nIdUnique_P)
      type : 458752
    -
      name : sExport
@@ -724,7 +653,7 @@ class :
       
       sRetour est un json
       
-      sRetour.id					= :m_nidunique
+      sRetour.id					= :ZF_Get_IdUnique()
       sRetour.name				= :m_snom
       sRetour.email				= :m_semail
       sRetour.login_ad			= :m_slogin_ad
@@ -732,6 +661,15 @@ class :
       sRetour.is_team_info		= :m_btop_equip_informatique
       
       renvoyer sRetour
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422513878896693885
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
      type : 458752
   properties :
    -
@@ -748,7 +686,7 @@ class :
       -
         code : |1-
          procédure publique p_bTop_Equip_Informatique(bValeur est un booléen)
-         :EstModif()
+         :ZF_EstModif()
          :m_bTop_Equip_Informatique=bValeur
         type : 2031616
      template_refs : []
@@ -766,7 +704,7 @@ class :
       -
         code : |1-
          procédure publique p_sEMail(sValeur est une chaîne)
-         :EstModif()
+         :ZF_EstModif()
          :m_sEMail=sValeur
         type : 2031616
      template_refs : []
@@ -784,7 +722,7 @@ class :
       -
         code : |1-
          procédure publique p_sLogin_AD(sValeur est une chaîne)
-         :EstModif()
+         :ZF_EstModif()
          :m_sLogin_AD=sValeur
         type : 2031616
      template_refs : []
@@ -802,7 +740,7 @@ class :
       -
         code : |1-
          procédure publique p_sNom(sValeur est une chaîne)
-         :EstModif()
+         :ZF_EstModif()
          :m_sNom=sValeur
         type : 2031616
      template_refs : []
@@ -820,7 +758,7 @@ class :
       -
         code : |1-
          procédure publique p_sService(sValeur est une chaîne)
-         :EstModif()
+         :ZF_EstModif()
          :m_sService=sValeur
         type : 2031616
      template_refs : []

@@ -193,7 +193,7 @@ window :
          			OuvreSoeur(FEN_User_Story_Detail_v2,oUS)
          		CAS zcst_tache
          			oTache <- ClTache.GetObj(TBL_Resultat.COL_Id)
-         			OuvreSoeur(FEN_User_Story_Detail_v2,oTache.m_oUserStoryParent,oTache.Get_IdUnique())
+         			OuvreSoeur(FEN_User_Story_Detail_v2,oTache.p_oUserStoryParent,oTache.Get_IdUnique())
          		AUTRE CAS
          			
          	FIN
@@ -270,7 +270,7 @@ window :
   p_codes :
    -
      code : |1-
-      PROCEDURE MaFenêtre(zaoRes_P est un tableau de ClObjDB dynamique)
+      PROCEDURE MaFenêtre(zaoRes_P est un tableau de ClZF_ObjDB dynamique)
       
       constante
       	zcst_US = "US"
@@ -278,7 +278,7 @@ window :
       fin
    -
      code : |1+
-      oTmp est un ClObjDB dynamique
+      oTmp est un ClZF_ObjDB dynamique
       nLigne est un entier
       sType est une chaîne
       sCode est une chaîne
@@ -302,7 +302,7 @@ window :
       		cas "ClTache"
       			sType = zcst_tache
       			oTache <- oTmp
-      			sPrj = oTache.m_oUserStoryParent.p_oProjetParent.p_sNom
+      			sPrj = oTache.p_oUserStoryParent.p_oProjetParent.p_sNom
       			sCode = oTache.p_sCodeTache
       			sTxt = oTache.p_sDescription
       			
@@ -311,7 +311,7 @@ window :
       	FIN
       	
       	nLigne = TableAjouteLigne(TBL_Resultat)
-      	TBL_Resultat[nLigne].COL_Id		= oTmp.Get_IdUnique()
+      	TBL_Resultat[nLigne].COL_Id		= oTmp.ZF_Get_IdUnique()
       	TBL_Resultat[nLigne].COL_Type	= sType
       	TBL_Resultat[nLigne].COL_Projet	= sPrj
       	TBL_Resultat[nLigne].COL_Code	= sCode

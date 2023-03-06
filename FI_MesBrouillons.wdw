@@ -197,8 +197,8 @@ window :
             SI TableOccurrence(TBL_MesBrouiillons) >= 1 ALORS
             	oTache est un ClTache <- ClTache.GetObj(TBL_MesBrouiillons.COL_IdTache)
             	SI OuiNon(Non, "Confirmez-vous la suppression de la tache :" + RC + oTache.p_sDescription) ALORS
-            		oTache.Supprimer()
-            		oTache.Enregistre()
+            		oTache.ZF_Supprimer()
+            		oTache.ZF_Enregistre()
             		Actualise()
             	FIN
             FIN
@@ -240,7 +240,7 @@ window :
       
       TableSupprimeTout(TBL_MesBrouiillons)
       
-      pour tout element oTache de goApp.m_oUsrCnx.aoTaches_MesBrouillons()
+      pour tout element oTache de goApp.m_oUsrCnx.oTaches_MesBrouillons().aItems()
       	nNumLigne = TableAjouteLigne(TBL_MesBrouiillons)
       	TBL_MesBrouiillons[nNumLigne].COL_IdTache	= oTache.Get_IdUnique()
       	TBL_MesBrouiillons[nNumLigne].COL_Tache		= oTache.p_sDescription

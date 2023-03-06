@@ -17,7 +17,7 @@ class :
    -
      code : |1-
       ClSprint est une Classe
-      		Hérite de ClObjDB
+      		Hérite de ClZF_ObjDB
       
       	m_sNoteDebutDeSprint	est une chaîne							<MAPPING=NoteDebutDeSprint>
       prive
@@ -58,8 +58,8 @@ class :
       PROCEDURE Constructeur(local nID_P est un entier = 0)
       
       ancetre.constructeur(Scr_Sprint..Nom, Scr_Sprint.Num_Sprint..nom,nID_P)
-      //si nID_P = 0 alors stop
-      :Charge()
+      
+      //:ZF_Charge()
      type : 589824
    -
      name : Destructeur
@@ -71,13 +71,13 @@ class :
       PROCEDURE Destructeur()
      type : 655360
    -
-     name : Calcul_Velocite_Moyenne
+     name : Calcul_Velocite_Moyenne_old
      procedure_id : 2201687502152376146
      type_code : 12
      code : |1+
       // Résumé : Calcule la velocité
       // Syntaxe :
-      //Calcul_Velocite_Moyenne ()
+      //Calcul_Velocite_Moyenne_old ()
       //
       // Paramètres :
       //	Aucun
@@ -87,7 +87,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE GLOBAL Calcul_Velocite_Moyenne()
+      PROCEDURE GLOBAL Calcul_Velocite_Moyenne_old():Vide
       
       nNbrSprint est un entier = 1 //compte le nombre de sprint pour le calcul de la moyenne
       nPointsSprint est un entier = 0 //compte le nb de points accumulé de chaque sprint
@@ -108,37 +108,38 @@ class :
       	FROM Scr_Sprint
       	
       	WHERE Scr_Sprint.Top_Termine = 1
-      		AND Scr_Sprint.Num_Sprint <> 0
       	
-      	GROUP BY Scr_Sprint.Num_Sprint,
-      		Scr_Sprint.NbPointsRealise
+      	ORDER BY Scr_Sprint.Num_Sprint
       	
       ]
       
       //Recherche de tout les sprint avec le nb de point réalisé
-      SI goApp.Rsql(sdToutLesSprint, sReq) ALORS
-      	Pour TOUT sdToutLesSprint
-      		
-      		nNumSprint = sdToutLesSprint.Num_Sprint
-      		//si le Sprint n'est pas le sprint actuel alors on ajoute au total et on divise par le nombre de sprint
-      		SI nNumSprint <> nNumSprintActuel alors
-      			nPointsSprint += sdToutLesSprint.NbPointsRealise
-      			nVelocitéMoyenne			= nPointsSprint / nNbrSprint //vélocité moyenne = Points du Sprint / nbrDeSprint
-      			goApp.m_nVelociteMoyenne	= nVelocitéMoyenne
-      		Sinon //Si c'est le sprint actuel on lui donne la vélocité du dernier sprint passé 
-      			nVelocitéMoyenne			= goapp.m_nVelociteMoyenne 
-      		fin
-      		
-      		
-      		//puis on modifie la vélocité moyenne dans la base de données
-      		oSprint <- ClSprint.GetObj(nNumSprint)
+      goApp.Rsql(sdToutLesSprint, sReq)
+      HLitPremier(sdToutLesSprint,hSansRafraîchir)
+      tantque pas HEnDehors(sdToutLesSprint)
+      	
+      	nNumSprint = sdToutLesSprint.Num_Sprint
+      	//si le Sprint n'est pas le sprint actuel alors on ajoute au total et on divise par le nombre de sprint
+      	SI nNumSprint <> nNumSprintActuel alors
+      		nPointsSprint += sdToutLesSprint.NbPointsRealise
+      		nVelocitéMoyenne			= nPointsSprint / nNbrSprint //vélocité moyenne = Points du Sprint / nbrDeSprint
+      		goApp.m_nVelociteMoyenne	= nVelocitéMoyenne
+      	Sinon //Si c'est le sprint actuel on lui donne la vélocité du dernier sprint passé 
+      		nVelocitéMoyenne			= goapp.m_nVelociteMoyenne 
+      	fin
+      	
+      	
+      	//puis on modifie la vélocité moyenne dans la base de données
+      	oSprint <- ClSprint.GetObj(nNumSprint)
+      	si oSprint.m_nVelociteMoyenneRes <> nVelocitéMoyenne alors
       		oSprint.m_nVelociteMoyenneRes = nVelocitéMoyenne
-      		oSprint.Enregistre()
-      		
-      		
-      		nNbrSprint++ 
-      	FIN
+      		oSprint.ZF_Enregistre()
+      	fin
+      	
+      	nNbrSprint++ 
+      	HLitSuivant(sdToutLesSprint)
       FIN
+      
       HAnnuleDéclaration(sdToutLesSprint)
       
      type : 458752
@@ -160,7 +161,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       
-      PROCEDURE VIRTUELLE pre_enregistre()
+      PROCEDURE VIRTUELLE pre_enregistre():Vide
       
       
       //Pour les Sprint historique : On verifie que la date du sprint est inferieure à la date actuelle pour determiner si le sprint est términé ou pas
@@ -168,13 +169,13 @@ class :
       	:m_bTop_Termine = Vrai
       FIN
       
-      si :bModeAjout() ALORS
+      si :ZF_bModeAjout() ALORS
       	//Réinitialisation du sprint max mémorisé.
       	::mg_nNumSprint_max = 0
       FIN
       
       si :m_nNumSprint <> 0 ALORS
-      	:m_nIdUnique = :m_nNumSprint
+      	:p_ZF_nIdUnique = :m_nNumSprint
       	Scr_Sprint.Num_Sprint = :m_nNumSprint
       FIN
      type : 458752
@@ -232,22 +233,19 @@ class :
       	WHERE Scr_Sprint.Top_Termine = 0
       ]
       
-      Si goApp.Rsql(sdToutLesSprints,sReq) ALORS
-      	SI HLitPremier(sdToutLesSprints) > 0 
-      		Si Htrouve(sdToutLesSprints) alors
-      			//On récupère le numéro du sprint
-      			nNumSprint = sdToutLesSprints.Num_Sprint
-      			goApp.m_nVelociteMoyenne = sdToutLesSprints.VelociteMoyenneRes
-      		Sinon
-      			info("aucun sprint trouvé", ErreurInfo())
-      		FIN
-      	SINON
-      		//A faire : NumSprintActuel : gerer le cas pas de sprint trouvé : erreur ??
-      		//Si aucun sprint en cours on renvoie le dernier sprint réalisé
-      		//nNumSprint = NumDernierSprintRealise()
+      goApp.Rsql(sdToutLesSprints,sReq)
+      SI HLitPremier(sdToutLesSprints) > 0 
+      	Si Htrouve(sdToutLesSprints) alors
+      		//On récupère le numéro du sprint
+      		nNumSprint = sdToutLesSprints.Num_Sprint
+      		goApp.m_nVelociteMoyenne = sdToutLesSprints.VelociteMoyenneRes
+      	Sinon
+      		info("aucun sprint trouvé", ErreurInfo())
       	FIN
-      Sinon
-      	Info("erreur de la requete SQL", ErreurInfo())
+      SINON
+      	//A faire : NumSprintActuel : gerer le cas pas de sprint trouvé : erreur ??
+      	//Si aucun sprint en cours on renvoie le dernier sprint réalisé
+      	//nNumSprint = NumDernierSprintRealise()
       FIN
       
       HAnnuleDéclaration(sdToutLesSprints)
@@ -273,7 +271,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	nPoints_p (entier) : Le nombre de points
-      PROCEDURE GLOBAL Sprint_Points_Realise_Maj(LOCAL nSprint_p est un entier)
+      PROCEDURE GLOBAL Sprint_Points_Realise_Maj(LOCAL nSprint_p est un entier):Vide
       
       nPoint est un entier
       
@@ -287,15 +285,10 @@ class :
       	WHERE Scr_Tache.Num_Sprint_Fin = [%nSprint_p%]
       ]
       
-      Si goApp.Rsql(sdRechercheNbPointRealise,sReq) ALORS
-      	HLitPremier(sdRechercheNbPointRealise)
-      	si htrouve(sdRechercheNbPointRealise) ALORS
-      		nPoint = sdRechercheNbPointRealise.Total
-      	sinon
-      		Erreur(ErreurInfo(errComplet))
-      	FIN
-      sinon
-      	erreur(erreurinfo(errComplet))
+      goApp.Rsql(sdRechercheNbPointRealise,sReq)
+      HLitPremier(sdRechercheNbPointRealise)
+      si htrouve(sdRechercheNbPointRealise) ALORS
+      	nPoint = sdRechercheNbPointRealise.Total
       FIN
       
       //Modification dans la base de données
@@ -351,19 +344,16 @@ class :
       	FROM Scr_Tache
       	
       	WHERE
-      		[%sChoixSprint%] = [%:Get_IdUnique()%]
+      		[%sChoixSprint%] = [%:ZF_Get_IdUnique()%]
       		AND Scr_Tache.Top_Brouillon = 0
       ]
       
-      SI goApp.Rsql(sdRecherchePointsRestant,sReq) ALORS
-      	HLitPremier(sdRecherchePointsRestant)
-      	SI HTrouve (sdRecherchePointsRestant) ALORS
-      		nPtsSprint = sdRecherchePointsRestant.Points
-      	SINON
-      		nPtsSprint = 0
-      	FIN
+      goApp.Rsql(sdRecherchePointsRestant,sReq)
+      HLitPremier(sdRecherchePointsRestant)
+      SI HTrouve (sdRecherchePointsRestant) ALORS
+      	nPtsSprint = sdRecherchePointsRestant.Points
       SINON
-      	Erreur(ErreurInfo(errComplet))
+      	nPtsSprint = 0
       FIN
       
       HAnnuleDéclaration(sdRecherchePointsRestant)
@@ -387,7 +377,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE SetNumSprint(LOCAL nNumSprint_P est un entier)
+      PROCEDURE SetNumSprint(LOCAL nNumSprint_P est un entier):vide
       
       :m_nNumSprint = nNumSprint_P
      type : 458752
@@ -440,30 +430,29 @@ class :
       	FROM Scr_Tache
       		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
       	
-      	WHERE Scr_Tache.Num_Sprint_Demarrage = [%:Get_IdUnique()%]
+      	WHERE Scr_Tache.Num_Sprint_Demarrage = [%:ZF_Get_IdUnique()%]
       	
       	ORDER BY val_etat
       ]
       
-      si goApp.Rsql(sdRechercheTaches,sReq) alors
+      goApp.Rsql(sdRechercheTaches,sReq)
       	
-      	pour TOUT sdRechercheTaches 
-      		stTache = COL_Scrum.Tache_Charger(sdRechercheTaches.IDScr_Tache) //Procédure qui rempli la structure
-      		selon sdRechercheTaches.val_etat
-      			cas 1 : 
-      				stTache.sEtat = "A faire"
-      			cas 2 :
-      				stTache.setat = "Commencée"
-      			cas 3 :
-      				stTache.setat = "Terminée"
-      			AUTRE CAS	
-      		FIN
-      		
-      		stTache.sBesoinUserStory = sdRechercheTaches.JAiBesoinDe
-      		
-      		tableauajoute(aTaches,stTache)
-      		
+      pour TOUT sdRechercheTaches 
+      	stTache = COL_Scrum.Tache_Charger(sdRechercheTaches.IDScr_Tache) //Procédure qui rempli la structure
+      	selon sdRechercheTaches.val_etat
+      		cas 1 : 
+      			stTache.sEtat = "A faire"
+      		cas 2 :
+      			stTache.setat = "Commencée"
+      		cas 3 :
+      			stTache.setat = "Terminée"
+      		AUTRE CAS	
       	FIN
+      	
+      	stTache.sBesoinUserStory = sdRechercheTaches.JAiBesoinDe
+      	
+      	tableauajoute(aTaches,stTache)
+      	
       FIN
       
       HAnnuleDéclaration(sdRechercheTaches)
@@ -489,7 +478,7 @@ class :
       //
       PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClSprint
       
-      renvoyer ClObjDB.GetObj("ClSprint", nIdUnique_P)
+      renvoyer ClZF_ObjDB.ZF_GetObj("ClSprint", nIdUnique_P)
      type : 458752
    -
      name : nGetNbPointsRealises
@@ -515,16 +504,15 @@ class :
       		FROM Scr_Tache
       		
       		WHERE 
-      			Scr_Tache.Num_Sprint_Fin = [%:Get_IdUnique()%]
+      			Scr_Tache.Num_Sprint_Fin = [%:ZF_Get_IdUnique()%]
       			and Scr_Tache.Top_Brouillon = 0
       			and Scr_Tache.Top_Annule = 0			
       	]
       	
-      	SI goapp.RSQL(sdCountPoint,sReq) ALORS
-      		HLitPremier(sdCountPoint)
-      		si pas HEnDehors(sdCountPoint) ALORS
-      			nRetour = sdCountPoint.NbrPoints
-      		FIN
+      	goapp.RSQL(sdCountPoint,sReq)
+      	HLitPremier(sdCountPoint)
+      	si pas HEnDehors(sdCountPoint) ALORS
+      		nRetour = sdCountPoint.NbrPoints
       	FIN
       	
       	HAnnuleDéclaration(sdCountPoint)
@@ -537,36 +525,31 @@ class :
      procedure_id : 2255173321961142998
      type_code : 12
      code : |1-
-      procédure publique globale aoListeSprint():tableau de ClSprint
+      procédure publique globale aoListeSprint():ClColSprint
       
-      sdRechercheSprint est une source de données
+      //sdRechercheSprint est une source de données
       sReq est une chaîne
-      oORetour est un tableau de ClSprint
+      oSprints est un ClColSprint
       
       sReq = [
       	SELECT
-      		Scr_Sprint.Num_Sprint
+      		Scr_Sprint.*
       	FROM
       		Scr_Sprint
       	ORDER BY
       		Scr_Sprint.Num_Sprint
       ]
       
-      SI goApp.Rsql(sdRechercheSprint, sReq)
-      	POUR TOUT sdRechercheSprint 
-      		TableauAjouteRéférence(oORetour, ClSprint.GetObj(sdRechercheSprint.Num_Sprint))
-      	FIN
-      FIN
-      HAnnuleDéclaration(sdRechercheSprint)
+      oSprints.ZF_LoadSQL(sReq)
       
-      renvoyer oORetour
+      renvoyer oSprints
      type : 458752
    -
      name : DefSprint
      procedure_id : 2257054495737300322
      type_code : 12
      code : |1-
-      procédure DefSprint(local dDateDebut_p est une date, LOCAL dDateFin_p est une date, LOCAL nNbreSemaines_p est un entier)
+      procédure DefSprint(local dDateDebut_p est une date, LOCAL dDateFin_p est une date, LOCAL nNbreSemaines_p est un entier):vide
       
       :m_dDateDebut		= dDateDebut_p
       :m_dDateFin			= dDateFin_p
@@ -623,16 +606,15 @@ class :
       	FROM Scr_Tache
       	
       	WHERE 
-      		Scr_Tache.Num_Sprint_Demarrage = [%:Get_IdUnique()%]
+      		Scr_Tache.Num_Sprint_Demarrage = [%:ZF_Get_IdUnique()%]
       		and Scr_Tache.Top_Brouillon = 0
       		and Scr_Tache.Top_Annule = 0
       		
       ]
-      SI goapp.RSQL(sdCountPoint,sReq) ALORS
-      	HLitPremier(sdCountPoint)
-      	si pas HEnDehors(sdCountPoint) ALORS
-      		nRetour = sdCountPoint.NbrPoints
-      	FIN
+      goapp.RSQL(sdCountPoint,sReq)
+      HLitPremier(sdCountPoint,hSansRafraîchir)
+      si pas HEnDehors(sdCountPoint) ALORS
+      	nRetour = sdCountPoint.NbrPoints
       FIN
       
       HAnnuleDéclaration(sdCountPoint)
@@ -645,7 +627,7 @@ class :
      procedure_id : 2278200462441652197
      type_code : 12
      code : |1+
-      procédure prive SyncNbreSemaine()
+      procédure prive SyncNbreSemaine():vide
       
       
       duDuréeSprint est une Durée
@@ -666,7 +648,7 @@ class :
       procédure sExport():JSON
       sRetour est un JSON
       
-      sRetour.id					= :m_nIdUnique
+      sRetour.id					= :ZF_Get_IdUnique()
       sRetour.sprint_start_note	= :m_snotedebutdesprint
       sRetour.is_finish			= :m_btop_termine
       sRetour.date_start			= :m_ddatedebut
@@ -702,11 +684,10 @@ class :
       ORDER BY Scr_Sprint.Num_Sprint desc	
       ]
       
-      SI goapp.RSQL(sdNumSpr,sReq) ALORS
-      	HLitPremier(sdNumSpr)
-      	si pas HEnDehors(sdNumSpr) alors
-      		oSpr <- ::GetObj(sdNumSpr.Num_Sprint)
-      	FIN
+      goapp.RSQL(sdNumSpr,sReq)
+      HLitPremier(sdNumSpr,hSansRafraîchir)
+      si pas HEnDehors(sdNumSpr) alors
+      	oSpr <- ::GetObj(sdNumSpr.Num_Sprint)
       FIN
       HAnnuleDéclaration(sdNumSpr)
       
@@ -717,7 +698,7 @@ class :
      procedure_id : 1204318776987445115
      type_code : 12
      code : |1+
-      procédure publique globale nGetNumSprintMax()
+      procédure publique globale nGetNumSprintMax():entier
       
       sdSprintMax est une Source de Données
       sReq est une chaîne
@@ -731,12 +712,10 @@ class :
       		FROM Scr_Sprint
       	]
       	
-      	SI goapp.RSQL(sdSprintMax,sReq) ALORS
-      	
-      		HLitPremier(sdSprintMax)
-      		si pas HEnDehors(sdSprintMax) ALORS
-      			::mg_nNumSprint_max = sdSprintMax.Num_Sprint
-      		FIN
+      	goapp.RSQL(sdSprintMax,sReq)
+      	HLitPremier(sdSprintMax,hSansRafraîchir)
+      	si pas HEnDehors(sdSprintMax) ALORS
+      		::mg_nNumSprint_max = sdSprintMax.Num_Sprint
       	FIN
       	
       	HAnnuleDéclaration(sdSprintMax)
@@ -744,6 +723,73 @@ class :
       
       
       renvoyer ::mg_nNumSprint_max
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422514578997170067
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+     type : 458752
+   -
+     name : Calcul_Velocite_Moyenne
+     procedure_id : 1439980665438804919
+     type_code : 12
+     code : |1+
+      // Résumé : Calcule la velocité
+      // Syntaxe :
+      //Calcul_Velocite_Moyenne ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE GLOBAL Calcul_Velocite_Moyenne():Vide
+      
+      nNbrSprint			est un entier	= 1	//compte le nombre de sprint pour le calcul de la moyenne
+      nPointsSprint		est un entier	= 0	//compte le nb de points accumulé de chaque sprint
+      nVelocitéMoyenne	est un entier
+      nNumSprintActuel	est un entier	= goApp.m_nNumeroDuSprintActuel
+      oSprint				est un ClSprint dynamique
+      sReq				est une chaîne
+      oColSprints			est un ClColSprint
+      
+      sReq = [
+      	
+      	SELECT
+      		Scr_Sprint.*
+      	
+      	FROM Scr_Sprint
+      	
+      	WHERE Scr_Sprint.Top_Termine = 1
+      	
+      	ORDER BY Scr_Sprint.Num_Sprint
+      	
+      ]
+      oColSprints.ZF_LoadSQL(sReq)
+      pour tout element oSprint de oColSprints.aItems()
+      	
+      	si nNumSprintActuel > oSprint.ZF_Get_IdUnique() ALORS
+      		nPointsSprint				+= oSprint.p_nNbPointsRealise
+      		nVelocitéMoyenne			= nPointsSprint / nNbrSprint //vélocité moyenne = Points du Sprint / nbrDeSprint
+      		goApp.m_nVelociteMoyenne	= nVelocitéMoyenne
+      	SINON //Si c'est le sprint actuel on lui donne la vélocité du dernier sprint passé 
+      		nVelocitéMoyenne			= goApp.m_nVelociteMoyenne 
+      	FIN
+      	
+      	si oSprint.p_nVelociteMoyenneRes <> nVelocitéMoyenne ALORS
+      		oSprint.m_nVelociteMoyenneRes = nVelocitéMoyenne
+      		oSprint.ZF_Enregistre()
+      	FIN
+      	
+      	nNbrSprint++ 
+      FIN
      type : 458752
   properties :
    -
@@ -759,7 +805,7 @@ class :
         type : 1966080
       -
         code : |1+
-         procédure p_dDateDebut(dDateDebut_p est une date)
+         procédure p_dDateDebut(dDateDebut_p est une date):Vide
          
          :m_dDateDebut = dDateDebut_p
          
@@ -780,7 +826,7 @@ class :
         type : 1966080
       -
         code : |1+
-         procédure p_dDateFin(dDateFin_p est une date)
+         procédure p_dDateFin(dDateFin_p est une date):Vide
          
          :m_dDateFin = dDateFin_p
          
@@ -826,7 +872,7 @@ class :
       -
         code : |1-
          procédure publique p_bTop_Termine(bValeur est un booléen)
-         :EstModif()
+         :ZF_EstModif()
          :m_bTop_Termine=bValeur
         type : 2031616
      template_refs : []

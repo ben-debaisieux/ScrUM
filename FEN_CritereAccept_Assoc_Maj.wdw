@@ -56,11 +56,10 @@ window :
          ], CBO_ProjectList..ValeurMémorisée)
          // on se sert de la combo d'avant pour la requete
          ListeSupprime(CBO_IDUS)
-         SI goApp.Rsql(sdIDUS, sReqGetIDUS) ALORS
-         	POUR TOUT sdIDUS
-         		// on revoie l'ID user story
-         		ListeAjoute(CBO_IDUS, sdIDUS.CodeUserStory +" :  "+ sdIDUS.EntantQue+" "+sdIDUS.JaiBesoinDe+" "+sdIDUS.AfinDe + gLien(sdIDUS.IDScr_UserStory))
-         	FIN
+         goApp.Rsql(sdIDUS, sReqGetIDUS)
+         POUR TOUT sdIDUS
+         	// on revoie l'ID user story
+         	ListeAjoute(CBO_IDUS, sdIDUS.CodeUserStory +" :  "+ sdIDUS.EntantQue+" "+sdIDUS.JaiBesoinDe+" "+sdIDUS.AfinDe + gLien(sdIDUS.IDScr_UserStory))
          FIN
         type : 33
       -
@@ -117,7 +116,7 @@ window :
          	Scr_CritereAccept.IDScr_CritereAccept_Etat = 4	// doublon
          	Scr_CritereAccept.CommentaireDesactivation += [rc] + SAI_CommDoublon
          	Scr_CritereAccept.DateDesactivation = dDate
-         	Scr_CritereAccept.IDSrc_Usr_Desactivation = goApp.m_oUsrCnx.Get_IdUnique()
+         	Scr_CritereAccept.IDSrc_Usr_Desactivation = goApp.m_oUsrCnx.ZF_Get_IdUnique()
          	// on le modifie
          	SI PAS HModifie(Scr_CritereAccept) ALORS
          		Info(ErreurInfo(errComplet))
@@ -212,11 +211,10 @@ window :
          ], CBO_IDUS..ValeurMémorisée)
          // on se sert de la combo d'avant pour la requete
          ListeSupprime(CBO_CritereAccept)
-         SI goApp.Rsql(sdIDCritere, sReqGetIDCritere) ALORS
-         	POUR TOUT sdIDCritere
-         		// on renvoi l'id user story
-         		ListeAjoute(CBO_CritereAccept, sdIDCritere.Titre + gLien(sdIDCritere.IDScr_CritereAccept))
-         	FIN
+         goApp.Rsql(sdIDCritere, sReqGetIDCritere)
+         POUR TOUT sdIDCritere
+         	// on renvoi l'id user story
+         	ListeAjoute(CBO_CritereAccept, sdIDCritere.Titre + gLien(sdIDCritere.IDScr_CritereAccept))
          FIN
         type : 33
       -
@@ -285,60 +283,28 @@ window :
       
       mafenetre..ValeurRenvoyée = faux
    -
-     code : |1+
+     code : |1-
       
       // requete pour avoir le nom, et l'id du projet
-      //SI IDcritereAccept_Associé_p = 0 ALORS
-      	sdSource_projet est une source de données
-      	sReq_Projet est une chaîne = [
-      	SELECT	
-      		Nom,
-      		IDScr_Projet
-      		FROM
-      		Scr_Projet
-      		
-      	]
-      	//remplissage combo
-      	ListeSupprime(CBO_ProjectList)
+      
+      sdSource_projet est une source de données
+      sReq_Projet est une chaîne = [
+      SELECT	
+      	Nom,
+      	IDScr_Projet
+      	FROM
+      	Scr_Projet
       	
-      	SI goApp.Rsql(sdSource_projet,sReq_Projet) ALORS
-      		POUR TOUT sdSource_projet 
-      			// on revoie ID Prjet dans le glien
-      			ListeAjoute(CBO_ProjectList,sdSource_projet.Nom + gLien(sdSource_projet.IDScr_Projet))
-      		FIN
-      		
-      	FIN
-      //sinon
-      	//CBO_CritereAccept..EnSaisie = False
-      	//CBO_IDUS..EnSaisie = False
-      	//CBO_ProjectList..EnSaisie = False
-      	// chargement de la combo User Storie
+      ]
+      //remplissage combo
+      ListeSupprime(CBO_ProjectList)
+      
+      goApp.Rsql(sdSource_projet,sReq_Projet)
+      POUR TOUT sdSource_projet 
+      	// on revoie ID Prjet dans le glien
+      	ListeAjoute(CBO_ProjectList,sdSource_projet.Nom + gLien(sdSource_projet.IDScr_Projet))
+      FIN
       	
-      //	sdGetNomUstitre est une source de données
-      //	sDRequest est une chaine = ChaîneConstruit([
-      //		SELECT
-      //		
-      //			Scr_UserStory.IDScr_UserStory,
-      //			Scr_UserStory.EntantQue,
-      //			Scr_UserStory.JaiBesoinDe,
-      //			Scr_UserStory.AfinDe
-      //		
-      //		FROM
-      //		
-      //			Scr_UserStory
-      //			
-      //		INNER JOIN
-      //		 Scr_CritereAccept on Scr_UserStory.IDScr_UserStory = %1
-      //		
-      //		
-      //	], IDcritereAccept_p)
-      //	
-      //	
-      //	si HExécuteRequêteSQL(sdGetNomUstitre, hRequêteDéfaut, sDRequest) = vrai alors
-      //		ListeAjoute(CBO_IDUS, sdGetNomUstitre.EntantQue+" "+sdGetNomUstitre.JaiBesoinDe+" "+sdGetNomUstitre.AfinDe+gLien(sdGetNomUstitre.IDScr_UserStory))
-      //	FIN
-      //	ListeSelect(CBO_IDUS, 1)
-      //FIN
      type : 34
    -
      code : |1+

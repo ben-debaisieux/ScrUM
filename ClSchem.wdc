@@ -16,7 +16,7 @@ class :
    -
      code : |1+
       ClSchem est une Classe
-      	hérite de ClObjDB
+      	hérite de ClZF_ObjDB
       PUBLIC
       	m_sLibelle est une chaîne <MAPPING=Libelle>
       	m_sCMTR est une chaîne <MAPPING=CMTR>
@@ -32,18 +32,14 @@ class :
      name : Constructeur
      procedure_id : 2260749829942883243
      type_code : 27
-     code : |1-
+     code : |1+
       procédure Constructeur( nID_P est un entier = 0)
       
       //Déclaration du constructeur de la classe d'accès aux données.
       Ancêtre.Constructeur(Scr_Process_Metier..Nom, Scr_Process_Metier.IDScr_Process_Metier..Nom, nID_P)
       
-      :Charge()
+      //:ZF_Charge()
       
-      
-      si nID_P <> 0 ALORS
-      	:ChargeInter()
-      FIN
      type : 589824
    -
      name : Destructeur
@@ -83,18 +79,18 @@ class :
       	ORDER BY 
       		Scr_Process_Metier_Axe.Ordre
       	
-      ], :Get_IdUnique())
-      SI goapp.RSQL(sdInterDeProcess,sReq) ALORS
+      ], :ZF_Get_IdUnique())
+      goapp.RSQL(sdInterDeProcess,sReq)
       POUR TOUT sdInterDeProcess
-      		oAxeTmp <- ClSchem_Axe.GetObj(sdInterDeProcess.IDScr_Process_Metier_Axe)
-              
-              TableauAjouteRéférence(:m_aoAxes, oAxeTmp)
-              
-              aCorrestpOrdreAxe[sdInterDeProcess.Ordre]	<- oAxeTmp
-              
-              oAxeTmp.m_oSchemParent <- objet
-      	FIN
+      	oAxeTmp <- ClSchem_Axe.GetObj(sdInterDeProcess.IDScr_Process_Metier_Axe)
+             
+             TableauAjouteRéférence(:m_aoAxes, oAxeTmp)
+             
+             aCorrestpOrdreAxe[sdInterDeProcess.Ordre]	<- oAxeTmp
+             
+             oAxeTmp.m_oSchemParent <- objet
       FIN
+      
       HAnnuleDéclaration(sdInterDeProcess)
       
       
@@ -115,20 +111,19 @@ class :
       	
       	ORDER BY Scr_Process_Metier_Intervenant.OrdreAbsolu
       	
-      ], :Get_IdUnique())
+      ], :ZF_Get_IdUnique())
       
-      SI goapp.RSQL(sdInterDeProcess,sReq) ALORS
+      goapp.RSQL(sdInterDeProcess,sReq)
       
-      	POUR TOUT sdInterDeProcess
-      		
-      		oInterTmp <- ClSchem_Inter.oGetTypeInter( ...
-      			sdInterDeProcess.IDScr_Process_Metier_Intervenant_Type, ...
-      			sdInterDeProcess.IDScr_Process_Metier_Intervenant)
-      		
-      		TableauAjouteRéférence(:m_aoInter,oInterTmp)
-      		
-      		oInterTmp.m_oAxe <- aCorrestpOrdreAxe[sdInterDeProcess.Ordre]
-      	FIN
+      POUR TOUT sdInterDeProcess
+      	
+      	oInterTmp <- ClSchem_Inter.oGetTypeInter( ...
+      		sdInterDeProcess.IDScr_Process_Metier_Intervenant_Type, ...
+      		sdInterDeProcess.IDScr_Process_Metier_Intervenant)
+      	
+      	TableauAjouteRéférence(:m_aoInter,oInterTmp)
+      	
+      	oInterTmp.m_oAxe <- aCorrestpOrdreAxe[sdInterDeProcess.Ordre]
       FIN
       
       HAnnuleDéclaration(sdInterDeProcess)
@@ -167,7 +162,7 @@ class :
       //
       //	oSchem_P (ClSchem) : <indiquez ici le rôle de oSchem_P>
       PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClSchem
-      RENVOYER ClObjDB.GetObj("ClSchem", nIdUnique_P)
+      RENVOYER ClZF_ObjDB.ZF_GetObj("ClSchem", nIdUnique_P)
      type : 458752
    -
      name : nNbreInter
@@ -187,7 +182,20 @@ class :
       PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre()
       
       
-      Scr_Process_Metier.IDScr_Projet	 = :m_oProjet.Get_IdUnique()
+      Scr_Process_Metier.IDScr_Projet	 = :m_oProjet.ZF_Get_IdUnique()
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422515601209848287
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+      
+      SI pas :ZF_bModeAjout() ALORS
+      	:ChargeInter()
+      FIN
      type : 458752
   properties :
    -

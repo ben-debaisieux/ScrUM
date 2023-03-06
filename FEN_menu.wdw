@@ -546,7 +546,7 @@ window :
                -
                  code : |1-
                   sRech		est une chaîne
-                  aoRes		est un tableau de ClObjDB dynamique
+                  aoRes		est un tableau de ClZF_ObjDB dynamique
                   
                   si saisie("Recherche :",sRech) ALORS
                   	aoRes <- COL_Scrum.aoRechItems(sRech)
@@ -678,20 +678,39 @@ window :
      code : |1+
       PROCEDURE FEN_menu()
       
+      //AnalyseurDébut()
+      
+      
       MajTitre()
+      
+      MaFenêtre..Plan = 2
+      
+      
    -
      code : |1+
+      
+      AnalyseurDébut()
       
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique = vrai alors
       	GR_Dev..etat = Actif
       	SEL_ModeAffichage = 1
+      	
+      	oColTaches est un ClColTaches
+      	sReq est une chaine = [
+      	select
+      		Scr_Tache.*
+      	FROM Scr_Tache
+      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
+      		INNER JOIN Scr_Projet ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)
+      	where Scr_Projet.Top_Termine = 0
+      	]
+      	oColTaches.ZF_LoadSQL(sReq)
       sinon
       	GR_Dev..etat = Grisé
       	SEL_ModeAffichage = 2
       FIN
-      //AnalyseurDébut()
       ChangeModeAffichage()
-      //AnalyseurFin()
+      AnalyseurFin()
      type : 34
    -
      code : |1+

@@ -192,7 +192,7 @@ window :
             		oProcessAxeAg.m_nOrdre			= dimension(zoProcess.m_oSchem.m_aoAxes) + 1
             		TableauAjouteRéférence(zoProcess.m_oSchem.m_aoAxes,oProcessAxeAg)
             		zoProcess.Affiche() 
-            		zoProcess.m_oSchem.Enregistre()
+            		zoProcess.m_oSchem.ZF_Enregistre()
             	// Annuler
             	CAS 2
             		
@@ -211,7 +211,7 @@ window :
            code : |1+
             si Ouvre(FEN_Process_Ajout_Intervenant_v2,zoProcess.m_oSchem, Null) ALORS
             	zoProcess.Affiche()
-            	zoProcess.m_oSchem.Enregistre()
+            	zoProcess.m_oSchem.ZF_Enregistre()
             FIN
            type : 32
      -
@@ -226,7 +226,7 @@ window :
             zoProcess.p_bModeEdition = pas zoProcess.p_bModeEdition
             OPT_Mode_édition..Cochée = zoProcess.p_bModeEdition
             zoProcess.Affiche()
-            zoProcess.m_oSchem.Enregistre()
+            zoProcess.m_oSchem.ZF_Enregistre()
             
            type : 32
      -
@@ -261,7 +261,7 @@ window :
            code : |1+
             oInter est un ClSchem_Inter <- zoProcess.m_oSchem.oInterDePosition(znPositionBoxCliqué)
             SI Ouvre(FEN_Process_Ajout_Intervenant_v2,zoProcess.m_oSchem, oInter) ALORS
-            	zoProcess.m_oSchem.Enregistre()
+            	zoProcess.m_oSchem.ZF_Enregistre()
             	zoProcess.Affiche()
             FIN
             

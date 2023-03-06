@@ -130,7 +130,7 @@ procedure_set :
       //sinon
       	oUS est un ClUserStory dynamique
       	
-      	pour tout element oUS de oProjet_P.aoListeUS()
+      	pour tout element oUS de oProjet_P.aoListeUS().aItems()
       		bAPrendre = vrai
       		
       		si oEpic_P <> null alors
@@ -138,7 +138,7 @@ procedure_set :
       				bAPrendre = faux
       			sinon
       				
-      				SI oUS.p_oEpic.Get_IdUnique() <> oEpic_P.Get_IdUnique() ALORS
+      				SI oUS.p_oEpic.ZF_Get_IdUnique() <> oEpic_P.ZF_Get_IdUnique() ALORS
       					bAPrendre = Faux
       				FIN
       			FIN
@@ -222,7 +222,7 @@ procedure_set :
       stSprint_Tmp	est un col_graphes.STR_Evol_Charge_Projet_Spr
       nCle			est un entier
       
-      stAnalyse = col_graphes.Graphe_Evol_Charge_projet(oProjet_P.Get_IdUnique())
+      stAnalyse = col_graphes.Graphe_Evol_Charge_projet(oProjet_P.ZF_Get_IdUnique())
       
       grSupprimeSérie(graphe)
       grLibellé(graphe, grAfficheEtiquette, Vrai)
@@ -276,7 +276,7 @@ procedure_set :
       stSp_Tmp.nProj = nPointsTotal
       stSp_Tmp.nReal = nPointsTotal
       
-      pour tout element oSprint de ClSprint.aoListeSprint()
+      pour tout element oSprint de ClSprint.aoListeSprint().aItems()
       	
       	SI oSprint.p_bTop_Termine ALORS
       		stSp_Tmp.nReal -= oSprint.nGetNbPointsRealises()
@@ -322,7 +322,7 @@ procedure_set :
       
       oPrj <- ClProjet.GetObj(znIdProjet_P)
       stRetour.sTitre += oPrj.p_sNom
-      POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches()
+      POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches().aItems()
       	si (oTache.p_bEstRealise ou oTache.p_bAnnule) et oTache.p_nNum_Sprint_Realisation <> 0 alors
       		nAnticipation = oTache.p_nNum_Sprint_Realisation - oTache.p_nNum_Sprint_Creation
       		stRetour.aStSeries[nAnticipation].sEtiquette = nAnticipation
@@ -354,7 +354,7 @@ procedure_set :
       nCptSpr			est un entier
       nNumPrj			est un entier
       nNumSprint		est un entier
-      aTableauProjet	est un tableau de ClProjet	= ClProjet.aoProjets_sur_periode(nSprint_p, nNbSprint_p, eSelecteur_p)
+      oTableauProjet	est un ClColProjet	= ClProjet.aoProjets_sur_periode(nSprint_p, nNbSprint_p, eSelecteur_p)
       nPoints			est un entier
       stRetour		est un STR_Charge
       stProjet_Tmp	est un STR_Charge_InfoPrj
@@ -371,7 +371,7 @@ procedure_set :
       
       nNumPrj = 0
       //parcours les projets compris dans l'intervalle de sprints
-      POUR TOUT ELEMENT oPrj DE aTableauProjet
+      POUR TOUT ELEMENT oPrj DE oTableauProjet.aItems()
       	nNumPrj++
       	VariableRAZ(stProjet_Tmp)
       	//donne une couleur à la série
@@ -398,11 +398,11 @@ procedure_set :
       	//affichage des dates du sprint en graduation
       	oSprint <- ClSprint.GetObj(nNumSprint)
       	//Récupération des étiquettes des sprints
-      	stRetour.aStListeSprints[nNumSprint] = oSprint.Get_IdUnique() + rc + oSprint.sSprint_Date()
+      	stRetour.aStListeSprints[nNumSprint] = oSprint.ZF_Get_IdUnique() + rc + oSprint.sSprint_Date()
       	
       	nNumPrj = 0
       	//parcours des projets compris dans l'intervalle de sprints
-      	POUR TOUT ELEMENT oPrj DE aTableauProjet
+      	POUR TOUT ELEMENT oPrj DE oTableauProjet.aItems()
       		nNumPrj++
       		
       		//Récupération du nb de points du projet, sur le sprint
@@ -459,8 +459,8 @@ procedure_set :
       
       stRetour.sTitre	= "Analyse de l'évolution de la charge du projet" + rc
       
-      POUR TOUT ELEMENT oSprint DE ClSprint.aoListeSprint()
-      	sNumSprint										= oSprint.Get_IdUnique()
+      POUR TOUT ELEMENT oSprint DE ClSprint.aoListeSprint().aItems()
+      	sNumSprint										= oSprint.ZF_Get_IdUnique()
       	
       	stRetour.aStSeries[sNumSprint]					= allouer un STR_Evol_Charge_Projet_Spr
       	stRetour.aStSeries[sNumSprint].sEtiquette		= sNumSprint + " - " + oSprint.sSprint_Date()
@@ -471,7 +471,7 @@ procedure_set :
       
       oPrj <- ClProjet.GetObj(znIdProjet_P)
       stRetour.sTitre += oPrj.p_sNom
-      POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches()
+      POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches().aItems()
       	stRetour.aStSeries[oTache.p_nNum_Sprint_Creation].nCharge			+= oTache.p_nPoids
       	stRetour.aStSeries[oTache.p_nNum_Sprint_Realisation].nChargeEngage	+= oTache.p_nPoids
       FIN
@@ -507,12 +507,13 @@ procedure_set :
       oTache			est un ClTache dynamique
       oPrj			est un ClProjet dynamique
       sNumSprint		est une chaîne
-      
+      oSprints		est un ClColSprint
       
       stRetour.sTitre	= "Analyse des temps de mise en production des taches réalisées" + rc
       
-      POUR TOUT ELEMENT oSprint DE ClSprint.aoListeSprint()
-      	sNumSprint										= oSprint.Get_IdUnique()
+      oSprints <- ClSprint.aoListeSprint()
+      POUR TOUT ELEMENT oSprint DE oSprints.aItems()
+      	sNumSprint										= oSprint.ZF_Get_IdUnique()
       	
       	stRetour.aStSeries[sNumSprint]					= allouer un STR_Temps_validation_Spr
       	stRetour.aStSeries[sNumSprint].sEtiquette		= sNumSprint + " - " + oSprint.sSprint_Date()
@@ -533,8 +534,8 @@ procedure_set :
       
       SI nIdProjet_P = 0 ALORS
       	//Tous les projets
-      	POUR TOUT ELEMENT oSprint DE ClSprint.aoListeSprint()
-      		sNumSprint									= oSprint.Get_IdUnique()
+      	POUR TOUT ELEMENT oSprint DE oSprints.aItems()
+      		sNumSprint									= oSprint.ZF_Get_IdUnique()
       		stRetour.aStSeries[sNumSprint].nDemarre		= oSprint.nGetNbPointsDemarre()
       		stRetour.aStSeries[sNumSprint].nFin			= oSprint.nGetNbPointsRealises()
       	FIN
@@ -545,7 +546,7 @@ procedure_set :
       	oPrj <- ClProjet.GetObj(nIdProjet_P)
       
       	//Projet en cours
-      	POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches()
+      	POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches().aItems()
       		//trace(ChaîneConstruit("Début*%1*Fin*%2*poids*%3*code%4", oTache.p_nNum_Sprint_Demarrage, oTache.p_nNum_Sprint_Fin, oTache.p_nPoids, oTache.p_sCodeTache))
       		SI oTache.p_nNum_Sprint_Demarrage <> 0 ALORS
       			stRetour.aStSeries[oTache.p_nNum_Sprint_Demarrage].nDemarre += oTache.p_nPoids

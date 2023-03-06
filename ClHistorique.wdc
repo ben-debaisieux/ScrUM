@@ -63,7 +63,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE AjouteHistorique(sHistorique_P est une chaîne)
+      PROCEDURE AjouteHistorique(sHistorique_P est une chaîne):Vide
       TableauAjoute(:m_asHistorique, sHistorique_P)
      type : 458752
    -
@@ -71,7 +71,7 @@ class :
      procedure_id : 2254444409955998039
      type_code : 12
      code : |1-
-      procédure protégée EnregHisto()
+      procédure protégée EnregHisto():Vide
       
       
       sHistorique est une chaîne
@@ -91,7 +91,7 @@ class :
       	FIN
       	
       	Scr_Historique.Date_Evt			= DateHeureSys()
-      	Scr_Historique.IDScr_Usr		= goApp.m_oUsrCnx.Get_IdUnique()
+      	Scr_Historique.IDScr_Usr		= goApp.m_oUsrCnx.ZF_Get_IdUnique()
       	Scr_Historique.CMTR				= sHistorique
       	SI PAS HAjoute(Scr_Historique) ALORS
       		ExceptionDéclenche(1,HErreurInfo())
@@ -112,7 +112,7 @@ class :
      procedure_id : 2254445659800422849
      type_code : 12
      code : |1+
-      procédure protégée CleanHisto()
+      procédure protégée CleanHisto():Vide
       
       
       sReq est une chaîne
@@ -170,24 +170,22 @@ class :
       ], :sNomCleEtrangereDeClasseActu(),...
       	:Get_IdUnique())
       
-      SI goapp.RSQL(sdHistoUS,sReq) ALORS
+      goapp.RSQL(sdHistoUS,sReq)
       
-      	POUR TOUT sdHistoUS
-      		VariableRAZ(stEvt)
-      		
-      		stEvt.dhEvt					= sdHistoUS.Date_Evt
-      		stEvt.nIdUsr				= sdHistoUS.IDScr_Usr
-      		stEvt.sDetail				= sdHistoUS.CMTR
-      		
-      		stEvt.sDateEct_en_chaine	= DateVersChaîne(stEvt.dhEvt..PartieDate) + " " + ...
-      										HeureVersChaîne(stEvt.dhEvt..PartieHeure,"HH:MM:SS")
-      		
-      		oUsr						<- ClUsr.GetObj(stEvt.nIdUsr)
-      		stEvt.sNomUsr				= oUsr.p_sNom
-      		
-      		TableauAjoute(aStListeEvt,stEvt)
-      	FIN
+      POUR TOUT sdHistoUS
+      	VariableRAZ(stEvt)
       	
+      	stEvt.dhEvt					= sdHistoUS.Date_Evt
+      	stEvt.nIdUsr				= sdHistoUS.IDScr_Usr
+      	stEvt.sDetail				= sdHistoUS.CMTR
+      	
+      	stEvt.sDateEct_en_chaine	= DateVersChaîne(stEvt.dhEvt..PartieDate) + " " + ...
+      									HeureVersChaîne(stEvt.dhEvt..PartieHeure,"HH:MM:SS")
+      	
+      	oUsr						<- ClUsr.GetObj(stEvt.nIdUsr)
+      	stEvt.sNomUsr				= oUsr.p_sNom
+      	
+      	TableauAjoute(aStListeEvt,stEvt)
       FIN
       
       HAnnuleDéclaration(sdHistoUS)

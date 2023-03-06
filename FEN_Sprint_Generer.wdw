@@ -151,7 +151,7 @@ window :
          	oSprint.SetNumSprint(TBL_Visualisation_Sprint[nInd].COL_Num)
          	oSprint.p_dDateDebut	= TBL_Visualisation_Sprint[nInd].COL_Date_de_début
          	oSprint.p_dDateFin		= TBL_Visualisation_Sprint[nInd].COL_Date_de_fin
-         	oSprint.Enregistre()
+         	oSprint.ZF_Enregistre()
          fin
          
          Info("Les sprints ont été générés.")

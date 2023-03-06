@@ -1,0 +1,89 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColSprint
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x137e858a131c395c
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClColSprint est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVE
+      	m_aoSprint est un tableau de ClSprint dynamique
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1404706961858836828
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1404706961858902364
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 1404708185929454291
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      :ZF_addItem(ClSprint.GetObj(nId_P))
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 1404708203109392511
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClColObjDB.aItems
+      PROCÉDURE aItems():tableau de ClSprint dynamique
+      renvoyer :m_aoSprint
+     type : 458752
+   -
+     name : Init
+     procedure_id : 1404708241764173195
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClColObjDB.Init
+      PROCÉDURE  Init():Vide
+      ZF_InitCol(:m_aoSprint)
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 1422513183087778253
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
+      
+      oObj est un ClSprint
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.Num_Sprint)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x137e857c131601e1
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

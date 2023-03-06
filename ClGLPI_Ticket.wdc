@@ -1,0 +1,259 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClGLPI_Ticket
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1390669505cf5841
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClGLPI_Ticket est une Classe hérite de ClGLPI_Entite
+      	m_nId				est entier
+      	m_sSujet			est chaine
+      	m_dhDateCreation	est dateheure
+      	m_nIDPriorite		est entier
+      	m_sPriorite			est chaine
+      	m_nIDStatut			est entier
+      	m_sStatut			est chaine
+      	m_bufDescription	est buffer
+      	m_anUID				est tableau associatif d'entier
+      	m_sLieu				est chaine
+      	m_nIDLieu			est entier
+      	m_astSuiviCom		est tableau de STR_Suivi_Commentaire
+      	m_sType				est chaine
+      	m_sCategorie		est chaine
+      	m_sUtilisateur		est chaine
+      	m_astLinks			est tableau de STR_Links
+      	m_astDocument		est tableau de STR_Documents
+      fin
+      
+      STR_Suivi_Commentaire est une structure
+      	sUtilisateur	est une chaine
+      	dhCreation		est une dateHeure
+      	sDateAffichage	est une chaine
+      	buContent		est un buffer
+      fin
+      
+      STR_Documents est une structure
+      	nID			est entier
+      	sNom		est chaine
+      	sExtension	est chaine
+      	buFFichier	est buffer
+      fin
+      
+      STR_Links est structure
+      	sRel	est chaine
+      	sHref	est chaine
+      fin
+      
+      STR_Statut est une structure
+      	sLibelle	est chaine
+      	nID			est entier
+      fin
+      
+      constante
+      	cst_Priorite_TresBasse_ID		= 1
+      	cst_Priorite_Basse_ID			= 2
+      	cst_Priorite_Moyenne_ID			= 3
+      	cst_Priorite_Haute_ID			= 4
+      	cst_Priorite_TresHaute_ID		= 5
+      	cst_Priorite_Majeur_ID			= 6
+      	
+      	cst_Type_Demande_ID				= 1
+      	cst_Type_incident_ID			= 2
+      	
+      	cst_User_ID						= 492
+      	cst_AssigneA_Type				= 2
+      	cst_Utilisateur_Defaut			= "Benjamin Debaisieux"
+      	cst_Statut_Nouveau_ID			= 1
+      	cst_Statut_EnCoursAttribue_ID	= 2
+      	cst_Statut_EnCoursPlanifie_ID	= 3
+      	cst_Statut_EnAttente_ID			= 4
+      	cst_Statut_Resolut_ID			= 5
+      	cst_Statut_Clos_ID				= 6
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1409739473600665665
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1409739473600731201
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetPriorityName
+     procedure_id : 1409774864135427416
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetPriorityName (<nID> est entier)
+      //
+      // Paramètres :
+      //	nID (entier) : <indiquez ici le rôle de nID>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetPriorityName(nID est un entier) : chaine
+      
+      selon nID
+      	CAS cst_Priorite_tresBasse_ID
+      		renvoyer "Très basse"
+      
+      	CAS cst_Priorite_Basse_ID
+      		renvoyer "basse"
+      
+      	CAS cst_Priorite_moyenne_ID
+      		renvoyer "Moyenne"
+      
+      	CAS cst_Priorite_Haute_ID
+      		renvoyer "Haute"
+      
+      	CAS cst_Priorite_tresHaute_ID
+      		renvoyer "Très haute"
+      
+      	CAS cst_Priorite_majeur_ID
+      		renvoyer "Majeur"
+      		
+      	AUTRE CAS
+      		renvoyer ""
+      FIN
+     type : 458752
+   -
+     name : GetTypeName
+     procedure_id : 1409785060422668054
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTypeName (<nID> est entier)
+      //
+      // Paramètres :
+      //	nID (entier) : <indiquez ici le rôle de nID>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTypeName(nID est un entier) : chaine
+      
+      selon nID
+      	CAS cst_Type_Demande_ID
+      		renvoyer "Demande"
+      
+      	CAS cst_Type_Incident_ID
+      		renvoyer "Incident"
+      
+      		
+      	AUTRE CAS
+      		renvoyer ""
+      FIN
+     type : 458752
+   -
+     name : GetStatusOuvert
+     procedure_id : 1410076911949589576
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetStatusOuvert ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	variant : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale GetStatusOuvert() : tableau de STR_Statut
+      stStatut est une STR_Statut
+      anStatus est un tableau de STR_Statut
+      
+      stStatut.sLibelle 	= "Nouveau"
+      stStatut.nID 		= 1
+      tableauajoute(anStatus, stStatut)
+      
+      stStatut.sLibelle 	= "En cours (Attribué)"
+      stStatut.nID 		= 2
+      tableauajoute(anStatus, stStatut)
+      
+      stStatut.sLibelle 	= "En cours (Planifié)"
+      stStatut.nID 		= 3
+      tableauajoute(anStatus, stStatut)
+      
+      stStatut.sLibelle 	= "En attente"
+      stStatut.nID 		= 4
+      tableauajoute(anStatus, stStatut)
+      
+      
+      renvoyer anStatus 
+     type : 458752
+   -
+     name : GetStatusName
+     procedure_id : 1410093069622023282
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetStatusName (<nIDStatut> est entier)
+      //
+      // Paramètres :
+      //	nIDStatut (entier) : <indiquez ici le rôle de nIDStatut>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetStatusName(nIDStatut est un entier) : chaine
+      
+      selon nIDStatut
+      	CAS cst_Statut_Nouveau_ID
+      		renvoyer "Nouveau"
+      	CAS cst_Statut_EnCoursAttribue_ID
+      		renvoyer "En cours (Attribué)"
+      	CAS cst_Statut_EnCoursPlanifie_ID
+      		renvoyer "En cours (Planifié)"
+      	CAS cst_Statut_EnAttente_ID
+      		renvoyer "En attente"
+      		
+      	AUTRE CAS
+      		renvoyer ""
+      FIN
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1390668805c92673
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

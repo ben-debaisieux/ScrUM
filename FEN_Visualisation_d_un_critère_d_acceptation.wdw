@@ -61,7 +61,7 @@ window :
      p_codes :
       -
         code : |1+
-         SI Ouvre(FEN_Critère_Acceptation_UserStorie_Maj,zoCritere.Get_IdUnique(),zoCritere.p_oUserStoryParente.Get_IdUnique()) ALORS
+         SI Ouvre(FEN_Critère_Acceptation_UserStorie_Maj,zoCritere.ZF_Get_IdUnique(),zoCritere.p_oUserStoryParente.Get_IdUnique()) ALORS
          	ChargeCriteres()
          	MaFenêtre..ValeurRenvoyée = vrai
          FIN
@@ -135,7 +135,7 @@ window :
          si nIdUS <> 0 ALORS
          	
          	zoCritere.p_oUserStoryParente = ClUserStory.GetObj(nIdUS)
-         	zoCritere.Enregistre()
+         	zoCritere.ZF_Enregistre()
          	
          	SetInfoUS()
          	
@@ -224,8 +224,8 @@ window :
       sNiv est une chaîne
       sNiv = "Etant donnée que..."
       ArbreAjoute(ARBRE_SansNom1,sNiv,Null,Null,"",aDernier)
-      POUR TOUT ELEMENT oCompo DE zoCritere.Get_aoEtantDonneQue()
-      	ArbreAjoute(ARBRE_SansNom1,sNiv + TAB + oCompo.m_sDescription,null,Null,"",aDernier)
+      POUR TOUT ELEMENT oCompo DE zoCritere.Get_aoEtantDonneQue().aItems()
+      	ArbreAjoute(ARBRE_SansNom1,sNiv + TAB + oCompo.p_sDescription,null,Null,"",aDernier)
       FIN
       
       sNiv = "Au moment de..."
@@ -235,8 +235,8 @@ window :
       
       sNiv = "J'attend que..."
       ArbreAjoute(ARBRE_SansNom1,sNiv,Null,Null,"",aDernier)
-      POUR TOUT ELEMENT oCompo DE zoCritere.Get_aoJAttendsQue()
-      	ArbreAjoute(ARBRE_SansNom1,sNiv + TAB + oCompo.m_sDescription,Null,Null,"",aDernier)
+      POUR TOUT ELEMENT oCompo DE zoCritere.Get_aoJAttendsQue().aItems()
+      	ArbreAjoute(ARBRE_SansNom1,sNiv + TAB + oCompo.p_sDescription,Null,Null,"",aDernier)
       FIN
       
       ArbreDérouleTout(ARBRE_SansNom1)

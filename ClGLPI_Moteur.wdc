@@ -1,0 +1,719 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClGLPI_Moteur
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1390637205c1176a
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClGLPI_Moteur est une Classe
+      	m_sSessionToken 	est chaine
+      	m_opclEntite		est une ClGLPI_Entite dynamique
+      	m_aopclEntite		est un tableau de ClGLPI_Entite dynamique
+      	m_sURL				est une chaine
+      	m_nMethode			est un entier
+      	m_sParam			est une chaine
+      	m_bList				est un booleen
+      	m_vBody				est un variant
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1409736024740992874
+     type_code : 27
+     code : |1-
+      procédure Constructeur(oGLPI_Entite est une ClGLPI_Entite dynamique)
+      
+      m_opclEntite 		<- oGLPI_Entite
+      m_bList 			= faux
+     type : 589824
+   -
+     name : Constructeur
+     procedure_id : 1409736024740992874
+     type_code : 27
+     code : |1-
+      procédure Constructeur(aOGLPI_Entite)
+      aOGLPI_Entite 		<- aOGLPI_Entite
+      m_bList 			= vrai
+     type : 589825
+   -
+     name : Destructeur
+     procedure_id : 1409736024741058410
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      KillSession()
+     type : 655360
+   -
+     name : GetAccessToken
+     procedure_id : 1409736656101529494
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetAccessToken ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetAccessToken()
+      restRequete 	est une restRequete
+      restReponse 	est une restRéponse
+      jsonAccessToken	est un json
+      
+      restRequete..Méthode 			= "GET"
+      restRequete..ContentType 		= "application/json"
+      restRequete..url 				= "https://glpi.union-materiaux.fr/apirest.php/initSession"
+      restRequete["App-Token"]		= "TYUBaYZKwbVtqXFQQcbveIoLJGKIRcaQsi9lMwZw"
+      restRequete["Authorization"]	= "user_token rp7bu1tY2OzAJmvg5GaReGm2kOqz8qf4UMNcGBMP"	
+      
+      restReponse = RESTEnvoie(restRequete)
+      
+      si pas restReponse.CodeEtat dans (200, 201) ALORS
+      	erreur("Impossible de récupérer le token")
+      	renvoyer faux
+      FIN
+      
+      jsonAccessToken = restReponse.Contenu
+      
+      m_sSessionToken = jsonAccessToken.session_token
+      
+      renvoyer vrai
+     type : 458752
+   -
+     name : Exec
+     procedure_id : 1409742037697000865
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Exec (<vRetour> est variant)
+      //
+      // Paramètres :
+      //	vRetour (variant) : <indiquez ici le rôle de vRetour>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	bJson (booléen - valeur par défaut=0) : <indiquez ici le rôle de bJson>
+      procédure Exec(vRetour est un variant)
+      restRequete		est une restRequete
+      restReponse		est une restRéponse
+      
+      si m_sSessionToken = "" ALORS
+      	si pas GetAccessToken() ALORS
+      		renvoyer faux
+      	FIN
+      FIN
+      
+      si pas ChaîneOccurrence(m_surl, "https") ALORS
+      	m_surl = remplace(m_surl, "http", "https")	
+      FIN
+      
+      restRequete..Méthode			= m_nMethode
+      restRequete..ContentType		= "application/json"
+      si m_sParam = "" ALORS
+      	restRequete..URL				= m_sURL
+      sinon
+      	restRequete..URL				= m_sURL + m_sParam	
+      FIN
+      
+      si m_vBody <> null ALORS
+      	restRequete.Contenu = variantversjson(m_vBody)
+      FIN
+      
+      restRequete["App-Token"]		= "TYUBaYZKwbVtqXFQQcbveIoLJGKIRcaQsi9lMwZw"
+      restRequete["session-token"]	= m_sSessionToken
+      
+      restReponse						= RESTEnvoie(restRequete)
+      
+      SI PAS restReponse.CodeEtat DANS (200, 201, 206) ALORS
+      	Erreur("Impossible d’exécuter la requête", restReponse.Contenu)
+      	RENVOYER Faux
+      FIN
+      
+      si chaineoccurrence(restReponse.ContentType,  "application/json") <> 0 _et_ pas Contient(m_sURL, "killSession") ALORS
+      	vRetour = JSONVersVariant(restReponse.Contenu)	
+      sinon
+      	vRetour = restReponse.Contenu	
+      FIN
+      
+      
+      
+      renvoyer vrai
+     type : 458752
+   -
+     name : GetTicketsOpenedWinmat
+     procedure_id : 1409745409246653957
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketsOpenedWinmat (<nStatut> est entier, <sCategorie> est chaîne)
+      //
+      // Paramètres :
+      //	nStatut (entier) : <indiquez ici le rôle de nStatut>
+      //	sCategorie (chaîne ANSI) : <indiquez ici le rôle de sCategorie>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nStatut (entier) : <indiquez ici le rôle de nStatut>
+      procédure GetTicketsOpenedWinmat(nStatut est un entier, sCategorie est une chaine)
+      sID		est une chaine
+      oTicket	est un ClGLPI_ticket dynamique
+      vData 	est un variant
+      vRetour est un Variant
+      sParam	est une chaine
+      
+      sParam			= "?&criteria[0][link]=AND&criteria[0][field]=12&criteria[0][searchtype]=equals&criteria[0][value]=" + nStatut
+      sParam			+= "&criteria[1][link]=AND&criteria[1][field]=7&criteria[1][searchtype]=contains&criteria[1][value]=" + sCategorie
+      sParam			+= "&range=0-200"
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/search/Ticket", httpGet, sParam) 
+      
+      SI PAS Exec(vRetour) ALORS
+      	RENVOYER Faux
+      FIN
+      
+      vData = vRetour.data
+      
+      si vData <> null ALORS
+      	POUR TOUT vTicket de vData
+      		oTicket	= allouer un ClGLPI_Ticket
+      		sID		= vTicket."2"
+      		GetTicket(sID, oTicket)
+      		TableauAjoute(m_aopclEntite, oTicket)
+      	FIN
+      FIN
+      
+      renvoyer vrai
+      
+     type : 458752
+   -
+     name : GetTicket
+     procedure_id : 1409767592755216243
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicket (<sID> est chaîne, <oTicket> est ClGLPI_Ticket)
+      //
+      // Paramètres :
+      //	sID (chaîne ANSI) : <indiquez ici le rôle de sID>
+      //	oTicket (ClGLPI_Ticket) : <indiquez ici le rôle de oTicket>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicket(sID est une chaine, oTicket est un ClGLPI_Ticket)
+      avLinks	est un tableau de variant
+      vRetour est un variant
+      nIndice	est un entier
+      sURL	est une chaine
+      stLink	est une ClGLPI_Ticket.STR_links
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/" + sID)
+      
+      si pas exec(vRetour) ALORS
+      	renvoyer faux
+      FIN
+      
+      avLinks = vRetour.links
+      oTicket.m_sSujet 			= vRetour.name
+      oTicket.m_nId 				= vRetour.id
+      oTicket.m_dhDateCreation 	= vRetour.date_creation
+      oTicket.m_nIDPriorite 		= vRetour.priority
+      oTicket.m_spriorite			= oTicket.GetPriorityName(val(vRetour.priority))
+      oTicket.m_bufDescription	= HTMLVersTexte(vRetour.content)
+      oTicket.m_sType				= oTicket.GetTypeName(val(vRetour.type))
+      //TODO a récupérer quand on aura les droits
+      oTicket.m_sCategorie		= "Winmat"
+      oTicket.m_sStatut			= oTicket.GetStatusName(val(vRetour.status))
+      
+      pour tout vLinks de avLinks
+      	stLink.sRel 	= vLinks.rel
+      	stLink.shref 	= vLinks.href
+      	tableauajoute(oTicket.m_astLinks, stLink)
+      FIN
+      nIndice = tableaucherche(oTicket.m_astLinks, tcLinéaire, "sRel", "Location")
+      
+      si nIndice <> -1 ALORS
+      	sURL = oTicket.m_astLinks[nIndice].shref
+      	GetTicketLocation(sURL, oTicket)
+      FIN
+      
+      sURL = "https://glpi.union-materiaux.fr/apirest.php/User/" + vRetour.users_id_recipient
+      oTicket.m_sUtilisateur = GetTicketUsername(sURL)
+      //nIndice = tableaucherche(oTicket.m_astLinks, tcLinéaire, "sRel", "User")
+      //
+      //si nIndice <> -1 ALORS
+      //	sURL = oTicket.m_astLinks[nIndice].shref
+      //	oTicket.m_sUtilisateur = GetTicketUsername(sURL)
+      //FIN
+      
+      nIndice = tableaucherche(oTicket.m_astLinks, tcLinéaire, "sRel", "Document_Item")
+      
+      si nIndice <> -1 ALORS
+      	sURL = oTicket.m_astLinks[nIndice].shref
+      	GetTicketDocuments(sURL, oTicket)
+      FIN
+      
+      nIndice = tableaucherche(oTicket.m_astLinks, tcLinéaire, "sRel", "TicketFollowup")
+      
+      si nIndice <> -1 ALORS
+      	sURL = oTicket.m_astLinks[nIndice].shref
+      	GetTicketFollowups(sURL, oTicket.m_astSuiviCom, oTicket)
+      FIN
+      
+      renvoyer vrai
+     type : 458752
+   -
+     name : GetTicketLocation
+     procedure_id : 1409785485624528811
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketLocation (<sURL> est chaîne, <oTicket> est ClGLPI_Ticket)
+      //
+      // Paramètres :
+      //	sURL (chaîne ANSI) : <indiquez ici le rôle de sURL>
+      //	oTicket (ClGLPI_Ticket) : <indiquez ici le rôle de oTicket>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicketLocation(sURL est une chaine, oTicket est un ClGLPI_Ticket) : booléen
+      vRetour est un Variant
+      
+      InitRequete(sURL)
+      
+      si pas Exec(vRetour) ALORS
+      	renvoyer faux
+      FIN
+      
+      oTicket.m_sLieu = vRetour.name
+      
+      renvoyer vrai
+     type : 458752
+   -
+     name : GetTicketUsername
+     procedure_id : 1409786336028120816
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketUsername (<sURL> est chaîne)
+      //
+      // Paramètres :
+      //	sURL (chaîne ANSI) : <indiquez ici le rôle de sURL>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	oTicket (ClGLPI_Ticket) : <indiquez ici le rôle de oTicket>
+      procédure GetTicketUsername(sURL est une chaine) : chaine
+      vRetour est un variant
+      sNom 	est une chaine
+      sPrenom est une chaine
+      
+      InitRequete(sURL)
+      
+      si pas Exec(vRetour) ALORS
+      	renvoyer ""
+      FIN
+      
+      sPrenom = vRetour.firstname
+      sNom	= vRetour.realname  
+      
+      renvoyer  sPrenom + " " + sNom
+     type : 458752
+   -
+     name : GetTicketDocuments
+     procedure_id : 1409796296059336361
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketDocuments (<sURL> est chaîne, <oTicket> est ClGLPI_Ticket)
+      //
+      // Paramètres :
+      //	sURL (chaîne ANSI) : <indiquez ici le rôle de sURL>
+      //	oTicket (ClGLPI_Ticket) : <indiquez ici le rôle de oTicket>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicketDocuments(sURL est une chaine, oTicket est un ClGLPI_Ticket) : booléen
+      vRetour 	est un variant
+      stDoc		est un ClGLPI_Ticket.STR_Documents
+      
+      
+      InitRequete(sURL)
+      
+      si pas Exec(vRetour) ALORS
+      	renvoyer faux
+      FIN
+      
+      pour tout vDocument de vRetour
+      	sURL = "https://glpi.union-materiaux.fr/apirest.php/Document/" + vDocument.documents_id
+      	si pas GetTicketDocument(sURL, stDoc) ALORS
+      		renvoyer faux
+      	FIN
+      	tableauajoute(oTicket.m_astDocument	, stDoc)
+      FIN
+      
+      renvoyer vrai
+     type : 458752
+   -
+     name : GetTicketDocument
+     procedure_id : 1409798117125566154
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketDocument (<sURL> est chaîne, <stDoc> est STR_Documents)
+      //
+      // Paramètres :
+      //	sURL (chaîne ANSI) : <indiquez ici le rôle de sURL>
+      //	stDoc (STR_Documents) : <indiquez ici le rôle de stDoc>
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicketDocument(sURL est une chaîne, stDoc est un ClGLPI_Ticket.STR_Documents) : booleen
+      vRetour 	est un variant
+      sFilePath 	est une chaine
+      
+      InitRequete(sURL)
+      
+      si pas exec(vRetour) ALORS
+      	renvoyer faux
+      FIN
+      
+      sFilePath = vRetour.filepath
+      stDoc.sNom 			= vRetour.filename
+      stDoc.sExtension 	= extraitchaine(sFilePath, 1, "/")
+      stDoc.nid 			= vRetour.id
+      //stDoc.buFFichier	= GetTicketDocumentBuffer(val(vRetour.document_id))
+      
+      renvoyer vrai
+     type : 458752
+   -
+     name : GetTicketDocumentBuffer
+     procedure_id : 1409799774983000699
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketDocumentBuffer (<nIDDocument> est entier)
+      //
+      // Paramètres :
+      //	nIDDocument (entier) : <indiquez ici le rôle de nIDDocument>
+      // Valeur de retour :
+      // 	Type indéterminé : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicketDocumentBuffer(nIDDocument est un entier)
+      vRetour est un variant
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/document/" + nIDDocument, httpGet, "?alt=media" )
+      
+      si pas exec(vRetour) ALORS
+      	renvoyer ""
+      FIN
+      
+      renvoyer vRetour
+     type : 458752
+   -
+     name : GetTicketFollowups
+     procedure_id : 1409811921168219006
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketFollowups (<sURL> est chaîne, <aStSuivi> est tableau (STR_Suivi_Commentaire), <oTicket> est ClGLPI_Ticket)
+      //
+      // Paramètres :
+      //	sURL (chaîne ANSI) : <indiquez ici le rôle de sURL>
+      //	aStSuivi (tableau (STR_Suivi_Commentaire)) : <indiquez ici le rôle de tab>
+      //	oTicket (ClGLPI_Ticket) : <indiquez ici le rôle de oTicket>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicketFollowups(sURL est une chaine, aStSuivi Est un tableau de ClGLPI_Ticket.STR_Suivi_Commentaire, oTicket est un ClGLPI_Ticket)
+      vRetour		est un variant
+      stSuivi 	est une ClGLPI_Ticket.STR_Suivi_Commentaire
+      nIDDoc		est un entier
+      stDoc 		est un ClGLPI_Ticket.STR_Documents
+      
+      InitRequete(sURL)
+      
+      SI PAS Exec(vRetour) ALORS
+      	RENVOYER Faux
+      FIN
+      
+      pour tout vSuivi de vRetour
+      	stSuivi.sUtilisateur 	= GetTicketUsername("https://glpi.union-materiaux.fr/apirest.php/User/" + vSuivi.users_id)
+      	stSuivi.dhCreation		= vSuivi.date_creation
+      	stSuivi.sDateAffichage	= DateHeureVersChaîne(stSuivi.dhCreation, "JJ/MM/AAAA HH:mm")
+      	stSuivi.buContent		= HTMLverstexte(vSuivi.content)
+      	
+      	tableauajoute(aStSuivi, stSuivi)
+      	
+      	//Si on a une image on l'a rajoute en tant que doc
+      	nIDDoc = ExtraitChaîneEntre(HTMLVersTexte(vSuivi.content), rangpremier, "https://glpi.union-materiaux.fr/front/document.send.php?docid=", "&tickets_id") 
+       	tantque nIDDoc <> 0	
+       		si tableaucherche(oTicket.m_astDocument, tcLinéaire, "nID", nIDDoc) = -1 ALORS
+      	 		GetTicketDocument("https://glpi.union-materiaux.fr/apirest.php/Document/" + nIDDoc, stDoc)
+       			tableauajoute(oTicket.m_astDocument, stDoc)
+      		FIN
+      		
+      		nIDDoc = ExtraitChaîneEntre(HTMLVersTexte(vSuivi.content), rangsuivant, "https://glpi.union-materiaux.fr/front/document.send.php?docid=", "&") 
+      	FIN
+      FIN
+      
+      RENVOYER Vrai
+     type : 458752
+   -
+     name : UpdateTicketStatut
+     procedure_id : 1409817749439082675
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] UpdateTicketStatut (<nIDTicket> est entier, <nStatut> est entier)
+      //
+      // Paramètres :
+      //	nIDTicket (entier) : <indiquez ici le rôle de nIDTicket>
+      //	nStatut (entier) : <indiquez ici le rôle de nStatut>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure UpdateTicketStatut(nIDTicket est un entier, nStatut est un entier)
+      vRetour	est un variant
+      vInput	est un variant
+      vBody 	est un variant
+      
+      //Maj du statut
+      m_surl 			= "https://glpi.union-materiaux.fr/apirest.php/Ticket/"
+      m_nMethode 		= httpput
+      m_sParam		= ""
+      vInput.id 		= nIDTicket
+      vInput.status 	= nStatut
+      
+      vBody.input = vInput	
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/", httpPut, *, vBody)	
+      si pas Exec(vRetour) ALORS
+      	renvoyer faux
+      FIN
+      
+      
+      renvoyer vrai
+      
+     type : 458752
+   -
+     name : UpdateTicketUser
+     procedure_id : 1410119771435331963
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] UpdateTicketUser (<nIDTicket> est entier)
+      //
+      // Paramètres :
+      //	nIDTicket (entier) : <indiquez ici le rôle de nIDTicket>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nStatut (entier) : <indiquez ici le rôle de nStatut>
+      procédure UpdateTicketUser(nIDTicket est un entier)
+      vRetour	est un variant
+      vInput	est un variant
+      vBody	est un variant
+      
+      //Maj de l'attribution si le user n'est pas attribué
+      m_sURL			= "https://glpi.union-materiaux.fr/apirest.php/Ticket/" + nIDTicket + "/ticket_user"
+      m_nMethode		= httppost
+      
+      vInput.tickets_id	= nIDTicket
+      vInput.users_id		= ClGLPI_Ticket.cst_User_ID
+      vInput.type			= ClGLPI_Ticket.cst_AssigneA_Type
+      
+      vBody.input	= vInput	
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/" + nIDTicket + "/ticket_user", httpPost, *, vBody)
+      
+      SI PAS Exec(vRetour) ALORS
+      	RENVOYER Faux
+      FIN
+      
+      renvoyer vrai
+      
+     type : 458752
+   -
+     name : KillSession
+     procedure_id : 1410121283264695927
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] KillSession ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée KillSession()
+      vRetour est un variant
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/killSession")
+      
+      si pas exec(vRetour) ALORS
+      	erreur("Impossible de détruire la session")
+      	renvoyer faux
+      FIN
+      
+      renvoyer vrai
+     type : 458752
+   -
+     name : CreateFollowup
+     procedure_id : 1410151193427972175
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] CreateFollowup (<sContenu>)
+      //
+      // Paramètres :
+      //	sContenu : <indiquez ici le rôle de sContenu>
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure CreateFollowup(sContenu)
+      vRetour est un variant
+      oTicket est un ClGLPI_Ticket
+      vInput	est un variant
+      stSuivi est un ClGLPI_Ticket.STR_Suivi_Commentaire
+      vBody 	est un variant
+      
+      oTicket = m_opclEntite
+      
+      vInput.tickets_id	= oTicket.m_nId
+      vInput.users_id		= ClGLPI_Ticket.cst_User_ID
+      vInput.content		= sContenu
+      
+      vBody.input		= vInput	
+      
+      InitRequete(ChaîneConstruit("https://glpi.union-materiaux.fr/apirest.php/Ticket/%1/TicketFollowup", oTicket.m_nId), httpPost, "", vBody)
+      
+      si pas exec(vRetour) ALORS
+      	renvoyer faux
+      FIN
+      
+      stSuivi.dhCreation 		= dateheuresys()
+      stSuivi.dhCreation 		= dateverschaine(stSuivi.dhCreation, "JJ/MM/AAAA HH:mm")
+      stSuivi.sUtilisateur 	= ClGLPI_Ticket.cst_Utilisateur_Defaut
+      stSuivi.buContent 		= sContenu
+      
+      tableauajoute(oTicket.m_astSuiviCom, stSuivi)
+      
+      m_opclEntite = oTicket
+      
+      renvoyer vrai
+     type : 458752
+   -
+     name : InitRequete
+     procedure_id : 1410154174136297092
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //InitRequete (<sURL> est chaîne [, <nMethode> est entier [, <sParam> est chaîne [, <vBody> est variant]]])
+      //
+      // Paramètres :
+      //	sURL (chaîne ANSI) : <indiquez ici le rôle de sURL>
+      //	nMethode (entier - valeur par défaut=1) : <indiquez ici le rôle de nMethode>
+      //	sParam (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de sParam>
+      //	vBody (variant - valeur par défaut=0) : <indiquez ici le rôle de vBody>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée InitRequete(sURL est chaine, nMethode est entier = httpget, sParam est chaine = "" , vBody est un variant = null)
+      
+      m_sURL		= sURL
+      m_sParam	= sParam
+      m_nMethode	= nMethode
+      m_vBody		= vBody
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1390636005bbcfa3
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

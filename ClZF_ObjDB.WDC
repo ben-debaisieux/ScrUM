@@ -1,0 +1,450 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_ObjDB
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13c3274a18dbd8cc
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : BwAAAAcAAACmAwaRPJNXOHKYPshT259864CQwLZHS2h01Pc8ZH0ILg5alXbi7xQp2jaYVRxVtkKa6si1eonG/tRv/ad9n/86N969zfMRB63kTA==
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_ObjDB est une Classe, abstraite
+      	herite de ClZF_ObjDbLs
+      
+      PRIVÉ
+      	m_ZF_bEstSupprime				est un booléen
+      	m_ZF_bEnregistrementEnCours	est un booléen
+      	m_ZF_bModif					est un booléen
+      	
+      public
+      GLOBAL
+      	mg_oExDupplicationObjet			est un ClZF_Exception dynamique
+      	mg_oExEchecEnregistrement		est un ClZF_Exception dynamique
+      FIN
+      
+      
+      mg_oExDupplicationObjet = allouer un ClZF_Exception([
+      			Erreur : la référence de l'objet %1 est différente de celle d'origine.
+      			L'objet a été dupliqué.
+      			], ClZF_Exception.cstInfoLogSimple)	
+      mg_oExEchecEnregistrement = allouer un ClZF_Exception("Echec de l'enregistrement", ClZF_Exception.cstInfoLogHF)
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1424025106377529548
+     type_code : 27
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur (<sNomTable_P> est chaîne, <sNomColIdAuto_P> est chaîne [, <nId_P> est entier])
+      //
+      // Paramètres :
+      //	sNomTable_P (chaîne ANSI) : < indiquez ici le rôle de P_sNomTable >
+      //	sNomColIdAuto_P (chaîne ANSI) : <indiquez ici le rôle de sNomColIdAuto_P>
+      //	nId_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nId_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE Constructeur(sNomTable_P est une chaîne , sNomColIdAuto_P est une chaîne , nId_P est un entier = 0)
+      
+      ancetre.constructeur(sNomTable_P, sNomColIdAuto_P, nId_P)
+      
+      SI nId_P = 0 ALORS
+      	//En création, on considère que l'objet est déjà en modification.
+      	:m_ZF_bModif = Vrai
+      FIN
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1424025106377595084
+     type_code : 28
+     code : |1+
+      
+      
+      PROCEDURE Destructeur()
+      
+      SI :m_ZF_bModif ALORS
+      	Trace("Libération d'un objet non enregistré : [%:p_sNomTable%] ID : [%:p_ZF_nIdUnique%]")
+      	STOP SI PAS EnModeTestAutomatique()
+      FIN
+     type : 655360
+   -
+     name : ZF_Enregistre
+     procedure_id : 1424025106377660620
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE ZF_Enregistre()<métier>:Vide
+      
+      bLeverTopEnreg est un booléen
+      bMemoModeAjout est un booléen
+      
+      
+      goapp.TranDebut()
+      
+      quand exception dans
+      	
+      	//On s'assure qu'on enregistre bien l'instance d'origine.
+      	si pas :ZF_bVerifPointeur() alors
+      		mg_oExDupplicationObjet.ZF_Declenche([Objet..Classe])
+      	FIN
+      	
+      	
+      	//A t on déja le top 'en cours d'enregistrement' actif ? (en cas de dérivation de la procédure d'enregistrement)
+      	si pas :m_ZF_bEnregistrementEnCours ALORS
+      		//Non : On le passe à vrai
+      		:m_ZF_bEnregistrementEnCours = vrai
+      		bLeverTopEnreg = vrai
+      	FIN
+      	
+      	
+      	//Est ce que l'enregistrement courant correspond à l'enregistrement de la classe ?
+      	SI :ZF_Get_IdUnique() <> {:p_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique} ALORS
+      		//Non : Repositionnement, mais sans actualisation des membres de l'instance.
+      		:ZF_Charge(Vrai)
+      	FIN
+      	
+      	
+      	bMemoModeAjout = :ZF_bModeAjout()
+      
+      	MémoireVersFichier(objet,:p_sNomTable)
+      	
+      	//Traitements précédent l'enregistrement
+      	:pre_enregistre()
+      	
+      	
+      	SI bMemoModeAjout ALORS
+      
+      		SI :m_ZF_bEstSupprime ALORS
+      			//Rien a faire : l'élément n'était pas enregistré
+      		SINON
+      			SI PAS HAjoute(:p_sNomTable) ALORS
+      				mg_oExEchecEnregistrement.ZF_Declenche()
+      			sinon
+      				:p_ZF_nIdUnique = {:p_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique}
+      			FIN
+      		FIN
+      		
+      	SINON
+      		
+      		SI :m_ZF_bEstSupprime ALORS
+      			
+      			SI PAS HSupprime(:p_sNomTable) ALORS
+      				mg_oExEchecEnregistrement.ZF_Declenche()
+      			sinon
+      				sRef est une chaîne
+      				sRef = :ZF_sGetNomInstance()
+      				si pas ClZF_App.mg_aoInstances[sRef]..vide ALORS
+      					TableauSupprime(ClZF_App.mg_aoInstances,sRef)
+      				FIN
+      			FIN
+      			
+      		SINON
+      			
+      			SI PAS HModifie(:p_sNomTable) ALORS
+      				mg_oExEchecEnregistrement.ZF_Declenche()
+      			FIN
+      		FIN
+      		
+      	FIN
+      	
+      	//Traitements post enregistrement
+      	:post_enregistre()
+      	
+      	goapp.TranFin()
+      	
+      	//On mémorise que l'enregistrement est effectué.
+      	:m_ZF_bModif = faux
+      faire
+      	sMsg est une chaîne 
+      	sMsg = ExceptionInfo(errMessage)
+      	goapp.TranAnnule()
+      	ExceptionPropage()
+      sinon
+      	//A t on initialisé le top 'en cours d'enregistrement' dans la procédure ?
+      	si bLeverTopEnreg ALORS
+      		//Oui :
+      		//On le désactive.
+      		:m_ZF_bEnregistrementEnCours = faux
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : ZF_Supprimer
+     procedure_id : 1424025106377726156
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Supprimer ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE ZF_Supprimer()<métier>:Vide
+      
+      :m_ZF_bEstSupprime = Vrai
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 1424025106377922764
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE PROTÉGÉE abstraite pre_enregistre()<métier>:Vide
+      
+     type : 458752
+   -
+     name : ZF_bModeAjout
+     procedure_id : 1424025106377988300
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_bModeAjout ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	booléen : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION ZF_bModeAjout()<métier>:booléen
+      
+      renvoyer (:ZF_Get_IdUnique() = 0)
+     type : 458752
+   -
+     name : post_enregistre
+     procedure_id : 1424025106378053836
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //post_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE PROTÉGÉE VIRTUELLE post_enregistre()<métier>:Vide
+      
+     type : 458752
+   -
+     name : ZF_Get_est_supprime
+     procedure_id : 1424025106378250444
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_Get_est_supprime ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	booléen : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE ZF_Get_est_supprime()<métier>:booléen
+      renvoyer :m_ZF_bEstSupprime
+     type : 458752
+   -
+     name : sExport
+     procedure_id : 1424025106378381516
+     type_code : 12
+     code : |1-
+      procédure  sExport()<métier>:json 
+      Ret est un json
+      renvoyer Ret
+     type : 458752
+   -
+     name : ZF_EstModif
+     procedure_id : 1424025106378512588
+     type_code : 12
+     code : |1-
+      procédure protegé ZF_EstModif()<métier>:Vide
+      :m_ZF_bModif = vrai
+     type : 458752
+   -
+     name : ZF_bEstModifie
+     procedure_id : 1424025106378643660
+     type_code : 12
+     code : |1-
+      procédure ZF_bEstModifie()<métier>:booléen
+      renvoyer :m_ZF_bModif
+     type : 458752
+   -
+     name : ZF_bObjEgal
+     procedure_id : 1424025106378709196
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_bObjEgal (<oObj1_p> est ClZF_ObjDbLs, <oObj2_p> est ClZF_ObjDbLs)
+      //
+      // Paramètres :
+      //	oObj1_p (ClZF_ObjDbLs) : <indiquez ici le rôle de oObj1_p>
+      //	oObj2_p (ClZF_ObjDbLs) : <indiquez ici le rôle de oObj2_p>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale ZF_bObjEgal(oObj1_p est un ClZF_ObjDBls, oObj2_p est un ClZF_ObjDBls)<métier>:booléen
+      
+      bRetour est un booléen
+      
+      si oObj1_p = Null _et_ oObj2_p = null ALORS
+      	bRetour = vrai
+      sinon
+      	si pas oObj1_p = Null _ET_ pas oObj2_p = Null _et_ oObj1_p.ZF_Get_IdUnique() = oObj2_p.ZF_Get_IdUnique() ALORS
+      		bRetour = Vrai
+      	FIN
+      FIN
+      
+      
+      renvoyer bRetour
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 1426155878119279865
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GetObj (<nIdUnique_P> est entier)
+      //
+      // Paramètres :
+      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique GetObj(LOCAL nIdUnique_P est un entier <utile>)
+      //a faire : repasser la méthode en abstrait
+     type : 458752
+   -
+     name : ZF_Charge
+     procedure_id : 1438112500072102037
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Charge ( [<bSansRechargement_P> est booléen])
+      //
+      // Paramètres :
+      //	bSansRechargement_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bSansRechargement_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      pROCEDURE PROTÉGÉE ZF_Charge(bSansRechargement_P est un booléen = faux)<métier>:Vide
+      
+      si :ZF_bModeAjout() alors
+      	hraz(:p_sNomTable)
+      	SI PAS bSansRechargement_P ALORS
+      		FichierVersMémoire(objet, :p_sNomTable)
+      		//Chargement des objets enfants
+      		Init_ObjBD()
+      	FIN
+      sinon
+      	ancetre.zf_charge(bSansRechargement_P)
+      FIN
+      
+      
+      
+      
+     type : 458752
+   -
+     name : ZF_Charge_source
+     procedure_id : 1438114832312369769
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.ZF_Charge_source
+      PROCÉDURE ZF_Charge_source(sdSource_p est une Source de Données)<métier>:Vide
+      
+      ancetre.ZF_Charge_source(sdSource_p)
+      :m_ZF_bModif = Faux
+     type : 458752
+  properties :
+   -
+     name : p_bEnregistrementEnCours
+     identifier : 0x13c3274a18dcd8cc
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bEnregistrementEnCours() : booléen
+         renvoyer :m_ZF_bEnregistrementEnCours
+        type : 1966080
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ClObjDB
+resources :
+ string_res :
+  identifier : 0x1e494c4397e1b0e1
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

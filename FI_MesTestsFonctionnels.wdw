@@ -283,7 +283,7 @@ window :
       
       TableSupprimeTout(TBL_MesTests)
       
-      pour tout element oUs de goApp.m_oUsrCnx.aoMesUS_En_Test(ClUsr.test_fonctionnel)
+      pour tout element oUs de goApp.m_oUsrCnx.aoMesUS_En_Test(ClUsr.test_fonctionnel).aItems()
       	
       	sBulle = oUs.p_sCodeUserStory + rc + ...
       		oUs.sNommination_US() + rc + rc + ...

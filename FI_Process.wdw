@@ -37,10 +37,10 @@ window :
         p_codes :
          -
            code : |1-
-            hcreation(Scr_Process_Metier_Intervenant)
-            hcreation(Scr_Process_Metier_Intervenant_Type)
-            HCréation(Scr_Process_Metier_Axe)
-            hcreation(Scr_Process_Metier)
+            //hcreation(Scr_Process_Metier_Intervenant)
+            //hcreation(Scr_Process_Metier_Intervenant_Type)
+            //HCréation(Scr_Process_Metier_Axe)
+            //hcreation(Scr_Process_Metier)
             
             
             
@@ -225,7 +225,7 @@ window :
         p_codes :
          -
            code : |1+
-            zpclProcess = allouer un ClProcess_Metier(zpclProcess.p_sNomFen, zpclProcess.Get_IdUnique())
+            zpclProcess = allouer un ClProcess_Metier(zpclProcess.p_sNomFen, zpclProcess.ZF_Get_IdUnique())
             zpclProcess.Affiche()
             
            type : 32

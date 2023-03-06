@@ -16,7 +16,7 @@ class :
    -
      code : |1-
       ClEpic est une Classe
-      	herite de ClObjDB
+      	herite de ClZF_ObjDB
       	
       prive
       	m_oProjet		est un ClProjet dynamique
@@ -41,12 +41,9 @@ class :
       
       Ancêtre.Constructeur(Scr_Epic..Nom, Scr_Epic.IDScr_Epic..Nom,nID_P)
       
-      :Charge()
+      //:ZF_Charge()
       
       
-      si nID_P <> 0 ALORS
-      	:m_oProjet		<- ClProjet.GetObj(Scr_Epic.IDScr_Projet)
-      FIN
      type : 589824
    -
      name : Destructeur
@@ -63,7 +60,7 @@ class :
      code : |1-
       // Redéfinition de la méthode ClObjDB.GetObj
       PROCÉDURE GLOBALE GetObj(local nIdUnique_P est un entier):ClEpic
-      renvoyer ClObjDB.GetObj("ClEpic",nIdUnique_P)
+      renvoyer ClZF_ObjDB.ZF_GetObj("ClEpic",nIdUnique_P)
      type : 458752
    -
      name : pre_enregistre
@@ -71,18 +68,18 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClObjDB.pre_enregistre
-      PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre()
+      PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre():Vide
       
       sdSuppRefEpic est une Source de Données
       sReq est une chaîne
       
-      si pas :m_bEstSupprime alors
+      si pas :ZF_Get_est_supprime() alors
       	
       	//On s'assure qu'il y ait bien un projet associé à l'epic.
       	si :m_oProjet = Null ALORS
       		ExceptionDéclenche(1, "Enregistrement du groupe impossible : Aucun projet n'y est affecté")
       	sinon
-      		Scr_Epic.IDScr_Projet = :m_oProjet.Get_IdUnique()
+      		Scr_Epic.IDScr_Projet = :m_oProjet.ZF_Get_IdUnique()
       	FIN
       	
       	si :m_nOrdre = 0 ALORS
@@ -96,7 +93,7 @@ class :
       	sReq = [
       		UPDATE Scr_UserStory
       		SET IDScr_Epic = Null
-      		WHERE IDScr_Epic = [%:Get_IdUnique()%]
+      		WHERE IDScr_Epic = [%:ZF_Get_IdUnique()%]
       		]
       	goapp.RSQL(sdSuppRefEpic,sReq)
       	HAnnuleDéclaration(sdSuppRefEpic)
@@ -111,14 +108,13 @@ class :
       		sReqCnt = [
       			SELECT COUNT(*) AS Nbre
       			FROM Scr_Epic
-      			WHERE Scr_Epic.IDScr_Projet = [%:m_oProjet.Get_IdUnique()%]
+      			WHERE Scr_Epic.IDScr_Projet = [%:m_oProjet.ZF_Get_IdUnique()%]
       		]
       		
-      		SI goapp.RSQL(sdNbEpicDePrj, sReqCnt) ALORS
-      			HLitPremier(sdNbEpicDePrj)
-      			si pas HEnDehors(sdNbEpicDePrj)
-      				nRetour = sdNbEpicDePrj.Nbre
-      			FIN
+      		goapp.RSQL(sdNbEpicDePrj, sReqCnt)
+      		HLitPremier(sdNbEpicDePrj)
+      		si pas HEnDehors(sdNbEpicDePrj)
+      			nRetour = sdNbEpicDePrj.Nbre
       		FIN
       		
       		HAnnuleDéclaration(sdNbEpicDePrj)
@@ -148,14 +144,13 @@ class :
       where Scr_Epic.IDScr_Projet = %1
       	AND Scr_Epic.Nom = '%2'
       	
-      ], oPrj_P.get_idunique(), goapp.sParamSql(sNom_P))
+      ], oPrj_P.ZF_Get_IdUnique(), ClZF_App.sFormateTexteSQL(sNom_P))
       
-      SI goapp.RSQL(sdRechEpic,sReq) ALORS
+      goapp.RSQL(sdRechEpic,sReq)
       
-      	HLitPremier(sdRechEpic)
-      	si pas HEnDehors(sdRechEpic) ALORS
-      		oRetour <- ClEpic.GetObj(sdRechEpic.IDScr_Epic)
-      	FIN
+      HLitPremier(sdRechEpic)
+      si pas HEnDehors(sdRechEpic) ALORS
+      	oRetour <- ClEpic.GetObj(sdRechEpic.IDScr_Epic)
       FIN
       
       HAnnuleDéclaration(sdRechEpic)
@@ -172,7 +167,7 @@ class :
       
       sRetour est un JSON
       
-      sRetour.ID		= :m_nIdUnique
+      sRetour.ID		= :ZF_Get_IdUnique()
       sRetour.Nom		= :m_sNom
       
       RENVOYER sRetour
@@ -182,7 +177,7 @@ class :
      procedure_id : 1309169029155736491
      type_code : 12
      code : |1-
-      procédure Deplace_Grp(nSens_p est un entier)
+      procédure Deplace_Grp(nSens_p est un entier):Vide
       
       nMemoPos est un entier = :m_nOrdre
       nNouvPos est un entier
@@ -211,19 +206,19 @@ class :
       
       
       oEpic_Tmp est un ClEpic dynamique
-      pour tout element oEpic_Tmp de :m_oProjet.aoEpics()
+      pour tout element oEpic_Tmp de :m_oProjet.aoEpics().aItems()
       	
       	si oEpic_Tmp = objet alors
       		:p_nOrdre = nNouvPos
-      		:Enregistre()
+      		:ZF_Enregistre()
       	sinon
       		si pas bDeplaceAmont et nMemoPos < oEpic_Tmp.m_nOrdre <= nNouvPos ALORS
       			oEpic_Tmp.p_nOrdre--
-      			oEpic_Tmp.Enregistre()
+      			oEpic_Tmp.ZF_Enregistre()
       		FIN
       		si bDeplaceAmont et nNouvPos <= oEpic_Tmp.m_nOrdre < nMemoPos ALORS
       			oEpic_Tmp.p_nOrdre++
-      			oEpic_Tmp.Enregistre()
+      			oEpic_Tmp.ZF_Enregistre()
       		FIN
       	FIN
       FIN
@@ -245,29 +240,35 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      procédure aoUS():tableau de ClUserStory dynamique
+      procédure aoUS():ClColUserStory
       
-      
-      aoRetour est un tableau de ClUserStory dynamique
-      sdUS est une Source de Données
+      oRetour est un ClColUserStory
+      //sdUS est une Source de Données
       sReq est une chaîne
       
       sReq = [
-      	SELECT IDScr_UserStory
+      	SELECT
+      		Scr_UserStory.*
+      		--Scr_UserStory.IDScr_UserStory
       	FROM Scr_UserStory
-      	WHERE IDScr_Epic = [%:Get_IdUnique()%]
+      	WHERE IDScr_Epic = [%:ZF_Get_IdUnique()%]
       ]
       
-      SI goApp.Rsql(sdUS,sReq) ALORS
-      	POUR TOUT sdUS
-      		TableauAjouteRéférence(aoRetour,ClUserStory.GetObj(sdUS.IDScr_UserStory))
-      	FIN
+      oRetour.ZF_LoadSQL(sReq)
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 1422514862468026504
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClObjDB.charge_obj_enfants
+      PROCÉDURE  init_ObjBD()
+      
+      SI pas :ZF_bModeAjout() ALORS
+      	:m_oProjet		<- ClProjet.GetObj(Scr_Epic.IDScr_Projet)
       FIN
-      
-      HAnnuleDéclaration(sdUS)
-      
-      
-      renvoyer aoRetour
      type : 458752
   properties :
    -
@@ -283,8 +284,8 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sNom(sValeur est une chaîne)
-         :EstModif()
+         procédure publique p_sNom(sValeur est une chaîne):Vide
+         :ZF_EstModif()
          :m_sNom=sValeur
         type : 2031616
      template_refs : []
@@ -295,9 +296,12 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_oProjet(oValeur est ClProjet)
-         :EstModif()
-         :m_oProjet <- oValeur
+         procédure publique p_oProjet(oValeur est ClProjet):Vide
+         
+         si PAS ZF_bObjEgal(:m_oProjet, oValeur) alors
+         	:ZF_EstModif()
+         	:m_oProjet <- oValeur
+         fin
         type : 2031616
      template_refs : []
    -

@@ -118,17 +118,17 @@ window :
      p_codes :
       -
         code : |1+
-         oUsr est un clusr
-         nNumLigne est un entier
+         oUsr		est un clusr dynamique
+         nNumLigne	est un entier
          
          
          TBL_Src_Usr..AffichageActif = faux
          
          TableSupprimeTout(TBL_Src_Usr)
          
-         pour tout element oUsr de ClUsr.aoListeUsr()
+         pour tout element oUsr de ClUsr.aoListeUsr().aItems()
          	nNumLigne = TableAjouteLigne(TBL_Src_Usr)
-         	TBL_Src_Usr.COL_IDScr_Usr[nNumLigne]	= oUsr.Get_IdUnique()
+         	TBL_Src_Usr.COL_IDScr_Usr[nNumLigne]	= oUsr.ZF_Get_IdUnique()
          	TBL_Src_Usr.COL_Nom[nNumLigne]			= oUsr.p_sNom
          	TBL_Src_Usr.COL_EMail[nNumLigne]		= oUsr.p_sEMail
          	TBL_Src_Usr.COL_Service[nNumLigne]		= oUsr.p_sService

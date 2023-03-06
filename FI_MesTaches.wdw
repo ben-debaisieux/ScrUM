@@ -249,7 +249,7 @@ window :
             	oTache est un ClTache <- ClTache.GetObj(TBL_MesTaches.COL_IdTache)
             	SI OuiNon(Non, "Confirmez-vous la fin des tests unitaires de la tache :" + RC + oTache.p_sDescription) ALORS
             		oTache.p_bEstRealise = Vrai
-            		oTache.Enregistre()
+            		oTache.ZF_Enregistre()
             		Actualise()
             	FIN
             FIN
@@ -268,7 +268,7 @@ window :
             	SI OuiNon(Non, "Confirmez-vous le renvoi en ""à faire"", de la tache :" + RC + oTache.p_sDescription) ALORS
             		oTache.p_oUsr_Dev				= Null
             		oTache.p_nNum_Sprint_Demarrage	= 0
-            		oTache.Enregistre()
+            		oTache.ZF_Enregistre()
             		Actualise()
             	FIN
             FIN
@@ -317,7 +317,7 @@ window :
       TBL_MesTaches..AffichageActif = faux
       TableSupprimeTout(TBL_MesTaches)
       
-      POUR TOUT ELÉMENT oTache DE goApp.m_oUsrCnx.aoTaches_MesTaches()
+      POUR TOUT ELÉMENT oTache DE goApp.m_oUsrCnx.oTaches_MesTaches().aItems()
       	nNumLigne = TableAjouteLigne(TBL_MesTaches)
       	TBL_MesTaches[nNumLigne].COL_IdTache		= oTache.Get_IdUnique()
       	TBL_MesTaches[nNumLigne].COL_Tache			= oTache.p_sDescription

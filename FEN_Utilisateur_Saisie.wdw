@@ -46,30 +46,13 @@ window :
          	
          	EcranVersSource(MaFenêtre,"zoUsr")
          	quand Exception dans
-         		zoUsr.Enregistre()
+         		zoUsr.ZF_Enregistre()
          	FAIRE
          		erreur(ExceptionInfo(errMessage))
          	sinon
+         		MaFenêtre..ValeurRenvoyée = vrai
          		ferme()
          	FIN
-         	
-         //	EcranVersFichier() 
-         //	
-         //	Si Scr_Usr..NouvelEnregistrement
-         //		
-         //		Si HAjoute(Scr_Usr) Alors
-         //			Info("Utilisateur ajouté !")
-         //		Sinon // message d'erreur
-         //			Info("Echec de l'ajout de l'utilisateur", ErreurInfo())
-         //		FIN
-         //	Sinon
-         //		Si HModifie(Scr_Usr) Alors
-         //			info("Utilisateur modifié !")
-         //		Sinon //message d'erreur
-         //			Info("Echec de la modification de l'utilisateur", erreurinfo())
-         //		FIN
-         //	fin
-         //	Ferme()
          FIN
         type : 18
       -
@@ -217,24 +200,12 @@ window :
      code : |1-
       PROCEDURE MaFenêtre(nIdUsr_P est un entier = 0)
       
+      MaFenêtre..ValeurRenvoyée = Faux
+      
       zoUsr est un ClUsr(nIdUsr_P)
    -
-     code : |1+
-      //Si nIdUsr_P = 0 alors //Si aucun utilisateur n'est spécifié -> mode creation
-      //	HRAZ(Scr_Usr) 
-      //	
-      //Sinon //Sinon on affiche les infos de l'utilisateur selectionné 
-      //	HLitRecherche(Scr_Usr,IDScr_Usr,nIdUsr_P, hIdentique+hLimiteParcours)
-      //	SI Htrouve(Scr_Usr) Alors
-      //		FichierVersEcran()
-      //	Sinon //Gestion de l'erreur si l'utilisateur n'est pas trouvé
-      //		Info("utilisateur non trouvé")
-      //		ferme()
-      //	fin
-      //FIN
-      
+     code : |1-
       SourceVersEcran(MaFenêtre,"zoUsr")
-      
      type : 34
    -
      code : |1+

@@ -315,25 +315,25 @@ window :
       
       oTache est un ClTache dynamique
       nNumLigne est un entier
-      aoLstTaches est un tableau de ClTache
+      oLstTaches est un ClColTaches
       TableSupprimeTout(TBL_Suspendues)
       
       
       si goApp.m_oUsrCnx.p_bTop_Equip_Informatique alors
       	//Affichage de tous les blocages pour l'équipe info.
-      	aoLstTaches <- ClTache.aoTachesSelonStatut(ClTache.cstStatut_Suspendu)
+      	oLstTaches <- ClTache.oTachesSelonStatut(ClTache.cstStatut_Suspendu)
       sinon
       	//On filtre les blocages, poru les autres utilisateurs.
-      	pour tout element oTache de ClTache.aoTachesSelonStatut(ClTache.cstStatut_Suspendu)
+      	pour tout element oTache de ClTache.oTachesSelonStatut(ClTache.cstStatut_Suspendu).aItems()
       		//Est ce que l'utilisateur courant est affecté au projet de cette tache ?
-      		si oTache.m_oUserStoryParent.p_oProjetParent.bUsrAffecteAuProjet(goApp.m_oUsrCnx)
-      			TableauAjouteRéférence(aoLstTaches, oTache)
+      		si oTache.p_oUserStoryParent.p_oProjetParent.bUsrAffecteAuProjet(goApp.m_oUsrCnx) ALORS
+      			oLstTaches.ZF_addItem(oTache)
       		fin
       	FIN
       FIN
       
       
-      pour tout element oTache de aoLstTaches
+      pour tout element oTache de oLstTaches.aItems()
       	nNumLigne = TableAjouteLigne(TBL_Suspendues)
       	TBL_Suspendues[nNumLigne].COL_IdTache		= oTache.Get_IdUnique()
       	TBL_Suspendues[nNumLigne].COL_Tache			= oTache.p_sDescription

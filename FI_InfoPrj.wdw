@@ -208,25 +208,23 @@ window :
      code : |1+
       PROCÉDURE Actualise()
       
-      
-      
       oPrjTmp		est un ClProjet dynamique
-      aoProjets	est un tableau de ClProjet dynamique
+      aoProjets	est un ClColProjet
       
       
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
       	aoProjets <- ClProjet.aoListeProjets(Faux)
       SINON
-      	aoProjets <- goApp.m_oUsrCnx.aoMesProjets(ClUsr.usr_tous)
+      	aoProjets <- ClProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
       FIN
       
       
       ListeSupprimeTout(CBO_Projet)
       
       
-      POUR TOUT ELEMENT oPrjTmp DE aoProjets
+      POUR TOUT ELEMENT oPrjTmp DE aoProjets.aItems()
       	si pas oPrjTmp.p_bTop_Direction alors
-      		ListeAjoute(CBO_Projet, oPrjTmp.p_sNom + gLien(oPrjTmp.Get_IdUnique()))	
+      		ListeAjoute(CBO_Projet, oPrjTmp.p_sNom + gLien(oPrjTmp.ZF_Get_IdUnique()))	
       	FIN
       FIN
       

@@ -32,26 +32,26 @@ window :
      p_codes :
       -
         code : |1-
-         oPrj est un ClProjet dynamique
-         oUsr est un ClUsr dynamique
-         oSprint est un ClSprint dynamique
-         sGlobal est un json
-         nInd est un entier
+         oPrj	est un ClProjet dynamique
+         oUsr	est un ClUsr dynamique
+         oSprint	est un ClSprint dynamique
+         sGlobal	est un json
+         nInd	est un entier
          
          nInd = 0
-         pour tout element oUsr de ClUsr.aoListeUsr()
+         pour tout element oUsr de ClUsr.aoListeUsr().aItems()
          	nInd++
          	sGlobal.Users[nInd] = oUsr.sExport()
          FIN
          
          nInd = 0
-         pour tout element oSprint de ClSprint.aoListeSprint()
+         pour tout element oSprint de ClSprint.aoListeSprint().aItems()
          	nInd++
          	sGlobal.Sprints[nInd] = oSprint.sExport()
          FIN
          
          nInd = 0
-         pour tout element oPrj de ClProjet.aoListeProjets()
+         pour tout element oPrj de ClProjet.aoListeProjets().aItems()
          	nInd++
          	sGlobal.Projets[nInd] = oPrj.sExport()
          FIN
@@ -82,7 +82,7 @@ window :
          
          
          nInd = 0
-         pour tout element oSprint de ClSprint.aoListeSprint()
+         pour tout element oSprint de ClSprint.aoListeSprint().aItems()
          	nInd++
          	sGlobal.ListeSprint[nInd] = oSprint.sExport()
          FIN

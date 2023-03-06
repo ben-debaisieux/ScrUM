@@ -36,8 +36,8 @@ window :
          bRetrospectiveValide est un booléen = vrai
          
          // Parcours de contrôles
-         POUR i = 1 _a_ TableOccurrence(ZR_Retrospective)
-         	si ZR_Retrospective[i].COL_Commentaire.INT_Defaut = 1 ET ZR_Retrospective[i].COL_Commentaire.SAI_Commentaire = "" alors
+         POUR i = 1 _a_ TableOccurrence(TBL_Retrospective)
+         	si TBL_Retrospective[i].COL_Commentaire.INT_Defaut = 1 ET TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire = "" alors
          		erreur("Vous devez remplir les champs par défaut pour enregistrer la rétrospective.")
          		bRetrospectiveValide = faux
          		Sortir
@@ -46,13 +46,13 @@ window :
          
          si bRetrospectiveValide alors
          	
-         	Pour i = 1 _a_ TableOccurrence(ZR_Retrospective)
+         	Pour i = 1 _a_ TableOccurrence(TBL_Retrospective)
          		
-         		HLitRecherche(Scr_Commentaire,IDScr_Commentaire,ZR_Retrospective[i].COL_Commentaire.SAI_ID,hIdentique+hLimiteParcours)
+         		HLitRecherche(Scr_Commentaire,IDScr_Commentaire,TBL_Retrospective[i].COL_Commentaire.SAI_ID,hIdentique+hLimiteParcours)
          		
          		//Si le commentaire existe déja, on le modifie
          		si Htrouve(Scr_Commentaire) alors
-         			Scr_Commentaire.CMTR = ZR_Retrospective[i].COL_Commentaire.SAI_Commentaire
+         			Scr_Commentaire.CMTR = TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
          			
          			si pas HModifie(Scr_Commentaire) alors
          				Erreur(ErreurInfo(errComplet))
@@ -60,14 +60,14 @@ window :
          			
          		sinon
          			//Si le champ Commentaire n'est pas rempli, il ne faux pas l'enregistrer
-         			si ZR_Retrospective[i].COL_Commentaire.SAI_Commentaire <> "" alors
+         			si TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire <> "" alors
          				
          				HRAZ(Scr_Commentaire)
-         				Scr_Commentaire.Num_Sprint		= zoSprint.Get_IdUnique()
-         				Scr_Commentaire.CMTR			= ZR_Retrospective[i].COL_Commentaire.SAI_Commentaire
+         				Scr_Commentaire.Num_Sprint		= zoSprint.ZF_Get_IdUnique()
+         				Scr_Commentaire.CMTR			= TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
          				
          				gLienActive(CBO_Type_Cmtr_Ref,faux)
-         				nLigneTypeCom = ListeCherche(CBO_Type_Cmtr_Ref, ZR_Retrospective[i].COL_Commentaire.CBO_Type_Cmtr)
+         				nLigneTypeCom = ListeCherche(CBO_Type_Cmtr_Ref, TBL_Retrospective[i].COL_Commentaire.CBO_Type_Cmtr)
          				gLienActive(CBO_Type_Cmtr_Ref,vrai)
          				
          				Scr_Commentaire.IDScr_Type_Cmtr	= CBO_Type_Cmtr_Ref[nLigneTypeCom]
@@ -83,7 +83,7 @@ window :
          	zoSprint.p_bTop_Termine = vrai
          
          	quand exception dans
-         		zoSprint.Enregistre()
+         		zoSprint.ZF_Enregistre()
          	FAIRE
          		erreur(ExceptionInfo(errMessage))
          	sinon
@@ -119,14 +119,14 @@ window :
          
          sDateSprint est une chaine = zoSprint.sSprint_Date()
          
-         LIB_Info_du_sprint = "Sprint " + NumériqueVersChaîne(zoSprint.Get_IdUnique()) + ...
+         LIB_Info_du_sprint = "Sprint " + NumériqueVersChaîne(zoSprint.ZF_Get_IdUnique()) + ...
          	", Du " + gauche(sDateSprint,5) + " au " + droite(sDateSprint, 5) + ...
          	", Nombre de points réalisés : " + NumériqueVersChaîne(zoSprint.nGetNbPointsRealises())
         type : 14
   -
     name : TBL_TachesRealise
     identifier : 0x2ce2784704e4799a
-    internal_properties : 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
+    internal_properties : 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
     properties :
      x : 6
      y : 57
@@ -284,7 +284,7 @@ window :
         type : 224
         enabled : false
   -
-    name : ZR_Retrospective
+    name : TBL_Retrospective
     identifier : 0x2ce2784704ea799a
     internal_properties : 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
     properties :
@@ -494,11 +494,11 @@ window :
          
          nligne est un entier
          
-         nligne = TableAjouteLigne(ZR_Retrospective)
+         nligne = TableAjouteLigne(TBL_Retrospective)
          
-         ZR_Retrospective[nligne].COL_Commentaire.SAI_Commentaire = ""
-         ZR_Retrospective[nligne].COL_Commentaire.SAI_ID = 0
-         ZR_Retrospective[nligne].COL_Commentaire.BTN_Ajouter_Type..Visible = vrai
+         TBL_Retrospective[nligne].COL_Commentaire.SAI_Commentaire = ""
+         TBL_Retrospective[nligne].COL_Commentaire.SAI_ID = 0
+         TBL_Retrospective[nligne].COL_Commentaire.BTN_Ajouter_Type..Visible = vrai
          
          
          //TBL_Retrospective[nligne].COL_Commentaire.INT_Defaut..Visible = vrai
@@ -597,9 +597,9 @@ window :
          nNbUS_EnTest est un entier
          
          
-         POUR TOUT ELÉMENT oPrj DE ClProjet.aoListeProjets()
-         	POUR TOUT ELÉMENT oUS DE oPrj.aoListeUS(Vrai)
-         		POUR TOUT ELÉMENT oTache DE oUS.aoListeTaches()
+         POUR TOUT ELÉMENT oPrj DE ClProjet.aoListeProjets().aItems()
+         	POUR TOUT ELÉMENT oUS DE oPrj.aoListeUS(Vrai).aItems()
+         		POUR TOUT ELÉMENT oTache DE oUS.aoListeTaches().aItems()
          			selon oTache.p_nStatut 
          				
          				cas ClTache.cstStatut_Suspendu
@@ -756,19 +756,17 @@ window :
       	WHERE Scr_Tache.Num_Sprint_Fin = %1
       		and Scr_Tache.Top_Brouillon = 0
       		and Scr_Tache.Top_Annule = 0	
-      ], zoSprint.Get_IdUnique())
+      ], zoSprint.ZF_Get_IdUnique())
       
-      SI goApp.Rsql(sdRechercheTachesRealisees,sReq) ALORS
-      	
-      	pour TOUT sdRechercheTachesRealisees 
-      		nLigne = TableAjouteLigne(TBL_TachesRealise)
-      		TBL_TachesRealise[nLigne].COL_ID = sdRechercheTachesRealisees.IDScr_Tache
-      		TBL_TachesRealise[nLigne].COL_Code = sdRechercheTachesRealisees.CodeTache
-      		TBL_TachesRealise[nLigne].COL_Description = sdRechercheTachesRealisees.Description
-      		TBL_TachesRealise[nLigne].COL_Sprint_Initial = sdRechercheTachesRealisees.Num_Sprint_Demarrage
-      		TBL_TachesRealise[nLigne].COL_Poids = sdRechercheTachesRealisees.Poids		
-      	FIN
-      	
+      goApp.Rsql(sdRechercheTachesRealisees,sReq)
+      
+      pour TOUT sdRechercheTachesRealisees 
+      	nLigne											= TableAjouteLigne(TBL_TachesRealise)
+      	TBL_TachesRealise[nLigne].COL_ID				= sdRechercheTachesRealisees.IDScr_Tache
+      	TBL_TachesRealise[nLigne].COL_Code				= sdRechercheTachesRealisees.CodeTache
+      	TBL_TachesRealise[nLigne].COL_Description		= sdRechercheTachesRealisees.Description
+      	TBL_TachesRealise[nLigne].COL_Sprint_Initial	= sdRechercheTachesRealisees.Num_Sprint_Demarrage
+      	TBL_TachesRealise[nLigne].COL_Poids				= sdRechercheTachesRealisees.Poids		
       FIN
       
       HAnnuleDéclaration(sdRechercheTachesRealisees)
@@ -801,8 +799,8 @@ window :
       sReq est une chaîne
       
       
-      ZR_Retrospective..AffichageActif = Faux
-      TableSupprimeTout(ZR_Retrospective)
+      TBL_Retrospective..AffichageActif = Faux
+      TableSupprimeTout(TBL_Retrospective)
       
       
       sReq = ChaîneConstruit([
@@ -826,38 +824,36 @@ window :
       			WHERE Scr_Commentaire.Num_Sprint = %1
       		) TEMP_Cmtr ON (TEMP_Cmtr.IDScr_Type_Cmtr = Scr_Type_Cmtr.IDScr_Type_Cmtr)
       	
-      ], zoSprint.Get_IdUnique())
+      ], zoSprint.ZF_Get_IdUnique())
       
       nligcbo est un entier
       
-      Si goApp.Rsql(sdRechercheCommentaire,sReq) ALORS
+      goApp.Rsql(sdRechercheCommentaire,sReq)
+      
+      pour TOUT sdRechercheCommentaire 
+      
+      	si sdRechercheCommentaire.Top_Par_Defaut = vrai _OU_ sdRechercheCommentaire.IDScr_Commentaire <> 0 alors
+      					
+      		nLigne = TableAjouteLigne(TBL_Retrospective)
       	
-      	
-      	pour TOUT sdRechercheCommentaire 
-      	
-      		si sdRechercheCommentaire.Top_Par_Defaut = vrai _OU_ sdRechercheCommentaire.IDScr_Commentaire <> 0 alors
-      						
-      			nLigne = TableAjouteLigne(ZR_Retrospective)
+      		TBL_Retrospective[nLigne].COL_Commentaire.SAI_ID = sdRechercheCommentaire.IDScr_Commentaire
       		
-      			ZR_Retrospective[nLigne].COL_Commentaire.SAI_ID = sdRechercheCommentaire.IDScr_Commentaire
-      			
-      			nligcbo = listecherche(CBO_Type_Cmtr_ref,sdRechercheCommentaire.IDScr_Type_Cmtr,vrai,1)
-      			ZR_Retrospective.COL_Commentaire[nLigne].CBO_Type_Cmtr = CBO_Type_Cmtr_Ref[nligcbo]..ValeurAffichée
-      			
-      			ZR_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire = sdRechercheCommentaire.CMTR
-      			ZR_Retrospective[nLigne].COL_Commentaire.INT_Defaut = 1
-      			
-      			//Les commentaires déja remplis sont grisés
-      			si ZR_Retrospective[nLigne].COL_Commentaire.SAI_ID <> 0 alors
-      				ZR_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire..grisé = vrai
-      			fin
+      		nligcbo = listecherche(CBO_Type_Cmtr_ref,sdRechercheCommentaire.IDScr_Type_Cmtr,vrai,1)
+      		TBL_Retrospective.COL_Commentaire[nLigne].CBO_Type_Cmtr = CBO_Type_Cmtr_Ref[nligcbo]..ValeurAffichée
+      		
+      		TBL_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire = sdRechercheCommentaire.CMTR
+      		TBL_Retrospective[nLigne].COL_Commentaire.INT_Defaut = 1
+      		
+      		//Les commentaires déja remplis sont grisés
+      		si TBL_Retrospective[nLigne].COL_Commentaire.SAI_ID <> 0 alors
+      			TBL_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire..grisé = vrai
       		fin
-      	FIN
+      	fin
       FIN
       
       HAnnuleDéclaration(sdRechercheCommentaire)
       
-      ZR_Retrospective..AffichageActif = Vrai
+      TBL_Retrospective..AffichageActif = Vrai
      type : 458752
    -
      name : chargement_cbo_type_commentaire
@@ -884,7 +880,7 @@ window :
       sReq_Liste_Type_Commentaire est une chaîne
       
       
-      ListeSupprimeTout(ZR_Retrospective.COL_Commentaire.CBO_Type_Cmtr)
+      ListeSupprimeTout(TBL_Retrospective.COL_Commentaire.CBO_Type_Cmtr)
       
       
       sReq_Liste_Type_Commentaire = ChaîneConstruit([
@@ -898,21 +894,20 @@ window :
       	
       	WHERE Scr_Commentaire.Num_Sprint = %1 OR Scr_Type_Cmtr.Top_Par_Defaut <= 1
       	
-      ], zoSprint.Get_IdUnique())
+      ], zoSprint.ZF_Get_IdUnique())
       
-      SI goApp.Rsql(sdSource_Liste_Type_Commentaire,sReq_Liste_Type_Commentaire) ALORS
+      goApp.Rsql(sdSource_Liste_Type_Commentaire,sReq_Liste_Type_Commentaire)
+      
+      POUR TOUT sdSource_Liste_Type_Commentaire
+      	ListeAjoute(CBO_Type_Cmtr_Ref, sdSource_Liste_Type_Commentaire.Type_Cmtr + ...
+      		gLien(sdSource_Liste_Type_Commentaire.IDScr_Type_Cmtr))
       	
-      	POUR TOUT sdSource_Liste_Type_Commentaire
-      		ListeAjoute(CBO_Type_Cmtr_Ref, sdSource_Liste_Type_Commentaire.Type_Cmtr + ...
-      			gLien(sdSource_Liste_Type_Commentaire.IDScr_Type_Cmtr))
-      		
-      		sContenu_Cbo_Conteneur += [rc] + sdSource_Liste_Type_Commentaire.Type_Cmtr
-      	FIN
+      	sContenu_Cbo_Conteneur += [rc] + sdSource_Liste_Type_Commentaire.Type_Cmtr
       FIN
       
       HAnnuleDéclaration(sdSource_Liste_Type_Commentaire)
       
-      ZR_Retrospective.COL_Commentaire.CBO_Type_Cmtr..contenu = sContenu_Cbo_Conteneur
+      TBL_Retrospective.COL_Commentaire.CBO_Type_Cmtr..contenu = sContenu_Cbo_Conteneur
       
       
       gLienActive(CBO_Type_Cmtr_Ref, vrai)

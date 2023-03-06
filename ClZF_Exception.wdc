@@ -1,0 +1,115 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_Exception
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13c3294c25cbb0ea
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClZF_Exception est une Classe
+      PRIVE
+      	m_nCode		est un entier
+      	m_sMessage	est une chaîne
+      	m_nLog		est un entier
+      	
+      fin
+      
+      constante
+      	cstInfoLogSimple = 1
+      	cstInfoLogHF = 2
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1424027314207699178
+     type_code : 27
+     code : |1+
+      procédure Constructeur(sMessage_p est une chaîne, nInfoLog_p est un entier = 0)
+      
+      m_nCode		= DonneIdentifiant()
+      m_sMessage	= sMessage_p
+      m_nLog		= nInfoLog_p
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1424027314207764714
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : ZF_Declenche
+     procedure_id : 1424027314207830250
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Declenche ( [<asParams_p> est tableau (chaîne)])
+      //
+      // Paramètres :
+      //	asParams_p (tableau (chaîne ANSI)) : <indiquez ici le rôle de aSParams_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_Declenche(asParams_p est un tableau de chaine = []):vide
+      
+      sMsg est une chaîne = ChaîneConstruit(:m_sMessage, asParams_p)
+      
+      si :m_nLog > 0 alors
+      	si enmodetest() ALORS
+      		sMsg += rc + rc + "MsgLog :"
+      		
+      		selon :m_nLog
+      			CAS cstInfoLogHF
+      				sMsg += rc + rc + HErreurInfo(hErrMessage)
+      			AUTRE CAS
+      				
+      		FIN
+      		
+      		sMsg += RC + RC + "pile :" + dbgInfo(dbgPile)
+      	FIN
+      FIN
+      
+      ExceptionDéclenche(:m_nCode, sMsg)
+     type : 458752
+  properties :
+   -
+     name : ZF_Code
+     identifier : 0x13c3294c25ccb0ea
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique ZF_Code()
+         renvoyer :m_nCode
+        type : 1966080
+      -
+        code : |1-
+         
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1390fa8b37c6b3d2
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

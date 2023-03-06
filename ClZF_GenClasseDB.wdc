@@ -1,0 +1,1104 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenClasseDB
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13e8dcbb1b8fdb39
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      
+      STR_DefRub est une structure
+      	nTypeRub				est un entier
+      	nTypeRubHF				est un entier
+      	
+      	bNullable				est un booléen
+      	sObjetCompse			est une chaîne
+      	sPrefixe				est une chaîne
+      	sNomDeclarationComplet	est une chaîne
+      	sNomDeclarationCourt	est une chaîne
+      fin
+      
+      STR_InfoCol est une Structure
+      	sDeclaration est une chaîne
+      	sTableDesti est une chaîne
+      	sCleDesti est une chaîne
+      FIN
+      
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      
+      ClZF_GenClasseDB est une Classe
+      	m_aRub est un tableau associatif de STR_DefRub
+      	m_aCol est un tableau de STR_InfoCol
+      PRIVE
+      	m_bLectureSeule est un booléen
+      	m_sNomTable est une chaîne
+      	m_sNomUsage est une chaîne
+      	m_sNomRubId est une chaîne
+      globale
+      public
+      	mg_sPrefixeTable est une chaîne ANSI
+      fin
+      
+      constante
+      	cstDefRubNum	= 1
+      	cstDefRubChaine	= 2
+      	cstDefRubObj	= 3
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1434639177496976185
+     type_code : 27
+     code : |1+
+      procédure Constructeur(local sNomTable_P est une chaîne)
+      
+      :m_sNomTable = sNomTable_P
+      :m_sNomUsage = remplace(sNomTable_P, ::mg_sPrefixeTable , "")
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1434639177497041721
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GenConstructeur
+     procedure_id : 1434639516799471819
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenConstructeur ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure prive GenConstructeur():chaîne
+      
+      
+      sRetour			est une chaîne
+      sListeMembres	est une chaîne
+      stDefRub		est un STR_DefRub
+      sRub			est une chaine
+      stRubCol		est un STR_InfoCol
+      sDecExcept		est une chaîne
+      sInitExcept		est une chaîne
+      sHerite			est une chaîne
+      
+      
+      pour tout stDefRub, sRub de :m_aRub
+      	sListeMembres += [rc] + TAB + "m_[%stDefRub.sPrefixe%][%sRub%]	[%stDefRub.sNomDeclarationComplet%]"
+      	si stDefRub.nTypeRub <> ::cstDefRubObj ALORS
+      		sListeMembres +="	<MAPPING=[%sRub%]>"
+      	FIN
+      FIN
+      
+      
+      POUR TOUT element stRubCol de :m_aCol
+      	sListeMembres += [rc] + TAB + stRubCol.sDeclaration
+      FIN
+      
+      
+      si :m_bLectureSeule ALORS
+      	sHerite = ClZF_ObjDbLs
+      sinon
+      	sHerite = ClZF_ObjDb
+      FIN
+      
+      
+      nInd est un entier
+      pour nInd = 1 a 10
+      	sDecExcept += [rc] + tab + "mg_oEx_Exception[%nInd%]	est un ClZF_Exception dynamique"
+      	sInitExcept += [rc] + "mg_oEx_Exception[%nInd%]	= Allouer un ClZF_Exception(""..."")"
+      fin
+      
+      
+      sRetour = [
+      [%:sNomClasseGen()%] est une Classe
+      	hérite de [%sHerite%]
+      	
+      PRIVÉ
+      [%sListeMembres%]
+      
+      GLOBAL
+      PUBLIC
+      /*
+      [%sDecExcept%]
+      */
+      FIN
+      
+      /*
+      [%sInitExcept%]
+      */
+      
+      
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      Ancêtre.Constructeur([%:m_sNomTable%]..Nom, [%:m_sNomTable%].[%:m_sNomRubId%]..Nom,nID_P)
+      
+      Procédure Destructeur()
+      
+      ]
+      
+      
+      
+      
+      //sRetour = [
+      //info :
+      // name : [%:sNomClasseGen()%]
+      // major_version : 27
+      // minor_version : 0
+      // type : 4
+      // description : ""
+      // subtype : 0
+      //class :
+      // identifier : 0x10311e59001dd83e
+      // code_elements :
+      //  type_code : 10
+      //  p_codes :
+      //   -
+      //     code : |1-
+      //      [%:sIndentSpace(sRetour)%]
+      //     type : 131072
+      //]
+      
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenInitObject
+     procedure_id : 1434639654238588926
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GenInitObject ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PRIVÉ GenInitObject():chaine
+      
+      sRetour		est une chaîne
+      sListeInit	est une chaîne
+      sCle		est une chaîne
+      sLigne		est une chaîne
+      stRubTmp	est un STR_DefRub
+      
+      pour tout element stRubTmp, sCle de :m_aRub
+      	si stRubTmp.sObjetCompse <> "" ALORS
+      		
+      		sLigne = tab + ":m_o[%sCle%]	<- [%stRubTmp.sObjetCompse%].GetObj([%:m_sNomTable%].[%sCle%])"
+      		
+      		si stRubTmp.bNullable ALORS
+      			
+      			sLigne = [
+      			[%TAB%]SI PAS [%:m_sNomTable%].[%sCle%]..Null ALORS
+      				[%TAB%][%sLigne%]
+      			[%TAB%]FIN
+      			]
+      		fin
+      		
+      		sListeInit += [rc + rc] + sLigne
+      	FIN
+      FIN
+      
+      si pas :m_bLectureSeule ALORS
+      	sListeInit = [
+      	SI PAS :ZF_bModeAjout() ALORS
+      	[%sListeInit%]
+      	FIN
+      	]
+      FIN
+      
+      sRetour = [
+      PROCÉDURE init_ObjBD()
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      [%sListeInit%]
+      
+      
+      ]
+      
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenPropriete
+     procedure_id : 1434639757317893019
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenPropriete (<sRub_p> est chaîne)
+      //
+      // Paramètres :
+      //	sRub_p (chaîne ANSI) : <indiquez ici le rôle de sRub_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PRIVÉ GenPropriete(sRub_p est une chaîne):chaine
+      
+      sRetour est une chaîne
+      stRub est un STR_DefRub = :m_aRub[sRub_p]
+      sPropriete est une chaîne
+      sMembre est une chaîne
+      sTestModif est une chaîne
+      sParam est une chaîne
+      
+      
+      
+      si stRub.sObjetCompse = "" ALORS
+      	sMembre		= "m_" + :GetInfoRubPrefix(stRub.nTypeRubHF) + sRub_p
+      	sPropriete	= "p_" + :GetInfoRubPrefix(stRub.nTypeRubHF) + sRub_p
+      	sTestModif	= "SI :[%sMembre%] <> [%:GetInfoRubPrefix(stRub.nTypeRubHF)%]Valeur_p ALORS"
+      sinon
+      	sMembre		= "m_o" + sRub_p
+      	sPropriete	= "p_o" + sRub_p
+      	sTestModif	= "SI PAS ZF_bObjEgal(:[%sMembre%], oValeur_p) ALORS"
+      FIN
+      
+      sParam = stRub.sPrefixe + "Valeur_p" + :GetInfoRubType(stRub.nTypeRubHF,Vrai)
+      
+      
+      
+      sRetour = [
+      PROPRIETE [%sPropriete%]() : [%stRub.sNomDeclarationCourt%]
+      //Propriétés de [%sMembre%]
+      
+      RENVOYER :[%sMembre%]
+      
+      
+      ]
+      
+      si pas :m_bLectureSeule alors
+      	sRetour += [
+      	PROPRIETE [%sPropriete%]([%stRub.sPrefixe%]Valeur_p [%stRub.sNomDeclarationComplet%]):Vide
+      	
+      	[%sTestModif%]
+      			[%TAB%]:ZF_EstModif()
+      			[%TAB%]:[%sMembre%] = [%:GetInfoRubPrefix(stRub.nTypeRubHF)%]Valeur_p
+      	FIN
+      	
+      	
+      	]
+      FIN
+      
+      
+      si stRub.sObjetCompse <> "" ALORS
+      	sRetour += rc + rc + GenProprieteID(sRub_p)
+      FIN
+      
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : sNomClasseGen
+     procedure_id : 1434644898393764230
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sNomClasseGen ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure sNomClasseGen():chaine
+      
+      renvoyer "ClDb" + :m_sNomUsage
+     type : 458752
+   -
+     name : aLstRubs
+     procedure_id : 1434656799754320239
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aLstRubs ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure aLstRubs():tableau de chaine
+      
+      aRetour est un tableau de chaines
+      stTmp est un STR_DefRub
+      sCle est une chaîne
+      
+      pour tout element stTmp, sCle de :m_aRub
+      	TableauAjoute(aRetour, sCle)
+      FIN
+      
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : GetInfoRubPrefix
+     procedure_id : 1434665522836829694
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetInfoRubPrefix (<nTypeHF_p> est entier)
+      //
+      // Paramètres :
+      //	nTypeHF_p (entier) : <indiquez ici le rôle de nStypeHF_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GetInfoRubPrefix(nTypeHF_p est un entier):chaine
+      
+      sRetour est une chaîne
+      
+      selon nTypeHF_p
+      	CAS hRubBooléen
+      		sRetour = "b"
+      	CAS hRubdate6, hRubDate8
+      		sRetour = "d"
+      	CAS hRubDateHeure
+      		sRetour = "dh"
+      	CAS hRubEntier1, hRubEntier2, hRubEntier4, hRubEntier8, hRubEntierNonSigné1, hRubEntierNonSigné2, hRubEntierNonSigné4, hRubEntierNonSigné8
+      		sRetour = "n"
+      	CAS hRubMémoTexte, hRubMémoUnicode, hRubTexte, hRubTexteUnicode
+      		sRetour = "s"
+      	CAS hRubMonétaire
+      		sRetour = "m"
+      	CAS hRubRéel4, hRubRéel8
+      		sRetour = "r"		
+      	AUTRE CAS
+      		
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GetInfoRubType
+     procedure_id : 1434666905816358659
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetInfoRubType (<nTypeHF_p> est entier [, <bComplet_p> est booléen])
+      //
+      // Paramètres :
+      //	nTypeHF_p (entier) : <indiquez ici le rôle de nTypeHF_p>
+      // 	bComplet_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bComplet_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure prive GetInfoRubType(nTypeHF_p est un entier, bComplet_p est un booléen = faux):chaine
+      
+      sRetour est une chaîne
+      sDeclare est une chaîne
+      
+      SELON nTypeHF_p
+      	CAS hRubBooléen : sRetour = "Booléen"
+      	CAS hRubDate6 : sRetour = "Date sur 6"
+      	CAS hRubDate8 : sRetour = "Date"
+      	CAS hRubDateHeure : sRetour = "DateHeure"
+      	CAS hRubEntier1 : sRetour = "Entier sur 1 octet"
+      	CAS hRubEntier2 : sRetour = "Entier sur 2 octets"
+      	CAS hRubEntier4 : sRetour = "Entier"
+      	CAS hRubEntier8 : sRetour = "Entier sur 8 octets"
+      	CAS hRubEntierNonSigné1 : sRetour = "Entier non signé sur 1 octet"
+      	CAS hRubEntierNonSigné2 : sRetour = "Entier non signé sur 2 octets"
+      	CAS hRubEntierNonSigné4 : sRetour = "Entier non signé"
+      	CAS hRubEntierNonSigné8 : sRetour = "Entier non signé sur 8 octets"
+      	CAS hRubMémoTexte : sRetour = "chaîne"
+      	CAS hRubMémoUnicode : sRetour = "chaîne UNICODE"
+      	CAS hRubMonétaire : sRetour = "Monétaire"
+      	CAS hRubRéel4 : sRetour = "Réel"
+      	CAS hRubRéel8 : sRetour = "Réel sur 8 octets"
+      	CAS hRubTexte : sRetour = "chaîne"
+      	CAS hRubTexteUnicode : sRetour = "chaîne UNICODE"
+      	autre cas
+      		ExceptionDéclenche(1,"")
+      FIN
+      
+      
+      si bComplet_p ALORS
+      	si nTypeHF_p dans (hRubDate6, hRubDate8, hRubDateHeure) ALORS
+      		sDeclare = "est une "
+      	sinon
+      		sDeclare = "est un "
+      	FIN
+      	sRetour = sDeclare + sRetour
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenGetObj
+     procedure_id : 1434773657236840573
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenGetObj ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PRIVÉ GenGetObj():chaine
+      
+      sRetour		est une chaîne
+      
+      sRetour = [
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):[%:sNomClasseGen()%]
+      
+      sClasse est une chaîne = [%:sNomClasseGen()%]
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+      
+      ]
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : sNomClasseColGen
+     procedure_id : 1434779150500242940
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sNomClasseColGen ( [<bObj_P> est booléen])
+      //
+      // Paramètres :
+      //	bObj_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bObj_P>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure sNomClasseColGen(bObj_P est un booléen = faux):chaine
+      
+      si bObj_P ALORS
+      	RENVOYER "oCol" + :m_sNomUsage
+      sinon
+      	RENVOYER "ClCol" + :m_sNomUsage
+      FIN
+      
+     type : 458752
+   -
+     name : GenClCol
+     procedure_id : 1435679087416436412
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // GenClCol ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenClCol():chaine
+      
+      
+      sRetour est une chaine
+      sNomClasseBD est une chaine = :sNomClasseGen()
+      sNomListeObj est une chaine = "m_ao" + :m_sNomUsage
+      
+      
+      sRetour = [
+      ClCol[%:m_sNomUsage%] est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVÉ
+      	[%sNomListeObj%] est un tableau [%sNomClasseBD%] dynamique
+      FIN
+      
+      PROCÉDURE Constructeur()
+      
+      PROCÉDURE Destructeur()
+      
+      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem([%sNomClasseBD%].GetObj(nId_P)
+      
+      PROCÉDURE aItems():tableau de [%sNomClasseBD%] dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :[%sNomListeObj%]
+      
+      PROCÉDURE Init():Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:[%sNomListeObj%])
+      
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données):Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un [%sNomClasseBD%]
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.[%:m_sNomRubId%])
+      ]
+      
+      //sRetour = [
+      //info :
+      // name : ClCol[%:m_sNomUsage%]22
+      // major_version : 27
+      // minor_version : 0
+      // type : 4
+      // description : ""
+      // subtype : 0
+      //class :
+      // internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+      // code_elements :
+      //  type_code : 10
+      //  p_codes :
+      //   -
+      //     code : |1-
+      //      ClCol[%:m_sNomUsage%]22 est une Classe
+      //      	hérite de ClZF_ColObjDB
+      //      PRIVÉ
+      //      	[%sNomListeObj%] est un tableau [%sNomClasseBD%] dynamique
+      //      FIN
+      //     type : 131072
+      //  procedures :
+      //   -
+      //     name : Constructeur
+      //     [%GenProcIdent(1)%]
+      //     type_code : 27
+      //     code : |1-
+      //      PROCÉDURE Constructeur()
+      //     type : 589824
+      //   -
+      //     name : Destructeur
+      //     [%GenProcIdent(2)%]
+      //     type_code : 28
+      //     code : |1-
+      //      PROCÉDURE Destructeur()
+      //     type : 655360
+      //   -
+      //     name : addItemById
+      //     [%GenProcIdent(3)%]
+      //     type_code : 12
+      //     code : |1-
+      //      // Redéfinition de la méthode ClColObjDB.addItemById
+      //      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      //      :ZF_addItem([%sNomClasseBD%].GetObj(nId_P)
+      //     type : 458752
+      //   -
+      //     name : aItems
+      //     [%GenProcIdent(4)%]
+      //     type_code : 12
+      //     code : |1-
+      //      // Redéfinition de la méthode ClColObjDB.aItems
+      //      PROCÉDURE aItems():tableau de [%sNomClasseBD%] dynamique
+      //      RENVOYER :[%sNomListeObj%]
+      //     type : 458752
+      //   -
+      //     name : Init
+      //     [%GenProcIdent(5)%]
+      //     type_code : 12
+      //     code : |1-
+      //      // Redéfinition de la méthode ClColObjDB.Init
+      //      PROCÉDURE Init():Vide
+      //      ZF_InitCol(:[%sNomListeObj%])
+      //     type : 458752
+      //   -
+      //     name : addItemBySource
+      //     [%GenProcIdent(6)%]
+      //     type_code : 12
+      //     code : |1-
+      //      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      //      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données):Vide
+      //      oObj est un [%sNomClasseBD%]
+      //      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.[%:m_sNomRubId%])
+      //     type : 458752
+      //  procedure_templates : []
+      //  property_templates : []
+      // code_parameters :
+      //  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+      //  original_name : Classe1
+      //resources :
+      // string_res :
+      //  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+      //custom_note :
+      // internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+      //
+      //]
+      
+      
+      RENVOYER sRetour
+     type : 458752
+   -
+     name : Analyse
+     procedure_id : 1435737958762810507
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // Analyse ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure Analyse()
+      
+      
+      sRubs		est une chaîne	= HListeRubrique(:m_sNomTable,hLstDétail)
+      sLiaisons	est une chaîne	= HListeLiaison(:m_sNomTable)
+      sLigne		est une chaîne
+      sLigneCle	est une chaîne
+      sRub		est une chaîne
+      stRubTmp	est un STR_DefRub
+      stCol		est un STR_InfoCol
+      oGenTmp		est un ClZF_GenClasseDB dynamique
+      
+      
+      POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
+      	VariableRAZ(stRubTmp)
+      	sRub = ExtraitChaîne(sLigne, 1)
+      
+      	stRubTmp.nTypeRubHF = ExtraitChaîne(sLigne, 3)
+      	
+      	SI stRubTmp.nTypeRubHF DANS (hRubIDAuto, hRubIDAuto4) ALORS
+      		:m_sNomRubId = sRub
+      		
+      		POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
+      			SI :m_sNomTable = ExtraitChaîne(sLigneCle, 2) ET sRub = ExtraitChaîne(sLigneCle, 3) ALORS
+      				VariableRAZ(stCol)
+      				stCol.sTableDesti = ExtraitChaîne(sLigneCle, 5)
+      				stCol.sCleDesti = ExtraitChaîne(sLigneCle, 6)
+      				oGenTmp = allouer un ClZF_GenClasseDB(stCol.sTableDesti)
+      				stCol.sDeclaration = "[%oGenTmp.sNomClasseColGen(vrai)%]_[%ExtraitChaîne(sLigneCle, 6)%] est un [%oGenTmp.sNomClasseColGen()%]"
+      				TableauAjoute(:m_aCol, stCol)
+      				//trace(sLigneCle)
+      			FIN
+      		FIN
+      		
+      	SINON
+      		
+      		SELON ExtraitChaîne(sLigne, 2)
+      			CAS "T"
+      				stRubTmp.nTypeRub = ::cstDefRubChaine
+      			CAS "N"
+      				stRubTmp.nTypeRub = ::cstDefRubNum
+      			AUTRE CAS
+      				
+      		FIN
+      		
+      		stRubTmp.bNullable = {:m_sNomTable + "." + sRub,indRubrique}..NullAutorisé
+      		
+      		POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
+      			SI sRub = ExtraitChaîne(sLigneCle, 3) ALORS
+      				oTblTmp est un ClZF_GenClasseDB dynamique
+      				oTblTmp = allouer un ClZF_GenClasseDB(ExtraitChaîne(sLigneCle, 5))
+      				stRubTmp.sObjetCompse = oTblTmp.sNomClasseGen()
+      				stRubTmp.nTypeRub = ::cstDefRubObj
+      			FIN
+      		FIN
+      		
+      		
+      
+      		SELON stRubTmp.nTypeRub
+      			CAS ::cstDefRubObj
+      				stRubTmp.sPrefixe				= "o"
+      				stRubTmp.sNomDeclarationComplet	= "est un [%stRubTmp.sObjetCompse%] dynamique"
+      				stRubTmp.sNomDeclarationCourt	= stRubTmp.sObjetCompse
+      			AUTRE CAS
+      				stRubTmp.sPrefixe				= :GetInfoRubPrefix(stRubTmp.nTypeRubHF)
+      				stRubTmp.sNomDeclarationComplet	= :GetInfoRubType(stRubTmp.nTypeRubHF, Vrai)
+      				stRubTmp.sNomDeclarationCourt	= :GetInfoRubType(stRubTmp.nTypeRubHF)
+      			
+      		FIN
+      		
+      		:m_aRub[sRub] = stRubTmp
+      	FIN
+      	
+      FIN
+     type : 458752
+   -
+     name : GenChargeCol
+     procedure_id : 1435756732074869294
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GenChargeCol ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PRIVÉ GenChargeCol():chaine
+      
+      
+      sModele est une chaîne
+      sRetour est une chaîne
+      stLien est une STR_InfoCol
+      oClas est un ClZF_GenClasseDB dynamique
+      
+      
+      pour tout element stLien  de :m_aCol
+      	oClas = allouer un ClZF_GenClasseDB(stLien.sTableDesti)
+      	
+      	sModele = [
+      	PROCÉDURE [%oClas.sNomClasseColGen(vrai)%]():[%oClas.sNomClasseColGen()%]
+      	
+      	oRetour est un [%oClas.sNomClasseColGen()%]
+      	sReq est une chaîne
+      	
+      	SI PAS oRetour.p_bEstCharge ALORS
+      	[%tab%]sReq = [%"["%]
+      	[%TAB%][%TAB%]SELECT 
+      	[%TAB%][%TAB%][%TAB%][%stLien.sTableDesti%].*
+      	[%TAB%][%TAB%]FROM [%stLien.sTableDesti%]
+      	[%TAB%][%TAB%]WHERE [%stLien.sTableDesti%].[%stLien.sCleDesti%] = [%"["%]%:ZF_Get_IdUnique()%[%"]"%]
+      	[%TAB%][%"]"%]
+      		
+      	[%TAB%]oRetour.ZF_LoadSQL(sReq)
+      	FIN
+      	
+      	
+      	RENVOYER oRetour
+      	
+      	
+      	]
+      	
+      	sRetour += [rc] + sModele
+      fin
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenProcIdent
+     procedure_id : 1437381085977210878
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenProcIdent (<nNum>)
+      //
+      // Paramètres :
+      //	nNum : <indiquez ici le rôle de nNum>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GenProcIdent(nNum <utile>):chaine
+      
+      sRetour est une chaîne
+      sId est une chaîne = NumériqueVersChaîne(DonneIdentifiant(), "03d")
+      sRetour = "procedure_id : [%DateVersEntier(DateSys())%][%HeureVersEntier(HeureSys())%][%sId%]"
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenClDB
+     procedure_id : 1437604224947401773
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenClDB ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenClDB():chaine
+      
+      sClasse est une chaîne
+      
+      sClasse += :GenConstructeur() + RC
+      
+      sRub est une chaîne
+      POUR TOUT ÉLÉMENT sRub DE :aLstRubs()
+      	sClasse += :GenPropriete(sRub) + RC
+      FIN
+      
+      sClasse += :GenGetObj() + RC
+      sClasse += :GenInitObject() + RC
+      sClasse += :GenCHargeCol() + RC
+      
+      si pas :m_bLectureSeule ALORS
+      	sClasse += :GenPreEnreg() + RC
+      FIN
+      
+      renvoyer sClasse
+     type : 458752
+   -
+     name : sIndentSpace
+     procedure_id : 1437605822675411386
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sIndentSpace (<sTxt_p> est chaîne [, <nIndente_p> est entier])
+      //
+      // Paramètres :
+      //	sTxt_p (chaîne ANSI) : <indiquez ici le rôle de sTxt_p>
+      //	nIndente_p (entier - valeur par défaut=6) : <indiquez ici le rôle de nIndente_p>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure sIndentSpace(sTxt_p est une chaîne, nIndente_p est un entier = 6):chaine
+      sRetour est une chaîne
+      sLigne est une chaîne
+      
+      pour toute chaine sLigne de sTxt_p separee par rc
+      	sRetour += [rc] + Répète(" ", nIndente_p) + sLigne
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenPreEnreg
+     procedure_id : 1437893823905354247
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // GenPreEnreg ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenPreEnreg():chaine
+      
+      
+      sRetour est une chaine
+      
+      stTmp est un STR_DefRub
+      sCle est une chaîne
+      sCondNull est une chaîne
+      sExcDeclare est une chaîne
+      sExcInit est une chaîne
+      sNomVarExc est une chaîne
+      
+      POUR TOUT ÉLÉMENT stTmp, sCle DE :m_aRub
+      	si stTmp.sObjetCompse <> "" alors
+      		
+      		si stTmp.bNullable ALORS
+      			sCondNull = :m_sNomTable + "." + stTmp.sObjetCompse + "..Null	= Vrai"
+      		sinon
+      			sNomVarExc = "mg_oEx_CompoNonInst_" + sCle
+      			sCondNull = sNomVarExc + ".Declenche()"
+      			
+      			sExcDeclare += [rc] + sNomVarExc + "	est un ClZF_Exception dynamique"
+      			sExcInit += [rc] + sNomVarExc + "	= Allouer un ClZF_Exception(""..."")"
+      		FIN
+      		
+      		sRetour += [rc] + [
+      		//
+      		SI :[%stTmp.sObjetCompse%] = Null _OU_ :[%stTmp.sObjetCompse%].ZF_Get_IdUnique() = 0 ALORS
+      		[%sCondNull%]
+      		SINON
+      		[%TAB%][%:m_sNomTable%].[%sCle%]	= :[%stTmp.sObjetCompse%].ZF_Get_IdUnique()
+      		FIN
+      		
+      		]
+      		
+      	FIN
+      FIN
+      
+      
+      
+      
+      
+      sRetour = [
+      /* déclaration des exceptions
+      [%sExcDeclare%]
+      [%sExcInit%]
+      */
+      SI :m_bEstSupprime ALORS
+      	//...
+      SINON
+      	
+      [%sRetour%]
+      	
+      FIN
+      ]
+      
+      renvoyer sRetour
+      
+     type : 458752
+   -
+     name : GenProprieteID
+     procedure_id : 1439838656333846344
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenProprieteID (<sRub_p> est chaîne)
+      //
+      // Paramètres :
+      //	sRub_p (chaîne ANSI) : <indiquez ici le rôle de sRub_p>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PRIVÉ GenProprieteID(sRub_p est une chaîne):chaine
+      
+      sRetour est une chaîne
+      stRub est un STR_DefRub = :m_aRub[sRub_p]
+      sPropriete est une chaîne
+      sMembre est une chaîne
+      //sTestModif est une chaîne
+      //sParam est une chaîne
+      
+      
+      
+      si stRub.sObjetCompse = "" ALORS
+      	ExceptionDéclenche(1,"Génération impossible de 'propriété ID' pour les membres simples")
+      sinon
+      	sMembre		= "m_o" + sRub_p
+      	sPropriete	= "p_o" + sRub_p
+      FIN
+      
+      
+      sRetour = [
+      PROPRIETE [%sPropriete%]_ID()<métier>:entier
+      //Propriétés de l'objet [%sMembre%], accessible via son ID
+      SI :[%sPropriete%] = Null ALORS
+      [%TAB%]RENVOYER 0
+      SINON
+      [%TAB%]RENVOYER :[%sPropriete%].ZF_Get_IdUnique()
+      FIN
+      
+      
+      ]
+      
+      
+      si pas :m_bLectureSeule alors
+      	sRetour += [
+      	PROPRIETE [%sPropriete%]_ID(nValeur_p est un entier):Vide
+      	
+      	SI nValeur_P = 0 ALORS
+      	[%TAB%]:[%sPropriete%] = Null
+      	SINON
+      	[%TAB%]:[%sPropriete%] = [%stRub.sNomDeclarationCourt%].GetObj(nValeur_p)
+      	FIN
+      	
+      	
+      	]
+      FIN
+      
+      
+      renvoyer sRetour
+     type : 458752
+  properties :
+   -
+     name : p_sNomTable
+     identifier : 0x13ed4d60120a6981
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomTable() : chaîne
+         
+         renvoyer m_sNomTable
+        type : 1966080
+     template_refs : []
+   -
+     name : p_sNomUsage
+     identifier : 0x13ed4db2120ba992
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomUsage(sValeur est une chaîne)
+         
+         m_sNomUsage=sValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_bLectureSeule
+     identifier : 0x13f53e5421273ef4
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bLectureSeule(bValeur est un booléen)
+         
+         m_bLectureSeule=bValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13e8dca31b897f1f
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

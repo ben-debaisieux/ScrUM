@@ -132,7 +132,7 @@ window :
      type_code : 9
      p_codes :
       -
-        code : |1+
+        code : |1-
          //si goApp.m_oUsrCnx.m_bTop_Equip_Informatique alors
          //	Liste_Tout_Les_Projet()
          //sinon
@@ -140,38 +140,40 @@ window :
          //fin
          
          
-         aoProjet est un tableau de ClProjet
-         oPrjTmp est un ClProjet dynamique
-         nLigne est un entier
+         oColProjet		est un ClcolProjet
+         oPrjTmp			est un ClProjet dynamique
+         nLigne			est un entier
+         bAvecPrjFini	est un booléen = (SEL_FiltrePrj = 2)
          
          
          SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
-         	aoProjet <- ClProjet.aoListeProjets((SEL_FiltrePrj = 2))
+         	oColProjet <- ClProjet.aoListeProjets(bAvecPrjFini)
          SINON
-         	aoProjet <- goApp.m_oUsrCnx.aoMesProjets(ClUsr.usr_tous)
+         	oColProjet <- ClProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx, *, bAvecPrjFini)
+         //	oColProjet <- goApp.m_oUsrCnx.aoMesProjets(ClUsr.usr_tous)
          FIN
          
          TBL_Projet..AffichageActif = Faux
          TableSupprimeTout(TBL_Projet)
          
          //Remplissage de la table
-         POUR TOUT ELEMENT oPrjTmp DE aoProjet
+         POUR TOUT ELEMENT oPrjTmp DE oColProjet.aItems()
          	si SEL_FiltrePrj = 2 ou pas oPrjTmp.p_bTop_Termine ALORS
          		nLigne									= TableAjouteLigne(TBL_Projet)
-         		TBL_Projet[nLigne].COL_ID				= oPrjTmp.Get_IdUnique()
+         		TBL_Projet[nLigne].COL_ID				= oPrjTmp.ZF_Get_IdUnique()
          		TBL_Projet[nLigne].COL_Nom				= oPrjTmp.p_sNom
          		TBL_Projet[nLigne].COL_Top_Termine		= oPrjTmp.p_bTop_Termine
          		TBL_Projet[nLigne].COL_Utilisateur		= oPrjTmp.p_oUsr_ChefProjet.p_sNom
-         		TBL_Projet[nLigne].COL_IdUtilisateur	= oPrjTmp.p_oUsr_ChefProjet.Get_IdUnique()
+         		TBL_Projet[nLigne].COL_IdUtilisateur	= oPrjTmp.p_oUsr_ChefProjet.ZF_Get_IdUnique()
          	FIN
          FIN
          
-         TableTrie(TBL_Projet,TBL_Projet.COL_Nom..nom)
-         TableSelectPlus(TBL_Projet,1)
+         si TableOccurrence(TBL_Projet) alors
+         	TableTrie(TBL_Projet,TBL_Projet.COL_Nom..nom)
+         	TableSelectPlus(TBL_Projet,1)
+         fin
          
          TBL_Projet..AffichageActif = Vrai
-         
-         
         type : 14
       -
         type : 35
@@ -234,9 +236,9 @@ window :
          	//Suppression du projet
          	
          	oPrj est un ClProjet <- ClProjet.GetObj(TBL_Projet.COL_ID)
-         	oPrj.Supprimer()
+         	oPrj.ZF_Supprimer()
          	quand exception dans
-         		oPrj.Enregistre()
+         		oPrj.ZF_Enregistre()
          	FAIRE
          		erreur(ExceptionInfo(errMessage))
          	sinon

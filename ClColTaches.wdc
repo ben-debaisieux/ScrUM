@@ -1,0 +1,126 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColTaches
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x136ea9ae232bdb11
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClColTaches est une Classe
+      	hérite de ClZF_ColObjDB
+      prive
+      	m_aoTaches est un tableau de ClTache dynamique
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1400243099538348817
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1400243099538414353
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 1400243550522537617
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      :ZF_addItem(ClTache.GetObj(nId_P))
+     type : 458752
+   -
+     name : Init
+     procedure_id : 1400244594205273017
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClColObjDB.Init
+      PROCÉDURE  Init():Vide
+      ZF_InitCol(:m_aoTaches)
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 1400245552047362066
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClColObjDB.aItems
+      PROCÉDURE aItems():tableau de ClTache dynamique
+      renvoyer :m_aoTaches
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 1420665888001478384
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
+      
+      oTache est un ClTache
+      :ZF_addItemBySource_prot(sdSource_p, oTache, sdSource_p.IDScr_Tache)
+     type : 458752
+   -
+     name : pre_load
+     procedure_id : 1429594557999032597
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.pre_load
+      PROCÉDURE PROTÉGÉE pre_load(sdSource_P est une Source de Données)
+      
+      aLstUS est un tableau d'entiers
+      sListeUS est une chaîne
+      sCle est une chaîne
+      
+      HLitPremier(sdSource_P,hForwardOnly+hSansRafraîchir)
+      TANTQUE PAS HEnDehors(sdSource_P)
+      	si TableauCherche(aLstUS,tcLinéaire,sdSource_P.IDScr_UserStory) = -1 ALORS
+      		TableauAjoute(aLstUS,sdSource_P.IDScr_UserStory)
+      		
+      		
+      		sCle = ClZF_ObjDB.ZF_sCleOdb("ClUserStory", sdSource_P.IDScr_UserStory)
+      		
+      		SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
+      			sListeUS += [", "] + sdSource_P.IDScr_UserStory
+      		FIN
+      	FIN
+      	HLitSuivant(sdSource_P)
+      FIN
+      
+      //Le traitement de préchargement n'est utils que si on a plusieurs éléments à précharger (sinon, on passe par le chargement std)
+      si Position(sListeUS, ",") > 0 ALORS
+      	oColUs est un ClColUserStory()
+      	oColUs.ZF_LoadSQL([
+      		SELECT Scr_UserStory.*
+      		FROM Scr_UserStory
+      		WHERE Scr_UserStory.IDScr_UserStory IN ([%sListeUS%])
+      		])
+      FIN
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x136ea9a72325c19d
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

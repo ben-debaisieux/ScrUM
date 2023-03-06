@@ -620,14 +620,14 @@ report :
       stUserStorie est une STR_UserStorie 
       
       
-      zstProjet.nIdProjet            		= oProjet_P.Get_IdUnique()
+      zstProjet.nIdProjet            		= oProjet_P.ZF_Get_IdUnique()
       zstProjet.sNomProjet 		  		= oProjet_P.p_sNom
       zstProjet.bTermineProjet       		= oProjet_P.p_bTop_Termine
-      zstProjet.nIDUtilisateurProjet 		= oProjet_P.p_oUsr_ChefProjet.Get_IdUnique()
+      zstProjet.nIDUtilisateurProjet 		= oProjet_P.p_oUsr_ChefProjet.ZF_Get_IdUnique()
       zstProjet.sResponsable         		= oProjet_P.p_oUsr_ChefProjet.p_sNom
       
       
-      POUR TOUT ELEMENT oUs DE oProjet_P.aoListeUS()
+      POUR TOUT ELEMENT oUs DE oProjet_P.aoListeUS().aItems()
       	VariableRAZ(stUserStorie)
       	
       	stUserStorie.nIDUserStorie		= oUs.Get_IdUnique()
@@ -635,7 +635,7 @@ report :
       	stUserStorie.sEnTantQue			= oUs.p_sEntantQue
       	stUserStorie.sBesoinUserStorie	= oUs.p_sJaiBesoinDe
       	stUserStorie.sAfindeUserStorie	= oUs.p_sAfinDe
-      	stUserStorie.nIDResponsable		= oUs.p_oUsrResponsable.Get_IdUnique()
+      	stUserStorie.nIDResponsable		= oUs.p_oUsrResponsable.ZF_Get_IdUnique()
       	stUserStorie.bAtester			= oUs.p_bEstTestéParLeDemandeur
       	stUserStorie.eEtatUserStorie	= oUs.Get_EtatUS()
       	stUserStorie.sCharge			= oUs.User_Story_Poids()

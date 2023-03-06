@@ -16,7 +16,7 @@ class :
    -
      code : |1+
       ClMessage est une Classe
-      	herite de ClObjDB
+      	herite de ClZF_ObjDB
       	
       
       	m_oMsgparent			est un ClMessage dynamique
@@ -43,71 +43,13 @@ class :
      code : |1+
       procédure Constructeur(LOCAL nId_P est un entier = 0)
       
-      ClObjDB.Constructeur(Scr_Message..Nom, Scr_Message.IDScr_Message..Nom, nId_P)
+      ClZF_ObjDB.Constructeur(Scr_Message..Nom, Scr_Message.IDScr_Message..Nom, nId_P)
       
       
       //Chargement des données dans l'instance.
-      :Charge()
+      //:ZF_Charge()
       
       
-      SI :bModeAjout() ALORS
-      	:m_oUsr	<- goApp.m_oUsrCnx
-      	:m_bTop_Visible = vrai
-      sinon
-      	//Récupération du rédacteur du message
-      	:m_oUsr <- clusr.GetObj(Scr_Message.IDScr_Usr)
-      	
-      	//Récupération de l'US, si le message est associé à une US.
-      	si Scr_Message.IDScr_UserStory..Null ALORS
-      		:m_oUserStory = null
-      	sinon
-      		:m_oUserStory <- ClUserStory.GetObj(Scr_Message.IDScr_UserStory)
-      	FIN
-      	
-      	//Récupération de la tache, si le message est associé à une tache.
-      	si Scr_Message.IDScr_Tache..Null ALORS
-      		:m_oTache = null
-      	SINON
-      		:m_oTache <- ClTache.GetObj(Scr_Message.IDScr_Tache)
-      	FIN
-      	
-      	//Récupération du critère d'acceptation, si le message est associé à un critère.
-      	si Scr_Message.IDScr_CritereAccept..Null ALORS
-      		:m_oCritereAccept = null
-      	SINON
-      		:m_oCritereAccept <- ClCritereAccept.GetObj(Scr_Message.IDScr_CritereAccept)
-      	FIN
-      	
-      	//Récupération du message parent, si le message est associé à un autre message.
-      	si Scr_Message.IDScr_Message_Parent..Null ALORS
-      		:m_oMsgparent = null
-      	SINON
-      		:m_oMsgparent <- ClMessage.GetObj(Scr_Message.IDScr_Message_Parent)
-      	FIN
-      	
-      	//----------------------------------------------------------------------------------------
-      	sReq est une chaîne
-      	sdMsgUsr est une source de donnees
-      	
-      	//Récupération des messages de l'entité.
-      	sReq = ChaîneConstruit([
-      		
-      		SELECT
-      			Scr_Message.IDScr_Message
-      			
-      		FROM Scr_Message
-      		
-      		where Scr_Message.IDScr_Message_Parent = %1
-      		
-      	], nId_P)
-      	SI goApp.Rsql(sdMsgUsr,sReq) ALORS
-      		POUR TOUT sdMsgUsr
-      			TableauAjouteRéférence(:m_aoMsgEnfant, ClMessage.GetObj(sdMsgUsr.IDScr_Message))
-      		FIN
-      	FIN
-      	HAnnuleDéclaration(sdMsgUsr)
-      
-      FIN
       
      type : 589824
    -
@@ -154,11 +96,10 @@ class :
       		Scr_Message.IDScr_Message_Parent = %1
       ], nIDMessage_p)
       
-      SI goApp.Rsql(sdRechercheMessagesFils,sReq) ALORS
-      	Pour TOUT sdRechercheMessagesFils
-      		oMessage <- ClMessage.getobj(sdRechercheMessagesFils.IDScr_Message)
-      		TableauAjouteRéférence(aMessagesFils,oMessage) 
-      	FIN
+      goApp.Rsql(sdRechercheMessagesFils,sReq)
+      Pour TOUT sdRechercheMessagesFils
+      	oMessage <- ClMessage.getobj(sdRechercheMessagesFils.IDScr_Message)
+      	TableauAjouteRéférence(aMessagesFils,oMessage) 
       FIN
       
       HAnnuleDéclaration(sdRechercheMessagesFils)
@@ -173,7 +114,7 @@ class :
       // Redéfinition de la méthode ClObjDB.GetObj
       PROCÉDURE GLOBALE GetObj(local nIdUnique_P est un entier):ClMessage
       
-      renvoyer ClObjDB.GetObj("ClMessage", nIdUnique_P)
+      renvoyer ClZF_ObjDB.ZF_GetObj("ClMessage", nIdUnique_P)
      type : 458752
    -
      name : pre_enregistre
@@ -181,7 +122,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClObjDB.pre_enregistre
-      PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre()
+      PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre():Vide
       
       nNbreCle est un entier
       
@@ -190,12 +131,12 @@ class :
       
       
       
-      si pas :m_bEstSupprime alors
+      si pas :ZF_Get_est_supprime() alors
       	//Si pas d'utilisateur renseigné, on considère que c'est l'utilisateur en cours.
       	si :m_oUsr = Null ALORS
       		:m_oUsr <- goApp.m_oUsrCnx
       	FIN
-      	Scr_Message.IDScr_Usr						= :m_oUsr.Get_IdUnique()
+      	Scr_Message.IDScr_Usr						= :m_oUsr.ZF_Get_IdUnique()
       	
       	//Enregistrement de la user story (si une, est associée)
       	si :m_oUserStory = Null ALORS
@@ -209,7 +150,7 @@ class :
       	si :m_oCritereAccept = Null ALORS
       		Scr_Message.IDScr_CritereAccept..Null	= vrai
       	sinon
-      		Scr_Message.IDScr_CritereAccept			= :m_oCritereAccept.Get_IdUnique()
+      		Scr_Message.IDScr_CritereAccept			= :m_oCritereAccept.ZF_Get_IdUnique()
       		nNbreCle++
       	fin
       	
@@ -225,12 +166,12 @@ class :
       	si :m_oMsgparent = Null ALORS
       		Scr_Message.IDScr_Message_Parent..Null	= Vrai
       	sinon
-      		Scr_Message.IDScr_Message_Parent		= :m_oMsgparent.Get_IdUnique()
+      		Scr_Message.IDScr_Message_Parent		= :m_oMsgparent.ZF_Get_IdUnique()
       		nNbreCle++
       		
       		
       		//En cas d'ajout, on mémorise qu'il faut gérer le messages, du parent.
-      		SI :bModeAjout() ALORS
+      		SI :ZF_bModeAjout() ALORS
       			:m_bGererParent = Vrai
       		FIN
       	FIN
@@ -262,7 +203,7 @@ class :
      procedure_id : 2281177243962100806
      type_code : 12
      code : |1+
-      procédure privée ReinitAffiliation()
+      procédure privée ReinitAffiliation():Vide
       
       :m_oUserStory		= null
       :m_oTache			= null
@@ -289,12 +230,12 @@ class :
       	where Scr_Message.IDScr_Usr = %1
       		AND Scr_Message.Top_Visible = 1
       	
-      ], oUsr_P.Get_IdUnique())
-      SI goapp.RSQL(sdMsgUsr,sReq) ALORS
-      	POUR TOUT sdMsgUsr
-      		TableauAjouteRéférence(aoRetour, ClMessage.GetObj(sdMsgUsr.IDScr_Message))
-      	FIN
+      ], oUsr_P.ZF_Get_IdUnique())
+      goapp.RSQL(sdMsgUsr,sReq)
+      POUR TOUT sdMsgUsr
+      	TableauAjouteRéférence(aoRetour, ClMessage.GetObj(sdMsgUsr.IDScr_Message))
       FIN
+      
       HAnnuleDéclaration(sdMsgUsr)
       
       renvoyer aoRetour
@@ -304,7 +245,7 @@ class :
      procedure_id : 1163692080071249625
      type_code : 12
      code : |1+
-      procédure globale aoListeMessage(oEntite_P est un ClObjDB dynamique):tableau de ClMessage dynamique
+      procédure globale aoListeMessage(oEntite_P est un ClZF_ObjDB dynamique):tableau de ClMessage dynamique
       
       aoRetour	est un tableau de ClMessage dynamique
       sdMsgUsr	est une Source de Données
@@ -339,12 +280,12 @@ class :
       		AND Scr_Message.Top_Visible = 1
       	
       	ORDER BY Scr_Message.DteCreation
-      ], oEntite_P.Get_IdUnique(), sRubFiltre)
-      SI goApp.Rsql(sdMsgUsr,sReq) ALORS
-      	POUR TOUT sdMsgUsr
-      		TableauAjouteRéférence(aoRetour, ClMessage.GetObj(sdMsgUsr.IDScr_Message))
-      	FIN
+      ], oEntite_P.ZF_Get_IdUnique(), sRubFiltre)
+      goApp.Rsql(sdMsgUsr,sReq)
+      POUR TOUT sdMsgUsr
+      	TableauAjouteRéférence(aoRetour, ClMessage.GetObj(sdMsgUsr.IDScr_Message))
       FIN
+      
       HAnnuleDéclaration(sdMsgUsr)
       
       RENVOYER aoRetour
@@ -355,13 +296,13 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClObjDB.post_enregistre
-      PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre()
+      PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre():Vide
       
       si :m_oMsgparent <> Null et :m_bGererParent ALORS
-      	si pas :m_bEstSupprime alors
+      	si pas :ZF_Get_est_supprime() alors
       		TableauAjouteRéférence(:m_oMsgparent.p_aoMsgEnfant, objet)
       	sinon
-      		TableauSupprimeRéférence(:m_oMsgparent.p_aoMsgEnfant, objet)
+      		TableauSupprimeRéférence_deprecated(:m_oMsgparent.p_aoMsgEnfant, objet)
       	FIN
       FIN
      type : 458752
@@ -377,7 +318,7 @@ class :
       nInd	est un entier
       oMsg	est un ClMessage dynamique
       
-      sRetour.id			= :m_nIdUnique
+      sRetour.id			= :ZF_Get_IdUnique()
       sRetour.user		= :m_oUsr
       sRetour.comment		= :m_sCMTR
       sRetour.visible		= :m_bTop_Visible
@@ -390,6 +331,73 @@ class :
       FIN
       
       RENVOYER sRetour
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422516206803524080
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+      SI :ZF_bModeAjout() ALORS
+      	:m_oUsr	<- goApp.m_oUsrCnx
+      	:m_bTop_Visible = Vrai
+      SINON
+      	//Récupération du rédacteur du message
+      	:m_oUsr <- ClUsr.GetObj(Scr_Message.IDScr_Usr)
+      	
+      	//Récupération de l'US, si le message est associé à une US.
+      	SI Scr_Message.IDScr_UserStory..Null ALORS
+      		:m_oUserStory = Null
+      	SINON
+      		:m_oUserStory <- ClUserStory.GetObj(Scr_Message.IDScr_UserStory)
+      	FIN
+      	
+      	//Récupération de la tache, si le message est associé à une tache.
+      	SI Scr_Message.IDScr_Tache..Null ALORS
+      		:m_oTache = Null
+      	SINON
+      		:m_oTache <- ClTache.GetObj(Scr_Message.IDScr_Tache)
+      	FIN
+      	
+      	//Récupération du critère d'acceptation, si le message est associé à un critère.
+      	SI Scr_Message.IDScr_CritereAccept..Null ALORS
+      		:m_oCritereAccept = Null
+      	SINON
+      		:m_oCritereAccept <- ClCritereAccept.GetObj(Scr_Message.IDScr_CritereAccept)
+      	FIN
+      	
+      	//Récupération du message parent, si le message est associé à un autre message.
+      	SI Scr_Message.IDScr_Message_Parent..Null ALORS
+      		:m_oMsgparent = Null
+      	SINON
+      		:m_oMsgparent <- ClMessage.GetObj(Scr_Message.IDScr_Message_Parent)
+      	FIN
+      	
+      	//----------------------------------------------------------------------------------------
+      	sReq est une chaîne
+      	sdMsgUsr est une Source de Données
+      	
+      	//Récupération des messages de l'entité.
+      	sReq = ChaîneConstruit([
+      		
+      		SELECT
+      			Scr_Message.IDScr_Message
+      			
+      		FROM Scr_Message
+      		
+      		where Scr_Message.IDScr_Message_Parent = %1
+      		
+      	], :ZF_Get_IdUnique())
+      	goApp.Rsql(sdMsgUsr,sReq)
+      	POUR TOUT sdMsgUsr
+      		TableauAjouteRéférence(:m_aoMsgEnfant, ClMessage.GetObj(sdMsgUsr.IDScr_Message))
+      	FIN
+      	HAnnuleDéclaration(sdMsgUsr)
+      
+      FIN
+      
      type : 458752
   properties :
    -
@@ -405,12 +413,14 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_oTache(oValeur est ClTache)
+         procédure publique p_oTache(oValeur est ClTache):Vide
          
-         :ReinitAffiliation()
-         :EstModif()
-         
-         :m_oTache <- oValeur
+         si PAS ZF_bObjEgal(:m_oTache, oValeur) alors
+         	:ReinitAffiliation()
+         	:ZF_EstModif()
+         	
+         	:m_oTache <- oValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -428,10 +438,12 @@ class :
         code : |1-
          procédure publique p_oUserStory(oValeur est ClUserStory)
          
-         :ReinitAffiliation()
-         :EstModif()
-         
-         :m_oUserStory <- oValeur
+         si PAS ZF_bObjEgal(:m_oUserStory, oValeur) alors
+         	:ReinitAffiliation()
+         	:ZF_EstModif()
+         	
+         	:m_oUserStory <- oValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -447,10 +459,12 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUsr(oValeur est ClUsr)
+         procédure publique p_oUsr(oValeur est ClUsr):Vide
          
-         :EstModif()
-         :m_oUsr <- oValeur
+         si PAS ZF_bObjEgal(:m_oUsr, oValeur) alors
+         	:ZF_EstModif()
+         	:m_oUsr <- oValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -466,9 +480,9 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_dhDteCreation(dhValeur est une dateheure)
+         procédure publique p_dhDteCreation(dhValeur est une dateheure):Vide
          
-         :EstModif()
+         :ZF_EstModif()
          
          :m_dhDteCreation = dhValeur
         type : 2031616
@@ -480,17 +494,17 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_aoMsgEnfant()
+         procédure publique p_aoMsgEnfant():tableau de ClMessage dynamique
          
          renvoyer :m_aoMsgEnfant
         type : 1966080
       -
-        code : |1-
-         procédure publique p_aoMsgEnfant(Valeur)
+        code : |1+
+         procédure publique p_aoMsgEnfant(oValeur_p est un ClMessage):Vide
          
-         :EstModif()
+         :ZF_EstModif()
          
-         :m_aoMsgEnfant <- Valeur
+         :m_aoMsgEnfant <- oValeur_p
         type : 2031616
      template_refs : []
    -
@@ -506,9 +520,9 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR(sValeur est une chaîne)
+         procédure publique p_sCMTR(sValeur est une chaîne):Vide
          
-         :EstModif()
+         :ZF_EstModif()
          
          :m_sCMTR=sValeur
         type : 2031616
@@ -526,9 +540,9 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_bTop_Visible(bValeur est un booléen)
+         procédure publique p_bTop_Visible(bValeur est un booléen):Vide
          
-         :EstModif()
+         :ZF_EstModif()
          
          :m_bTop_Visible=bValeur
         type : 2031616

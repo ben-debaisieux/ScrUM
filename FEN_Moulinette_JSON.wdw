@@ -33,7 +33,7 @@ window :
       -
         code : |1+
          FEN_Moulinette_JSON..Visible = Faux
-         SysIconeAjoute(fRepExe() + "\ActiviteEquipe_48_1.ico", Menu_Icone_Caché, "Message","Fenetre_Visible")
+         SysIconeAjoute(fRepExe() + "\ActiviteEquipe_48_1.ico", Mnu_Icone_Caché, "Message","Fenetre_Visible")
         type : 18
       -
         type : 161
@@ -45,7 +45,7 @@ window :
   options : []
  popup_menus :
   -
-    name : MENU_Icone_Cache
+    name : MNU_Icone_Cache
     identifier : 0x2332f4131c60d12b
     internal_properties : BwAAAAcAAABxkf7LahiZHIJQmdbwe/DhLzS1zD1mAwXunwuDz1cHDF6K5o5lFJE7rfH/W93eQxYj7SxduMdHEPKMz5KA6bM3Q3qra5AWAwPT/fCO5Yd03w23HkmApLGqq3Icy+t2f8Iy/j1/TItU4TLRYj5sB5A/LvHnNtevSKBkNJ96cnmP2oYxDGNl4RpzI56tGUfUjfVqk/xHEBhTgUYXXwcdHyubniGNck0QCVZZMqYzyZ10ina1tOdvp77NKMDx1EG7gETSRuGZcyHnf1+AVAdl8DGm+0zsRBwjIsoctjM73bQ1tlhxXMFErxHmuRSdRsEqT5Km545Zs71FT+h4o8FLYEBLXIWEy7emfm6ayN6U4qAYrEYdw9FEEBfjHH29HA+WdBOMEoPp0IqGTs48KbSY4VTszUzc6w==
     options :
@@ -59,9 +59,9 @@ window :
          -
            code : |1+
             // récupère info de toutes les cartes trello sauf celle fini dans des sprints précédent 
-            ClTrello_req::JSON_Recup_Info_Trello(Faux)
+            ClTrello_SCRUM::JSON_Recup_Info_Trello(Faux)
             // tout récupérer
-            ClTrello_req::JSON_Tout_Recup()
+            ClTrello_SCRUM::JSON_Tout_Recup()
            type : 32
      -
        name : OPT_Enreg_fini_sprint_précédent
@@ -73,9 +73,9 @@ window :
          -
            code : |1+
             // récupère info de toutes les cartes trello qui ont été fini dans des sprints précédent 
-            ClTrello_req::JSON_Recup_Info_Trello(vrai)
+            ClTrello_SCRUM::JSON_Recup_Info_Trello(vrai)
             // tout récupérer
-            ClTrello_req::JSON_Tout_Recup()
+            ClTrello_SCRUM::JSON_Tout_Recup()
            type : 32
      -
        name : OPT_Fermer

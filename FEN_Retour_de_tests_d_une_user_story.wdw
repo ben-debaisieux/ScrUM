@@ -71,7 +71,7 @@ window :
          FIN
          
          quand Exception dans
-         	zoUs_P.Enregistre()
+         	zoUs_P.ZF_Enregistre()
          FAIRE
          	erreur(ExceptionInfo(errMessage))
          sinon

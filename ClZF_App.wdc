@@ -1,0 +1,375 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_App
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13c328cd24e8c007
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : BwAAAAcAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      STR_metrique est une structure
+      	nNbRequetes						est un entier
+      	nNbTransactions					est un entier
+      	nNbDeclarationObjBd				est un entier
+      	nNbDeclarationObjBd_Cache			est un entier
+      	nNbDeclarationObjBd_NonCache		est un entier
+      fin
+      
+      ClZF_App est une Classe, abstraite
+      protegé
+      	m_ZF_cnxBDD						est une connexion
+      	
+      PRIVÉ
+      	m_ZF_nNbreTrsOuverte				est un entier
+      	m_ZF_bAnnulationDemande			est un booléen
+      	m_ZF_bSingleton					est un booléen
+      
+      public
+      	m_aMetriques						est un tableau de 1 STR_metrique
+      	
+      GLOBAL
+      PUBLIC
+      	mg_aoInstances					est un tableau associatif de ClZF_ObjDBls dynamique
+      prive
+      	mg_oExPlusieursInstancesClAapp		est un ClZF_Exception dynamique
+      	mg_oExErreurSQL					est un ClZF_Exception dynamique
+      	mg_oExErreurTRS					est un ClZF_Exception dynamique
+      protege
+      	mg_aZF_aGetId						est un tableau associatif de chaine
+      FIN
+      
+      
+      mg_oExPlusieursInstancesClAapp = allouer un ClZF_Exception("Une seule instance de la classe ""%1"" est permise.", ...
+      	ClZF_Exception.cstInfoLogSimple)
+      	
+      mg_oExErreurSQL = allouer un ClZF_Exception("Echec de la récupération des données", ...
+      	ClZF_Exception.cstInfoLogHF)
+      
+      mg_oExErreurTRS = allouer un ClZF_Exception("Echec de la transaction", ...
+      	ClZF_Exception.cstInfoLogHF)
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     internal_properties : BwAAAAcAAADcQA4dQ8XP6uVsvBcKyevao3x75RHCjQB9pYHLj9xRzKyBeOlQEeORokqE/CzVuNBoT5v/ZPzjoKW79UlVAg0jKzHIdeUmmvuPFo9DqT93hXPow1d/bLUDFte846GzvLfEwPZmVnF8fPcxX4upfZsWjUZ3tiDsWxwQhgIvrBsMgAZ+pX+/d9lskBkWwW+uKG/IyAzPJoLstkg+xc+OQnjAQDK8jx5pGLzW3b5z0grKywgFzZGaSknw0Z46FM+4C4+8+mmyxPEDXbNO69NellZupIWMPiLQ3U13HxFFQTfJI6YJUP2+1Rh8qXvPZ1Q8FO4jGHtA2Rm5mHC948MFlqsbgpCUQ7NdEtRHCyX2/BFr
+     procedure_id : 1424026768731914247
+     type_code : 27
+     code : |1-
+      PROCEDURE Constructeur()
+      
+      si pas m_ZF_bSingleton ALORS
+      	m_ZF_bSingleton = vrai
+      sinon
+      	mg_oExPlusieursInstancesClAapp.ZF_Declenche([objet..Classe])
+      	//ExceptionDéclenche(1, "Une seule instance de la classe ""[%%]"" est permise.")
+      FIN
+      
+      
+      HSurErreur("*",hErrTout,"")
+      
+      :cnxbdd()
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1424026768731979783
+     type_code : 28
+     code : |1+
+      PROCEDURE Destructeur()
+      
+      ClZF_ObjDB.ZF_LibereInstancesMemo()
+      
+      // Fermeture de tous les fichiers
+      SI PAS HFerme("*") ALORS
+      	Erreur(HErreurInfo(hErrComplet))
+      FIN
+       
+      SI PAS HFermeConnexion(:m_ZF_cnxBDD) ALORS
+      	Erreur(HErreurInfo(hErrComplet))
+      FIN
+      
+     type : 655360
+   -
+     name : Rsql
+     procedure_id : 1424026768732045319
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Rsql (<sdSource_P> est objet source de données, <sReq_P> est chaîne)
+      //
+      // Paramètres :
+      //	sdSource_P (objet source de données) : <indiquez ici le rôle de sdSource>
+      //	sReq_P (chaîne ANSI) : <indiquez ici le rôle de sReq_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bSansCorrection_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bSansCorrection_p>
+      FONCTION Rsql(sdSource_P est source de données , sReq_P est une chaîne)<métier>:vide
+      
+      //trace("----------------------------")
+      //trace(sReq_P)
+      //trace(dbginfo(dbgPile))
+      SI PAS HExécuteRequêteSQL( sdSource_P, :m_ZF_cnxBDD, hRequêteSansCorrection, sReq_P) ALORS
+      	mg_oExErreurSQL.ZF_Declenche()
+      FIN
+      
+      //Métriques : Nombre d'exécutions de requetes
+      m_aMetriques[1].nNbRequetes++
+      
+      //renvoyer vrai
+     type : 458752
+   -
+     name : TranDebut
+     procedure_id : 1424026768732110855
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //TranDebut ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE TranDebut():Vide
+      
+      
+      :m_ZF_nNbreTrsOuverte++
+      
+      SI :m_ZF_nNbreTrsOuverte = 1 ALORS
+      	//Lors de la 1ere transaction, on réinitialise la valeur mémorisant l'annulation de transaction.
+      	:m_ZF_bAnnulationDemande = Faux
+      	
+      	//	trace("TD " + :nNbreTrsOuverte)
+      	
+      	//On active la transaction qu'au 1er appel de la procédure.
+      	SI PAS HTransactionDébut(:m_ZF_cnxBDD) ALORS
+      		mg_oExErreurTRS.ZF_Declenche()
+      		//ExceptionDéclenche(1, HErreurInfo(hErrMessage))
+      	FIN
+      fin
+     type : 458752
+   -
+     name : TranFin
+     procedure_id : 1424026768732176391
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //TranFin ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE TranFin():Vide
+      
+      
+      //On décrémente le compteur de transactions
+      :m_ZF_nNbreTrsOuverte--
+      
+      //A t on eu une erreur pendant une transaction ?
+      SI PAS :m_ZF_bAnnulationDemande ALORS
+      	//Non : on valide réellement la transaction.
+      	
+      	//Trace("TF " + :nNbreTrsOuverte)
+      
+      	SI :m_ZF_nNbreTrsOuverte = 0 ALORS
+      		si pas HTransactionFin(:m_ZF_cnxBDD) ALORS
+      			mg_oExErreurTRS.ZF_Declenche()
+      			//ExceptionDéclenche(1,HErreurInfo(hErrMessage))
+      		FIN
+      	FIN
+      sinon
+      	:TranAnnule()
+      FIN
+     type : 458752
+   -
+     name : TranAnnule
+     procedure_id : 1424026768732241927
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //TranAnnule ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE TranAnnule():Vide
+      
+      //On décrémente le nombre de transactions ouvertes, et on mémorise une annulation de transaction.
+      :m_zf_nNbreTrsOuverte--
+      :m_ZF_bAnnulationDemande = Vrai
+      
+      //Trace("TA " + :nNbreTrsOuverte)
+      
+      si pas HTransactionAnnule(:m_ZF_cnxBDD) ALORS
+      	mg_oExErreurTRS.ZF_Declenche()
+      	//ExceptionDéclenche(1, HErreurInfo(hErrMessage))
+      FIN
+     type : 458752
+   -
+     name : sFormateTexteSQL
+     internal_properties : BwAAAAcAAADYuPST6CP+T+K2ZU37o7g3n8Kew/nVjSZD5G6OyRuT2Yo67DV/AZmlWI7RE7NW48hb
+     procedure_id : 1424026768732307463
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sFormateTexteSQL (<sTexte_P> est chaîne)
+      //
+      // Paramètres :
+      //	sTexte_P (chaîne ANSI) : <indiquez ici le rôle de sTexte_P>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE global sFormateTexteSQL(local sTexte_P est une chaîne):chaine
+      
+      renvoyer remplace(sTexte_P, "'", "''")
+     type : 458752
+   -
+     name : cnxBdd
+     procedure_id : 1424026768732372999
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // cnxBdd ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure abstraite cnxBdd()
+      
+     type : 458752
+   -
+     name : CreeObj
+     procedure_id : 1424026768732438535
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] CreeObj (<sClasse_P> est chaîne, <nId_P> est entier)
+      //
+      // Paramètres :
+      //	sClasse_P (chaîne ANSI) : <indiquez ici le rôle de sClasse_P>
+      //	nId_P (entier) : <indiquez ici le rôle de nId_P>
+      // Valeur de retour :
+      // 	ClZF_ObjDbLs : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	sdSource_P (source de données) : <indiquez ici le rôle de sdSource_P>
+      procédure CreeObj(sClasse_P est une chaîne, nId_P est un entier):ClZF_ObjDBls
+      
+      
+      oRetour est un ClZF_ObjDbLs dynamique
+      
+      SI mg_aZF_aGetId[sClasse_P]..Vide ALORS
+      	sProc est une chaîne = "ZF_CreeObj_[%sClasse_P%]"
+      	sCode est une chaîne = [
+      		PROCEDURE [%sProc%](nId_P est un entier):[%sClasse_P%]
+      		oRetour est un [%sClasse_P%](nId_P)
+      		RENVOYER oRetour
+      		]
+      	Compile(sProc, sCode)
+      	mg_aZF_aGetId[sClasse_P] = sProc
+      FIN
+      oRetour <- Exécute(mg_aZF_aGetId[sClasse_P], nId_P)
+      
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : ExceptGenerale
+     procedure_id : 1434630806552584165
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ExceptGenerale ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Type indéterminé : // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure abstraite ExceptGenerale()
+      
+     type : 458752
+   -
+     name : GetMetriques
+     procedure_id : 1442558804699502758
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetMetriques ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau (STR_metrique) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique GetMetriques()<metier>:tableau de STR_metrique
+      
+      
+      m_aMetriques[1].nNbTransactions = :m_ZF_nNbreTrsOuverte
+      TableauInsère(m_aMetriques, 1)
+      si m_aMetriques..Occurrence > 60 ALORS
+      	Dimension(m_aMetriques, 60)
+      FIN
+      renvoyer m_aMetriques
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ClApp
+resources :
+ string_res :
+  identifier : 0x1e88f2332f2b5f44
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

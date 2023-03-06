@@ -8,7 +8,7 @@ info :
  description : ""
  subtype : 0
 class :
- identifier : 0x1e94177f42b02054
+ identifier : 0x13f3f3860e2488e8
  internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
@@ -16,171 +16,188 @@ class :
    -
      code : |1+
       ClCritereAccept_Composant est une Classe
-      	Hérite de ClObjDB
-      	
-      	m_sDescription		est une chaîne				<MAPPING=Description>
-      	m_nTypeCompo		est un entier sur 1 octet	<MAPPING=IDScr_CritereAccept_Composant_Type>
-      	m_oCritere_Parent	est un objet ClCritereAccept dynamique
+      hérite de ClZF_ObjDB
+      
       PRIVÉ
-      	LibTypeCompo		est une chaîne
+      	m_sDescription	est un chaîne ANSI	<MAPPING=Description>
+      	m_oIDScr_CritereAccept	est un ClCritereAccept dynamique
+      	m_oIDScr_CritereAccept_Composant_Type	est un ClCritereAccept_Composant_Type dynamique
+      
+      GLOBAL
+      PUBLIC
+      /*
+      	mg_oEx_Exception1	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception2	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception3	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception4	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception5	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception6	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception7	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception8	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception9	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception10	est un ClZF_Exception dynamique<§cs:10§>
+      */
       FIN
-       
-      constante
+      
+      /*
+      mg_oEx_Exception1	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception2	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception3	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception4	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception5	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception6	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception7	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception8	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception9	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception10	= Allouer un ClZF_Exception("...")<§cs:10§>
+      */
+      
+      
+      CONSTANTE
       	cst_EtantDonneQue	= 1
       	cst_AuMomentDe		= 2
       	cst_JattendQue		= 3
-      fin
+      FIN
      type : 131072
   procedures :
    -
      name : Constructeur
-     procedure_id : 2203411953038205012
+     procedure_id : 1437760463150024936
      type_code : 27
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //Constructeur ( [<nId_P> est entier])
-      //
-      // Paramètres :
-      //	nId_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nID_P>
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
       
-      //	oCritere_p (ClCritereAccept) : <indiquez ici le rôle de oCritere_p>
-      PROCEDURE Constructeur(local nId_P est un entier = 0)
+      Ancêtre.Constructeur(Scr_CritereAccept_Composant..Nom, Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant..Nom,nID_P)
       
-      ancetre.constructeur(Scr_CritereAccept_Composant..nom,Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant..Nom,nId_P)
+      //:ZF_Charge()
       
-      :charge()
-      si pas :bModeAjout() ALORS
-      	:m_oCritere_Parent <- ClCritereAccept.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept)
-      FIN
      type : 589824
    -
      name : Destructeur
-     procedure_id : 2203411953038270548
+     procedure_id : 1437760463150090472
      type_code : 28
-     code : |1-
+     code : |1+
+      Procédure Destructeur()
       
-      PROCEDURE Destructeur()
      type : 655360
    -
-     name : Get_LibCompo
-     procedure_id : 2203411953038336084
+     name : GetObj
+     procedure_id : 1437760463150156008
      type_code : 12
      code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //[ <Résultat> = ] Get_LibCompo ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	chaîne ANSI : <indiquez ici les valeurs possibles ainsi que leur interprétation>
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      
-      FONCTION Get_LibCompo()
-      
-      RENVOYER :LibTypeCompo
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClCritereAccept_Composant
+      sClasse est une chaine = ClCritereAccept_Composant
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
      type : 458752
    -
-     name : Enregistre
-     procedure_id : 2203582827376686458
+     name : init_ObjBD
+     procedure_id : 1437760463150221544
      type_code : 12
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //Enregistre ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
+     code : |1+
+      PROCÉDURE init_ObjBD()
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
       
-      PROCEDURE VIRTUELLE Enregistre()
+      SI PAS :ZF_bModeAjout() ALORS
+      	:m_oIDScr_CritereAccept	<- ClCritereAccept.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept)
       
-      //On enregistre le composant que si on est en train d'enregistrer le critère parent.
-      si :m_oCritere_Parent.m_bEnregistrementEnCours ALORS
-      	ancetre.enregistre()
-      sinon
-      	ExceptionDéclenche(1,"Les composant des critères d'acceptation ne peuvent s'enregistrer que via le critère lui-même")
+      	:m_oIDScr_CritereAccept_Composant_Type	<- ClCritereAccept_Composant_Type.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant_Type)
       FIN
+      
+      
+      
      type : 458752
    -
      name : pre_enregistre
-     procedure_id : 2203602094688413883
+     procedure_id : 1437895404468628805
      type_code : 12
      code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //pre_enregistre ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
+      // Redéfinition de la méthode ClZF_ObjDB.pre_enregistre
+      PROCÉDURE PROTÉGÉE  pre_enregistre()<métier>:Vide
       
-      PROCEDURE VIRTUELLE pre_enregistre()
       
-      Scr_CritereAccept_Composant.IDScr_CritereAccept	= :m_oCritere_Parent.Get_IdUnique()
+      Scr_CritereAccept_Composant.IDScr_CritereAccept	= :m_oIDScr_CritereAccept.ZF_Get_IdUnique()
      type : 458752
+  properties :
    -
-     name : GetObj
-     procedure_id : 2241676555229416140
-     type_code : 12
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //[ <Résultat> = ] GetObj (<nIdUnique_P> est entier)
-      //
-      // Paramètres :
-      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
-      // Valeur de retour :
-      // 	ClCritereAccept_Composant : // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClCritereAccept_Composant
-      
-      renvoyer ClObjDB.GetObj("ClCritereAccept_Composant", nIdUnique_P)
-     type : 458752
+     name : p_sDescription
+     identifier : 0x13f3f3860e2588e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_sDescription() : chaîne ANSI
+         //Propriétés de m_sDescription
+         
+         RENVOYER :m_sDescription
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure p_sDescription(sValeur_p est un chaîne ANSI):Vide
+         
+         SI :m_sDescription <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sDescription = sValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
    -
-     name : sExport
-     procedure_id : 1156467670279386429
-     type_code : 12
-     code : |1+
-      procédure sExport():JSON
-      
-      sRetour est un JSON
-      
-      sRetour.id					= :m_nIdUnique
-      sRetour.description			= :m_sdescription
-      
-      RENVOYER sRetour
-     type : 458752
+     name : p_oIDScr_CritereAccept
+     identifier : 0x13f3f3860e2688e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_oIDScr_CritereAccept() : ClCritereAccept
+         //Propriétés de m_oIDScr_CritereAccept
+         
+         RENVOYER :m_oIDScr_CritereAccept
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure p_oIDScr_CritereAccept(oValeur_p est un ClCritereAccept dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_CritereAccept, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_CritereAccept = oValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_CritereAccept_Composant_Type
+     identifier : 0x13f3f3860e2788e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_oIDScr_CritereAccept_Composant_Type() : ClCritereAccept_Composant_Type
+         //Propriétés de m_oIDScr_CritereAccept_Composant_Type
+         
+         RENVOYER :m_oIDScr_CritereAccept_Composant_Type
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure p_oIDScr_CritereAccept_Composant_Type(oValeur_p est un ClCritereAccept_Composant_Type dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_CritereAccept_Composant_Type, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_CritereAccept_Composant_Type = oValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :
   internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
 resources :
  string_res :
-  identifier : 0x1e932a0b4459941f
+  identifier : 0x13f3ed9d0c5a6fd2
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

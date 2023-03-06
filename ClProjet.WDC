@@ -17,9 +17,7 @@ class :
    -
      code : |1+
       ClProjet est une Classe
-      	Hérite de ClObjDb
-      	
-      	m_aoListeUserStories	est un tableau de 1 objet ClUserStory dynamique
+      	Hérite de ClZF_ObjDb
       	
       prive
       	m_sNom					est une chaîne				<MAPPING=nom>
@@ -36,13 +34,15 @@ class :
       	
       	m_oUsr_ChefProjet		est un objet ClUsr dynamique
       	
-      	m_bListeInvitesInit		est un booléen
-      	m_aoListeInvites		est un tableau de 0 objet ClUsr dynamique
+      	m_oListeInvites			est un ClColUsr
+      	m_aClassifInvite		est un tableau associatif de ClColUsr
+      	m_oColUserStories		est un ClColUserStory
       	
-      	m_bInitListeUS			est un booléen
       	m_anStatsUS				est un tableau associatif de entier
-      	
       	m_bInitStatsUS			est un booléen
+      GLOBAL
+      	mg_oEx_TypeInvite		est un ClZF_Exception dynamique
+      	mg_oEx_SuppImpossible_PresUS		est un ClZF_Exception dynamique
       FIN
       
       STR_SimulationCharge est une structure
@@ -52,7 +52,15 @@ class :
       
       constante
       	cstTauxImponderable		= 0.50
+      	
+      	cstInter_Informe		= 4
+      	cstInter_Consulte		= 3
+      	cstInter_Decideur		= 2
+      	cstInter_Responsable	= 1
       fin
+      
+      mg_oEx_TypeInvite = allouer un ClZF_Exception("Erreur de type d'invité passé en paramètre : %1")
+      mg_oEx_SuppImpossible_PresUS = allouer un ClZF_Exception("Impossible de supprimer un projet, tant que des user stories sont affectées")
      type : 131072
   procedures :
    -
@@ -78,34 +86,9 @@ class :
       //Déclaration du constructeur de la classe d'accès aux données.
       Ancêtre.Constructeur(Scr_Projet..Nom, Scr_Projet.IDScr_Projet..Nom, nID_P)
       
-      TableauSupprimeTout(:m_aoListeUserStories)
-      
       //Chargement des données dans l'instance.
-      :Charge()
+      //:ZF_Charge()
       
-      si :bModeAjout() ALORS
-      	:m_oUsr_ChefProjet <- goApp.m_oUsrCnx
-      sinon
-      	sdUsrDePrj est une Source de Données
-      	sReq est une chaîne
-      	
-      	sReq = [
-      		SELECT IDScr_Usr
-      		FROM Scr_Usr_Projet
-      		WHERE Top_Chef_Projet = 1
-      			AND IDScr_Projet = [%:Get_IdUnique()%]
-      	]
-      	
-      	SI goApp.Rsql(sdUsrDePrj,sReq) ALORS
-      	
-      		POUR TOUT sdUsrDePrj
-      			:m_oUsr_ChefProjet <- ClUsr::GetObj(sdUsrDePrj.IDScr_Usr)
-      		FIN
-      		
-      	FIN
-      	
-      	HAnnuleDéclaration(sdUsrDePrj)
-      FIN
      type : 589824
    -
      name : Destructeur
@@ -158,11 +141,10 @@ class :
       	ORDER BY Scr_Projet.Nom
       	]
       
-      SI goApp.Rsql(sdSource_Liste_Projet,sReq_Liste_Projet) ALORS
-      	
-      	POUR TOUT sdSource_Liste_Projet
-      		aRetour[sdSource_Liste_Projet.IDScr_Projet] = sdSource_Liste_Projet.Nom
-      	FIN
+      goApp.Rsql(sdSource_Liste_Projet,sReq_Liste_Projet)
+      
+      POUR TOUT sdSource_Liste_Projet
+      	aRetour[sdSource_Liste_Projet.IDScr_Projet] = sdSource_Liste_Projet.Nom
       FIN
       
       HAnnuleDéclaration(sdSource_Liste_Projet)
@@ -200,18 +182,14 @@ class :
       	
       	FROM Scr_Usr_Projet
       	
-      	WHERE Scr_Usr_Projet.IDScr_Projet = [%:Get_IdUnique()%]
+      	WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       		AND Scr_Usr_Projet.Top_Chef_Projet = 1
       ]
       
-      si goApp.Rsql(sdRechercheChef,sReq) alors
-      	HLitPremier(sdRechercheChef)
-      	si htrouve(sdRechercheChef) ALORS
-      		oUsr <- ClUsr.GetObj(sdRechercheChef.IDScr_Usr)
-      //		oUsr <- allouer un ClUsr(sdRechercheChef.IDScr_Usr)
-      	FIN
-      sinon
-      	erreur(HErreurInfo(hErrComplet))
+      goApp.Rsql(sdRechercheChef,sReq)
+      HLitPremier(sdRechercheChef)
+      si htrouve(sdRechercheChef) ALORS
+      	oUsr <- ClUsr.GetObj(sdRechercheChef.IDScr_Usr)
       FIN
       
       HAnnuleDéclaration(sdRechercheChef)
@@ -236,14 +214,14 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	nIDProjet_p (entier) : <indiquez ici le rôle de nIDProjet>
-      PROCEDURE Projet_Etat()
+      PROCEDURE Projet_Etat():Vide
       
       bProjetTerminees est un booléen
       nNbrUSTerminees est un entier = 0
       nNbrTotal est un entier = 0
       oUs est un ClUserStory dynamique
       
-      pour tout element oUs de :aoListeUS()
+      pour tout element oUs de :aoListeUS().aItems()
       	si oUs.p_bTermine = Vrai alors
       		nNbrUSTerminees++
       	FIN
@@ -258,7 +236,7 @@ class :
       
       si :m_bTop_Termine <> bProjetTerminees ALORS
       	:m_bTop_Termine = bProjetTerminees
-      	:Enregistre()
+      	:ZF_Enregistre()
       FIN
      type : 458752
    -
@@ -312,21 +290,18 @@ class :
       	
       	WHERE
       		 [%sChoixSprint%] > [%nNumSprint_p%] 
-      		 AND Scr_UserStory.IDScr_Projet = [%:Get_IdUnique()%]
+      		 AND Scr_UserStory.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       		 AND Scr_Tache.Num_Sprint_Fin is null
       		 AND Scr_Tache.Top_Brouillon = 0
       ]
       //,sChoixPoids,sChoixSprint, nNumSprint_p, :Get_IdUnique())
       
-      SI goApp.Rsql(sdRecherchePointsRestant,sReq) alors
-      	HLitPremier(sdRecherchePointsRestant)
-      	si htrouve (sdRecherchePointsRestant) alors
-      		nPtsRestant = sdRecherchePointsRestant.Points
-      	sinon
-      		nPtsRestant = -1
-      	FIN
+      goApp.Rsql(sdRecherchePointsRestant,sReq)
+      HLitPremier(sdRecherchePointsRestant)
+      si htrouve (sdRecherchePointsRestant) alors
+      	nPtsRestant = sdRecherchePointsRestant.Points
       sinon
-      	Erreur(erreurinfo(errComplet))
+      	nPtsRestant = -1
       FIN
       
       HAnnuleDéclaration(sdRecherchePointsRestant)
@@ -377,21 +352,20 @@ class :
       	FROM Scr_Tache
       		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
       	
-      	WHERE Scr_UserStory.IDScr_Projet = [%:Get_IdUnique()%]
+      	WHERE Scr_UserStory.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       		AND Scr_Tache.[%sChoixSprint%] = [%nNumSprint_p%]
       		AND Scr_Tache.Top_Brouillon = 0
       		AND Scr_Tache.Top_Annule = 0
       	
       ]
-      
-      si goApp.Rsql(sdRechechePointProjetSprint,sReq) alors
-      	HLitPremier(sdRechechePointProjetSprint,SommePoids)
-      	SI pas HEnDehors(sdRechechePointProjetSprint) alors
-      		nPoints = sdRechechePointProjetSprint.SommePoids
-      	FIN
+      goApp.Rsql(sdRechechePointProjetSprint,sReq)
+      HLitPremier(sdRechechePointProjetSprint,SommePoids)
+      SI pas HEnDehors(sdRechechePointProjetSprint) alors
+      	nPoints = sdRechechePointProjetSprint.SommePoids
       FIN
       
       HAnnuleDéclaration(sdRechechePointProjetSprint)
+      
       renvoyer nPoints
      type : 458752
    -
@@ -439,20 +413,19 @@ class :
       		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
       	
       	WHERE
-      		Scr_UserStory.IDScr_Projet = [%:Get_IdUnique()%]
+      		Scr_UserStory.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       		AND Scr_Tache.Top_Realise = 0
       		AND Scr_Tache.Top_Brouillon = 0
       		AND Scr_Tache.Top_Annule = 0
       		
       ]
       
-      SI goApp.Rsql(sdRecherchePointsRestant,sReq) ALORS
-      	HLitPremier(sdRecherchePointsRestant)
-      	SI HTrouve (sdRecherchePointsRestant) ALORS
-      		nPointsTotal = sdRecherchePointsRestant.Points
-      	SINON
-      		nPointsTotal = 0
-      	FIN
+      goApp.Rsql(sdRecherchePointsRestant,sReq)
+      HLitPremier(sdRecherchePointsRestant)
+      SI HTrouve (sdRecherchePointsRestant) ALORS
+      	nPointsTotal = sdRecherchePointsRestant.Points
+      SINON
+      	nPointsTotal = 0
       FIN
       
       HAnnuleDéclaration(sdRecherchePointsRestant)
@@ -510,22 +483,19 @@ class :
       		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
       	
       	WHERE
-      		Scr_UserStory.IDScr_Projet = [%:Get_IdUnique()%]
+      		Scr_UserStory.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       		AND [%sChoixSprint%] < [%nSprintActuel%]
       		AND Scr_Tache.Top_Annule = 0
       		AND Scr_Tache.Top_Realise = 0
       		AND Scr_Tache.Top_Brouillon = 0
       ]
       
-      SI goApp.Rsql(sdRecherchePointsRestant,sReq) ALORS
-      	HLitPremier(sdRecherchePointsRestant)
-      	SI HTrouve (sdRecherchePointsRestant) ALORS
-      		nPtsRealises = sdRecherchePointsRestant.Points
-      	SINON
-      		nPtsRealises = 0
-      	FIN
+      goApp.Rsql(sdRecherchePointsRestant,sReq)
+      HLitPremier(sdRecherchePointsRestant)
+      SI HTrouve (sdRecherchePointsRestant) ALORS
+      	nPtsRealises = sdRecherchePointsRestant.Points
       SINON
-      	Erreur(ErreurInfo(errComplet))
+      	nPtsRealises = 0
       FIN
       
       HAnnuleDéclaration(sdRecherchePointsRestant)
@@ -540,92 +510,83 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //aoListeUS ()
+      //[ <Résultat> = ] aoListeUS ( [<bForceRecharge_P> est booléen])
       //
       // Paramètres :
-      //	Aucun
+      // 	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
       // Valeur de retour :
-      // 	Aucune
+      // 	ClColUserStory : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
       //	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
-      FONCTION aoListeUS(bForceRecharge_P est un booléen = faux):tableau de ClUserStory dynamique
+      FONCTION aoListeUS(bForceRecharge_P est un booléen = faux):ClColUserStory
       
-      sdListUserStorie est une source de données
       sReq est une chaîne
       
       
-      si pas :m_bInitListeUS ou bForceRecharge_P alors
+      si pas :m_oColUserStories.p_bEstCharge ou bForceRecharge_P alors
       	
-      	dimension(:m_aoListeUserStories,0)
+      	m_oColUserStories.ZF_vider()
       	
       	sReq = [
       		SELECT
-      			Scr_UserStory.IDScr_UserStory
+      			Scr_UserStory.*
+      			--Scr_UserStory.IDScr_UserStory
       			
       		FROM Scr_UserStory
       		
-      		WHERE Scr_UserStory.IDScr_Projet = [%:Get_IdUnique()%]
+      		WHERE Scr_UserStory.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       		
       		ORDER BY Scr_UserStory.IDScr_UserStory
       	]
       	
-      	SI goapp.Rsql(sdListUserStorie,sReq) ALORS
-      		POUR TOUT sdListUserStorie
-      			TableauAjouteRéférence(:m_aoListeUserStories, ClUserStory.GetObj(sdListUserStorie.IDScr_UserStory)) 
-      		FIN
-      	FIN
-      	HAnnuleDéclaration(sdListUserStorie)
-      	:m_bInitListeUS = vrai
+      	m_oColUserStories.ZF_LoadSQL(sReq)
       fin
       
-      RENVOYER :m_aoListeUserStories
+      RENVOYER m_oColUserStories
      type : 458752
    -
-     name : User_Story_Dev_Prevu_Tout_Les_Projets
+     name : User_Story_Dev_Prevu_Tout_Les_Projets_old
      procedure_id : 2202863756084414943
      type_code : 12
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] User_Story_Dev_Prevu_Tout_Les_Projets ()
+      //[ <Résultat> = ] User_Story_Dev_Prevu_Tout_Les_Projets_old ()
       //
       // Paramètres :
       //	Aucun
+      
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	ClColUserStory : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION GLOBAL User_Story_Dev_Prevu_Tout_Les_Projets():tableau de ClUserStory dynamique
+      FONCTION GLOBAL User_Story_Dev_Prevu_Tout_Les_Projets_old():ClColUserStory
       
-      aStUStableau est un tableau de ClUserStory dynamique
-      nVelocite est un entier = goApp.m_nVelociteMoyenne
-      bUsCommencee est un booléen = faux
-      bUSAnnulee est un booleen = Faux
-      sdRechercheUserStory est une source de données
-      sReq est une chaîne
+      oUStableau				est un ClColUserStory
+      nVelocite				est un entier	= goApp.m_nVelociteMoyenne
+      bUsCommencee			est un booléen	= faux
+      bUSAnnulee				est un booleen	= Faux
+      //sdRechercheUserStory	est une source de données
+      sReq					est une chaîne
       
       
       sReq = [
       	SELECT
-      		scr_UserStory.IDScr_UserStory
+      		scr_UserStory.*
+      		--scr_UserStory.IDScr_UserStory
       	
       	FROM Scr_Projet
       		INNER JOIN Scr_UserStory ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)
       ]
       
-      SI goApp.Rsql(sdRechercheUserStory,sReq) ALORS
-      	POUR TOUT sdRechercheUserStory 
-      		TableauAjouteRéférence(aStUStableau, ClUserStory.GetObj(sdRechercheUserStory.IDScr_UserStory))
-      	FIN
-      FIN
-      HAnnuleDéclaration(sdRechercheUserStory)
+      oUStableau.ZF_LoadSQL(sReq)
       
-      RENVOYER aStUStableau 
+      RENVOYER oUStableau 
      type : 458752
    -
      name : post_enregistre
@@ -644,13 +605,13 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE VIRTUELLE post_enregistre()
+      PROCEDURE VIRTUELLE post_enregistre():Vide
       
       
       sdRecupCdp est une Source de Données
       sReq est une chaîne
       
-      	si pas :m_bEstSupprime alors
+      	si pas :ZF_Get_est_supprime() alors
       	sReq = [
       		
       		SELECT
@@ -659,42 +620,41 @@ class :
       			
       		FROM Scr_Usr_Projet
       		
-      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:Get_IdUnique()%]
+      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       			AND Scr_Usr_Projet.Top_Chef_Projet = 1
       		
       	]
       	
-      	SI goapp.Rsql(sdRecupCdp,sReq) ALORS
-      		HLitPremier(sdRecupCdp)
-      		
-      		//A t on un chef de projet pour ce projet ?
-      		si pas HEnDehors(sdRecupCdp) alors
-      			//Oui :
-      			//Est ce celui en cours ?
-      			si sdRecupCdp.IDScr_Usr	<> :m_oUsr_ChefProjet.Get_IdUnique() alors
-      				//Non :
-      				
-      				//Mise à jour du chef de projet
-      				HLitRecherche(Scr_Usr_Projet,IDScr_Usr_Projet,sdRecupCdp.IDScr_Usr_Projet,hIdentique+hLimiteParcours)
-      				si HTrouve(Scr_Usr_Projet) ALORS
-      					Scr_Usr_Projet.IDScr_Usr	= :m_oUsr_ChefProjet.Get_IdUnique()
-      					si pas HModifie(Scr_Usr_Projet) ALORS
-      						ExceptionDéclenche(1,HErreurInfo(hErrComplet))
-      					FIN
-      				FIN
-      			FIN
-      		sinon
+      	goapp.Rsql(sdRecupCdp,sReq)
+      	HLitPremier(sdRecupCdp)
+      	
+      	//A t on un chef de projet pour ce projet ?
+      	si pas HEnDehors(sdRecupCdp) alors
+      		//Oui :
+      		//Est ce celui en cours ?
+      		si sdRecupCdp.IDScr_Usr	<> :m_oUsr_ChefProjet.ZF_Get_IdUnique() alors
       			//Non :
       			
-      			//Création de l'association utilisateur / projet, avec l'attribut "chef de projet"
-      			hraz(Scr_Usr_Projet)
-      			Scr_Usr_Projet.IDScr_Projet		= :Get_IdUnique()
-      			Scr_Usr_Projet.IDScr_Usr		= :m_oUsr_ChefProjet.Get_IdUnique()
-      			Scr_Usr_Projet.Top_Chef_Projet	= vrai
-      			Scr_Usr_Projet.Top_Invite		= faux
-      			SI PAS HAjoute(Scr_Usr_Projet) ALORS
-      				ExceptionDéclenche(1,HErreurInfo(hErrComplet))
+      			//Mise à jour du chef de projet
+      			HLitRecherche(Scr_Usr_Projet,IDScr_Usr_Projet,sdRecupCdp.IDScr_Usr_Projet,hIdentique+hLimiteParcours)
+      			si HTrouve(Scr_Usr_Projet) ALORS
+      				Scr_Usr_Projet.IDScr_Usr	= :m_oUsr_ChefProjet.ZF_Get_IdUnique()
+      				si pas HModifie(Scr_Usr_Projet) ALORS
+      					ExceptionDéclenche(1,HErreurInfo(hErrComplet))
+      				FIN
       			FIN
+      		FIN
+      	sinon
+      		//Non :
+      		
+      		//Création de l'association utilisateur / projet, avec l'attribut "chef de projet"
+      		hraz(Scr_Usr_Projet)
+      		Scr_Usr_Projet.IDScr_Projet		= :ZF_Get_IdUnique()
+      		Scr_Usr_Projet.IDScr_Usr		= :m_oUsr_ChefProjet.ZF_Get_IdUnique()
+      		Scr_Usr_Projet.Top_Chef_Projet	= vrai
+      		Scr_Usr_Projet.Top_Invite		= faux
+      		SI PAS HAjoute(Scr_Usr_Projet) ALORS
+      			ExceptionDéclenche(1,HErreurInfo(hErrComplet))
       		FIN
       	FIN
       	
@@ -708,8 +668,8 @@ class :
       	oInvite est un clusr dynamique
       	
       	//Transfert des id usr dans une liste
-      	pour tout element oInvite de :m_aoListeInvites
-      		TableauAjoute(anLstUsr,oInvite.Get_IdUnique())
+      	pour tout element oInvite de :m_oListeInvites.aItems()
+      		TableauAjoute(anLstUsr,oInvite.ZF_Get_IdUnique())
       	FIN
       	
       	
@@ -720,31 +680,30 @@ class :
       			
       		FROM Scr_Usr_Projet
       		
-      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:Get_IdUnique()%]
+      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       			AND Scr_Usr_Projet.Top_Invite = 1
       		
       	]
       	
-      	SI goApp.Rsql(sdLstUsr,sReq) ALORS
-      		pour tout sdLstUsr
-      			nInd = TableauCherche(anLstUsr,tcLinéaire, sdLstUsr.IDScr_Usr)
-      			si nInd = -1 ALORS
-      				//L'utilisateur en base n'est pas dans la liste : il faut le supprimer de la base
-      				HLitRecherche(Scr_Usr_Projet,CC_IDScr_ProjetIDScr_Usr,[:Get_IdUnique(), sdLstUsr.IDScr_Usr],hIdentique+hLimiteParcours)
-      				si HTrouve(Scr_Usr_Projet) ALORS
-      					HSupprime(Scr_Usr_Projet)
-      				FIn
-      			sinon
-      				// L'id est présent dans les utiliateurs et dans la base : pas de modif en BDD
-      				TableauSupprime(anLstUsr,nInd)
-      			FIN
+      	goApp.Rsql(sdLstUsr,sReq)
+      	pour tout sdLstUsr
+      		nInd = TableauCherche(anLstUsr,tcLinéaire, sdLstUsr.IDScr_Usr)
+      		si nInd = -1 ALORS
+      			//L'utilisateur en base n'est pas dans la liste : il faut le supprimer de la base
+      			HLitRecherche(Scr_Usr_Projet,CC_IDScr_ProjetIDScr_Usr,[:ZF_Get_IdUnique(), sdLstUsr.IDScr_Usr],hIdentique+hLimiteParcours)
+      			si HTrouve(Scr_Usr_Projet) ALORS
+      				HSupprime(Scr_Usr_Projet)
+      			FIn
+      		sinon
+      			// L'id est présent dans les utiliateurs et dans la base : pas de modif en BDD
+      			TableauSupprime(anLstUsr,nInd)
       		FIN
       		HAnnuleDéclaration(sdLstUsr)
       		
       		//Une fois ce traitement de comparaison fini, il ne reste que les utilisateurs manquants.
       		pour tout nInd de anLstUsr
       			HRAZ(Scr_Usr_Projet)
-      			Scr_Usr_Projet.IDScr_Projet		= :Get_IdUnique()
+      			Scr_Usr_Projet.IDScr_Projet		= :ZF_Get_IdUnique()
       			Scr_Usr_Projet.IDScr_Usr		= nInd
       			Scr_Usr_Projet.Top_Chef_Projet	= Faux
       			Scr_Usr_Projet.Top_Invite		= Vrai
@@ -773,22 +732,23 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       
-      PROCEDURE VIRTUELLE pre_enregistre()
+      PROCEDURE VIRTUELLE pre_enregistre():Vide
       
       
       sdDelUsrPrj est une Source de Données
       sReq est une chaîne
       
-      si :m_bEstSupprime alORS
+      si :ZF_Get_est_supprime() alORS
       	
-      	si TableauOccurrence(:aoListeUS()) ALORS
-      		ExceptionDéclenche(1, "Impossible de supprimer un projet, tant que des user stories sont affectées")
+      	si :aoListeUS().ZF_nTaille() ALORS
+      		mg_oEx_SuppImpossible_PresUS.ZF_Declenche()
+      		//ExceptionDéclenche(1, "Impossible de supprimer un projet, tant que des user stories sont affectées")
       	FIN
       	
       	//On supprimer tous les liens des utilisateurs associés à ce projet.
       	sReq = [
       	DELETE FROM Scr_Usr_Projet
-      	WHERE IDScr_Projet = [%:Get_IdUnique()%]
+      	WHERE IDScr_Projet = [%:ZF_Get_IdUnique()%]
       	]
       	goapp.RSQL(sdDelUsrPrj,sReq)
       	HAnnuleDéclaration(sdDelUsrPrj)
@@ -796,7 +756,7 @@ class :
       	//On supprimer tous les liens des utilisateurs associés à ce projet.
       	sReq = [
       	DELETE FROM Scr_Projet_Situation
-      	WHERE IDScr_Projet = [%:Get_IdUnique()%]
+      	WHERE IDScr_Projet = [%:ZF_Get_IdUnique()%]
       	]
       	goapp.RSQL(sdDelUsrPrj,sReq)
       	HAnnuleDéclaration(sdDelUsrPrj)
@@ -810,47 +770,57 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] aoListeProjets ( [<bAvecProjetsFini_P> est booléen])
+      //[ <Résultat> = ] aoListeProjets ( [<bAvecProjetsFini_P> est booléen [, <oUsr_p> est ClUsr]])
       //
       // Paramètres :
-      // 	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      // 	oUsr_p (ClUsr - valeur par défaut=0) : <indiquez ici le rôle de oUsr_p>
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	ClColProjet : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
       //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
       //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
-      FONCTION GLOBAL aoListeProjets(bAvecProjetsFini_P est un booléen = faux):tableau de ClProjet dynamique
+      FONCTION GLOBAL aoListeProjets(bAvecProjetsFini_P est un booléen = faux, oUsr_p est un ClUsr = null):ClcolProjet
       
-      aRetour est un tableau de ClProjet dynamique
-      sdSource_Liste_Projet est une Source de Données
-      sReq_Liste_Projet est une chaîne
-      sComplement est une chaîne
+      oColRetour			est un ClcolProjet
+      
+      sReq_Liste_Projet	est une chaîne
+      sComplement			est une chaîne
       
       si pas bAvecProjetsFini_P ALORS
-      	sComplement = "WHERE Scr_Projet.Top_Termine = 0"
+      	sComplement += ["AND "] + "Scr_Projet.Top_Termine = 0"
       FIN
-      	
+      
+      si oUsr_p <> Null ALORS
+      	sComplement += ["AND "] + [
+      	Scr_Projet.IDScr_Projet IN (
+      		SELECT
+      			Scr_Usr_Projet.IDScr_Projet
+      		FROM Scr_Usr_Projet
+      		where Scr_Usr_Projet.IDScr_Usr = [%oUsr_p.ZF_Get_IdUnique()%]
+      		)
+      	]
+      FIN
+      
+      si sComplement <> "" ALORS
+      	sComplement = "WHERE " + sComplement
+      FIN
+      
       sReq_Liste_Projet = [
-      	SELECT
-      		Scr_Projet.IDScr_Projet
+      	SELECT distinct
+      		Scr_Projet.*
+      		--Scr_Projet.IDScr_Projet
       	FROM Scr_Projet
       	
       	[%sComplement%]
       	]
       
-      SI goApp.Rsql(sdSource_Liste_Projet,sReq_Liste_Projet) ALORS
-      	POUR TOUT sdSource_Liste_Projet
-      		TableauAjouteRéférence(aRetour,ClProjet.GetObj(sdSource_Liste_Projet.IDScr_Projet))
-      //		TableauAjouteRéférence(aRetour,allouer un ClProjet(sdSource_Liste_Projet.IDScr_Projet))
-      	FIN
-      FIN
+      oColRetour.ZF_LoadSQL(sReq_Liste_Projet)
       
-      HAnnuleDéclaration(sdSource_Liste_Projet)
-      
-      renvoyer aRetour
+      renvoyer oColRetour
      type : 458752
    -
      name : Invite_Ajoute
@@ -859,10 +829,11 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Invite_Ajoute (<oUsr_P> est ClUsr)
+      //Invite_Ajoute (<oUsr_P> est ClUsr [, <nTypeInvite_P> est entier])
       //
       // Paramètres :
       //	oUsr_P (ClUsr) : <indiquez ici le rôle de oUsr_P>
+      // 	nTypeInvite_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nTypeInvite_P>
       // Valeur de retour :
       // 	Aucune
       //
@@ -870,22 +841,45 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	nIdUsr_P (entier) : <indiquez ici le rôle de nIdUsr_P>
-      PROCEDURE Invite_Ajoute(oUsr_P est un ClUsr)
+      PROCEDURE Invite_Ajoute(oUsr_P est un ClUsr, nTypeInvite_P est un entier = 0):Vide
       
-      bTrouve est un booléen
-      oInvite est un ClUsr dynamique
+      //bTrouve est un booléen
+      //oInvite est un ClUsr dynamique
+      //
+      ////On s'assure que l'utilisateur n'est pas déja présent.
+      //pour tout element oInvite de :m_oListeInvites.aItems()
+      //	si oInvite.ZF_Get_IdUnique() = oUsr_P.ZF_Get_IdUnique() ALORS
+      //		bTrouve = vrai
+      //		sortir
+      //	FIN
+      //FIN
       
-      //On s'assure que l'utilisateur n'est pas déja présent.
-      pour tout oInvite de :m_aoListeInvites
-      	si oInvite.Get_IdUnique() = oUsr_P.Get_IdUnique() ALORS
-      		bTrouve = vrai
-      		sortir
-      	FIN
+      si pas :m_oListeInvites.ZF_recherche(oUsr_P) ALORS
+      	//Ajout de l'utilisateur à la liste.
+      	:m_oListeInvites.ZF_addItem(oUsr_P)
       FIN
       
-      si pas bTrouve ALORS
-      	//Ajout de l'utilisateur à la liste.
-      	TableauAjouteRéférence(:m_aoListeInvites, oUsr_P)
+      si nTypeInvite_P <> 0 alors
+      	
+      	sCle est une chaîne 
+      	oColInvite est un ClColUsr dynamique
+      	
+      	//Est ce que le type d'invité est correct ?
+      	si pas nTypeInvite_P dans(::cstInter_Informe, ::cstInter_Consulte, ::cstInter_Decideur, ::cstInter_Responsable) ALORS
+      		mg_oEx_TypeInvite.ZF_Declenche([nTypeInvite_P])
+      	FIN
+      	
+      	//Parcourt de tous les groupes d'invités
+      	POUR TOUT ELEMENT oColInvite, sCle de :m_aClassifInvite
+      		//Est on sur le groupe où on veut ajouter l'utilisateur ?
+      		si val(sCle) = nTypeInvite_P ALORS
+      			//Ajout de l'utilisateur à la liste.
+      			oColInvite.ZF_addItem(oUsr_P)
+      		sinon
+      			//Si on trouve l'utilisateur dans cette liste, on le supprime.
+      			oColInvite.ZF_Supp(oUsr_P)
+      		FIN
+      	FIN
       FIN
       
      type : 458752
@@ -907,16 +901,25 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	nIdUsr_P (entier) : <indiquez ici le rôle de nIdUsr_P>
-      PROCEDURE Invite_Supprime(LOCAL oUsr_P est un ClUsr)
+      PROCEDURE Invite_Supprime(LOCAL oUsr_P est un ClUsr):Vide
       
-      nInd est un entier
+      :m_oListeInvites.ZF_Supp(oUsr_P)
       
-      POUR nInd = 1 _a_ :m_aoListeInvites..Occurrence
-      	SI :m_aoListeInvites[nInd].Get_IdUnique() = oUsr_P.Get_IdUnique() ALORS
-      		TableauSupprime(:m_aoListeInvites,nInd)
-      		SORTIR
-      	FIN
+      sCle est une chaîne 
+      oColInvite est un ClColUsr dynamique
+      pour tout oColInvite, sCle de :m_aClassifInvite
+      	oColInvite.ZF_Supp(oUsr_P)
       FIN
+      
+      //nInd	est un entier
+      //oUsrTmp	est un ClUsr dynamique
+      //
+      //pour tout element oUsrTmp, nInd de :m_oListeInvites.aItems()
+      //	SI oUsrTmp.ZF_Get_IdUnique() = oUsr_P.ZF_Get_IdUnique() ALORS
+      //		:m_oListeInvites.ZF_Supp(nInd)
+      //		SORTIR
+      //	FIN
+      //FIN
      type : 458752
    -
      name : aoInvite_Liste
@@ -935,38 +938,29 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      //	nIdUsr_P (entier) : <indiquez ici le rôle de nIdUsr_P>
-      //	nIdUsr_P (entier) : <indiquez ici le rôle de nIdUsr_P>
-      //	bForce_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForce_p>
-      FONCTION aoInvite_Liste(LOCAL bForce_p est un booléen = 0)
+      FONCTION aoInvite_Liste(LOCAL bForce_p est un booléen = 0)<métier>:ClColUsr
       
       sReq est une chaîne
-      sdLstInvite est une source de données
       
-      si bForce_p ou pas :m_bListeInvitesInit ALORS
-      	dimension(:m_aoListeInvites, 0)
+      
+      si bForce_p ou pas :m_oListeInvites.p_bEstCharge ALORS
+      	:m_oListeInvites.ZF_vider()
       	
       	sReq = [
       		SELECT
+      			--Scr_Usr_Projet.*
       			Scr_Usr_Projet.IDScr_Usr
       			
       		FROM Scr_Usr_Projet
       		
-      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:Get_IdUnique()%]
+      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       			AND Scr_Usr_Projet.Top_Invite = 1
       	]
       	
-      	
-      	SI goApp.Rsql(sdLstInvite,sReq) ALORS
-      		POUR TOUT sdLstInvite
-      			TableauAjouteRéférence(:m_aoListeInvites,ClUsr.GetObj(sdLstInvite.IDScr_Usr))
-      //			TableauAjouteRéférence(:m_aoListeInvites,allouer un clusr(sdLstInvite.IDScr_Usr))
-      		fin
-      	fin
-      	:m_bListeInvitesInit = vrai
+      	m_oListeInvites.ZF_LoadSQL(sReq)
       fin
       
-      renvoyer :m_aoListeInvites 
+      renvoyer :m_oListeInvites
      type : 458752
    -
      name : CalcStatsUS
@@ -986,7 +980,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       // 	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
-      PROCEDURE PRIVÉE CalcStatsUS(bForceRecharge_P est un booléen = 0)
+      PROCEDURE PRIVÉE CalcStatsUS(bForceRecharge_P est un booléen = 0):Vide
       
       oUsTmp est un ClUserStory dynamique
       nEtat est un ClUserStory.ECompteNbUS
@@ -994,12 +988,47 @@ class :
       //Si les stats ne sont pas initialisés ou si on force le rechargement...
       si pas :m_bInitStatsUS ou bForceRecharge_P alors
       	variableraz(:m_anStatsUS)
+      	
+      	//Préchargement de toutes les taches, dans les collections pour les US	
+      	aColTachesParUs	est un tableau associatif de ClColTaches
+      	sCle			est une chaîne
+      	oTache			est un ClTache dynamique
+      	oColTaches		est un ClColTaches
+      	sReq			est une chaîne
+      
+      	sReq = [
+      	select
+      		Scr_Tache.*
+      	FROM Scr_Tache
+      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
+      	where Scr_UserStory.IDScr_Projet = [%:ZF_Get_IdUnique()%]
+      	]
+      	oColTaches.ZF_LoadSQL(sReq)
+      	pour tout element oTache de oColTaches.aItems()
+      		sCle = oTache.p_oUserStoryParent.ZF_Get_IdUnique()
+      		si aColTachesParUs[sCle]..Vide ALORS
+      			aColTachesParUs[sCle] = allouer un ClColTaches
+      			aColTachesParUs[sCle].p_bEstCharge = Vrai
+      		FIN
+      		aColTachesParUs[sCle].ZF_addItem(oTache)
+      	FIN
+      	
+      	
       	//Rechargement de toutes les US.
-      	pour tout element oUsTmp de :aoListeUS(bForceRecharge_P)
+      	pour tout element oUsTmp de :aoListeUS(bForceRecharge_P).aItems()
+      		
+      		//Envoi de la collection de tache, à l'US
+      		sCle = oUsTmp.ZF_Get_IdUnique()
+      		si pas aColTachesParUs[sCle]..Vide ALORS
+      			oUsTmp.p_oTaches = aColTachesParUs[sCle]
+      		FIN
+      		
       		//Comptage de tous les US, classés par type.
       		nEtat = oUsTmp.Get_EtatUS()
       		:m_anStatsUS[nEtat]++
       	fin
+      	
+      	:m_bInitStatsUS = vrai
       fin
      type : 458752
    -
@@ -1058,22 +1087,22 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE GLOBAL Combo_Charge_Projet(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne , LOCAL aOProjets_p est un tableau de ClProjet dynamique)
+      PROCEDURE GLOBAL Combo_Charge_Projet(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne , LOCAL oProjets_p est un ClColProjet):Vide
       
       oPrj est un ClProjet dynamique
-      aOProjets est un tableau ClProjet dynamique
+      oProjets est un ClColProjet
       
       //Si on ne passe pas de liste de projet, on charge les projets non terminés.
-      si TableauOccurrence(aOProjets_p) = 0 ALORS
-      	aOProjets <- ClProjet.aoListeProjets()
+      si oProjets_p.ZF_nTaille() = 0 ALORS
+      	oProjets <- ClProjet.aoListeProjets()
       sinon
       	//On charge les projets passés en paramètre.
-      	aOProjets <- aOProjets_p
+      	oProjets <- oProjets_p
       FIN
       
       ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
-      pour TOUT element oPrj de aOProjets
-      	ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, oPrj.m_sNom + glien(oPrj.Get_IdUnique()))
+      pour TOUT element oPrj de oProjets.aItems()
+      	ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, oPrj.m_sNom + glien(oPrj.ZF_Get_IdUnique()))
       FIN
       
       ListeTrie(sNomFenetre_P + "." + sNomCombo_P)
@@ -1091,8 +1120,9 @@ class :
       //	nNumSprint_p (entier) : <indiquez ici le rôle de nNumSprint_p>
       //	nPeriodeNbSprint_p (entier) : <indiquez ici le rôle de nPeriodeNbSprint_p>
       //	nSelecteur (ClTache.ETypeCharge) : <indiquez ici le rôle de nSelecteur>
+      
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	ClColProjet dynamique : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
@@ -1101,67 +1131,39 @@ class :
       //	nNumSprint_p (entier) : Le numéro du sprint
       //	nPeriodeNbSprint_p (entier) : <indiquez ici le rôle de nPeriodeNbSprint_p>
       //	nSelecteur (ClTache.ETypeCharge) : <indiquez ici le rôle de nSelecteur>
-      FONCTION GLOBAL aoProjets_sur_periode(LOCAL nNumSprint_p est un entier , LOCAL nPeriodeNbSprint_p est un entier , LOCAL nSelecteur est un ClTache.ETypeCharge):tableau de ClProjet dynamique
+      procedure GLOBALe aoProjets_sur_periode(LOCAL nNumSprint_p est un entier , LOCAL nPeriodeNbSprint_p est un entier , LOCAL nSelecteur est un ClTache.ETypeCharge):ClColProjet
       
-      //stProjet est un STR_Projet
-      aProjetsSprint est un tableau de ClProjet dynamique
+      oProjetsSprint			est un ClColProjet
+      nNumSprintFin			est un entier	= nNumSprint_p + nPeriodeNbSprint_p - 1 
+      sChoixSprint			est une chaîne
+      sReq					est une chaîne
       
-      nNumSprintFin est un entier = nNumSprint_p + nPeriodeNbSprint_p - 1 
       
       //On choisis si on veut en prod ou previsionnel 
-      sChoixSprint est une chaîne
-      schoixPoids est une chaine
       SI nSelecteur = ClTache.ETypeCharge.Charge_réelle ALORS
-      	sChoixSprint = "Scr_Tache.Num_Sprint_Realisation" 
-      	schoixPoids = "Scr_Tache.Poids"
+      	sChoixSprint = "Scr_Tache.Num_Sprint_Realisation"
       SINON
-      	sChoixSprint = "Scr_Tache.Num_Sprint_Previsionnel"	
-      	schoixPoids = "Scr_Tache.Poids_Previsionnel"
+      	sChoixSprint = "Scr_Tache.Num_Sprint_Previsionnel"
       FIN
-      
-      sdRechercheProjetSprint est une source de données
-      sReq est une chaîne
       
       
       
       sReq = [
       	SELECT DISTINCT
-      		Scr_Projet.IDScr_Projet,
-      		Scr_Projet.Nom + ' - ' + Scr_Usr.Service AS Nom,
-      		Scr_Usr.Nom AS NomUsr,
-      		SUM([%schoixPoids%]) AS Poids
+      		Scr_Projet.*
+      		--Scr_Projet.IDScr_Projet
       	
-      	FROM Scr_Sprint
-      		INNER JOIN Scr_Tache ON (Scr_Sprint.Num_Sprint = [%sChoixSprint%])
+      	FROM Scr_Tache
       		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
       		INNER JOIN Scr_Projet ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)
-      		INNER JOIN Scr_Usr_Projet ON (Scr_Usr_Projet.IDScr_Projet = Scr_Projet.IDScr_Projet
-      			AND Scr_Usr_Projet.Top_Chef_Projet = 1)
-      		INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)
       		
       	WHERE
-      		Scr_Sprint.Num_Sprint BETWEEN [%nNumSprint_p%] AND [%nNumSprintFin%]
+      		[%sChoixSprint%] BETWEEN [%nNumSprint_p%] AND [%nNumSprintFin%]
       		
-      	GROUP BY
-      		Scr_Projet.IDScr_Projet,
-      		Scr_Projet.Nom + ' - ' + Scr_Usr.Service,
-      		Scr_Usr.Nom
-      		
-      	HAVING SUM([%schoixPoids%]) <> 0
-      		
-      	ORDER BY
-      		Scr_Usr.Nom,
-      		Scr_Projet.Nom
       ]
+      oProjetsSprint.ZF_LoadSQL(sReq)
       
-      SI goApp.Rsql(sdRechercheProjetSprint,sReq) alors
-      	POUR TOUT sdRechercheProjetSprint 
-      		TableauAjouteRéférence(aProjetsSprint, ClProjet.GetObj(sdRechercheProjetSprint.IDScr_Projet))
-      	FIN
-      FIN
-      
-      HAnnuleDéclaration(sdRechercheProjetSprint)
-      renvoyer aProjetsSprint
+      renvoyer oProjetsSprint
      type : 458752
    -
      name : aoProcessMetiers
@@ -1194,15 +1196,14 @@ class :
       
       	FROM Scr_Process_Metier
       	
-      	WHERE Scr_Process_Metier.IDScr_Projet = [%:Get_IdUnique()%]
+      	WHERE Scr_Process_Metier.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       	
       	ORDER BY Scr_Process_Metier.Libelle
       ]
       
-      SI goApp.Rsql(sdListeProcess,sReq) ALORS
-      	POUR TOUT sdListeProcess
-      		TableauAjouteRéférence(aOProcess, ClSchem.GetObj(sdListeProcess.IDScr_Process_Metier))
-      	FIN
+      goApp.Rsql(sdListeProcess,sReq)
+      POUR TOUT sdListeProcess
+      	TableauAjouteRéférence(aOProcess, ClSchem.GetObj(sdListeProcess.IDScr_Process_Metier))
       FIN
       HAnnuleDéclaration(sdListeProcess)
       
@@ -1225,12 +1226,12 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE ReaffecteToutesUsAuCDP()
+      PROCEDURE ReaffecteToutesUsAuCDP():Vide
       
       oUS est un ClUserStory dynamique
-      POUR TOUT ELEMENT oUS DE :aoListeUS()
+      POUR TOUT ELEMENT oUS DE :aoListeUS().aItems()
       	oUS.p_oUsrResponsable = :m_oUsr_ChefProjet
-      	oUS.Enregistre()
+      	oUS.ZF_Enregistre()
       FIN
      type : 458752
    -
@@ -1252,14 +1253,14 @@ class :
       //
       PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClProjet
       
-      renvoyer ClObjDB.GetObj("ClProjet", nIdUnique_P)
+      renvoyer ClZF_ObjDB.ZF_GetObj("ClProjet", nIdUnique_P)
      type : 458752
    -
      name : ChargeSituation
      procedure_id : 2257371631902684937
      type_code : 12
      code : |1+
-      procédure prive ChargeSituation()
+      procédure prive ChargeSituation():Vide
       
       
       sdSituationPrj est une Source de Données
@@ -1274,23 +1275,20 @@ class :
       	
       	
       	WHERE Scr_Projet_Situation.Num_Sprint = [%goApp.m_nNumeroDuSprintActuel%]
-      		AND Scr_Projet_Situation.IDScr_Projet = [%:Get_IdUnique()%]
+      		AND Scr_Projet_Situation.IDScr_Projet = [%:ZF_Get_IdUnique()%]
       ]
       
-      SI goapp.RSQL(sdSituationPrj,sReq) ALORS
+      goapp.RSQL(sdSituationPrj,sReq)
       	
-      	
-      	:m_bInitSituation	=	vrai
-      	
-      	HLitPremier(sdSituationPrj)
-      	si pas HEnDehors(sdSituationPrj)
-      		:m_bTop_Prioritaire	= sdSituationPrj.Top_Prioritaire
-      		:m_sCmtrsituation	= sdSituationPrj.CMTR
-      	sinon
-      		:m_bTop_Prioritaire	= faux
-      		:m_sCmtrsituation	= ""
-      	FIN
-      	
+      :m_bInitSituation	=	vrai
+      
+      HLitPremier(sdSituationPrj)
+      si pas HEnDehors(sdSituationPrj)
+      	:m_bTop_Prioritaire	= sdSituationPrj.Top_Prioritaire
+      	:m_sCmtrsituation	= sdSituationPrj.CMTR
+      sinon
+      	:m_bTop_Prioritaire	= faux
+      	:m_sCmtrsituation	= ""
       FIN
       
       HAnnuleDéclaration(sdSituationPrj)
@@ -1323,7 +1321,7 @@ class :
       
       
       //Récupération du prévisionnel de toutes les taches non positionnés ou non commencé
-      POUR TOUT ELEMENT oTache_Tmp DE :aoListeTaches()
+      POUR TOUT ELEMENT oTache_Tmp DE :aoListeTaches().aItems()
       	SI oTache_Tmp.p_nNum_Sprint_Realisation = 0 OU oTache_Tmp.p_nNum_Sprint_Realisation >= nNumSprintDepart_P ALORS
       		nChargeARealiser += oTache_Tmp.p_nPoids_Previsionnel
       	FIN
@@ -1367,31 +1365,32 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] aoListeTaches ( [<bForceRecharge_P> est booléen])
+      //[ <Résultat> = ] aoListeTaches ()
       //
       // Paramètres :
-      //	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
+      //	Aucun
       // Valeur de retour :
-      // 	tableau : // 	Aucune
+      // 	ClColTaches : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
       //	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
-      FONCTION aoListeTaches():tableau de ClTache dynamique
+      //	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
+      FONCTION aoListeTaches():ClColTaches
       
-      aoTaches est un tableau de ClTache dynamique
+      oTaches			est un ClColTaches
       oUS				est un ClUserStory dynamique
       oTache			est un ClTache dynamique
       
-      POUR TOUT ELEMENT oUS DE :aoListeUS()
-      	POUR TOUT ELEMENT oTache DE oUS.aoListeTaches()
-      		TableauAjouteRéférence(aoTaches,oTache)
+      POUR TOUT ELEMENT oUS DE :aoListeUS().aItems()
+      	POUR TOUT ELEMENT oTache DE oUS.aoListeTaches().aItems()
+      		oTaches.ZF_addItem(oTache)
       	FIN
       FIN
       
       
-      RENVOYER aoTaches
+      RENVOYER oTaches
      type : 458752
    -
      name : sExport
@@ -1407,7 +1406,7 @@ class :
       
       
       
-      sRetour.id					= :m_nidunique
+      sRetour.id					= :ZF_Get_IdUnique()
       sRetour.name				= :m_sNom
       sRetour.is_departement		= :m_btop_direction
       sRetour.is_priority			= :m_btop_prioritaire
@@ -1420,13 +1419,13 @@ class :
       sRetour.user_manager		= :m_ousr_chefprojet.sExport()
       
       nInd = 0
-      pour tout element oUsr de :aoInvite_Liste()
+      pour tout element oUsr de :aoInvite_Liste().aItems()
       	nInd++
       	sRetour.user_guest[nInd] = oUsr.sExport()
       FIN
       
       nInd = 0
-      pour tout element oUS de :aoListeUS()
+      pour tout element oUS de :aoListeUS().aItems()
       	nInd++
       	sRetour.user_Stories[nInd] = oUS.sExport()
       FIN
@@ -1439,28 +1438,25 @@ class :
      procedure_id : 1166750015107763012
      type_code : 12
      code : |1-
-      procédure aoEpics():tableau de ClEpic dynamique
+      procédure aoEpics():ClColEpic
       
-      aoRetour est un tableau de ClEpic dynamique
-      sdEpics est une Source de Données
+      oRetour est un ClColEpic
       sReq est une chaîne
       
-      sReq = [
-      	SELECT IDScr_Epic
-      	FROM Scr_Epic
-      	WHERE IDScr_Projet = [%:Get_IdUnique()%]
-      	ORDER BY Ordre
-      ]
+      si pas oRetour.p_bEstCharge alors
+      	sReq = [
+      		SELECT 
+      			Scr_Epic.*
+      			--Scr_Epic.IDScr_Epic
+      		FROM Scr_Epic
+      		WHERE IDScr_Projet = [%:ZF_Get_IdUnique()%]
+      		ORDER BY Ordre
+      	]
+      	
+      	oRetour.ZF_LoadSQL(sReq)
+      fin
       
-      SI goapp.RSQL(sdEpics,sReq) ALORS
-      	POUR TOUT sdEpics
-      		TableauAjouteRéférence(aoRetour,ClEpic.GetObj(sdEpics.IDScr_Epic))
-      	FIN
-      FIN
-      
-      HAnnuleDéclaration(sdEpics)
-      
-      renvoyer aoRetour
+      renvoyer oRetour
      type : 458752
    -
      name : Combo_Charge_Epic
@@ -1482,7 +1478,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE Combo_Charge_Epic(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne, sValDef_P est une chaîne = "", aCompl_P est un tableau associatif de chaine =  [])
+      PROCEDURE Combo_Charge_Epic(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne, sValDef_P est une chaîne = "", aCompl_P est un tableau associatif de chaine =  []):Vide
       
       oEpic est un ClEpic dynamique
       sNomComplet est une chaîne = sNomFenetre_P + "." + sNomCombo_P
@@ -1496,8 +1492,8 @@ class :
       	ListeAjoute(sNomComplet, sComp + gLien(sCle))
       fin
       
-      pour TOUT element oEpic de :aoEpics()
-      	ListeAjoute(sNomComplet, oEpic.p_sNom + glien(oEpic.Get_IdUnique()))
+      pour TOUT element oEpic de :aoEpics().aItems()
+      	ListeAjoute(sNomComplet, oEpic.p_sNom + glien(oEpic.ZF_Get_IdUnique()))
       FIN
       
       
@@ -1530,11 +1526,11 @@ class :
       bRetour est un booléen
       oUsr_tmp est un ClUsr dynamique
       
-      si oUsr_p.get_idunique() = :m_oUsr_ChefProjet.Get_IdUnique() ALORS
+      si oUsr_p.ZF_Get_IdUnique() = :m_oUsr_ChefProjet.ZF_Get_IdUnique() ALORS
       	bRetour = vrai
       sinon
-      	POUR TOUT ELÉMENT oUsr_tmp DE :aoInvite_Liste()
-      		SI oUsr_tmp.Get_IdUnique() = :m_oUsr_ChefProjet.Get_IdUnique() ALORS
+      	POUR TOUT ELÉMENT oUsr_tmp DE :aoInvite_Liste().aItems()
+      		SI oUsr_tmp.ZF_Get_IdUnique() = :m_oUsr_ChefProjet.ZF_Get_IdUnique() ALORS
       			bRetour = Vrai
       		FIN
       	FIN
@@ -1560,16 +1556,16 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure publique  NettoieDependances()
+      procédure publique  NettoieDependances():Vide
       
       oUs est un ClUserStory dynamique
       oTache est un ClTache dynamique
       oMessage est un ClMessage dynamique
       aoMessages est un tableau de ClMessage dynamique
       
-      pour tout element oUs de :aoListeUS()
+      pour tout element oUs de :aoListeUS().aItems()
       	
-      	pour tout element oTache de oUs:aoListeTaches()
+      	pour tout element oTache de oUs:aoListeTaches().aItems()
       		
       		aoMessages <- ClMessage::aoListeMessage(oTache)
       		pour tout element oMessage de aoMessages
@@ -1582,20 +1578,223 @@ class :
       FIN
       
       oUser est un ClUsr dynamique
-      pour tout element oUser de :aoInvite_Liste()
+      pour tout element oUser de :aoInvite_Liste().aItems()
       	:Invite_Supprime(oUser)
       FIN
       
       oEpic est un ClEpic dynamique
-      pour tout element oEpic de :aoEpics()
+      pour tout element oEpic de :aoEpics().aItems()
       	AppSupp(oEpic)
       fin
       
       
-      	procedure interne AppSupp(oObj est un ClObjDB)
-      		oObj:Supprimer()
-      		oObj:Enregistre()
+      	procedure interne AppSupp(oObj est un ClZF_ObjDB)
+      		oObj:ZF_Supprimer()
+      		oObj:ZF_Enregistre()
       	FIN
+     type : 458752
+   -
+     name : aoListeProjetsDeUsr
+     procedure_id : 1406942354607166897
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoListeProjetsDeUsr (<oUsr_p> est ClUsr [, <eTypeUsr> est ClUsr.ETypeUsr [, <bAvecProjetsFini_P> est booléen]])
+      //
+      // Paramètres :
+      //	oUsr_p (ClUsr) : <indiquez ici le rôle de oUsr_p>
+      //	eTypeUsr (ClUsr.ETypeUsr) : <indiquez ici le rôle de TypeUsr>
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      
+      // Valeur de retour :
+      // 	ClColProjet : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      FONCTION GLOBAL aoListeProjetsDeUsr(oUsr_p est un ClUsr, ...
+      	eTypeUsr est un clusr.ETypeUsr = clusr.ETypeUsr.usr_tous, ...
+      	bAvecProjetsFini_P est un booléen = faux):ClcolProjet
+      
+      oColRetour				est un ClcolProjet
+      sReq_Liste_Projet		est une chaîne
+      sComplement				est une chaîne
+      
+      
+      si pas bAvecProjetsFini_P ALORS
+      	sComplement = "AND Scr_Projet.Top_Termine = 0" + rc
+      FIN
+      
+      
+      selon eTypeUsr
+      	CAS ClUsr.ETypeUsr.usr_tous
+      		
+      	CAS ClUsr.ETypeUsr.usr_invite
+      		sComplement = "AND Scr_Usr_Projet.Top_Invite = 1" + rc
+      	CAS ClUsr.ETypeUsr.usr_chef_de_projet
+      		sComplement = "AND Scr_Usr_Projet.Top_Chef_Projet = 1" + rc
+      		
+      FIN
+      
+      
+      sReq_Liste_Projet = [
+      	SELECT
+      		Scr_Projet.*
+      		--Scr_Projet.IDScr_Projet
+      		
+      	FROM Scr_Projet
+      		INNER JOIN Scr_Usr_Projet ON (Scr_Usr_Projet.IDScr_Projet = Scr_Projet.IDScr_Projet)
+      	
+      	WHERE Scr_Usr_Projet.IDScr_Usr = [%oUsr_p.ZF_Get_IdUnique()%]
+      
+      	[%sComplement%]
+      	]
+      
+      oColRetour.ZF_LoadSQL(sReq_Liste_Projet)
+      
+      renvoyer oColRetour
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1422514123716767897
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+      nInd est un entier
+      aTypes est un tableau d'entiers = [::cstInter_Responsable, ::cstInter_Decideur, ::cstInter_Consulte, ::cstInter_Informe]
+      pour tout nInd de aTypes
+      	::m_aClassifInvite[nInd] = allouer un ClColUsr()
+      FIN
+      
+      SI :ZF_bModeAjout() ALORS
+      	:m_oUsr_ChefProjet <- goApp.m_oUsrCnx
+      SINON
+      	sdUsrDePrj est une Source de Données
+      	sReq est une chaîne
+      	
+      	sReq = [
+      		SELECT IDScr_Usr
+      		FROM Scr_Usr_Projet
+      		WHERE Top_Chef_Projet = 1
+      			AND IDScr_Projet = [%:ZF_Get_IdUnique()%]
+      	]
+      	
+      	goApp.Rsql(sdUsrDePrj,sReq)
+      	POUR TOUT sdUsrDePrj
+      		:m_oUsr_ChefProjet <- ClUsr::GetObj(sdUsrDePrj.IDScr_Usr)
+      	FIN
+      	
+      	HAnnuleDéclaration(sdUsrDePrj)
+      FIN
+     type : 458752
+   -
+     name : sLibelleDeTypeInvite
+     procedure_id : 1434408713655293190
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sLibelleDeTypeInvite (<nType_p> est entier)
+      //
+      // Paramètres :
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale sLibelleDeTypeInvite(nType_p est un entier) <métier>:chaine
+      
+      
+      selon nType_p
+      	cas cstInter_Informe
+      		renvoyer "Informé"
+      	cas cstInter_Consulte
+      		RENVOYER "Consulté"
+      	cas cstInter_Decideur
+      		RENVOYER "Décideur"
+      	cas cstInter_Responsable
+      		RENVOYER "Responsable"
+      	autre cas
+      		mg_oEx_TypeInvite.ZF_Declenche([nType_p])
+      FIN
+      
+      RENVOYER ""
+     type : 458752
+   -
+     name : aGrpInvite
+     procedure_id : 1434414520490178149
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aGrpInvite ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	tableau associatif (ClColUsr) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION aGrpInvite()<métier>:tableau associatif de ClColUsr
+      
+      sReq est une chaîne
+      sCle est une chaîne
+      oColUsr est un ClColUsr dynamique
+      
+      pour tout elEMENT oColUsr, sCle de :m_aClassifInvite
+      	
+      	oColUsr.ZF_vider()
+      	
+      	sReq = [
+      		SELECT
+      			Scr_Usr.*
+      			
+      		FROM Scr_Usr_Projet
+      			INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)
+      		
+      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
+      			AND Scr_Usr_Projet.RoleSurLeProjet = [%sCle%]
+      	]
+      	
+      	oColUsr.ZF_LoadSQL(sReq)
+      	
+      	:m_aClassifInvite[sCle] <- oColUsr
+      FIN
+      
+      
+      renvoyer :m_aClassifInvite
+      
+      
+      //si bForce_p ou pas :m_oListeInvites.p_bEstCharge ALORS
+      //	:m_oListeInvites.ZF_vider()
+      //	
+      //	
+      //	
+      //	sReq = [
+      //		SELECT
+      //			--Scr_Usr_Projet.*
+      //			Scr_Usr_Projet.IDScr_Usr
+      //			
+      //		FROM Scr_Usr_Projet
+      //		
+      //		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
+      //			AND Scr_Usr_Projet.Top_Invite = 1
+      //	]
+      //	
+      //	m_oListeInvites.ZF_LoadSQL(sReq)
+      //fin
+      //
+      //renvoyer :m_oListeInvites
      type : 458752
   properties :
    -
@@ -1611,8 +1810,8 @@ class :
         type : 1966080
       -
         code : |1+
-         procédure p_bTop_Termine(bTopTremine est un booléen)
-         :EstModif()
+         procédure p_bTop_Termine(bTopTremine est un booléen):Vide
+         :ZF_EstModif()
          :m_bTop_Termine = bTopTremine
         type : 2031616
      template_refs : []
@@ -1629,9 +1828,12 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUsr_ChefProjet(oValeur est ClUsr)
-         :EstModif()
-         :m_oUsr_ChefProjet <- oValeur
+         procédure publique p_oUsr_ChefProjet(oValeur est ClUsr):Vide
+         
+         si PAS ZF_bObjEgal(:m_oUsr_ChefProjet, oValeur) alors
+         	:ZF_EstModif()
+         	:m_oUsr_ChefProjet <- oValeur
+         fin
         type : 2031616
      template_refs : []
    -
@@ -1679,8 +1881,8 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_bTop_Direction(bValeur est un booléen)
-         :EstModif()
+         procédure publique p_bTop_Direction(bValeur est un booléen):Vide
+         :ZF_EstModif()
          :m_bTop_Direction=bValeur
         type : 2031616
      template_refs : []
@@ -1697,8 +1899,8 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nChargeProvisionelle(nValeur est un entier)
-         :EstModif()
+         procédure publique p_nChargeProvisionelle(nValeur est un entier):Vide
+         :ZF_EstModif()
          :m_nChargeProvisionelle=nValeur
         type : 2031616
      template_refs : []
@@ -1715,8 +1917,8 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_nOrdreGrp(nValeur est un entier)
-         :EstModif()
+         procédure publique p_nOrdreGrp(nValeur est un entier):Vide
+         :ZF_EstModif()
          :m_nOrdreGrp=nValeur
         type : 2031616
      template_refs : []
@@ -1733,8 +1935,8 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sGroupement(sValeur est une chaîne)
-         :EstModif()
+         procédure publique p_sGroupement(sValeur est une chaîne):Vide
+         :ZF_EstModif()
          :m_sGroupement=sValeur
         type : 2031616
      template_refs : []
@@ -1751,8 +1953,8 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sNom(sValeur est une chaîne)
-         :EstModif()
+         procédure publique p_sNom(sValeur est une chaîne):Vide
+         :ZF_EstModif()
          :m_sNom = sValeur
         type : 2031616
      template_refs : []
@@ -1769,10 +1971,22 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCode(sValeur est une chaîne)
-         :EstModif()
+         procédure publique p_sCode(sValeur est une chaîne):Vide
+         :ZF_EstModif()
          :m_sCode = sValeur
         type : 2031616
+     template_refs : []
+   -
+     name : p_aClassifInvite
+     identifier : 0x13e80a25101e4030
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_aClassifInvite() : tableau associatif de ClColUsr
+         
+         renvoyer m_aClassifInvite
+        type : 1966080
      template_refs : []
   procedure_templates : []
   property_templates : []
@@ -1784,3 +1998,5 @@ resources :
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+associated_test :
+ name : TEST_ClProjet.wxt

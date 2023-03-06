@@ -1,0 +1,77 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClTrello_Kanban
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13f895f6179be004
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClTrello_Kanban est une Classe
+      	herite de ClTrello_req
+      fin
+      
+      constante
+      	cst_TableauKanban									= "5a9e4eacd0c55e84ed2ddbd2"
+      	
+      	// statut
+      	cst_StatutKanban_A_faire							= "5a9e4ef5f6df4d5502d93aa3"
+      	
+      	// carte
+      	cst_LabelKanban_Bug									= "5a9e4eac35b91abfde76e3c5"
+      	cst_LabelKanban_Kanban								= "5a9e4eac35b91abfde76e3c6"
+      	cst_LabelKanban_A_livrer_en_prod					= "5c8296fefa6e846cc407c033"
+      	cst_LabelKanban_Demande_utilisateur					= "5a9e4eac35b91abfde76e3c8"
+      	cst_LabelKanban_En_attente_d_infos					= "5a9e4eac35b91abfde76e3c4"
+      	cst_LabelKanban_A_reverser_au_Backlog				= "5ccc195a5529171d09576f96"
+      	cst_LabelKanban_Prioritaire							= "5f199044da16592c5d0bc912"
+      	cst_LabelKanban_A_livrer_en_PréProd					= "5c82970e9ea0772d14070249"
+      	cst_LabelKanban_Explication_à_fournir_au_demandeur	= "61a490f2c72fb0290ad7661c"
+      	cst_LabelKanban_Dette_technique						= "5a9e4eac35b91abfde76e3c7"
+      	cst_LabelKanban_Transmettre_à_l_infra				= "63e518b1ab21f8fe54d6af32"
+      	
+      	// membre
+      	cst_MembersKanban_NM = "5a9e4e274709322e75d2ca4d"
+      	cst_MembersKanban_BD = "5975ee2f655c7d8d3a96ea8b"
+      	cst_MembersKanban_JD = "55bf756d79699693a1c8f953"
+      	cst_MembersKanban_CM = "5a9e61b6a43e919710e16ae4"
+      	cst_MembersKanban_JG = "5c76784f47cb1379291bba94"
+      	cst_MembersKanban_HG = "620651b3e70d864e4614d45a"
+      	cst_MembersKanban_CF = "6143547a372c976fca3bcecd"
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1439064965135523844
+     type_code : 27
+     code : |1-
+      procédure Constructeur(sUrl_P est une chaîne)
+      Ancêtre.constructeur(sUrl_P)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1439064965135589380
+     type_code : 28
+     code : |1-
+      procédure Destructeur()
+     type : 655360
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13f895f717a1e498
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

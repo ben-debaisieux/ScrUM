@@ -103,7 +103,7 @@ report :
          
          
          oUsTmp est un ClUserStory dynamique
-         pour tout element oUsTmp de zoPrj_P.aoListeUS()
+         pour tout element oUsTmp de zoPrj_P.aoListeUS().aItems()
          	si pas oUsTmp.p_bTermine ALORS
          		
          		iTerminePage()
@@ -251,7 +251,7 @@ report :
          //Impression des taches, par statuts
          pour tout stStatutTmp de aListStauts
          	bRamure = faux
-         	POUR TOUT ELEMENT oTacheTmp DE zoUS.aoListeTaches()
+         	POUR TOUT ELEMENT oTacheTmp DE zoUS.aoListeTaches().aItems()
          		
          		SI TableauCherche(stStatutTmp.aStatuts, tcLinéaire, oTacheTmp.p_nStatut) <> -1 ALORS
          			
@@ -329,7 +329,7 @@ report :
          FIN
          si zoTache.p_nNum_Sprint_Realisation <> 0 ALORS
          	oSprint <- ClSprint.GetObj(zoTache.p_nNum_Sprint_Realisation)
-         	sInfoSprint = oSprint.Get_IdUnique() + " (" + oSprint.sSprint_Date() + ")"
+         	sInfoSprint = oSprint.ZF_Get_IdUnique() + " (" + oSprint.sSprint_Date() + ")"
          sinon
          	sInfoSprint = "(Non déterminé)"
          FIN
@@ -363,7 +363,7 @@ report :
     properties :
      y : 300.364
      width : 190.
-     height : 7.61899999999997
+     height : 7.61799999999999
     code_elements :
      type_code : 30
      p_codes : []
@@ -384,7 +384,7 @@ report :
         type_code : 29
         p_codes : []
     properties :
-     y : 307.983
+     y : 307.982
      width : 190.
      height : 12.381
     code_elements :

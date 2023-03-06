@@ -181,10 +181,10 @@ window :
         code : |1+
          quand exception dans
          	EcranVersSource(MaFenêtre,"zoTache")
-         	si zoTache.bModeAjout() ALORS
+         	si zoTache.ZF_bModeAjout() ALORS
          		zoTache.p_bBrouillon = Vrai
          	FIN
-         	zoTache.Enregistre()
+         	zoTache.ZF_Enregistre()
          	zbRetour = vrai
          	ferme()
          FAIRE
@@ -212,7 +212,7 @@ window :
          quand exception dans
          	EcranVersSource(MaFenêtre,"zoTache")
          	zoTache.p_bBrouillon = faux
-         	zoTache.Enregistre()
+         	zoTache.ZF_Enregistre()
          	zbRetour = vrai
          	ferme()
          FAIRE

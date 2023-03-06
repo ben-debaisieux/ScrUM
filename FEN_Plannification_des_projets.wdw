@@ -261,7 +261,7 @@ window :
          		
          		aStCharge					= stPrj_tmp.oPrj.aoSimulationDistributionCharge(nSprintDepart, nVelociteRepart)
          		
-         		tcGantt.ID					= stPrj_tmp.oPrj.Get_IdUnique()
+         		tcGantt.ID					= stPrj_tmp.oPrj.ZF_Get_IdUnique()
          		tcGantt.CouleurFond			= COL_Scrum.gnCouleur_JauneVif
          		tcGantt.CouleurAvancement	= COL_Scrum.gnCouleur_VertVif
          		
@@ -277,7 +277,7 @@ window :
          			nChargeEffect			+= stCharge_tmp.nChargeSimulee
          			
          			//Mémorisation du dernier sprint créé
-         			nSprintDepart = stCharge_tmp.oSprint.Get_IdUnique() + 1
+         			nSprintDepart = stCharge_tmp.oSprint.ZF_Get_IdUnique() + 1
          		FIN
          		
          		
@@ -290,7 +290,7 @@ window :
          			
          			tcGantt.Avancement = (nChargeEffect / nChargeMax) * 100
          			
-         			nLigne = TableAjouteLigne(TBL_Gantt, stPrj_tmp.oPrj.Get_IdUnique(), stPrj_tmp.oPrj.p_sNom, tcGantt)
+         			nLigne = TableAjouteLigne(TBL_Gantt, stPrj_tmp.oPrj.ZF_Get_IdUnique(), stPrj_tmp.oPrj.p_sNom, tcGantt)
          			
          			GanttAjouteCongé(TBL_Gantt.COL_Gantt, nLigne, AnnéeEnCours() + "1225", AnnéeEnCours() + "1231")
          		fin		
@@ -361,8 +361,7 @@ window :
        internal_properties : BwAAAAcAAADMR19CvCryHVUDWnj1H/riaNgmiRUv+TZNNFJc/NTJUYxkGUrMrVo61nNclKXTu3kjzKTTre1Oa89F7A0bu3EG0rC5SRru8NgPLfUnpaZOuwR8O0jup5kQ7moM3wa5JjGbFmZUx965llj7PuFxYb90ZG60j6FPNaEWAxS9FHyKzxAadWWiKdjBjrZ63iiiPxNz3xq8/tmUOpDPG7DW
        type : 110
        content :
-        internal_properties : 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
-        properties : {}
+        internal_properties : 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
         type : 110
        code_elements :
         internal_properties : BwAAAAcAAABgg26+Is4k2fwn+WV3M8FgKpw+R+tdmRCP9JZGFrCUzWGJH2X8OWb8uKWLPo2cxzlyjL/jNw==
@@ -465,7 +464,7 @@ window :
      code : |1+
       oPrj		est un ClProjet dynamique
       nLigne		est un entier
-      aoProjets	est un tableau de ClProjet dynamique
+      oProjets	est un ClColProjet
       bMonoGroupe	est un booléen
       nInd		est un entier
       nChargeRest est un entier
@@ -475,15 +474,16 @@ window :
       TBL_ProjetsDispo..AffichageActif	= Faux
       
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
-      	aoProjets <- ClProjet.aoListeProjets(Faux)
+      	oProjets <- ClProjet.aoListeProjets(Faux)
       	bMonoGroupe = faux
       SINON
-      	aoProjets <- goApp.m_oUsrCnx.aoMesProjets(ClUsr.usr_tous)
+      	oProjets <- ClProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
+      //	oProjets <- goApp.m_oUsrCnx.aoMesProjets(ClUsr.usr_tous)
       	bMonoGroupe = Vrai
       FIN
       
       
-      POUR TOUT ELEMENT oPrj, nInd DE aoProjets
+      POUR TOUT ELEMENT oPrj, nInd DE oProjets.aItems()
       	bAffiche = vrai
       	
       	//On masque les projets 'direction' et ceux terminés
@@ -503,7 +503,7 @@ window :
       	
       	si bAffiche alors
       		nLigne										= TableAjouteLigne(TBL_ProjetsDispo)
-      		TBL_ProjetsDispo[nLigne].COL_idProjet		= oPrj.Get_IdUnique()
+      		TBL_ProjetsDispo[nLigne].COL_idProjet		= oPrj.ZF_Get_IdUnique()
       		TBL_ProjetsDispo[nLigne].COL_Projet			= oPrj.p_sNom
       		si bMonoGroupe ALORS
       			TBL_ProjetsDispo[nLigne].COL_Groupement	= "Mes projets"
