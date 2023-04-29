@@ -32,10 +32,15 @@ procedure_set :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure col_tbl_sprint(local sCol_p est une chaîne, local nInd_p est un entier, oSprint_P est un ClSprint)<ui>:vide
+      procédure col_tbl_sprint(local sCol_p est une chaîne, local nInd_p est un entier, oSprint_P est un ClDbSprint)<ui>:vide
       
-      {sCol_p, indChamp}[nInd_p]..Valeur = oSprint_P.ZF_Get_IdUnique()
-      {sCol_p, indChamp}[nInd_p]..Bulle = oSprint_P.sSprint_Date()
+      si oSprint_P = Null ALORS
+      	{sCol_p, indChamp}[nInd_p]..Valeur = ""
+      	{sCol_p, indChamp}[nInd_p]..Bulle = "Sprint non défini"
+      sinon
+      	{sCol_p, indChamp}[nInd_p]..Valeur = oSprint_P.ZF_Get_IdUnique()
+      	{sCol_p, indChamp}[nInd_p]..Bulle = oSprint_P.sSprint_Date()
+      FIN
      type : 458752
    -
      name : FEN_Communication_livraison_tests_Charger
@@ -55,14 +60,14 @@ procedure_set :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure FEN_Communication_livraison_tests_Charger(dDebut_p est une date, dFin_p est une Date) <métier>:chaine
+      procédure FEN_Communication_livraison_tests_Charger(local dDebut_p est une date, LOCAL dFin_p est une Date) <métier>:chaine
       
       sRetour		est une chaîne
       sdUsEnTest	est une Source de Données
       sReq		est une chaîne
-      oTache		est un ClTache dynamique
-      oUs			est un ClUserStory dynamique
-      oPrj		est un ClProjet dynamique
+      oTache		est un ClDbTache dynamique
+      oUs			est un ClDbUserStory dynamique
+      oPrj		est un ClDbProjet dynamique
       
       
       sReq = [
@@ -85,18 +90,20 @@ procedure_set :
       POUR TOUT sdUsEnTest
       	
       	SI oPrj = Null _OU_ oPrj.ZF_Get_IdUnique() <> sdUsEnTest.IDScr_Projet ALORS
-      		oPrj <- ClProjet.GetObj(sdUsEnTest.IDScr_Projet)
+      		oPrj <- ClDbProjet.GetObj(sdUsEnTest.IDScr_Projet)
       		
       		sRetour += [RC + RC + RC] + oPrj.p_sNom + " - " + oPrj.p_oUsr_ChefProjet.p_sNom
       	FIN
       	
-      	oUs <- ClUserStory.GetObj(sdUsEnTest.IDScr_UserStory)
-      	sRetour += [RC + RC] + oUs.p_sCodeUserStory + " - " + DateVersChaîne(oUs.p_dDateMiseADispo_EnTest, "jj/mm/aaaa")
-      	sRetour += RC + oUs.sNommination_US()
+      	oUs <- ClDbUserStory.GetObj(sdUsEnTest.IDScr_UserStory)
+      	si pas oUs.p_bTop_RepriseHisto alors
+      		sRetour += [RC + RC] + oUs.p_sCodeUserStory + " - " + DateVersChaîne(oUs.p_dDateMiseADispo_EnTest, "jj/mm/aaaa")
+      		sRetour += RC + oUs.sNommination_US()
+      	fin
       	
       	sRetour += RC + "Taches :"
-      	POUR TOUT ÉLÉMENT oTache DE oUs.aoListeTaches().aItems()
-      		sRetour += RC + ChaîneConstruit("> %1 (%2)", oTache.p_sDescription, oTache.sLibDeStatut())
+      	POUR TOUT ÉLÉMENT oTache DE ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      		sRetour += RC + ChaîneConstruit("> %1", oTache.p_sDescription)
       	FIN
       	
       FIN

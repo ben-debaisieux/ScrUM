@@ -1,0 +1,1134 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbCritereAccept
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x140d02855d866ccb
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : BwAAAAcAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbCritereAccept est une Classe
+      	Hérite de ClZF_ObjDB
+      	
+      PRIVÉ
+      	m_sTitre					est une chaîne							<MAPPING=Titre>
+      	m_sCommentaireDemandeur		est une chaîne							<MAPPING=CommentaireDemand>
+      	m_sCommentaireDev			est une chaîne							<MAPPING=CommentaireDev>
+      	m_dDateCreation				est une date							<MAPPING=DateCreation>
+      	m_dDateValidation			est une date							<MAPPING=DateValidation>
+      	m_dDateDesactivation		est une date							<MAPPING=DateDesactivation>
+      	m_sCommentaireDesactivation	est une chaîne							<MAPPING=CommentaireDesactivation>
+      	
+      //	m_oComposants				est un ClColCritereAccept_Composant
+      	m_oUserStoryParente			est un objet ClDbUserStory dynamique	<note="mapping=IDScr_UserStory">
+      	m_oIDScr_CritereAccept_Asso	est un ClDbCritereAccept dynamique		<note="mapping=IDScr_CritereAccept_Asso">
+      	
+      	m_oEtat						est un ClDbCritereAccept_Etat dynamique	<note="mapping=IDScr_CritereAccept_Etat">
+      	m_oUsrRedacteur				est un objet ClDbUsr dynamique			<note="mapping=IDSrc_Usr_Redacteur">
+      	m_oUsrValideur				est un objet ClDbUsr dynamique			<note="mapping=IDSrc_Usr_Valideur">
+      	m_oUserDesactivateur		est un objet ClDbUsr dynamique			<note="mapping=IDSrc_Usr_Desactivation">
+      GLOBAL
+      public
+      	mg_oExEvt_jattent_que_Manquant					est un ClZF_Exception dynamique
+      	mg_oExEvt_au_moment_Manquant					est un ClZF_Exception dynamique
+      	mg_oExUsManquante								est un ClZF_Exception dynamique
+      	mg_oEx_CompoNonInst_IDSrc_Usr_Redacteur			est un ClZF_Exception dynamique
+      	mg_oEx_CompoNonInst_IDScr_CritereAccept_Etat	est un ClZF_Exception dynamique
+      FIN
+       
+       
+      constante
+      	cst_Col_CriteresCompo				= "CriteresCompo"
+      	
+      	cst_Critere_En_cours_de_rédaction	= 1
+      	cst_Critere_Validé_a_implémenter	= 2
+      	cst_Critere_Validé					= 3
+      	cst_Critere_Regression				= 4
+      	cst_Critere_Abandonné				= 5
+      	cst_Critere_Doublon					= 6
+      fin
+      
+      mg_oExEvt_jattent_que_Manquant					= allouer un ClZF_Exception("Au moins un événement de type ""J'attends que..."" est obligatoire.")
+      mg_oExEvt_au_moment_Manquant					= allouer un ClZF_Exception("Un et un seul événement de type ""au moment de..."" est obligatoire.")
+      mg_oExUsManquante								= allouer un ClZF_Exception("Aucune user story n'est associée au critère d'acceptation.")
+      mg_oEx_CompoNonInst_IDSrc_Usr_Redacteur			= Allouer un ClZF_Exception("Un rédacteur est requis.")
+      mg_oEx_CompoNonInst_IDScr_CritereAccept_Etat	= Allouer un ClZF_Exception("Etat non déterminé.")
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1444813827279187147
+     type_code : 27
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur ( [<nID_P> est entier])
+      //
+      // Paramètres :
+      //	nID_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nID_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	oUserStory (ClUserStory) : <indiquez ici le rôle de oUserStory>
+      PROCEDURE Constructeur(local nID_P est un entier = 0)
+      
+      ancetre.constructeur(Scr_CritereAccept..nom,Scr_CritereAccept.IDScr_CritereAccept..nom,nID_P)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1444813827279252683
+     type_code : 28
+     code : |1+
+      
+      
+      PROCEDURE Destructeur()
+      
+     type : 655360
+   -
+     name : Get_aoEtantDonneQue
+     procedure_id : 1444813827279318219
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_aoEtantDonneQue ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	ClColCritereAccept_Composant : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION Get_aoEtantDonneQue():ClColCritereAccept_Composant
+      RENVOYER :aoChargeComposants(ClDbCritereAccept_Composant.cst_EtantDonneQue)
+     type : 458752
+   -
+     name : Get_sAuMomentDe
+     procedure_id : 1444813827279383755
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_sAuMomentDe ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION Get_sAuMomentDe():chaîne 
+      
+      sRésultat est une chaîne
+      aoCritCompo est un ClColCritereAccept_Composant
+      aCompo est un tableau de ClDbCritereAccept_Composant
+      
+      aoCritCompo <- :aoChargeComposants(ClDbCritereAccept_Composant.cst_AuMomentDe)
+      si aoCritCompo.ZF_nTaille() > 0 ALORS
+      	aCompo = aoCritCompo.aItems()
+      	sRésultat = aCompo[1].p_sDescription
+      FIN
+      
+      RENVOYER sRésultat
+     type : 458752
+   -
+     name : Get_aoJAttendsQue
+     procedure_id : 1444813827279449291
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_aoJAttendsQue ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION Get_aoJAttendsQue():ClColCritereAccept_Composant
+      //aoRetour est un tableau de ClCritereAccept_Composant dynamique
+      //aoRetour = :aoChargeComposants(ClCritereAccept_Composant.cst_JattendQue)
+      //RENVOYER aoRetour
+      RENVOYER :aoChargeComposants(ClDbCritereAccept_Composant.cst_JattendQue)
+     type : 458752
+   -
+     name : post_enregistre
+     procedure_id : 1444813827279514827
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //post_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE post_enregistre():Vide
+      
+      
+      oComposant est un ClDbCritereAccept_Composant dynamique
+      oColCompo est un ClColCritereAccept_Composant <- :ZF_GetCol(cst_Col_CriteresCompo)
+      
+      
+      pour tout element oComposant de oColCompo.aItems()
+      	oComposant.zf_Enregistre()
+      	
+      	si oComposant.ZF_bEstsupprime() ALORS
+      		oColCompo.ZF_Supp(oComposant)
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 1444813827279580363
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE pre_enregistre():Vide
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      	oTmpCompo est un ClDbCritereAccept_Composant dynamique
+      	pour tout element oTmpCompo de :aoChargeComposants().aItems()
+      		oTmpCompo.ZF_Supprimer()
+      		oTmpCompo.ZF_Enregistre()
+      	FIN
+      sinon
+      //	Scr_CritereAccept.IDScr_CritereAccept_Etat		= :m_oEtat.ZF_Get_IdUnique()
+      	
+      	//Enregistrement du récacteur
+      	si :m_oUsrRedacteur = null _ou_ :m_oUsrRedacteur.ZF_Get_IdUnique() = 0 ALORS
+      		:m_oUsrRedacteur							<- goapp.m_oUsrCnx
+      	FIN
+      //	Scr_CritereAccept.IDSrc_Usr_Redacteur			= :m_oUsrRedacteur.ZF_Get_IdUnique()
+      	
+      	
+      //	//Enregistrement du valideur
+      //	si :m_oUsrValideur = Null _OU_ :m_oUsrValideur.ZF_Get_IdUnique() = 0 ALORS
+      //		Scr_CritereAccept.IDSrc_Usr_Valideur..null	= vrai
+      //	sinon
+      //		Scr_CritereAccept.IDSrc_Usr_Valideur		= :m_oUsrValideur.ZF_Get_IdUnique()
+      //	FIN
+      //	
+      //	
+      //	//Enregistrement du desactivateur
+      //	SI :m_oUserDesactivateur = Null _OU_ :m_oUserDesactivateur.ZF_Get_IdUnique() = 0 ALORS
+      //		Scr_CritereAccept.IDSrc_Usr_Desactivation..Null	= Vrai
+      //	SINON
+      //		Scr_CritereAccept.IDSrc_Usr_Desactivation	= :m_oUserDesactivateur.ZF_Get_IdUnique()
+      //	FIN
+      	
+      	
+      	SI :m_oUsrRedacteur = Null ALORS
+      		mg_oEx_CompoNonInst_IDSrc_Usr_Redacteur.ZF_Declenche()
+      	FIN
+      	//
+      	SI :m_oEtat = Null ALORS
+      		mg_oEx_CompoNonInst_IDScr_CritereAccept_Etat.ZF_Declenche()
+      	FIN
+      
+      	//Controle de la présence d'une user storie
+      	si :m_oUserStoryParente = null ALORS
+      		mg_oExUsManquante.ZF_Declenche()
+      		//ExceptionDéclenche(1,"Aucune user story n'est associée au critère d'acceptation.")
+      //	sinon
+      //		//Enregistrement de la User story
+      //		Scr_CritereAccept.IDScr_UserStory			= :m_oUserStoryParente.Get_IdUnique()
+      	FIN
+      	
+      	//Controle des conditions minimales requises : Un 'au moment de'
+      	si :Get_sAuMomentDe() = "" ALORS
+      		mg_oExEvt_au_moment_Manquant.ZF_Declenche()
+      		//ExceptionDéclenche(1,"Un et un seul événement de type ""au moment de..."" est obligatoire.")
+      	FIN
+      	
+      	//Controle des conditions minimales requises : Au moins un 'J'attend que'
+      	si dimension(:Get_aoJAttendsQue()) = 0 ALORS
+      		mg_oExEvt_jattent_que_Manquant.ZF_Declenche()
+      		//ExceptionDéclenche(1,"Au moins un événement de type ""J'attend que..."" est obligatoire.")
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : AjouteComposant
+     procedure_id : 1444813827279645899
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //AjouteComposant (<nType_p> est entier, <sDescription_P> est chaîne)
+      //
+      // Paramètres :
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      //	sDescription_P (chaîne ANSI) : <indiquez ici le rôle de s>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE AjouteComposant(nType_p est un entier , sDescription_P est une chaîne):Vide
+      
+      
+      oComposant est un ClDbCritereAccept_Composant()
+      oComposant.p_oIDScr_CritereAccept					= objet
+      oComposant.p_sDescription							= sDescription_P
+      oComposant.p_oIDScr_CritereAccept_Composant_Type	= ClDbCritereAccept_Composant_Type.GetObj(nType_p)
+      
+      oColCompo est un ClColCritereAccept_Composant <- :ZF_GetCol(cst_Col_CriteresCompo)
+      oColCompo.ZF_addItem(oComposant)
+     type : 458752
+   -
+     name : aoChargeComposants
+     procedure_id : 1444813827279711435
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoChargeComposants ( [<nFiltre_p> est entier])
+      //
+      // Paramètres :
+      //	nFiltre_p (entier - valeur par défaut=0) : <indiquez ici le rôle de nFiltre_p>
+      // Valeur de retour :
+      // 	ClColCritereAccept_Composant : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bForce_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForce_P>
+      FONCTION PRIVÉE aoChargeComposants(nFiltre_p est un entier = 0):ClColCritereAccept_Composant
+      
+      //A t on un filtre sur un type de composant ?
+      si nFiltre_p = 0 ALORS
+      	//Non  : On renvoi tout
+      	RENVOYER :aoComposants()
+      sinon
+      	aRésultat est un ClColCritereAccept_Composant
+      	oCritCompo est un ClDbCritereAccept_Composant dynamique
+      	
+      	//Parcourt de tous les composants du critère
+      	POUR TOUT ELEMENT oCritCompo DE :aoComposants().aItems()
+      		//Si le composant est du type demandé..
+      		SI oCritCompo.p_oIDScr_CritereAccept_Composant_Type.zf_get_idunique() = nFiltre_p ALORS
+      			//On l'ajoute au jeu de données de retour
+      			aRésultat.ZF_addItem(oCritCompo)
+      		FIN
+      	FIN
+      	
+      	renvoyer aRésultat
+      FIN
+      
+     type : 458752
+   -
+     name : Get_sEtat
+     procedure_id : 1444813827279776971
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_sEtat ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE Get_sEtat():chaîne
+      
+      RENVOYER :m_oEtat.p_sLibelle
+     type : 458752
+   -
+     name : aoComposants
+     procedure_id : 1444813827279842507
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoComposants ( [<bForce_P> est booléen])
+      //
+      // Paramètres :
+      //	bForce_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForce_P>
+      // Valeur de retour :
+      // 	ClColCritereAccept_Composant : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE aoComposants(local bForce_P est un booléen = faux):ClColCritereAccept_Composant
+      
+      sReq est une chaîne
+      oColCompo est un ClColCritereAccept_Composant <- :ZF_GetCol(cst_Col_CriteresCompo)
+      
+      si pas oColCompo.p_bEstCharge ou bForce_P alors
+      	
+      	sReq = [
+      		SELECT
+      			Scr_CritereAccept_Composant.*
+      		
+      		FROM Scr_CritereAccept_Composant
+      		
+      		WHERE Scr_CritereAccept_Composant.IDScr_CritereAccept = [%:ZF_Get_IdUnique()%]
+      		]
+      	oColCompo.ZF_LoadSQL(sReq)
+      FIN
+      
+      renvoyer oColCompo
+     type : 458752
+   -
+     name : Get_aoAuMomentDe
+     procedure_id : 1444813827279908043
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Get_aoAuMomentDe ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	ClColCritereAccept_Composant : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION Get_aoAuMomentDe():ClColCritereAccept_Composant
+      
+      RENVOYER :aoChargeComposants(ClDbCritereAccept_Composant.cst_AuMomentDe)
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 1444813827279973579
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetObj (<nIdUnique_P> est entier)
+      //
+      // Paramètres :
+      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      // Valeur de retour :
+      // 	ClCritereAccept : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClDbCritereAccept
+      
+      renvoyer ClZF_ObjDB.ZF_GetObj(ClDbCritereAccept, nIdUnique_P)
+     type : 458752
+   -
+     name : Combo_Charge_Etats
+     procedure_id : 1444813827280039115
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Combo_Charge_Etats (<sNomFenetre_P> est chaîne, <sNomCombo_P> est chaîne)
+      //
+      // Paramètres :
+      //	sNomFenetre_P (chaîne ANSI) : <indiquez ici le rôle de sNomFenetre_P>
+      //	sNomCombo_P (chaîne ANSI) : <indiquez ici le rôle de sNomCombo_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE GLOBAL Combo_Charge_Etats(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne):Vide
+      
+      sdListeEtatsCrit est une Source de Données
+      sReq est une chaîne
+      
+      sReq = ChaîneConstruit([
+      	
+      	SELECT
+      		Scr_CritereAccept_Etat.IDScr_CritereAccept_Etat,
+      		Scr_CritereAccept_Etat.Libelle
+      	
+      	FROM
+      		Scr_CritereAccept_Etat
+      	
+      	ORDER BY
+      		Scr_CritereAccept_Etat.IDScr_CritereAccept_Etat
+      	
+      ])
+      ::mg_oApp.RSQL(sdListeEtatsCrit,sReq)
+      
+      ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
+      POUR TOUT sdListeEtatsCrit
+      	ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, sdListeEtatsCrit.Libelle + gLien(sdListeEtatsCrit.IDScr_CritereAccept_Etat))
+      FIN
+      
+      
+      HAnnuleDéclaration(sdListeEtatsCrit)
+      
+      
+      
+      
+      
+     type : 458752
+   -
+     name : sExport
+     procedure_id : 1444813827280170187
+     type_code : 12
+     code : |1+
+      procédure sExport():JSON
+      
+      sRetour est un JSON
+      nInd est un entier
+      oCritCompo est un ClDbCritereAccept_Composant dynamique
+      oMsg est un ClDbMessage dynamique
+      
+      sRetour.id					= :p_ZF_nIdUnique
+      sRetour.user_writer			= :m_ousrredacteur.sExport()
+      sRetour.date_create			= :m_ddatecreation
+      sRetour.user_validator		= :m_ousrvalideur.sExport()
+      sRetour.date_validator		= :m_ddatevalidation
+      
+      
+      nInd = 0
+      pour tout element oCritCompo de :Get_aoEtantDonneQue().aItems()
+      	nInd++
+      	sRetour.given[nInd]		= oCritCompo.sExport()
+      FIN
+      
+      nInd = 0
+      pour tout element oCritCompo de :Get_aoAuMomentDe().aItems()
+      	nInd++
+      	sRetour.when[nInd]		= oCritCompo.sExport()
+      FIN
+      
+      nInd = 0
+      pour tout element oCritCompo de :Get_aoJAttendsQue().aItems()
+      	nInd++
+      	sRetour.then[nInd]		= oCritCompo.sExport()
+      FIN
+      
+      nInd = 0
+      POUR TOUT ELEMENT oMsg DE ClcolMessage.aoListeMessage(objet).aitems()
+      	nInd++
+      	sRetour.message[nInd] = oMsg.sExport()
+      FIN
+      
+      
+      RENVOYER sRetour
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1444813827280235723
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+      
+      SI :ZF_bModeAjout() ALORS
+      	:m_oEtat				= ClDbCritereAccept_Etat.GetObj(::cst_Critere_En_cours_de_rédaction)
+      SINON
+      	:m_oEtat				<- ClDbCritereAccept_Etat.GetObj(Scr_CritereAccept.IDScr_CritereAccept_Etat)
+      FIN
+      
+      
+      :m_oUserStoryParente		<- ClDbUserStory.GetObj(Scr_CritereAccept.IDScr_UserStory)
+      
+      
+      SI PAS Scr_CritereAccept.IDSrc_Usr_Redacteur..Null ALORS
+      	:m_oUsrRedacteur		<- ClDbUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Redacteur)
+      FIN
+      
+      SI PAS Scr_CritereAccept.IDSrc_Usr_Valideur..Null ALORS
+      	:m_oUsrValideur			<- ClDbUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Valideur)
+      FIN
+      
+      SI PAS Scr_CritereAccept.IDSrc_Usr_Desactivation..Null ALORS
+      	:m_oUserDesactivateur	<- ClDbUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Desactivation)
+      FIN
+      
+     type : 458752
+   -
+     name : p_sTitre
+     procedure_id : 1459550923716266148
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // p_sTitre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure p_sTitre()
+      
+     type : 458752
+  properties :
+   -
+     name : p_oUserDesactivateur
+     identifier : 0x140d02855d876ccb
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUserDesactivateur() : ClDbUsr
+         
+         renvoyer :m_oUserDesactivateur
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUserDesactivateur(oValeur est ClDbUsr)
+         
+         SI PAS ZF_bObjEgal(:m_oUserDesactivateur, oValeur) ALORS
+         	:ZF_EstModif()
+         	:m_oUserDesactivateur <- oValeur
+         fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUsrRedacteur
+     identifier : 0x140d02855d886ccb
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUsrRedacteur() : ClDbUsr
+         
+         renvoyer :m_oUsrRedacteur
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUsrRedacteur(oValeur est ClDbUsr)
+         
+         SI PAS ZF_bObjEgal(:m_oUsrRedacteur, oValeur) ALORS
+         	:ZF_EstModif()
+         	:m_oUsrRedacteur <- oValeur
+         fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUsrValideur
+     identifier : 0x140d02855d896ccb
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUsrValideur() : ClDbUsr
+         
+         renvoyer :m_oUsrValideur
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUsrValideur(oValeur est ClDbUsr)
+         
+         SI PAS ZF_bObjEgal(:m_oUsrValideur, oValeur) ALORS
+         	:ZF_EstModif()
+         	:m_oUsrValideur <- oValeur
+         fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUserStoryParente
+     identifier : 0x140d02855d8a6ccb
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUserStoryParente() : ClDbUserStory
+         
+         renvoyer :m_oUserStoryParente
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUserStoryParente(oValeur est ClDbUserStory)
+         
+         SI PAS ZF_bObjEgal(:m_oUserStoryParente, oValeur) ALORS
+         	:ZF_EstModif()
+         	:m_oUserStoryParente <- oValeur
+         fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oEtat
+     identifier : 0x140d02855d8b6ccb
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oEtat() : ClDbCritereAccept_Etat
+         
+         renvoyer m_oEtat
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oEtat(oValeur est ClDbCritereAccept_Etat)
+         
+         SI PAS ZF_bObjEgal(:m_oEtat, oValeur) ALORS
+         	:ZF_EstModif()
+         	:m_oEtat <- oValeur
+         fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUserStoryParente_ID
+     identifier : 0x14415d7303b20bc8
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oUserStoryParente_ID():entier
+         //Propriétés de l'objet m_oIDScr_UserStory, accessible via son ID
+         SI :p_oUserStoryParente = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oUserStoryParente.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_oUserStoryParente_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oUserStoryParente = Null
+         SINON
+         	:p_oUserStoryParente = ClDbUserStory.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sTitre
+     identifier : 0x14415dee03b4ec01
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         // Résumé : <indiquez ici ce que fait la procédure>
+         // Syntaxe :
+         // p_sTitre ()
+         //
+         // Paramètres :
+         //	Aucun
+         // Valeur de retour :
+         // 	Aucune
+         //
+         // Exemple :
+         // <Indiquez ici un exemple d'utilisation>
+         //
+         // Résumé : <indiquez ici ce que fait la procédure>
+         // Syntaxe :
+         // p_sTitre ()
+         //
+         // Paramètres :
+         //	Aucun
+         // Valeur de retour :
+         // 	Aucune
+         //
+         // Exemple :
+         // <Indiquez ici un exemple d'utilisation>
+         //
+         procédure publique p_sTitre(): chaîne
+         //Propriétés de m_sTitre
+         
+         RENVOYER :m_sTitre
+         
+        type : 1966080
+      -
+        code : |1+
+         // Résumé : <indiquez ici ce que fait la procédure>
+         // Syntaxe :
+         // p_sTitre ()
+         //
+         // Paramètres :
+         //	Aucun
+         // Valeur de retour :
+         // 	Aucune
+         //
+         // Exemple :
+         // <Indiquez ici un exemple d'utilisation>
+         //
+         // Résumé : <indiquez ici ce que fait la procédure>
+         // Syntaxe :
+         // p_sTitre ()
+         //
+         // Paramètres :
+         //	Aucun
+         // Valeur de retour :
+         // 	Aucune
+         //
+         // Exemple :
+         // <Indiquez ici un exemple d'utilisation>
+         //
+         procédure publique p_sTitre(sValeur_p est un chaîne):Vide
+         
+         SI :m_sTitre <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sTitre = sValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sCommentaireDemand
+     identifier : 0x14415e7803b50414
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_sCommentaireDemand() : chaîne
+         //Propriétés de m_sCommentaireDemand
+         
+         RENVOYER :m_sCommentaireDemandeur
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_sCommentaireDemand(sValeur_p est un chaîne):Vide
+         
+         SI :m_sCommentaireDemandeur <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sCommentaireDemandeur = sValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUsrRedacteur_ID
+     identifier : 0x14415f3d03b90751
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oUsrRedacteur_ID():entier
+         //Propriétés de l'objet m_oIDSrc_Usr_Redacteur, accessible via son ID
+         SI :p_oUsrRedacteur = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oUsrRedacteur.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_oUsrRedacteur_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oUsrRedacteur = Null
+         SINON
+         	:p_oUsrRedacteur = ClDbUsr.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUsrValideur_ID
+     identifier : 0x14415f8403ba1d55
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oUsrValideur_ID():entier
+         //Propriétés de l'objet m_oIDSrc_Usr_Valideur, accessible via son ID
+         SI :p_oUsrValideur = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oUsrValideur.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_oUsrValideur_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oUsrValideur = Null
+         SINON
+         	:p_oUsrValideur = ClDbUsr.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_dDateCreation
+     identifier : 0x14415fba03bbede4
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_dDateCreation() : Date
+         //Propriétés de m_dDateCreation
+         
+         RENVOYER :m_dDateCreation
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_dDateCreation(dValeur_p est une Date):Vide
+         
+         SI :m_dDateCreation <> dValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_dDateCreation = dValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_dDateValidation
+     identifier : 0x14415fdb03bc6f77
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_dDateValidation() : Date
+         //Propriétés de m_dDateValidation
+         
+         RENVOYER :m_dDateValidation
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_dDateValidation(dValeur_p est une Date):Vide
+         
+         SI :m_dDateValidation <> dValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_dDateValidation = dValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUserDesactivateur_ID
+     identifier : 0x1441601503bd51aa
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oUserDesactivateur_ID():entier
+         //Propriétés de l'objet m_oIDSrc_Usr_Desactivation, accessible via son ID
+         SI :p_oUserDesactivateur = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oUserDesactivateur.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_oUserDesactivateur_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oUserDesactivateur = Null
+         SINON
+         	:p_oUserDesactivateur = ClDbUsr.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_dDateDesactivation
+     identifier : 0x1441604603be1056
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_dDateDesactivation() : Date
+         //Propriétés de m_dDateDesactivation
+         
+         RENVOYER :m_dDateDesactivation
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_dDateDesactivation(dValeur_p est une Date):Vide
+         
+         SI :m_dDateDesactivation <> dValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_dDateDesactivation = dValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sCommentaireDesactivation
+     identifier : 0x1441606903bf9c98
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_sCommentaireDesactivation() : chaîne
+         //Propriétés de m_sCommentaireDesactivation
+         
+         RENVOYER :m_sCommentaireDesactivation
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_sCommentaireDesactivation(sValeur_p est un chaîne):Vide
+         
+         SI :m_sCommentaireDesactivation <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sCommentaireDesactivation = sValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sCommentaireDev
+     identifier : 0x1441608b03c02030
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_sCommentaireDev() : chaîne
+         //Propriétés de m_sCommentaireDev
+         
+         RENVOYER :m_sCommentaireDev
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_sCommentaireDev(sValeur_p est un chaîne):Vide
+         
+         SI :m_sCommentaireDev <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sCommentaireDev = sValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oEtat_ID
+     identifier : 0x144160ae03c1a7bf
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oEtat_ID():entier
+         //Propriétés de l'objet m_oIDScr_CritereAccept_Etat, accessible via son ID
+         SI :p_oEtat = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oEtat.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_oEtat_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oEtat = Null
+         SINON
+         	:p_oEtat = ClDbCritereAccept_Etat.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_CritereAccept_Asso
+     identifier : 0x1441a3c809bfc511
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oIDScr_CritereAccept_Asso() : ClDbCritereAccept
+         //Propriétés de m_oIDScr_CritereAccept_Asso
+         
+         RENVOYER :m_oIDScr_CritereAccept_Asso
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_oIDScr_CritereAccept_Asso(oValeur_p est un ClDbCritereAccept dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_CritereAccept_Asso, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_CritereAccept_Asso = oValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_CritereAccept_Asso_ID
+     identifier : 0x1441a3f509c774b9
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oIDScr_CritereAccept_Asso_ID():entier
+         //Propriétés de l'objet m_oIDScr_CritereAccept_Asso, accessible via son ID
+         SI :p_oIDScr_CritereAccept_Asso = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_CritereAccept_Asso.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oIDScr_CritereAccept_Asso_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oIDScr_CritereAccept_Asso = Null
+         SINON
+         	:p_oIDScr_CritereAccept_Asso = ClDbCritereAccept.GetObj(nValeur_p)
+         FIN
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ClCritereAccept
+resources :
+ string_res :
+  identifier : 0x1e9321fe43a1201e
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

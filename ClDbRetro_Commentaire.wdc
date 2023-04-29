@@ -1,0 +1,260 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbRetro_Commentaire
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e56cd3d4610b
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbRetro_Commentaire est une Classe
+      	hérite de ClZF_ObjDB
+      
+      PRIVÉ
+      	m_oNum_Sprint	est un ClDbSprint dynamique
+      	m_sCMTR	est un chaîne	<MAPPING=CMTR>
+      	m_oIDScr_Retro_Commentaire_Type	est un ClDbRetro_Commentaire_Type dynamique
+      
+      GLOBAL
+      PUBLIC
+      	// mg_oEx_Exception1	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception2	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception3	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception4	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception5	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception6	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception7	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception8	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception9	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception10	est un ClZF_Exception dynamique
+      FIN
+      
+      // mg_oEx_Exception1	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception2	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception3	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception4	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception5	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception6	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception7	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception8	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception9	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 815205526561030
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      Ancêtre.Constructeur(Scr_Retro_Commentaire..Nom, Scr_Retro_Commentaire.IDScr_Retro_Commentaire..Nom,nID_P)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 815205526561031
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 815205526561032
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbRetro_Commentaire
+      
+      sClasse est une chaîne = ClDbRetro_Commentaire
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 815205526561033
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉ init_ObjBD()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      SI PAS :ZF_bModeAjout() ALORS
+      	SI PAS Scr_Retro_Commentaire.Num_Sprint..Null ALORS
+      			:m_oNum_Sprint	<- ClDbSprint.GetObj(Scr_Retro_Commentaire.Num_Sprint)
+      	FIN
+      
+      	SI PAS Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type..Null ALORS
+      			:m_oIDScr_Retro_Commentaire_Type	<- ClDbRetro_Commentaire_Type.GetObj(Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type)
+      	FIN
+      FIN
+      
+     type : 458752
+   -
+     name : Pre_Enregistre
+     procedure_id : 815205526561034
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ Pre_Enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.Pre_Enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      //. . .
+      SINON
+      
+      //
+      SI :m_oNum_Sprint = Null _OU_ :m_oNum_Sprint.ZF_Get_IdUnique() = 0 ALORS
+      	Scr_Retro_Commentaire.Num_Sprint..Null	= Vrai
+      SINON
+      	Scr_Retro_Commentaire.Num_Sprint	= :m_oNum_Sprint.ZF_Get_IdUnique()
+      FIN
+      //
+      SI :m_oIDScr_Retro_Commentaire_Type = Null _OU_ :m_oIDScr_Retro_Commentaire_Type.ZF_Get_IdUnique() = 0 ALORS
+      	Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type..Null	= Vrai
+      SINON
+      	Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type	= :m_oIDScr_Retro_Commentaire_Type.ZF_Get_IdUnique()
+      FIN
+      
+      
+      FIN
+     type : 458752
+  properties :
+   -
+     name : p_oNum_Sprint
+     identifier : 0x2e56cd3d46101
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_oNum_Sprint() : ClDbSprint
+         //Propriétés de m_oNum_Sprint
+         
+         RENVOYER :m_oNum_Sprint
+        type : 1966080
+      -
+        code : |1-
+         PROCEDURE p_oNum_Sprint(oValeur_p est un ClDbSprint dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oNum_Sprint, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oNum_Sprint = oValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oNum_Sprint_ID
+     identifier : 0x2e56cd3d46102
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oNum_Sprint_ID():entier
+         //Propriétés de l'objet m_oNum_Sprint, accessible via son ID
+         SI :p_oNum_Sprint = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oNum_Sprint.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oNum_Sprint_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oNum_Sprint = Null
+         SINON
+         	:p_oNum_Sprint = ClDbSprint.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sCMTR
+     identifier : 0x2e56cd3d46103
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_sCMTR() : chaîne
+         //Propriétés de m_sCMTR
+         
+         RENVOYER :m_sCMTR
+        type : 1966080
+      -
+        code : |1-
+         PROCEDURE p_sCMTR(sValeur_p est un chaîne):Vide
+         
+         SI :m_sCMTR <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sCMTR = sValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Retro_Commentaire_Type
+     identifier : 0x2e56cd3d46104
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_oIDScr_Retro_Commentaire_Type() : ClDbRetro_Commentaire_Type
+         //Propriétés de m_oIDScr_Retro_Commentaire_Type
+         
+         RENVOYER :m_oIDScr_Retro_Commentaire_Type
+        type : 1966080
+      -
+        code : |1-
+         PROCEDURE p_oIDScr_Retro_Commentaire_Type(oValeur_p est un ClDbRetro_Commentaire_Type dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_Retro_Commentaire_Type, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_Retro_Commentaire_Type = oValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Retro_Commentaire_Type_ID
+     identifier : 0x2e56cd3d46105
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Retro_Commentaire_Type_ID():entier
+         //Propriétés de l'objet m_oIDScr_Retro_Commentaire_Type, accessible via son ID
+         SI :p_oIDScr_Retro_Commentaire_Type = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_Retro_Commentaire_Type.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Retro_Commentaire_Type_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oIDScr_Retro_Commentaire_Type = Null
+         SINON
+         	:p_oIDScr_Retro_Commentaire_Type = ClDbRetro_Commentaire_Type.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e56cd3d4610c
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

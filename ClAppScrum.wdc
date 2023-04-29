@@ -15,24 +15,32 @@ class :
   type_code : 10
   p_codes :
    -
-     code : |1-
+     code : |1+
       ClAppScrum est une Classe
       	herite de clZF_app
       	
       public
-      	m_oUsrCnx				est un objet ClUsr dynamique
+      	m_oUsrCnx				est un objet ClDbUsr dynamique
       	m_nVelociteMoyenne		est un entier
       	m_nNumeroDuSprintActuel	est un entier
       	
       	m_sMsgCnx				est une chaîne
       prive
       	m_bUsrDev				est un booléen
+      	
       GLOBAL
       PUBLIC
-      	mg_oExPbCnx					est un ClZF_Exception dynamique
+      	mg_oExPbCnx				est un ClZF_Exception dynamique
       FIN
-       
+      
       mg_oExPbCnx					= allouer un ClZF_Exception("Connexion impossible à la base de données :" + rc + "%1", ClZF_Exception.cstInfoLogHF)
+      
+      
+      CONSTANTE
+      	cstCriteresDeUS			= "CriteresDeUS"
+      	cstColUsrInvite			= "UsrInvite"
+      	cstDoscDeUS				= "DoscDeUS"
+      FIN
      type : 131072
   procedures :
    -
@@ -81,28 +89,28 @@ class :
       	
       	SI PAS EnModeTest() OU PAS Droite(SysEnvironnement("USERNAME"),4) DANS ("x2777") ALORS 
       		
-      //		:m_sMsgCnx						= "Connexion : SQlServer"
+      //		:m_sMsgCnx					= "Connexion : SQlServer"
       //		// Paramètres de la connexion
       //		:m_ZF_cnxBDD..Provider			= hAccèsNatifSQLServer
-      //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      //		:m_ZF_cnxBDD..Accès			= hOLectureEcriture
       //		:m_ZF_cnxBDD..Utilisateur		= "sa"
       //		:m_ZF_cnxBDD..MotDePasse		= "sa@sql2016"
       //		:m_ZF_cnxBDD..Serveur			= "10.20.30.140"
       //		
-      //		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM"
+      //		:m_ZF_cnxBDD..BaseDeDonnées	= "SCRUM"
       ////		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
       //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
-      //		:m_ZF_cnxBDD..InfosEtendues		= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
+      //		:m_ZF_cnxBDD..InfosEtendues	= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
       
-      		:m_sMsgCnx						= "Connexion : HF/CS"
+      		:m_sMsgCnx					= "Connexion : HF/CS"
       		// Paramètres de la connexion
       		:m_ZF_cnxBDD..Provider			= hAccèsHFClientServeur
-      		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      		:m_ZF_cnxBDD..Accès			= hOLectureEcriture
       		:m_ZF_cnxBDD..Utilisateur		= "cnx_scrum"
       		:m_ZF_cnxBDD..MotDePasse		= "cnx_scrum"
       		:m_ZF_cnxBDD..Serveur			= "prod-vm-ast02"
       		
-      		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM-BDD"
+      		:m_ZF_cnxBDD..BaseDeDonnées	= "SCRUM-BDD"
       		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
       		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
       		
@@ -143,6 +151,7 @@ class :
       
       
       
+      
       //***************************** Identification de l'utilisateur ***************************************************//
       sLoginAD est une chaîne
       
@@ -151,22 +160,30 @@ class :
       	//On rempli le login de la structure globale Utilisateur par le login de la session windows
       	sLoginAD = Droite(SysEnvironnement("USERNAME"),4)
       	
-      	HLitRecherche(Scr_Usr,Login_AD,sLoginAD,hIdentique+hLimiteParcours)
-      	//Si on le trouve alors on rempli le reste des inforamtion dans la structure
-      	SI PAS HTrouve(Scr_Usr) ALORS
-      		
-      		SI HNbEnr(Scr_Usr) = 0 ALORS
-      			HRAZ(Scr_Usr)
-      			Scr_Usr.Login_AD				= sLoginAD
-      			Scr_Usr.Top_Equip_Informatique	= Vrai
-      			HAjoute(Scr_Usr)
-      		SINON
-      			//Sinon on bloque l'acces à l'application en fermant le programme
-      			Info("vous n'avez pas accès à cette application. (" + sLoginAD + " / " + :m_ZF_cnxBDD..Serveur + ")")
-      			STOP
-      			FinProgramme()
+      	oUsr est un ClDbUsr dynamique
+      	
+      	quand exception dans 
+      		oUsr <- ClDbUsr.oGetUsrDeNumAD(sLoginAD)
+      	faire
+      		selon ExceptionInfo(errCode)
+      			CAS ClDbUsr.mg_oEx_IdAbsentAD.ZF_Code
+      				SI HNbEnr(Scr_Usr) = 0 ALORS
+      					//Il s'agit du 1er lancement : on crée l'utilisateur avec les infos de l’utilisateur courant.
+      					oUsr = allouer un ClDbUsr
+      					oUsr.p_sLogin_AD = sLoginAD
+      					oUsr.p_sNom = sLoginAD
+      					oUsr.ZF_Enregistre()
+      				SINON
+      					//Sinon on bloque l'acces à l'application en fermant le programme
+      					Info("vous n'avez pas accès à cette application. (" + sLoginAD + " / " + :m_ZF_cnxBDD..Serveur + ")")
+      					STOP
+      					FinProgramme()
+      				FIN		
+      			AUTRE CAS
+      				ExceptionPropage(ExceptionInfo(errMessage))
       		FIN
-      	FIN	
+      	fin
+      	
       SINON
       	Col_Test.InitAll()
       	
@@ -176,12 +193,12 @@ class :
       //*****************************************************************************************************************//
       
       
-      :m_nNumeroDuSprintActuel = ClSprint.Sprint_Num_Actuel() 
-      ClSprint.Calcul_Velocite_Moyenne()
+      :m_nNumeroDuSprintActuel = ClDbSprint.Sprint_Num_Actuel() 
+      ClDbSprint.Calcul_Velocite_Moyenne()
       
       
       //Enregistrement de l'utilisateur en cours, dans l'application.
-      :m_oUsrCnx <- ClUsr.nGetIdDeNumAD(sLoginAD)
+      :m_oUsrCnx <- ClDbUsr.oGetUsrDeNumAD(sLoginAD)
       
       //On mémorise si l'utilisateur est de l'équipe de dev (isolé, pour gérer les cas d'usurpation d'identité)
       :m_bUsrDev = :m_oUsrCnx.p_bTop_Equip_Informatique
@@ -212,6 +229,51 @@ class :
       DélaiAvantFermeture(1000)
       Info("Suite à une erreur, le programme doit être relancé.")
       FinProgramme(Faux)
+     type : 458752
+   -
+     name : CreeCol
+     procedure_id : 1459473434255790445
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] CreeCol (<sCle_p> est chaîne)
+      //
+      // Paramètres :
+      //	sCle_p (chaîne ANSI) : <indiquez ici le rôle de sCle_p>
+      
+      // Valeur de retour :
+      // 	ClZF_ColObjDB : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	oObjDB_p (ClZF_ObjDbLs) : <indiquez ici le rôle de oObjDB_p>
+      procédure prive CreeCol(sCle_p est une chaîne):ClZF_ColObjDB
+      
+      oCol est un ClZF_ColObjDB dynamique
+      
+      selon sCle_p
+      	CAS ClDbProjetMap.cstKeyCol_MapDeProjet
+      		oCol = allouer un ClColProjetMap
+      	cas ClDbUserStory.cstUSDeProjet
+      		oCol = allouer un ClColUserStory
+      	cas cstCriteresDeUS
+      		oCol = allouer un ClColCritereAccept
+      	cas cstColUsrInvite
+      		oCol = allouer un ClColUsr
+      	cas cstDoscDeUS
+      		oCol = allouer un ClColUserStory_Doc
+      	cas ClDbCritereAccept.cst_Col_CriteresCompo
+      		oCol = allouer un ClColCritereAccept_Composant
+      	cas ClDbMessage.cst_col_messages
+      		oCol = allouer un ClColMessage
+      		
+      	AUTRE CAS
+      		::mg_oExTypeColNonDefinit.ZF_Declenche([sCle_p])
+      FIN
+      
+      renvoyer oCol
      type : 458752
   properties :
    -

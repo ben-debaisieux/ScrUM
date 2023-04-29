@@ -1,0 +1,301 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenCodeCl
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x143456d9141e34b9
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_GenCodeCl est une Classe, abstraite
+      	herite de ClZF_GenEltWD
+      PROTEGE
+      	m_bNatif est un booléen
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1455884069893059769
+     type_code : 27
+     code : |1+
+      procédure Constructeur(oClasseGen est un ClZF_GenCodeFic)
+      Ancêtre.Constructeur(oClasseGen)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1455884069893125305
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GenBlocCL_Constructeur
+     procedure_id : 1455884069893256377
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBlocCL_Constructeur ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      procédure GenBlocCL_Constructeur(sCode_p est un chaine):chaine
+      sRetour est une chaîne = [
+         -
+           name : Constructeur
+           procedure_id : [%GenProcIdent()%]
+           type_code : 27
+           code : |1+
+      [%sIndentSpace(sCode_p)%]
+           type : 589824
+      ]
+      RENVOYER sRetour
+     type : 458752
+   -
+     name : GenBlocCL_Destructeur
+     procedure_id : 1455884069893321913
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBlocCL_Destructeur ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      procédure GenBlocCL_Destructeur(sCode_p est un chaine):chaine
+      sRetour est une chaîne = [
+         -
+           name : Destructeur
+           procedure_id : [%GenProcIdent()%]
+           type_code : 28
+           code : |1+
+      [%sIndentSpace(sCode_p)%]
+           type : 655360
+      ]
+      RENVOYER sRetour
+     type : 458752
+   -
+     name : GenBlocCL_Fin
+     procedure_id : 1455884069893387449
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBlocCL_Fin ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      //	sCode_p (chaîne ANSI) : <indiquez ici le rôle de sCode_p>
+      //	sClasse_p (chaîne ANSI) : <indiquez ici le rôle de sClasse_p>
+      procédure GenBlocCL_Fin():chaine
+      sRetour est une chaîne = [
+        procedure_templates : []
+        property_templates : []
+       code_parameters :
+        internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+        original_name : Classe1
+      resources :
+       string_res :
+        identifier : [%GenProcIdent()%]
+        internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+      custom_note :
+       internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
+       ]
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenBlocCL_Init
+     procedure_id : 1455884069893452985
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBlocCL_Init (<sCode_p> est chaîne, <sClasse_p> est chaîne)
+      //
+      // Paramètres :
+      //	sCode_p (chaîne ANSI) : <indiquez ici le rôle de sCode_p>
+      //	sClasse_p (chaîne ANSI) : <indiquez ici le rôle de sClasse_p>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      procédure GenBlocCL_Init(sCode_p est un chaine, sClasse_p est un chaine):chaine
+      sRetour est une chaîne = [
+      #To edit and compare internal_properties, use WINDEV integrated tools.
+      #Internal properties refer to the properties of controls in windows, reports, etc.
+      info :
+       name : [%sClasse_p%]
+       major_version : 27
+       minor_version : 0
+       type : 4
+       description : ""
+       subtype : 0
+      class :
+       identifier : [%GenProcIdent(*, vrai)%]
+       internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+       code_elements :
+        type_code : 10
+        p_codes :
+         -
+           code : |1-
+      [%sIndentSpace(sCode_p)%]
+           type : 131072
+        procedures :
+      ]
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenBlocCL_Procedure
+     procedure_id : 1455884069893518521
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBlocCL_Procedure ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      procédure GenBlocCL_Procedure(sCode_p est un chaine, sNom_p est un chaine):chaine
+      sRetour est une chaîne = [
+         -
+           name : [%sNom_p%]
+           procedure_id : [%GenProcIdent()%]
+           type_code : 12
+           code : |1-
+      [%sIndentSpace(sCode_p)%]
+           type : 458752
+      ]
+      RENVOYER sRetour
+     type : 458752
+   -
+     name : GenBlocCL_Propriete
+     procedure_id : 1455884069893584057
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBlocCL_Propriete (<sCode_R_p> est chaîne, <sCode_W_p> est chaîne, <sNom_p> est chaîne)
+      //
+      // Paramètres :
+      //	sCode_R_p (chaîne ANSI) : <indiquez ici le rôle de sCode_p>
+      //	sCode_W_p (chaîne ANSI) : <indiquez ici le rôle de sCode_W_p>
+      //	sNom_p (chaîne ANSI) : <indiquez ici le rôle de sNom_p>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      procédure GenBlocCL_Propriete(sCode_R_p est un chaine, sCode_W_p est un chaine, sNom_p est un chaine):chaine
+      
+      sBlocR est une chaîne
+      sBlocW est une chaîne
+      
+      si sCode_R_p = "" et sCode_W_p = "" ALORS
+      	exceptiondéclenche(1,"Erreur de paramètre : une propriété est au moins en écriture ou en lecture.")
+      FIN
+      
+      si sCode_R_p <> "" ALORS
+      	sBlocR = [
+              code : |1-
+      [%sIndentSpace(sCode_R_p, 9)%]
+              type : 1966080
+      	]
+      FIN
+      
+      SI sCode_R_p <> "" ALORS
+      	sBlocW = [
+              code : |1-
+      [%sIndentSpace(sCode_w_p, 9)%]
+              type : 2031616
+      	]
+      FIN
+      
+      sRetour est une chaîne = [
+         -
+           name : [%sNom_p%]
+           identifier : [%GenProcIdent()%]
+           type_code : 103
+           p_codes :
+            -
+      [%sBlocR%]
+            -
+      [%sBlocw%]
+           template_refs : []
+      ]
+      
+      RENVOYER sRetour
+     type : 458752
+  properties :
+   -
+     name : SetNatif
+     identifier : 0x143456d9141f34b9
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique SetNatif(bValeur est un booléen)
+         
+         m_bNatif=bValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x140b193c08892726
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

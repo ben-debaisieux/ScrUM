@@ -156,20 +156,13 @@ window :
      p_codes :
       -
         code : |1-
-         HLitRecherche(Scr_Commentaire,IDScr_Type_Cmtr,COL_ID,hIdentique+hLimiteParcours)
+         HLitRecherche(Scr_Retro_Commentaire_Type,IDScr_Retro_Commentaire_Type,COL_ID,hIdentique+hLimiteParcours)
          
-         si htrouve(Scr_Commentaire) alors
-         	
-         		info("Impossible de supprimer car il y a des commentaires existants de ce type ")
-         
+         si htrouve(Scr_Retro_Commentaire_Type) alors
+         	info("Impossible de supprimer car il y a des commentaires existants de ce type ")
          sinon
-         	HLitRecherche(Scr_Type_Cmtr,IDScr_Type_Cmtr,COL_ID,hIdentique+hLimiteParcours)
-         	SI HTrouve(Scr_Type_Cmtr) ALORS
-         		
-         		SI PAS HSupprime(Scr_Type_Cmtr) ALORS
-         			Erreur(ErreurInfo(errComplet))
-         		FIN
-         		
+         	SI PAS HSupprime(Scr_Retro_Commentaire_Type) ALORS
+         		Erreur(ErreurInfo(errComplet))
          	FIN
          FIN
          
@@ -300,25 +293,25 @@ window :
       
       Si COL_ID = 0 alors //C'est un ajout
       	
-      	HRAZ(Scr_Type_Cmtr)
+      	HRAZ(Scr_Retro_Commentaire_Type)
       	
-      	Scr_Type_Cmtr.Type_Cmtr = COL_Type
-      	Scr_Type_Cmtr.Top_Par_Defaut = COL_Par_Defaut
+      	Scr_Retro_Commentaire_Type.Type_Cmtr = COL_Type
+      	Scr_Retro_Commentaire_Type.Top_Par_Defaut = COL_Par_Defaut
       	
-      	si pas Hajoute(Scr_Type_Cmtr) alors
+      	si pas Hajoute(Scr_Retro_Commentaire) alors
       		erreur(erreurinfo(errComplet))
       	FIN
       	
       sinon //On modifie
       	
-      	HLitRecherche(Scr_Type_Cmtr,IDScr_Type_Cmtr,COL_ID,hIdentique+hLimiteParcours)
+      	HLitRecherche(Scr_Retro_Commentaire_Type,IDScr_Retro_Commentaire_Type,COL_ID,hIdentique+hLimiteParcours)
       	
-      	si htrouve(Scr_Type_Cmtr) ALORS
+      	si htrouve(Scr_Retro_Commentaire_Type) ALORS
       		
-      		Scr_Type_Cmtr.Type_Cmtr = COL_Type
-      		Scr_Type_Cmtr.Top_Par_Defaut = COL_Par_Defaut
+      		Scr_Retro_Commentaire_Type.Type_Cmtr = COL_Type
+      		Scr_Retro_Commentaire_Type.Top_Par_Defaut = COL_Par_Defaut
       		
-      		si pas HModifie(Scr_Type_Cmtr) alors
+      		si pas HModifie(Scr_Retro_Commentaire_Type) alors
       			Erreur(ErreurInfo(errComplet))
       		FIN
       		

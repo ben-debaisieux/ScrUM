@@ -1,0 +1,178 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_Fic_ProjetMap
+ major_version : 27
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_Fic_ProjetMap
+ identifier : 0x242d6737b1ef1a7e
+ internal_properties : BwAAAAcAAABLyC58ygtyzcBFMUAXxeo/WcjMJzc0L0JIdo/eE6D3liXv7qIEJjmdY7nF35N6Ei14ycfW8kIZexCGReO+gmu4aYfGqJzxoI78hnP4S5d3fZC4JZzG9hKnOhioVPRv0oDthyfpXGB23HiCod2bVgX0fU1x4fq/HKrsxFykDlg0ERtTmhENaHpR+Ub68RFEQqpBwux8Jion0UPT5YRiq9tXSmBT3dG5lkP6e6BTyvot+DS2peFGIzda+hLgSOgN2IRQu5SZWE8TKlx/ZLlRFzX+7e1xXntPWb3NCUQYn039fbfJpCK8uGSmHHfMfvqAeLUy1xvxvaguVgaRmE9uy14+ONGmGCfMilCgM3PUzbAFBBUiYqA5cLaFWZgC7hfKCW4TDDS2mSp1XLQdV6ed4sJ7FA84PljKwc8/iA7e088NgrmKHkkpocTY7xcYOOM15nv3f8iWcRG+MNhBaopocrvgJvWP5U8TKI3oPnxlOwpzJBwbGprcJLHgrK+HH4+f2W658hUvSjC4pZ3PFKp561+UqUhEQMhSHop45Galn/6pUaABG/zzyV9M1n64PeBdIGMfMzOL1Q3ZVngIKtU0kiB98FdTcTkF8AfIPwCxvnmdvGhBHaLX5upvAwImd08CZ+4ZXBdP/iQsPhanpNxKHtOgq1umeglwkLKGnWJGMkLXuXv0JWpk+4bPgefIdKkvMnToiNZHuw1gdQcpshh1U1LXqZdNyutJZePWZQdA0qrdt47/KpkSddNYWYZBj1HNQsU=
+ properties :
+  width : 486
+  height : 140
+  widthClient : 484
+  heightClient : 108
+ controls :
+  -
+    name : BTN_Valider
+    identifier : 0x242d6737b1f01a7e
+    internal_properties : BwAAAAcAAAArCTqtaCUgWLULvwFIaXxlGQw7FXXtn6GfOnHaAMUzP7lC9Q7JtAx6kLnzUf3I3qaY5ZQsiZEmb/U9huHVrCM3Z5UYW/Pxc+SDbj8dO4VOieUGVHm/PYnbZhsseLrYCGZe8EvLdUYohOU+UaQt9DyxHX7TBqwXDDB9CVRL8K7R5CbItjPWUwYzHwVxK2CKU5aMxtQo1tdyrHINzQIJcOxg2qOLnb4OULVBTfya7DQbqF/FnVlO3BURoy+oFyJgsdoG0FUQByUVY+kVYE6vSrzIDGShl73hbW/Ia3lfPknTkhSIqLDJgYeYFVIcWUBq0Mv5fhn2lBb89Plu0BPt6492sOphv5XmCWYr+MfaC3lFampBOF7GhZ5GGclebN6FJ33lLvF0GbxJU2qH0e2aNNg2Gt2kC0CXBqN1P/OO+D9wd+kIiXKuxk4kv6vLtt7iMJVoagA7lvs7LuppYEyMDm52pf4TL/dKriKwKbpeTF0gti4R/2ydLVL/K8WsboBdF2E0M3RS8ADOkNoPiy0Vxvtqk0gor0XT+fcpisUa6lll7uEp6nxZb5dYWcyK8QDV1vh9/QOVsv9sh2WUzA7U3l0kMwwAOSdSegEM/3Rdbvu3c+BVRBxt+MqFMAW8vxMpe/SFkPxCZcaM7pZvnFWJ1T9KA5oVuRtsNvfQ1CoXs3IAToyK+HrIwxuQAzJLzgRaoSWO0+oYD9MDO6Nr5HloTnqzLGbq2Jtzu6W3WbWER5l7/K1ZL3FH3XQx3rmBglgkmM9RJY5ndBr0aEJ3wgAARAJrfgTmgo5bhQ58qd5MfRWVn1nffcVLe/G/84mEBNc5TwJWlVQIRwPvx6xrfkauCWgCK2sEwd4PmocWDJVaXTnUJYsDAEeISJy6yrFgrKW5ST8qVnLEN9caU6VTsJXFG9rWYI/4jnB9HCE=
+    properties :
+     x : 398
+     y : 6
+     width : 80
+     height : 24
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         
+        type : 14
+      -
+        internal_properties : BwAAAAcAAAB8whTP8jyNmgkMGIsGPo1+pzoS8WCO0MjlsupNMDb1aWheqcvaLo0QXA3+B5msICF6WlXec3vIsfwkEbdnxkpZPJXHxmGq+kab8JFAmwawQlUbKJZMDFs=
+        code : |1-
+         
+         QUAND EXCEPTION DANS 
+         	EcranVersSource(MaFenêtre,"zoProjetMap")
+         	oProjetMap_p <= zoProjetMap
+         FAIRE
+         	sInfo est une chaîne = ExceptionInfo(errMessage)
+         	Erreur(sInfo)
+         SINON
+         	ferme()
+         FIN
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : BTN_Annuler
+    identifier : 0x242d6737b1f11a7e
+    internal_properties : BwAAAAcAAABLSvdd28UDLt/UEVlFpAH8bOXPgtFQNTbQk2vt9Ov0B+Wuvh12/Wn3Rr51OYY5s4GHruCxjfPdE9rF0BR/+Ye/vB+4JB06kwXkE5HcLg1wtZqSFuB3ti2ek2kMLD+llqtjBQRuJeSqeqexLK/lMSipE9PKv1e85fzK4G803SSLDJZlSHXvFOTuxs46yHZ7ZMHB6xzcljL6bpBlob2ugpXgYkfgkGNTiPQs9hHx53drsHbXhdeaZZtuv7jZ0CXgy5mthT0XZyJexRMVK6TII6tf2qIBLiqsbLOS0zoKz8iw0I5kmFA1gM7jlEJHaNSXXjb9kiF2xKjJzxtTQDb8b6Ak9HjHgXrco0PPcJU8SU5BbtLvzmWdkZCdLHlD1dnOMFY6MbvsN/WwzLd0l8WGDkZfcKUUbuC1CjBDLcG9I/xOuui404guinH5vlSg3R77DLPxxQMsML3u6BYpNfznvDHeEwUfIMxJhM2G9KSKr5IwQttkhH2lgJAT0jY7mr0ueVUdhcAJgK/pK3v90TyEYmaQCP4qLl/QEwgnYHp8F+nKG31RY2DnfW4xOA0sS9rIxb5NrS6sFEcVvlcJdr+Kkru/j3dTWbzFYQB6JcZz+2WF3NJNOPK4mmB3Zd8ulR8BqWMjGRl/lokLaDylJbTOv7BQhlJRku7SoApaHQLUHG59HHwdhAFFnTpGZ5Resfrqj4N8AH0e7yEtr+95DOuiweBoV9kj+8s1J8sc57/kLX5HGdsBp1HUvdVRZDkzBhaPH6GxcJ4ET06NY/GiTZaI8e5NMe/hSH6RZpOkQ9QOqSrALNjWg2xZccgMw2XGpJr7LHwTDJP62ZsiYxMSmDHB1IROnumldKMcJRgpDnQSX43L1QmrtuNoV28GyzrC
+    properties :
+     x : 398
+     y : 38
+     width : 80
+     height : 24
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         
+        type : 14
+      -
+        code : |1-
+         ferme()
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : SAI_Libelle
+    identifier : 0x242f232b5f315131
+    internal_properties : BwAAAAcAAABXFJSFkKeQVrGS+Kg2UsA0/D/MB62hne256+a+S1DCsr0Y5MbSs/YIIIYWYVmxt5j/EBVkFxIsd5mqDBRPAgd5TYOtnlUMlQvXaUTvCugEFiEJK4Z0DGrlGp9eRmm7zX+4+buO8AarIHwqgz2cQ/J1G5h69ONEaFZ8hidFSQVUgdrYUJRgGbKYFsBKXAUhw6Emh8pinFVbZUle9HvjRi+78W3/cMNuFxUOwD56S6vgMPEDWAmiTaTuMrbfMVV+ZCufs5a1bLFQZPJu0Wsy0+6KSURi8FjnTSo2sT+87vDZPBmwsww8H2o0DxK7GDmw1ejUeSAwBJ39Td1pnutowDgxzplGcxvQ4+EhMHqqAEf/C53sBFV7cN+NAzke4eOT8bWgywd9sCJXsW5NbQVH1qqpiLqxzU5HgBuzVqFSbmmmapEhG3LE7vTJLZuCbo00YHrVF3cLBbzaPsFor7ETV2Ernk2TgOMSdAQBTv2SAyIDl0ivIZ73TWpr+2YvOk9As7JYIh6NfJhyoTsOa1Lfb+PFhK1GNMWN8Dd7dsbOAG41LpnGuhGzlIjtoT8uzyl447bz8IAMJ+QBwY450uRuCW6NMZAIhFghaZm6hW0vA75u6AYJd2/K1u2PP6FtpF8YrXfUyBm+rMwiXPb1hrMD36O2zjmWUsbpYbmq5l3qX0R61wkXDAl3rOM8JbV+YheRV8hT4FTuHEp4f5v6YFbXGZ8bpXdiob6v/iy5+4cBPr/qM/uM2FfhsPP5F2GApXgf+OArVOSXnXGogg7TZ0iM3QdtvXwQ4VK3Lr2qLtTy+VOexB9ElbsVHzMr2xld2Gu5h9Y+Yc4SIXYH+4Qy/c61sykEeKxrMHf1S6R3FUvriqjRs+btMa4emtt1TrZiRAjKqghKxqssc6OgqJG69IXUFN/S63dNAtW0IsxgRqPsp9d/dYNHWAcUIUaPo50MK2pQtZcW4D8dj/FM4TLv4A8ymFR2kPSlKu1G9H5coG4S3pooIahHgEl7M9XNC1Wdr6M3RX+l9jiugo9bNUiubvpHliQP1hqaN4AMi3ZVnwmEz2QuNg03J5JclgG32pblh3cHUKI3L1fRys38GeVcSbDRBoE60rJ+4I+HQH5Eh5dYhhX1yQ7SMZgt9zG8ajTX3EHTlpGMRdDBL61bq3hW1g63xglwmMOtO4rFqyWbyXm9A/yxpZKFt/MWkRggvAVvIwMA4X2VphCF++I0CDVYPIwkFQgudtICE6vRHAy8eIvD4Xub5fYk0NocCnFxYwgaeWlRf7PiWT0sE5EBha5LlsizSuv0LJzij0g8Gq16Tmp2bzNBa1uAtPVcx2NyjOf8f4P1f7MVsGBjG4FYVNRrRgBy4l//ou1aLQ==
+    properties :
+     x : 6
+     y : 6
+     width : 351
+     height : 22
+    type : 2
+    code_elements :
+     type_code : 3
+     p_codes :
+      -
+        code : |1-
+         
+        type : 14
+      -
+        code : |1-
+         
+        type : 15
+      -
+        code : |1-
+         
+        type : 16
+      -
+        type : 276
+        enabled : false
+      -
+        type : 277
+        enabled : false
+      -
+        type : 278
+        enabled : false
+      -
+        code : |1-
+         
+        type : 17
+ menu :
+  name : _Menu
+  identifier : 0x273afca111f3c66a
+  internal_properties : BwAAAAcAAABhHrstMa4Z9rl6OwYjS84TLQsX3FeSpLFLw6OvT/q0TTop6246LIQjRYH2rort/iXEVEG8h3nssqS9OS6nlahnSvHNwBZ3KPsCPDNV6DqMwv3sqAqt2U3nDV0zIOu+QVCE7sm+q8pvNYbcweI/Xf5+pTd110qVRHw/aPAqbcyH6tUlS/E0iUY84n4p3RgoGt7SEUhHX03No4MSlCtrbTApzAPbqfYJ36YXNFxnrnahZBQZtLha7RY6axUM6IhAnoOpGhtv9Xz9dSbxjTRMiNTba5ANViKqxytyMeFsUOpUDAB+A66iElDh
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BwAAAAcAAAC4NW9UkbRLpmE2Bdm7am3dd6gBY4dSxiW4OmFbI+J9Lr9ziDCIWPE31ZC0PezllIBY0TrcWtfGcb4X941q9mceVjwV/Te/mjEUypnSF4A=
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     internal_properties : BwAAAAcAAABYxSC3Cp1yBTyrJ/2BTkhMB4j8437pso3GJmARvJbefoMzFHNVs9rPLVES9eVbPfgC65HHpasFtl6ZO/kjk6EEFE5DrzcSkvELUv2opdnOY7ofHWDpuTnI
+     code : |1+
+      // Traitement automatique des erreurs :   afficher l'erreur, puis quitter ou relancer l'application
+      //
+      
+      procédure mafenetre(oProjetMap_p est un ClDbProjetMap )
+      
+      zoProjetMap est un ClDbProjetMap <- oProjetMap_p.ZR_Clone()
+      SourceVersEcran(MaFenêtre,"zoProjetMap")
+   -
+     code : |1-
+      
+     type : 34
+   -
+     code : |1-
+      
+     type : 234
+   -
+     code : |1-
+      
+     type : 165
+   -
+     code : |1-
+      
+     type : 177
+   -
+     code : |1-
+      
+     type : 180
+   -
+     type : 230
+     enabled : false
+   -
+     code : |1-
+      
+     type : 2
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : FEN_Fenêtre1
+resources :
+ string_res :
+  identifier : 0x142d66ff25624135
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+associated_test :
+ name : TEST_Fiche_RADFichierB.wxt
+rad :
+ internal_properties : BwAAAAcAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

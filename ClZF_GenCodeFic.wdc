@@ -1,0 +1,496 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenCodeFic
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1408fca4c669569e
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      str_DefRub est une structure
+      	nTypeRub				est un entier
+      	nTypeRubHF				est un entier
+      	
+      	bNullable				est un booléen
+      	//sNomClasseObjetCompse	est une chaîne
+      	sNomMembre				est une chaîne
+      	sPrefixe				est une chaîne
+      	sNomDeclarationComplet	est une chaîne
+      	sNomDeclarationCourt	est une chaîne
+      	
+      	sLibelleRubrique		est une chaîne
+      	bVisibleUsr				est un booléen
+      	
+      	oObj_Parent				est un ClZF_GenCodeFic dynamique
+      fin
+      
+      STR_InfoCol est une Structure
+      	sDeclaration		est une chaîne
+      	sTableDesti			est une chaîne
+      	sCleDesti			est une chaîne
+      FIN
+      
+      
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      
+      ClZF_GenCodeFic est une Classe
+      	m_aRub			est un tableau associatif (ccSansCasse) de STR_DefRub
+      	m_aCol_Enfant	est un tableau de STR_InfoCol
+      PRIVE
+      	m_sNomTable	est une chaîne
+      	m_sNomUsage	est une chaîne
+      	m_sNomRubId	est une chaîne
+      globale
+      public
+      	mg_sPrefixeTable est une chaîne ANSI
+      fin
+      
+      constante
+      	cstDefRubNum		= 1
+      	cstDefRubChaine		= 2
+      	cstDefRubObj		= 3
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1443681465206134430
+     type_code : 27
+     code : |1+
+      procédure Constructeur(local sNomTable_P est une chaîne = "")
+      
+      :m_sNomTable = sNomTable_P
+      :m_sNomUsage = remplace(sNomTable_P, ::mg_sPrefixeTable , "", SansCasse)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1443681465206199966
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : aLstRubs
+     procedure_id : 1443681465206527646
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aLstRubs ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure aLstRubs():tableau de chaine
+      
+      aRetour est un tableau de chaines
+      stTmp est un STR_DefRub
+      sCle est une chaîne
+      
+      pour tout element stTmp, sCle de :m_aRub
+      	TableauAjoute(aRetour, sCle)
+      FIN
+      
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : GetInfoRubPrefix
+     procedure_id : 1443681465206593182
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetInfoRubPrefix (<nTypeHF_p> est entier)
+      //
+      // Paramètres :
+      //	nTypeHF_p (entier) : <indiquez ici le rôle de nStypeHF_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetInfoRubPrefix(nTypeHF_p est un entier):chaine
+      
+      sRetour est une chaîne
+      
+      selon nTypeHF_p
+      	CAS hRubBooléen
+      		sRetour = "b"
+      	CAS hRubdate6, hRubDate8
+      		sRetour = "d"
+      	CAS hRubDateHeure
+      		sRetour = "dh"
+      	CAS hRubEntier1, hRubEntier2, hRubEntier4, hRubEntier8, hRubEntierNonSigné1, hRubEntierNonSigné2, hRubEntierNonSigné4, hRubEntierNonSigné8
+      		sRetour = "n"
+      	CAS hRubMémoTexte, hRubMémoUnicode, hRubTexte, hRubTexteUnicode
+      		sRetour = "s"
+      	CAS hRubMonétaire
+      		sRetour = "m"
+      	CAS hRubRéel4, hRubRéel8
+      		sRetour = "r"	
+      	cas hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+      		sRetour = "bu"	
+      	AUTRE CAS
+      		
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GetInfoRubType
+     procedure_id : 1443681465206658718
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetInfoRubType (<nTypeHF_p> est entier [, <bComplet_p> est booléen])
+      //
+      // Paramètres :
+      //	nTypeHF_p (entier) : <indiquez ici le rôle de nTypeHF_p>
+      // 	bComplet_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bComplet_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetInfoRubType(nTypeHF_p est un entier, bComplet_p est un booléen = faux):chaine
+      
+      sRetour est une chaîne
+      sDeclare est une chaîne
+      
+      SELON nTypeHF_p
+      	CAS hRubBooléen : sRetour = "Booléen"
+      	CAS hRubDate6 : sRetour = "Date sur 6"
+      	CAS hRubDate8 : sRetour = "Date"
+      	CAS hRubDateHeure : sRetour = "DateHeure"
+      	CAS hRubEntier1 : sRetour = "Entier sur 1 octet"
+      	CAS hRubEntier2 : sRetour = "Entier sur 2 octets"
+      	CAS hRubEntier4 : sRetour = "Entier"
+      	CAS hRubEntier8 : sRetour = "Entier sur 8 octets"
+      	CAS hRubEntierNonSigné1 : sRetour = "Entier sans signe sur 1 octet"
+      	CAS hRubEntierNonSigné2 : sRetour = "Entier sans signe sur 2 octets"
+      	CAS hRubEntierNonSigné4 : sRetour = "Entier sans signe"
+      	CAS hRubEntierNonSigné8 : sRetour = "Entier sans signe sur 8 octets"
+      	CAS hRubMémoTexte : sRetour = "chaîne"
+      	CAS hRubMémoUnicode : sRetour = "chaîne UNICODE"
+      	CAS hRubMonétaire : sRetour = "Monétaire"
+      	CAS hRubRéel4 : sRetour = "Réel"
+      	CAS hRubRéel8 : sRetour = "Réel sur 8 octets"
+      	CAS hRubTexte : sRetour = "chaîne"
+      	CAS hRubTexteUnicode : sRetour = "chaîne UNICODE"
+      	cas hRubImage, hRubMémoBinaire, hRubMémoBinaire4 : sRetour = "Buffer"
+      	autre cas
+      		ExceptionDéclenche(1,"")
+      FIN
+      
+      
+      si bComplet_p ALORS
+      	si nTypeHF_p dans (hRubDate6, hRubDate8, hRubDateHeure) ALORS
+      		sDeclare = "est une "
+      	sinon
+      		sDeclare = "est un "
+      	FIN
+      	sRetour = sDeclare + sRetour
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : Analyse
+     procedure_id : 1443681465206920862
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // Analyse ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure Analyse()
+      
+      str_rel est une structure
+      	sTableLiee est une chaîne
+      	sRubriqueLiee est une chaîne
+      fin
+      
+      sRubs		est une chaîne	= HListeRubrique(:m_sNomTable,hLstDétail)
+      sLiaisons	est une chaîne	= HListeLiaison(:m_sNomTable)
+      sLigne		est une chaîne
+      sLigneCle	est une chaîne
+      sRub		est une chaîne
+      stRubTmp	est un STR_DefRub
+      stCol		est un STR_InfoCol
+      oGenTmp		est un ClZF_GenCodeFic dynamique
+      sRubIdAuto	est une chaîne
+      stRelTmp	est un str_rel
+      aFK_de_PK	est un tableau de str_rel
+      aPK_de_FK	est un tableau associatif de str_rel
+      
+      
+      
+      //Identification de la PK de la table
+      POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
+      	VariableRAZ(stRubTmp)
+      	sRub = ExtraitChaîne(sLigne, 1)
+      	
+      	stRubTmp.nTypeRubHF = ExtraitChaîne(sLigne, 3)
+      	
+      	//Est on sur la clé primaire ?
+      	SI stRubTmp.nTypeRubHF DANS (hRubIDAuto, hRubIDAuto4) ALORS
+      		//Oui
+      		sRubIdAuto = sRub
+      	fin
+      fin
+      
+      
+      
+      POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
+      	
+      	//Identification des relations associées à la clé primaire de la table en cours.
+      	si ExtraitChaîne(sLigneCle,2,tab) = :m_sNomTable et ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto ALORS
+      		stRelTmp.sTableLiee = ExtraitChaîne(sLigneCle,5,TAB)
+      		stRelTmp.sRubriqueLiee = ExtraitChaîne(sLigneCle,6,TAB)
+      		TableauAjoute(aFK_de_PK,stRelTmp)
+      	FIN
+      
+      	SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,6,TAB) = sRubIdAuto ALORS
+      		stRelTmp.sTableLiee = ExtraitChaîne(sLigneCle,2,TAB)
+      		stRelTmp.sRubriqueLiee = ExtraitChaîne(sLigneCle,3,TAB)
+      		TableauAjoute(aFK_de_PK,stRelTmp)
+      	FIN
+      
+      
+      	//Identification des clés étrangères présentes dans la table en cours.
+      	sRub = ExtraitChaîne(sLigneCle,3,TAB)
+      	SI ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
+      		stRelTmp.sTableLiee = ExtraitChaîne(sLigneCle,5,TAB)
+      		stRelTmp.sRubriqueLiee = ExtraitChaîne(sLigneCle,6,TAB)
+      		aPK_de_FK[sRub] = stRelTmp
+      	FIN
+      	
+      	sRub = ExtraitChaîne(sLigneCle,6,TAB)
+      	SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
+      		stRelTmp.sTableLiee = ExtraitChaîne(sLigneCle,2,TAB)
+      		stRelTmp.sRubriqueLiee = ExtraitChaîne(sLigneCle,3,TAB)
+      		aPK_de_FK[sRub] = stRelTmp
+      	FIN
+      FIN
+      
+      
+      
+      POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
+      	VariableRAZ(stRubTmp)
+      	sRub = ExtraitChaîne(sLigne, 1)
+      	
+      	stRubTmp.nTypeRubHF = ExtraitChaîne(sLigne, 3)
+      	
+      	//Est on sur la clé primaire ?
+      	SI sRub = sRubIdAuto ALORS
+      		
+      		//Mémorisation du nom de la clé
+      		:m_sNomRubId = sRub
+      		
+      		//On liste les relations, pour identifier les clés étrangères, des autres tables
+      		pour tout stRelTmp de aFK_de_PK
+      			VariableRAZ(stCol)
+      			stCol.sTableDesti	= stRelTmp.sTableLiee
+      			stCol.sCleDesti		= stRelTmp.sRubriqueLiee
+      			oGenTmp				= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      			stCol.sDeclaration	= "[%oGenTmp.sNomClasseColGen(vrai)%]_[%stRelTmp.sRubriqueLiee%] est un [%oGenTmp.sNomClasseColGen()%]"
+      			TableauAjoute(:m_aCol_Enfant, stCol)
+      		FIN
+      //		POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
+      //			//Est ce que la relation en cours pointe une clé primaire du fichier en cours ,
+      //			SI :m_sNomTable = ExtraitChaîne(sLigneCle, 2) ET sRub = ExtraitChaîne(sLigneCle, 3) ALORS
+      //				//Oui :
+      //				
+      //				VariableRAZ(stCol)
+      //				stCol.sTableDesti = ExtraitChaîne(sLigneCle, 5)
+      //				stCol.sCleDesti = ExtraitChaîne(sLigneCle, 6)
+      //				oGenTmp = allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      //				stCol.sDeclaration = "[%oGenTmp.sNomClasseColGen(vrai)%]_[%ExtraitChaîne(sLigneCle, 6)%] est un [%oGenTmp.sNomClasseColGen()%]"
+      //				TableauAjoute(:m_aCol_Enfant, stCol)
+      //			FIN
+      //		FIN
+      		
+      	SINON
+      		SELON ExtraitChaîne(sLigne, 2)
+      			CAS "T"
+      				stRubTmp.nTypeRub = ::cstDefRubChaine
+      			CAS "N"
+      				stRubTmp.nTypeRub = ::cstDefRubNum
+      			AUTRE CAS
+      				
+      		FIN
+      		
+      		stRubTmp.bNullable			= {:m_sNomTable + "." + sRub,indRubrique}..NullAutorisé
+      		stRubTmp.sLibelleRubrique	= {:m_sNomTable + "." + sRub,indRubrique}..libelle
+      		stRubTmp.bVisibleUsr		= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
+      		
+      		//Parcourt de toutes les liaisons, de la table en cours
+      		si pas aPK_de_FK[sRub]..vide alors
+      			stRelTmp = aPK_de_FK[sRub]
+      						
+      			VariableRAZ(stCol)
+      			stCol.sTableDesti		= stRelTmp.sTableLiee
+      			stCol.sCleDesti			= stRelTmp.sRubriqueLiee
+      			oGenTmp					= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      			stCol.sDeclaration		= "[%oGenTmp.sNomClasseColGen(Vrai)%]_[%sRub%] est un [%oGenTmp.sNomClasseColGen()%]"
+      			
+      			stRubTmp.oObj_Parent	= oGenTmp
+      			stRubTmp.nTypeRub		= ::cstDefRubObj
+      		FIN
+      //		POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
+      //			//Est ce que la liaison pointe sur la rubrique en cours ? (on est sur une clé étrangère)
+      //			SI sRub = ExtraitChaîne(sLigneCle, 3) ALORS
+      //				
+      //				VariableRAZ(stCol)
+      //				stCol.sTableDesti		= ExtraitChaîne(sLigneCle, 5)
+      //				stCol.sCleDesti			= ExtraitChaîne(sLigneCle, 3)
+      //				oGenTmp					= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      //				stCol.sDeclaration		= "[%oGenTmp.sNomClasseColGen(Vrai)%]_[%ExtraitChaîne(sLigneCle, 6)%] est un [%oGenTmp.sNomClasseColGen()%]"
+      //				
+      //				stRubTmp.oObj_Parent	= oGenTmp
+      //				stRubTmp.nTypeRub		= ::cstDefRubObj
+      //			FIN
+      //		FIN
+      		
+      
+      		SELON stRubTmp.nTypeRub
+      			CAS ::cstDefRubObj
+      				stRubTmp.sPrefixe				= "o"
+      				stRubTmp.sNomDeclarationComplet	= "est un [%stRubTmp.oObj_Parent.sNomClasseGen()%] dynamique"
+      				stRubTmp.sNomDeclarationCourt	= stRubTmp.oObj_Parent.sNomClasseGen()
+      			AUTRE CAS
+      				stRubTmp.sPrefixe				= :GetInfoRubPrefix(stRubTmp.nTypeRubHF)
+      				stRubTmp.sNomDeclarationComplet	= :GetInfoRubType(stRubTmp.nTypeRubHF, Vrai)
+      				stRubTmp.sNomDeclarationCourt	= :GetInfoRubType(stRubTmp.nTypeRubHF)
+      			
+      		FIN
+      		
+      		stRubTmp.sNomMembre = "m_[%stRubTmp.sPrefixe%][%sRub%]"
+      		
+      		:m_aRub[sRub] = stRubTmp
+      	FIN
+      	
+      FIN
+     type : 458752
+   -
+     name : sNomClasseColGen
+     procedure_id : 1443688143883210887
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sNomClasseColGen ( [<bObj_P> est booléen])
+      //
+      // Paramètres :
+      //	bObj_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bObj_P>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure sNomClasseColGen(bObj_P est un booléen = faux):chaine
+      
+      si bObj_P ALORS
+      	RENVOYER "oCol" + :m_sNomUsage
+      sinon
+      	RENVOYER "ClCol" + :m_sNomUsage
+      FIN
+      
+     type : 458752
+   -
+     name : sNomClasseGen
+     procedure_id : 1443688143883277127
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sNomClasseGen ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure sNomClasseGen():chaine
+      
+      renvoyer "ClDb" + :m_sNomUsage
+     type : 458752
+  properties :
+   -
+     name : p_sNomTable
+     identifier : 0x1408fca4c66a569e
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomTable() : chaîne
+         
+         renvoyer m_sNomTable
+        type : 1966080
+     template_refs : []
+   -
+     name : p_sNomRubId
+     identifier : 0x14090446c9e22a7b
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomRubId() : chaîne
+         
+         renvoyer m_sNomRubId
+        type : 1966080
+     template_refs : []
+   -
+     name : p_sNomUsage
+     identifier : 0x1409044fc9e34ca9
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomUsage() : chaîne
+         
+         renvoyer m_sNomUsage
+        type : 1966080
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13e8dca31b897f1f
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

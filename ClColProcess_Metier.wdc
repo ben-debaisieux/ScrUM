@@ -1,0 +1,167 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColProcess_Metier
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e5c0d4d30cfa
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClColProcess_Metier est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVÉ
+      	m_aoProcess_Metier est un tableau ClDbProcess_Metier dynamique
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 815566320504059
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 815566320504060
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 815566320504061
+     type_code : 12
+     code : |1+
+      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem(ClDbProcess_Metier.GetObj(nId_P))
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 815566320504062
+     type_code : 12
+     code : |1+
+      PROCÉDURE aItems()<métier>:tableau de ClDbProcess_Metier dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :m_aoProcess_Metier
+     type : 458752
+   -
+     name : Init
+     procedure_id : 815566320504063
+     type_code : 12
+     code : |1+
+      PROCÉDURE Init()<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:m_aoProcess_Metier)
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 815566320504064
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un ClDbProcess_Metier(ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Process_Metier)
+     type : 458752
+   -
+     name : oCol_De_IDScr_Projet
+     procedure_id : 815566320504065
+     type_code : 12
+     code : |1+
+      PROCÉDURE oCol_De_IDScr_Projet(oParent_p est un ClDbProjet)<métier>:ClColProcess_Metier
+      
+      oRetour est un ClColProcess_Metier
+      sReq est une chaîne
+      
+      SI PAS oRetour.p_bEstCharge ALORS
+      	sReq = [
+      		SELECT 
+      			Scr_Process_Metier.*
+      		FROM Scr_Process_Metier
+      		WHERE Scr_Process_Metier.IDScr_Projet = [%oParent_p.ZF_Get_IdUnique()%]
+      	]
+      
+      	oRetour.ZF_LoadSQL(sReq)
+      FIN
+      
+      RENVOYER oRetour
+      
+      
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 1458507766401734582
+     type_code : 12
+     code : |1-
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbProcess_Metier
+      
+      sClasse est une chaîne = ClDbProcess_Metier
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : aoProcessMetiers
+     procedure_id : 1459099832201528445
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoProcessMetiers (<oPrj_P> est ClDbProjet)
+      //
+      // Paramètres :
+      //	oPrj_P (ClDbProjet) : <indiquez ici le rôle de oPrj_P>
+      // Valeur de retour :
+      // 	tableau (ClSchem dynamique) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION globale aoProcessMetiers(oPrj_P est un ClDbProjet):tableau de ClSchem dynamique
+      
+      
+      sdListeProcess est une source de données
+      sReq est une chaîne
+      aOProcess est un tableau de ClSchem dynamique
+      
+      sReq = [
+      	SELECT
+      		Scr_Process_Metier.IDScr_Process_Metier,
+      		Scr_Process_Metier.Libelle
+      
+      	FROM Scr_Process_Metier
+      	
+      	WHERE Scr_Process_Metier.IDScr_Projet = [%oPrj_P.ZF_Get_IdUnique()%]
+      	
+      	ORDER BY Scr_Process_Metier.Libelle
+      ]
+      
+      ClZF_ObjDbLs.mg_oApp.Rsql(sdListeProcess,sReq)
+      POUR TOUT sdListeProcess
+      	TableauAjouteRéférence(aOProcess, ClSchem.GetObj(sdListeProcess.IDScr_Process_Metier))
+      FIN
+      HAnnuleDéclaration(sdListeProcess)
+      
+      RENVOYER aOProcess
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e5c0d4d30d02
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

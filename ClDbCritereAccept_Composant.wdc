@@ -1,0 +1,260 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbCritereAccept_Composant
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x140dd8bf77c33e71
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbCritereAccept_Composant est une Classe
+      hérite de ClZF_ObjDB
+      
+      PRIVÉ
+      	m_sDescription							est un chaîne ANSI									<MAPPING=Description>
+      	m_oIDScr_CritereAccept					est un ClDbCritereAccept dynamique					<note="mapping=IDScr_CritereAccept">
+      	m_oIDScr_CritereAccept_Composant_Type	est un ClDbCritereAccept_Composant_Type dynamique	<note="mapping=IDScr_CritereAccept_Composant_Type">
+      
+      GLOBAL
+      PUBLIC
+      /*
+      	mg_oEx_Exception1	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception2	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception3	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception4	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception5	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception6	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception7	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception8	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception9	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception10	est un ClZF_Exception dynamique<§cs:10§>
+      */
+      FIN
+      
+      /*
+      mg_oEx_Exception1	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception2	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception3	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception4	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception5	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception6	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception7	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception8	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception9	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception10	= Allouer un ClZF_Exception("...")<§cs:10§>
+      */
+      
+      
+      CONSTANTE
+      	cst_EtantDonneQue	= 1
+      	cst_AuMomentDe		= 2
+      	cst_JattendQue		= 3
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1445049372315696753
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      
+      Ancêtre.Constructeur(Scr_CritereAccept_Composant..Nom, Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant..Nom,nID_P)
+      
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1445049372315762289
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 1445049372315827825
+     type_code : 12
+     code : |1-
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClDbCritereAccept_Composant
+      sClasse est une chaine = ClDbCritereAccept_Composant
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 1445049372315893361
+     type_code : 12
+     code : |1+
+      PROCÉDURE init_ObjBD()
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      SI PAS :ZF_bModeAjout() ALORS
+      	:m_oIDScr_CritereAccept	<- ClDbCritereAccept.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept)
+      
+      	:m_oIDScr_CritereAccept_Composant_Type	<- ClDbCritereAccept_Composant_Type.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant_Type)
+      FIN
+      
+      
+      
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 1445049372315958897
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ObjDB.pre_enregistre
+      PROCÉDURE PROTÉGÉE  pre_enregistre()<métier>:Vide
+      
+      
+      //Scr_CritereAccept_Composant.IDScr_CritereAccept	= :m_oIDScr_CritereAccept.ZF_Get_IdUnique()
+     type : 458752
+  properties :
+   -
+     name : p_sDescription
+     identifier : 0x140dd8bf77c43e71
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_sDescription() : chaîne ANSI
+         //Propriétés de m_sDescription
+         
+         RENVOYER :m_sDescription
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure p_sDescription(sValeur_p est un chaîne ANSI):Vide
+         
+         SI :m_sDescription <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sDescription = sValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_CritereAccept
+     identifier : 0x140dd8bf77c53e71
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_oIDScr_CritereAccept() : ClDbCritereAccept
+         //Propriétés de m_oIDScr_CritereAccept
+         
+         RENVOYER :m_oIDScr_CritereAccept
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure p_oIDScr_CritereAccept(oValeur_p est un ClDbCritereAccept dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_CritereAccept, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_CritereAccept = oValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_CritereAccept_Composant_Type
+     identifier : 0x140dd8bf77c63e71
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_oIDScr_CritereAccept_Composant_Type() : ClDbCritereAccept_Composant_Type
+         //Propriétés de m_oIDScr_CritereAccept_Composant_Type
+         
+         RENVOYER :m_oIDScr_CritereAccept_Composant_Type
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure p_oIDScr_CritereAccept_Composant_Type(oValeur_p est un ClDbCritereAccept_Composant_Type dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_CritereAccept_Composant_Type, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_CritereAccept_Composant_Type = oValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_CritereAccept_ID
+     identifier : 0x1444459b0b377f17
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oIDScr_CritereAccept_ID():entier
+         //Propriétés de l'objet m_oIDScr_CritereAccept, accessible via son ID
+         SI :p_oIDScr_CritereAccept = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_CritereAccept.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_oIDScr_CritereAccept_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oIDScr_CritereAccept = Null
+         SINON
+         	:p_oIDScr_CritereAccept = ClDbCritereAccept.GetObj(nValeur_p)
+         FIN
+         
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_CritereAccept_Composant_Type_ID
+     identifier : 0x144445de0b3984ef
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oIDScr_CritereAccept_Composant_Type_ID():entier
+         //Propriétés de l'objet m_oIDScr_CritereAccept_Composant_Type, accessible via son ID
+         SI :p_oIDScr_CritereAccept_Composant_Type = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_CritereAccept_Composant_Type.ZF_Get_IdUnique()
+         FIN
+         
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_oIDScr_CritereAccept_Composant_Type_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oIDScr_CritereAccept_Composant_Type = Null
+         SINON
+         	:p_oIDScr_CritereAccept_Composant_Type = ClDbCritereAccept_Composant_Type.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13f3ed9d0c5a6fd2
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

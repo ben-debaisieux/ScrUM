@@ -67,7 +67,7 @@ window :
      -
        name : SPIN_SpinEntier
        identifier : 0x2377ee0d085ff582
-       internal_properties : BwAAAAcAAACJ5XCaMRL+oCzpazjyLlT/PkCXODqEw7VfwIYukY1T2v8HV4OonN12rGPNGgDCo6Bz99I/OJ781TYWwZNVI/hBpKlImsJcjBuumzg3r4bsDc6eA+3frvepA3aP319REMfHlmTpjuZI/cidsa7k0dyCzeyNla42S3eKwEoSraOpJWIb2Ul6k/A6oDwpFG8adU1DeczMLiyIXGxRxQm9dCm+BWsB27CU+0E60/THgZuc+cBKEw7YPyulPbu43pW/q/O4Qz8XawwU1tSgxTI5JpT5+hg5oRTzweYGIAa3GV5fCz5qazRlbt0EmtK+ME3+OcuHZpJmda8BQkqb/NJVaFnHt1dArnT4nUDCmxKjseaed0DHwRlGgX5VJRKgNd+JGbQ1Wt3/CJZuoYPVIuJkNdZj01vuwjxXN36AqURx0qt9kGq9pIrqjONE+T545rq36BmELllC6DMzKV8/Q9mrKoeKsYDwbwH07JXK+6hssDZQXJAp6p3XrDTDNgeU8BA=
+       internal_properties : BwAAAAcAAAAyqzq4w99lZ0fmLOQW0XJuT7WjHb2OkGgC3ciN7gFM3MyEufQjrz+FMw2WKqrRSimnJXVybm7b6N2zNQ66Il1+LMpNJitKrTYJKY8gXB3/rzELitYSmfnAezqFvthtlnrIe8Sg4z0gCLpJ8LWbxaYb5B5uKZwmf1Svc9JkWsjE0ZLLNnIVNaTilY9mdX4C1rnZyKuXmFN0I0qL1VfNdMwo4LT/31Z/uENDQC/nGQND1CIR+jH5TuQsI8p8GGTnUcDMLSdA4leP2kglSMJ4fH9Mo2uYLuJatVFq6iaVDQDrfZSPjVXN4DGL6ysl73uYt+8K2jSAxjj+8ozRLJT50Oasfc8MVJS7Tp8Jj2zYIvHDgrPVByiT0gQL5Wd3mtHMaq7XsOuUefk2cE+bekqh4NTMVwZm0yLDIJYuNUhJqPSDFeT4OWxNcVSxmA3qdzg1gfq5GpFJzjUcFHNl+GaLZW+h9we76h9Y6tltFxBpsCFEZaMRTUjHoo9TQBO8EojwyIog+FiMzdY=
        properties :
         x : 208
         width : 14
@@ -90,7 +90,7 @@ window :
      p_codes :
       -
         code : |1-
-         zoSpr est un ClSprint()
+         zoSpr est un ClDbSprint dynamique
       -
         code : |1-
          
@@ -109,6 +109,7 @@ window :
         type : 16
       -
         code : |1-
+         //libérer zoSpr
          zoSpr <- moimeme..Valeur
          maj_spr()
         type : 43
@@ -152,6 +153,10 @@ window :
       //
       procédure privée Maj_Spr()
       
+      si zoSpr = Null ALORS
+      	zoSpr <- allouer un ClDbSprint(SAI_Sprint)
+      FIN
+      
       SAI_Sprint..Bulle = zoSpr.sSprint_Date()
       SPIN_SpinEntier..Bulle = zoSpr.sSprint_Date()
      type : 458752
@@ -178,7 +183,7 @@ window :
       
       si spFutur > 0 ALORS
       	quand Exception dans 
-      		zoSpr <- ClSprint.GetObj(spFutur)
+      		zoSpr <- ClDbSprint.GetObj(spFutur)
       		Maj_Spr()
       		SAI_Sprint = spFutur
       	FAIRE

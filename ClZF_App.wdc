@@ -17,6 +17,7 @@ class :
    -
      code : |1+
       STR_metrique est une structure
+      	nNbRecherches						est un entier
       	nNbRequetes						est un entier
       	nNbTransactions					est un entier
       	nNbDeclarationObjBd				est un entier
@@ -39,6 +40,7 @@ class :
       GLOBAL
       PUBLIC
       	mg_aoInstances					est un tableau associatif de ClZF_ObjDBls dynamique
+      	mg_oExTypeColNonDefinit				est un ClZF_Exception dynamique
       prive
       	mg_oExPlusieursInstancesClAapp		est un ClZF_Exception dynamique
       	mg_oExErreurSQL					est un ClZF_Exception dynamique
@@ -56,11 +58,14 @@ class :
       
       mg_oExErreurTRS = allouer un ClZF_Exception("Echec de la transaction", ...
       	ClZF_Exception.cstInfoLogHF)
+      
+      mg_oExTypeColNonDefinit = allouer un ClZF_Exception("Aucun prototype de collection trouvée dans le projet, pour la clé ""%1"".", ...
+      	ClZF_Exception.cstInfoLogSimple)
      type : 131072
   procedures :
    -
      name : Constructeur
-     internal_properties : BwAAAAcAAADcQA4dQ8XP6uVsvBcKyevao3x75RHCjQB9pYHLj9xRzKyBeOlQEeORokqE/CzVuNBoT5v/ZPzjoKW79UlVAg0jKzHIdeUmmvuPFo9DqT93hXPow1d/bLUDFte846GzvLfEwPZmVnF8fPcxX4upfZsWjUZ3tiDsWxwQhgIvrBsMgAZ+pX+/d9lskBkWwW+uKG/IyAzPJoLstkg+xc+OQnjAQDK8jx5pGLzW3b5z0grKywgFzZGaSknw0Z46FM+4C4+8+mmyxPEDXbNO69NellZupIWMPiLQ3U13HxFFQTfJI6YJUP2+1Rh8qXvPZ1Q8FO4jGHtA2Rm5mHC948MFlqsbgpCUQ7NdEtRHCyX2/BFr
+     internal_properties : BwAAAAcAAADNVx0MUNTe+ZBvdzhHkp7zdKNq9AbltHNMVJDYGM1YxZWcS+SdrE6MuXFbZQWCj4Ul+gaKyZMWgzguAJoqd+BkZORzyMbFTa7SyVIU9pA6fgRfgp60pxzaSYpPRH6UJ4h1k8EBc9wHGxKMqoMTBS0ceVTrLCZUf7LSADgjOq+mrv4AQZ2tt2WxlQBdhOpfh8olr1OYY8c9az0FfJI5x6PP4U1fzJP8tdsxeNkYvz0ZlHPoKDbnBQ43aOXxXRBH+vgHTTRnEay4kOYxzjDz4Y0n/1jfa/c7QjBqAnTa3op8UHVYJ5YXvAFnRMaaXEEvG/cqJwox6giqi2ek2tQWZVpErbtPGOhgH+NWGjTn7QB6
      procedure_id : 1424026768731914247
      type_code : 27
      code : |1-
@@ -73,6 +78,8 @@ class :
       	//ExceptionDéclenche(1, "Une seule instance de la classe ""[%%]"" est permise.")
       FIN
       
+      //On référence l'objet App, dans les classes d'acces aux données
+      ClZF_ObjDbLs.mg_oApp <- objet
       
       HSurErreur("*",hErrTout,"")
       
@@ -85,7 +92,7 @@ class :
      code : |1+
       PROCEDURE Destructeur()
       
-      ClZF_ObjDB.ZF_LibereInstancesMemo()
+      //ZF_LibereInstancesMemo()
       
       // Fermeture de tous les fichiers
       SI PAS HFerme("*") ALORS
@@ -360,7 +367,83 @@ class :
       si m_aMetriques..Occurrence > 60 ALORS
       	Dimension(m_aMetriques, 60)
       FIN
+      
+      
       renvoyer m_aMetriques
+     type : 458752
+   -
+     name : ZF_LibereInstancesMemo
+     procedure_id : 1442820196631151189
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // ZF_LibereInstancesMemo ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_LibereInstancesMemo()
+      
+      oInstance est un ClZF_ObjDbLs dynamique
+      sKey est une chaîne
+      POUR TOUT ÉLÉMENT oInstance, sKey DE ::mg_aoInstances
+      	libérer oInstance
+      	TableauSupprime(::mg_aoInstances, sKey)
+      FIN
+      //TableauSupprimeTout(::mg_aoInstances)
+     type : 458752
+   -
+     name : GetCol
+     procedure_id : 1459473614645113972
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetCol (<oObjDB_p> est ClZF_ObjDbLs, <sCle_p> est chaîne)
+      //
+      // Paramètres :
+      //	oObjDB_p (ClZF_ObjDbLs) : <indiquez ici le rôle de oObjDB_p>
+      //	sCle_p (chaîne ANSI) : <indiquez ici le rôle de sCle_p>
+      // Valeur de retour :
+      // 	ClZF_ColObjDB : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetCol(oObjDB_p est un ClZF_ObjDbLs, sCle_p est une chaîne):ClZF_ColObjDB
+      
+      SI oObjDB_p.m_ZF_aListCol[sCle_p]..Vide ALORS
+      	oObjDB_p.m_ZF_aListCol[sCle_p] = CreeCol(sCle_p)
+      FIN
+      
+      RENVOYER oObjDB_p.m_ZF_aListCol[sCle_p]
+     type : 458752
+   -
+     name : CreeCol
+     procedure_id : 1459479116591251892
+     type_code : 12
+     code : |1-
+      procedure prive abstraite CreeCol(sCle_p est une chaine):ClZF_ColObjDB
+      
+      // Prototype : 
+      //oCol est un ClZF_ColObjDB dynamique
+      //SELON sCle_p
+      //	CAS ...
+      //		oCol = allouer un ClCol...
+      //	CAS ...
+      //		oCol = allouer un ClCol...
+      //		
+      //	AUTRE CAS
+      //		::mg_oExTypeColNonDefinit.ZF_Declenche([sCle_p])
+      //FIN
+      //
+      //RENVOYER oCol
      type : 458752
   procedure_templates : []
   property_templates : []

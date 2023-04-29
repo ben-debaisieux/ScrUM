@@ -237,19 +237,19 @@ report :
          	
          	
          	SELON Vrai
-         		CAS zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClUserStory.ECompteNbUS.A_faire
+         		CAS zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClDbUserStory.ECompteNbUS.A_faire
          			LIB_EtatUS = "A faire" 
          			LIB_CouleurUS..CouleurFond = COL_Scrum.gnCouleur_Rougeclair
-         		CAS zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClUserStory.ECompteNbUS.EnCours
+         		CAS zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClDbUserStory.ECompteNbUS.EnCours
          			LIB_EtatUS = "Commencée" 
          			LIB_CouleurUS..CouleurFond = COL_Scrum.gnCouleur_Orange_pale
-         		CAS zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClUserStory.ECompteNbUS.Terminee
+         		CAS zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClDbUserStory.ECompteNbUS.Terminee
          			LIB_EtatUS = "Finie"  
          			LIB_CouleurUS..CouleurFond = COL_Scrum.gnCouleur_Vert_pale 
-         		CAS zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClUserStory.ECompteNbUS.Annulée
+         		CAS zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClDbUserStory.ECompteNbUS.Annulée
          			LIB_EtatUS = "Annulee"  
          			LIB_CouleurUS..CouleurFond = COL_Scrum.gnCouleur_Vert_pale 
-         		cas zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClUserStory.ECompteNbUS.En_test_fonctionnel
+         		cas zstProjet.aTableau_UserStorie[znUSImp].eEtatUserStorie = ClDbUserStory.ECompteNbUS.En_test_fonctionnel
          			LIB_EtatUS = "En Test"
          			LIB_CouleurUS..CouleurFond = COL_Scrum.gnCouleur_Orange_pale
          		Autre CAS : //
@@ -606,7 +606,7 @@ report :
   p_codes :
    -
      code : |1+
-      Procedure ETAT_Avancement_Projet_V2(oProjet_P est un ClProjet Dynamique)
+      Procedure ETAT_Avancement_Projet_V2(oProjet_P est un ClDbProjet Dynamique)
       
       
       zbEnteteImprimer est un booleen
@@ -616,7 +616,7 @@ report :
       
       local
       nNbreTotal est un entier
-      oUs est un ClUserStory dynamique
+      oUs est un ClDbUserStory dynamique
       stUserStorie est une STR_UserStorie 
       
       
@@ -627,7 +627,7 @@ report :
       zstProjet.sResponsable         		= oProjet_P.p_oUsr_ChefProjet.p_sNom
       
       
-      POUR TOUT ELEMENT oUs DE oProjet_P.aoListeUS().aItems()
+      POUR TOUT ELEMENT oUs DE ClColUserStory.oFromProjet(oProjet_P).aitems()	//oProjet_P.aoListeUS().aItems()
       	VariableRAZ(stUserStorie)
       	
       	stUserStorie.nIDUserStorie		= oUs.Get_IdUnique()
@@ -646,16 +646,16 @@ report :
       FIN
       
       nNbreTotal							= TableauOccurrence(zstProjet.aTableau_UserStorie)
-      zstProjet.nNbrUSTerminee         	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Terminee)
-      zstProjet.rPourcentageUsTerminee 	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Terminee) / nNbreTotal
-      zstProjet.nNbrUSAfaire           	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.A_faire)
-      zstProjet.rPourcentageUsAfaire   	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.A_faire) / nNbreTotal
-      zstProjet.nNbrUSCommencee        	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.EnCours)
-      zstProjet.rPourcentageUsCommencee	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.EnCours) / nNbreTotal
-      zstProjet.nNbrUSAnnule           	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Annulée)
-      zstProjet.rPourcentageAnnule     	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Annulée) / nNbreTotal
-      zstProjet.nNbrUSEnTest          	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.En_test_fonctionnel)
-      zstProjet.rPourcentageUsEnTest   	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.En_test_fonctionnel) / nNbreTotal
+      zstProjet.nNbrUSTerminee         	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.Terminee)
+      zstProjet.rPourcentageUsTerminee 	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.Terminee) / nNbreTotal
+      zstProjet.nNbrUSAfaire           	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.A_faire)
+      zstProjet.rPourcentageUsAfaire   	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.A_faire) / nNbreTotal
+      zstProjet.nNbrUSCommencee        	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.EnCours)
+      zstProjet.rPourcentageUsCommencee	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.EnCours) / nNbreTotal
+      zstProjet.nNbrUSAnnule           	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.Annulée)
+      zstProjet.rPourcentageAnnule     	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.Annulée) / nNbreTotal
+      zstProjet.nNbrUSEnTest          	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.En_test_fonctionnel)
+      zstProjet.rPourcentageUsEnTest   	= oProjet_P.Get_StatUS(ClDbUserStory.ECompteNbUS.En_test_fonctionnel) / nNbreTotal
       
       
      type : 327680

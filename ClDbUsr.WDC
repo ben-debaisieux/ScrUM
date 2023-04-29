@@ -1,0 +1,481 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbUsr
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x140dd7c67296737f
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : BwAAAAcAAACmcEcPUOl8P88f4DqAteA6m/Mt111GGOClrNjaLJ9vO63bNEtdrqYoCCnjX1eG34p8AOi72Du5JSuppQ==
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbUsr est une Classe
+      	Hérite de ClZF_ObjDB
+      
+      prive
+      	m_sNom est une chaîne <MAPPING=Nom>
+      	m_sEMail est une chaîne <MAPPING=eMail>
+      	m_sService est une chaîne <MAPPING=Service>
+      	m_sLogin_AD est une chaîne <MAPPING=Login_AD>
+      	m_bTop_Equip_Informatique est un booléen <MAPPING=Top_Equip_Informatique>
+      GLOBAL
+      PUBLIC
+      	mg_oEx_IdAbsentAD				est un ClZF_Exception dynamique
+      	mg_oEx_UsrReferenceParPrj		est un ClZF_Exception dynamique
+      	mg_oEx_UsrReferenceParUS		est un ClZF_Exception dynamique
+      	mg_oEx_UsrReferenceParMessage	est un ClZF_Exception dynamique
+      	mg_oExLoginAdInvalide			est un ClZF_Exception dynamique
+      	mg_oExNomMailInvalide			est un ClZF_Exception dynamique
+      	mg_oExNomUsrInvalide			est un ClZF_Exception dynamique
+      FIN
+       
+      ETypeUsr est une énumération
+      	usr_tous
+      	usr_invite
+      	usr_chef_de_projet
+      fin
+      ETypeInter est une énumération
+      	usr_tous
+      	usr_Dev
+      	usr_Fonc
+      FIN
+      
+      ETypeTest est une énumération
+      	test_unitaire
+      	test_fonctionnel
+      fin
+       
+      
+      mg_oEx_IdAbsentAD				= allouer un ClZF_Exception("Identifiant AD introuvable : ""%1"".")
+      mg_oEx_UsrReferenceParPrj		= allouer un ClZF_Exception("Cet utilisateur est responsable ou invité d'un projet, impossible de le supprimer")
+      mg_oEx_UsrReferenceParUS		= allouer un ClZF_Exception("Cet utilisateur est responsable d'une User Story, impossible de le supprimer")
+      mg_oEx_UsrReferenceParMessage	= allouer un ClZF_Exception("Cet utilisateur a posté au moins un message, impossible de le supprimer")
+      mg_oExLoginAdInvalide			= allouer un ClZF_Exception("Login AD incorrect.")
+      mg_oExNomMailInvalide			= allouer un ClZF_Exception("Adresse mail de l'utilisateur incorrecte.")
+      mg_oExNomUsrInvalide			= allouer un ClZF_Exception("Nom d'utilisateur incorrect.")
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1445048302782149503
+     type_code : 27
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur ( [<nID_P> est entier])
+      //
+      // Paramètres :
+      //	nID_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nId_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      
+      
+      // 	sdSource_P (source de données - valeur par défaut=0) : <indiquez ici le rôle de sdSource_P>
+      PROCEDURE Constructeur(LOCAL nID_P est un entier = 0)
+      
+      Ancêtre.Constructeur(Scr_Usr..Nom, Scr_Usr.IDScr_Usr..Nom, nID_P)
+      
+      //Chargement des données dans l'instance.
+      //:ZF_Charge()
+      //stop si nID_P = 0
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1445048302782215039
+     type_code : 28
+     code : |1-
+      
+      
+      PROCEDURE Destructeur()
+     type : 655360
+   -
+     name : oGetUsrDeNumAD
+     procedure_id : 1445048302782346111
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oGetUsrDeNumAD (<sNumAD_P> est chaîne)
+      //
+      // Paramètres :
+      //	sNumAD_P (chaîne ANSI) : <indiquez ici le rôle de nNNumAD_P>
+      
+      // Valeur de retour :
+      // 	ClUsr : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION GLOBAL oGetUsrDeNumAD(LOCAL sNumAD_P est une chaîne)<métier>:ClDbUsr
+      
+      HLitRecherche(Scr_Usr,Login_AD,sNumAD_P,hIdentique+hLimiteParcours)
+      si pas HTrouve(Scr_Usr) ALORS
+      	mg_oEx_IdAbsentAD.ZF_Declenche([sNumAD_P])
+      FIN
+      
+      RENVOYER ::GetObj(Scr_Usr.IDScr_Usr)
+     type : 458752
+   -
+     name : Utilisateur_Est_Chef_De_Projet
+     procedure_id : 1445048302782477183
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Utilisateur_Est_Chef_De_Projet ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	booléen : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	nIDUsr_p (entier) : <indiquez ici le rôle de nIDUsr_p>
+      FONCTION Utilisateur_Est_Chef_De_Projet()
+      
+      bChefdeProjet	est un booléen
+      sdRecherche		est une source de données
+      sReq			est une chaîne
+      
+      sReq = ChaîneConstruit([
+      	SELECT DISTINCT
+      		Scr_Usr_Projet.IDScr_Usr,
+      		SUM(Scr_Usr_Projet.Top_Chef_Projet) AS NbProjets
+      	
+      	FROM Scr_Usr_Projet
+      	
+      	WHERE Scr_Usr_Projet.IDScr_Usr = %1
+      		AND Scr_Usr_Projet.Top_Chef_Projet = 1
+      
+      	GROUP BY Scr_Usr_Projet.IDScr_Usr
+      	
+      ], :ZF_Get_IdUnique())
+      
+      ::mg_oApp.Rsql(sdRecherche,sReq)
+      	
+      HLitPremier(sdRecherche)
+      si pas HEnDehors(sdRecherche) alors
+      	si sdRecherche.NbProjets > 0 alors
+      		bChefdeProjet = vrai
+      	sinon
+      		bChefdeProjet = faux
+      	FIN
+      fin
+      
+      HAnnuleDéclaration(sdRecherche)
+      
+      renvoyer bChefdeProjet
+     type : 458752
+   -
+     name : aoMesUS_En_Test
+     procedure_id : 1445048302782804863
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoMesUS_En_Test (<eTypeTest_P> est ClUsr.ETypeTest)
+      //
+      // Paramètres :
+      //	eTypeTest_P (ClUsr.ETypeTest) : <indiquez ici le rôle de eTypeTest_P>
+      // Valeur de retour :
+      // 	ClColUserStory : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
+      FONCTION aoMesUS_En_Test(eTypeTest_P est un ETypeTest):ClColUserStory
+      
+      sdMestests est une Source de Données
+      sReq est une chaîne
+      oUsEnDev est un ClColUserStory
+      sWhere est une chaîne
+      oUsTmp est un ClDbUserStory dynamique
+      
+      selon eTypeTest_P
+      	CAS test_unitaire
+      		
+      		sWhere = ChaîneConstruit([
+      		AND (
+      			Scr_UserStory.IDScr_Usr_TestDev = %1
+      			OR
+      			Scr_UserStory.IDScr_Usr_TestDev IS NULL
+      			)
+      			AND Scr_UserStory.EstTesteParEquipeDev = 0
+      		], :ZF_Get_IdUnique())
+      		
+      	CAS test_fonctionnel
+      		
+      		sWhere = ChaîneConstruit([
+      		AND Scr_UserStory.IDScr_Usr_Valideur = %1
+      		AND Scr_UserStory.EstTesteParEquipeDev = 1
+      		AND Scr_UserStory.EstTesteParFonctionnel = 0
+      		], :ZF_Get_IdUnique())
+      		
+      FIN
+      
+      
+      sReq = [
+      	SELECT 
+      		Scr_UserStory.*
+      		--Scr_UserStory.IDScr_UserStory
+      	
+      	FROM Scr_UserStory
+      	where Scr_UserStory.IDScr_UserStory IN (
+      		SELECT DISTINCT
+      			Scr_UserStory.IDScr_UserStory
+      		
+      		FROM Scr_UserStory
+      			LEFT OUTER JOIN Scr_Tache AS tmpTachesSignificatives ON (tmpTachesSignificatives.IDScr_UserStory = Scr_UserStory.IDScr_UserStory
+      				AND tmpTachesSignificatives.Top_Realise = 0
+      				AND tmpTachesSignificatives.Top_Annule = 0
+      				AND tmpTachesSignificatives.Top_tache_tech = 0)
+      				
+      			LEFT OUTER JOIN Scr_Tache AS tmpTachesExiste ON (tmpTachesExiste.IDScr_UserStory = Scr_UserStory.IDScr_UserStory)
+      		
+      		WHERE Scr_UserStory.EstTesteParFonctionnel = 0
+      			AND Scr_UserStory.Top_Termine = 0
+      			AND tmpTachesSignificatives.IDScr_UserStory IS NULL		--On ne prend les US qui n'ont pas de taches non finies.
+      			AND tmpTachesExiste.IDScr_UserStory IS NOT NULL			--On ne prend que les US qui ont au moins une tache
+      			[%sWhere%]
+      		)
+      ]
+      
+      ::mg_oApp.Rsql(sdMestests,sReq)
+      POUR TOUT sdMestests
+      	oUsTmp <- ClDbUserStory.GetObj(sdMestests.IDScr_UserStory)
+      	si (oUsTmp.Get_NbreTache(ClDbUserStory.A_faire) + oUsTmp.Get_NbreTache(ClDbUserStory.EnCours)) = 0 ALORS
+      		oUsEnDev.ZF_addItem(oUsTmp)
+      	FIN
+      FIN
+      
+      HAnnuleDéclaration(sdMestests)
+      
+      
+      renvoyer oUsEnDev
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 1445048302782870399
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE virtuelle pre_enregistre()
+      
+      
+      si :ZF_bEstsupprime() ALORS
+      	
+      	
+      
+      	
+      	
+      	//verif si l'utilisateur n'est pas responsables de projets ou d'User Story, ou si il n'as pas posté de message
+      	HLitRecherche(Scr_Usr_Projet,IDScr_Usr,:ZF_Get_IdUnique(),hIdentique+hLimiteParcours)
+      	SI HTrouve(Scr_Usr_Projet) ALORS
+      		mg_oEx_UsrReferenceParPrj.ZF_Declenche()
+      //		ExceptionDéclenche(1, "Cet utilisateur est responsable ou invité d'un projet, impossible de le supprimer")
+      	FIN
+      	
+      	HLitRecherche(Scr_UserStory,IDScr_Usr_Valideur,:ZF_Get_IdUnique(),hIdentique+hLimiteParcours)
+      	SI HTrouve(Scr_UserStory) ALORS
+      		mg_oEx_UsrReferenceParUS.ZF_Declenche()
+      //		ExceptionDéclenche(1, "Cet utilisateur est responsable d'une User Story, impossible de le supprimer")
+      	FIN
+      	
+      	HLitRecherche(Scr_Message,IDScr_Usr,:ZF_Get_IdUnique(),hIdentique+hLimiteParcours)
+      	SI HTrouve(Scr_Message) ALORS
+      		mg_oEx_UsrReferenceParMessage.ZF_Declenche()
+      //		ExceptionDéclenche(1, "Cet utilisateur a posté au moins un message, impossible de le supprimer")
+      	FIN
+      sinon
+      	
+      	SI SansEspace(:m_sNom) = "" ALORS
+      		mg_oExNomUsrInvalide.ZF_Declenche()
+      	FIN
+      	
+      	SI EmailVérifieAdresse(:m_sEMail, emailAdresseSyntaxeIncorrecte) = "" ALORS
+      		mg_oExNomMailInvalide.ZF_Declenche()
+      	FIN
+      	
+      	SI SansEspace(:m_sLogin_AD) = "" ALORS
+      		mg_oExLoginAdInvalide.ZF_Declenche()
+      	FIN
+      	
+      FIN
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 1445048302782935935
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetObj (<nIdUnique_P> est entier)
+      //
+      // Paramètres :
+      //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      
+      // Valeur de retour :
+      // 	ClUsr : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClDbUsr
+      sClasse est une chaine = ClDbUsr
+      renvoyer ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : sExport
+     procedure_id : 1445048302783001471
+     type_code : 12
+     code : |1+
+      procédure sExport():json
+      
+      sRetour est un json
+      
+      sRetour.id					= :ZF_Get_IdUnique()
+      sRetour.name				= :m_snom
+      sRetour.email				= :m_semail
+      sRetour.login_ad			= :m_slogin_ad
+      sRetour.depatement			= :m_sservice
+      sRetour.is_team_info		= :m_btop_equip_informatique
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1445048302783067007
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+     type : 458752
+  properties :
+   -
+     name : p_bTop_Equip_Informatique
+     identifier : 0x140dd7c67297737f
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bTop_Equip_Informatique() : booléen
+         
+         renvoyer :m_bTop_Equip_Informatique
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_bTop_Equip_Informatique(bValeur est un booléen)
+         :ZF_EstModif()
+         :m_bTop_Equip_Informatique=bValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sEMail
+     identifier : 0x140dd7c67298737f
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sEMail() : chaîne
+         
+         renvoyer :m_sEMail
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sEMail(sValeur est une chaîne)
+         :ZF_EstModif()
+         :m_sEMail=sValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sLogin_AD
+     identifier : 0x140dd7c67299737f
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sLogin_AD() : chaîne
+         
+         renvoyer :m_sLogin_AD
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sLogin_AD(sValeur est une chaîne)
+         :ZF_EstModif()
+         :m_sLogin_AD=sValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sNom
+     identifier : 0x140dd7c6729a737f
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNom() : chaîne
+         
+         renvoyer :m_sNom
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sNom(sValeur est une chaîne)
+         :ZF_EstModif()
+         :m_sNom=sValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sService
+     identifier : 0x140dd7c6729b737f
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sService() : chaîne
+         
+         renvoyer :m_sService
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sService(sValeur est une chaîne)
+         :ZF_EstModif()
+         :m_sService=sValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ClUsr
+resources :
+ string_res :
+  identifier : 0x1e85d177205a7ea1
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

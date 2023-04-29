@@ -19,7 +19,7 @@ class :
       	hérite de ClZF_ColObjDB
       	
       PRIVE
-      	m_aoUsr est un tableau de ClUsr dynamique
+      	m_aoUsr est un tableau de ClDbUsr dynamique
       fin
      type : 131072
   procedures :
@@ -29,7 +29,7 @@ class :
      type_code : 27
      code : |1+
       procédure Constructeur()
-      
+      //trace(dbgInfo(dbgPile))
      type : 589824
    -
      name : Destructeur
@@ -46,7 +46,7 @@ class :
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
       PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
-      :ZF_addItem(ClUsr.GetObj(nId_P))
+      :ZF_addItem(ClDbUsr.GetObj(nId_P))
      type : 458752
    -
      name : aItems
@@ -54,7 +54,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClColObjDB.aItems
-      PROCÉDURE aItems():tableau de ClUsr dynamique
+      PROCÉDURE aItems():tableau de ClDbUsr dynamique
       renvoyer :m_aoUsr
      type : 458752
    -
@@ -74,8 +74,183 @@ class :
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
       
-      oObj est un ClUsr
+      oObj est un ClDbUsr(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Usr)
+     type : 458752
+   -
+     name : aoListeUsr
+     procedure_id : 1456281315546237098
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoListeUsr ( [<eFiltre_p> est ClUsr.ETypeUsr])
+      //
+      // Paramètres :
+      //	eFiltre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de eFiltre_p>
+      
+      // Valeur de retour :
+      // 	ClColUsr : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	filtre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de filtre_p>
+      //	filtre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de filtre_p>
+      FONCTION GLOBAL aoListeUsr(eFiltre_p est un ClDbUsr.ETypeInter = ClDbUsr.ETypeInter.usr_tous):ClColUsr
+      
+      
+      
+      oRetour				est un ClColUsr
+      sReq_Liste_Usr		est une chaîne
+      sWhere				est une chaîne
+      
+      selon eFiltre_p
+      	CAS ClDbUsr.ETypeInter.usr_tous
+      		sWhere = ""
+      	CAS ClDbUsr.ETypeInter.usr_dev
+      		sWhere = "WHERE Scr_Usr.Top_Equip_Informatique = 1"
+      	CAS ClDbUsr.ETypeInter.usr_Fonc
+      		sWhere = "WHERE Scr_Usr.Top_Equip_Informatique = 0"
+      FIN
+      
+      sReq_Liste_Usr = [
+      	SELECT
+      		Scr_Usr.*
+      	
+      	FROM Scr_Usr
+      	
+      	[%sWhere%]
+      	
+      	ORDER BY Scr_Usr.Nom
+      ]
+      
+      oRetour.ZF_LoadSQL(sReq_Liste_Usr)
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : Combo_Charge_Usr
+     procedure_id : 1456281315546433956
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Combo_Charge_Usr (<sNomFen_p> est chaîne, <sNomChamps_p> est chaîne [, <eFiltre_p> est ClDbUsr.ETypeInter [, <oUsr_P> est ClDbUsr dynamique]])
+      //
+      // Paramètres :
+      //	sNomFen_p (chaîne ANSI) : <indiquez ici le rôle de sNomFen_p>
+      //	sNomChamps_p (chaîne ANSI) : <indiquez ici le rôle de sNomChamps_p>
+      //	eFiltre_p (ClDbUsr.ETypeInter) : <indiquez ici le rôle de eFiltre_p>
+      //	oUsr_P (ClDbUsr dynamique - valeur par défaut=0) : <indiquez ici le rôle de oUsr_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE GLOBAL Combo_Charge_Usr(sNomFen_p est une chaîne , sNomChamps_p est une chaîne , eFiltre_p est un ClDbUsr.ETypeInter = ClDbUsr.ETypeInter.usr_tous, oUsr_P est ClDbUsr dynamique = Null):vide
+      
+      nNumLigneSel est un entier
+      oUsr est un ClDbUsr dynamique
+      sNomComplet est une chaîne = sNomFen_p + "." + sNomChamps_p
+      
+      ListeSupprimeTout(sNomComplet)
+      ListeAjoute(sNomComplet, "<Aucun>" + gLien(0))
+      
+      pour tout element oUsr de ClcolUsr.aoListeUsr(eFiltre_p).aItems()
+      	
+      	ListeAjoute(sNomComplet, oUsr.p_sNom + glien(oUsr.ZF_Get_IdUnique()))
+      	
+      	si oUsr_P <> null _et_ oUsr.ZF_Get_IdUnique() = oUsr_P.ZF_Get_IdUnique() ALORS
+      		nNumLigneSel = ListeOccurrence(sNomComplet)
+      	FIN
+      fin
+      
+      //Si l'utilisateur n'a pas été trouvé, on l'ajoute à la liste
+      SI oUsr_P <> Null et nNumLigneSel = 0 ALORS
+      	ListeAjoute(sNomComplet, oUsr_P.p_sNom + gLien(oUsr_P.ZF_Get_IdUnique()))
+      	nNumLigneSel = ListeOccurrence(sNomComplet)
+      FIN
+      
+      
+      si nNumLigneSel >= 1 ALORS
+      	ListeSelectPlus(sNomComplet,nNumLigneSel)
+      sinon
+      	ListeSelectPlus(sNomComplet,1)
+      FIN
+      
+     type : 458752
+   -
+     name : asListeUsr
+     procedure_id : 1456284502425688545
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] asListeUsr ( [<filtre_p> est ClUsr.ETypeUsr])
+      //
+      // Paramètres :
+      //	filtre_p (ClUsr.ETypeUsr) : <indiquez ici le rôle de filtre_p>
+      // Valeur de retour :
+      // 	tableau associatif : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION GLOBAL asListeUsr(filtre_p est un ClDbUsr.ETypeInter = ClDbUsr.ETypeInter.usr_tous)
+      
+      asRetour est un tableau associatif de chaînes
+      oUsrTmp est un ClDbUsr dynamique
+      
+      pour tout element oUsrTmp de ClColUsr.aoListeUsr(filtre_p).aItems()
+      	asRetour[oUsrTmp.ZF_Get_IdUnique()] = oUsrTmp.p_sNom
+      FIN
+      
+      
+      renvoyer asRetour
+     type : 458752
+   -
+     name : aoInvite_Liste
+     procedure_id : 1458869742599673627
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoInvite_Liste (<oPrj_p> est ClDbProjet [, <bForce_p> est booléen])
+      //
+      // Paramètres :
+      //	oPrj_p (ClDbProjet) : <indiquez ici le rôle de oPrj_p>
+      //	bForce_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForce_p>
+      
+      // Valeur de retour :
+      // 	ClColUsr : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION globale aoInvite_Liste(oPrj_p est un ClDbProjet, LOCAL bForce_p est un booléen = 0)<métier>:ClColUsr
+      
+      sReq est une chaîne
+      oRetour est un ClColUsr <- oPrj_p.ZF_GetCol(ClAppScrum.cstColUsrInvite)
+      
+      si bForce_p ou pas oRetour.p_bEstCharge ALORS
+      	oRetour.ZF_vider()
+      	sReq = [
+      		SELECT<§cs:3§>
+      			Scr_Usr.*<§cs:3§>
+      			<§cs:3§>
+      		FROM Scr_Usr_Projet<§cs:3§>
+      			INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)<§cs:3§>
+      		<§cs:3§>
+      		WHERE Scr_Usr_Projet.IDScr_Projet = [%oPrj_p.ZF_Get_IdUnique()%]<§cs:3§>
+      			AND Scr_Usr_Projet.Top_Invite = 1<§cs:3§>
+      	]
+      	
+      	oRetour.ZF_LoadSQL(sReq)
+      fin
+      
+      renvoyer oRetour
      type : 458752
   procedure_templates : []
   property_templates : []

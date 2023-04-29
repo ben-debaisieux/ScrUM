@@ -16,11 +16,11 @@ procedure_set :
    -
      code : |1+
       STR_compo_pr_us_ta est une structure
-      	oPrj		est un clprojet dynamique
+      	oPrj		est un ClDbprojet dynamique
       	bChangePrj	est un booléen
-      	oUs			est un ClUserStory dynamique
+      	oUs			est un ClDbUserStory dynamique
       	bChangeUs	est un booléen
-      	oTache		est un ClTache dynamique
+      	oTache		est un ClDbTache dynamique
       FIN
       
      type : 720896
@@ -36,16 +36,16 @@ procedure_set :
       stOTmp		est un STR_compo_pr_us_ta
       bChangePrj	est un booléen
       bChangeUs	est un booléen
-      oPrj		est un ClProjet dynamique
-      oUs			est un ClUserStory dynamique
-      oTache_Tmp	est un ClTache dynamique
+      oPrj		est un ClDbProjet dynamique
+      oUs			est un ClDbUserStory dynamique
+      oTache_Tmp	est un ClDbTache dynamique
       
       
       POUR TOUT ÉLÉMENT oPrj DE oColPrj_P.aItems()
       	bChangePrj = Vrai
-      	POUR TOUT ÉLÉMENT oUs DE oPrj.aoListeUS().aItems()
+      	POUR TOUT ÉLÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
       		bChangeUs = Vrai
-      		POUR TOUT ÉLÉMENT oTache_Tmp DE oUs.aoListeTaches().aItems()
+      		POUR TOUT ÉLÉMENT oTache_Tmp DE ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       			VariableRAZ(stOTmp)
       			stOTmp.oPrj			<- oPrj
       			stOTmp.bChangePrj	= bChangePrj

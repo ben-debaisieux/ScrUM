@@ -32,7 +32,7 @@ window :
      p_codes :
       -
         code : |1-
-         oPrj est un ClProjet(znIdProjet_P)
+         oPrj est un ClDbProjet <- ClDbProjet.GetObj(znIdProjet_P)
          COL_Graphes.EvolCharge(GRF_Projection..Nom, oPrj, INT_AvecImponderable)
          
          //stAnalyse		est un COL_Charge_UI.STR_Evol_Charge_Projet

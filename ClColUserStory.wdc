@@ -18,8 +18,9 @@ class :
       ClColUserStory est une Classe
       	herite de ClZF_ColObjDB
       PRIVE
-      	m_aoUserStories est un tableau de ClUserStory dynamique
+      	m_aoUserStories est un tableau de ClDbUserStory dynamique
       fin
+      
      type : 131072
   procedures :
    -
@@ -45,7 +46,7 @@ class :
      code : |1+
       // Redéfinition de la méthode ClColObjDB.addItemById
       PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
-      :ZF_addItem(ClUserStory.GetObj(nId_P))
+      :ZF_addItem(ClDbUserStory.GetObj(nId_P))
      type : 458752
    -
      name : aItems
@@ -53,7 +54,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.aItems
-      PROCÉDURE aItems():tableau de ClUserStory dynamique
+      PROCÉDURE aItems():tableau de ClDbUserStory dynamique
       renvoyer :m_aoUserStories
      type : 458752
    -
@@ -73,7 +74,7 @@ class :
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
       
-      oUS	est un ClUserStory()
+      oUS	est un ClDbUserStory(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oUS, sdSource_p.IDScr_UserStory)
      type : 458752
    -
@@ -84,21 +85,21 @@ class :
       // Redéfinition de la méthode ClZF_ColObjDB.pre_load
       PROCÉDURE PROTÉGÉE pre_load(sdSource_P est une Source de Données)
       
-      aLstUS est un tableau d'entiers
+      //aLstUS est un tableau d'entiers
       sListePrj est une chaîne
       sCle est une chaîne
       
       HLitPremier(sdSource_P,hForwardOnly+hSansRafraîchir)
       TANTQUE PAS HEnDehors(sdSource_P)
-      	si TableauCherche(aLstUS,tcLinéaire,sdSource_P.IDScr_Projet) = -1 ALORS
-      		TableauAjoute(aLstUS,sdSource_P.IDScr_Projet)
+      //	si TableauCherche(aLstUS,tcLinéaire,sdSource_P.IDScr_Projet) = -1 ALORS
+      //		TableauAjoute(aLstUS,sdSource_P.IDScr_Projet)
       		
-      		sCle = ClZF_ObjDB.ZF_sCleOdb("ClProjet", sdSource_P.IDScr_Projet)
+      		sCle = ClZF_ObjDB.ZF_sCleOdb("ClDbProjet", sdSource_P.IDScr_Projet)
       		
       		SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
       			sListePrj += [", "] + sdSource_P.IDScr_Projet
       		FIN
-      	FIN
+      //	FIN
       	HLitSuivant(sdSource_P)
       FIN
       
@@ -111,6 +112,80 @@ class :
       		WHERE Scr_Projet.IDScr_Projet IN ([%sListePrj%])
       		])
       FIN
+     type : 458752
+   -
+     name : from_Epic
+     procedure_id : 1454718295460514070
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] from_Epic (<oEpic_p> est ClDbEpic)
+      //
+      // Paramètres :
+      //	oEpic_p (ClDbEpic) : <indiquez ici le rôle de oEpic_p>
+      
+      // Valeur de retour :
+      // 	ClColUserStory : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      procédure globale from_Epic(oEpic_p est un ClDbEpic):ClColUserStory
+      
+      oRetour est un ClColUserStory
+      sReq est une chaîne
+      
+      sReq = [
+      	SELECT
+      		Scr_UserStory.*
+      	FROM Scr_UserStory
+      	WHERE IDScr_Epic = [%oEpic_p:ZF_Get_IdUnique()%]
+      ]
+      oRetour.ZF_LoadSQL(sReq)
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : oFromProjet
+     procedure_id : 1456890114952194886
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oFromProjet (<oPrj_p> est ClDbProjet [, <bForceRecharge_P> est booléen])
+      //
+      // Paramètres :
+      //	oPrj_p (ClDbProjet) : <indiquez ici le rôle de oPrj_p>
+      //	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
+      
+      // Valeur de retour :
+      // 	ClColUserStory : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
+      FONCTION globale oFromProjet(oPrj_p est un ClDbProjet, bForceRecharge_P est un booléen = faux):ClColUserStory
+      
+      sReq est une chaîne
+      oRetour est un ClColUserStory <- oPrj_p.ZF_GetCol(ClDbUserStory.cstUSDeProjet)
+      
+      si pas oRetour.p_bEstCharge ou bForceRecharge_P alors
+      	
+      	oRetour.ZF_vider()
+      	
+      	sReq = [
+      		SELECT
+      			Scr_UserStory.*
+      		FROM Scr_UserStory
+      		WHERE Scr_UserStory.IDScr_Projet = [%oPrj_p.ZF_Get_IdUnique()%]
+      	]
+      	
+      	oRetour.ZF_LoadSQL(sReq)
+      fin
+      
+      RENVOYER oRetour
      type : 458752
   procedure_templates : []
   property_templates : []

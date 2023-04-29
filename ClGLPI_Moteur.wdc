@@ -25,6 +25,19 @@ class :
       	m_bList				est un booleen
       	m_vBody				est un variant
       fin
+      
+      CONSTANTE
+      	cstGLPI_Categories_Autres = 11
+      	cstGLPI_Categories_Droits_Acces = 12
+      	cstGLPI_Categories_Imprimantes = 5
+      	cstGLPI_Categories_Mail = 6
+      	cstGLPI_Categories_Materiel = 4
+      	cstGLPI_Categories_Pistolet_Zebra = 9
+      	cstGLPI_Categories_Telephonie = 7
+      	//cstGLPI_Categories_Wifi = 0
+      	cstGLPI_Categories_WinMat = 8
+      	
+      FIN
      type : 131072
   procedures :
    -
@@ -167,11 +180,12 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GetTicketsOpenedWinmat (<nStatut> est entier, <sCategorie> est chaîne)
+      //[ <Résultat> = ] GetTicketsOpenedWinmat (<nStatut> est entier, <sCategorie> est chaîne [, <sDate_p> est chaîne])
       //
       // Paramètres :
       //	nStatut (entier) : <indiquez ici le rôle de nStatut>
       //	sCategorie (chaîne ANSI) : <indiquez ici le rôle de sCategorie>
+      // 	sDate_p (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de sDate_p>
       
       // Valeur de retour :
       // 	booléen : <indiquez ici le rôle de la valeur de retour>
@@ -180,7 +194,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       //	nStatut (entier) : <indiquez ici le rôle de nStatut>
-      procédure GetTicketsOpenedWinmat(nStatut est un entier, sCategorie est une chaine)
+      procédure GetTicketsOpenedWinmat(nStatut est un entier, sCategorie est une chaine, sDate_p est une chaine="")
       sID		est une chaine
       oTicket	est un ClGLPI_ticket dynamique
       vData 	est un variant
@@ -189,6 +203,11 @@ class :
       
       sParam			= "?&criteria[0][link]=AND&criteria[0][field]=12&criteria[0][searchtype]=equals&criteria[0][value]=" + nStatut
       sParam			+= "&criteria[1][link]=AND&criteria[1][field]=7&criteria[1][searchtype]=contains&criteria[1][value]=" + sCategorie
+      
+      SI sDate_p <> "" ALORS
+      	sParam			+= "&criteria[2][link]=AND&criteria[2][field]=15&criteria[2][searchtype]=morethan&criteria[2][value]=" + sDate_p
+      FIN
+      
       sParam			+= "&range=0-200"
       
       InitRequete("https://glpi.union-materiaux.fr/apirest.php/search/Ticket", httpGet, sParam) 
@@ -535,7 +554,8 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure UpdateTicketStatut(nIDTicket est un entier, nStatut est un entier)
+      //	nGroupe (entier) : <indiquez ici le rôle de nGroupe>
+      procédure UpdateTicketStatut(local nIDTicket est un entier, LOCAL nStatut est un entier)
       vRetour	est un variant
       vInput	est un variant
       vBody 	est un variant
@@ -546,6 +566,7 @@ class :
       m_sParam		= ""
       vInput.id 		= nIDTicket
       vInput.status 	= nStatut
+      
       
       vBody.input = vInput	
       
@@ -705,6 +726,214 @@ class :
       m_sParam	= sParam
       m_nMethode	= nMethode
       m_vBody		= vBody
+     type : 458752
+   -
+     name : UpdateTicketCategory
+     procedure_id : 1443141644839928466
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] UpdateTicketCategory (<nIDTicket> est entier, <nCategory> est entier)
+      //
+      // Paramètres :
+      //	nIDTicket (entier) : <indiquez ici le rôle de nIDTicket>
+      //	nCategory (entier) : <indiquez ici le rôle de nStatut>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure UpdateTicketCategory(local nIDTicket est un entier, LOCAL nCategory est un entier)
+      vRetour	est un variant
+      vInput	est un variant
+      vBody 	est un variant
+      
+      //Maj du statut
+      m_surl 			= "https://glpi.union-materiaux.fr/apirest.php/Ticket/"
+      m_nMethode 		= httpput
+      m_sParam		= ""
+      vInput.id 		= nIDTicket
+      vInput.itilcategories_id = nCategory
+      
+      vBody.input = vInput	
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/", httpPut, *, vBody)	
+      si pas Exec(vRetour) ALORS
+      	renvoyer faux
+      FIN
+      
+      
+      renvoyer vrai
+      
+     type : 458752
+   -
+     name : GetCategories
+     procedure_id : 1443210183934100160
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetCategories ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	variant : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetCategories()
+      
+      
+      // attention problème de droit
+      // droit super admin
+      
+      vRetour	est un variant
+      
+      //Maj du statut
+      m_sURL						= "https://glpi.union-materiaux.fr/apirest.php/ITILCategory"
+      m_nMethode					= httpGet
+      m_sParam					= ""
+      	
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/ITILCategory", httpGet)	
+      SI PAS Exec(vRetour) ALORS
+      
+      FIN
+      
+      
+      
+      
+      RENVOYER vRetour
+     type : 458752
+   -
+     name : UpdateTicketAssign
+     procedure_id : 1443861558677629416
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] UpdateTicketAssign (<nIDTicket> est entier, <sIDUser> est chaîne)
+      //
+      // Paramètres :
+      //	nIDTicket (entier) : <indiquez ici le rôle de nIDTicket>
+      //	sIDUser (chaîne ANSI) : <indiquez ici le rôle de nGroupe>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure UpdateTicketAssign(LOCAL nIDTicket est un entier, LOCAL sIDUser est une chaine)
+      
+      
+      vRetour	est un Variant
+      vInput	est un Variant
+      vBody	est un Variant
+      
+      //Maj du statut
+      m_sURL						= "https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket%]/Ticket_User/"
+      m_nMethode					= httpPost
+      m_sParam					= ""
+      //vInput.id					= nIDTicket
+      vInput.tickets_id	= nIDTicket
+      vInput.users_id = sIDUser
+      vInput.type = "2"
+      vInput.use_notification = "1"
+      
+      
+      vBody.input					= vInput
+      	
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket%]/Ticket_User/", httpPost, *, vBody)	
+      SI PAS Exec(vRetour) ALORS
+      	RENVOYER Faux
+      FIN
+      
+      
+      RENVOYER Vrai
+     type : 458752
+   -
+     name : GetInfoUser
+     procedure_id : 1444291424782818633
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetInfoUser ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetInfoUser()
+      
+      
+      vRetour	est un Variant
+      sLien est une chaine = "https://glpi.union-materiaux.fr/apirest.php/User?criteria[0][field]=is_active&criteria[0][value]=1&criteria[1][link]=AND&criteria[1][field]=is_deleted&criteria[1][value]=0&range=0-1500"
+      
+      
+      //Maj du statut
+      m_sURL						= sLien
+      m_nMethode					= httpGet
+      m_sParam					= ""
+      
+      
+      
+      InitRequete(sLien, httpGet)	
+      SI PAS Exec(vRetour) ALORS
+      	RENVOYER Faux
+      FIN
+      
+      
+      RENVOYER vRetour
+     type : 458752
+   -
+     name : GetTicketUserAssign
+     procedure_id : 1446178749140001469
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketUserAssign (<nIDTicket_p> est entier)
+      //
+      // Paramètres :
+      //	nIDTicket_p (entier) : <indiquez ici le rôle de nIDTicket_p>
+      // Valeur de retour :
+      // 	variant : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicketUserAssign(LOCAL nIDTicket_p est un entier)
+      
+      
+      vRetour	est un Variant
+      
+      //Maj du statut
+      m_sURL						= "https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket_p%]/Ticket_User"
+      m_nMethode					= httpGet
+      m_sParam					= ""
+      
+      
+      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket_p%]/Ticket_User", httpGet)	
+      SI PAS Exec(vRetour) ALORS
+      	
+      FIN
+      
+      
+      
+      
+      RENVOYER vRetour
      type : 458752
   procedure_templates : []
   property_templates : []

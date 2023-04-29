@@ -159,7 +159,7 @@ window :
       znNumSprintActuel est un entier = goApp.m_nNumeroDuSprintActuel
    -
      code : |1+
-      oUs est un ClUserStory(znid)
+      oUs est un ClDbUserStory(znid)
       si oUs.p_bEstTestéParLeDemandeur ALORS
       	INT_Valider..Visible = Vrai
       sinon

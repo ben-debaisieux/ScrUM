@@ -118,7 +118,7 @@ window :
      p_codes :
       -
         code : |1+
-         oUsr		est un clusr dynamique
+         oUsr		est un ClDbUsr dynamique
          nNumLigne	est un entier
          
          
@@ -126,7 +126,7 @@ window :
          
          TableSupprimeTout(TBL_Src_Usr)
          
-         pour tout element oUsr de ClUsr.aoListeUsr().aItems()
+         pour tout element oUsr de ClColUsr.aoListeUsr().aItems()
          	nNumLigne = TableAjouteLigne(TBL_Src_Usr)
          	TBL_Src_Usr.COL_IDScr_Usr[nNumLigne]	= oUsr.ZF_Get_IdUnique()
          	TBL_Src_Usr.COL_Nom[nNumLigne]			= oUsr.p_sNom
@@ -189,7 +189,7 @@ window :
      p_codes :
       -
         code : |1-
-         MaFenêtre..ValeurRenvoyée = ClUsr.GetObj(TBL_Src_Usr.COL_IDScr_Usr)
+         MaFenêtre..ValeurRenvoyée = ClDbUsr.GetObj(TBL_Src_Usr.COL_IDScr_Usr)
          ferme()
         type : 18
       -

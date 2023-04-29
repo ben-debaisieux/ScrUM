@@ -386,11 +386,11 @@ window :
          	Info("Veuillez sélectionner une tache ou une User Story")	
          sinon
          	si pas TBLH_Projet.COL_EstUneUS alors //c'est une tache
-         		oTache est un ClTache <- ClTache.GetObj(TBLH_Projet.COL_N)
+         		oTache est un ClDbTache <- ClDbTache.GetObj(TBLH_Projet.COL_N)
          		Ouvre(FEN_User_Story_Detail_v2,oTache.p_oUserStoryParent, oTache.Get_IdUnique())
          //		Ouvre(FEN_Tache_Detail_V2,)
          	sinon
-         		Ouvre(FEN_User_Story_Detail_v2,ClUserStory.GetObj(TBLH_Projet.COL_N))
+         		Ouvre(FEN_User_Story_Detail_v2,ClDbUserStory.GetObj(TBLH_Projet.COL_N))
          	fin
          fin
         type : 18
@@ -508,10 +508,10 @@ window :
          //
          //
          
-         oSpr est un ClSprint dynamique
+         oSpr est un ClDbSprint dynamique
          
          ListeSupprimeTout(CBO_Sprint)
-         pour tout element oSpr de ClSprint.aoListeSprint().aItems()
+         pour tout element oSpr de ClColSprint.aoListeSprint().aItems()
          	ListeAjoute(CBO_Sprint, "Sprint " + oSpr.ZF_Get_IdUnique() + gLien(oSpr.ZF_Get_IdUnique()))
          FIN
          
@@ -631,11 +631,11 @@ window :
          
          nLigneUserStory	est un entier
          nLigneTache		est un entier
-         aOPrj			est un tableau de ClProjet
-         oTache			est un ClTache dynamique
-         pclPrj			est un ClProjet dynamique
-         oUS				est un ClUserStory dynamique
-         oSprint			est un ClSprint dynamique
+         oLstPrj			est un ClcolProjet
+         oTache			est un ClDbTache dynamique
+         pclPrj			est un ClDbProjet dynamique
+         oUS				est un ClDbUserStory dynamique
+         oSprint			est un ClDbSprint dynamique
          bAvecTache		est un booléen = (SEL_Visu = 2)
          sPeriode		est une chaîne
          nNumSprint		est un entier
@@ -655,19 +655,18 @@ window :
          
          SI CBO_Projet dans(cstcboTous, cstcboFutur) ALORS
          	si goapp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
-         		aOPrj = ClProjet.aoListeProjets(INT_Projets_Termines).aItems()
+         		oLstPrj = ClColProjet.aoListeProjets(INT_Projets_Termines).aItems()
          	sinon
-         		aOPrj = ClProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx,*,INT_Projets_Termines).aItems()
-         //		aOPrj = goApp.m_oUsrCnx.aoMesProjets().aItems()
+         		oLstPrj = ClColProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx,*,INT_Projets_Termines)
          	FIN
          	
          SINON
-         	TableauAjouteRéférence(aOPrj,ClProjet.GetObj(CBO_Projet))
+         	oLstPrj.ZF_addItem(ClDbProjet.GetObj(CBO_Projet))
          FIN
          
          
-         POUR TOUT ELEMENT pclPrj DE aOPrj
-         	POUR TOUT ELEMENT oUS DE pclPrj.aoListeUS().aItems()
+         POUR TOUT ELEMENT pclPrj DE oLstPrj.aitems()
+         	POUR TOUT ELEMENT oUS DE ClColUserStory.oFromProjet(pclPrj).aitems()	//pclPrj.aoListeUS().aItems()
          		
          		bAffiche = vrai
          		
@@ -681,23 +680,23 @@ window :
          		si CBO_Etat = "" ALORS
          			//ok
          		sinon
-         			si CBO_Etat = cst_StatutUS_A_faire et oUS.Get_EtatUS() <> ClUserStory.ECompteNbUS.A_faire ALORS
+         			si CBO_Etat = cst_StatutUS_A_faire et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.A_faire ALORS
          				bAffiche = Faux
          			FIN
          				
-         			SI CBO_Etat = cst_StatutUS_Commencée ET oUS.Get_EtatUS() <> ClUserStory.ECompteNbUS.EnCours ALORS
+         			SI CBO_Etat = cst_StatutUS_Commencée ET oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.EnCours ALORS
          				bAffiche = Faux
          			FIN
          				
-         			si CBO_Etat = cst_StatutUS_En_Test et oUS.Get_EtatUS() <> ClUserStory.ECompteNbUS.En_test_fonctionnel ALORS
+         			si CBO_Etat = cst_StatutUS_En_Test et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.En_test_fonctionnel ALORS
          				bAffiche = Faux
          			FIN
          				
-         			si CBO_Etat = cst_StatutUS_Terminée et oUS.Get_EtatUS() <> ClUserStory.ECompteNbUS.Terminee ALORS
+         			si CBO_Etat = cst_StatutUS_Terminée et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.Terminee ALORS
          				bAffiche = Faux
          			FIN
          				
-         			si CBO_Etat = cst_StatutUS_Annulée et oUS.Get_EtatUS() <> ClUserStory.ECompteNbUS.Annulée ALORS
+         			si CBO_Etat = cst_StatutUS_Annulée et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.Annulée ALORS
          				bAffiche = Faux
          			FIN
          		FIN
@@ -709,7 +708,7 @@ window :
          				sPeriode = "(Non déterminée)"
          				nNumSprint = 999999999
          			sinon
-         				oSprint <- ClSprint.GetObj(nNumSprint)
+         				oSprint <- ClDbSprint.GetObj(nNumSprint)
          				sPeriode = oSprint.ZF_Get_IdUnique() + RC + "(" + oSprint.sSprint_Date() + ")"
          			FIN
          			
@@ -732,15 +731,15 @@ window :
          			TBLH_Projet[nLigneUserStory].COL_Etat								= oUS.Get_EtatUS()
          	
          			SELON oUS.Get_EtatUS()
-         				CAS ClUserStory.ECompteNbUS.Annulée
+         				CAS ClDbUserStory.ECompteNbUS.Annulée
          					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_Annulée
-         				CAS ClUserStory.ECompteNbUS.Terminee
+         				CAS ClDbUserStory.ECompteNbUS.Terminee
          					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_Terminée
-         				CAS ClUserStory.ECompteNbUS.EnCours
+         				CAS ClDbUserStory.ECompteNbUS.EnCours
          					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_Commencée
-         				CAS ClUserStory.ECompteNbUS.En_test_fonctionnel
+         				CAS ClDbUserStory.ECompteNbUS.En_test_fonctionnel
          					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_En_Test
-         				CAS ClUserStory.ECompteNbUS.A_faire
+         				CAS ClDbUserStory.ECompteNbUS.A_faire
          					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_A_faire
          				AUTRE CAS
          					
@@ -749,7 +748,7 @@ window :
          			
          			
          			si bAvecTache alors
-         				POUR TOUT ELEMENT oTache DE oUS.aoListeTaches().aItems()
+         				POUR TOUT ELEMENT oTache DE ClColTaches.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
          					
          					
          					nLigneTache														= TableAjouteFils(TBLH_Projet,nLigneUserStory)
@@ -760,10 +759,11 @@ window :
          					TBLH_Projet[nLigneTache].COL_Besoin_Utilisateurs_Fonctionnalité	= oTache.p_sDescription
          					TBLH_Projet[nLigneTache].COL_Sprint								= oTache.p_nNum_Sprint_Realisation
          					
-         					oSprint <- ClSprint.GetObj(oTache.p_nNum_Sprint_Realisation)
-         					TBLH_Projet[nLigneTache].COL_Periode_de_démarrage				= oSprint.sSprint_Date()
-         					TBLH_Projet[nLigneTache].COL_Projet								= oUS.p_oProjetParent.p_sNom
-         					
+         					si oTache.p_nNum_Sprint_Realisation > 0 alors
+         						oSprint <- ClDbSprint.GetObj(oTache.p_nNum_Sprint_Realisation)
+         						TBLH_Projet[nLigneTache].COL_Periode_de_démarrage				= oSprint.sSprint_Date()
+         						TBLH_Projet[nLigneTache].COL_Projet								= oUS.p_oProjetParent.p_sNom
+         					fin
          			//		SELON Vrai
          			//			CAS oTache.m_bAnnule
          			//				TBL_Projet[nLigneTache].COL_Etat	= "Annulée"
@@ -844,7 +844,7 @@ window :
       -
         code : |1-
          
-         ClUserStory.Combo_Charge_Etats(MaFenêtre..Nom, CBO_Etat..Nom)
+         ClDbUserStory.Combo_Charge_Etats(MaFenêtre..Nom, CBO_Etat..Nom)
          ListeInsère(CBO_Etat , "<Tous>" + glien(""), 1)
          ListeSelectPlus(CBO_Etat, 1)
          	
@@ -949,7 +949,7 @@ window :
       PROCEDURE TableChefProjet_old(LOCAL nIdProjet_p est un entier <utile>)
       //nInd est un entier
       //nLigneUserStory est un entier
-      //oPrj est un ClProjet(nIdProjet_p)
+      //oPrj est un ClDbProjet(nIdProjet_p)
       //aStUs est un tableau de STR_UserStorie
       //
       //sClef est une chaîne
@@ -1049,7 +1049,7 @@ window :
       ////aStTache est un tableau de STR_Tache
       //sClef est une chaîne
       //oTache est un ClTache dynamique
-      //pclPrj est un ClProjet dynamique
+      //pclPrj est un ClDbProjet dynamique
       //oUS est un ClUserStory dynamique
       //
       //		pclSprint est un ClSprint dynamique
@@ -1059,11 +1059,11 @@ window :
       //TBL_Projet..AffichageActif = Faux
       //
       //si nIdProjet_p = 1000 alors
-      ////	aStUs = ClProjet.aoListeUS()
-      //	aStUs = ClProjet.User_Story_Dev_Prevu_Tout_Les_Projets()
+      ////	aStUs = ClDbProjet.aoListeUS()
+      //	aStUs = ClDbProjet.User_Story_Dev_Prevu_Tout_Les_Projets()
       //sinon
-      //	pclPrj <- ClProjet.GetObj(nIdProjet_p)
-      ////	pclPrj <- Allouer un ClProjet(nIdProjet_p)
+      //	pclPrj <- ClDbProjet.GetObj(nIdProjet_p)
+      ////	pclPrj <- Allouer un ClDbProjet(nIdProjet_p)
       //	aStUs = pclPrj.aoListeUS()
       //fin
       //
@@ -1220,13 +1220,13 @@ window :
       ListeSupprimeTout(CBO_Projet)
       
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
-      	oPrjets <- ClProjet.aoListeProjets(INT_Projets_Termines)
+      	oPrjets <- ClColProjet.aoListeProjets(INT_Projets_Termines)
       SINON
-      	oPrjets <- ClProjet.aoListeProjetsDeUsr(goapp.m_oUsrCnx)
+      	oPrjets <- ClcolProjet.aoListeProjetsDeUsr(goapp.m_oUsrCnx)
       //	oPrjets <- goapp.m_oUsrCnx.aoMesProjets()
       FIN
       
-      ClProjet.Combo_Charge_Projet(MaFenêtre..nom, CBO_Projet..nom, oPrjets)
+      ClColProjet.Combo_Charge_Projet(MaFenêtre..nom, CBO_Projet..nom, oPrjets)
       
       
       ListeInsère(CBO_Projet,"<Tous>"+gLien(cstCboTous),1)

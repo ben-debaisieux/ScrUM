@@ -33,7 +33,7 @@ window :
       -
         code : |1+
          
-         zoTache_P.p_nStatut = ClTache.cstStatut_Suspendu
+         zoTache_P.p_nStatut = ClDbTache.cstStatut_Suspendu
          zoTache_P.p_sCMTR_Blocage = SAI_Commentaire
          
          quand Exception dans
@@ -131,7 +131,7 @@ window :
   p_codes :
    -
      code : |1+
-      PROCEDURE MaFenêtre(zoTache_P est un ClTache)
+      PROCEDURE MaFenêtre(zoTache_P est un ClDbTache)
       MaFenêtre..ValeurRenvoyée = faux
       
    -

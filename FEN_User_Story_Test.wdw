@@ -248,10 +248,10 @@ window :
         code : |1+
          nIDUs est un entier = COL_IDUserStory
          SI nIDUs <> 0 ALORS
-         	Ouvre(FEN_User_Story_Detail_v2, ClUserStory.GetObj(nIDUs))
+         	Ouvre(FEN_User_Story_Detail_v2, ClDbUserStory.GetObj(nIDUs))
          	
          	
-         	oUs est un ClUserStory <- ClUserStory.GetObj(nIDUs)
+         	oUs est un ClDbUserStory <- ClDbUserStory.GetObj(nIDUs)
          	oUs.RecalcEtatUS()
          FIN
          
@@ -274,16 +274,16 @@ window :
      p_codes :
       -
         code : |1+
-         oPrj		est un ClProjet dynamique
+         oPrj		est un ClDbProjet dynamique
          oProjets	est un ClColProjet
          nCompt		est un entier
          nComptTot	est un entier
          
          
          SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
-         	oProjets <- ClProjet.aoListeProjets(Faux)
+         	oProjets <- ClColProjet.aoListeProjets(Faux)
          SINON
-         	oProjets <- ClProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
+         	oProjets <- ClColProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
          FIN
          
          ListeSupprimeTout(CBO_Projet)
@@ -291,7 +291,7 @@ window :
          	nCompt = 0
          	
          	//On compte les US qui sont en test fonctionnel
-         	POUR TOUT ÉLÉMENT oUs DE oPrj.aoListeUS().aItems()
+         	POUR TOUT ÉLÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
          		SI bAffUS(oUs) ALORS
          			nCompt++
          			nComptTot++
@@ -422,18 +422,18 @@ window :
       sLstTaches			est une chaîne
       sGrp				est une chaîne
       oPrjs				est un ClColProjet
-      oPrj				est un ClProjet dynamique
-      oUs					est un ClUserStory dynamique
-      oTache				est un ClTache dynamique
+      oPrj				est un ClDbProjet dynamique
+      oUs					est un ClDbUserStory dynamique
+      oTache				est un ClDbTache dynamique
       //bPresTacheATester	est un booléen
       
       si CBO_Projet..ValeurMémorisée <> -1 alors
       	
       	si CBO_Projet..ValeurMémorisée = cstTousProjet ALORS
       		si goapp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
-      			oPrjs = ClProjet.aoListeProjets()
+      			oPrjs = ClColProjet.aoListeProjets()
       		sinon
-      			oPrjs = ClProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
+      			oPrjs = ClColProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
       //			oPrjs = goApp.m_oUsrCnx.aoMesProjets(ClUsr.usr_tous)
       		FIN
       		
@@ -446,7 +446,7 @@ window :
       	TBL_Liste_User_Stories..AffichageActif = Faux
       	pour tout element oPrj de oPrjs.aItems()
       		
-      		POUR TOUT element oUs de oPrj.aoListeUS().aItems()
+      		POUR TOUT element oUs de ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
       			
       			
       			si bAffUS(oUs) alors
@@ -460,12 +460,10 @@ window :
       				FIN
       				
       				
-      				sLstTaches = ""
-      				
-      				pour tout element oTache de oUs.aoListeTaches().aItems()
-      //					si oTache.p_nNum_Sprint_Fin = null alors
+      				pour tout element oTache de ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      					si pas oTache.p_nStatut dans (ClDbTache.cstStatut_realise, ClDbTache.cstStatut_Annulee) alors
       						sLstTaches += [rc] + oTache.p_sCodeTache + " - " + oTache.p_sDescription + " (" + oTache.sLibDeStatut() + ")"
-      //					FIN
+      					FIN
       				FIN
       				
       				
@@ -504,17 +502,17 @@ window :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure bAffUS(oUS_p est un ClUserStory dynamique):booléen
+      procédure bAffUS(oUS_p est un ClDbUserStory dynamique):booléen
       
-      oTache est un ClTache dynamique
+      oTache est un ClDbTache dynamique
       bPresTacheATester est un booléen
       
       SI PAS oUS_p.p_bTermine ALORS
-      	POUR TOUT ÉLÉMENT oTache DE oUS_p.aoListeTaches().aItems()
+      	POUR TOUT ÉLÉMENT oTache DE ClColTaches.aoFromUS(oUS_p).aItems()	//oUS_p.aoListeTaches().aItems()
       		SI oTache.p_nNum_Sprint_Demarrage _ET_ ...
       				oTache.p_nNum_Sprint_Fin = Null _et_ ...
       				pas oTache.bEstValidee() _et_ ...
-      				pas oTache.p_nStatut dans (ClTache.cstStatut_Annulee, ClTache.cstStatut_Suspendu) ALORS
+      				pas oTache.p_nStatut dans (ClDbTache.cstStatut_Annulee, ClDbTache.cstStatut_Suspendu) ALORS
       				
       			bPresTacheATester = Vrai
       			SORTIR

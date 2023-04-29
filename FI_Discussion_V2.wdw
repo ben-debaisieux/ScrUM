@@ -100,8 +100,8 @@ window :
            p_codes :
             -
               code : |1+
-               oNewMes est un ClMessage
-               oNewMes.m_oMsgparent <- ClMessage.GetObj(ZR_Messages_UserStory.ATT_Id_Parent)
+               oNewMes est un ClDbMessage
+               oNewMes.m_oMsgparent <- ClDbMessage.GetObj(ZR_Messages_UserStory.ATT_Id_Parent)
                si Ouvre(FEN_Message_Saisie,oNewMes) ALORS
                	ZoneRepete_Message()
                FIN
@@ -199,10 +199,10 @@ window :
            p_codes :
             -
               code : |1+
-               oMsg est un ClMessage dynamique
+               oMsg est un ClDbMessage dynamique
                
                si ouinon("Confirmez-vous la suppression du message ?") ALORS
-               	oMsg <- ClMessage.GetObj(ZR_Messages_UserStory.ATT_IDMessage)
+               	oMsg <- ClDbMessage.GetObj(ZR_Messages_UserStory.ATT_IDMessage)
                	oMsg.ZF_Supprimer()
                	quand Exception dans
                		oMsg.ZF_Enregistre()
@@ -457,14 +457,14 @@ window :
         p_codes :
          -
            code : |1+
-            oNewMes est un ClMessage
+            oNewMes est un ClDbMessage
             
             SELON zoEntite..Classe
             	CAS "ClTache"
-            		oNewMes.p_oTache = ClTache.GetObj(zoEntite.ZF_Get_IdUnique())
+            		oNewMes.p_oTache = ClDbTache.GetObj(zoEntite.ZF_Get_IdUnique())
             		
             	CAS "ClUserStory"
-            		oNewMes.p_oUserStory = ClTache.GetObj(zoEntite.ZF_Get_IdUnique())
+            		oNewMes.p_oUserStory = ClDbTache.GetObj(zoEntite.ZF_Get_IdUnique())
             	
             	AUTRE CAS
             		ExceptionDéclenche(1, ChaîneConstruit("Type de message non prévu pour l'entité ""%1"".", zoEntite..Classe))
@@ -526,8 +526,8 @@ window :
       //	nIDUS_p (entier) : <indiquez ici le rôle de nIDUS>
       PROCEDURE privée ZoneRepete_Message()
       
-      oMsg_Tmp	est un ClMessage dynamique
-      oMsgEnf_Tmp	est un ClMessage dynamique
+      oMsg_Tmp	est un ClDbMessage dynamique
+      oMsgEnf_Tmp	est un ClDbMessage dynamique
       nLigne		est un entier
       bRepondre	est un booléen
       //iImageMessage est une image
@@ -539,7 +539,7 @@ window :
       
       ZoneRépétéeSupprimeTout(ZR_Messages_UserStory)
       
-      pour tout element oMsg_Tmp de ClMessage.aoListeMessage(zoEntite)
+      pour tout element oMsg_Tmp de ClcolMessage.aoListeMessage(zoEntite).aItems()
       	nNbrMess++
       	
       	LIB_Utilisateur..X								= LIB_Utilisateur..XInitial
@@ -566,7 +566,7 @@ window :
       	
       	nInd											= 0
       	
-      	pour tout element oMsgEnf_Tmp de oMsg_Tmp.p_aoMsgEnfant
+      	pour tout element oMsgEnf_Tmp de oMsg_Tmp.p_aoMsgEnfant.aItems()
       		
       		nNbrMess++
       		

@@ -199,7 +199,7 @@ window :
          
          STR_Prj est une structure
          	nOrdre	est un entier
-         	oPrj	est un ClProjet dynamique
+         	oPrj	est un ClDbProjet dynamique
          fin
          STR_SuitePrj est une structure
          	aProjets est un tableau de STR_Prj
@@ -210,8 +210,8 @@ window :
          
          tcGantt			est une TâcheGantt
          nLigne			est un entier
-         aStCharge		est un tableau de ClProjet.STR_SimulationCharge
-         stCharge_tmp	est un ClProjet.STR_SimulationCharge
+         aStCharge		est un tableau de ClDbProjet.STR_SimulationCharge
+         stCharge_tmp	est un ClDbProjet.STR_SimulationCharge
          sGroupe			est une chaîne
          
          sCle			est une chaîne
@@ -235,7 +235,7 @@ window :
          		
          		VariableRAZ(stPrj_tmp)
          		stPrj_tmp.nOrdre	= TBL_ProjetsDispo[nLigne].COL_Ordre
-         		stPrj_tmp.oPrj		<- ClProjet.GetObj(TBL_ProjetsDispo[nLigne].COL_IDProjet)
+         		stPrj_tmp.oPrj		<- ClDbProjet.GetObj(TBL_ProjetsDispo[nLigne].COL_IDProjet)
          		
          		TableauAjoute(aGoupe[sGroupe].aProjets, stPrj_tmp)
          	FIN
@@ -462,7 +462,7 @@ window :
       PROCEDURE MaFenêtre()
    -
      code : |1+
-      oPrj		est un ClProjet dynamique
+      oPrj		est un ClDbProjet dynamique
       nLigne		est un entier
       oProjets	est un ClColProjet
       bMonoGroupe	est un booléen
@@ -474,10 +474,10 @@ window :
       TBL_ProjetsDispo..AffichageActif	= Faux
       
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
-      	oProjets <- ClProjet.aoListeProjets(Faux)
+      	oProjets <- ClColProjet.aoListeProjets(Faux)
       	bMonoGroupe = faux
       SINON
-      	oProjets <- ClProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
+      	oProjets <- ClColProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
       //	oProjets <- goApp.m_oUsrCnx.aoMesProjets(ClUsr.usr_tous)
       	bMonoGroupe = Vrai
       FIN
@@ -494,7 +494,7 @@ window :
       	
       	si bAffiche alors
       		//On masque les projets qui n'ont plus de charge (ni à faire, ni provisionné)
-      		nChargeRest = oPrj.Projet_PointsRestantReliquat(ClTache.Charge_réelle)
+      		nChargeRest = oPrj.Projet_PointsRestantReliquat(ClDbTache.Charge_réelle)
       		
       		si nChargeRest = 0 et oPrj.p_nChargeProvisionelle = 0 ALORS
       			bAffiche = Faux

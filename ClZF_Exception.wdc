@@ -20,7 +20,8 @@ class :
       	m_nCode		est un entier
       	m_sMessage	est une chaîne
       	m_nLog		est un entier
-      	
+      global
+      	mg_aListeExceptions est un tableau de ClZF_Exception dynamique
       fin
       
       constante
@@ -33,12 +34,19 @@ class :
      name : Constructeur
      procedure_id : 1424027314207699178
      type_code : 27
-     code : |1+
-      procédure Constructeur(sMessage_p est une chaîne, nInfoLog_p est un entier = 0)
+     code : |1-
+      procédure Constructeur(sMessage_p est une chaîne, nInfoLog_p est un entier = 0, nCode_p est un entier = 0)
       
-      m_nCode		= DonneIdentifiant()
-      m_sMessage	= sMessage_p
-      m_nLog		= nInfoLog_p
+      si nCode_p = 0 ALORS
+      	m_nCode		= DonneIdentifiant()
+      sinon
+      	m_nCode		= nCode_p
+      FIN
+      m_sMessage		= sMessage_p
+      m_nLog			= nInfoLog_p
+      
+      //On référence l'objet en cours dans la liste des exceptions
+      TableauAjouteRéférence(::mg_aListeExceptions,objet)
      type : 589824
    -
      name : Destructeur
@@ -101,6 +109,18 @@ class :
         code : |1-
          
         type : 2031616
+     template_refs : []
+   -
+     name : p_mg_aM_aListeExceptions
+     identifier : 0x140b015f07ceecb2
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_mg_aM_aListeExceptions()
+         
+         renvoyer mg_aListeExceptions
+        type : 1966080
      template_refs : []
   procedure_templates : []
   property_templates : []

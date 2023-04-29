@@ -240,13 +240,13 @@ window :
       PROCEDURE MaFenêtre(local znIdTache_p est un entier = 0)
       
       zbRetour est un booléen
-      zoTache est un ClTache <- ClTache.GetObj(znidtache_p)
+      zoTache est un ClDbTache <- ClDbTache.GetObj(znidtache_p)
    -
      code : |1+
       SourceVersEcran(MaFenêtre,"zoTache")
       
-      SAI_Num_Sprint_Previsionnel	= goapp.m_nNumeroDuSprintActuel + ClTache.cstOffsetEstimatifTacheNonPlanif
-      SAI_Poids_Previsionnel		= ClTache.cstPoidsEstimatifTacheNonCote
+      SAI_Num_Sprint_Previsionnel	= goapp.m_nNumeroDuSprintActuel + ClDbTache.cstOffsetEstimatifTacheNonPlanif
+      SAI_Poids_Previsionnel		= ClDbTache.cstPoidsEstimatifTacheNonCote
       
      type : 34
    -

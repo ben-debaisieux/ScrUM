@@ -80,9 +80,9 @@ class :
       	
       	//Affectation de la clé étrangère, correspondant à l'objet en cours
       	SELON objet..Classe
-      		CAS "ClUserStory"
+      		CAS CldbUserStory
       			Scr_Historique.IDScr_UserStory	= :Get_IdUnique()
-      		CAS "ClTache"
+      		CAS CldbTache
       			Scr_Historique.IDScr_Tache		= :Get_IdUnique()
       		AUTRE CAS
       			ExceptionDéclenche(1, ChaîneConstruit(...
@@ -91,10 +91,11 @@ class :
       	FIN
       	
       	Scr_Historique.Date_Evt			= DateHeureSys()
-      	Scr_Historique.IDScr_Usr		= goApp.m_oUsrCnx.ZF_Get_IdUnique()
+      	Scr_Historique.IDScr_Usr			= goApp.m_oUsrCnx.ZF_Get_IdUnique()
       	Scr_Historique.CMTR				= sHistorique
       	SI PAS HAjoute(Scr_Historique) ALORS
-      		ExceptionDéclenche(1,HErreurInfo())
+      		ClZF_ObjDB.mg_oExEchecEnregistrement.ZF_Declenche()
+      		//ExceptionDéclenche(1,HErreurInfo())
       	FIN
       FIN
       TableauSupprimeTout(:m_asHistorique)
@@ -150,7 +151,7 @@ class :
       sReq est une chaîne
       stEvt est un STR_Histo
       aStListeEvt est un tableau de 0 STR_Histo
-      oUsr est un ClUsr dynamique
+      oUsr est un ClDbUsr dynamique
       
       sReq = ChaîneConstruit([
       	
@@ -182,7 +183,7 @@ class :
       	stEvt.sDateEct_en_chaine	= DateVersChaîne(stEvt.dhEvt..PartieDate) + " " + ...
       									HeureVersChaîne(stEvt.dhEvt..PartieHeure,"HH:MM:SS")
       	
-      	oUsr						<- ClUsr.GetObj(stEvt.nIdUsr)
+      	oUsr						<- ClDbUsr.GetObj(stEvt.nIdUsr)
       	stEvt.sNomUsr				= oUsr.p_sNom
       	
       	TableauAjoute(aStListeEvt,stEvt)
@@ -204,13 +205,13 @@ class :
       
       //Récupération du nom de la clé étrangère (dans la table des historiques), correspondant à l'objet en cours
       SELON objet..Classe
-      	CAS "ClUserStory"
+      	CAS CldbUserStory
       		sCle	= Scr_Historique.IDScr_UserStory..Nom
-      	CAS "ClTache"
+      	CAS CldbTache
       		sCle	= Scr_Historique.IDScr_Tache..Nom
       	AUTRE CAS
       		ExceptionDéclenche(1, ChaîneConstruit(...
-      			"La classe %1 n'est pas paramétré pour l'enregistrement des historique.",...
+      			"La classe ""%1"" n'est pas paramétrée pour l'enregistrement des historique.",...
       			objet..Classe))
       FIN
       

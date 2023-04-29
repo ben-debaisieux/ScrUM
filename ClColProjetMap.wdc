@@ -1,0 +1,179 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColProjetMap
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1410d96c05a94a96
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClColProjetMap est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVÉ
+      	m_aoSCR_ProjetMap est un tableau ClDbProjetMap dynamique
+      FIN
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1445894538360670870
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1445894538360736406
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 1445894538360801942
+     type_code : 12
+     code : |1+
+      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem(ClDbProjetMap.GetObj(nId_P))
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 1445894538360867478
+     type_code : 12
+     code : |1+
+      PROCÉDURE aItems()<métier>:tableau de ClDbProjetMap dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :m_aoSCR_ProjetMap
+     type : 458752
+   -
+     name : Init
+     procedure_id : 1445894538360933014
+     type_code : 12
+     code : |1+
+      PROCÉDURE Init()<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:m_aoSCR_ProjetMap)
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 1445894538360998550
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un ClDbProjetMap(ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDSCR_ProjetMap)
+     type : 458752
+   -
+     name : oColMapsDeProjet
+     procedure_id : 1452930914503850770
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oColMapsDeProjet (<oPrj> est ClDbProjet)
+      //
+      // Paramètres :
+      //	oPrj (ClDbProjet) : <indiquez ici le rôle de oPrj>
+      
+      // Valeur de retour :
+      // 	ClColProjetMap : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	sKey_p (chaîne ANSI - valeur par défaut=1) : <indiquez ici le rôle de sKey_p>
+      procédure globale oColMapsDeProjet(oPrj est un ClDbProjet)<métier>:ClColProjetMap
+      
+      
+      oRetour est un ClColProjetMap <- oPrj.ZF_GetCol(ClDbProjetMap.cstKeyCol_MapDeProjet)
+      
+      
+      si pas oRetour.p_bEstCharge alors
+      	sReq est une chaîne = [
+      		SELECT
+      			SCR_ProjetMap.*
+      		FROM SCR_ProjetMap
+      		WHERE SCR_ProjetMap.IDScr_Projet = [%oPrj.ZF_Get_IdUnique()%]
+      	]
+      	oRetour.ZF_LoadSQL(sReq)
+      fin
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : oColProjetMap_Enfant
+     procedure_id : 1452930914503916400
+     type_code : 12
+     code : |1+
+      PROCÉDURE globale oColProjetMap_Enfant(oProjMapParent est un ClDbProjetMap)<métier>:ClColProjetMap
+      
+      sReq est une chaîne
+      
+      SI PAS oProjMapParent.p_oColProjetMap_Enfant.p_bEstCharge ALORS
+      	sReq = [
+      		SELECT 
+      			SCR_ProjetMap.*
+      		FROM SCR_ProjetMap
+      		WHERE SCR_ProjetMap.IDSCR_ProjetMap_Parent = [%oProjMapParent.ZF_Get_IdUnique()%]
+      	]
+      
+      	oProjMapParent.p_oColProjetMap_Enfant.ZF_LoadSQL(sReq)
+      FIN
+      
+      
+      RENVOYER oProjMapParent.p_oColProjetMap_Enfant
+      
+     type : 458752
+   -
+     name : Save_Items
+     procedure_id : 1454416659756476179
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Save_Items ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure Save_Items():vide
+      
+      oTheme_tmp est un ClDbProjetMap dynamique
+      
+      quand exception dans
+      	pour tout element oTheme_tmp de :aItems()
+      		oTheme_tmp.ZF_Enregistre()
+      	FIN
+      FAIRE
+      	erreur(ExceptionInfo(errMessage))
+      fin
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e5718d379ec3
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

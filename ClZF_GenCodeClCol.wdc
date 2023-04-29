@@ -1,0 +1,397 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenCodeClCol
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1408fe72c68f64b5
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_GenCodeClCol est une Classe
+      	herite de ClZF_GenCodecl
+      	
+      PRIVE
+      	m_sNomClasseBD est une chaîne
+      	m_sNomListeObj est une chaîne
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1443683449483322549
+     type_code : 27
+     code : |1+
+      procédure Constructeur(oClasseGen est un ClZF_GenCodeFic)
+      Ancêtre.Constructeur(oClasseGen)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1443683449483388085
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : Genere
+     procedure_id : 1443686078003854274
+     type_code : 12
+     code : |1-
+      procédure Genere(oGenCode est un ClZF_GenCodeFic):vide
+      
+      
+      
+      sClasse est une chaîne
+      sProcsChargeCol est une chaîne
+      
+      :m_sNomClasseBD = oGenCode.sNomClasseGen()
+      :m_sNomListeObj = "m_ao" + oGenCode.p_sNomUsage
+      
+      
+      sClasse = :GenDeclaration(oGenCode) + RC
+      sClasse += :GenConstructeur() + RC
+      sClasse += :GenDestructeur() + RC
+      sClasse += :GenProc_addItemById() + RC
+      sClasse += :GenProc_aItems() + RC
+      sClasse += :GenProc_Init() + RC
+      sClasse += :GenProc_addItemBySource(oGenCode) + RC
+      
+      
+      sProcsChargeCol = :GenChargeCol(oGenCode)
+      SI sProcsChargeCol <> "" ALORS
+      	sClasse += sProcsChargeCol + RC
+      FIN
+      
+      si m_bNatif ALORS
+      	sClasse += GenBlocCL_Fin()
+      FIN
+      
+      
+      :m_sCode = sClasse
+     type : 458752
+   -
+     name : GenDeclaration
+     procedure_id : 1444059152800302883
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenDeclaration (<oGenCode> est ClZF_GenCodeFic)
+      //
+      // Paramètres :
+      //	oGenCode (ClZF_GenCodeFic) : <indiquez ici le rôle de oGenCode>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GenDeclaration(oGenCode est un ClZF_GenCodeFic):chaine
+      sNom est une chaîne = "ClCol" + oGenCode.p_sNomUsage
+      sRetour est une chaine = [
+      [%sNom%] est une Classe
+      [%TAB%]hérite de ClZF_ColObjDB
+      PRIVÉ
+      [%TAB%][%m_sNomListeObj%] est un tableau [%m_sNomClasseBD%] dynamique
+      FIN
+      ]
+      
+      si :m_bNatif ALORS
+      	//Génération du code natif de l'objet pour WD
+      	sRetour = GenBlocCL_Init(sRetour,sNom)
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenProc_addItemById
+     procedure_id : 1444059298829290468
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenProc_addItemById ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GenProc_addItemById():chaine
+      sNomProc est une chaîne = "addItemById"
+      sRetour est une chaine = [
+      PROCÉDURE [%sNomProc%](LOCAL nId_P est un entier)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem([%m_sNomClasseBD%].GetObj(nId_P))
+      
+      ]
+      
+      SI :m_bNatif ALORS
+      	//Génération du code natif de l'objet pour WD
+      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      FIN
+      
+      RENVOYER sRetour
+      
+     type : 458752
+   -
+     name : GenProc_aItems
+     procedure_id : 1444059376138719889
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenProc_aItems ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GenProc_aItems():chaine
+      sNomProc est une chaîne = "aItems"
+      sRetour est une chaine = [
+      PROCÉDURE [%sNomProc%]()<métier>:tableau de [%m_sNomClasseBD%] dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :[%m_sNomListeObj%]
+      
+      ]
+      
+      SI :m_bNatif ALORS
+      	//Génération du code natif de l'objet pour WD
+      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      FIN
+      
+      
+      RENVOYER sRetour
+      
+     type : 458752
+   -
+     name : GenProc_Init
+     procedure_id : 1444059453448214816
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenProc_Init ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GenProc_Init():chaine
+      sNomProc est une chaîne = "Init"
+      sRetour est une chaine = [
+      PROCÉDURE [%sNomProc%]()<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:[%m_sNomListeObj%])
+      
+      ]
+      
+      SI :m_bNatif ALORS
+      	//Génération du code natif de l'objet pour WD
+      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      FIN
+      
+      
+      RENVOYER sRetour
+      
+     type : 458752
+   -
+     name : GenProc_addItemBySource
+     procedure_id : 1444059547937583192
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GenProc_addItemBySource ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GenProc_addItemBySource(oGenCode est un ClZF_GenCodeFic):chaine
+      sNomProc est une chaîne = "addItemBySource"
+      sRetour est une chaine = [
+      PROCÉDURE PROTÉGÉE VIRTUELLE [%sNomProc%](sdSource_p est une Source de Données)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un [%m_sNomClasseBD%](ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.[%oGenCode.p_sNomRubId%])
+      
+      ]
+      
+      SI :m_bNatif ALORS
+      	//Génération du code natif de l'objet pour WD
+      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      FIN
+      
+      
+      RENVOYER sRetour
+      
+     type : 458752
+   -
+     name : GenConstructeur
+     procedure_id : 1444279583461828601
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenConstructeur ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      procédure prive GenConstructeur():chaîne
+      
+      sRetour			est une chaîne = [
+      PROCÉDURE Constructeur()
+      
+      ]
+      
+      SI :m_bNatif ALORS
+      	//Génération du code natif de l'objet pour WD
+      	sRetour = GenBlocCL_Constructeur(sRetour)
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenDestructeur
+     procedure_id : 1444279583461894278
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenDestructeur ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      procédure prive GenDestructeur():chaîne
+      
+      sRetour			est une chaîne = [
+      Procédure Destructeur()
+      
+      ]
+      SI :m_bNatif ALORS
+      	//Génération du code natif de l'objet pour WD
+      	sRetour = GenBlocCL_Destructeur(sRetour)
+      FIN
+      
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenChargeCol
+     procedure_id : 1449626577093835576
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GenChargeCol ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PRIVÉ GenChargeCol(oGencode_p est un ClZF_GenCodeFic):chaine
+      
+      sModele		est une chaîne
+      sNomProc	est une chaîne
+      sRetour		est une chaîne
+      stLien		est une ClZF_GenCodeFic.STR_DefRub
+      oClas		est un ClZF_GenCodeFic dynamique
+      sRub		est une chaîne
+      
+      pour tout element stLien, sRub de oGencode_p.m_aRub
+      	si stLien.oObj_Parent <> null alors
+      		oClas = stLien.oObj_Parent
+      		
+      		sNomProc = "oCol_De_" + sRub
+      		
+      		sModele = [
+      		PROCÉDURE [%sNomProc%](oParent_p est un [%oClas.sNomClasseGen()%])<métier>:[%oGencode_p.sNomClasseColGen()%]
+      		
+      		oRetour est un [%oGencode_p.sNomClasseColGen()%]
+      		sReq est une chaîne
+      		
+      		SI PAS oRetour.p_bEstCharge ALORS
+      		[%tab%]sReq = [%"["%]
+      		[%TAB%][%TAB%]SELECT 
+      		[%TAB%][%TAB%][%TAB%][%oGencode_p.p_sNomTable%].*
+      		[%TAB%][%TAB%]FROM [%oGencode_p.p_sNomTable%]
+      		[%TAB%][%TAB%]WHERE [%oGencode_p.p_sNomTable%].[%sRub%] = [%"["%]%oParent_p.ZF_Get_IdUnique()%[%"]"%]
+      		[%TAB%][%"]"%]
+      			
+      		[%TAB%]oRetour.ZF_LoadSQL(sReq)
+      		FIN
+      		
+      		RENVOYER oRetour
+      		
+      		
+      		]
+      		
+      		SI :m_bNatif ALORS
+      			sModele = GenBlocCL_Procedure(sModele, sNomProc)
+      		FIN
+      	
+      		
+      		sRetour += [rc] + sModele
+      	fin
+      fin
+      
+      renvoyer sRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x140a4e1302038be2
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

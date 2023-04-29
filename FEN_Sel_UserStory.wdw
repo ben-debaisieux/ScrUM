@@ -162,14 +162,14 @@ window :
    -
      code : |1-
       
-      oPrj est un ClProjet dynamique
-      oUS est un ClUserStory dynamique
+      oPrj est un ClDbProjet dynamique
+      oUS est un ClDbUserStory dynamique
       nLigneParent est un entier
       nLigne est un entier
       bOuvre est un booléen
       
       //Liste de tous les projets
-      pour tout element oPrj de ClProjet.aoListeProjets().aItems()
+      pour tout element oPrj de ClColProjet.aoListeProjets().aItems()
       	bOuvre = faux
       	
       	//Ajout du projet dans la liste
@@ -178,7 +178,7 @@ window :
       	TBLH_SelUS[nLigneParent].COL_IdUS	= 0
       	
       	//Liste de toutes les user storues
-      	POUR TOUT ELEMENT oUS de oPrj.aoListeUS().aItems()
+      	POUR TOUT ELEMENT oUS de ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
       		
       		//Ajoue de l'User story dans la liste
       		nLigne = TableAjouteFils(TBLH_SelUS,nLigneParent)

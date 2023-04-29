@@ -417,7 +417,7 @@ window :
          
          
          SI ouinon(non,"Confirmer la suppression ?") = Oui alors
-         	oUs est un ClUserStory <- ClUserStory.GetObj(TBL_Liste_User_Stories.COL_ID)
+         	oUs est un ClDbUserStory <- ClDbUserStory.GetObj(TBL_Liste_User_Stories.COL_ID)
          	
          //	stUserStory.aTableau_Tache = COL_Scrum.Taches_Tableau(stUserStory.nIDUserStorie)
          //	
@@ -507,7 +507,7 @@ window :
         type : 14
       -
         code : |1-
-         oNewUS est un ClUserStory
+         oNewUS est un ClDbUserStory
          oNewUS.p_oProjetParent = zoProjet_p
          si Ouvre(FEN_User_Story_Detail_v2,oNewUS) alors
          	ListeUserStories()
@@ -533,7 +533,7 @@ window :
         code : |1+
          
          SI TBL_Liste_User_Stories.COL_ID <> 0 ALORS
-         	SI Ouvre(FEN_User_Story_Detail_v2, ClUserStory.GetObj(TBL_Liste_User_Stories.COL_ID)) ALORS 
+         	SI Ouvre(FEN_User_Story_Detail_v2, ClDbUserStory.GetObj(TBL_Liste_User_Stories.COL_ID)) ALORS 
          		ListeUserStories()
          	FIN
          FIN
@@ -624,7 +624,7 @@ window :
          	sInit = zoEpic_p.ZF_Get_IdUnique()
          FIN
          
-         zoProjet_p.Combo_Charge_Epic(MaFenêtre..Nom, CBO_Groupement..nom, sInit, asComplément)
+         ClColEpic.Combo_Charge_from_projet(MaFenêtre..Nom, CBO_Groupement..nom, zoProjet_p, sInit, asComplément)
         type : 14
       -
         type : 35
@@ -654,7 +654,7 @@ window :
   p_codes :
    -
      code : |1-
-      PROCEDURE FEN_User_Story_Liste_v2(LOCAL zoProjet_p est un clProjet, zoEpic_p est un ClEpic = null)
+      PROCEDURE mafenetre(LOCAL zoProjet_p est un ClDbProjet, zoEpic_p est un ClDbEpic dynamique = null)
       
       SEL_FiltreAFaire = 2
    -
@@ -719,8 +719,8 @@ window :
       PROCÉDURE ListeUserStories()
       
       nLigne est un entier
-      oUs est un ClUserStory dynamique
-      oSpr est un ClSprint dynamique
+      oUs est un ClDbUserStory dynamique
+      oSpr est un ClDbSprint dynamique
       nNumSprDem est un entier
       sComplementEtat est une chaîne
       
@@ -730,12 +730,12 @@ window :
       TableSupprimeTout(TBL_Liste_User_Stories)
       TBL_Liste_User_Stories..AffichageActif = Faux
       
-      POUR tout element oUs de zoProjet_p.aoListeUS(vrai).aItems()
+      POUR tout element oUs de ClColUserStory.oFromProjet(zoProjet_p).aitems()	//zoProjet_p.aoListeUS(vrai).aItems()
       	
       	bAffUs = vrai
       	//Soit on demande toutes les US, soit on affiche que celles qui ne sont pas terminées.
       	si SEL_FiltreAFaire = 2 et ...
-      			oUs.Get_EtatUS() dans (ClUserStory.ECompteNbUS.Terminee, ClUserStory.ECompteNbUS.Annulée) alors
+      			oUs.Get_EtatUS() dans (ClDbUserStory.ECompteNbUS.Terminee, ClDbUserStory.ECompteNbUS.Annulée) alors
       		
       		bAffUs = faux
       	fin
@@ -764,7 +764,7 @@ window :
       		//Récupération du sprint où on prévoit de réaliser la tache
       		nNumSprDem = oUs.Get_DemarrageTache()
       		si nNumSprDem <> 0 ALORS
-      			oSpr <- ClSprint.GetObj(nNumSprDem)
+      			oSpr <- ClDbSprint.GetObj(nNumSprDem)
       		FIN
       		
       		//On vérifie la présence d'une tache bloquée, sur l'US.
@@ -781,7 +781,7 @@ window :
       		TBL_Liste_User_Stories[nLigne].COL_Besoin			= oUs.p_sJaiBesoinDe
       		TBL_Liste_User_Stories[nLigne].COL_AfinDe			= oUs.p_sAfinDe
       		TBL_Liste_User_Stories[nLigne].COL_Responsable		= oUs.p_oUsrResponsable.p_sNom
-      		TBL_Liste_User_Stories[nLigne].COL_Etat				= ClUserStory.sNomDeEtat(oUs.Get_EtatUS()) + sComplementEtat
+      		TBL_Liste_User_Stories[nLigne].COL_Etat				= ClDbUserStory.sNomDeEtat(oUs.Get_EtatUS()) + sComplementEtat
       		TBL_Liste_User_Stories[nLigne].COL_Charge			= oUs.User_Story_Poids()
       		si oUs.p_oEpic <> Null ALORS
       			TBL_Liste_User_Stories[nLigne].COL_Groupement	= oUs.p_oEpic.p_sNom

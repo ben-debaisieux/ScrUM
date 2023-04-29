@@ -65,6 +65,10 @@ class :
       SI nId_P = 0 ALORS
       	//En création, on considère que l'objet est déjà en modification.
       	:m_ZF_bModif = Vrai
+      	
+      	si EnModeTest() et FenEtat("FEN_Moulinette") = Inexistant ALORS 
+      		trace(:ZF_sGetNomInstance() + " -> " + dbgInfo(dbgPile))
+      	FIN
       FIN
       
      type : 589824
@@ -79,7 +83,7 @@ class :
       
       SI :m_ZF_bModif ALORS
       	Trace("Libération d'un objet non enregistré : [%:p_sNomTable%] ID : [%:p_ZF_nIdUnique%]")
-      	STOP SI PAS EnModeTestAutomatique()
+      	//STOP SI PAS EnModeTestAutomatique() //et p_ZF_nIdUnique > 0
       FIN
      type : 655360
    -
@@ -106,7 +110,7 @@ class :
       bMemoModeAjout est un booléen
       
       
-      goapp.TranDebut()
+      ::mg_oApp.TranDebut()
       
       quand exception dans
       	
@@ -132,11 +136,16 @@ class :
       	
       	
       	bMemoModeAjout = :ZF_bModeAjout()
-      
+      	
       	MémoireVersFichier(objet,:p_sNomTable)
       	
       	//Traitements précédent l'enregistrement
       	:pre_enregistre()
+      	
+      	
+      	:ZF_GetObjectsIds()
+      	
+      	
       	
       	
       	SI bMemoModeAjout ALORS
@@ -147,7 +156,17 @@ class :
       			SI PAS HAjoute(:p_sNomTable) ALORS
       				mg_oExEchecEnregistrement.ZF_Declenche()
       			sinon
+      				sKey est une chaîne
+      				//On était en création : on retire l'adresse de l'objet en cours de la liste des objets déclarés
+      				sKey = :ZF_sGetNomInstance()
+      				TableauSupprime(ClZF_App.mg_aoInstances,sKey)
+      				
+      				//Récupération de l'ID généré
       				:p_ZF_nIdUnique = {:p_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique}
+      				
+      				//Enregistrement de l'objet, avec sa nouvelle valeur d'adresse
+      				sKey = :ZF_sGetNomInstance()
+      				ClZF_App.mg_aoInstances[sKey] <- objet
       			FIN
       		FIN
       		
@@ -177,14 +196,14 @@ class :
       	//Traitements post enregistrement
       	:post_enregistre()
       	
-      	goapp.TranFin()
+      	::mg_oApp.TranFin()
       	
       	//On mémorise que l'enregistrement est effectué.
       	:m_ZF_bModif = faux
       faire
       	sMsg est une chaîne 
       	sMsg = ExceptionInfo(errMessage)
-      	goapp.TranAnnule()
+      	::mg_oApp.TranAnnule()
       	ExceptionPropage()
       sinon
       	//A t on initialisé le top 'en cours d'enregistrement' dans la procédure ?
@@ -257,7 +276,7 @@ class :
       //
       FONCTION ZF_bModeAjout()<métier>:booléen
       
-      renvoyer (:ZF_Get_IdUnique() = 0)
+      renvoyer (:ZF_Get_IdUnique() <= 0)
      type : 458752
    -
      name : post_enregistre
@@ -280,13 +299,13 @@ class :
       
      type : 458752
    -
-     name : ZF_Get_est_supprime
+     name : ZF_bEstsupprime
      procedure_id : 1424025106378250444
      type_code : 12
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] ZF_Get_est_supprime ()
+      //[ <Résultat> = ] ZF_bEstsupprime ()
       //
       // Paramètres :
       //	Aucun
@@ -297,7 +316,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE ZF_Get_est_supprime()<métier>:booléen
+      PROCEDURE ZF_bEstsupprime()<métier>:booléen
       renvoyer :m_ZF_bEstSupprime
      type : 458752
    -
@@ -366,17 +385,17 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //GetObj (<nIdUnique_P> est entier)
+      //[ <Résultat> = ] GetObj (<nIdUnique_P> est entier)
       //
       // Paramètres :
       //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
       // Valeur de retour :
-      // 	Aucune
+      // 	Type indéterminé : // 	Aucune
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure publique GetObj(LOCAL nIdUnique_P est un entier <utile>)
+      procédure abstraite GetObj(LOCAL nIdUnique_P est un entier <utile>)
       //a faire : repasser la méthode en abstrait
      type : 458752
    -
@@ -404,6 +423,7 @@ class :
       	SI PAS bSansRechargement_P ALORS
       		FichierVersMémoire(objet, :p_sNomTable)
       		//Chargement des objets enfants
+      		ZF_GetObjectsFromIds()
       		Init_ObjBD()
       	FIN
       sinon
@@ -424,6 +444,85 @@ class :
       
       ancetre.ZF_Charge_source(sdSource_p)
       :m_ZF_bModif = Faux
+     type : 458752
+   -
+     name : ZF_GetObjectsIds
+     procedure_id : 1447755410941081711
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_GetObjectsIds ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure prive ZF_GetObjectsIds() <métier>
+      
+      sRub			est une chaîne
+      nVal			est un entier
+      //sLstRub			est une chaîne
+      sPropId			est une chaîne
+      Vars			est une Description de variable
+      Def				est une Définition	= RécupèreDéfinitionType(objet..classe)
+      
+      
+      POUR TOUT Vars DE Def.Variable
+      	sRub = ""
+      	sPropId = ""
+      	SI Vars.AttributNote <> "" ALORS
+      		
+      		aNotes est un tableau associatif de chaînes = col_zf_surcharge.chaineverstableauasso(Vars.AttributNote)
+      		sRub = aNotes["mapping"]
+      		sPropId = Vars.Nom + "_ID"
+      		sPropId[1] = "p"
+      		
+      //		sLstRub += [","] + sRub
+      		nVal = {sPropId,indVariable}
+      		si nVal = 0 ALORS
+      			{:p_sNomTable + "." + sRub,indRubrique}..Null = vrai
+      		sinon
+      			{:p_sNomTable + "." + sRub,indRubrique} = nVal
+      		FIN
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : ZF_GetObjectsFromIds
+     procedure_id : 1447915728586672186
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ObjDbLs.ZF_GetObjectsFromIds
+      PROCÉDURE prive ZF_GetObjectsFromIds()
+      
+      bMemoModif	est un booléen = :m_ZF_bModif
+      ancetre.ZF_GetObjectsFromIds()
+      :m_ZF_bModif = bMemoModif
+     type : 458752
+   -
+     name : Init_Data
+     procedure_id : 1461096824199472024
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Init_Data ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée Init_Data()
+      //Déclaré en privé ici, pour couper l'héritage imposé par la déclaration abstraite du parent : cette méthode n'est utile que pour les données en lecture seule
      type : 458752
   properties :
    -

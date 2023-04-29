@@ -1,0 +1,503 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbMessage
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x140d035f5e72c0d8
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbMessage est une Classe
+      	herite de ClZF_ObjDB
+      	
+      
+      	m_oMsgparent				est un ClDbMessage dynamique
+      	
+      prive
+      	m_oUsr					est un ClDbUsr dynamique
+      	m_oUserStory				est un ClDbUserStory dynamique
+      	m_oTache					est un ClDbTache dynamique
+      	m_oCritereAccept			est un ClDbCritereAccept dynamique
+      
+      	m_sCMTR					est une chaîne		<MAPPING=CMTR>
+      	m_bTop_Visible			est un booléen 		<MAPPING=Top_Visible>
+      	m_dhDteCreation			est une dateheure		<mapping=DteCreation>
+      	
+      	m_oMsgEnfant				est un ClcolMessage dynamique
+      	m_bGererParent			est un booléen	//Précise, lors de l'ajout ou suppression, qu'il faut ajouter le message actuel, au message parent.
+      fin
+      
+      constante
+      	cst_col_messages = "messages"
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1444814763597676776
+     type_code : 27
+     code : |1+
+      procédure Constructeur(LOCAL nId_P est un entier = 0)
+      
+      ClZF_ObjDB.Constructeur(Scr_Message..Nom, Scr_Message.IDScr_Message..Nom, nId_P)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1444814763597742312
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : Message_Fils
+     internal_properties : BwAAAAcAAADYuPST6CP+T+K2ZU37o7g3n8Kew/nVjSZD5G6OyRuT2Yo67DV/AZmlWI7RE7NW48hb
+     procedure_id : 1444814763597807848
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Message_Fils (<nIDMessage_p> est entier)
+      //
+      // Paramètres :
+      //	nIDMessage_p (entier) : <indiquez ici le rôle de nIDMessage>
+      // Valeur de retour :
+      // 	ClColMessage : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE globale Message_Fils(LOCAL nIDMessage_p est un entier):ClcolMessage
+      
+      oMessagesFils est un ClcolMessage
+      sReq est une chaine
+       
+      sReq = [
+      	SELECT
+      		Scr_Message.*
+      	
+      	FROM
+      		Scr_Message
+      	
+      	WHERE
+      		Scr_Message.IDScr_Message_Parent = [%nIDMessage_p%]
+      ]
+      oMessagesFils.ZF_LoadSQL(sReq)
+      //::mg_oApp.Rsql(sdRechercheMessagesFils,sReq)
+      //Pour TOUT sdRechercheMessagesFils
+      //	oMessage <- ClDbMessage.getobj(sdRechercheMessagesFils.IDScr_Message)
+      //	TableauAjouteRéférence(aMessagesFils,oMessage) 
+      //FIN
+      //
+      //HAnnuleDéclaration(sdRechercheMessagesFils)
+      
+      Renvoyer oMessagesFils
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 1444814763597873384
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.GetObj
+      PROCÉDURE GLOBALE GetObj(local nIdUnique_P est un entier):ClDbMessage
+      sClasse est une chaine = ClDbMessage
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 1444814763597938920
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClObjDB.pre_enregistre
+      PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre():Vide
+      
+      nNbreCle est un entier
+      
+      
+      :m_bGererParent = Faux
+      
+      
+      
+      si pas :ZF_bEstsupprime() alors
+      	//Si pas d'utilisateur renseigné, on considère que c'est l'utilisateur en cours.
+      	si :m_oUsr = Null ALORS
+      		:m_oUsr <- goApp.m_oUsrCnx
+      	FIN
+      	Scr_Message.IDScr_Usr						= :m_oUsr.ZF_Get_IdUnique()
+      	
+      	//Enregistrement de la user story (si une, est associée)
+      	si :m_oUserStory = Null ALORS
+      		Scr_Message.IDScr_UserStory..Null		= vrai
+      	sinon
+      		Scr_Message.IDScr_UserStory				= :m_oUserStory.Get_IdUnique()
+      		nNbreCle++
+      	fin
+      	
+      	//Enregistrement du critère d'acceptation (si un, est associée)
+      	si :m_oCritereAccept = Null ALORS
+      		Scr_Message.IDScr_CritereAccept..Null	= vrai
+      	sinon
+      		Scr_Message.IDScr_CritereAccept			= :m_oCritereAccept.ZF_Get_IdUnique()
+      		nNbreCle++
+      	fin
+      	
+      	//Enregistrement de la tache (si une, est associé)
+      	si :M_oTache = Null ALORS
+      		Scr_Message.IDScr_Tache..Null			= vrai
+      	sinon
+      		Scr_Message.IDScr_Tache					= :m_oTache.Get_IdUnique()
+      		nNbreCle++
+      	FIN
+      	
+      	//Enregistrement d'un message parent (si un, est associé)
+      	si :m_oMsgparent = Null ALORS
+      		Scr_Message.IDScr_Message_Parent..Null	= Vrai
+      	sinon
+      		Scr_Message.IDScr_Message_Parent		= :m_oMsgparent.ZF_Get_IdUnique()
+      		nNbreCle++
+      		
+      		
+      		//En cas d'ajout, on mémorise qu'il faut gérer le messages, du parent.
+      		SI :ZF_bModeAjout() ALORS
+      			:m_bGererParent = Vrai
+      		FIN
+      	FIN
+      	
+      	//On s'assure que le message est associé à une et une seule entité.
+      	si nNbreCle <> 1 ALORS
+      		ExceptionDéclenche(1, ChaîneConstruit("État du message incohérent : %1 ID affectés", nNbreCle))
+      	FIN
+      	
+      	
+      	si pas datevalide(:m_dhDteCreation) ALORS
+      		:m_dhDteCreation						= DateHeureSys()
+      		Scr_Message.DteCreation					= :m_dhDteCreation
+      	FIN
+      sinon
+      	
+      	si :m_oMsgEnfant.ZF_nTaille() ALORS
+      		ExceptionDéclenche(1, "Impossible de supprimer un message, ayant des réponses.")
+      	FIN
+      	
+      	//Desenregistrement d'un message parent (si un, est associé)
+      	SI :m_oMsgparent <> Null ALORS
+      		:m_bGererParent = Vrai
+      	fin
+      fin
+     type : 458752
+   -
+     name : ReinitAffiliation
+     procedure_id : 1444814763598004456
+     type_code : 12
+     code : |1+
+      procédure privée ReinitAffiliation():Vide
+      
+      :m_oUserStory		= null
+      :m_oTache			= null
+      :m_oCritereAccept	= null
+     type : 458752
+   -
+     name : aoMessagesDeUsr_Old
+     procedure_id : 1444814763598069992
+     type_code : 12
+     code : |1+
+      procédure GLOBALE aoMessagesDeUsr_Old(oUsr_P est un ClDbUsr):tableau de ClDbMessage dynamique
+      
+      
+      aoRetour	est un tableau de ClDbMessage dynamique
+      sdMsgUsr	est une Source de Données
+      sReq		est une chaîne
+      
+      //Récupération des messages de l'utilisateur.
+      sReq = ChaîneConstruit([
+      	
+      	SELECT
+      		Scr_Message.IDScr_Message
+      	FROM Scr_Message
+      	where Scr_Message.IDScr_Usr = %1
+      		AND Scr_Message.Top_Visible = 1
+      	
+      ], oUsr_P.ZF_Get_IdUnique())
+      ::mg_oApp.RSQL(sdMsgUsr,sReq)
+      POUR TOUT sdMsgUsr
+      	TableauAjouteRéférence(aoRetour, ClDbMessage.GetObj(sdMsgUsr.IDScr_Message))
+      FIN
+      
+      HAnnuleDéclaration(sdMsgUsr)
+      
+      renvoyer aoRetour
+     type : 458752
+   -
+     name : post_enregistre
+     procedure_id : 1444814763598201064
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClObjDB.post_enregistre
+      PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre():Vide
+      
+      si :m_oMsgparent <> Null et :m_bGererParent ALORS
+      	si pas :ZF_bEstsupprime() alors
+      		:m_oMsgparent.p_aoMsgEnfant.ZF_addItem(objet)
+      		//TableauAjouteRéférence(:m_oMsgparent.p_aoMsgEnfant, objet)
+      	sinon
+      		:m_oMsgparent.p_aoMsgEnfant.ZF_Supp(objet)
+      
+      //		TableauSupprimeRéférence_deprecated(:m_oMsgparent.p_aoMsgEnfant, objet)
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : sExport
+     procedure_id : 1444814763598266600
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.sExport
+      PROCÉDURE sExport():JSON 
+      
+      sRetour	est un JSON
+      nInd	est un entier
+      oMsg	est un ClDbMessage dynamique
+      
+      sRetour.id			= :ZF_Get_IdUnique()
+      sRetour.user		= :m_oUsr
+      sRetour.comment		= :m_sCMTR
+      sRetour.visible		= :m_bTop_Visible
+      sRetour.time		= :m_dhDteCreation
+      
+      nInd = 0
+      POUR TOUT ELEMENT oMsg DE :m_oMsgEnfant.aItems()
+      	nInd++
+      	sRetour.answer[nInd] = oMsg.sExport()
+      FIN
+      
+      RENVOYER sRetour
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1444814763598332136
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+      SI :ZF_bModeAjout() ALORS
+      	:m_oUsr	<- goApp.m_oUsrCnx
+      	:m_bTop_Visible = Vrai
+      SINON
+      	//Récupération du rédacteur du message
+      	:m_oUsr <- ClDbUsr.GetObj(Scr_Message.IDScr_Usr)
+      	
+      	//Récupération de l'US, si le message est associé à une US.
+      	SI Scr_Message.IDScr_UserStory..Null ALORS
+      		:m_oUserStory = Null
+      	SINON
+      		:m_oUserStory <- ClDbUserStory.GetObj(Scr_Message.IDScr_UserStory)
+      	FIN
+      	
+      	//Récupération de la tache, si le message est associé à une tache.
+      	SI Scr_Message.IDScr_Tache..Null ALORS
+      		:m_oTache = Null
+      	SINON
+      		:m_oTache <- ClDbTache.GetObj(Scr_Message.IDScr_Tache)
+      	FIN
+      	
+      	//Récupération du critère d'acceptation, si le message est associé à un critère.
+      	SI Scr_Message.IDScr_CritereAccept..Null ALORS
+      		:m_oCritereAccept = Null
+      	SINON
+      		:m_oCritereAccept <- ClDbCritereAccept.GetObj(Scr_Message.IDScr_CritereAccept)
+      	FIN
+      	
+      	//Récupération du message parent, si le message est associé à un autre message.
+      	SI Scr_Message.IDScr_Message_Parent..Null ALORS
+      		:m_oMsgparent = Null
+      	SINON
+      		:m_oMsgparent <- ClDbMessage.GetObj(Scr_Message.IDScr_Message_Parent)
+      	FIN
+      	
+      	//----------------------------------------------------------------------------------------
+      	sReq est une chaîne
+      	
+      	//Récupération des messages de l'entité.
+      	sReq = [
+      		
+      		SELECT
+      			Scr_Message.*
+      			
+      		FROM Scr_Message
+      		
+      		where Scr_Message.IDScr_Message_Parent = [%:ZF_Get_IdUnique()%]
+      		
+      	]
+      	:m_oMsgEnfant.ZF_LoadSQL(sReq)
+      FIN
+      
+     type : 458752
+  properties :
+   -
+     name : p_oTache
+     identifier : 0x140d035f5e73c0e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oTache() : ClDbTache
+         
+         renvoyer :m_oTache
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oTache(oValeur est ClDbTache):Vide
+         
+         si PAS ZF_bObjEgal(:m_oTache, oValeur) alors
+         	:ReinitAffiliation()
+         	:ZF_EstModif()
+         	
+         	:m_oTache <- oValeur
+         fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUserStory
+     identifier : 0x140d035f5e74c0e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUserStory() : ClDbUserStory
+         
+         renvoyer :m_oUserStory
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUserStory(oValeur est ClDbUserStory)
+         
+         si PAS ZF_bObjEgal(:m_oUserStory, oValeur) alors
+         	:ReinitAffiliation()
+         	:ZF_EstModif()
+         	
+         	:m_oUserStory <- oValeur
+         fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oUsr
+     identifier : 0x140d035f5e75c0e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oUsr() : ClDbUsr
+         
+         renvoyer :m_oUsr
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oUsr(oValeur est ClDbUsr):Vide
+         
+         si PAS ZF_bObjEgal(:m_oUsr, oValeur) alors
+         	:ZF_EstModif()
+         	:m_oUsr <- oValeur
+         fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_dhDteCreation
+     identifier : 0x140d035f5e76c0e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_dhDteCreation() : dateheure
+         
+         renvoyer :m_dhDteCreation
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_dhDteCreation(dhValeur est une dateheure):Vide
+         
+         :ZF_EstModif()
+         
+         :m_dhDteCreation = dhValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_aoMsgEnfant
+     identifier : 0x140d035f5e77c0e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_aoMsgEnfant():ClcolMessage
+         
+         renvoyer :m_oMsgEnfant
+        type : 1966080
+      -
+        code : |1+
+         procédure publique p_aoMsgEnfant(oValeur_p est un ClDbMessage):Vide
+         
+         :ZF_EstModif()
+         
+         :m_oMsgEnfant <- oValeur_p
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sCMTR
+     identifier : 0x140d035f5e78c0e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sCMTR() : chaîne
+         
+         renvoyer :m_sCMTR
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sCMTR(sValeur est une chaîne):Vide
+         
+         :ZF_EstModif()
+         
+         :m_sCMTR=sValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_bTop_Visible
+     identifier : 0x140d035f5e79c0e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bTop_Visible() : booléen
+         
+         renvoyer :m_bTop_Visible
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_bTop_Visible(bValeur est un booléen):Vide
+         
+         :ZF_EstModif()
+         
+         :m_bTop_Visible=bValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1fa82ef703e8a8f7
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -211,7 +211,7 @@ window :
          -
            code : |1-
             SI TableOccurrence(TBL_MesTests) >= 1 ALORS
-            	oUs est un ClUserStory <- ClUserStory.GetObj(TBL_MesTests.COL_IdTache)
+            	oUs est un ClDbUserStory <- ClDbUserStory.GetObj(TBL_MesTests.COL_IdTache)
             	SI Ouvre(FEN_User_Story_Detail_v2, oUs)
             		Actualise()
             	FIN
@@ -263,7 +263,7 @@ window :
          -
            code : |1+
             SI TableOccurrence(TBL_MesTests) >= 1 ALORS
-            	oUs est un ClUserStory <- ClUserStory.GetObj(TBL_MesTests.COL_IdTache)
+            	oUs est un ClDbUserStory <- ClDbUserStory.GetObj(TBL_MesTests.COL_IdTache)
             	
             	SI OuiNon(ChaîneConstruit([
             		Voulez-vous rejoindre l'US en tant que testeur :
@@ -286,7 +286,7 @@ window :
          -
            code : |1-
             SI TableOccurrence(TBL_MesTests) >= 1 ALORS
-            	oUs est un ClUserStory <- ClUserStory.GetObj(TBL_MesTests.COL_IdTache)
+            	oUs est un ClDbUserStory <- ClDbUserStory.GetObj(TBL_MesTests.COL_IdTache)
             	
             	SI Ouvre(FEN_User_storie_a_faire_tester, oUs)
             		Actualise()
@@ -323,7 +323,7 @@ window :
       //
       PROCEDURE Actualise()
       
-      oUs est un ClUserStory dynamique
+      oUs est un ClDbUserStory dynamique
       nNumLigne est un entier
       nInd est un entier
       
@@ -332,7 +332,7 @@ window :
       
       TableSupprimeTout(TBL_MesTests)
       
-      pour tout element oUs de goApp.m_oUsrCnx.aoMesUS_En_Test(ClUsr.test_unitaire).aItems()
+      pour tout element oUs de goApp.m_oUsrCnx.aoMesUS_En_Test(ClDbUsr.test_unitaire).aItems()
       	nNumLigne = TableAjouteLigne(TBL_MesTests)
       	TBL_MesTests[nNumLigne].COL_IdTache			= oUs.Get_IdUnique()
       	TBL_MesTests[nNumLigne].COL_US				= oUs.sNommination_US()

@@ -210,10 +210,6 @@ window :
      type_code : 9
      p_codes :
       -
-        code : |1+
-         ListeUtilisateur()
-        type : 14
-      -
         type : 35
         enabled : false
       -
@@ -292,8 +288,10 @@ window :
      p_codes :
       -
         code : |1-
-         si Ouvre(FEN_Utilisateur_Saisie, TBL_Utilisateurs.COL_ID) ALORS
-         	ListeUtilisateur()
+         si TBL_Utilisateurs..Occurrence > 0 ALORS
+         	SI Ouvre(FEN_Utilisateur_Saisie, ClDbUsr.GetObj(TBL_Utilisateurs.COL_ID)) ALORS
+         		ListeUtilisateur()
+         	FIN
          FIN
         type : 18
       -
@@ -314,20 +312,42 @@ window :
      p_codes :
       -
         code : |1+
+         si TBL_Utilisateurs..Occurrence > 0 ALORS
+         	SI OuiNon(Non,"Confirmer la suppression de l'utilisateur ?") = Oui ALORS
+         		
+         		//Suppression de l'utilisateur
+         		QUAND EXCEPTION DANS
+         			oUsr est un ClDbUsr(TBL_Utilisateurs.COL_ID)
+         			oUsr.ZF_Supprimer()
+         			oUsr.ZF_Enregistre()
+         		FAIRE
          
-         SI ouinon(non,"Confirmer la suppression de l'utilisateur ?") = Oui alors
-         	
-         	//Suppression de l'utilisateur
-         	QUAND EXCEPTION DANS
-         		oUsr est un ClUsr(TBL_Utilisateurs.COL_ID)
-         		oUsr.ZF_Supprimer()
-         		oUsr.ZF_Enregistre()
-         	FAIRE
-         		Erreur(ExceptionInfo(errMessage))
-         	SINON
-         		ListeUtilisateur()
+         			sInfo est une chaîne = ExceptionInfo(errMessage)
+         			Erreur(sInfo)
+         			SELON ExceptionInfo(errCode)
+         //				CAS ClDbUsr.mg_oEx_IdAbsentAD.ZF_Code
+         //					EcranPremier(MaFenêtre)
+         				CAS ClDbUsr.mg_oEx_UsrReferenceParPrj.ZF_Code
+         					EcranPremier(MaFenêtre)
+         				CAS ClDbUsr.mg_oEx_UsrReferenceParUS.ZF_Code
+         					EcranPremier(MaFenêtre)
+         				CAS ClDbUsr.mg_oEx_UsrReferenceParMessage.ZF_Code
+         					EcranPremier(MaFenêtre)
+         //				CAS ClDbUsr.mg_oExLoginAdInvalide.ZF_Code
+         //					EcranPremier(MaFenêtre)
+         //				CAS ClDbUsr.mg_oExNomMailInvalide.ZF_Code
+         //					EcranPremier(MaFenêtre)
+         //				CAS ClDbUsr.mg_oExNomUsrInvalide.ZF_Code
+         //					EcranPremier(MaFenêtre)
+         		
+         				AUTRE CAS
+         					ExceptionPropage()
+         			FIN
+         		SINON
+         			ListeUtilisateur()
+         		FIN
          	FIN
-         Fin
+         FIN
         type : 18
       -
         type : 161
@@ -352,7 +372,7 @@ window :
         type : 14
       -
         code : |1+
-         goApp.m_oUsrCnx	<- ClUsr.GetObj(col_id)
+         goApp.m_oUsrCnx	<- ClDbUsr.GetObj(col_id)
          
          ToastAffiche("connecté avec l'utilisateur : " + goApp.m_oUsrCnx.p_sNom)
          ferme()
@@ -397,12 +417,13 @@ window :
      code : |1+
       PROCEDURE MaFenêtre()
    -
-     code : |1+
+     code : |1-
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique = Vrai ALORS
       	GR_Dev..Etat = Actif
       SINON
       	GR_Dev..Etat = Grisé
       FIN
+      ListeUtilisateur()
      type : 34
    -
      code : |1+
@@ -452,12 +473,12 @@ window :
       //
       PROCEDURE ListeUtilisateur()
       
-      nLigne est un entier
-      olUsr est un ClUsr dynamique
+      nLigne	est un entier
+      olUsr	est un ClDbUsr dynamique
       
       TBL_Utilisateurs..AffichageActif = Faux
       TableSupprimeTout(TBL_Utilisateurs)
-      pour tout element olUsr de clusr.aoListeUsr().aItems()
+      pour tout element olUsr de ClColUsr.aoListeUsr().aItems()
       	nLigne = TableAjouteLigne(TBL_Utilisateurs)
       	TBL_Utilisateurs[nLigne].COL_ID				= olUsr.ZF_Get_IdUnique()
       	TBL_Utilisateurs[nLigne].COL_Login			= olUsr.p_sLogin_AD
@@ -466,8 +487,8 @@ window :
       	TBL_Utilisateurs[nLigne].COL_Service		= olUsr.p_sService
       	TBL_Utilisateurs[nLigne].COL_Equipe_Dev		= olUsr.p_bTop_Equip_Informatique
       	TBL_Utilisateurs[nLigne].COL_Chef_Projet	= olUsr.Utilisateur_Est_Chef_De_Projet()
-      	TBL_Utilisateurs[nLigne].COL_NbreProjets	= ClProjet.aoListeProjetsDeUsr(olUsr).ZF_nTaille()
-      	TBL_Utilisateurs[nLigne].COL_NbreUSEntest	= olUsr.aoMesUS_En_Test(ClUsr.test_fonctionnel).ZF_nTaille()
+      	TBL_Utilisateurs[nLigne].COL_NbreProjets	= ClColProjet.aoListeProjetsDeUsr(olUsr).ZF_nTaille()
+      	TBL_Utilisateurs[nLigne].COL_NbreUSEntest	= olUsr.aoMesUS_En_Test(ClDbUsr.test_fonctionnel).ZF_nTaille()
       FIN
       TBL_Utilisateurs..AffichageActif = Vrai
      type : 458752

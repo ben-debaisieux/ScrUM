@@ -38,7 +38,7 @@ window :
          -
            code : |1+
             si TableOccurrence(TBL_MesTaches) >= 1 alors
-            	oTache est un ClTache <- ClTache.GetObj(TBL_MesTaches.COL_IdTache)
+            	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_MesTaches.COL_IdTache)
             	
             	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
             		Actualise()
@@ -246,7 +246,7 @@ window :
          -
            code : |1+
             SI TableOccurrence(TBL_MesTaches) >= 1 ALORS
-            	oTache est un ClTache <- ClTache.GetObj(TBL_MesTaches.COL_IdTache)
+            	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_MesTaches.COL_IdTache)
             	SI OuiNon(Non, "Confirmez-vous la fin des tests unitaires de la tache :" + RC + oTache.p_sDescription) ALORS
             		oTache.p_bEstRealise = Vrai
             		oTache.ZF_Enregistre()
@@ -264,7 +264,7 @@ window :
          -
            code : |1+
             SI TableOccurrence(TBL_MesTaches) >= 1 ALORS
-            	oTache est un ClTache <- ClTache.GetObj(TBL_MesTaches.COL_IdTache)
+            	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_MesTaches.COL_IdTache)
             	SI OuiNon(Non, "Confirmez-vous le renvoi en ""à faire"", de la tache :" + RC + oTache.p_sDescription) ALORS
             		oTache.p_oUsr_Dev				= Null
             		oTache.p_nNum_Sprint_Demarrage	= 0
@@ -311,13 +311,13 @@ window :
       PROCÉDURE Actualise()
       
       
-      oTache est un ClTache dynamique
+      oTache est un ClDbTache dynamique
       nNumLigne est un entier
       
       TBL_MesTaches..AffichageActif = faux
       TableSupprimeTout(TBL_MesTaches)
       
-      POUR TOUT ELÉMENT oTache DE goApp.m_oUsrCnx.oTaches_MesTaches().aItems()
+      POUR TOUT ELÉMENT oTache DE ClColTaches.oTaches_MesTaches(goApp.m_oUsrCnx).aItems()
       	nNumLigne = TableAjouteLigne(TBL_MesTaches)
       	TBL_MesTaches[nNumLigne].COL_IdTache		= oTache.Get_IdUnique()
       	TBL_MesTaches[nNumLigne].COL_Tache			= oTache.p_sDescription

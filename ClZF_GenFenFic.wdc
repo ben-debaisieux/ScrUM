@@ -1,0 +1,977 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenFenFic
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x144bb02b035259c6
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_GenFenFic est une Classe
+      	herite de ClZF_GenFen
+      
+      PRIVE
+      	m_nPosYActu			est un entier
+      fin
+      
+      
+      constante
+      	cstHauteurDefaut = 24
+      	cstLargeurBtnDefaut = 100
+      	cstMargeDefaut = 5
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1462456202797799894
+     type_code : 27
+     code : |1+
+      procédure Constructeur(oClasseGen est un ClZF_GenCodeFic)
+      ancetre.constructeur(oClasseGen)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1462456202797865430
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : Genere
+     procedure_id : 1462456202797930966
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_GenEltWD.Genere
+      PROCÉDURE  Genere():Vide
+      
+      
+      
+      :m_nPosYActu = 5
+      
+      
+      sRub			est une chaîne
+      nHauteurTot		est un entier
+      
+      //-------------------------------------------------
+      //Récupération des membres déclarées dans la classe
+      Vars			est une Description de variable
+      Def				est une Définition	= RécupèreDéfinitionType(:m_oClasseGen.sNomClasseGen())
+      bEstObj			est un booléen
+      sChamps			est une chaîne
+      
+      
+      
+      POUR TOUT Vars DE Def.Variable
+      	
+      	sRub = :sNomRubAsso(Vars)
+      	
+      	SI sRub <> "" ALORS
+      		
+      		//A faire : identifier plus proprement qu'il s'agit d'un objet
+      		SI Vars.AttributNote <> "" ALORS
+      			bEstObj = Vrai
+      		sinon
+      		 	bEstObj = Faux
+      		FIN
+      		
+      		stProto_tmp est un ClZF_GenFen.STR_ProtoChamps
+      		InfoRub est un ClZF_GenCodeFic.str_DefRub
+      		
+      		
+      		
+      		InfoRub					= :m_oClasseGen.m_aRub[sRub]
+      		
+      		stProto_tmp.sNom		= sRub
+      		stProto_tmp.sSource		= Vars.Nom + " - " + InfoRub.sNomMembre
+      		stProto_tmp.sLibelle	= InfoRub.nTypeRub
+      		
+      		selon InfoRub.nTypeRubHF
+      			CAS hRubBooléen : 
+      				sChamps += [RC] + :GenChampsCheckBox(stProto_tmp)
+      			CAS hRubDate6 , hRubDate8
+      				sChamps += [RC] + :GenChampsDate(stProto_tmp)
+      //			CAS hRubDateHeure : 
+      			CAS hRubEntier1, hRubEntierNonSigné1 :
+      				sChamps = [rc] + :GenChampsRadio(stProto_tmp)
+      			CAS hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
+      				SI bEstObj ALORS
+      					sChamps += [RC] + :GenChampsCombo(stProto_tmp)
+      				SINON
+      					sChamps += [RC] + :GenChampsSaisieEntier(stProto_tmp)
+      				FIN
+      			CAS hRubMémoTexte, hRubMémoUnicode :
+      				sChamps += [RC] + :GenChampsTexteMultiLigne(stProto_tmp)
+      			CAS hRubMonétaire :
+      				sChamps += [RC] + :GenChampsSaisieMonetaire(stProto_tmp)
+      //			CAS hRubRéel4, hRubRéel8 :
+      			CAS hRubTexte, hRubTexteUnicode :
+      				sChamps += [RC] + :GenChampsSaisieTexte(stProto_tmp)
+      //			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+      			AUTRE CAS
+      				trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
+      		FIN
+      		
+      
+      	FIN
+      FIN
+      
+      
+      
+      sRapport est une chaîne
+      
+      
+      //Calcul de la hauteur de la fenetre
+      nHauteurTot = max(140, :m_nPosYActu + cstMargeDefaut + 30)
+      nAlignBtns est un entier = 380
+      
+      sRapport = [
+      #To edit and compare internal_properties, use WINDEV integrated tools.
+      #Internal properties refer to the properties of controls in windows, reports, etc.
+      info :
+       name : [%:sNomFen()%]
+       major_version : 27
+       minor_version : 0
+       type : 2
+       description : ""
+       subtype : 0
+      window :
+       name : [%:sNomFen()%]
+       identifier : [%GenProcIdent(1)%]
+       internal_properties : BwAAAAcAAABLyC58ygtyzcBFMUAXxeo/WcjMJzc0L0JIdo/eE6D3liXv7qIEJjmdY7nF35N6Ei14ycfW8kIZexCGReO+gmu4aYfGqJzxoI78hnP4S5d3fZC4JZzG9hKnOhioVPRv0oDthyfpXGB23HiCod2bVgX0fU1x4fq/HKrsxFykDlg0ERtTmhENaHpR+Ub68RFEQqpBwux8Jion0UPT5YRiq9tXSmBT3dG5lkP6e6BTyvot+DS2peFGIzda+hLgSOgN2IRQu5SZWE8TKlx/ZLlRFzX+7e1xXntPWb3NCUQYn039fbfJpCK8uGSmHHfMfvqAeLUy1xvxvaguVgaRmE9uy14+ONGmGCfMilCgM3PUzbAFBBUiYqA5cLaFWZgC7hfKCW4TDDS2mSp1XLQdV6ed4sJ7FA84PljKwc8/iA7e088NgrmKHkkpocTY7xcYOOM15nv3f8iWcRG+MNhBaopocrvgJvWP5U8TKI3oPnxlOwpzJBwbGprcJLHgrK+HH4+f2W658hUvSjC4pZ3PFKp561+UqUhEQMhSHop45Galn/6pUaABG/zzyV9M1n64PeBdIGMfMzOL1Q3ZVngIKtU0kiB98FdTcTkF8AfIPwCxvnmdvGhBHaLX5upvAwImd08CZ+4ZXBdP/iQsPhanpNxKHtOgq1umeglwkLKGnWJGMkLXuXv0JWpk+4bPgefIdKkvMnToiNZHuw1gdQcpshh1U1LXqZdNyutJZePWZQdA0qrdt47/KpkSddNYWYZBj1HNQsU=
+       properties :
+        width : 486
+        height : [%nHauteurTot%]
+        widthClient : 484
+        heightClient : [%nHauteurTot%]
+       controls :
+        -
+          name : BTN_Valider
+          identifier : [%GenProcIdent(2)%]
+          internal_properties : BwAAAAcAAAArCTqtaCUgWLULvwFIaXxlGQw7FXXtn6GfOnHaAMUzP7lC9Q7JtAx6kLnzUf3I3qaY5ZQsiZEmb/U9huHVrCM3Z5UYW/Pxc+SDbj8dO4VOieUGVHm/PYnbZhsseLrYCGZe8EvLdUYohOU+UaQt9DyxHX7TBqwXDDB9CVRL8K7R5CbItjPWUwYzHwVxK2CKU5aMxtQo1tdyrHINzQIJcOxg2qOLnb4OULVBTfya7DQbqF/FnVlO3BURoy+oFyJgsdoG0FUQByUVY+kVYE6vSrzIDGShl73hbW/Ia3lfPknTkhSIqLDJgYeYFVIcWUBq0Mv5fhn2lBb89Plu0BPt6492sOphv5XmCWYr+MfaC3lFampBOF7GhZ5GGclebN6FJ33lLvF0GbxJU2qH0e2aNNg2Gt2kC0CXBqN1P/OO+D9wd+kIiXKuxk4kv6vLtt7iMJVoagA7lvs7LuppYEyMDm52pf4TL/dKriKwKbpeTF0gti4R/2ydLVL/K8WsboBdF2E0M3RS8ADOkNoPiy0Vxvtqk0gor0XT+fcpisUa6lll7uEp6nxZb5dYWcyK8QDV1vh9/QOVsv9sh2WUzA7U3l0kMwwAOSdSegEM/3Rdbvu3c+BVRBxt+MqFMAW8vxMpe/SFkPxCZcaM7pZvnFWJ1T9KA5oVuRtsNvfQ1CoXs3IAToyK+HrIwxuQAzJLzgRaoSWO0+oYD9MDO6Nr5HloTnqzLGbq2Jtzu6W3WbWER5l7/K1ZL3FH3XQx3rmBglgkmM9RJY5ndBr0aEJ3wgAARAJrfgTmgo5bhQ58qd5MfRWVn1nffcVLe/G/84mEBNc5TwJWlVQIRwPvx6xrfkauCWgCK2sEwd4PmocWDJVaXTnUJYsDAEeISJy6yrFgrKW5ST8qVnLEN9caU6VTsJXFG9rWYI/4jnB9HCE=
+          properties :
+           x : [%nAlignBtns%]
+           y : 6
+           width : [%cstLargeurBtnDefaut%]
+           height : [%cstHauteurDefaut%]
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1-
+               
+              type : 14
+            -
+              internal_properties : BwAAAAcAAAB8whTP8jyNmgkMGIsGPo1+pzoS8WCO0MjlsupNMDb1aWheqcvaLo0QXA3+B5msICF6WlXec3vIsfwkEbdnxkpZPJXHxmGq+kab8JFAmwawQlUbKJZMDFs=
+              code : |1-
+      [%:sIndentSpace(:GenBtnValide(), 9)%]
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : BTN_Annuler
+          identifier : [%GenProcIdent(3)%]
+          internal_properties : BwAAAAcAAABLSvdd28UDLt/UEVlFpAH8bOXPgtFQNTbQk2vt9Ov0B+Wuvh12/Wn3Rr51OYY5s4GHruCxjfPdE9rF0BR/+Ye/vB+4JB06kwXkE5HcLg1wtZqSFuB3ti2ek2kMLD+llqtjBQRuJeSqeqexLK/lMSipE9PKv1e85fzK4G803SSLDJZlSHXvFOTuxs46yHZ7ZMHB6xzcljL6bpBlob2ugpXgYkfgkGNTiPQs9hHx53drsHbXhdeaZZtuv7jZ0CXgy5mthT0XZyJexRMVK6TII6tf2qIBLiqsbLOS0zoKz8iw0I5kmFA1gM7jlEJHaNSXXjb9kiF2xKjJzxtTQDb8b6Ak9HjHgXrco0PPcJU8SU5BbtLvzmWdkZCdLHlD1dnOMFY6MbvsN/WwzLd0l8WGDkZfcKUUbuC1CjBDLcG9I/xOuui404guinH5vlSg3R77DLPxxQMsML3u6BYpNfznvDHeEwUfIMxJhM2G9KSKr5IwQttkhH2lgJAT0jY7mr0ueVUdhcAJgK/pK3v90TyEYmaQCP4qLl/QEwgnYHp8F+nKG31RY2DnfW4xOA0sS9rIxb5NrS6sFEcVvlcJdr+Kkru/j3dTWbzFYQB6JcZz+2WF3NJNOPK4mmB3Zd8ulR8BqWMjGRl/lokLaDylJbTOv7BQhlJRku7SoApaHQLUHG59HHwdhAFFnTpGZ5Resfrqj4N8AH0e7yEtr+95DOuiweBoV9kj+8s1J8sc57/kLX5HGdsBp1HUvdVRZDkzBhaPH6GxcJ4ET06NY/GiTZaI8e5NMe/hSH6RZpOkQ9QOqSrALNjWg2xZccgMw2XGpJr7LHwTDJP62ZsiYxMSmDHB1IROnumldKMcJRgpDnQSX43L1QmrtuNoV28GyzrC
+          properties :
+           x : [%nAlignBtns%]
+           y : 38
+           width : [%cstLargeurBtnDefaut%]
+           height : [%cstHauteurDefaut%]
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1-
+               
+              type : 14
+            -
+              code : |1-
+               ferme()
+              type : 18
+            -
+              type : 161
+              enabled : false
+      [%sChamps%]
+       menu :
+        name : _Menu
+        identifier : [%GenProcIdent(4)%]
+        internal_properties : BwAAAAcAAABhHrstMa4Z9rl6OwYjS84TLQsX3FeSpLFLw6OvT/q0TTop6246LIQjRYH2rort/iXEVEG8h3nssqS9OS6nlahnSvHNwBZ3KPsCPDNV6DqMwv3sqAqt2U3nDV0zIOu+QVCE7sm+q8pvNYbcweI/Xf5+pTd110qVRHw/aPAqbcyH6tUlS/E0iUY84n4p3RgoGt7SEUhHX03No4MSlCtrbTApzAPbqfYJ36YXNFxnrnahZBQZtLha7RY6axUM6IhAnoOpGhtv9Xz9dSbxjTRMiNTba5ANViKqxytyMeFsUOpUDAB+A66iElDh
+        options : []
+       languages :
+        - fr-FR
+       popup_menus : []
+       message_bar :
+        internal_properties : BwAAAAcAAAC4NW9UkbRLpmE2Bdm7am3dd6gBY4dSxiW4OmFbI+J9Lr9ziDCIWPE31ZC0PezllIBY0TrcWtfGcb4X941q9mceVjwV/Te/mjEUypnSF4A=
+       code_elements :
+        type_code : 1
+        p_codes :
+         -
+           internal_properties : BwAAAAcAAABYxSC3Cp1yBTyrJ/2BTkhMB4j8437pso3GJmARvJbefoMzFHNVs9rPLVES9eVbPfgC65HHpasFtl6ZO/kjk6EEFE5DrzcSkvELUv2opdnOY7ofHWDpuTnI
+           code : |1+
+      [%:sIndentSpace(:GenBlocDeclaration(), 6)%]
+         -
+           code : |1-
+            
+           type : 34
+         -
+           code : |1-
+            
+           type : 234
+         -
+           code : |1-
+            
+           type : 165
+         -
+           code : |1-
+            
+           type : 177
+         -
+           code : |1-
+            
+           type : 180
+         -
+           type : 230
+           enabled : false
+         -
+           code : |1-
+            
+           type : 2
+       code_parameters :
+        internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+        original_name : [%:sNomFen()%]
+      resources :
+       string_res :
+        identifier : [%GenProcIdent()%]
+        internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+      custom_note :
+       internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+      associated_test :
+       name : TEST_Fiche_RADFichierB.wxt
+      rad :
+       internal_properties : BwAAAAcAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe
+      ]
+      
+      :m_sCode = sRapport
+     type : 458752
+   -
+     name : sNomObjParamFen
+     procedure_id : 1462456202797996502
+     type_code : 12
+     code : |1-
+      PROCÉDURE PRIVÉ	sNomObjParamFen(oClasseGen_p est un ClZF_GenCodeFic)<metier>:chaine
+      renvoyer "o" + oClasseGen_p.p_sNomUsage + "_p"
+     type : 458752
+   -
+     name : sNomObjGlobal
+     procedure_id : 1462456202798062038
+     type_code : 12
+     code : |1+
+      procedure prive	sNomObjGlobal(oClasseGen_p est un ClZF_GenCodeFic)<metier>:chaine
+      RENVOYER "zo" + oClasseGen_p.p_sNomUsage
+     type : 458752
+   -
+     name : sNomFen
+     procedure_id : 1462964400490508046
+     type_code : 12
+     code : |1-
+      PROCÉDURE sNomFen():chaîne
+      renvoyer "FEN_Fic_" + :m_oClasseGen.p_sNomUsage
+     type : 458752
+   -
+     name : GenBtnValide
+     procedure_id : 1462456202798127574
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBtnValide ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	oClasseGen_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oClasseGen_p>
+      procédure GenBtnValide():chaine
+      
+      
+      Def		est une Définition	= RécupèreDéfinitionType(:m_oClasseGen.sNomClasseGen())
+      Vars	est une Description de variable
+      sCode	est une chaîne
+      
+      
+      // Liste des variables de l'objet Def
+      POUR TOUT Vars DE Def.Variable
+      	SI Vars.Définition = ClZF_Exception ALORS
+      		sCode += [
+      [%TAB%][%TAB%]CAS [%Vars.Déclaration%].[%Vars.Nom%].ZF_Code
+      [%TAB%][%TAB%][%TAB%]EcranPremier(MaFenêtre)
+      			
+      		]
+      	FIN
+      FIN
+      
+      sCode = [
+      
+      QUAND EXCEPTION DANS 
+      [%TAB%]EcranVersSource(MaFenêtre,"[%:sNomObjGlobal(:m_oClasseGen)%]")
+      
+      [%TAB%][%:sNomObjGlobal(:m_oClasseGen)%].ZF_Enregistre()
+      [%TAB%][%:sNomObjParamFen(:m_oClasseGen)%] <= [%:sNomObjGlobal(:m_oClasseGen)%]
+      FAIRE
+      [%TAB%]sInfo est une chaîne = ExceptionInfo(errMessage)
+      [%TAB%]Erreur(sInfo)
+      [%TAB%]SELON ExceptionInfo(errCode)
+      [%sCode%]
+      [%TAB%][%TAB%]AUTRE CAS
+      [%TAB%][%TAB%][%TAB%]ExceptionPropage()
+      [%TAB%]FIN
+      SINON
+      [%TAB%]MaFenêtre..ValeurRenvoyée = [%:sNomObjParamFen(:m_oClasseGen)%].Get_IdUnique()
+      [%TAB%]Ferme()
+      FIN
+      
+      ]
+      
+               
+      renvoyer sCode
+     type : 458752
+   -
+     name : GenBlocDeclaration
+     procedure_id : 1462456202798193110
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBlocDeclaration ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenBlocDeclaration():chaine
+      
+      sCode est une chaîne
+      
+      sCode = [
+      procédure mafenetre([%:sNomObjParamFen(:m_oClasseGen)%] est un [%:m_oClasseGen.sNomClasseGen()%])
+      
+      MaFenêtre..ValeurRenvoyée = 0
+      
+      [%:sNomObjGlobal(:m_oClasseGen)%] est un [%:m_oClasseGen.sNomClasseGen()%] <- [%:sNomObjParamFen(:m_oClasseGen)%].ZR_Clone()
+      SourceVersEcran(MaFenêtre,"[%:sNomObjGlobal(:m_oClasseGen)%]")
+      ]
+               
+      RENVOYER sCode
+     type : 458752
+   -
+     name : GenChampsCombo
+     procedure_id : 1462456202798389718
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenChampsCombo (<sRub_p> est chaîne)
+      //
+      // Paramètres :
+      //	sRub_p (chaîne ANSI) : <indiquez ici le rôle de sRub>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenChampsCombo(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut
+      
+      
+      
+      sRetour = [
+        -
+          name : CBO_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAADRMQXmGNJ8NKaG6huIHVHoeZMJDsS+/fyBCRZjxwpBwm3TKXV6jGvIKv3EpzUIh5wqUjEvem977l/GCABZM9IiJYqc28ZP5gIXRZUen4kSqjbO864UsUMhNgcaAIY1jE9mlYFXO/1eOGGXD5MMm4crGK+aOu4gRBKCxpxLhSJPCb5LMVq10IX+lD9eK7ywBjeU+rvkx9dd5XpsDYATavrygQEizRUeQViW+ty6rd8DcYIOvpkuCFV0gx2Ef/iXCs9WG7q99jwpubK8EVwTv+oz5AUCQypd05Og+w9kTqPRIWK//zlJCNV8Z1Vn/ZL0NsH49A279S8I+kXISUvMLk/P8fzGQGrie9BLr6XoA3LjTJTzVzl2mQfJYL1e88FElqCOHQqtHMXUPhudLIjS8vh/tRP4bFjzpfDtkTSwrEAa0cIIWN4IwhSfWlTUiRFsXfgkTdmiK2KyuBvcK2TH+FGX3RuP46Hx9Loyk4hUfpyMKK/5eLcxOxa5XTjw5gGU6sHEiyk+pbhB+aGXURuxr01hPZJ+8nR276DoIEXFUmsed1UGsEG+N28rLUMaLgHj+UW726Yeb/stl4JZG0nftwxidVDr7qKgNpfN0tl+puxNd/e0fjiK1UWOVdYnrnlWvl6Y6pgvZ21/AtE1iLidnkF9OoFtXKOfj+zz3/VEUJs5i9+tXSbCUqufuMYfULvLxDu5lEGLvvYiB74FMr7ifBZSXpD7SS/PJQWieDb/A8SQK+hZzIIQNTIl8PWXUdOSNwCrYiVO6YZJnYxEMi/ZrSjuWbqLnzS3LTDn0LM0rsj3itG+o1y1JTQ+iM1Xjx/ea0V0fushr2wAX9a0kzRa5vr6EOnylvJwmP+yIRpHerNvFZMf3aLDIcY1atltSqzG6Wka730joT0+GCmShEAw2gYVncLa+xy3Z5YMIvYfKOux5sm+4ENpZqUso+4YsbJ61gXDL
+      bvqhaPqbqbZoArdsSCM7R7QjD7M8lllYWpINGCJezu16HpfKpH7F55RTuF8GMiDbPmRuFmCMWl9hKF5lB/k2HxBcs0UOisBaYM0QCYoOLct4nsOUUgBSh5UuLD2B69smwfFDs/HZyFovhN4uRARzFyvRNdxh9e7QnLdf0wYPqVWfj9EnrBeNoqv4Ovh2+O5yZjH9OLtjTJSNL6ydyIhr8mHUmIuSK5Au1GdH0/kL7GJ8aU+iNIwEG84KMoEkoXQqix+dmCYmMPFOp9HTcTU7Qn1e3OehHf4faIG3BbwQh6+aTyUsdvD1qMT25cKXSiOl8Po+/5qwOeCI8xM8ggKO18gPyMLc/2s0J3DNujyThQmtBhqPbE2BPjm08krlytprDinFMGecXHDLprRKoBFTPvEkcMqieU61Yi8O3Xp+sqX+AMPEOQH1MgQ13youVW5O0HuszJ5vgnJUuaL1K9Eyb8R9p37uZK/d0BtrDrQvR2FmCIK8S0Mzpgs4FKXxZ5Ok72m6az1vKHtroD88VoxK5nrWKBkIUrZ8tJ6zoPsuHyeyXlFJqY0w2HsGmoRWt2eX56JlF/oarNHtn74SSUxl2RfJkquNhqDPxgdrn1E7EDBBHeuNF+MYAkRJ2qDUM+ALhCNcvQI2WehIOWhcE7sV44nuSjxV3Z3EpUpp70sHSPXgfaVmJo5vXVCVLYOxTrkLkLNOXzej6XehGHMOH+nd4mDzqaaJ3SQBAgJY5NX/4gKTagkxTO+VP+1DWbP2F4mSvtSdY3K
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : 156
+           height : [%nHauteur%]
+          dropdown :
+           internal_properties : BwAAAAcAAAAFcaDRw/wn/VLGlN+73CMDqD2HI6emkdAw47jwam14OQc+hSKzyKeajO+3gMY4L9fDRs1yWJkiGdoajoLEywo0o4p/I5D1Fe90rJ0omNJrEqiOOLOr042o8PqU9QKAlt3y8EelyhbeaejrJGpGBkGLeoVca3vbHDPsC7JyGzPr2az8TNfH+hIPj/HsRWofuAPZFyZcI+MCqRSCX8Y7zzxSbvvvdnAp6QkMzPsQfmHYYGBj3j4o+Xf2FSh5vQ9yCXbV9CYvmXeZD9m4svA9KRoO26UDof5OeVsNUcYHpEhMDvbVuw3La6fPgiYKRyAx+3LC9HSw7/5USqVc0lvErdTD3zsFG4f62oDN7tnvLiWaqyl5GFy7vCSOV4X40lLoHA7bRKugZX3igLjEy7EcjHzcIMgAMMwEWF3BTLuPLWQjOsJI8KFbuFCH5Z9XkZxyjnvkPsDjMYepbX6gV6PMVCgwHcVc6PT78DBEvo9uVrayGSPmdntFlvMZvuvoshZr0gXUThr0V0EaDAeU5H6u6cCEOOgBIHqeFO6xHcfSL+0fyVGllV1v8mzNv7PWOOML5U2Nu+zYGTyUEG4fi61JuSCacWNxAqTTWaiStoIcTtRO2sPnL5uHLiaQpYMOXktxOFPBIos9oDSPg14/oZI/wbEzoG7wNNUjyWtNMPOWhLxiZTInlO5SCuaCTjsrXmY3XkC8nAc38fntCER5wXXr6u/Jw1N34SG64MkUXd62VFMNVvgM
+           type : 7
+          type : 14
+          code_elements :
+           type_code : 23
+           p_codes :
+            -
+              code : |1+
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+            -
+              type : 35
+              enabled : false
+            -
+              type : 17
+              enabled : false
+      ]
+      
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      
+      renvoyer sReCheckLignesCode(sRetour)
+     type : 458752
+   -
+     name : GenChampsSaisieTexte
+     procedure_id : 1462456202798455254
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenChampsSaisieTexte (<sRub_p> est chaîne, <sInfoCode_p> est chaîne)
+      //
+      // Paramètres :
+      //	sRub_p (chaîne ANSI) : <indiquez ici le rôle de sRub_p>
+      //	sInfoCode_p (chaîne ANSI) : <indiquez ici le rôle de sInfoCode_p>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenChampsSaisieTexte(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut
+      
+      
+      
+      sRetour = [
+        -
+          name : SAI_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAADwJd/PMnGt7SfPquAar0KgxE+9Brqngn/qJAkRxJnht6JEKv0q9CBS77p2Daz7njYj1JAeBHPxTRNP6g8GjAaUq078It9j1pGenEH2v2MNuBW/VEXgdXCtj6NolKf1ztfUfD9mFwFgrXux6SRaoLJUWTEouodj9lUvDeVO+vq4ZxkvsbPuOicEI/BpS6oJarzM6kHP8HwuRhSPzVJikj3arf+pXRY6LflhHdfnvmIIzs1kFOvHhcdl1NLZQYrgW1Hj/kWQw3pHUGDLtcmyohj8a+mXb+7I1RqDokSfQ4vgpIdyANMGO3A3AjTSfQvh4ruuDzKlic/5SzefPwcv2k94YFwIvx6e/xqe5CvmiVzvbdndN9XDY+uTG87yn7Bt8x0zMGZFse59QM18kmraH0wmNVEmZ3wzbXhhAua2zznXNVryfM6s+39zJ4EGkho9D4TAhWiheTalkhyjCAC2Gc6OWD0l7cIyXvg9nVmbTw497Kmf0L5A6Kl9U7wkUBCQf9ix6iBMCNIFB1OnFxrCloHpx9uQoWIuFLYJ8Dn8tIlSLJajN85mEShPDFBXEorPuaVfHJk4+uhx+jtvlr8uyLF2kqiYp7S1WMi/7QZPUnXJeV8acIMwwp+VD0f/K+Ys7QIWiPWU/UIy2hfsWL155g635WPJHoX9lh+gRnYH3AY62u14m8ZeK04pY4Dhkf7IUdntXpHAwrmXz0Uy0w0iFxwvs7CE+ET36N+aY/IX7h7KLQ4GEiEaV+F1MDX6Oyxymd4LNI7g6BQTNPTUHvlW0cYf9OkJf2bC6qXM3JRJ+QMtpX/rqewElh/R0QHiIzdtyGHTLb8otw5E96aGFWSnexKNnUxGsgBZxXC143OhGNwlLN03uiJqll3KzDoRpq1jisZrVJDuwEO5M08uoJ+S74C0zOsjUcWktgaBYtSVi5i1tfET2FACydBSw4jLrMnJDf5GA
+      Bp12O0lrG+2FLlRWjVS8Jvp0NA4wlccAnCppJsQBeBjVHOI2c2tMmUdujbH6ttMD/C+b0GmhYVy6T/mU5xUbTBLWJJpH0kE2G3RL7MdJqeYx1vevG5S3ijGv+Xpi5lEDd2+KIwL1hIw6i/R/G1QFL1yjbHLQDm+FFgc+y3TbQTaih797KoLsm4NApPcwpfNEI8vULXTazmS41CD0vcN23MLK+tQ743GIr2BM6F7WiRIUl8WdhKAnRnwF4V07TGMrdfFzJwhMwYhEcWjyYdli2dDcW9/5+SbdaEnI+8H9/IZFiBwrMmNOZFkFKL/ioW62rUtZg461PrzCZbRqESs3AJp35YYQVfseUS8hf2U92W/kWcPCuFzMho=
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : 351
+           height : [%nHauteur%]
+          type : 2
+          code_elements :
+           type_code : 3
+           p_codes :
+            -
+              code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
+            -
+              code : |1-
+               
+              type : 15
+            -
+              code : |1-
+               
+              type : 16
+            -
+              type : 276
+              enabled : False
+            -
+              type : 277
+              enabled : False
+            -
+              type : 278
+              enabled : False
+            -
+              code : |1-
+               
+              type : 17
+      ]
+      
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      
+      renvoyer sReCheckLignesCode(sRetour)
+     type : 458752
+   -
+     name : GenChampsSaisieEntier
+     procedure_id : 1462456202798520790
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenChampsSaisieEntier ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenChampsSaisieEntier(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut
+      
+      sRetour = [
+        -
+          name : SAI_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAAA19HTB1NfRTduaNITpBnESbHvbDE0NY2inQLAkCbAajboxq7upBhtLsWUK4kEiBOu7qaLcwSYE8H4GI9y5axp5r4shkwjHaQ8Bb57b/9eIDGL3ZGJRpj8uLKeIckJGe61kw4nAUMF2w7K27vXFUm5vAOzTFFAkbOzxtzjeQPR/3BJDnLWfVZBF4NgeHRz8tzT603OrFlaxkW8p7vm3pvOjgPvCO9PiL4MxDyeFtq+ooFK3UoVwSCvq14HL9J9vC2nUNTN8lgUhvV3ocYbfDCTxCqkNwIpV8FeBZez3fjKl4gO1IsNxCeXwyaSkXoqvUqJezeC9jeshxNUlekBXKrautNBW77HdB4jPDIYBxSXfhAKfJfgxaNFRDJALrmqzUjA2U1p+vtI3s+4zK58VDMzUuJN3nIwMOjhzw8bh/snp5jKeolXhn5+wmIrcrVH9XcSo+yIMQ4eOW1kbWtDquZNseg/RMbUhBIpcDoOCCF7eDkcGdcRlXbqiXRftMc6pMEAukFGDHZAe0tYJOa6r6ZCX7eZQPfX2IdXlv9w6sZ/dsXOst9Hz5boEW0uUMc9FdIwn37ycCXmgaKRiBOQP1KL0/Bg0HtexTRGPvuPRFH8kOG+oE0RRo8PDd9zfvN3IOpj2piqq/lQb0lYA76Qd7Swi2svcbToYq0lx5FJ/3UEKH5NoaYgbGRD2II3pH/JQlS8rLAKiwOiJPiCXVo4EdP9159J0BrIvbCtqvW81p+oId5U05pZczfs3tl7veCJlfa5DmyaHw8gf+ef9wwL66ls3D8hyYd85RlnlxCoE5juniIc1KBoTaP/abPD4hHusqQuSkXSRFYJMh5xpSYzG25/ck4pAjLTFFB6cPRDo4sGvSxjSLzl4QScQ4fxNHPNlPs/dCH0Sr4Ram3XVbm9wdrPHf4x/1l1cIOnvxaCBDt3Os9eLcytjsmi+0LDpA1PZGr03l
+      NCo+DeCZVmr6OcqrhA9nlAMO4kRH47IShH3by5hAk1nFa7HLPCwRSYiF/ZneMcosm8wUhAYzqnxemoThWa4nfqoVVuAQNMeSce3oNSm3XFGVZtOiJnjHJ1UtPde86NNVOssNbtTVU/IgFK86ihCP5StofQ39UWUoGgPm9sIniv2P8qy13lO/nGAx5Mofr5lDYultg+XDsgwLkyz5cD5a8zR6OninLM/6RWKABCQ3Z2SFH51689iYrqEjNigQrogjEo/DtoO0YEixitcv0ehtSse1hBjgV7JzNGhkMKcf+qJslIBHlK5CveKK6UAfvIemH5od51k8cuVlsmfjoBPzIUvVkMBU35G5MWwkiuxgeYRDCGxi4RVeNwnZmEC6refNZfcK3U2anIASryuySo6Lw==
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : 351
+           height : [%nHauteur%]
+          type : 2
+          code_elements :
+           type_code : 3
+           p_codes :
+            -
+              code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
+            -
+              code : |1-
+               
+              type : 15
+            -
+              code : |1-
+               
+              type : 16
+            -
+              type : 276
+              enabled : false
+            -
+              type : 277
+              enabled : false
+            -
+              type : 278
+              enabled : false
+            -
+              code : |1-
+               
+              type : 17
+      ]
+      
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      renvoyer sReCheckLignesCode(sRetour)
+     type : 458752
+   -
+     name : GenChampsSaisieMonetaire
+     procedure_id : 1462456202798586326
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenChampsSaisieMonetaire ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenChampsSaisieMonetaire(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut
+      
+      sRetour = [
+        -
+          name : SAI_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAAAzPN5Vs9NTrm0ojDitRbQAVBFFJtfXFfT3VIaJ45eoiYNtpWuv2k9inDJfUfrLM4a6JdmEwxOldChEkAgui1heXs4wFR3H0GO3gOZKet1gYc3DcN6RCRmfzaEKDqfNu2X2Pun5OZ3FJ2tlEJXPH2IlYQHb5f/a4tNgEnDRdbdjmJthInZmX1YTz7Y2Zy1VXsaxMQo7Jv5AFxCVDe/Z76MsXppKoJqeXGX/9AmuuvRKbfQGPa1CwQqM4J982D4ByF0fC4k60TYGqOvUz/UigrPEL5dslpLtRnRbEV5Trut5U1Ec/5a1INgNs7ikAPmttre1uLErooeWpvKly12WbGKbyUG1T2rCCIJKPeEyNQ4DDmtwSC8kKLJMZsz0oHi536XSVTI9PVWItlq1RhUE7mtI/VPbZPSv7V5osjl3Bv6ASSGHmbI8H9Qjv/AR0ANCfV4BBJUCaZSWVT5gj1io6oHS5RWGTV3SoLWQNGwiNsQQEgxneXFALEoc35/UBJQSb8HQ33w28zDsJ23JT1+n2lds2t/zqJzA+vkj+hibM/gcPOtkCpi01rM+d+m9reWhtoOoTlLflTpIRhOijpb1P7P5OonbyQ/cq3RsA1F23sdPLlNl31uBVGUEuY7IPasXSvnuX1SWdLmms02TTxkVFHMb35KEWLtd12JkEjLaaVEp2iH9HM8hHhGQpinhvYTpZBkJonwcLn0GIsrPimL0oeq17T7EGMDcLUESPbOp/4XZQQv6UIp8EhgTRsDV4kjEpiAlRQz1FTGsxaNbzdjUzZgfIyTyM/0uuwWH4BqkCiKkSuEp4CDtq5o+uIr+3rkjMo9mRcSPH30jUXK7546cGH4UYT7QurZ+cfpaZeTikPAkqZb05ZMOKCIS92oXmKv6QTelvoe+J9eJdUPF+qWqKTBn9wJJzomllUPPPbwfsI6pa3k/g8fT9xme8HoHHYluSckHj
+      GQipiyLoZfXKJfGF/sX0GZ+6RvSwM4ILmEdGS/IJH9RWwp/33+weeqC3ejArynmsLnCsEeLIP/ZzpxxnEsIEUrsYROTu9c2t2EZBpFddcV8v1Fg8d7BPreqruUbkk/7ODsOWxr+v8E8IBBWNVWIn65rtcQawNFEHnr3h3TrkGl8kRhsOuS6bMN+Eemvl6gZ8YMNMrYyFjpM3sIFsO0hY47/ik837c0Xk3ugalHvHafiiCijEj4qGu5UhiZPM6Am4sxZDJH90YPYuOne6sQrwX+2nFIOfPqtzg8hJDPf2W7XrLh7YQU7+OGIRaOXk2ikGlymUa6Ne1lvWfIkfJAIF2y6FZHgQ6WUn7i5/WgnWhhs41E/7pZxVri3/j5D0CjsN34+nTymnJE+p3TRMVDlEF6wEwLv2GkT
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : 351
+           height : [%nHauteur%]
+          type : 2
+          code_elements :
+           type_code : 3
+           p_codes :
+            -
+              code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
+            -
+              code : |1-
+               
+              type : 15
+            -
+              code : |1-
+               
+              type : 16
+            -
+              type : 276
+              enabled : false
+            -
+              type : 277
+              enabled : false
+            -
+              type : 278
+              enabled : false
+            -
+              code : |1-
+               
+              type : 17
+      ]
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      renvoyer sReCheckLignesCode(sRetour)
+     type : 458752
+   -
+     name : GenChampsCheckBox
+     procedure_id : 1462456202798651862
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenChampsCheckBox ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenChampsCheckBox(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut
+      
+      sRetour = [
+        -
+          name : INT_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAADeDgjsws3LL8xes+MCGw7fSJ7Nte0dtXBqqXvKZly9rqy9Ei6K1e1Xi/XXpuBNUojbK8WLf+A51X9TFSS3WTK3SN4jRsZy/W1x+4qLE+UpkK6qMZU2gzyeg1fpjECCFexo9wK34kFxZPZeft0D+fkWd+VZahnFJNxtZ2dcz3rXjKNE0UI+63M/VJ9kgCZciiA4OcYGw/EXfa1TayRyTt3qBSGP2fNPq9x0wyCIuue0F6JjMlEv2liIaoWXBulk9hjVj30/0dy/CO78AXalNgilEgG8Em4KQKqSCDN47+OOfRpaNI5YPphlTOt1/Et91cAYn3kd1OtBuLY6a02heay9xe4tFRAbn7ZnL8eMxT21oq/qpphbxISA1Xv3iQhZfMH5JSJZ8CLDPsgotDaSNGIoksDcsLjFQiwLqz6nsfX4t22AddsSkjbvgrEbd99J+fZzWSLoHqfhzBBteGuZSSwLAzwynIGmzXkfRI3mtI6wWHIC1axL8gn/DLfWeFdq7U/Ah7Dm0dnb9a/dADNGsb7qoUK5Tfe0Q1cWkk63Gjr9JpTrWofAw1wTD09LT1bGWUF09aLFzVk907Bfx1esdjL5I9xgsHC0K7C/I7gBDgKkDwcCVPh4Oa7a1cPUZDZANVZYkiHNGDKbxuYgih+MrQUzo+yrBIVhlFZsKlVJfGUYYtSjIhrczMluX+WSgvFRW4eFKOMS27e2xgSDzln2lejKxCJeewThs7hlaBfk+HSHZ8t196LQtufE0ztpKuE8F7c47eNNxah3w8N4f16Sylz75qAFTWw2rVPr/ZLTNto/n4J8eBj/xGJ2rVEYuuRkGjkAUXMgrf2iPGYP04zc6nj6PqRTsuxBm+p6fPY01qrBKxkv1AhOarmp+klUwxDJ9h3i6z36zQcCAXWEx21tl014KeayqcQol2AIPUWVUiYGfvziiag96yUYyliDRhCz14MmB
+      5DkmAvsIUIWXZIoHwt2aRuJhhF+tPA55rLbaGHrlKhR1hxcaDbmxnyNsOrDuVQ8DdK7mHFVQ7gAWfVoig9yAppPDYIap3ziVc3R8goJhf0TES6sGgS7EFcJjbBqmxcO2qMkhR64nHY=
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : 100
+           height : [%nHauteur%]
+          options :
+           -
+             internal_properties : BwAAAAcAAAB1yxKfyF3RaDTeAzhUWg4OYXWF8GOZMIunb0QEH9r4qKkWWoes8OgJxeaHSqzVVPP0rTr3fjquzhqqmwSS5vezr3FVJtZVnwUKrIcCgnOus6GHCbIof1bKQMVwI6i/d3dnBJPBzzjpHLGiWEqu
+          type : 5
+          controls : []
+          code_elements :
+           type_code : 5
+           p_codes :
+            -
+              code : |1+
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
+      ]
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      renvoyer sReCheckLignesCode(sRetour)
+     type : 458752
+   -
+     name : GenChampsRadio
+     procedure_id : 1462456202798717398
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenChampsRadio ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenChampsRadio(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut * 2
+      
+      sRetour = [
+        -
+          name : SEL_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAACP5K263Ua6F7wHYdIJGpQAzYiXPi+mL67ztbbYggLZS31cCWamHvrTCVKbcZXAnNaleLZWEMFFRbpjrRdVegmUv4PJU8aQWBVCAopdO1aNXhXjzxSD3tjBnSsFj+aVB0ZnnurUpHeI2Y0faTpKv1ToFIE9TjF1MVOafLm2+nuwo1omymEtJhFq/+cB3RSvTr5PSRKKIS6EUu7U3dPPTzas6oLzkC6Iw3d3y3KgbYhQxO+POjVs352bByzXk+mbgeaZoJe/3DsfUgNCg/DwaJzSqw2m4O5Y2jxriLsEpFzXDSEW6Uyo9U/QGLN37r3pcuCH6f65puiEDQaDUdGovBsKQQCnCCVvIeHm7s3HxjJqmzUVbDVcUkbFw4sYR6wvFq3jMGtvGZNrcpydWDnVHVlVkpSQrSlzpuSzK1r0bSI/ZMuv22HTBh0oCYQ6snfxTONA0qtqFFdNFMnku2TD4UVseX9U9bCWYbRXIJDi8CcXKOxXgfrf1OoOxBTlRiQsU5LhwUg+95/9nCIHmyJ2fwvYGgXC7JlDqyDES7b7w8Za+L1vNt3bUD8fS0i/Fc52EjitHV/h4/3yXSCTl+PL5XKMy/1TvcS3Z7BknW35UPdluk1QAa6pHouq74nxSkAIOe6usQmjh2Tn7ClZFhpFNcZeMigAyJ6xHdWD5oK9PSrzGuR5qUxSb8xUxxoqhu1bfPht91Gx39N4TyPn8tixHBgV9ZhWFtth2X12HZnLm4giv66YyazobBQWzx4x5yucLxViB0GE12ldPyC/L+kNEfixfwU85uwMeVqgzS+R6OY0tqnUXpW/I6HKD+pQ5/X12N5hQ9qbMX4/EhYHDPYTe1GVVR1/pHkUOWLWJuhF2sE29j8Ggz5XkMHZ7O7Px4ro7vPwDM97vb6Nq/cO7ZzH0AIAsCFD+au3VZcy9IcuG5Oia5FSaKtUWfFgxCpF1kBIXA4SG
+      N/oCbJFLLsvK93NB2BzSsemgXOu+r1de5GELDLWIF9VL7zyZ4I3I+doHST+MMyhQANE+zqNeEMSkYr/xQeZ1b+BQVemmFZBut2vMBAgphPA9ypdd6If4GCtfii77r7EXptXMOtDGTRI+qgtt8BhWjNV9QFghoc=
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : 100
+           height : [%nHauteur%]
+          options :
+           -
+             internal_properties : BwAAAAcAAACDueihjh8XLvqszWYigETMpzNLiimLhgk15f6ibegWVickQKkSmoaHo4xZCOqz+kFaYzCpVSCT8ag4GVZ8DNmhvfdjKPCzsQcYOiVc1OEoGQe951Sq/ci8dou25Wr9sS290uFzGfarXvd4rjxY
+          type : 6
+          controls : []
+          code_elements :
+           type_code : 6
+           p_codes :
+            -
+              code : |1+
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
+      ]
+      
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      renvoyer sReCheckLignesCode(sRetour)
+     type : 458752
+   -
+     name : GenChampsTexteMultiLigne
+     procedure_id : 1462456202798782934
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenChampsTexteMultiLigne (<stProto> est STR_ProtoChamps)
+      //
+      // Paramètres :
+      //	stProto (STR_ProtoChamps) : <indiquez ici le rôle de stProto>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenChampsTexteMultiLigne(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut * 3
+      
+      sRetour = [
+        -
+          name : SAI_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAABdJ0I/Hu72WF/eSkW8KMjulBM3S9WbHgKzog/pcnePY+uW1/TUjLst/HIxbZsV/ZEx4acXdRrgJC6tNAqPQon/1shbvsaZ+SuXy0ieU4QpyRkZGXyY0eTAdIr4FW5SA3baNLtvv4bb6hp1stg4l0Q0jjcbXpk/FXo8Rfeh4E535/kQ3kNPpNoXUOrETgo/jwTb4eOBSL0BhEgeTlOLNaj9xxAsgr6bcuewVWd61Dglhue3yc5qquvw/X7R7YqSbfxhtkJ+zCHEXcfJXzFNiPR74BgiprMosFvbUUcwY7/UIULufapy6Jj/nxcpDyXDwILBkmzKxKuKmMrkBel08SeB8YdcFeg/50Sk0Tum+JNLmZHJbcxQ4IAc22NUdr/2jLIikgNLQpo/HF5eM99GTHJojMDYktVInHywtaUPTMD4rH79znjlVB5TyoZ518//+MKiLuMNCfnTBKuqzE5ExXLzmofJRXh81tyAF7akXx4w9Uht7ErqTspXbaORqdOqc5uoKdo/YmAKcXj+AJ6STnGjjlfYmhbJJgUNatFHR5VtFCjj/PFpbg/ApoZ+LTV+QyxDt8KB15ih/ac7V5mNXWgzHnfcleVaMoYxS6UWqHtGLtHexiHfRkZf5e5DXQ8+rVrK4tbtBYxxRrGehtJjZFRyvy+uLW4OG+CFmmo6KmaAFw/EHaMsh6q9BGAhi/ozM5BZ6+outKPTyVPFZWRMF368ERKS0KkKKu9I5qxaV5UiAE3Rt7BvaTVnlLYPLv4CUREDSPIQdlmtJWxqBNjmJ9XLOcSl0RmCPexuK7BsEdSbDdMvggDfVVdQVzwRAB9IZJotWbbOpu93b2AFw2Fe3JXNKpDmOo5dHCpmUiPMsbWqQlYJSCeWhFhj0llg1XWxk2gNdtiNEDyqF3yP5W9cCIZiBLTuPxwUQAKy2Xfvle07yDnH7igIuCMZ3CVb4SL9uJp16
+      CgysWlu9McR5jTy0lxQYaUD1A60OFYfll+IgVy1yQ5onT5VoPuqnURbHrEcmKPLaxehLRfp8fRJHnzD8IcO4zMYGih3N2it0EFvnmERMCPrXKXlMa2TOjSLkjckUo2XoZhW2ChW8PqXpr4XHPgg6iS1tu4Ua4/CB705tBLnCP4qjav+zJSIRGCq0IQYd0kE4Hkh22vj7E2cNEBjUs4aw3QezqVqLrGipqAwgx8LrDiyYeSlV4+IFlpPXdgZX4cROkkABSmNhlZ0LGV+PkPZKTUvEbC52TCXFNSmQW99zeQv+W20xtufXHFAtQoGQtw1TbaImOGQ6XlRzmIweNWzQLAndpi2LtBY9/58QZcB3+4eQFEi+LFUW+yjwlqqUQXy6+D2Qx+ByQF8MwUHhsq5uwPFRipfplUkMp20OQLSHVY2js5ZnMVKwO29b5X/7D2/q3axoaNdTiBwgRo=
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : 351
+           height : [%nHauteur%]
+          type : 2
+          code_elements :
+           type_code : 3
+           p_codes :
+            -
+              code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
+            -
+              code : |1-
+               
+              type : 15
+            -
+              code : |1-
+               
+              type : 16
+            -
+              type : 276
+              enabled : false
+            -
+              type : 277
+              enabled : false
+            -
+              type : 278
+              enabled : false
+            -
+              code : |1-
+               
+              type : 17
+      ]
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      renvoyer sReCheckLignesCode(sRetour)
+     type : 458752
+   -
+     name : GenChampsDate
+     procedure_id : 1462456202798848470
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenChampsDate (<stProto> est STR_ProtoChamps)
+      //
+      // Paramètres :
+      //	stProto (STR_ProtoChamps) : <indiquez ici le rôle de stProto>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenChampsDate(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut
+      
+      sRetour = [
+        -
+          name : SAI_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAABqmiTMWO2AR4wLQi+9XiiqvDZ6jDEH745w2NtUSrtfU2oId1+sG0zqERmlPY/NNGicnty3L44+KZTrU2bvifzVH8t3PwDoNXvryVk76MbUW0hlFCB8Oz7Kgl5n9M69eAFLFXCOmPX/qqmrwXRpOGUO5P9mEZY9jOO6/xAitV45ALzinQxSGL7qtVGm3Q4U3iGo2gB+CRASCzCN/EyG7c4qV/iF9dr5ZXvJMcCpUHmblAGKQ5d/otzDugs5kt6iAjr5L1hDKilicKAUZgr73FoO0W15JFRLVsmCX5H8Cl95Of3QrOnrb7fJFvVdso/BTZ8bCueME6hqEOe+R8/SXBFpQ6QyUPKdrgIvCw48lXcuHUQd1Yjp0QRtsTajnmRdbLB5LkdlxXL1NkjyPnorChAVfLfsoEBft1LX6EqYa3o4eqhUh6ssIsYzpwzmFh5cwUkmwy0nFmnRNDS5nFJkfrDDVIAccuuDim3pYY07Uq/Qu4VE/FCdAcAIoikZmF+yGvRZU/1XmsfGM1lYOssZ0aC9DOm6uNEPMvHptB2cxwMW/pYQSDM+9WT8yzfxCWNrXilu+B86i8x6MjpSFexopBStA3hykvxNTTHENJgmzLQlmk9ihr3rcpSEEPIyeFYNDVHA01l5oZsofnkmhjfQg8LFfL8m7IQgCmb2lVXGCh9pTde+Ya4k0niyld3BhiyHoFazkDA8CzizaxdnVmBxasnDHFqvS3YxgvRrrJIPQuFR2aglzXpVE3WZC4yIvm1jq+X9mO4SBNy2VfllISjTE7BF8QenrS7S/MfvEnlX7ZUYYM7NRVWglAevDwxnife7phc0nhXO8DKIengn+e8DsFci+ri2X4HYmlRD2YxVZlO9Q+MvNQ4lAV0MTIWT49hqE07CnKWgplg3OSqNVVtbkgGFHHUbhKmNUkGdyqbGWVtXaRDM4yt5VYs5pq8+4Sm5rwbPk
+      Dnf3nOQsLAxrbHnm1hIKTAkGiQg92xTzxp3mR6ugidP2hwXRNic8BGNUJb3yK8Tv8h6O7tdzT7KsSE3vTmywD8IaL5qhAo69EjwWXXxrETjrRFj2nK1G+6FzEZkU3sc1NfvGrVj76v0B22aY8GZfft1C0IpMb6hZx4+LdDyO7nn/nZTbWb0uUc2uLu+FMC23aC5IOGbO39wh0g2PD3Oz1rkJDKz+lZkKIIKpIL6DDVCtXggiy1602kvteHwtlDkcNJsAoN6JgDNGhmzd0YCkZqLyYGO91W3dU/vhQ21Erl8FnBB4u5E4ywWRK2sY8/BLOO7zD17bdKzvSX8q7CRG6WwN85HE+b6doEHk5qlS1NFe7PV5bSwSz4y7ztIebkJbflfps0nHsuGB1Fg6cv3SExtLAvcjE0kUGRpvff47T5YVpAuV2ng8OW0iAGTndpixVr9rGTXELHgb75hMNNTYjlM8F5IHCH2TXTP3qfS5Tf3FH+oo+FSz1vj
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : 351
+           height : [%nHauteur%]
+          calendar :
+           internal_properties : BwAAAAcAAACD+qjhJiaBQTVEFZEUKlLq5h1k27lT9xrG6ol6KPNYwDQYVpZNsa/FGb6GCXUp2r7rZoE4JShqrHo18aGppmALZtKDQ4jSQI9kSV/M42dtQwZ17RChq+3Q652UNNOQDNyzsSZiR/csW0HYkhZoOn+O5PqxNCBeMCB2FKvzRPEN7ho3vgNctE5M5+dA0Uux2jXvo5pVXdV8rPyuAVqX7R/jfL8AU8XcXjDzqDExHhr0qWHQLOLwJaaOZg96r0dRgNaUKD/nFqqFuEcd4FS42CaEhd0FWJ5HY1DYw4PMCjr5qjd31FcMQhHbpmltUP0TKyv9YJ08Jt6s1uZfIp0RGHqNe73abMVtCyL0Jb+vDWhKyLohGb9tWCxxOXKmH9JmDfbzWKNsDjkgbkww9BhbOJcjVdxpwiaGAvKm0YGgWE5LEGqAnfWhvkYLL2D2jrmqNdrVUiJ8qTfOdMfd3fLBKzT3eC3qYSmVuGJ5d9vde7dKU0Abj0cplF8j9HxvASLJ4/CCn3eXRAS8mZefDg/Fl6knFtVJNND/U1IsMsQPLmwwi+/7f9PweB1Z1gDwDpBKWPPlBarCgEIccLu1c50xtK5h4r9GS2+knzNs63RH5a9P4Kd9EI1Q3o36LQwrZnQMvBAYfUsrIya7cXgjcm7+2oTF9CD5qEB+Tcs/eqqA0PJ7AwtDLWpvajwFifErY3RFD+X9krcPYZxdCR65q3hAgcCz+Usx4IvsY+hUniH52qGyBnD4RbUEH3cRh5EoEeYxJcJ+iSHC9FdfU5dIIT3OfBKtzUOAgvi1NwO+wR2z3F2HiJtPHFky0Gppk7hmlbAv98AckLRSUF8Imo5iP2/4NzoD759zmYGSgZ/rEfS43akUql5+JxLnQoQ4Eop1Aj/W29mCElO6K01IeE2jlPWgC3lby0CyBLd4+FNTIO6wwaqeo9aBB4YOCeYDVpok8VDIOIE8
+      DF4Oj4cvYTqgci5iWDi1jHBLlEwZbHhUyg9qa8oy3qyWWR27IRfQ1/pYrmXrgajX1mqAjjCKpQKXdHyZgkerCBYSLgV1shEv3wn9nTIoWBtsVBW7E8ix5ZaPSE8sRLNCrE9Ysz344oROIfC6JRQKRaXmEP+GVqPNdGTE1keoRjohgiHq1HS2dtcvifbpN0b+COR00pj8dD2sWlzUMpVb+aIHNlaQR6KMenPlwN1mUSFLr1tQgWj1Ij6bFmzICFHffutFnD1w4faDH+yZxZCtfkLhotot0Nrcy60zQW2bsP8ozaMSVk9lnbVMlsjotPxdAc/2LJ6Adh9clzAq8zuBPJfMHvhVzPRC4LFpcf934wnFbsOQu/SgKLPq+0KABAtjsoFykFmJJM3ZjVNKedojRd3i9xMIwbPTYkXhquJvuEL9zEH2nb8yPd+hqKmKnzzUwP8Pd99rV9OelKUPtrfsd6sjSC1KTyo/kyYndWKGLdvPyNWBuBIgJd4j2UqB7C2uiRS4eeW3znvugxxNlYPGZYKGz3vBicKGiUc8J5PsttOx8zQvDGrEBz3/8hm0MM5UohB36lxiqWtVRW64z8qVdY1Os6BcafyodqWAx1OWm1Pw8uoGTRkpGYip01+/lCM7utgV9gsl1zZphktOwFDUP5IY7o8adu0DC5hfWyu11to0j8pPrhoWCuxx3BHAUcYYxzgYIj1Mc6orCiVICrA7LMAtIfE45ihSWpfEGH7k
+           type : 47
+          type : 2
+          code_elements :
+           type_code : 3
+           p_codes :
+            -
+              code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
+            -
+              code : |1-
+               
+              type : 15
+            -
+              code : |1-
+               
+              type : 16
+            -
+              type : 276
+              enabled : false
+            -
+              type : 277
+              enabled : false
+            -
+              type : 278
+              enabled : false
+            -
+              code : |1-
+               
+              type : 17
+      ]
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      renvoyer sReCheckLignesCode(sRetour)
+     type : 458752
+   -
+     name : GenChampsHeure
+     procedure_id : 1462456202798914006
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenChampsHeure (<stProto> est STR_ProtoChamps)
+      //
+      // Paramètres :
+      //	stProto (STR_ProtoChamps) : <indiquez ici le rôle de stProto>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenChampsHeure(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut
+      
+      sRetour = [
+        -
+          name : SAI_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAADu+jDcoocrLsDvwVmizBdNYgUYdodzGOf7vVu+gR6FwX0ogY4mhSyahffqZmVL7yN+t0+p+8w7YToEsQ0lNJqe9QZP+4joRWRdsUfyjQ2gVV4CDshr+NNViYryQeqokxiXk7Vy87KQYhmeVEEuY9jdffkHvz2rwvRYXr7QKdXbWbhd39+rnryk2f76W02Cu4O4ZYvEUockyFefJdeZBdhIWGkAuSBKPAgjFE5ITsIkLYahwS6cdtXmAMiTjm3M8AyhQ4Mwhbapkii3BZS1iHxcqooIXnQdu7261yT0bLDq9ySOKIYuiH5W1PvAqQ+FvZ6Wmfi37mM4JkvwEN+JKPcWMjHcdyuxmD52ko+0IPBxGai3XIb9Twhg06ZuZ+fK3jDK++fAaq6Pdf20wHB9f+lJYqzOfYlIe9TbQgX4F7YpxHhkLyP7Vz43V/Gjs0heOMTRHaOY7FA6FxQRGeB7wRAAnzAUPYf/kQm8Dfol3zJEFcx08/dhgV89cM1rtSIdTjRQqndFHImWl4oodUP68fJfAHK9tgFDJS2XtrEVpCa2yRqLHp+hBEQDHGVq3VPsktgROHE+EHW86hLwpIuiJwaygoIWJvVnPaU+s0m9B7dncoHMM+mGhPKFVMatcG5Ved+zRYoN1vSJCmZ5WRRnXyJUxLgk8WyhKX/lL89igow0aXNQGhcrT+BeV55V4tN+CJ08pflZjHB1/YAEl8SiMGUlUtpcLmETociEV9z/aY2STMcX/1T6Q1jJ8tFalkJxzoYmZprMtzxnqWzisbrgVQEQnONLQU/MRTPaFyEr8KWv7b9vy/9h1Mq1qG/h2643UfiVmCfckzK5CDVKx8XCPq5Xm55mefRImyjufmy9pyE41Dh/TUJi4RqGow4JL4t0rIGprg8oq9wAJe+odQfG1ubUv+Er/tzp+Zui+Uj6aJsyOoXGxzHefwCBoWi+SQhniu8I5
+      kfFX2MzrqNuWdXIycEL8MwOYnG8ToCGFNwdvAgnLRIT1naasLk6Az5HtGV3McJixYaIkNvO6S3T5c0yQ8Itw5ssqgmsgTIdSdzCPi3Wi3eTvy3Mhmf3jps3NoEWlD77/EtddXuMdSyjvWnr8+bQXG8lPfmzaiz4PHroWsRrHizZSpqukyGCIuocpFTI4Yede+a5m1dk3/i3X77LSIhf8LDqyG09UVAdi25AZQSv6yQE6ZyzFUTUIOz5x4aYmXkd6BhSv/Wpeu3ILHNOnzFbesQLUd60rs9SYnO3BP0aeajw9NIeyhmiik0SumDaJuAmYt1Jy31qKUkE2yljY9/WFOO0z7cXAH4VOwXhAshOrrIxMwFSGy9e7L2GcSw6qL4qAeFlJfv6Nvg5RUceY/ZoyYjplgJ+6RdzzOvOnq/HomGsLyWaQs6FjGH5z+3zT1zXFpSHKKAOWiqDRBkEEfhlaYh+XJ6lPkIqYfad
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : 351
+           height : [%nHauteur%]
+          type : 2
+          code_elements :
+           type_code : 3
+           p_codes :
+            -
+              code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
+            -
+              code : |1-
+               
+              type : 15
+            -
+              code : |1-
+               
+              type : 16
+            -
+              type : 276
+              enabled : false
+            -
+              type : 277
+              enabled : false
+            -
+              type : 278
+              enabled : false
+            -
+              code : |1-
+               
+              type : 17
+      ]
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      renvoyer sReCheckLignesCode(sRetour)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x14345a8914469ef9
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

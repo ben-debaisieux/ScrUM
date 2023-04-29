@@ -1,0 +1,341 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbEpic
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x140d02f85dd62f7a
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbEpic est une Classe
+      	herite de ClZF_ObjDB
+      	
+      prive
+      	m_oProjet			est un ClDbProjet dynamique	<note="mapping=IDScr_projet">
+      	m_sNom				est une chaîne ANSI			<mapping=Nom>
+      	m_nOrdre			est un entier sur 2 octets	<MAPPING=Ordre>
+      	
+      GLOBAL
+      public
+      	mg_oExErreurProjetAbsent est un ClZF_Exception dynamique
+      fin
+      
+      constante
+      	cst_posPrem	= -2
+      	cst_posPrec	= -1
+      	cst_posSuiv	= 1
+      	cst_posFin	= 2
+      fin
+      
+      
+      mg_oExErreurProjetAbsent = allouer un ClZF_Exception("Enregistrement du groupe impossible : Aucun projet n'y est affecté")
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1444814321205522298
+     type_code : 27
+     code : |1+
+      procédure Constructeur(LOCAL nID_P est un entier = 0)
+      
+      Ancêtre.Constructeur(Scr_Epic..Nom, Scr_Epic.IDScr_Epic..Nom,nID_P)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1444814321205587834
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 1444814321205653370
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.GetObj
+      PROCÉDURE GLOBALE GetObj(local nIdUnique_P est un entier):ClDbEpic
+      sClasse est une chaine = ClDbEpic
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 1444814321205718906
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClObjDB.pre_enregistre
+      PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre():Vide
+      
+      sdSuppRefEpic est une Source de Données
+      sReq est une chaîne
+      
+      si pas :ZF_bEstsupprime() alors
+      	
+      	//On s'assure qu'il y ait bien un projet associé à l'epic.
+      	si :m_oProjet = Null ALORS
+      		mg_oExErreurProjetAbsent.ZF_Declenche()
+      //		ExceptionDéclenche(1, "Enregistrement du groupe impossible : Aucun projet n'y est affecté")
+      //	sinon
+      //		Scr_Epic.IDScr_Projet = :m_oProjet.ZF_Get_IdUnique()
+      	FIN
+      	
+      	si :m_nOrdre = 0 ALORS
+      		//Si aucun ordre n'a été définit, on ajoute le groupe en dernier
+      		:m_nOrdre		= nNbEpicsDePrj() + 1
+      		Scr_Epic.Ordre	= :m_nOrdre
+      	FIN
+      	
+      sinon
+      	//Si on supprime l'epic, on retire la référence dans les US qui y sont rattachés.
+      	sReq = [
+      		UPDATE Scr_UserStory
+      		SET IDScr_Epic = Null
+      		WHERE IDScr_Epic = [%:ZF_Get_IdUnique()%]
+      		]
+      	::mg_oApp.RSQL(sdSuppRefEpic,sReq)
+      	HAnnuleDéclaration(sdSuppRefEpic)
+      fin
+      
+      
+      	procedure interne nNbEpicsDePrj():entier
+      		sdNbEpicDePrj est une Source de Données
+      		sReqCnt est une chaîne
+      		nRetour est un entier
+      		
+      		sReqCnt = [
+      			SELECT COUNT(*) AS Nbre
+      			FROM Scr_Epic
+      			WHERE Scr_Epic.IDScr_Projet = [%:m_oProjet.ZF_Get_IdUnique()%]
+      		]
+      		
+      		::mg_oApp.RSQL(sdNbEpicDePrj, sReqCnt)
+      		HLitPremier(sdNbEpicDePrj)
+      		si pas HEnDehors(sdNbEpicDePrj)
+      			nRetour = sdNbEpicDePrj.Nbre
+      		FIN
+      		
+      		HAnnuleDéclaration(sdNbEpicDePrj)
+      		
+      		renvoyer nRetour
+      	
+      	FIN
+     type : 458752
+   -
+     name : Get_EpicDeNom
+     procedure_id : 1444814321205784442
+     type_code : 12
+     code : |1-
+      procédure globale Get_EpicDeNom(oPrj_P est un ClDbProjet, sNom_P est une chaîne):ClDbEpic
+      
+      oRetour est un ClDbEpic dynamique
+      sdRechEpic est une Source de Données
+      sReq est une chaîne
+      
+      sReq = ChaîneConstruit([
+      	
+      SELECT
+      	Scr_Epic.IDScr_Epic
+      	
+      FROM Scr_Epic
+      
+      where Scr_Epic.IDScr_Projet = %1
+      	AND Scr_Epic.Nom = '%2'
+      	
+      ], oPrj_P.ZF_Get_IdUnique(), ClZF_App.sFormateTexteSQL(sNom_P))
+      
+      ::mg_oApp.RSQL(sdRechEpic,sReq)
+      
+      HLitPremier(sdRechEpic)
+      si pas HEnDehors(sdRechEpic) ALORS
+      	oRetour <- ClDbEpic.GetObj(sdRechEpic.IDScr_Epic)
+      FIN
+      
+      HAnnuleDéclaration(sdRechEpic)
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : sExport
+     procedure_id : 1444814321205849978
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.sExport
+      PROCÉDURE  sExport():JSON 
+      
+      sRetour est un JSON
+      
+      sRetour.ID		= :ZF_Get_IdUnique()
+      sRetour.Nom		= :m_sNom
+      
+      RENVOYER sRetour
+     type : 458752
+   -
+     name : Deplace_Grp
+     procedure_id : 1444814321205915514
+     type_code : 12
+     code : |1-
+      procédure Deplace_Grp(nSens_p est un entier):Vide
+      
+      nMemoPos est un entier = :m_nOrdre
+      nNouvPos est un entier
+      bDeplaceAmont est un booléen
+      
+      selon nSens_p
+      	cas ::cst_posPrem
+      		bDeplaceAmont = vrai
+      		nNouvPos = 1
+      		
+      	CAS ::cst_posPrec
+      		bDeplaceAmont = Vrai
+      		nNouvPos = :m_nOrdre - 1
+      		
+      	CAS ::cst_posSuiv
+      		bDeplaceAmont = faux
+      		nNouvPos = :m_nOrdre + 1
+      		
+      	CAS ::cst_posFin
+      		bDeplaceAmont = Faux
+      		nNouvPos = ClColEpic.from_projet(:m_oProjet).ZF_nTaille()
+      //		nNouvPos = Dimension(:m_oProjet.aoEpics())
+      		
+      	AUTRE CAS
+      		ExceptionDéclenche(1,ChaîneConstruit("Paramètre incompatible ""%1"". Pile : %2", nSens_p, dbgInfo(dbgPile)))
+      FIN
+      
+      
+      oEpic_Tmp est un ClDbEpic dynamique
+      pour tout element oEpic_Tmp de ClColEpic.from_projet(:m_oProjet).aItems()
+      	
+      	si oEpic_Tmp = objet alors
+      		:p_nOrdre = nNouvPos
+      		:ZF_Enregistre()
+      	sinon
+      		si pas bDeplaceAmont et nMemoPos < oEpic_Tmp.m_nOrdre <= nNouvPos ALORS
+      			oEpic_Tmp.p_nOrdre--
+      			oEpic_Tmp.ZF_Enregistre()
+      		FIN
+      		si bDeplaceAmont et nNouvPos <= oEpic_Tmp.m_nOrdre < nMemoPos ALORS
+      			oEpic_Tmp.p_nOrdre++
+      			oEpic_Tmp.ZF_Enregistre()
+      		FIN
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 1444814321206046586
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.charge_obj_enfants
+      PROCÉDURE  init_ObjBD()
+      
+      //SI pas :ZF_bModeAjout() ALORS
+      //	:m_oProjet		<- ClDbProjet.GetObj(Scr_Epic.IDScr_Projet)
+      //FIN
+      
+      
+     type : 458752
+  properties :
+   -
+     name : p_sNom
+     identifier : 0x140d02f85dd72f7a
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNom() : chaîne
+         
+         renvoyer :m_sNom
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sNom(sValeur est une chaîne):Vide
+         :ZF_EstModif()
+         :m_sNom=sValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oProjet
+     identifier : 0x140d02f85dd82f7a
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure p_oProjet() : ClDbProjet
+         //Propriétés de m_oIDScr_Projet
+         
+         RENVOYER :m_oProjet
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oProjet(oValeur est ClDbProjet):Vide
+         
+         si PAS ZF_bObjEgal(:m_oProjet, oValeur) alors
+         	:ZF_EstModif()
+         	:m_oProjet <- oValeur
+         fin
+        type : 2031616
+     template_refs : []
+   -
+     name : p_nOrdre
+     identifier : 0x140d02f85dd92f7a
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_nOrdre() : entier
+         
+         renvoyer :m_nOrdre
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_nOrdre(nValeur est un entier)
+         
+         :m_nOrdre=nValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oProjet_ID
+     identifier : 0x1418059709add990
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCÉDURE p_oProjet_ID():entier
+         //Propriétés de l'objet m_oIDScr_Projet, accessible via son ID
+         SI :p_oProjet = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oProjet.ZF_Get_IdUnique()
+         FIN
+        type : 1966080
+      -
+        code : |1+
+         PROCÉDURE p_oProjet_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oProjet = Null
+         SINON
+         	:p_oProjet = ClDbProjet.GetObj(nValeur_p)
+         FIN
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x10311e4900179cbc
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -1,0 +1,112 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColProcess_Metier_Axe
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e5c0d4e75c47
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClColProcess_Metier_Axe est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVÉ
+      	m_aoProcess_Metier_Axe est un tableau ClDbProcess_Metier_Axe dynamique
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 815566321835080
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 815566321835081
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 815566321835082
+     type_code : 12
+     code : |1+
+      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem(ClDbProcess_Metier_Axe.GetObj(nId_P))
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 815566321835083
+     type_code : 12
+     code : |1+
+      PROCÉDURE aItems()<métier>:tableau de ClDbProcess_Metier_Axe dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :m_aoProcess_Metier_Axe
+     type : 458752
+   -
+     name : Init
+     procedure_id : 815566321835084
+     type_code : 12
+     code : |1+
+      PROCÉDURE Init()<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:m_aoProcess_Metier_Axe)
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 815566321835085
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un ClDbProcess_Metier_Axe(ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Process_Metier_Axe)
+     type : 458752
+   -
+     name : oCol_De_IDScr_Process_Metier
+     procedure_id : 815566321835086
+     type_code : 12
+     code : |1+
+      PROCÉDURE oCol_De_IDScr_Process_Metier(oParent_p est un ClDbProcess_Metier)<métier>:ClColProcess_Metier_Axe
+      
+      oRetour est un ClColProcess_Metier_Axe
+      sReq est une chaîne
+      
+      SI PAS oRetour.p_bEstCharge ALORS
+      	sReq = [
+      		SELECT 
+      			Scr_Process_Metier_Axe.*
+      		FROM Scr_Process_Metier_Axe
+      		WHERE Scr_Process_Metier_Axe.IDScr_Process_Metier = [%oParent_p.ZF_Get_IdUnique()%]
+      	]
+      
+      	oRetour.ZF_LoadSQL(sReq)
+      FIN
+      
+      RENVOYER oRetour
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e5c0d4e75c4f
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

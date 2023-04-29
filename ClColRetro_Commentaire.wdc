@@ -1,0 +1,88 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColRetro_Commentaire
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e56cd3d47c65
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClColRetro_Commentaire est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVÉ
+      	m_aoRetro_Commentaire est un tableau ClDbRetro_Commentaire dynamique
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 815205526568038
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 815205526568039
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 815205526568040
+     type_code : 12
+     code : |1+
+      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem(ClDbRetro_Commentaire.GetObj(nId_P))
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 815205526568041
+     type_code : 12
+     code : |1+
+      PROCÉDURE aItems()<métier>:tableau de ClDbRetro_Commentaire dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :m_aoRetro_Commentaire
+     type : 458752
+   -
+     name : Init
+     procedure_id : 815205526568042
+     type_code : 12
+     code : |1+
+      PROCÉDURE Init()<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:m_aoRetro_Commentaire)
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 815205526568043
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un ClDbRetro_Commentaire(ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Retro_Commentaire)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e56cd3d47c6c
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

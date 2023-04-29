@@ -18,7 +18,10 @@ class :
       ClColSprint est une Classe
       	hérite de ClZF_ColObjDB
       PRIVE
-      	m_aoSprint est un tableau de ClSprint dynamique
+      	m_aoSprint est un tableau de ClDbSprint dynamique
+      GLOBAL
+      public
+      	mg_nNumSprint_max		est un entier
       fin
      type : 131072
   procedures :
@@ -45,7 +48,7 @@ class :
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
       PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
-      :ZF_addItem(ClSprint.GetObj(nId_P))
+      :ZF_addItem(ClDbSprint.GetObj(nId_P))
      type : 458752
    -
      name : aItems
@@ -53,7 +56,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.aItems
-      PROCÉDURE aItems():tableau de ClSprint dynamique
+      PROCÉDURE aItems():tableau de ClDbSprint dynamique
       renvoyer :m_aoSprint
      type : 458752
    -
@@ -73,8 +76,63 @@ class :
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
       
-      oObj est un ClSprint
+      oObj est un ClDbSprint(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.Num_Sprint)
+     type : 458752
+   -
+     name : aoListeSprint
+     procedure_id : 1456096739215100493
+     type_code : 12
+     code : |1-
+      procédure publique globale aoListeSprint():ClColSprint
+      
+      
+      sReq est une chaîne
+      oSprints est un ClColSprint
+      
+      sReq = [
+      	SELECT
+      		Scr_Sprint.*
+      	FROM
+      		Scr_Sprint
+      	ORDER BY
+      		Scr_Sprint.Num_Sprint
+      ]
+      
+      oSprints.ZF_LoadSQL(sReq)
+      
+      renvoyer oSprints
+     type : 458752
+   -
+     name : nGetNumSprintMax
+     procedure_id : 1456101236090684172
+     type_code : 12
+     code : |1+
+      procédure publique globale nGetNumSprintMax():entier
+      
+      sdSprintMax est une Source de Données
+      sReq est une chaîne
+      
+      
+      si ::mg_nNumSprint_max = 0 ALORS
+      	
+      	sReq = [
+      		SELECT
+      			MAX(Num_Sprint) AS Num_Sprint
+      		FROM Scr_Sprint
+      	]
+      	
+      	ClZF_ObjDbLs.mg_oApp.RSQL(sdSprintMax,sReq)
+      	HLitPremier(sdSprintMax,hSansRafraîchir)
+      	si pas HEnDehors(sdSprintMax) ALORS
+      		::mg_nNumSprint_max = sdSprintMax.Num_Sprint
+      	FIN
+      	
+      	HAnnuleDéclaration(sdSprintMax)
+      FIN
+      
+      
+      renvoyer ::mg_nNumSprint_max
      type : 458752
   procedure_templates : []
   property_templates : []

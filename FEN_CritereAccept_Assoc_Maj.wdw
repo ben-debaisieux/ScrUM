@@ -109,7 +109,7 @@ window :
          dDate est une Date = DateSys()
          
          // on cherche l'enregistrement du critère associé à mettre en doublon
-         HLitRecherche(Scr_CritereAccept, IDScr_CritereAccept, IDcritereAccept_p, hIdentique+hLimiteParcours)
+         HLitRecherche(Scr_CritereAccept, IDScr_CritereAccept, zoCrit_p.ZF_Get_IdUnique(), hIdentique+hLimiteParcours)
          si htrouve(Scr_CritereAccept) alors
          	
          	Scr_CritereAccept.IDScr_CritereAccept_Asso =  nIDNouveauCritere_Associé
@@ -279,7 +279,7 @@ window :
   p_codes :
    -
      code : |1+
-      PROCEDURE fen_critereAccept_Assoc_MAj(local IDcritereAccept_p est un entier)
+      PROCEDURE fen_critereAccept_Assoc_MAj(zoCrit_p est un ClDbCritereAccept)
       
       mafenetre..ValeurRenvoyée = faux
    -

@@ -188,12 +188,12 @@ window :
         p_codes :
          -
            code : |1+
-            oTache est un ClTache dynamique
+            oTache est un ClDbTache dynamique
             nIdTace est un entier = TBL_taches.COL_idTache
             bModif est un booléen
             
             si nIdTace > 0 ALORS
-            	oTache <- ClTache.GetObj(nIdTace)
+            	oTache <- ClDbTache.GetObj(nIdTace)
             	
             	quand Exception dans
             		oTache.p_nPoids_Previsionnel = TBL_taches.COL_Poids_Previ
@@ -288,7 +288,7 @@ window :
       -
         code : |1+
          SI TableOccurrence(TBL_taches) >= 1 ALORS
-         	oTache est un ClTache <- ClTache.GetObj(TBL_taches.COL_idTache)
+         	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_taches.COL_idTache)
          	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
          		AffTaches()
          	FIN
@@ -351,9 +351,9 @@ window :
       
       
       
-      oPrj		est un ClProjet dynamique
-      oUs			est un ClUserStory dynamique
-      oTache_Tmp	est un ClTache dynamique
+      oPrj		est un ClDbProjet dynamique
+      oUs			est un ClDbUserStory dynamique
+      oTache_Tmp	est un ClDbTache dynamique
       nNumLigne	est un entier
       sGrp		est une chaîne
       
@@ -363,10 +363,10 @@ window :
       TableSupprimeTout(TBL_taches)
       
       
-      POUR TOUT ELÉMENT oPrj DE ClProjet.aoListeProjets().aItems()
-      	POUR TOUT ELÉMENT oUs DE oPrj.aoListeUS().aItems()
+      POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
+      	POUR TOUT ELÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
       		
-      		POUR TOUT ELÉMENT oTache_Tmp DE oUs.aoListeTaches().aItems()
+      		POUR TOUT ELÉMENT oTache_Tmp DE ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       			
       //			Trace("Tache : " + oTache_Tmp.p_sCodeTache)
       //			Trace("Aff" + oTache_Tmp:p_nPoids + "-" + oTache_Tmp:p_nPoids_Previsionnel + "-" + oTache_Tmp:p_bAnnule + "-" + oTache_Tmp.p_bBrouillon)
@@ -391,7 +391,7 @@ window :
       				TBL_taches[nNumLigne].COL_Sprint			= oTache_Tmp.p_nNum_Sprint_Realisation
       				TBL_taches[nNumLigne].COL_Statut			= oTache_Tmp.sLibDeStatut()
       				TBL_taches[nNumLigne].COL_Poids_Previ		= oTache_Tmp.p_nPoids_Previsionnel
-      				TBL_taches[nNumLigne].COL_Docs				= Dimension(oUs.asCheminsDocs())
+      				TBL_taches[nNumLigne].COL_Docs				= ClColUserStory_Doc.oFromUS(oUs).ZF_nTaille()
       				
       				SI oTache_Tmp.p_nNum_Sprint_Realisation <= goApp.m_nNumeroDuSprintActuel ET oTache_Tmp.p_nNum_Sprint_Realisation <> 0 ALORS
       					TBL_taches[nNumLigne].COL_Sprint..CouleurFond = COL_Scrum.gnCouleur_OrangeVif

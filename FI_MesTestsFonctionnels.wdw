@@ -185,7 +185,7 @@ window :
          -
            code : |1-
             SI TableOccurrence(TBL_MesTests) >= 1 ALORS
-            	oUs est un ClUserStory <- ClUserStory.GetObj(TBL_MesTests.COL_IdUS)
+            	oUs est un ClDbUserStory <- ClDbUserStory.GetObj(TBL_MesTests.COL_IdUS)
             	SI Ouvre(FEN_User_Story_Detail_v2, oUs) ALORS
             		Actualise()
             	FIN
@@ -237,7 +237,7 @@ window :
          -
            code : |1+
             SI TableOccurrence(TBL_MesTests) >= 1 ALORS
-            	oUs est un ClUserStory <- ClUserStory.GetObj(TBL_MesTests.COL_IdUS)
+            	oUs est un ClDbUserStory <- ClDbUserStory.GetObj(TBL_MesTests.COL_IdUS)
             	SI Ouvre(FEN_Retour_de_tests_d_une_user_story, oUs)
             		Actualise()
             	FIN
@@ -274,7 +274,7 @@ window :
       //
       PROCEDURE Actualise()
       
-      oUs est un ClUserStory dynamique
+      oUs est un ClDbUserStory dynamique
       nNumLigne est un entier
       sBulle est une chaîne
       
@@ -283,7 +283,7 @@ window :
       
       TableSupprimeTout(TBL_MesTests)
       
-      pour tout element oUs de goApp.m_oUsrCnx.aoMesUS_En_Test(ClUsr.test_fonctionnel).aItems()
+      pour tout element oUs de goApp.m_oUsrCnx.aoMesUS_En_Test(ClDbUsr.test_fonctionnel).aItems()
       	
       	sBulle = oUs.p_sCodeUserStory + rc + ...
       		oUs.sNommination_US() + rc + rc + ...

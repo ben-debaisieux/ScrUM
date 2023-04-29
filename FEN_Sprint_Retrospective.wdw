@@ -32,7 +32,8 @@ window :
      p_codes :
       -
         code : |1+
-         nLigneTypeCom est un entier
+         oCmtr est un ClDbRetro_Commentaire
+         //nLigneTypeCom est un entier
          bRetrospectiveValide est un booléen = vrai
          
          // Parcours de contrôles
@@ -47,36 +48,46 @@ window :
          si bRetrospectiveValide alors
          	
          	Pour i = 1 _a_ TableOccurrence(TBL_Retrospective)
+         		oCmtr <- ClDbRetro_Commentaire.GetObj(TBL_Retrospective[i].COL_Commentaire.SAI_ID)
+         		oCmtr.p_sCMTR = TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
          		
-         		HLitRecherche(Scr_Commentaire,IDScr_Commentaire,TBL_Retrospective[i].COL_Commentaire.SAI_ID,hIdentique+hLimiteParcours)
+         		si oCmtr.ZF_bModeAjout() ALORS
+         			oCmtr.p_oIDScr_Retro_Commentaire_Type_ID = TBL_Retrospective[i].COL_Commentaire.CBO_Type_Cmtr..ValeurMémorisée
+         			oCmtr.p_oNum_Sprint = goApp.Sprint_Num_Actuel()
+         		FIN
          		
-         		//Si le commentaire existe déja, on le modifie
-         		si Htrouve(Scr_Commentaire) alors
-         			Scr_Commentaire.CMTR = TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
-         			
-         			si pas HModifie(Scr_Commentaire) alors
-         				Erreur(ErreurInfo(errComplet))
-         			FIN
-         			
-         		sinon
-         			//Si le champ Commentaire n'est pas rempli, il ne faux pas l'enregistrer
-         			si TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire <> "" alors
-         				
-         				HRAZ(Scr_Commentaire)
-         				Scr_Commentaire.Num_Sprint		= zoSprint.ZF_Get_IdUnique()
-         				Scr_Commentaire.CMTR			= TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
-         				
-         				gLienActive(CBO_Type_Cmtr_Ref,faux)
-         				nLigneTypeCom = ListeCherche(CBO_Type_Cmtr_Ref, TBL_Retrospective[i].COL_Commentaire.CBO_Type_Cmtr)
-         				gLienActive(CBO_Type_Cmtr_Ref,vrai)
-         				
-         				Scr_Commentaire.IDScr_Type_Cmtr	= CBO_Type_Cmtr_Ref[nLigneTypeCom]
-         				
-         				SI PAS Hajoute(Scr_Commentaire) ALORS
-         					Erreur(ErreurInfo(errComplet))
-         				FIN
-         			FIN
-         		fin
+         		oCmtr.ZF_Enregistre()
+         		
+         		
+         //		HLitRecherche(Scr_Retro_Commentaire,IDScr_Retro_Commentaire,TBL_Retrospective[i].COL_Commentaire.SAI_ID,hIdentique+hLimiteParcours)
+         //		
+         //		//Si le commentaire existe déja, on le modifie
+         //		si Htrouve(Scr_Retro_Commentaire) alors
+         //			Scr_Retro_Commentaire.CMTR = TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
+         //			
+         //			si pas HModifie(Scr_Retro_Commentaire) alors
+         //				Erreur(ErreurInfo(errComplet))
+         //			FIN
+         //			
+         //		sinon
+         //			//Si le champ Commentaire n'est pas rempli, il ne faux pas l'enregistrer
+         //			si TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire <> "" alors
+         //				
+         //				HRAZ(Scr_Retro_Commentaire)
+         //				Scr_Retro_Commentaire.Num_Sprint		= zoSprint.ZF_Get_IdUnique()
+         //				Scr_Retro_Commentaire.CMTR			= TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
+         //				
+         //				gLienActive(CBO_Type_Cmtr_Ref,faux)
+         //				nLigneTypeCom = ListeCherche(CBO_Type_Cmtr_Ref, TBL_Retrospective[i].COL_Commentaire.CBO_Type_Cmtr)
+         //				gLienActive(CBO_Type_Cmtr_Ref,vrai)
+         //				
+         //				Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type	= CBO_Type_Cmtr_Ref[nLigneTypeCom]
+         //				
+         //				SI PAS Hajoute(Scr_Retro_Commentaire) ALORS
+         //					Erreur(ErreurInfo(errComplet))
+         //				FIN
+         //			FIN
+         //		fin
          	FIN
          	
          	
@@ -88,10 +99,10 @@ window :
          		erreur(ExceptionInfo(errMessage))
          	sinon
          		
-         		ClSprint.Calcul_Velocite_Moyenne()
+         		ClDbSprint.Calcul_Velocite_Moyenne()
          		
          		//Recalcul du n° de sprint
-         		ClSprint.Sprint_Num_Actuel()
+         		ClDbSprint.Sprint_Num_Actuel()
          		Info("Rétrospective enregistrée.")
          		Ferme()
          	FIN
@@ -584,9 +595,9 @@ window :
       -
         code : |1+
          
-         oPrj				est un ClProjet dynamique
-         oUS					est un ClUserStory dynamique
-         oTache				est un ClTache dynamique
+         oPrj				est un ClDbProjet dynamique
+         oUS					est un ClDbUserStory dynamique
+         oTache				est un ClDbTache dynamique
          
          
          nNbACoter est un entier
@@ -597,22 +608,22 @@ window :
          nNbUS_EnTest est un entier
          
          
-         POUR TOUT ELÉMENT oPrj DE ClProjet.aoListeProjets().aItems()
-         	POUR TOUT ELÉMENT oUS DE oPrj.aoListeUS(Vrai).aItems()
-         		POUR TOUT ELÉMENT oTache DE oUS.aoListeTaches().aItems()
+         POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
+         	POUR TOUT ELÉMENT oUS DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS(Vrai).aItems()
+         		POUR TOUT ELÉMENT oTache DE ClColTaches.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
          			selon oTache.p_nStatut 
          				
-         				cas ClTache.cstStatut_Suspendu
+         				cas ClDbTache.cstStatut_Suspendu
          					nNbSuspendu++
          					
-         				cas ClTache.cstStatut_a_coter
+         				cas ClDbTache.cstStatut_a_coter
          					nNbACoter++
          					
          					si 1 <= oTache.p_nNum_Sprint_Realisation < goApp.Sprint_Num_Actuel() ALORS
          						nNbACoterEtDemarre++
          					FIN
          
-         				CAS ClTache.cstStatut_a_faire
+         				CAS ClDbTache.cstStatut_a_faire
          				
          					SI 1 <= oTache.p_nNum_Sprint_Realisation < goApp.Sprint_Num_Actuel() ALORS
          						nNbEnRetard++
@@ -625,7 +636,7 @@ window :
          		FIN
          		
          		selon oUS.Get_EtatUS()
-         			cas ClUserStory.ECompteNbUS.En_test_fonctionnel
+         			cas ClDbUserStory.ECompteNbUS.En_test_fonctionnel
          				nNbUS_EnTest++
          			AUTRE CAS
          				
@@ -666,16 +677,16 @@ window :
       PROCEDURE FEN_Sprint_Retrospective(LOCAL nSprint_P est un entier = 0)
       
       
-      zoSprint est un ClSprint dynamique
+      zoSprint est un ClDbSprint dynamique
       
       
       //A t on un N° de sprint spécifié ?
       si nSprint_P = 0 ALORS
       	//Non
-      	zoSprint <- ClSprint.GetObj(goApp.m_nNumeroDuSprintActuel)
+      	zoSprint <- ClDbSprint.GetObj(goApp.m_nNumeroDuSprintActuel)
       sinon
       	//Oui
-      	zoSprint <- ClSprint.GetObj(nSprint_P)
+      	zoSprint <- ClDbSprint.GetObj(nSprint_P)
       FIN
    -
      code : |1+
@@ -737,39 +748,32 @@ window :
       //	nSprint_p (entier) : <indiquez ici le rôle de nSprint_p>
       PROCEDURE Liste_Tache_Realisee()
       
-      nLigne est un entier
-      
-      sdRechercheTachesRealisees est une source de Données
-      sReq est une chaîne
+      nLigne		est un entier
+      oTache		est un ClDbTache dynamique
+      oColTache	est un ClcolTaches
+      sReq		est une chaîne
       
       TBL_TachesRealise..AffichageActif = Faux
       TableSupprimeTout(TBL_TachesRealise)
       
-      sReq = ChaîneConstruit([
+      sReq = [
       	SELECT 
-      		Scr_Tache.IDScr_Tache,
-      		Scr_Tache.CodeTache,
-      		Scr_Tache.Description,
-      		Scr_Tache.Num_Sprint_Demarrage,
-      		Scr_Tache.Poids
+      		Scr_Tache.*
       	FROM Scr_Tache
-      	WHERE Scr_Tache.Num_Sprint_Fin = %1
+      	WHERE Scr_Tache.Num_Sprint_Fin = [%zoSprint.ZF_Get_IdUnique()%]
       		and Scr_Tache.Top_Brouillon = 0
       		and Scr_Tache.Top_Annule = 0	
-      ], zoSprint.ZF_Get_IdUnique())
+      ]
+      oColTache.ZF_LoadSQL(sReq)
       
-      goApp.Rsql(sdRechercheTachesRealisees,sReq)
-      
-      pour TOUT sdRechercheTachesRealisees 
-      	nLigne											= TableAjouteLigne(TBL_TachesRealise)
-      	TBL_TachesRealise[nLigne].COL_ID				= sdRechercheTachesRealisees.IDScr_Tache
-      	TBL_TachesRealise[nLigne].COL_Code				= sdRechercheTachesRealisees.CodeTache
-      	TBL_TachesRealise[nLigne].COL_Description		= sdRechercheTachesRealisees.Description
-      	TBL_TachesRealise[nLigne].COL_Sprint_Initial	= sdRechercheTachesRealisees.Num_Sprint_Demarrage
-      	TBL_TachesRealise[nLigne].COL_Poids				= sdRechercheTachesRealisees.Poids		
+      pour TOUT element oTache de oColTache.aItems() 
+      	nLigne										= TableAjouteLigne(TBL_TachesRealise)
+      	TBL_TachesRealise[nLigne].COL_ID				= oTache.Get_IdUnique()
+      	TBL_TachesRealise[nLigne].COL_Code				= oTache.p_sCodeTache
+      	TBL_TachesRealise[nLigne].COL_Description		= oTache.p_sDescription
+      	TBL_TachesRealise[nLigne].COL_Sprint_Initial	= oTache.p_nNum_Sprint_Demarrage
+      	TBL_TachesRealise[nLigne].COL_Poids			= oTache.p_nPoids		
       FIN
-      
-      HAnnuleDéclaration(sdRechercheTachesRealisees)
       
       TBL_TachesRealise..AffichageActif = Vrai
      type : 458752
@@ -796,53 +800,53 @@ window :
       nLigne est un entier 
       
       sdRechercheCommentaire est une source de Données
+      oCmtrRetro est un ClDbRetro_Commentaire
+      oCmtrRetro_Type est un ClDbRetro_Commentaire_Type
       sReq est une chaîne
       
       
       TBL_Retrospective..AffichageActif = Faux
       TableSupprimeTout(TBL_Retrospective)
       
-      
-      sReq = ChaîneConstruit([
+      sReq = [
       	SELECT
-      		Scr_Type_Cmtr.IDScr_Type_Cmtr,
-      		Scr_Type_Cmtr.Type_Cmtr,
-      		Scr_Type_Cmtr.Top_Par_Defaut,
-      		
-      		TEMP_Cmtr.IDScr_Commentaire,
-      		TEMP_Cmtr.CMTR
+      		Scr_Retro_Commentaire_Type.IDScr_Retro_Commentaire_Type,
+      		TEMP_Cmtr.IDScr_Retro_Commentaire
       			
-      	FROM Scr_Type_Cmtr
+      	FROM Scr_Retro_Commentaire_Type
       		LEFT OUTER JOIN (
       			SELECT
-      				Scr_Commentaire.IDScr_Commentaire,
-      				Scr_Commentaire.IDScr_Type_Cmtr,
-      				Scr_Commentaire.CMTR
+      				Scr_Retro_Commentaire.IDScr_Retro_Commentaire,
+      				Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type,
+      				Scr_Retro_Commentaire.CMTR
       			
-      			FROM Scr_Commentaire
+      			FROM Scr_Retro_Commentaire
       			
-      			WHERE Scr_Commentaire.Num_Sprint = %1
-      		) TEMP_Cmtr ON (TEMP_Cmtr.IDScr_Type_Cmtr = Scr_Type_Cmtr.IDScr_Type_Cmtr)
+      			WHERE Scr_Retro_Commentaire.Num_Sprint = [%zoSprint.ZF_Get_IdUnique()%]
+      		) TEMP_Cmtr ON (TEMP_Cmtr.IDScr_Retro_Commentaire_Type = Scr_Retro_Commentaire_Type.IDScr_Retro_Commentaire_Type)
       	
-      ], zoSprint.ZF_Get_IdUnique())
+      ]
       
       nligcbo est un entier
       
       goApp.Rsql(sdRechercheCommentaire,sReq)
       
       pour TOUT sdRechercheCommentaire 
-      
-      	si sdRechercheCommentaire.Top_Par_Defaut = vrai _OU_ sdRechercheCommentaire.IDScr_Commentaire <> 0 alors
-      					
-      		nLigne = TableAjouteLigne(TBL_Retrospective)
       	
-      		TBL_Retrospective[nLigne].COL_Commentaire.SAI_ID = sdRechercheCommentaire.IDScr_Commentaire
+      	oCmtrRetro <- ClDbRetro_Commentaire.GetObj(sdRechercheCommentaire.IDScr_Retro_Commentaire)
+      	oCmtrRetro_Type <- ClDbRetro_Commentaire_Type.GetObj(sdRechercheCommentaire.IDScr_Retro_Commentaire_Type)
+      
+      	si oCmtrRetro_Type.p_bTop_Par_Defaut _OU_ sdRechercheCommentaire.IDScr_Retro_Commentaire <> 0 alors
       		
-      		nligcbo = listecherche(CBO_Type_Cmtr_ref,sdRechercheCommentaire.IDScr_Type_Cmtr,vrai,1)
-      		TBL_Retrospective.COL_Commentaire[nLigne].CBO_Type_Cmtr = CBO_Type_Cmtr_Ref[nligcbo]..ValeurAffichée
+      		nLigne												= TableAjouteLigne(TBL_Retrospective)
       		
-      		TBL_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire = sdRechercheCommentaire.CMTR
-      		TBL_Retrospective[nLigne].COL_Commentaire.INT_Defaut = 1
+      		TBL_Retrospective[nLigne].COL_Commentaire.SAI_ID			= sdRechercheCommentaire.IDScr_Retro_Commentaire
+      		
+      		nligcbo												= listecherche(CBO_Type_Cmtr_ref,oCmtrRetro_Type.ZF_Get_IdUnique(),vrai,1)
+      		TBL_Retrospective.COL_Commentaire[nLigne].CBO_Type_Cmtr	= CBO_Type_Cmtr_Ref[nligcbo]..ValeurAffichée
+      		
+      		TBL_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire	= oCmtrRetro.p_sCMTR
+      		TBL_Retrospective[nLigne].COL_Commentaire.INT_Defaut		= oCmtrRetro_Type.p_bTop_Par_Defaut
       		
       		//Les commentaires déja remplis sont grisés
       		si TBL_Retrospective[nLigne].COL_Commentaire.SAI_ID <> 0 alors
@@ -875,42 +879,43 @@ window :
       PROCEDURE chargement_cbo_type_commentaire()
       
       //sNomCboComplet est une chaîne = TBL_Retrospective.COL_Commentaire.CBO_Type_Cmtr..nom
-      sContenu_Cbo_Conteneur est une chaine 
-      sdSource_Liste_Type_Commentaire est une Source de Données
+      //sContenu_Cbo_Conteneur est une chaine 
+      //sdSource_Liste_Type_Commentaire est une Source de Données
       sReq_Liste_Type_Commentaire est une chaîne
-      
+      oColCmtr_type est un ClColRetro_Commentaire_Type
       
       ListeSupprimeTout(TBL_Retrospective.COL_Commentaire.CBO_Type_Cmtr)
       
-      
-      sReq_Liste_Type_Commentaire = ChaîneConstruit([
+      sReq_Liste_Type_Commentaire = [
       	SELECT
-      		Scr_Type_Cmtr.IDScr_Type_Cmtr,
-      		Scr_Type_Cmtr.Type_Cmtr
+      		Scr_Retro_Commentaire_Type.*
       		
-      	FROM Scr_Type_Cmtr
+      	FROM Scr_Retro_Commentaire_Type
       	
-      	LEFT OUTER JOIN Scr_Commentaire ON (Scr_Commentaire.IDScr_Type_Cmtr = Scr_Type_Cmtr.IDScr_Type_Cmtr)
+      		LEFT OUTER JOIN Scr_Retro_Commentaire ON (Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type = Scr_Retro_Commentaire_Type.IDScr_Retro_Commentaire_Type)
       	
-      	WHERE Scr_Commentaire.Num_Sprint = %1 OR Scr_Type_Cmtr.Top_Par_Defaut <= 1
-      	
-      ], zoSprint.ZF_Get_IdUnique())
+      	WHERE Scr_Retro_Commentaire.Num_Sprint = [%zoSprint.ZF_Get_IdUnique()%]
+      		OR
+      		Scr_Retro_Commentaire_Type.Top_Par_Defaut = 1	
+      ]
+      oColCmtr_type.ZF_LoadSQL(sReq_Liste_Type_Commentaire)
+      oColCmtr_type.ChargeCbo(MaFenêtre..Nom, CBO_Type_Cmtr_Ref..nom)
       
-      goApp.Rsql(sdSource_Liste_Type_Commentaire,sReq_Liste_Type_Commentaire)
-      
-      POUR TOUT sdSource_Liste_Type_Commentaire
-      	ListeAjoute(CBO_Type_Cmtr_Ref, sdSource_Liste_Type_Commentaire.Type_Cmtr + ...
-      		gLien(sdSource_Liste_Type_Commentaire.IDScr_Type_Cmtr))
-      	
-      	sContenu_Cbo_Conteneur += [rc] + sdSource_Liste_Type_Commentaire.Type_Cmtr
-      FIN
-      
-      HAnnuleDéclaration(sdSource_Liste_Type_Commentaire)
-      
-      TBL_Retrospective.COL_Commentaire.CBO_Type_Cmtr..contenu = sContenu_Cbo_Conteneur
-      
-      
-      gLienActive(CBO_Type_Cmtr_Ref, vrai)
+      //goApp.Rsql(sdSource_Liste_Type_Commentaire,sReq_Liste_Type_Commentaire)
+      //
+      //POUR TOUT sdSource_Liste_Type_Commentaire
+      //	ListeAjoute(CBO_Type_Cmtr_Ref, sdSource_Liste_Type_Commentaire.Type_Cmtr + ...
+      //		gLien(sdSource_Liste_Type_Commentaire.IDScr_Type_Cmtr))
+      //	
+      //	sContenu_Cbo_Conteneur += [rc] + sdSource_Liste_Type_Commentaire.Type_Cmtr
+      //FIN
+      //
+      //HAnnuleDéclaration(sdSource_Liste_Type_Commentaire)
+      //
+      //TBL_Retrospective.COL_Commentaire.CBO_Type_Cmtr..contenu = sContenu_Cbo_Conteneur
+      //
+      //
+      //gLienActive(CBO_Type_Cmtr_Ref, vrai)
      type : 458752
   procedure_templates : []
   property_templates : []

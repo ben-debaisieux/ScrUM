@@ -32,27 +32,29 @@ window :
      p_codes :
       -
         code : |1+
-         bOk est un booléen = Vrai
          
          
-         Si SAI_Nom ="" ou SAI_EMail ="" alors
-         	Erreur("Les informations ne sont pas valides")
-         	bOk = faux
-         fin
-         
-         
-         
-         si bOk alors
-         	
+         quand Exception dans
          	EcranVersSource(MaFenêtre,"zoUsr")
-         	quand Exception dans
-         		zoUsr.ZF_Enregistre()
-         	FAIRE
-         		erreur(ExceptionInfo(errMessage))
-         	sinon
-         		MaFenêtre..ValeurRenvoyée = vrai
-         		ferme()
+         	zoUsr.ZF_Enregistre()
+         	zoUsr_p <= zoUsr
+         FAIRE
+         	sInfo est une chaîne = ExceptionInfo(errMessage)
+         	Erreur(sInfo)
+         	SELON ExceptionInfo(errCode)
+         		CAS ClDbUsr.mg_oExLoginAdInvalide.ZF_Code
+         			EcranPremier(SAI_Login_AD)
+         		CAS ClDbUsr.mg_oExNomMailInvalide.ZF_Code
+         			EcranPremier(SAI_EMail)
+         		CAS ClDbUsr.mg_oExNomUsrInvalide.ZF_Code
+         			EcranPremier(SAI_Nom)
+         
+         		AUTRE CAS
+         			ExceptionPropage()
          	FIN
+         sinon
+         	MaFenêtre..ValeurRenvoyée = vrai
+         	ferme()
          FIN
         type : 18
       -
@@ -197,12 +199,17 @@ window :
   type_code : 1
   p_codes :
    -
-     code : |1-
-      PROCEDURE MaFenêtre(nIdUsr_P est un entier = 0)
+     code : |1+
+      PROCEDURE MaFenêtre(zoUsr_p est un ClDbUsr dynamique = null)
       
       MaFenêtre..ValeurRenvoyée = Faux
       
-      zoUsr est un ClUsr(nIdUsr_P)
+      zoUsr est un ClDbUsr dynamique
+      si zoUsr_p = null ALORS
+      	zoUsr = allouer un ClDbUsr()
+      sinon
+      	zoUsr <-zoUsr_p
+      FIN
    -
      code : |1-
       SourceVersEcran(MaFenêtre,"zoUsr")

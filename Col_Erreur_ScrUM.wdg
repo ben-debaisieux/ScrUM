@@ -249,18 +249,6 @@ procedure_set :
       Info(sMessage_P) 
       
      type : 458752
-   -
-     name : ExceptionDéclenche
-     internal_properties : BwAAAAcAAADyc3QQIEI+xe0D3hUPFNPSrrMRJVwFw+cV6Mqmz74reuktZWjrsY/GBqbcT0VcEUwQNFUHZOun+FkTzyEAebr+jHSZpWSoP4YFIPZtGnChs0P75ud3fuEZZwQfSo/bt25+k+kx5WGOBqinTYL+vv1z4vFTUcU4TYeuB1CsEAhyFQmg6WMoQ6lpg+M9yInmHkunSgGy1DBmKtiRYlnR0ZhWRfbKHIpVSB+Pv04atshSab5iyT4WzfZzgBCHCvahG1MJXueA
-     procedure_id : 2254767619002474688
-     type_code : 15
-     code : |1+
-      procédure ExceptionDéclenche(nNum_p Est un entier, sMessage_P est une chaine)
-      
-      
-      si pas EnModeTestAutomatique() alors stop
-      wl.ExceptionDéclenche(nNum_p, sMessage_P)
-     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

@@ -18,7 +18,7 @@ class :
       ClColEpic est une Classe
       	hérite de ClZF_ColObjDB
       prive
-      	m_aoEpic est un tableau ClEpic dynamique
+      	m_aoEpic est un tableau ClDbEpic dynamique
       fin
      type : 131072
   procedures :
@@ -43,7 +43,7 @@ class :
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
       PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
-      :ZF_addItem(ClEpic.GetObj(nId_P))
+      :ZF_addItem(ClDbEpic.GetObj(nId_P))
      type : 458752
    -
      name : aItems
@@ -51,7 +51,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.aItems
-      PROCÉDURE aItems():tableau de ClEpic dynamique
+      PROCÉDURE aItems():tableau de ClDbEpic dynamique
       renvoyer :m_aoEpic
      type : 458752
    -
@@ -71,8 +71,91 @@ class :
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
       
-      oObj est un ClEpic
+      oObj est un ClDbEpic(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Epic)
+     type : 458752
+   -
+     name : from_projet
+     procedure_id : 1449244419702655458
+     type_code : 12
+     code : |1-
+      procédure globale from_projet(oProjet_p est un ClDbProjet):ClColEpic
+      
+      oRetour est un ClColEpic
+      sReq est une chaîne
+      
+      si pas oRetour.p_bEstCharge alors
+      	sReq = [
+      		SELECT 
+      			Scr_Epic.*
+      		FROM Scr_Epic
+      		WHERE IDScr_Projet = [%oProjet_p.ZF_Get_IdUnique()%]
+      		ORDER BY Ordre
+      	]
+      	
+      	oRetour.ZF_LoadSQL(sReq)
+      fin
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : Combo_Charge_from_projet
+     procedure_id : 1449244419703114367
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Combo_Charge_from_projet (<sNomFenetre_P> est chaîne, <sNomCombo_P> est chaîne, <oProjet_p> est ClDbProjet [, <sValDef_P> est chaîne [, <aCompl_P> est tableau associatif (chaîne)]])
+      //
+      // Paramètres :
+      //	sNomFenetre_P (chaîne ANSI) : <indiquez ici le rôle de sNomFenetre_P>
+      //	sNomCombo_P (chaîne ANSI) : <indiquez ici le rôle de sNomCombo_P>
+      //	oProjet_p (ClDbProjet) : <indiquez ici le rôle de oProjet_p>
+      //	sValDef_P (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de sValDef_P>
+      //	aCompl_P (tableau associatif (chaîne ANSI)) : <indiquez ici le rôle de aCompl_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE globale Combo_Charge_from_projet(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne, oProjet_p est un ClDbProjet, sValDef_P est une chaîne = "", aCompl_P est un tableau associatif de chaine =  []):Vide
+      
+      oEpic est un ClDbEpic dynamique
+      sNomComplet est une chaîne = sNomFenetre_P + "." + sNomCombo_P
+      sCle est une chaîne
+      sComp est une chaîne
+      
+      
+      ListeSupprimeTout(sNomComplet)
+      
+      pour tout sComp, sCle de aCompl_P
+      	ListeAjoute(sNomComplet, sComp + gLien(sCle))
+      fin
+      
+      pour TOUT element oEpic de ::from_projet(oProjet_p).aItems()
+      	ListeAjoute(sNomComplet, oEpic.p_sNom + glien(oEpic.ZF_Get_IdUnique()))
+      FIN
+      
+      
+      //Sélection par défaut
+      nInd est un entier
+      
+      SI sValDef_P = "" ALORS
+      	nInd = 1
+      SINON
+      	nInd = 1
+      	TANTQUE nInd <= {sNomComplet, indChamp}..Occurrence ET {sNomComplet, indChamp}[nInd]..ValeurMémorisée <> sValDef_P
+      		nInd++
+      	FIN
+      	SI nInd > {sNomComplet, indChamp}..Occurrence ALORS
+      		nInd = 1
+      	FIN
+      FIN
+      
+      si ListeOccurrence(sNomComplet) > 0 ALORS
+      	ListeSelectPlus(sNomComplet, nInd)
+      FIN
      type : 458752
   procedure_templates : []
   property_templates : []

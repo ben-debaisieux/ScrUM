@@ -1,0 +1,121 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColUserStory_Doc
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1407a081406e6d97
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClColUserStory_Doc est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVÉ
+      	m_aoUserStory_Doc est un tableau ClDbUserStory_Doc dynamique
+      FIN
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1443298682587803031
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur()
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1443298682587868567
+     type_code : 28
+     code : |1+
+      PROCÉDURE Destructeur()
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 1443298682587934103
+     type_code : 12
+     code : |1+
+      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem(ClDbUserStory_Doc.GetObj(nId_P))
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 1443298682587999639
+     type_code : 12
+     code : |1+
+      PROCÉDURE aItems()<métier>:tableau de ClDbUserStory_Doc dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :m_aoUserStory_Doc
+     type : 458752
+   -
+     name : Init
+     procedure_id : 1443298682588065175
+     type_code : 12
+     code : |1+
+      PROCÉDURE Init()<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:m_aoUserStory_Doc)
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 1443298682588130711
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // addItemBySource (<sdSource_p> est objet source de données)
+      //
+      // Paramètres :
+      //	sdSource_p (objet source de données) : <indiquez ici le rôle de sdSource_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un ClDbUserStory_Doc(ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_UserStory_Doc)
+     type : 458752
+   -
+     name : oFromUS
+     procedure_id : 1457011774605370575
+     type_code : 12
+     code : |1+
+      procédure globale oFromUS(oUs_p est un ClDbUserStory):ClColUserStory_Doc
+      
+      sReq est une chaîne
+      oRetour est un ClColUserStory_Doc <- oUs_p.ZF_GetCol(ClAppScrum.cstDoscDeUS)
+      
+      si pas oRetour.p_bEstCharge alors
+      	sReq = [
+      		SELECT
+      			Scr_UserStory_Doc.*
+      		FROM Scr_UserStory_Doc
+      		WHERE Scr_UserStory_Doc.IDScr_UserStory = [%oUs_p.Get_IdUnique()%]
+      	]
+      	oRetour.ZF_LoadSQL(sReq)
+      fin
+      
+      renvoyer oRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1407a081406b6d97
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

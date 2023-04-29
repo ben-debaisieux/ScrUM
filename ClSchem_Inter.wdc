@@ -134,7 +134,7 @@ class :
       	
       	
       ],nIdUnique_P)
-      goapp.RSQL(sdGetTypeInter,sReq)
+      ::mg_oApp.RSQL(sdGetTypeInter,sReq)
       
       HLitPremier(sdGetTypeInter)
       si pas HEnDehors(sdGetTypeInter) ALORS
@@ -226,29 +226,22 @@ class :
      procedure_id : 2265507854744299057
      type_code : 12
      code : |1+
-      procédure aoUS_Associees():tableau de ClUserStory
+      procédure aoUS_Associees():ClcolUserStory
       
       
-      sdUsdeInter est une Source de Données
       sReq est une chaîne
-      aoRetour est un tableau de ClUserStory
+      aoRetour est un ClcolUserStory
       
-      sReq = ChaîneConstruit([
+      sReq = [
       	SELECT
-      		Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_UserStory
+      		Scr_UserStory_Scr_Process_Metier_Intervenant.*
       		
       	FROM Scr_UserStory_Scr_Process_Metier_Intervenant
       	
-      	WHERE Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant = %1
+      	WHERE Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant = [%:ZF_Get_IdUnique()%]
       	
-      ], :ZF_Get_IdUnique())
-      
-      goapp.RSQL(sdUsdeInter,sReq)
-      POUR TOUT sdUsdeInter
-      	TableauAjouteRéférence(aoRetour,ClUserStory.GetObj(sdUsdeInter.IDScr_UserStory))
-      FIN
-      
-      HAnnuleDéclaration(sdUsdeInter)
+      ]
+      aoRetour.ZF_LoadSQL(sReq)
       
       
       renvoyer aoRetour
@@ -258,13 +251,14 @@ class :
      procedure_id : 2265591439111297058
      type_code : 12
      code : |1-
-      procédure AjouteUS(oUS_P est un ClUserStory)
+      procédure AjouteUS(oUS_P est un ClDbUserStory)
       
       HRAZ(Scr_UserStory_Scr_Process_Metier_Intervenant)
       Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant	= :ZF_Get_IdUnique()
       Scr_UserStory_Scr_Process_Metier_Intervenant.IDScr_UserStory					= oUS_P.Get_IdUnique()
       SI PAS HAjoute(Scr_UserStory_Scr_Process_Metier_Intervenant) ALORS
-      	ExceptionDéclenche(1,ExceptionInfo(errMessage))
+      	ClZF_ObjDB.mg_oExEchecEnregistrement.ZF_Declenche()
+      	//ExceptionDéclenche(1,ExceptionInfo(errMessage))
       FIN
      type : 458752
    -
@@ -272,7 +266,7 @@ class :
      procedure_id : 2265593599482119200
      type_code : 12
      code : |1+
-      procédure RetireUS(oUS_P est un ClUserStory)
+      procédure RetireUS(oUS_P est un ClDbUserStory)
       
       HLitRecherche(Scr_UserStory_Scr_Process_Metier_Intervenant,...
       	IDScr_UserStory_IDScr_Process_Metier_Intervenant, ...
@@ -281,7 +275,8 @@ class :
       
       si HTrouve(Scr_UserStory_Scr_Process_Metier_Intervenant) ALORS
       	SI PAS HAjoute(Scr_UserStory_Scr_Process_Metier_Intervenant) ALORS
-      		ExceptionDéclenche(1,ExceptionInfo(errMessage))
+      		ClZF_ObjDB.mg_oExEchecEnregistrement.ZF_Declenche()
+      		//ExceptionDéclenche(1,ExceptionInfo(errMessage))
       	FIN
       sinon
       	ExceptionDéclenche(1, "Association user story / intervenant introuvable.")

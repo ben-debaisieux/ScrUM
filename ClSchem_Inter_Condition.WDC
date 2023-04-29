@@ -86,11 +86,11 @@ class :
      name : GetObj
      procedure_id : 2261485626596608097
      type_code : 12
-     code : |1-
+     code : |1+
       // Redéfinition de la méthode ClSchem_Inter.GetObj
       PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClSchem_Inter_Condition
-      
-      RENVOYER ClZF_ObjDB.ZF_GetObj("ClSchem_Inter_Condition", nIdUnique_P)
+      sClasse est une chaine = ClSchem_Inter_Condition
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
      type : 458752
    -
      name : aListeLiens

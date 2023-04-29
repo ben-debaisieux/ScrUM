@@ -61,7 +61,7 @@ window :
      p_codes :
       -
         code : |1+
-         SI Ouvre(FEN_Critère_Acceptation_UserStorie_Maj,zoCritere.ZF_Get_IdUnique(),zoCritere.p_oUserStoryParente.Get_IdUnique()) ALORS
+         SI Ouvre(FEN_Critère_Acceptation_UserStorie_Maj, zoCritere) ALORS
          	ChargeCriteres()
          	MaFenêtre..ValeurRenvoyée = vrai
          FIN
@@ -134,7 +134,7 @@ window :
          	
          si nIdUS <> 0 ALORS
          	
-         	zoCritere.p_oUserStoryParente = ClUserStory.GetObj(nIdUS)
+         	zoCritere.p_oUserStoryParente = ClDbUserStory.GetObj(nIdUS)
          	zoCritere.ZF_Enregistre()
          	
          	SetInfoUS()
@@ -160,7 +160,7 @@ window :
   p_codes :
    -
      code : |1-
-      PROCEDURE MaFenêtre(zoCritere est un ClCritereAccept)
+      PROCEDURE MaFenêtre(zoCritere est un ClDbCritereAccept)
       
       MaFenêtre..ValeurRenvoyée = faux
    -
@@ -211,10 +211,10 @@ window :
       //
       PROCEDURE ChargeCriteres()
       
-      oCompo est un ClCritereAccept_Composant dynamique
+      oCompo est un ClDbCritereAccept_Composant dynamique
       
       
-      ARBRE_SansNom1..Libellé = zoCritere.m_sTitre
+      ARBRE_SansNom1..Libellé = zoCritere.p_sTitre
       
       ArbreSupprimeTout(ARBRE_SansNom1)
       

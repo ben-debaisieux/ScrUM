@@ -218,7 +218,7 @@ window :
       -
         code : |1+
          SI TableOccurrence(TBL_taches) >= 1 ALORS
-         	oTache est un ClTache <- ClTache.GetObj(TBL_taches.COL_idTache)
+         	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_taches.COL_idTache)
          	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
          		AffTaches()
          	FIN
@@ -258,9 +258,9 @@ window :
      code : |1+
       procédure AffTaches()
       
-      oPrj		est un ClProjet dynamique
-      oUs			est un ClUserStory dynamique
-      oTache_Tmp	est un ClTache dynamique
+      oPrj		est un ClDbProjet dynamique
+      oUs			est un ClDbUserStory dynamique
+      oTache_Tmp	est un ClDbTache dynamique
       nNumLigne	est un entier
       
       TBL_taches..AffichageActif = Faux
@@ -268,15 +268,15 @@ window :
       TableSupprimeTout(TBL_taches)
       
       
-      POUR TOUT ELÉMENT oPrj DE ClProjet.aoListeProjets().aItems()
-      	POUR TOUT ELÉMENT oUs DE oPrj.aoListeUS().aItems()
+      POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
+      	POUR TOUT ELÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
       		
-      		POUR TOUT ELÉMENT oTache_Tmp DE oUs.aoListeTaches().aItems()
+      		POUR TOUT ELÉMENT oTache_Tmp DE ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       			
       //			Trace("Tache : " + oTache_Tmp.p_sCodeTache)
       //			Trace("Aff" + oTache_Tmp:p_nPoids + "-" + oTache_Tmp:p_nPoids_Previsionnel + "-" + oTache_Tmp:p_bAnnule + "-" + oTache_Tmp.p_bBrouillon)
       			
-      			SI oTache_Tmp.p_nStatut DANS(ClTache.cstStatut_en_cours) ALORS
+      			SI oTache_Tmp.p_nStatut DANS(ClDbTache.cstStatut_en_cours) ALORS
       				nNumLigne									= TableAjouteLigne(TBL_taches)
       				TBL_taches[nNumLigne].COL_idTache			= oTache_Tmp.Get_IdUnique()
       				TBL_taches[nNumLigne].COL_Projet			= oUs.p_oProjetParent.p_sNom

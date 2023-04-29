@@ -365,11 +365,11 @@ class :
       nLigne_Action			est un entier
       sClé					est une chaîne
       sCodeTache				est une chaîne
-      oTache					est un ClTache dynamique
+      oTache					est un ClDbTache dynamique
       nIdUs					est un entier
       anUSARecalculer			est un tableau d'entiers
-      oUsrDev					est un ClUsr dynamique
-      aSprintDeDate			est un tableau associatif de ClSprint dynamique
+      oUsrDev					est un ClDbUsr dynamique
+      aSprintDeDate			est un tableau associatif de ClDbSprint dynamique
       
       aLstTacheImportes est un tableau de chaînes
       
@@ -450,7 +450,7 @@ class :
       		//SI sCodeTache DANS ("BLM031j") ALORS STOP
       		
       		// recup info tache
-      		oTache <- ClTache.GetObj_de_code(sCodeTache)
+      		oTache <- ClDbTache.GetObj_de_code(sCodeTache)
       		
       		
       		////////////////////////////////////////////////////////
@@ -475,6 +475,10 @@ class :
       			
       			SI oTache.p_bAnnule ALORS
       				oTache = Null
+      			SINON
+      				SI oTache.p_nNum_Sprint_Realisation > goApp.Sprint_Num_Actuel() ALORS
+      					Trace("La tache ""[%sCodeTache%]"" est prévue pour le sprint [%oTache.p_nNum_Sprint_Realisation%] mais est déjà dans trello ([%oTache.p_sDescription%]).")
+      				FIN
       			FIN
       		FIN
       		
@@ -491,19 +495,19 @@ class :
       			SI bSuspendue ALORS
       				//Oui : on s'assure qu'il y ait le motif.
       				SI oTache.p_sCMTR_Blocage = "" ALORS
-      					oTache.p_nStatut = ClTache.cstStatut_Suspendu
+      					oTache.p_nStatut = ClDbTache.cstStatut_Suspendu
       					Trace("La tache [%oTache.p_sCodeTache%] est suspendue dans trello, mais n'a pas de motif ([%oTache.p_sDescription%]).")
       				FIN
       			SINON
       				//Non : On s'assure qu'il n'y ait plus de motif.
       				SI oTache.p_sCMTR_Blocage <> "" ALORS
-      					oTache.p_nStatut = ClTache.cstStatut_Suspendu
+      					oTache.p_nStatut = ClDbTache.cstStatut_Suspendu
       					Trace("La tache [%oTache.p_sCodeTache%] n'est pas suspendue dans trello, mais a de motif de blocage ([%oTache.p_sDescription%]).")
       				FIN
       				
       				
       				SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_Dev_en_cours, cst_List_ID_A_faire_tester_par_DEV2, cst_List_ID_Test_unitaire) ALORS
-      					oTache.p_nStatut = ClTache.cstStatut_en_cours
+      					oTache.p_nStatut = ClDbTache.cstStatut_en_cours
       				FIN
       			FIN
       			
@@ -512,7 +516,7 @@ class :
       			SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev <> "" ALORS
       				HLitRecherche(Scr_Usr_Trello,IdTrello,aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev,hIdentique+hLimiteParcours)
       				SI HTrouve(Scr_Usr_Trello) ALORS
-      					oUsrDev <- ClUsr.GetObj(Scr_Usr_Trello.IDScr_Usr)
+      					oUsrDev <- ClDbUsr.GetObj(Scr_Usr_Trello.IDScr_Usr)
       				SINON
       					STOP
       				FIN
@@ -563,9 +567,9 @@ class :
       			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
       			
       			//			vEvts		est un Variant
-      			oMessage	est un ClMessage dynamique
+      			oMessage	est un ClDbMessage dynamique
       			dhEvt		est une DateHeure
-      			oSpr		est un ClSprint dynamique
+      			oSpr		est un ClDbSprint dynamique
       			
       			//récupération des actions de la carte
       			
@@ -576,7 +580,7 @@ class :
       				dhEvt = dh_FormatRFC3339_Vers_DateHeure(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sDate_Action)
       				
       				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre <> Null ALORS
-      					oMessage						= allouer un ClMessage()
+      					oMessage						= allouer un ClDbMessage()
       					oMessage.p_oTache				= oTache
       					oMessage.p_oUsr					= oUsrDev
       					oMessage.p_sCMTR				= aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre
@@ -586,7 +590,7 @@ class :
       				
       				
       				SI aSprintDeDate[dhEvt..PartieDate]..Vide ALORS
-      					aSprintDeDate[dhEvt..PartieDate] <- ClSprint.oGet_SprintDeDate(dhEvt..PartieDate)
+      					aSprintDeDate[dhEvt..PartieDate] <- ClDbSprint.oGet_SprintDeDate(dhEvt..PartieDate)
       				FIN
       				oSpr <- aSprintDeDate[dhEvt..PartieDate]
       				
@@ -679,16 +683,16 @@ class :
       FIN
       
       
-      oUs est un ClUserStory dynamique
+      oUs est un ClDbUserStory dynamique
       POUR TOUT nIdUs DE anUSARecalculer
-      	oUs <- ClUserStory.GetObj(nIdUs)
+      	oUs <- ClDbUserStory.GetObj(nIdUs)
       	
       	SI oUs.p_bTermine ET oUs.p_dDateMiseEnProd = "" ALORS
       		oUs.p_dDateMiseEnProd = DateSys()
       		
       	FIN
       	SI PAS oUs.p_bEstTestéParLeDemandeur ET oUs.p_oEnvironnement_Test = Null ALORS
-      		oUs.p_oEnvironnement_Test = ClEnvironnement.GetObj(1)
+      		oUs.p_oEnvironnement_Test = ClDbEnvironnement.GetObj(1)
       	FIN
       	//Trace(oUs.p_sCodeUserStory + "#" + oUs.p_dDateMiseEnProd)
       	oUs.RecalcEtatUS()

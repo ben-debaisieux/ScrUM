@@ -84,8 +84,8 @@ class :
      code : |1+
       // Redéfinition de la méthode ClSchem_Inter.GetObj
       PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClSchem_Inter_SousProcess
-      
-      RENVOYER ClZF_ObjDB.ZF_GetObj("ClSchem_Inter_SousProcess", nIdUnique_P)
+      sClasse est une chaine = ClSchem_Inter_SousProcess
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
       
      type : 458752
   procedure_templates : []

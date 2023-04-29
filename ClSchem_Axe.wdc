@@ -54,7 +54,7 @@ class :
      name : GetObj
      procedure_id : 2261063792054738383
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] GetObj (<nIdUnique_P> est entier)
@@ -68,8 +68,8 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClSchem_Axe
-      
-      renvoyer ClZF_ObjDB.ZF_GetObj("ClSchem_Axe", nIdUnique_P)
+      sClasse est une chaine = ClSchem_Axe
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
      type : 458752
    -
      name : Init_ObjBD

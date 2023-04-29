@@ -1,0 +1,365 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbProjetMap
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e57206a5f44b
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClDbProjetMap est une Classe
+      	hérite de ClZF_ObjDB
+      	
+      PRIVÉ
+      	m_sLibelle					est une chaîne					<mapping=Libelle>
+      	m_oProjetMap_Parent			est un ClDbProjetMap dynamique	<note="mapping=IDSCR_ProjetMap_Parent">
+      	m_oProjet					est un ClDbProjet dynamique		<note="mapping=IDScr_Projet">
+      	m_oColProjetMap_Enfant		est un ClColProjetMap
+      GLOBAL
+      PUBLIC
+      	mg_oEx_DependenceIncoherente	est un ClZF_Exception dynamique
+      	mg_oEx_PasDeParent				est un ClZF_Exception dynamique
+      	mg_oEx_EnregTopNiveau			est un ClZF_Exception dynamique
+      	mg_oEx_LibelleObligatoire		est un ClZF_Exception dynamique
+      	// mg_oEx_Exception5	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception6	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception7	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception8	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception9	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception10	est un ClZF_Exception dynamique
+      FIN
+      
+      mg_oEx_DependenceIncoherente	= Allouer un ClZF_Exception("Un thème de projet ne peut pas être associé à un projet et un thème parent")
+      mg_oEx_PasDeParent				= Allouer un ClZF_Exception("Un thème de projet doit être associé à un projet ou un thème parent")
+      mg_oEx_EnregTopNiveau			= Allouer un ClZF_Exception("On ne peut déclencher l'enregistrement que depuis l'item de plus haut niveau")
+      mg_oEx_LibelleObligatoire		= Allouer un ClZF_Exception("Le libellé est obligatoire")
+      // mg_oEx_Exception5	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception6	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception7	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception8	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception9	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
+      
+      constante
+      	cstKeyCol_MapDeProjet	= "MapDeProjet"
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 815227853993029
+     type_code : 27
+     code : |1-
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      
+      Ancêtre.Constructeur(SCR_ProjetMap..Nom, SCR_ProjetMap.IDSCR_ProjetMap..Nom,nID_P)
+      
+      //stop si nID_P = 0
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 815227853993030
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 815227853993031
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbProjetMap
+      
+      sClasse est une chaîne = ClDbProjetMap
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 815227853993032
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉ init_ObjBD()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      SI PAS :ZF_bModeAjout() ALORS
+      	SI PAS SCR_ProjetMap.IDSCR_ProjetMap_Parent..Null ALORS
+      		:m_oProjetMap_Parent	<- ClDbProjetMap.GetObj(SCR_ProjetMap.IDSCR_ProjetMap_Parent)
+      	FIN
+      
+      	SI PAS SCR_ProjetMap.IDScr_Projet..Null ALORS
+      		:m_oProjet	<- ClDbProjet.GetObj(SCR_ProjetMap.IDScr_Projet)
+      	FIN
+      FIN
+      
+     type : 458752
+   -
+     name : Pre_Enregistre
+     procedure_id : 815227853993033
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ Pre_Enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.Pre_Enregistre()
+      
+      //Trace("pré Enreg  : " + :ZF_Get_IdUnique() + " - supp : " + ZF_bEstsupprime())
+      
+      SI :ZF_bEstsupprime() ALORS
+      	
+      	nSauveEnr est un entier = HSauvePosition(SCR_ProjetMap)
+      	oObjEnf est un ClDbProjetMap dynamique
+      	pour tout element oObjEnf de ClColProjetMap.oColProjetMap_Enfant(objet).aItems()
+      		//Si l'item en cours est supprimé : on supprime tous les enfants
+      		oObjEnf.ZF_Supprimer()
+      		oObjEnf.ZF_Enregistre()
+      	FIN
+      	
+      	HRetourPosition(nSauveEnr)
+      	
+      //	//A faire : disposer d'une variable enreistrment pour figer le contexte des objets
+      //	//Est ce que l'enregistrement courant correspond à l'enregistrement de la classe ?
+      //	SI :ZF_Get_IdUnique() <> {:p_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique} ALORS
+      //		//Non : Repositionnement, mais sans actualisation des membres de l'instance.
+      //		:ZF_Charge(Vrai)
+      //	FIN
+      
+      SINON
+      	
+      	//Il faut un projet parent ou (exclusif !) un item parent
+      	si :m_oProjetMap_Parent <> null et :m_oProjet <> Null ALORS
+      		mg_oEx_DependenceIncoherente.ZF_Declenche()
+      	FIN
+      	SI :m_oProjetMap_Parent = Null ET :m_oProjet = Null ALORS
+      		mg_oEx_PasDeParent.ZF_Declenche()
+      	FIN
+      	
+      	//On ne peut déclencher l'enregistrement que depuis l'item de plus haut niveau
+      	si :m_oProjet = Null _et_ pas :m_oProjetMap_Parent.p_bEnregistrementEnCours ALORS
+      		mg_oEx_EnregTopNiveau.ZF_Declenche()
+      	FIN
+      	
+      	//Le libellé est obligatoire
+      	si SansEspace(:m_sLibelle) = "" alors
+      		mg_oEx_LibelleObligatoire.ZF_Declenche()
+      	FIN
+      	
+      	
+      	
+      //	//
+      //	SI :m_oProjetMap_Parent = Null _OU_ :m_oProjetMap_Parent.ZF_Get_IdUnique() = 0 ALORS
+      //		SCR_ProjetMap.IDSCR_ProjetMap_Parent..Null	= Vrai
+      //	SINON
+      //		SCR_ProjetMap.IDSCR_ProjetMap_Parent	= :m_oProjetMap_Parent.ZF_Get_IdUnique()
+      //	FIN
+      //	//
+      //	SI :m_oProjet = Null _OU_ :m_oProjet.ZF_Get_IdUnique() = 0 ALORS
+      //		SCR_ProjetMap.IDScr_Projet..Null	= Vrai
+      //	SINON
+      //		SCR_ProjetMap.IDScr_Projet	= :m_oProjet.ZF_Get_IdUnique()
+      //	FIN
+      FIN
+     type : 458752
+   -
+     name : post_enregistre
+     procedure_id : 1445910197859381265
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ObjDB.post_enregistre
+      PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre()<métier>:Vide
+      
+      oMapEnf est un ClDbProjetMap dynamique
+      
+      si pas :ZF_bEstsupprime() ALORS
+      	pour tout element oMapEnf de :m_oColProjetMap_Enfant.aItems()
+      		oMapEnf.ZF_Enregistre()
+      	FIN
+      sinon
+      	//Si l'item en cours est supprimé, on a traité la suppression des enfants en pré traitement.
+      FIN
+     type : 458752
+  properties :
+   -
+     name : p_oProjetMap_Parent
+     identifier : 0x2e57206a5f441
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_oProjetMap_Parent() : ClDbProjetMap
+         //Propriétés de m_oIDSCR_ProjetMap_Parent
+         
+         RENVOYER :m_oProjetMap_Parent
+        type : 1966080
+      -
+        code : |1-
+         PROCEDURE p_oProjetMap_Parent(oValeur_p est un ClDbProjetMap dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oProjetMap_Parent, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	
+         	//On des-enregistre l'objet dans les enfants du parent initial
+         	si :m_oProjetMap_Parent <> Null ALORS
+         		:m_oProjetMap_Parent.m_oColProjetMap_Enfant.ZF_Supp(objet)
+         	FIN
+         	
+         	:m_oProjetMap_Parent <- oValeur_p
+         	
+         	//On enregistre l'objet dans le nouveau parent
+         	:m_oProjetMap_Parent.m_oColProjetMap_Enfant.ZF_addItem(objet)
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oProjetMap_Parent_ID
+     identifier : 0x2e57206a5f442
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oProjetMap_Parent_ID():entier
+         //Propriétés de l'objet m_oIDSCR_ProjetMap_Parent, accessible via son ID
+         SI :p_oProjetMap_Parent = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oProjetMap_Parent.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oProjetMap_Parent_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oProjetMap_Parent = Null
+         SINON
+         	:p_oProjetMap_Parent = ClDbProjetMap.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oProjet
+     identifier : 0x2e57206a5f443
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_oProjet() : ClDbProjet
+         //Propriétés de m_oIDScr_Projet
+         
+         RENVOYER :m_oProjet
+        type : 1966080
+      -
+        code : |1-
+         PROCEDURE p_oProjet(oValeur_p est un ClDbProjet dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oProjet, oValeur_p) ALORS
+         	oColMapDeProjet est un ClColProjetMap dynamique
+         	oColMapDeProjet <- :m_oProjet.ZF_GetCol(ClDbProjetMap.cstKeyCol_MapDeProjet)
+         	//Déréférencement de l'objet dans l'ancienne collection (si chargée)
+         	si :m_oProjet <> Null ALORS
+         		si oColMapDeProjet.p_bEstCharge ALORS
+         			oColMapDeProjet.ZF_Supp(objet)
+         		FIN
+         	FIN
+         	
+         	:ZF_EstModif()
+         	:m_oProjet <- oValeur_p
+         	
+         	//Référencement de l'objet dans la nouvelle collection (si non chargée, on la charge)
+         	SI :m_oProjet <> Null ALORS
+         		oColMapDeProjet <- :m_oProjet.ZF_GetCol(ClDbProjetMap.cstKeyCol_MapDeProjet)
+         		SI oColMapDeProjet.p_bEstCharge ALORS
+         			ClColProjetMap.oColMapsDeProjet(:m_oProjet)
+         		FIN
+         		oColMapDeProjet.ZF_addItem(objet)
+         	FIN
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oProjet_ID
+     identifier : 0x2e57206a5f444
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oProjet_ID():entier
+         //Propriétés de l'objet m_oIDScr_Projet, accessible via son ID
+         SI :p_oProjet = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oProjet.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oProjet_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oProjet = Null
+         SINON
+         	:p_oProjet = ClDbProjet.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oColProjetMap_Enfant
+     identifier : 0x1429da040231902d
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oColProjetMap_Enfant() : ClColProjetMap
+         
+         renvoyer m_oColProjetMap_Enfant
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oColProjetMap_Enfant(oValeur est ClColProjetMap)
+         
+         m_oColProjetMap_Enfant=oValeur
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sLibelle
+     identifier : 0x142d63c42542a24f
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_sLibelle() : chaîne
+         //Propriétés de m_sLibelle
+         
+         RENVOYER :m_sLibelle
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_sLibelle(sValeur_p est un chaîne):Vide
+         
+         SI :m_sLibelle <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sLibelle = sValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e57206a5f44c
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

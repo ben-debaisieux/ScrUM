@@ -102,8 +102,8 @@ report :
         code : |1+
          
          
-         oUsTmp est un ClUserStory dynamique
-         pour tout element oUsTmp de zoPrj_P.aoListeUS().aItems()
+         oUsTmp est un ClDbUserStory dynamique
+         pour tout element oUsTmp de ClColUserStory.oFromProjet(zoPrj_P).aitems()	//zoPrj_P.aoListeUS().aItems()
          	si pas oUsTmp.p_bTermine ALORS
          		
          		iTerminePage()
@@ -199,19 +199,19 @@ report :
      p_codes :
       -
         code : |1+
-         oSp est un ClSprint dynamique
+         oSp est un ClDbSprint dynamique
          nNumSprintDemarrage est un entier = zoUS.Get_DemarrageTache()
          sInfoSprint est une chaîne
          
          si nNumSprintDemarrage = 0 ALORS
          	sInfoSprint = "Démarrage non planifié"
          sinon
-         	oSp <- ClSprint.GetObj(nNumSprintDemarrage)
+         	oSp <- ClDbSprint.GetObj(nNumSprintDemarrage)
          	sInfoSprint = "Démarrage : " + oSp.sSprint_Date()
          FIN
          
          LIB_InfoUS			= zoUS.sNommination_US()
-         LIB_Etat_US			= "Statut : " + ClUserStory.sNomDeEtat(zoUS.Get_EtatUS())
+         LIB_Etat_US			= "Statut : " + ClDbUserStory.sNomDeEtat(zoUS.Get_EtatUS())
          LIB_Demarrage_US	= sInfoSprint
          LIB_CodeUS			= "(" + zoUS.p_sCodeUserStory + ")"
          LIB_ChargeUS		= "Charge : " + zoUS.User_Story_Poids()
@@ -225,33 +225,33 @@ report :
          fin
          
          stStatutTmp est un STR_Statut
-         oTacheTmp est un ClTache dynamique
+         oTacheTmp est un ClDbTache dynamique
          bRamure est un booléen
          aListStauts est un tableau de STR_Statut
          
          //Chargement des statuts à traiter
          stStatutTmp.sLib = "A valider"
-         stStatutTmp.aStatuts = [ClTache.cstStatut_realise]
+         stStatutTmp.aStatuts = [ClDbTache.cstStatut_realise]
          TableauAjoute(aListStauts, stStatutTmp)
          
          stStatutTmp.sLib = "A réaliser"
-         stStatutTmp.aStatuts = [ClTache.cstStatut_a_coter, ...
-         			ClTache.cstStatut_a_faire, ...
-         			ClTache.cstStatut_en_cours]
+         stStatutTmp.aStatuts = [ClDbTache.cstStatut_a_coter, ...
+         			ClDbTache.cstStatut_a_faire, ...
+         			ClDbTache.cstStatut_en_cours]
          TableauAjoute(aListStauts, stStatutTmp)
          
          stStatutTmp.sLib = "Suspendues"
-         stStatutTmp.aStatuts = [ClTache.cstStatut_Suspendu]
+         stStatutTmp.aStatuts = [ClDbTache.cstStatut_Suspendu]
          TableauAjoute(aListStauts, stStatutTmp)
          
          stStatutTmp.sLib = "Annulées"
-         stStatutTmp.aStatuts = [ClTache.cstStatut_Annulee]
+         stStatutTmp.aStatuts = [ClDbTache.cstStatut_Annulee]
          TableauAjoute(aListStauts, stStatutTmp)
          
          //Impression des taches, par statuts
          pour tout stStatutTmp de aListStauts
          	bRamure = faux
-         	POUR TOUT ELEMENT oTacheTmp DE zoUS.aoListeTaches().aItems()
+         	POUR TOUT ELEMENT oTacheTmp DE ClColTaches.aoFromUS(zoUs).aItems()	//zoUS.aoListeTaches().aItems()
          		
          		SI TableauCherche(stStatutTmp.aStatuts, tcLinéaire, oTacheTmp.p_nStatut) <> -1 ALORS
          			
@@ -271,7 +271,7 @@ report :
          			FIN
          
          			
-         			si oTacheTmp.p_nStatut = ClTache.cstStatut_Suspendu ALORS
+         			si oTacheTmp.p_nStatut = ClDbTache.cstStatut_Suspendu ALORS
          				Bloc_Cmtr.LIB_CmtrTache = "Motif de blocage : " +  oTacheTmp.p_sCMTR_Blocage
          				iImprimeBloc(Bloc_Cmtr)
          			FIN
@@ -317,7 +317,7 @@ report :
      p_codes :
       -
         code : |1+
-         oSprint est un ClSprint dynamique
+         oSprint est un ClDbSprint dynamique
          sInfoPoids est une chaîne
          sInfoSprint est une chaîne
          
@@ -328,7 +328,7 @@ report :
          	sInfoPoids = "(Non déterminé)"
          FIN
          si zoTache.p_nNum_Sprint_Realisation <> 0 ALORS
-         	oSprint <- ClSprint.GetObj(zoTache.p_nNum_Sprint_Realisation)
+         	oSprint <- ClDbSprint.GetObj(zoTache.p_nNum_Sprint_Realisation)
          	sInfoSprint = oSprint.ZF_Get_IdUnique() + " (" + oSprint.sSprint_Date() + ")"
          sinon
          	sInfoSprint = "(Non déterminé)"
@@ -396,10 +396,10 @@ report :
   p_codes :
    -
      code : |1+
-      PROCEDURE MonEtat(zoPrj_P est un ClProjet)
+      PROCEDURE MonEtat(zoPrj_P est un ClDbProjet)
       
-      zoUS est un ClUserStory dynamique
-      zoTache est un ClTache dynamique
+      zoUS est un ClDbUserStory dynamique
+      zoTache est un ClDbTache dynamique
      type : 327680
    -
      code : |1-

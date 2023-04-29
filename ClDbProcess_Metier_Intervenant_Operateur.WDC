@@ -1,0 +1,116 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbProcess_Metier_Intervenant_Operateur
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x143d67fe0278d2e1
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClDbProcess_Metier_Intervenant_Operateur est une Classe
+      		Hérite de CldbProcess_Metier_Intervenant_AvecUS
+      FIN
+       
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1458436194998801121
+     type_code : 27
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur ( [<ID> est entier])
+      //
+      // Paramètres :
+      //	ID (entier - valeur par défaut=0) : <indiquez ici le rôle de ID>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      
+      
+      //	oAxeParent_P (ClProcess_Metier_Axe) : <indiquez ici le rôle de oAxeParent_P>
+      PROCEDURE Constructeur(LOCAL ID est un entier = 0)
+      
+      Ancêtre:Constructeur(ID)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1458436194998866657
+     type_code : 28
+     code : |1-
+      
+      
+      PROCEDURE Destructeur()
+     type : 655360
+   -
+     name : GenBox
+     procedure_id : 1458436194998932193
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GenBox ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE GenBox()
+      
+      oBtn est un champ <- :oBoxModele()
+      oBtn..Libellé = :Description
+      oBtn..CouleurFond = COL_Scrum.gnCouleur_BleuPale
+      
+      //RENVOYER Null
+     type : 458752
+   -
+     name : _nType
+     procedure_id : 1458436194998997729
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] _nType ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	entier : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION PROTÉGÉE VIRTUELLE _nType()
+      
+      renvoyer ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Action_par_intervenant
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ClProcess_Metier_Intervenant_Operateur
+resources :
+ string_res :
+  identifier : 0x1e2d8d7b00f344f0
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

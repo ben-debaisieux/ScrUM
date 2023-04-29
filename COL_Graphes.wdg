@@ -103,7 +103,7 @@ procedure_set :
      procedure_id : 1288012627202703584
      type_code : 15
      code : |1+
-      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClProjet, oEpic_P est un ClEpic = Null)
+      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClDbProjet, oEpic_P est un ClDbEpic dynamique = Null)
       
       sTitre			est une chaîne
       bAPrendre		est un booléen
@@ -128,9 +128,9 @@ procedure_set :
       //	nEnCours	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.EnCours)
       //	nAFaire		= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.A_faire)
       //sinon
-      	oUS est un ClUserStory dynamique
+      	oUS est un ClDbUserStory dynamique
       	
-      	pour tout element oUS de oProjet_P.aoListeUS().aItems()
+      	pour tout element oUS de ClColUserStory.oFromProjet(oProjet_P).aitems()	//oProjet_P.aoListeUS().aItems()
       		bAPrendre = vrai
       		
       		si oEpic_P <> null alors
@@ -154,15 +154,15 @@ procedure_set :
       		si bAPrendre ALORS
       			oUS.User_Story_Etat()
       			selon oUS.Get_EtatUS()
-      				cas ClUserStory.ECompteNbUS.Terminee
+      				cas ClDbUserStory.ECompteNbUS.Terminee
       					nFinies++
-      				cas ClUserStory.ECompteNbUS.En_test_fonctionnel
+      				cas ClDbUserStory.ECompteNbUS.En_test_fonctionnel
       					nATester++
-      				cas ClUserStory.ECompteNbUS.Annulée
+      				cas ClDbUserStory.ECompteNbUS.Annulée
       					nAnnulee++
-      				cas ClUserStory.ECompteNbUS.EnCours
+      				cas ClDbUserStory.ECompteNbUS.EnCours
       					nEnCours++
-      				cas ClUserStory.ECompteNbUS.A_faire
+      				cas ClDbUserStory.ECompteNbUS.A_faire
       					nAFaire++
       				AUTRE CAS
       					
@@ -209,7 +209,7 @@ procedure_set :
      procedure_id : 1288167898864427811
      type_code : 15
      code : |1+
-      procédure EvolCharge(sChamp_P est une chaîne, oProjet_P est un ClProjet, bAvecImpond_P est un booléen)
+      procédure EvolCharge(sChamp_P est une chaîne, oProjet_P est un ClDbProjet, bAvecImpond_P est un booléen)
       
       
       //Affichage des infos dans le graphe :
@@ -267,16 +267,16 @@ procedure_set :
       stSp_Tmp				est un STR_Projection_Spr
       
       rNbSprintRestantEstime	est un réel
-      nPointsTotal			est un entier	= ClTache.Charge_Totale()
+      nPointsTotal			est un entier	= ClDbTache.Charge_Totale()
       nVelociteMoyenne		est un entier	= goApp.m_nVelociteMoyenne
-      oSprint					est un ClSprint dynamique
+      oSprint					est un ClDbSprint dynamique
       nNbPointsRestant		est un entier
       
       
       stSp_Tmp.nProj = nPointsTotal
       stSp_Tmp.nReal = nPointsTotal
       
-      pour tout element oSprint de ClSprint.aoListeSprint().aItems()
+      pour tout element oSprint de ClColSprint.aoListeSprint().aItems()
       	
       	SI oSprint.p_bTop_Termine ALORS
       		stSp_Tmp.nReal -= oSprint.nGetNbPointsRealises()
@@ -312,17 +312,17 @@ procedure_set :
       procédure Graphe_anticipation_de_charge(local znIdProjet_P est un entier)<UI>:STR_Anticipation_Charge_Projet
       
       stRetour		est un STR_Anticipation_Charge_Projet
-      oTache			est un ClTache dynamique
-      oPrj			est un ClProjet dynamique
+      oTache			est un ClDbTache dynamique
+      oPrj			est un ClDbProjet dynamique
       nAnticipation	est un entier
       
       
       stRetour.sTitre	= "Analyse de l'anticipation de la charge du projet" + rc
       
       
-      oPrj <- ClProjet.GetObj(znIdProjet_P)
+      oPrj <- ClDbProjet.GetObj(znIdProjet_P)
       stRetour.sTitre += oPrj.p_sNom
-      POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches().aItems()
+      POUR TOUT ELEMENT oTache DE ClColTaches.oFromProjet(oPrj).aItems()	//oPrj.aoListeTaches().aItems()
       	si (oTache.p_bEstRealise ou oTache.p_bAnnule) et oTache.p_nNum_Sprint_Realisation <> 0 alors
       		nAnticipation = oTache.p_nNum_Sprint_Realisation - oTache.p_nNum_Sprint_Creation
       		stRetour.aStSeries[nAnticipation].sEtiquette = nAnticipation
@@ -343,18 +343,18 @@ procedure_set :
      code : |1-
       procédure Graphe_Charge_Sprints(LOCAL nSprint_p est un entier, ...
       	LOCAL nNbSprint_p est un entier, ...
-      	LOCAL eSelecteur_p est un ClTache.ETypeCharge,...
+      	LOCAL eSelecteur_p est un ClDbTache.ETypeCharge,...
       	LOCAL nChargeReccurcive_p est un entier)<UI>:STR_Charge
       		
       
       
       
-      oPrj			est un ClProjet dynamique
-      oSprint			est un ClSprint dynamique
+      oPrj			est un ClDbProjet dynamique
+      oSprint			est un ClDbSprint dynamique
       nCptSpr			est un entier
       nNumPrj			est un entier
       nNumSprint		est un entier
-      oTableauProjet	est un ClColProjet	= ClProjet.aoProjets_sur_periode(nSprint_p, nNbSprint_p, eSelecteur_p)
+      oTableauProjet	est un ClColProjet	= ClColProjet.aoProjets_sur_periode(nSprint_p, nNbSprint_p, eSelecteur_p)
       nPoints			est un entier
       stRetour		est un STR_Charge
       stProjet_Tmp	est un STR_Charge_InfoPrj
@@ -362,9 +362,9 @@ procedure_set :
       
       stRetour.sTitre = "Planification des taches"
       SELON eSelecteur_p
-      	CAS ClTache.ETypeCharge.Charge_réelle
+      	CAS ClDbTache.ETypeCharge.Charge_réelle
       		stRetour.sTitre += " en production"
-      	CAS ClTache.ETypeCharge.Charge_prévisionelle
+      	CAS ClDbTache.ETypeCharge.Charge_prévisionelle
       		stRetour.sTitre += " prévisionnel"	
       FIN
       
@@ -396,7 +396,7 @@ procedure_set :
       POUR nCptSpr = 1 _À_ nNbSprint_p //pour chaque sprint on effectue la boucle suivante
       	
       	//affichage des dates du sprint en graduation
-      	oSprint <- ClSprint.GetObj(nNumSprint)
+      	oSprint <- ClDbSprint.GetObj(nNumSprint)
       	//Récupération des étiquettes des sprints
       	stRetour.aStListeSprints[nNumSprint] = oSprint.ZF_Get_IdUnique() + rc + oSprint.sSprint_Date()
       	
@@ -451,15 +451,15 @@ procedure_set :
       stRetour		est un STR_Evol_Charge_Projet
       nCumul			est un entier
       nCumulEngage	est un entier
-      oSprint			est un ClSprint dynamique
-      oTache			est un ClTache dynamique
-      oPrj			est un ClProjet dynamique
+      oSprint			est un ClDbSprint dynamique
+      oTache			est un ClDbTache dynamique
+      oPrj			est un ClDbProjet dynamique
       sNumSprint		est une chaîne
       
       
       stRetour.sTitre	= "Analyse de l'évolution de la charge du projet" + rc
       
-      POUR TOUT ELEMENT oSprint DE ClSprint.aoListeSprint().aItems()
+      POUR TOUT ELEMENT oSprint DE ClColSprint.aoListeSprint().aItems()
       	sNumSprint										= oSprint.ZF_Get_IdUnique()
       	
       	stRetour.aStSeries[sNumSprint]					= allouer un STR_Evol_Charge_Projet_Spr
@@ -469,9 +469,9 @@ procedure_set :
       
       
       
-      oPrj <- ClProjet.GetObj(znIdProjet_P)
+      oPrj <- ClDbProjet.GetObj(znIdProjet_P)
       stRetour.sTitre += oPrj.p_sNom
-      POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches().aItems()
+      POUR TOUT ELEMENT oTache DE ClColTaches.oFromProjet(oPrj).aItems()		//oPrj.aoListeTaches().aItems()
       	stRetour.aStSeries[oTache.p_nNum_Sprint_Creation].nCharge			+= oTache.p_nPoids
       	stRetour.aStSeries[oTache.p_nNum_Sprint_Realisation].nChargeEngage	+= oTache.p_nPoids
       FIN
@@ -486,7 +486,7 @@ procedure_set :
       		nCumulEngage							+= stSprint_Tmp.nChargeEngage
       		stRetour.aStSeries[sCle].nChargeCumul	= nCumul
       		stRetour.aStSeries[sCle].nChargeEngage	= nCumulEngage
-      		stRetour.aStSeries[sCle].nChargeImpond	= nCumul * (1 + ClProjet.cstTauxImponderable * (nCumul - nCumulEngage) / nCumul)
+      		stRetour.aStSeries[sCle].nChargeImpond	= nCumul * (1 + ClDbProjet.cstTauxImponderable * (nCumul - nCumulEngage) / nCumul)
       	FIN
       fin
       
@@ -499,19 +499,19 @@ procedure_set :
      procedure_id : 1394688821848060767
      type_code : 15
      code : |1-
-      procédure Graphe_Temps_validation(local nIdProjet_P est un entier)<UI>:STR_Temps_validation
+      procédure Graphe_Temps_validation(local nIdProjet_P est un entier)<métier>:STR_Temps_validation
       
       stRetour		est un STR_Temps_validation
       nCumul			est un entier
-      oSprint			est un ClSprint dynamique
-      oTache			est un ClTache dynamique
-      oPrj			est un ClProjet dynamique
+      oSprint			est un ClDbSprint dynamique
+      oTache			est un ClDbTache dynamique
+      oPrj			est un ClDbProjet dynamique
       sNumSprint		est une chaîne
       oSprints		est un ClColSprint
       
       stRetour.sTitre	= "Analyse des temps de mise en production des taches réalisées" + rc
       
-      oSprints <- ClSprint.aoListeSprint()
+      oSprints <- ClcolSprint.aoListeSprint()
       POUR TOUT ELEMENT oSprint DE oSprints.aItems()
       	sNumSprint										= oSprint.ZF_Get_IdUnique()
       	
@@ -543,10 +543,10 @@ procedure_set :
       	stRetour.sTitre += "Tout projets"
       	
       SINON
-      	oPrj <- ClProjet.GetObj(nIdProjet_P)
+      	oPrj <- ClDbProjet.GetObj(nIdProjet_P)
       
       	//Projet en cours
-      	POUR TOUT ELEMENT oTache DE oPrj.aoListeTaches().aItems()
+      	POUR TOUT ELEMENT oTache DE ClColTaches.oFromProjet(oPrj).aItems()		//oPrj.aoListeTaches().aItems()
       		//trace(ChaîneConstruit("Début*%1*Fin*%2*poids*%3*code%4", oTache.p_nNum_Sprint_Demarrage, oTache.p_nNum_Sprint_Fin, oTache.p_nPoids, oTache.p_sCodeTache))
       		SI oTache.p_nNum_Sprint_Demarrage <> 0 ALORS
       			stRetour.aStSeries[oTache.p_nNum_Sprint_Demarrage].nDemarre += oTache.p_nPoids

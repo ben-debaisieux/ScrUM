@@ -438,11 +438,11 @@ window :
       nVelocite est un entier = goApp.m_nVelociteMoyenne
       
       //Sélecteur en production ou prévisionnel :
-      eSelecteur est un ClTache.ETypeCharge
+      eSelecteur est un ClDbTache.ETypeCharge
       
-      oColProjets est un ClColProjet = ClProjet.aoProjets_sur_periode(nNumSprint_p,nligne, eSelecteur)
+      oColProjets est un ClColProjet = ClColProjet.aoProjets_sur_periode(nNumSprint_p,nligne, eSelecteur)
       //nProjet est un entier  = TableauOccurrence(oColProjets.get_col())
-      oPrj est un ClProjet dynamique
+      oPrj est un ClDbProjet dynamique
       nInd est un entier
       
       nColone est un entier = 6
@@ -452,10 +452,10 @@ window :
       SELON SEL_Production_Prevision
       	// Production
       	CAS "1"
-      		eSelecteur = ClTache.ETypeCharge.Charge_réelle
+      		eSelecteur = ClDbTache.ETypeCharge.Charge_réelle
       	// Prévisionnel
       	CAS "2"
-      		eSelecteur = ClTache.ETypeCharge.Charge_prévisionelle
+      		eSelecteur = ClDbTache.ETypeCharge.Charge_prévisionelle
       FIN
       
       
@@ -510,8 +510,8 @@ window :
       	//partie Sprint
       	TBL_Sprints[i].COL_numSprint = nNumSprint_p + i - 2
       	
-      	oSprint est un ClSprint dynamique
-      	oSprint <- ClSprint.GetObj(nNumSprint_p + i - 2)
+      	oSprint est un ClDbSprint dynamique
+      	oSprint <- ClDbSprint.GetObj(nNumSprint_p + i - 2)
       	TBL_Sprints[i].COL_dateSprints = oSprint.sSprint_Date()
       	
       	//Partie Productivité attendue

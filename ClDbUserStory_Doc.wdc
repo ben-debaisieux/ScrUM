@@ -1,0 +1,241 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbUserStory_Doc
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x140dd79d726ad2ba
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbUserStory_Doc est une Classe
+      	hérite de ClZF_ObjDB
+      
+      PRIVÉ
+      	m_sChemin			est un chaîne								<MAPPING=Chemin>
+      	m_nTypeChemin			est un Entier sans signe sur 1 octet	<MAPPING=TypeChemin>
+      	m_oIDScr_UserStory	est un ClDbUserStory dynamique				<note="mapping=IDScr_UserStory">
+      	
+      GLOBAL
+      PUBLIC
+      	mg_oEx_CompoNonInst_IDScr_UserStory	est un ClZF_Exception dynamique
+      	mg_oEx_CheminVide						est un ClZF_Exception dynamique
+      	mg_oEx_TypeDocIncorrect				est un ClZF_Exception dynamique
+      	//mg_oEx_Exception3	est un ClZF_Exception dynamique
+      	//mg_oEx_Exception4	est un ClZF_Exception dynamique
+      	//mg_oEx_Exception5	est un ClZF_Exception dynamique
+      	//mg_oEx_Exception6	est un ClZF_Exception dynamique
+      	//mg_oEx_Exception7	est un ClZF_Exception dynamique
+      	//mg_oEx_Exception8	est un ClZF_Exception dynamique
+      	//mg_oEx_Exception9	est un ClZF_Exception dynamique
+      	//mg_oEx_Exception10	est un ClZF_Exception dynamique
+      	
+      FIN
+      
+      mg_oEx_CompoNonInst_IDScr_UserStory	= allouer un ClZF_Exception("Enregistrement impossible : Aucune user story est associée au document.")
+      mg_oEx_CheminVide	= Allouer un ClZF_Exception("Impossible d'ajouter un chemin vide, pour un document.")
+      mg_oEx_TypeDocIncorrect	= Allouer un ClZF_Exception("Le type de document ""%1"" n'est pas géré")
+      //mg_oEx_Exception3	= Allouer un ClZF_Exception(". . .")
+      //mg_oEx_Exception4	= Allouer un ClZF_Exception(". . .")
+      //mg_oEx_Exception5	= Allouer un ClZF_Exception(". . .")
+      //mg_oEx_Exception6	= Allouer un ClZF_Exception(". . .")
+      //mg_oEx_Exception7	= Allouer un ClZF_Exception(". . .")
+      //mg_oEx_Exception8	= Allouer un ClZF_Exception(". . .")
+      //mg_oEx_Exception9	= Allouer un ClZF_Exception(". . .")
+      //mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
+      
+      constante
+      	cstTypeDocument_URL	= 1
+      	cstTypeDocument_Chemin	= 2
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1445048126685565642
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      Ancêtre.Constructeur(Scr_UserStory_Doc..Nom, Scr_UserStory_Doc.IDScr_UserStory_Doc..Nom,nID_P)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1445048126685631178
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 1445048126685696714
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbUserStory_Doc
+      
+      sClasse est une chaîne = ClDbUserStory_Doc
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 1445048126685762250
+     type_code : 12
+     code : |1+
+      PROCÉDURE init_ObjBD()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      //SI PAS :ZF_bModeAjout() ALORS
+      //	:m_oIDScr_UserStory	<- ClDbUserStory.GetObj(Scr_UserStory_Doc.IDScr_UserStory)
+      //FIN
+      
+      
+     type : 458752
+   -
+     name : Pre_Enregistre
+     procedure_id : 1445048126685827786
+     type_code : 12
+     code : |1+
+      PROCÉDURE protege Pre_Enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.Pre_Enregistre()
+      
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      	//. . .
+      SINON
+      	
+      	//On s'assure que le chemin est valide
+      	si SansEspace(:m_sChemin) = "" alors
+      		mg_oEx_CheminVide.ZF_Declenche()
+      	FIN
+      	
+      	//On contrôle le type de chemin.
+      	si :m_nTypeChemin pas dans (cstTypeDocument_URL, cstTypeDocument_Chemin) ALORS
+      		mg_oEx_TypeDocIncorrect.ZF_Declenche([:m_nTypeChemin])
+      	FIN
+      	
+      	//Controle de la présence obligatoire d'une US
+      	SI :m_oIDScr_UserStory = Null _OU_ :m_oIDScr_UserStory.ZF_Get_IdUnique() = 0 ALORS
+      		mg_oEx_CompoNonInst_IDScr_UserStory.ZF_Declenche()
+      //	SINON
+      //		Scr_UserStory_Doc.IDScr_UserStory	= :m_oIDScr_UserStory.ZF_Get_IdUnique()
+      	FIN
+      	
+      
+      FIN
+     type : 458752
+  properties :
+   -
+     name : p_sChemin
+     identifier : 0x140dd79d726bd2ca
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_sChemin() : chaîne
+         //Propriétés de m_sChemin
+         
+         RENVOYER :m_sChemin
+        type : 1966080
+      -
+        code : |1+
+         procédure p_sChemin(sValeur_p est un chaîne):Vide
+         
+         SI :m_sChemin <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sChemin = sValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_UserStory
+     identifier : 0x140dd79d726cd2ca
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_oIDScr_UserStory() : ClDbUserStory
+         //Propriétés de m_oIDScr_UserStory
+         
+         RENVOYER :m_oIDScr_UserStory
+        type : 1966080
+      -
+        code : |1+
+         procédure p_oIDScr_UserStory(oValeur_p est un ClDbUserStory dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_UserStory, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_UserStory = oValeur_p
+         FIN
+         
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_UserStory_ID
+     identifier : 0x140dd79d726dd2ca
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_oIDScr_UserStory_ID():entier
+         //Propriétés de l'objet m_oIDScr_UserStory, accessible via son ID
+         SI :p_oIDScr_UserStory = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_UserStory.ZF_Get_IdUnique()
+         FIN
+        type : 1966080
+      -
+        code : |1+
+         procédure p_oIDScr_UserStory_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oIDScr_UserStory = Null
+         SINON
+         	:p_oIDScr_UserStory = ClDbUserStory.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_nTypeChemin
+     identifier : 0x140dd79d726ed2ca
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_nTypeChemin() : Entier
+         //Propriétés de m_nTypeChemin
+         
+         RENVOYER :m_nTypeChemin
+        type : 1966080
+      -
+        code : |1+
+         procédure p_nTypeChemin(nValeur_p est un Entier sans signe sur 1 octet):Vide
+         
+         SI :m_nTypeChemin <> nValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_nTypeChemin = nValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x14079f3f387c82cd
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

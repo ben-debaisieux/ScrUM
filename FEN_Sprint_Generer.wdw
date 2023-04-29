@@ -143,11 +143,11 @@ window :
      p_codes :
       -
         code : |1-
-         oSprint	est un ClSprint dynamique
+         oSprint	est un ClDbSprint dynamique
          nInd	est un entier
          
          Pour nInd = 1 _a_ TableOccurrence(TBL_Visualisation_Sprint)
-         	oSprint <- allouer un ClSprint()
+         	oSprint <- allouer un ClDbSprint()
          	oSprint.SetNumSprint(TBL_Visualisation_Sprint[nInd].COL_Num)
          	oSprint.p_dDateDebut	= TBL_Visualisation_Sprint[nInd].COL_Date_de_début
          	oSprint.p_dDateFin		= TBL_Visualisation_Sprint[nInd].COL_Date_de_fin

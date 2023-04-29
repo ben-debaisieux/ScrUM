@@ -219,8 +219,8 @@ window :
            code : |1+
             SI TableOccurrence(TBL_A_faire) >= 1 ALORS
             	
-            	oTache est un ClTache <- ClTache.GetObj(TBL_A_faire.COL_IdTache)
-            	oUs est un ClUserStory <- oTache.p_oUserStoryParent
+            	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_A_faire.COL_IdTache)
+            	oUs est un ClDbUserStory <- oTache.p_oUserStoryParent
             	
             	SI Ouvre(FEN_User_Story_Detail_v2, oUs, oTache.Get_IdUnique()) ALORS
             		Actualise()
@@ -289,7 +289,7 @@ window :
          -
            code : |1+
             SI TableOccurrence(TBL_A_faire) >= 1 ALORS
-            	oTache est un ClTache <- ClTache.GetObj(TBL_A_faire.COL_IdTache)
+            	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_A_faire.COL_IdTache)
             	SI OuiNon(Non, "Confirmez-vous le démarrage de la tache :" + RC + oTache.p_sDescription) ALORS
             		oTache.p_oUsr_Dev				= goApp.m_oUsrCnx
             		oTache.p_nNum_Sprint_Demarrage	= goApp.m_nNumeroDuSprintActuel
@@ -308,7 +308,7 @@ window :
          -
            code : |1+
             SI TableOccurrence(TBL_A_faire) >= 1 ALORS
-            	oTache est un ClTache <- ClTache.GetObj(TBL_A_faire.COL_IdTache)
+            	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_A_faire.COL_IdTache)
             	si ouvre(FEN_Suspendre_la_tache, oTache) ALORS
             		Actualise()
             	FIN
@@ -347,17 +347,17 @@ window :
       // 	bForceActu_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceActu_p>
       PROCEDURE Actualise()
       
-      oTache est un ClTache dynamique
+      oTache est un ClDbTache dynamique
       nNumLigne est un entier
       
       TableSupprimeTout(TBL_A_faire)
       
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
       	
-      	pour tout element oTache de ClTache.Taches_a_faire(ClTache.PasseEtActuelle).aItems()
+      	pour tout element oTache de ClDbTache.Taches_a_faire(ClDbTache.PasseEtActuelle).aItems()
       		
       		//Affichage des taches non attribuées, ou qui sont attribuées à l'utilisateur connecté.
-      		si oTache.p_oUsr_Dev = null _ou_ oTache.p_oUsr_Dev.ZF_Get_IdUnique() = goapp.m_oUsrCnx.ZF_Get_IdUnique() et oTache.p_nStatut <> ClTache.cstStatut_Suspendu ALORS
+      		si oTache.p_oUsr_Dev = null _ou_ oTache.p_oUsr_Dev.ZF_Get_IdUnique() = goapp.m_oUsrCnx.ZF_Get_IdUnique() et oTache.p_nStatut <> ClDbTache.cstStatut_Suspendu ALORS
       			
       			nNumLigne = TableAjouteLigne(TBL_A_faire)
       			TBL_A_faire[nNumLigne].COL_IdTache		= oTache.Get_IdUnique()

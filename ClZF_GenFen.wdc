@@ -1,0 +1,124 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenFen
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x144ba98702fd6aeb
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_GenFen est une Classe
+      	hérite de ClZF_GenEltWD
+      
+      
+      fin
+      
+      
+      STR_ProtoChamps est une structure
+      	sNom est une chaîne
+      	sLibelle est une chaîne
+      	sSource est une chaîne
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1462448901347764971
+     type_code : 27
+     code : |1-
+      procédure Constructeur(oClasseGen est un ClZF_GenCodeFic)
+      Ancêtre.Constructeur(oClasseGen)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1462448901347830507
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : sCommenteCode
+     procedure_id : 1462483222477100664
+     type_code : 12
+     code : |1-
+      procédure PROTÉGÉ sCommenteCode(stProto est un ClZF_GenFen.STR_ProtoChamps)<metier>:chaine
+      
+      sCode_P est une chaîne
+      sRetour est une chaîne
+      sLigne est une chaîne
+      
+      sCode_P = "Libellé : " + stProto.sLibelle + rc
+      sCode_P += "Source : " + stProto.sSource
+      
+      pour chaque chaine sLigne de sCode_P separee par rc
+      	sRetour += [rc] + "// " + sLigne
+      FIN
+      renvoyer sRetour
+     type : 458752
+   -
+     name : sReCheckLignesCode
+     procedure_id : 1462483222477167012
+     type_code : 12
+     code : |1-
+      procedure protegé sReCheckLignesCode(sCode_p est une chaîne)<metier>:chaine
+      
+      sLigne	est une chaîne
+      sRetour	est une chaîne
+      
+      
+      pour toute chaine sLigne de sCode_p separee par RC
+      	si taille(sLigne) < 999 ALORS
+      		sLigne += rc
+      	FIN
+      	sRetour += sLigne
+      FIN
+      
+      
+      RENVOYER gauche(sRetour, taille(sRetour) - taille(rc))
+     type : 458752
+   -
+     name : sNomRubAsso
+     procedure_id : 1462485043543527314
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉ sNomRubAsso(ValElt est une Description de variable)<métier>:chaîne
+      
+      sRub est une chaine
+      SI ValElt.AttributMapping <> "" ALORS
+      	sRub = ValElt.AttributMapping
+      FIN
+      SI ValElt.AttributNote <> "" ALORS
+      	aNotes est un tableau associatif de chaînes = col_zf_surcharge.chaineverstableauasso(ValElt.AttributNote)
+      	sRub = aNotes["mapping"]
+      FIN
+      
+      renvoyer sRub
+      
+     type : 458752
+   -
+     name : sNomFen
+     procedure_id : 1462964232986678950
+     type_code : 12
+     code : |1+
+      PROCÉDURE ABSTRAITE sNomFen():chaîne
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x144ba98302f75a80
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

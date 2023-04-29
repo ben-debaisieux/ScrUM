@@ -133,23 +133,16 @@ window :
      p_codes :
       -
         code : |1-
-         //si goApp.m_oUsrCnx.m_bTop_Equip_Informatique alors
-         //	Liste_Tout_Les_Projet()
-         //sinon
-         //	Liste_Chef_Invite()
-         //fin
-         
-         
          oColProjet		est un ClcolProjet
-         oPrjTmp			est un ClProjet dynamique
+         oPrjTmp			est un ClDbProjet dynamique
          nLigne			est un entier
          bAvecPrjFini	est un booléen = (SEL_FiltrePrj = 2)
          
          
          SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
-         	oColProjet <- ClProjet.aoListeProjets(bAvecPrjFini)
+         	oColProjet <- ClColProjet.aoListeProjets(bAvecPrjFini)
          SINON
-         	oColProjet <- ClProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx, *, bAvecPrjFini)
+         	oColProjet <- ClColProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx, *, bAvecPrjFini)
          //	oColProjet <- goApp.m_oUsrCnx.aoMesProjets(ClUsr.usr_tous)
          FIN
          
@@ -227,20 +220,22 @@ window :
       -
         code : |1-
          
-         //aTableauUS est un tableau de STR_UserStorie
-         //sdUtilisateursProjet est une source de données 
-         //sReq est une chaine
-         
-         
-         SI ouinon(non,"Confirmer la suppression ?") = Oui alors
+         SI TBL_Projet..Occurrence > 0 _et_ ouinon(non,"Confirmer la suppression du projet [%TBL_Projet.COL_Nom%] ?") = Oui alors
          	//Suppression du projet
          	
-         	oPrj est un ClProjet <- ClProjet.GetObj(TBL_Projet.COL_ID)
-         	oPrj.ZF_Supprimer()
          	quand exception dans
+         		oPrj est un ClDbProjet <- ClDbProjet.GetObj(TBL_Projet.COL_ID)
+         		oPrj.ZF_Supprimer()
          		oPrj.ZF_Enregistre()
          	FAIRE
-         		erreur(ExceptionInfo(errMessage))
+         		sInfo est une chaîne = ExceptionInfo(errMessage)
+         		Erreur(sInfo)
+         		SELON ExceptionInfo(errCode)
+         			CAS ClDbProjet.mg_oEx_SuppImpossible_PresUS.ZF_Code
+         				EcranPremier(MaFenêtre)
+         			AUTRE CAS
+         				ExceptionPropage()
+         		FIN
          	sinon
          		TableAffiche(TBL_Projet,taInit)
          	FIN
@@ -263,10 +258,12 @@ window :
      type_code : 4
      p_codes :
       -
-        code : |1-
-         
-         si Ouvre(FEN_Projet_Saisie_V2, TBL_Projet.COL_ID) ALORS
-         	TableAffiche(TBL_Projet,taInit)
+        code : |1+
+         si TBL_Projet..Occurrence > 0 ALORS
+         	oPrj est un ClDbProjet <- ClDbProjet.GetObj(TBL_Projet.COL_ID)
+         	SI Ouvre(FEN_Projet_Saisie_V2, oPrj) ALORS
+         		TableAffiche(TBL_Projet,taInit)
+         	FIN	
          FIN
         type : 18
       -
@@ -310,7 +307,7 @@ window :
      p_codes :
       -
         code : |1-
-         oPrj est un ClProjet <- ClProjet.GetObj(TBL_Projet.COL_ID)
+         oPrj est un ClDbProjet <- ClDbProjet.GetObj(TBL_Projet.COL_ID)
          iAperçu(i100)
          iImprimeEtat(ETAT_Avancement_Projet_V2, oPrj)
         type : 18
@@ -336,7 +333,7 @@ window :
         type : 14
       -
         code : |1-
-         oPrj est un ClProjet <- ClProjet.GetObj(COL_ID)
+         oPrj est un ClDbProjet <- ClDbProjet.GetObj(COL_ID)
          Ouvre(FEN_User_Story_Liste_v2, oPrj)
         type : 18
       -
@@ -400,7 +397,7 @@ window :
      p_codes :
       -
         code : |1-
-         oPrj est un ClProjet <- ClProjet.GetObj(TBL_Projet.COL_ID)
+         oPrj est un ClDbProjet <- ClDbProjet.GetObj(TBL_Projet.COL_ID)
          iAperçu(i100)
          iImprimeEtat(ETAT_PrépaReuDemo, oPrj)
         type : 18

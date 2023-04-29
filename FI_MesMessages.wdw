@@ -185,7 +185,7 @@ window :
          -
            code : |1+
             si TableOccurrence(TBL_MesMessages) >= 1 alors
-            	oMsg est un ClMessage <- ClMessage.GetObj(TBL_MesMessages.COL_IdMsg)
+            	oMsg est un ClDbMessage <- ClDbMessage.GetObj(TBL_MesMessages.COL_IdMsg)
             	
             	selon vrai
             		cas oMsg.p_oTache <> Null
@@ -273,14 +273,14 @@ window :
       // 	bForceActu_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceActu_p>
       PROCEDURE Actualise()
       
-      oMsg est un ClMessage dynamique
+      oMsg est un ClDbMessage dynamique
       nNumLigne est un entier
       sPrj est une chaîne
       sLib est une chaîne
       
       TableSupprimeTout(TBL_MesMessages)
       
-      pour tout element oMsg de ClMessage.aoListeMessage(goApp.m_oUsrCnx)
+      pour tout element oMsg de ClcolMessage.aoListeMessage(goApp.m_oUsrCnx).aItems()
       	
       	SI oMsg.p_oTache <> NULL ALORS
       		sPrj = oMsg.p_oTache.p_oUserStoryParent.p_oProjetParent.p_sNom

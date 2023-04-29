@@ -51,7 +51,7 @@ procedure_set :
       
       	nIDResponsable est un entier
       	nIDProjet est un entier
-      	eEtatUserStorie est un ClUserStory.ECompteNbUS
+      	eEtatUserStorie est un ClDbUserStory.ECompteNbUS
       
       	bAtester est un booléen
       	sCmtrGeneral est une chaine
@@ -127,7 +127,14 @@ procedure_set :
        	nAfaire est un entier
        	nTotal est un entier
        fin
-      
+       
+      STR_LDAP_UTILISATEUR est une structure
+      	sMail est une chaine
+      	sPortable est une chaine
+      	sFixe est une chaine
+      	sPrénom est une chaîne
+      	sNom est une chaine
+      FIN
        
       
       //Couleurs
@@ -264,6 +271,7 @@ procedure_set :
      type : 458752
    -
      name : Fenetre_Visible
+     internal_properties : BwAAAAcAAACaD8YBCnfwv8QlxYG/7xd55gYErGUuDNbZnPcKT+y7hK/3erL4XhRYdkWHrng6GfL+/OPNxxfAILfC8zUQvucEtHNYaMXVx0Lu6zbkz+CcJhIlvhnuh8ofYaJASNlXFU+jMTZ2EVzPLsKE9gyhjc4qJ0ZwpiEvqpblAHPc08XqwpsASkPMlfYswR0/WdY5ttMgadHhnO7wBD5os5sv632Nhw77KqietWEQxbBHfPGw5+/3efBZYJB1fZowCqLWd+XCGjEOetNrqqMU+KlXeFXW
      procedure_id : 1381129193110821231
      type_code : 15
      code : |1+
@@ -365,9 +373,9 @@ procedure_set :
       	SELON sdRech.type
       		
       		CAS 1
-      			TableauAjouteRéférence(aoRes,ClUserStory.GetObj(sdRech.Id))
+      			TableauAjouteRéférence(aoRes,ClDbUserStory.GetObj(sdRech.Id))
       		CAS 2
-      			TableauAjouteRéférence(aoRes,ClTache.GetObj(sdRech.Id))
+      			TableauAjouteRéférence(aoRes,ClDbTache.GetObj(sdRech.Id))
       		AUTRE CAS
       			
       	FIN
@@ -376,6 +384,65 @@ procedure_set :
       HAnnuleDéclaration(sdRech)
       
       renvoyer aoRes
+     type : 458752
+   -
+     name : LDAP_Recherche_Par_DisplayName
+     procedure_id : 1456543012267383564
+     type_code : 15
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] LDAP_Recherche_Par_DisplayName (<sDisplayName_p> est chaîne)
+      //
+      // Paramètres :
+      //	sDisplayName_p (chaîne ANSI) : <indiquez ici le rôle de sDisplayName>
+      // Valeur de retour :
+      // 	STR_LDAP_UTILISATEUR : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure LDAP_Recherche_Par_DisplayName(LOCAL sDisplayName_p est une chaine):STR_LDAP_UTILISATEUR
+      
+      sSessionLDAP		est une chaîne	= "SessionLDAP"
+      sValeurTemp			est une chaine
+      stUtilisateur		est un STR_LDAP_UTILISATEUR
+      sUnUtilisateur		est une chaine
+      
+      
+      // Ferme la session qui a pu être ouverte précédemment
+      LDAPDéconnecte(sSessionLDAP)
+      
+      LDAPSession.Hôte		= "prod-vm-ad01.um.union-materiaux.local"
+      LDAPSession.Utilisateur	= "svc_ldap"
+      LDAPSession.MotDePasse	= "handy-8hEY$V"
+      LDAPSession.Port		= "389"
+      LDAPSession.Version		= "3"
+      
+      // Tentative de connexion
+      SI LDAPConnecte(sSessionLDAP) ALORS
+      	
+      	// Recherche du NamingContext par défaut ...
+      	sValeurTemp = LDAPValeur(sSessionLDAP, "", "defaultNamingContext", 1)
+      	// S'il est trouvé
+      	SI sValeurTemp <> "" ALORS
+      		// Récupère  la liste des utilisateurs
+      		sUnUtilisateur			=  LDAPRecherche(sSessionLDAP, sValeurTemp,"(&(objectCategory=person)(objectClass=user)(displayName=[%sDisplayName_p%]))")
+      		
+      		
+      		stUtilisateur.sPrénom	= UTF8VersChaîne(LDAPValeur(sSessionLDAP, sUnUtilisateur, "GivenName", 1))
+      		stUtilisateur.sNom		= UTF8VersChaîne(LDAPValeur(sSessionLDAP, sUnUtilisateur, "sn", 1))
+      		stUtilisateur.sMail		= UTF8VersChaîne(LDAPValeur(sSessionLDAP, sUnUtilisateur, "mail", 1))
+      		stUtilisateur.sFixe		= UTF8VersChaîne(LDAPValeur(sSessionLDAP, sUnUtilisateur, "telephonenumber", 1))
+      		stUtilisateur.sPortable	= UTF8VersChaîne(LDAPValeur(sSessionLDAP, sUnUtilisateur, "mobile", 1))
+      		
+      	FIN
+      FIN
+      
+      
+      LDAPDéconnecte(sSessionLDAP)
+      
+      RENVOYER stUtilisateur
      type : 458752
   procedure_templates : []
   property_templates : []

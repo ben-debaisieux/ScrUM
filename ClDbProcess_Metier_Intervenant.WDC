@@ -1,0 +1,589 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbProcess_Metier_Intervenant
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x143d67ca023607c1
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClDbProcess_Metier_Intervenant est une Classe
+      	PUBLIC
+      		Hérite de ClZF_ObjDB
+      		Reference est une chaîne					<MAPPING=Référence>
+      		Description est une chaîne					<MAPPING=Description>
+      		OrdreAbsolu est un entier sur 2 octets		<MAPPING=OrdreAbsolu>
+      		
+      		m_sNomBox est une chaîne = ""		
+      	prive
+      		m_oAxeParent est un objet ClDbProcess_Metier_Axe dynamique
+      		m_aMemo_ref_ouvertes est un tableau de 0 entier
+      FIN
+      
+      
+      CONSTANTE
+      	
+      	cstLargeurBox							= 120
+      	cstHauterurBox							= 180
+      	cstMargeHBox							= 30
+      	cstMargeVBox							= 25
+      	cstCoteBtn								= 20
+      	
+      	cstNomBox								= "btnBox"
+      	cstSuffix_prev							= "_prev"
+      	cstSuffix_suiv							= "_suiv"
+      	cstSuffix_Up							= "_up"
+      	cstSuffix_Down							= "_down"
+      	
+      	cstEvt_ClicBox							= 1
+      	cstEvt_ClicDroitBox						= 2
+      	cstEvt_ClicPrev							= 3
+      	cstEvt_ClicSuiv							= 4
+      	cstEvt_ClicUp							= 5
+      	cstEvt_ClicDown							= 6
+      FIN
+       
+      STR_Coordonnees est une structure
+      	nX est un entier
+      	nY est un entier
+      	nLarg est un entier
+      	nHaut est un entier
+      fin
+      
+      STR_CallBack est une structure
+      	nTypeEvt est un entier
+      	nPos est un entier
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1458435971656189904
+     type_code : 27
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Constructeur ( [<ID> est entier])
+      //
+      // Paramètres :
+      //	ID (entier - valeur par défaut=0) : < indiquez ici le rôle de P_Reference >
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	oAxeParent_P (ClProcess_Metier_Axe dynamique) : <indiquez ici le rôle de oAxeParent_P>
+      PROCEDURE VIRTUELLE Constructeur(LOCAL ID est un entier = 0)
+      
+      
+      //Déclaration du constructeur de la classe d'acces aux données.
+      Ancêtre.Constructeur(Scr_Process_Metier_Intervenant..nom, Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant..Nom, ID)
+      
+      
+      //Référencement de l'axe parent (par adresse)
+      //:m_oAxeParent <- oAxeParent_P
+      
+      //Chargement des données dans l'instance.
+      //:ZF_Charge()
+      
+      //TableauAjouteRéférence(:p_oAxeParent.m_aoIntervenants,objet)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1458435971656255440
+     type_code : 28
+     code : |1-
+      
+      
+      PROCEDURE Destructeur()
+      //nPos est un entier
+      //
+      //si :nIdUnique <> 0 ALORS
+      //	//Recherche de l'intervenant
+      //	nPos = TableauCherche(_memo_ref_ouvertes,tcLinéaire,:nIdUnique)
+      //	si nPos <> -1 alors
+      //		//Libération de l'intervenant
+      //		TableauSupprime(_memo_ref_ouvertes, nPos)
+      //	SINON
+      //		dbgAssertion(Faux, ChaîneConstruit("intervenant N° %1 introuvable dans la liste des intervenant déclarés", :nIdUnique))
+      //	FIN
+      //FIN
+     type : 655360
+   -
+     name : GenBox
+     procedure_id : 1458435971656320976
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBox ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Type indéterminé : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION ABSTRAITE GenBox()
+     type : 458752
+   -
+     name : oGetTypeInter
+     procedure_id : 1458435971656386512
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oGetTypeInter (<oAxeParent_P> est ClProcess_Metier_Axe, <nType_p> est entier [, <nID_p> est entier])
+      //
+      // Paramètres :
+      //	oAxeParent_P (ClProcess_Metier_Axe) : <indiquez ici le rôle de oAxeParent_P>
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      //	nID_p (entier - valeur par défaut=0) : <indiquez ici le rôle de nID_p>
+      // Valeur de retour :
+      // 	ClProcess_Metier_Intervenant dynamique : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	oAxeParent_p (ClProcess_Metier_Axe) : <indiquez ici le rôle de oAxeParent_p>
+      //	nID_p (entier) : <indiquez ici le rôle de nID_p>
+      FONCTION GLOBAL oGetTypeInter(oAxeParent_P est ClDbProcess_Metier_Axe, nType_p est un entier, nID_p est un entier = 0)
+      
+      oRésultat est un objet ClDbProcess_Metier_Intervenant dynamique 
+      
+      selon nType_p
+      	cas ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Action_manuelle
+      		oRésultat = allouer un CldbProcess_Metier_Intervenant_Manu(nID_p)
+      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Action_par_intervenant
+      		oRésultat = allouer un CldbProcess_Metier_Intervenant_Operateur(nID_p)
+      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Action_automatique
+      		oRésultat = allouer un CldbProcess_Metier_Intervenant_Auto(nID_p)
+      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Attente
+      		oRésultat = allouer un CldbProcess_Metier_Intervenant_Attente(nID_p)
+      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Sous_process
+      		oRésultat = allouer un CldbProcess_Metier_Intervenant_SousProcess(nID_p)
+      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Condition
+      		oRésultat = allouer un ClDbProcess_Metier_Intervenant_Condition(nID_p)
+      fin
+      
+      oRésultat.m_oAxeParent <- oAxeParent_P
+      
+      RENVOYER oRésultat
+     type : 458752
+   -
+     name : stCoordBox
+     procedure_id : 1458435971656452048
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] stCoordBox (<sTypeBox_P> est chaîne)
+      //
+      // Paramètres :
+      //	sTypeBox_P (chaîne ANSI) : <indiquez ici le rôle de sTypeBox_P>
+      // Valeur de retour :
+      // 	STR_Coordonnees : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION PROTÉGÉE stCoordBox(sTypeBox_P est une chaîne)
+      
+      stRetour est un STR_Coordonnees
+      stRetour.nX = (:OrdreAbsolu) * (::cstLargeurBox + 2 * ::cstMargeVBox) + ::cstMargeVBox
+      stRetour.ny = (:p_oAxeParent.Ordre - 1) * (::cstHauterurBox + 2 * ::cstMargeHBox) + ::cstMargeHBox
+      
+      si sTypeBox_P = ::cstNomBox ALORS
+      	stRetour.nLarg = ::cstLargeurBox
+      	stRetour.nHaut = ::cstHauterurBox
+      sinon
+      	stRetour.nLarg = ::cstCoteBtn
+      	stRetour.nHaut = ::cstCoteBtn
+      FIN
+      
+      selon sTypeBox_P
+      	cas ::cstNomBox
+      		//pas de changements
+      		
+      	cas ::cstSuffix_prev
+      		stRetour.nX -= ::cstCoteBtn
+      		stRetour.nY += ::cstHauterurBox / 2 + ::cstCoteBtn / 2
+      
+      	cas ::cstSuffix_suiv
+      		stRetour.nX += ::cstLargeurBox
+      		stRetour.nY += ::cstHauterurBox / 2 + ::cstCoteBtn / 2
+      
+      	CAS ::cstSuffix_Up
+      		stRetour.nX += ::cstLargeurBox / 2 + ::cstCoteBtn / 2
+      		stRetour.nY -= ::cstCoteBtn
+      		
+      	CAS ::cstSuffix_Down
+      		stRetour.nX += ::cstLargeurBox / 2 + ::cstCoteBtn / 2
+      		stRetour.nY += ::cstHauterurBox
+      		
+      	autres cas
+      		dbgAssertion(Faux, "Paramètre non valide : " + sTypeBox_P)
+      		
+      fin
+      
+      RENVOYER stRetour
+     type : 458752
+   -
+     name : oBoxModele
+     procedure_id : 1458435971656517584
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oBoxModele ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	champ : // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION oBoxModele()
+      
+      oBox est un champs
+      sNomCompletBox est une chaîne
+      stCoord est un CldbProcess_Metier_Intervenant.STR_Coordonnees
+      sModeleProcEvt est une chaîne
+      
+      
+      sModeleProcEvt = ChaîneConstruit([
+      	ClProcess_Metier_Intervenant._evt_clic(%1, %2, "%3")
+      	], :OrdreAbsolu, "%1", :p_oAxeParent.p_oProcessParent.p_sNomFen)
+      
+      
+      //Nom unique de la boite.
+      :m_sNomBox = ::cstNomBox + "_" + DonneIdentifiant()
+      
+      //Mémorisation du nom complet de la boite.
+      sNomCompletBox = :p_oAxeParent.p_oProcessParent.sCheminChamps(:m_sNomBox)
+      
+      
+      
+      //Récupération des coordonnées de la boite à créer
+      stCoord = :stCoordBox(::cstNomBox)
+      
+      oBox <- ChampCrée(sNomCompletBox, typLibellé, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      oBox..CadrageVertical = chCentre
+      oBox..CadrageHorizontal = cvMilieu
+      oBox..Cadre..Epaisseur = 2
+      oBox..Cadre..Couleur = Noir
+      
+      //Procédure d'événement clic sur la boite
+      oBox..Traitement[trtClic] = compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicBox))
+      
+      
+      si :p_oAxeParent.p_oProcessParent.m_bModeEdition alors
+      	///////////////////////////////////////////
+      	//Bouton précédent
+      	oPrev est un champ
+      	stCoord = :stCoordBox(::cstSuffix_prev)
+      	oPrev <- ChampCrée(sNomCompletBox + ::cstSuffix_prev, typBouton, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      	oPrev..Libellé = "<"
+      	
+      	//Procédure d'événement clic sur le bouton précédent
+      	oPrev..Traitement[trtClic] = Compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicPrev))
+      	
+      	
+      	///////////////////////////////////////////
+      	//Bouton suivant
+      	oSuiv est un champ
+      	stCoord = :stCoordBox(::cstSuffix_suiv)
+      	oSuiv <- ChampCrée(sNomCompletBox + ::cstSuffix_suiv, typBouton, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      	oSuiv..Libellé = ">"
+      	
+      	//Procédure d'événement clic sur le bouton suivant
+      	oSuiv..Traitement[trtClic] = Compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicSuiv))
+      	
+      	
+      	///////////////////////////////////////////
+      	//Bouton monter
+      	oUp est un champ
+      	stCoord = :stCoordBox(::cstSuffix_Up)
+      	oUp <- ChampCrée(sNomCompletBox + ::cstSuffix_Up, typBouton, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      	oUp..Libellé = "/\"
+      	
+      	//Procédure d'événement clic sur le bouton monter
+      	oUp..Traitement[trtClic] = Compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicUp))
+      	
+      	
+      	///////////////////////////////////////////
+      	//Bouton descendre
+      	oDown est un champ
+      	stCoord = :stCoordBox(::cstSuffix_Down)
+      	oDown <- ChampCrée(sNomCompletBox + ::cstSuffix_Down, typBouton, stCoord.nX, stCoord.nY, stCoord.nLarg, stCoord.nHaut)
+      	oDown..Libellé = "\/"
+      	
+      	//Procédure d'événement clic sur le bouton monter
+      	oDown..Traitement[trtClic] = Compile(ChaîneConstruit(sModeleProcEvt, ::cstEvt_ClicDown))
+      fin
+      
+      
+      RENVOYER oBox
+     type : 458752
+   -
+     name : _evt_clic
+     procedure_id : 1458435971656583120
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //_evt_clic (<nPosBox_P> est entier, <nTypeEvt_P> est entier, <sFenetreContener_p> est chaîne)
+      //
+      // Paramètres :
+      //	nPosBox_P (entier) : <indiquez ici le rôle de sMsg_p>
+      //	nTypeEvt_P (entier) : <indiquez ici le rôle de nTypeEvt_P>
+      //	sFenetreContener_p (chaîne ANSI) : <indiquez ici le rôle de nAdresseMemInter_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      //	nTailleOctet_P (entier) : <indiquez ici le rôle de nTailleOctet_P>
+      PROCEDURE GLOBAL _evt_clic(LOCAL nPosBox_P est un entier, local nTypeEvt_P est un entier, local sFenetreContener_p est une chaîne)
+      
+      stCallBack est un STR_CallBack
+      
+      stCallBack.nPos		= nPosBox_P
+      stCallBack.nTypeEvt	= nTypeEvt_P
+      TableauAjoute({sFenetreContener_p + ".zaEvtCall",indVariable}, stCallBack)
+     type : 458752
+   -
+     name : Enregistre
+     procedure_id : 1458435971656648656
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      PROCEDURE VIRTUELLE Enregistre()
+      
+      SI :p_oAxeParent.p_oProcessParent.p_bEnregistrementEnCours ALORS
+      	Ancêtre.ZF_Enregistre()
+      SINON
+      	ExceptionDéclenche(1, "Impossible d'utiliser la procédure d'enregistrement autrement que par l'enregistrement du process.")
+      FIN
+     type : 458752
+   -
+     name : _nType
+     procedure_id : 1458435971656714192
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] _nType ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Type indéterminé : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      FONCTION PROTÉGÉE ABSTRAITE _nType()
+     type : 458752
+   -
+     name : ChangeOrdre
+     procedure_id : 1458435971656779728
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ChangeOrdre (<nNouvelle_Pos_P> est entier)
+      //
+      // Paramètres :
+      //	nNouvelle_Pos_P (entier) : <indiquez ici le rôle de nNouvelle_Pos_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE ChangeOrdre(nNouvelle_Pos_P est un entier)
+      
+      oInterTmp est un objet dynamique ClDbProcess_Metier_Intervenant
+      
+      
+      //Le déplacement demandé est il dans une plage valide ? 
+      si 1 <= nNouvelle_Pos_P <= :p_oAxeParent.p_oProcessParent.nNbreInter() alors
+      	
+      	//Parcourt de tous les intervenants.
+      	POUR TOUT ELEMENT oInterTmp DE :p_oAxeParent.p_oProcessParent.aoIntervenants().aItems()
+      		//L'intervenant en cours est il a la place de destination ?
+      		si oInterTmp.OrdreAbsolu = nNouvelle_Pos_P ALORS
+      			//Oui : on remplace sa position, avec la boite qu'on déplace.
+      			oInterTmp.OrdreAbsolu = :OrdreAbsolu
+      		FIN
+      	FIN
+      	
+      	//Mémorisation de la nouvelle position.
+      	:OrdreAbsolu = nNouvelle_Pos_P
+      fin
+     type : 458752
+   -
+     name : ChangeAxe
+     procedure_id : 1458435971656845264
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ChangeAxe (<nNouvel_Axe_P> est entier)
+      //
+      // Paramètres :
+      //	nNouvel_Axe_P (entier) : <indiquez ici le rôle de nNouvelle_Pos_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE ChangeAxe(nNouvel_Axe_P est un entier)
+      
+      
+      nMemoAxeActu est un entier
+      oAxe est un ClDbProcess_Metier_Axe dynamique
+      nIndInter est un entier
+      
+      //Mémorisation de l'axe auquel l'intervenant est rattaché.
+      nMemoAxeActu = :p_oAxeParent.Ordre
+      
+      //Le déplacement demandé est il dans une plage valide ? 
+      si 1 <= nNouvel_Axe_P <= :p_oAxeParent.p_oProcessParent.m_oAxes.ZF_nTaille() et nMemoAxeActu <> nNouvel_Axe_P alors
+      	
+      	//Ajoute de la référence de l'intervenant en cours, au nouvel axe.
+      	:p_oAxeParent.p_oProcessParent.m_oAxes.ZF_addItem(Objet)
+      	
+      	//Parcourt de tous les axes
+      	POUR TOUT ELEMENT oAxe DE :p_oAxeParent.p_oProcessParent.m_oAxes.aItems()
+      		//Est on sur l'axe de destination ?
+      		si nNouvel_Axe_P <> oAxe.Ordre alors
+      			//Non : On cherche l'ancienne référence de l'intervenant pour le supprimer
+      			POUR nIndInter = oAxe.m_oIntervenants.ZF_nTaille() a 1 pas -1
+      				oInter est un ClDbProcess_Metier_Intervenant <- oAxe.m_oIntervenants.oItem(nIndInter)
+      				si oInter.OrdreAbsolu = :OrdreAbsolu ALORS
+      					oAxe.m_oIntervenants.ZF_Supp(oInter)
+      					//TableauSupprime(oAxe.m_aoIntervenants, nIndInter)
+      				FIN
+      			FIN
+      		sinon
+      			//Oui : On reassocie l'axe, en tant que parent de l'intervenant en cours.
+      			:m_oAxeParent <- oAxe
+      		FIN
+      	FIN
+      fin
+     type : 458752
+   -
+     name : pre_enregistre
+     procedure_id : 1458435971656910800
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_enregistre ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE pre_enregistre()
+      
+      Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Axe					= :p_oAxeParent.ZF_Get_IdUnique()
+      Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant_Type	= :_nType()
+     type : 458752
+   -
+     name : Init_ObjBD
+     procedure_id : 1458435971656976336
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
+      PROCÉDURE  Init_ObjBD()
+      
+      
+      //On mémorise tous les id de intervenants qu'on déclare pour s'assurer de ne pas ouvrir 2 fois le même
+      SI TableauCherche(:m_aMemo_ref_ouvertes, tcLinéaire, :ZF_Get_IdUnique()) = -1 ALORS
+      	TableauAjoute(:m_aMemo_ref_ouvertes, :ZF_Get_IdUnique())
+      SINON
+      	dbgAssertion(Faux, ChaîneConstruit("intervenant N° %1 déja déclaré", :ZF_Get_IdUnique()))
+      FIN
+      
+      
+      SI :ZF_bModeAjout() ALORS
+      	:OrdreAbsolu	= :p_oAxeParent.p_oProcessParent._nPosInterLibre()
+      FIN
+      
+     type : 458752
+   -
+     name : GetObj
+     procedure_id : 1458508238848312913
+     type_code : 12
+     code : |1-
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbProcess_Metier_Intervenant
+      
+      sClasse est une chaîne = ClDbProcess_Metier_Intervenant
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+  properties :
+   -
+     name : p_oAxeParent
+     identifier : 0x143d67ca023707d0
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_oAxeParent() : ClDbProcess_Metier_Axe
+         renvoyer :m_oAxeParent
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_oAxeParent(oValeur est ClDbProcess_Metier_Axe)
+         :m_oAxeParent <- oValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : ClProcess_Metier_Intervenant
+resources :
+ string_res :
+  identifier : 0x1e2d8d7400d22a06
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -247,7 +247,7 @@ window :
       -
         code : |1+
          SI TableOccurrence(TBL_taches) >= 1 ALORS
-         	oTache est un ClTache <- ClTache.GetObj(TBL_taches.COL_idTache)
+         	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_taches.COL_idTache)
          	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
          		AffTaches()
          	FIN
@@ -335,7 +335,7 @@ window :
      p_codes :
       -
         code : |1-
-         oPrj est un ClProjet dynamique
+         oPrj est un ClDbProjet dynamique
          
          
          pour tout element oPrj de zoColProjets.aItems()
@@ -396,7 +396,7 @@ window :
       fin
       
       STR_UsrTache est une structure
-      	oUsr		est un ClUsr
+      	oUsr		est un ClDbUsr
       	aLstTache	est un tableau d'entiers
       fin
       
@@ -499,17 +499,17 @@ window :
       procédure ChargeTachesSuspendues()
       
       stTacheTmp	est un STR_TacheSuspendue
-      oPrj		est un ClProjet dynamique
-      oUs			est un ClUserStory dynamique
-      oUsr		est un ClUsr dynamique
-      oTache_Tmp	est un ClTache dynamique
+      oPrj		est un ClDbProjet dynamique
+      oUs			est un ClDbUserStory dynamique
+      oUsr		est un ClDbUsr dynamique
+      oTache_Tmp	est un ClDbTache dynamique
       nLigne		est un entier
       
       
-      POUR TOUT ELÉMENT oPrj DE ClProjet.aoListeProjets().aItems()
-      	POUR TOUT ELÉMENT oUs DE oPrj.aoListeUS().aItems()
-      		POUR TOUT ELÉMENT oTache_Tmp DE oUs.aoListeTaches().aItems()
-      			SI oTache_Tmp.p_nStatut = ClTache.cstStatut_Suspendu ALORS
+      POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
+      	POUR TOUT ELÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
+      		POUR TOUT ELÉMENT oTache_Tmp DE ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      			SI oTache_Tmp.p_nStatut = ClDbTache.cstStatut_Suspendu ALORS
       				
       				VariableRAZ(stTacheTmp)
       				stTacheTmp.nIdTache			= oTache_Tmp.Get_IdUnique()
@@ -522,12 +522,12 @@ window :
       				stTacheTmp.nSprintReal		= oTache_Tmp.p_nNum_Sprint_Realisation
       				stTacheTmp.nPoids			= oTache_Tmp.p_nPoids
       				stTacheTmp.nIdTesteurTache	= oUs.p_oUsrResponsable.ZF_Get_IdUnique()
-      				stTacheTmp.nNbDocs			= Dimension(oUs.asCheminsDocs())
+      				stTacheTmp.nNbDocs			= ClColUserStory_Doc.oFromUS(oUs).ZF_nTaille()
       				nLigne						= TableauAjouteLigne(zaLstTaches,stTacheTmp)
       				
       				add_tache_usr(oPrj.p_oUsr_ChefProjet, nLigne)
       				
-      				POUR TOUT ELÉMENT oUsr DE oPrj.aoInvite_Liste().aItems()
+      				POUR TOUT ELÉMENT oUsr DE ClColUsr.aoInvite_Liste(oPrj).aItems()
       					add_tache_usr(oUsr, nLigne)
       				FIN
       				
@@ -539,7 +539,7 @@ window :
       FIN
       
       
-      	PROCÉDURE INTERNE add_tache_usr(oUsr_add est un ClUsr, nLigneTache)
+      	PROCÉDURE INTERNE add_tache_usr(oUsr_add est un ClDbUsr, nLigneTache)
       		
       		nIdUsr est un entier = oUsr_add.ZF_Get_IdUnique()
       		SI zaTachesDeUsr[nIdUsr]..Vide ALORS

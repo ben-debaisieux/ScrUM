@@ -200,7 +200,7 @@ window :
          -
            code : |1-
             SI TableOccurrence(TBL_TachesACoter) >= 1 ALORS
-            	oUs est un ClUserStory <- ClUserStory.GetObj(TBL_TachesACoter.COL_IdUS)
+            	oUs est un ClDbUserStory <- ClDbUserStory.GetObj(TBL_TachesACoter.COL_IdUS)
             	SI Ouvre(FEN_User_Story_Detail_v2, oUs) ALORS
             		Actualise()
             	FIN
@@ -283,9 +283,9 @@ window :
       //
       PROCEDURE Actualise()
       
-      oPrj		est un ClProjet dynamique
-      oUs			est un ClUserStory dynamique
-      oTache_Tmp	est un ClTache dynamique
+      oPrj		est un ClDbProjet dynamique
+      oUs			est un ClDbUserStory dynamique
+      oTache_Tmp	est un ClDbTache dynamique
       nNumLigne	est un entier
       sBulle		est une chaîne
       bAfficher	est un booléen
@@ -295,13 +295,13 @@ window :
       TableSupprimeTout(TBL_TachesACoter)
       
       si goapp.m_oUsrCnx.p_bTop_Equip_Informatique alors
-      	pour tout element oPrj de ClProjet.aoListeProjets().aItems()
-      		pour tout element oUs de oPrj.aoListeUS().aItems()s
+      	pour tout element oPrj de ClColProjet.aoListeProjets().aItems()
+      		pour tout element oUs de ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
       			
       			bAfficher	= faux
       			sBulle		= "Taches à coter :"
       			
-      			pour tout element oTache_Tmp de oUs.aoListeTaches().aItems()
+      			pour tout element oTache_Tmp de ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       				si oTache_Tmp.bCotationAFaire() ALORS
       					bAfficher = vrai
       					sBulle += [rc] + oTache_Tmp.p_sCodeTache + " - " + oTache_Tmp.p_sDescription

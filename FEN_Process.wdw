@@ -56,10 +56,11 @@ window :
       PROCEDURE MaFenêtre(local znIdProcess_p est un entier = 0)
    -
      code : |1-
-      FI_SansNom1.zpclProcess <- allouer un ClProcess_Metier(FI_SansNom1..Nom, znIdProcess_p)
+      FI_SansNom1.zoProcess <- allouer un CldbProcess_Metier(znIdProcess_p)
+      FI_SansNom1.zoProcess.p_sNomFen = FI_SansNom1..Nom
       //FI_SansNom1.zpclProcess <- allouer un ClProcess_Metier(mafenetre..Nom, znIdProcess_p)
       //FI_SansNom1.zpclProcess.m_sNomFen = MaFenêtre..Nom
-      FI_SansNom1.zpclProcess.Affiche()
+      FI_SansNom1.zoProcess.Affiche()
      type : 34
    -
      code : |1+

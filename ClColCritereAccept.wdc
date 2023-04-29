@@ -16,10 +16,11 @@ class :
    -
      code : |1+
       ClColCritereAccept est une Classe
-      hérite de ClZF_ColObjDB
+      	hérite de ClZF_ColObjDB
       PRIVÉ
-      m_aoCritereAccept est un tableau ClCritereAccept dynamique
+      	m_aoCritereAccept est un tableau ClDbCritereAccept dynamique
       FIN
+      
      type : 131072
   procedures :
    -
@@ -43,14 +44,14 @@ class :
      code : |1+
       PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClCritereAccept.GetObj(nId_P))
+      :ZF_addItem(ClDbCritereAccept.GetObj(nId_P))
      type : 458752
    -
      name : aItems
      procedure_id : 1438861168670923087
      type_code : 12
      code : |1+
-      PROCÉDURE aItems():tableau de ClCritereAccept dynamique
+      PROCÉDURE aItems():tableau de ClDbCritereAccept dynamique
       // Redéfinition de la méthode ClColObjDB.aItems
       RENVOYER :m_aoCritereAccept
      type : 458752
@@ -70,8 +71,91 @@ class :
      code : |1-
       PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données):Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClCritereAccept
+      oObj est un ClDbCritereAccept(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept)
+     type : 458752
+   -
+     name : oFromUS
+     procedure_id : 1457005456458690896
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oFromUS (<oUs_p> est ClDbUserStory [, <bForceCharge_p> est booléen])
+      //
+      // Paramètres :
+      //	oUs_p (ClDbUserStory) : <indiquez ici le rôle de oUs_p>
+      //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
+      
+      // Valeur de retour :
+      // 	ClColCritereAccept : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
+      FONCTION globale oFromUS(oUs_p est un ClDbUserStory, LOCAL bForceCharge_p est un booléen = 0):ClColCritereAccept
+      
+      sReq est une chaine
+      oRetour est un ClColCritereAccept <- oUs_p.ZF_GetCol(ClAppScrum.cstCriteresDeUS)
+      
+      si pas oRetour.p_bEstCharge ou bForceCharge_p alors
+      	
+      	sReq = [
+      		SELECT 
+      			Scr_CritereAccept.*
+      			
+      		FROM Scr_CritereAccept
+      		
+      		WHERE Scr_CritereAccept.IDScr_UserStory = [%oUs_p.Get_IdUnique()%]
+      		
+      	]
+      	oRetour.ZF_LoadSQL(sReq)
+      fin
+      
+      RENVOYER oRetour
+     type : 458752
+   -
+     name : aoCriteres_de_utilisateur_selon_etat
+     procedure_id : 1459995942421801138
+     type_code : 12
+     code : |1-
+      procédure publique globale aoCriteres_de_utilisateur_selon_etat(oUsr_p est un ClDbUsr, nFilteEtat_p est un entier = 0)<métier>:ClcolCritereAccept
+      
+      oRetour est un ClcolCritereAccept
+      sReq est une chaîne
+      
+      sReq = ChaîneConstruit([
+      	
+      	SELECT --DISTINCT
+      		Scr_CritereAccept.*
+      		
+      	FROM Scr_CritereAccept
+      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_CritereAccept.IDScr_UserStory)
+      		
+      	WHERE (
+      			Scr_UserStory.IDScr_Usr_Valideur = %1
+      			OR
+      			Scr_CritereAccept.IDSrc_Usr_Redacteur = %1
+      			OR
+      			Scr_CritereAccept.IDSrc_Usr_Valideur = %1
+      			OR
+      			Scr_CritereAccept.IDSrc_Usr_Desactivation = %1
+      			)
+      		
+      		AND (
+      			Scr_CritereAccept.IDScr_CritereAccept_Etat = %2
+      			OR
+      			0 = %2
+      			)
+      		
+      ], oUsr_p.ZF_Get_IdUnique(), ...
+      	nFilteEtat_p)
+      	
+      oRetour.ZF_LoadSQL(sReq)
+      
+      renvoyer oRetour
      type : 458752
   procedure_templates : []
   property_templates : []

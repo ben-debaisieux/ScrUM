@@ -51,8 +51,6 @@ ATTENTE.PNG
 BDD.PNG
 CALENDRIER.PNG
 CALENDRIER_32_5.PNG
-CRITERES_ETAT_32_5.PNG
-CRITÈRE_COMPOSANT_32_5.PNG
 DRAPEAU1.PNG
 DRAPEAU_32_5.PNG
 GABARITS\WD\230 SPATIUMN\SPATIUMN_RIBBON_BG.PNG
@@ -69,6 +67,7 @@ MESSAGE_32_5.PNG
 PLANNING.PNG
 PROJET_32_5.PNG
 SCRUM_48_1.ICO
+SYNC.PNG
 FEN_Synthese.wdw
 FEN_User_Story_Test.wdw
 USTESTS_48_1.ICO
@@ -95,56 +94,38 @@ Col_Erreur_ScrUM.wdg
 FEN_Projet_Utilisateur_Ajout.wdw
 UTILISATEUR_48_11.ICO
 ETAT_Sprint.wde
-FEN_Critere_Etat_Liste.wdw
-FLS15221E.ICO
-FEN_Critere_Composant_Type_Liste.wdw
-FLS15221B.ICO
-FEN_Critere_Etat_Maj.wdw
-FLS15221E1.ICO
-FEN_Critere_Composant_Type_Maj.wdw
-FLS15221B1.ICO
-FEN_Critère_Acceptation_UserStorie_Liste.wdw
-COPIE_28_1.PNG
-FLS01610_28_1.PNG
-FLS01621_28_1.PNG
-FLS02204_48_1.ICO
-GABARITS\WD\230 SPATIUMN\SPATIUMN_SPLITER_GRIP_H.PNG
-RÉDACTION_EN_COURS_24_1.PNG
 FEN_Critère_Acceptation_UserStorie_Maj.wdw
-FEN_CritereAccept_Composant_Etat_Maj.wdw
-JOUR_48_1.ICO
+FLS02204_48_1.ICO
 FEN_Process.wdw
-ClProcess_Metier_Intervenant.WDC
-ClProcess_Metier_Intervenant_Operateur.WDC
-ClProcess_Metier_Intervenant_Manu.WDC
-ClProcess_Metier_Intervenant_Attente.WDC
-ClProcess_Metier_Intervenant_Condition.WDC
-ClProcess_Metier_Intervenant_SousProcess.WDC
-ClProcess_Metier_Axe.WDC
-ClProcess_Metier.WDC
-ClProcess_Metier_Intervenant_Auto.WDC
-ClProcess_Metier_Intervenant_AvecUS.WDC
-FEN_CritereAccept_Assoc_Maj.wdw
+ClDbProcess_Metier_Intervenant.WDC
+ClDbProcess_Metier_Intervenant_Operateur.WDC
+ClDbProcess_Metier_Intervenant_Manu.WDC
+ClDbProcess_Metier_Intervenant_Attente.WDC
+ClDbProcess_Metier_Intervenant_Condition.WDC
+ClDbProcess_Metier_Intervenant_SousProcess.WDC
+ClDbProcess_Metier_Axe.WDC
+ClDbProcess_Metier.WDC
+ClDbProcess_Metier_Intervenant_Auto.WDC
+ClDbProcess_Metier_Intervenant_AvecUS.WDC
 ClZF_ObjDB.WDC
 FI_Process.wdw
 FEN_Process_Ajout_Intervenant_v2.wdw
-ClProjet.WDC
-ClUserStory.WDC
+ClDbProjet.WDC
+ClDbUserStory.WDC
 FEN_User_Story_Detail_v2.wdw
 GABARITS\WD\230 SPATIUMN\SPATIUMN_CALENDAR_NEXT.PNG
 GABARITS\WD\230 SPATIUMN\SPATIUMN_CALENDAR_PREVIOUS.PNG
 SORTIE.PNG
-ClUsr.WDC
-ClTache.WDC
+ClDbUsr.WDC
+ClDbTache.WDC
 ClZF_App.wdc
 Col_Test.wdg
-ClSprint.WDC
+ClDbSprint.WDC
 FEN_Saisie_tache_rapide.wdw
 FI_MesBrouillons.wdw
 FEN_Developpements_Prevus_v2.wdw
 TABLEAUPROJET_48_1.ICO
-ClCritereAccept.WDC
-ClCritereAccept_Composant_Old.WDC
+ClDbCritereAccept.WDC
 FEN_Projet_Saisie_V2.wdw
 GABARITS\WD\230 SPATIUMN\SPATIUMN_BTN_BRW.PNG
 GABARITS\WD\230 SPATIUMN\SPATIUMN_PICT_BRWFIRST_V_24_5.PNG
@@ -157,8 +138,6 @@ FI_Taches_a_faire.wdw
 FI_MesTaches.wdw
 FI_MesTestsUnitaires.wdw
 FEN_User_storie_a_faire_tester.wdw
-FEN_Tache_Detail_V2_old.wdw
-DETAIL_48_1.ICO
 FI_MesTestsFonctionnels.wdw
 FEN_Retour_de_tests_d_une_user_story.wdw
 FEN_User_Story_Liste_v2.wdw
@@ -198,14 +177,14 @@ FEN_Analyse_de_l_état_des_taches_non_finies.wdw
 COL_Charge_UI.wdg
 FI_Taches_suspendues.wdw
 FEN_Suspendre_la_tache.wdw
-ClMessage.wdc
+ClDbMessage.wdc
 FI_MesMessages.wdw
 FEN_Evolution_de_la_charge_d_un_projet.wdw
 FEN_ExportData.wdw
 FI_Discussion_V2.wdw
 FLECHE_512_1.PNG
 GABARITS\WD\230 SPATIUMN\SPATIUMN_BREAK.PNG
-ClEpic.wdc
+ClDbEpic.wdc
 FEN_Cotations_à_faire.wdw
 FI_InfoPrj.wdw
 FEN_Affiche_recherche.wdw
@@ -235,10 +214,37 @@ FEN_GLPI_Ticket.wdw
 ClZF_Exception.wdc
 FEN_ProjectMap.wdw
 FI_Map_Item.wdw
-ClCritereAccept_Composant.wdc
+ClDbCritereAccept_Composant.wdc
 ClColCritereAccept_Composant.wdc
-ClCritereAccept_Composant_Type.wdc
+ClDbCritereAccept_Composant_Type.wdc
 ClZF_ObjDbLs.wdc
+ClColCritereAccept.wdc
+ClDbCritereAccept_Etat.wdc
+ClTrello_SCRUM.wdc
+ClTrello_Kanban.wdc
+FEN_RecupGLPI.wdw
+ClDbEnvironnement.wdc
+FEN_ZF_Metrique.wdw
+COL_ZF_Surcharge.wdg
+FEN_Test_Camille.wdw
+ClDbUserStory_Doc.wdc
+ClColUserStory_Doc.wdc
+ClColMessage.wdc
+ClDbRetro_Commentaire_Type.wdc
+ClColRetro_Commentaire.wdc
+ClDbRetro_Commentaire.wdc
+ClColRetro_Commentaire_Type.wdc
+ClDbProjetMap.wdc
+ClColProjetMap.wdc
+FEN_Fic_ProjetMap.wdw
+GABARITS\WD\230 SPATIUMN\SPATIUMN_PICT_CANCEL_16_5.PNG
+FEN_GLPI_Nouveau_Commentaire.wdw
+ClColProcess_Metier.wdc
+ClColProcess_Metier_Axe.wdc
+ClColProcess_Metier_Intervenant.wdc
+ClColProcess_Metier_Intervenant_Type.wdc
+ClDbProcess_Metier_Intervenant_Type.wdc
+ClZF_GenSql.wdc
 WDFAA_1\WinDevDialogBox.wdw
 WDFAA_1\WDMSGBOX-ERROR.PNG
 WDFAA_1\WDMSGBOX-INFO.PNG
@@ -271,7 +277,6 @@ Gabarits\WD\230 Spatiumn\SPATIUMN_FRAME.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_LIB_MEDIA.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_PICT_APPLY_16_5.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_PICT_BROWSE_16_5.PNG
-Gabarits\WD\230 Spatiumn\SPATIUMN_PICT_CANCEL_16_5.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_PICT_COPY_16_5.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_PICT_CUT_16_5.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_PICT_DETAIL_16_2.PNG
@@ -321,6 +326,7 @@ Gabarits\WD\230 Spatiumn\SPATIUMN_SLD_BCKGRD.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_SLD_CURSOR.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_SLD_V_BCKGRD.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_SLD_V_CURSOR.PNG
+Gabarits\WD\230 Spatiumn\SPATIUMN_SPLITER_GRIP_H.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_SPLITER_GRIP_V.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_SPLITTER_BG.PNG
 Gabarits\WD\230 Spatiumn\SPATIUMN_TABLE_COLPICT_2.PNG

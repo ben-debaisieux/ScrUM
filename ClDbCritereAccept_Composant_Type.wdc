@@ -1,0 +1,203 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbCritereAccept_Composant_Type
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x140dd9737baa0031
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbCritereAccept_Composant_Type est une Classe
+      hérite de ClZF_ObjDBls
+      PRIVÉ
+      	m_sLibelle														est un chaîne ANSI			<MAPPING=Libelle>
+      	m_nOrdre														est un Entier sur 2 octets	<MAPPING=Ordre>
+      	oColCritereAccept_Composant_IDScr_CritereAccept_Composant_Type	est un ClColCritereAccept_Composant
+      
+      GLOBAL
+      PUBLIC
+      /*
+      	mg_oEx_Exception1	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception2	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception3	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception4	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception5	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception6	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception7	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception8	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception9	est un ClZF_Exception dynamique<§cs:10§>
+      	mg_oEx_Exception10	est un ClZF_Exception dynamique<§cs:10§>
+      */
+      FIN
+      
+      /*
+      mg_oEx_Exception1	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception2	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception3	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception4	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception5	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception6	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception7	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception8	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception9	= Allouer un ClZF_Exception("...")<§cs:10§>
+      mg_oEx_Exception10	= Allouer un ClZF_Exception("...")<§cs:10§>
+      */
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1445050145475199025
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      
+      Ancêtre.Constructeur(Scr_CritereAccept_Composant_Type..Nom, Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type..Nom,nID_P)
+      
+      //:ZF_Charge()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1445050145475264561
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 1445050145475330097
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClDbCritereAccept_Composant_Type
+      
+      sClasse est une chaîne = ClDbCritereAccept_Composant_Type
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 1445050145475395633
+     type_code : 12
+     code : |1+
+      PROCÉDURE init_ObjBD()
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      
+      
+     type : 458752
+   -
+     name : oColCritereAccept_Composant
+     procedure_id : 1445050145475461169
+     type_code : 12
+     code : |1+
+      PROCÉDURE oColCritereAccept_Composant():ClColCritereAccept_Composant
+      
+      oRetour est un ClColCritereAccept_Composant
+      sReq est une chaîne
+      
+      SI PAS oRetour.p_bEstCharge ALORS
+      	sReq = [
+      		SELECT 
+      			Scr_CritereAccept_Composant.*
+      		FROM Scr_CritereAccept_Composant
+      		WHERE Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant_Type = [%:ZF_Get_IdUnique()%]
+      	]
+      
+      	oRetour.ZF_LoadSQL(sReq)
+      FIN
+      
+      
+      RENVOYER oRetour
+      
+     type : 458752
+   -
+     name : Init_Data
+     procedure_id : 1461104314719993474
+     type_code : 12
+     code : |1-
+      procedure globale Init_Data()
+      
+      
+      SI pas hrecherche(Scr_CritereAccept_Composant_Type,IDScr_CritereAccept_Composant_Type,ClDbCritereAccept_Composant::cst_EtantDonneQue) ALORS
+      	HRAZ(Scr_CritereAccept_Composant_Type)
+      	Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type = ClDbCritereAccept_Composant::cst_EtantDonneQue
+      	Scr_CritereAccept_Composant_Type.Libelle	= "Etant donné que"
+      	Scr_CritereAccept_Composant_Type.Ordre		= ClDbCritereAccept_Composant::cst_EtantDonneQue
+      	HAjoute(Scr_CritereAccept_Composant_Type,hFixeIDAuto)
+      FIN
+      
+      SI PAS HRecherche(Scr_CritereAccept_Composant_Type,IDScr_CritereAccept_Composant_Type,ClDbCritereAccept_Composant::cst_AuMomentDe) ALORS
+      
+      	HRAZ(Scr_CritereAccept_Composant_Type)
+      	Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type = ClDbCritereAccept_Composant::cst_AuMomentDe
+      	Scr_CritereAccept_Composant_Type.Libelle	= "Au moment de"
+      	Scr_CritereAccept_Composant_Type.Ordre		= ClDbCritereAccept_Composant::cst_AuMomentDe
+      	HAjoute(Scr_CritereAccept_Composant_Type,hFixeIDAuto)
+      FIN
+      
+      SI PAS HRecherche(Scr_CritereAccept_Composant_Type,IDScr_CritereAccept_Composant_Type,ClDbCritereAccept_Composant::cst_JattendQue) ALORS
+      	HRAZ(Scr_CritereAccept_Composant_Type)
+      	Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type = ClDbCritereAccept_Composant::cst_JattendQue
+      	Scr_CritereAccept_Composant_Type.Libelle	= "J'attend que"
+      	Scr_CritereAccept_Composant_Type.Ordre		= ClDbCritereAccept_Composant::cst_JattendQue
+      	HAjoute(Scr_CritereAccept_Composant_Type,hFixeIDAuto)
+      	
+      FIN
+     type : 458752
+  properties :
+   -
+     name : p_sLibelle
+     identifier : 0x140dd9737bab0031
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_sLibelle() : chaîne ANSI
+         //Propriétés de m_sLibelle
+         
+         RENVOYER :m_sLibelle
+         
+        type : 1966080
+      -
+        code : |1-
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_nOrdre
+     identifier : 0x140dd9737bac0031
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_nOrdre() : Entier
+         //Propriétés de m_nOrdre
+         
+         RENVOYER :m_nOrdre
+         
+        type : 1966080
+      -
+        code : |1-
+         
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13f3f53a03472cac
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

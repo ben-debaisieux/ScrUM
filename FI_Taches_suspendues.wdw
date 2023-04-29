@@ -219,8 +219,8 @@ window :
            code : |1+
             SI TableOccurrence(TBL_Suspendues) >= 1 ALORS
             	
-            	oTache est un ClTache <- ClTache.GetObj(TBL_Suspendues.COL_IdTache)
-            	oUs est un ClUserStory <- oTache.p_oUserStoryParent
+            	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_Suspendues.COL_IdTache)
+            	oUs est un ClDbUserStory <- oTache.p_oUserStoryParent
             	SI oTache.p_oUserStoryParent <> Null ALORS
             		SI Ouvre(FEN_User_Story_Detail_v2, oUs, oTache.Get_IdUnique()) ALORS
             			Actualise()
@@ -313,7 +313,7 @@ window :
       // 	bForceActu_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceActu_p>
       PROCEDURE Actualise()
       
-      oTache est un ClTache dynamique
+      oTache est un ClDbTache dynamique
       nNumLigne est un entier
       oLstTaches est un ClColTaches
       TableSupprimeTout(TBL_Suspendues)
@@ -321,10 +321,10 @@ window :
       
       si goApp.m_oUsrCnx.p_bTop_Equip_Informatique alors
       	//Affichage de tous les blocages pour l'équipe info.
-      	oLstTaches <- ClTache.oTachesSelonStatut(ClTache.cstStatut_Suspendu)
+      	oLstTaches <- ClDbTache.oTachesSelonStatut(ClDbTache.cstStatut_Suspendu)
       sinon
       	//On filtre les blocages, poru les autres utilisateurs.
-      	pour tout element oTache de ClTache.oTachesSelonStatut(ClTache.cstStatut_Suspendu).aItems()
+      	pour tout element oTache de ClDbTache.oTachesSelonStatut(ClDbTache.cstStatut_Suspendu).aItems()
       		//Est ce que l'utilisateur courant est affecté au projet de cette tache ?
       		si oTache.p_oUserStoryParent.p_oProjetParent.bUsrAffecteAuProjet(goApp.m_oUsrCnx) ALORS
       			oLstTaches.ZF_addItem(oTache)

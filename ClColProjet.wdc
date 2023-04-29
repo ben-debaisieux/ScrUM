@@ -18,7 +18,7 @@ class :
       ClColProjet est une Classe
       	hérite de ClZF_colObjDB
       prive
-      	m_aoProjets est un tableau de ClProjet dynamique
+      	m_aoProjets est un tableau de ClDbProjet dynamique
       fin
      type : 131072
   procedures :
@@ -43,7 +43,7 @@ class :
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
       PROCÉDURE addItemById(local nId_P est un entier):Vide
-      :ZF_addItem(ClProjet.GetObj(nId_P))
+      :ZF_addItem(ClDbProjet.GetObj(nId_P))
      type : 458752
    -
      name : aItems
@@ -51,7 +51,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.aItems
-      PROCÉDURE aItems():tableau de ClProjet dynamique
+      PROCÉDURE aItems():tableau de ClDbProjet dynamique
       renvoyer :m_aoProjets
      type : 458752
    -
@@ -71,8 +71,278 @@ class :
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
       
-      oObj est un ClProjet
+      oObj est un ClDbProjet(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Projet)
+     type : 458752
+   -
+     name : aoListeProjets
+     procedure_id : 1449242169081858959
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoListeProjets ( [<bAvecProjetsFini_P> est booléen [, <oUsr_p> est ClDbUsr dynamique]])
+      //
+      // Paramètres :
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      //	oUsr_p (ClDbUsr dynamique - valeur par défaut=0) : <indiquez ici le rôle de oUsr_p>
+      
+      // Valeur de retour :
+      // 	ClColProjet : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      FONCTION GLOBAL aoListeProjets(bAvecProjetsFini_P est un booléen = faux, oUsr_p est un ClDbUsr dynamique = null):ClcolProjet
+      
+      oColRetour			est un ClcolProjet
+      
+      sReq_Liste_Projet	est une chaîne
+      sComplement			est une chaîne
+      
+      si pas bAvecProjetsFini_P ALORS
+      	sComplement += ["AND "] + "Scr_Projet.Top_Termine = 0"
+      FIN
+      
+      si oUsr_p <> Null ALORS
+      	sComplement += ["AND "] + [
+      	Scr_Projet.IDScr_Projet IN (
+      		SELECT
+      			Scr_Usr_Projet.IDScr_Projet
+      		FROM Scr_Usr_Projet
+      		where Scr_Usr_Projet.IDScr_Usr = [%oUsr_p.ZF_Get_IdUnique()%]
+      		)
+      	]
+      FIN
+      
+      si sComplement <> "" ALORS
+      	sComplement = "WHERE " + sComplement
+      FIN
+      
+      sReq_Liste_Projet = [
+      	SELECT distinct
+      		Scr_Projet.*
+      		--Scr_Projet.IDScr_Projet
+      	FROM Scr_Projet
+      	
+      	[%sComplement%]
+      	]
+      
+      oColRetour.ZF_LoadSQL(sReq_Liste_Projet)
+      
+      renvoyer oColRetour
+     type : 458752
+   -
+     name : aoProjets_sur_periode
+     procedure_id : 1449242169082907754
+     type_code : 12
+     code : |1+
+      // Résumé : Renvoie un tableau de str Projet qui contient tout les projet dans une periode de sprints
+      // Syntaxe :
+      //[ <Résultat> = ] aoProjets_sur_periode (<nNumSprint_p> est entier, <nPeriodeNbSprint_p> est entier, <nSelecteur> est ClTache.ETypeCharge)
+      //
+      // Paramètres :
+      //	nNumSprint_p (entier) : <indiquez ici le rôle de nNumSprint_p>
+      //	nPeriodeNbSprint_p (entier) : <indiquez ici le rôle de nPeriodeNbSprint_p>
+      //	nSelecteur (ClTache.ETypeCharge) : <indiquez ici le rôle de nSelecteur>
+      
+      // Valeur de retour :
+      // 	ClColProjet dynamique : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      //	nNumSprint_p (entier) : Le numéro du sprint
+      //	nPeriodeNbSprint_p (entier) : <indiquez ici le rôle de nPeriodeNbSprint_p>
+      //	nSelecteur (ClTache.ETypeCharge) : <indiquez ici le rôle de nSelecteur>
+      procedure GLOBALe aoProjets_sur_periode(LOCAL nNumSprint_p est un entier , LOCAL nPeriodeNbSprint_p est un entier , LOCAL nSelecteur est un ClDbTache.ETypeCharge):ClColProjet
+      
+      oProjetsSprint			est un ClColProjet
+      nNumSprintFin			est un entier	= nNumSprint_p + nPeriodeNbSprint_p - 1 
+      sChoixSprint			est une chaîne
+      sReq					est une chaîne
+      
+      
+      //On choisis si on veut en prod ou previsionnel 
+      SI nSelecteur = ClDbTache.ETypeCharge.Charge_réelle ALORS
+      	sChoixSprint = "Scr_Tache.Num_Sprint_Realisation"
+      SINON
+      	sChoixSprint = "Scr_Tache.Num_Sprint_Previsionnel"
+      FIN
+      
+      
+      
+      sReq = [
+      	SELECT DISTINCT
+      		Scr_Projet.*
+      	
+      	FROM Scr_Tache
+      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
+      		INNER JOIN Scr_Projet ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)
+      		
+      	WHERE
+      		[%sChoixSprint%] BETWEEN [%nNumSprint_p%] AND [%nNumSprintFin%]
+      		
+      ]
+      oProjetsSprint.ZF_LoadSQL(sReq)
+      
+      renvoyer oProjetsSprint
+     type : 458752
+   -
+     name : Combo_Charge_Projet
+     procedure_id : 1449242169083170023
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Combo_Charge_Projet ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE GLOBAL Combo_Charge_Projet(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne , LOCAL oProjets_p est un ClColProjet):Vide
+      
+      oPrj est un ClDbProjet dynamique
+      oProjets est un ClColProjet
+      
+      //Si on ne passe pas de liste de projet, on charge les projets non terminés.
+      si oProjets_p.ZF_nTaille() = 0 ALORS
+      	oProjets <- ClcolProjet.aoListeProjets()
+      sinon
+      	//On charge les projets passés en paramètre.
+      	oProjets <- oProjets_p
+      FIN
+      
+      ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
+      pour TOUT element oPrj de oProjets.aItems()
+      	ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, oPrj.p_sNom + glien(oPrj.ZF_Get_IdUnique()))
+      FIN
+      
+      ListeTrie(sNomFenetre_P + "." + sNomCombo_P)
+     type : 458752
+   -
+     name : asListeProjets
+     procedure_id : 1456278240330848617
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //asListeProjets ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      FONCTION GLOBAL asListeProjets(bAvecProjetsFini_P est un booléen = 0):tableau associatif de chaînes
+      
+      aRetour est un tableau associatif de chaines
+      
+      sdSource_Liste_Projet est une Source de Données
+      sReq_Liste_Projet est une chaîne
+      
+      sComplement est une chaîne
+      
+      si bAvecProjetsFini_P = faux ALORS
+      	sComplement = "WHERE Scr_Projet.Top_Termine = 0"
+      FIN
+      	
+      sReq_Liste_Projet = [
+      	SELECT
+      		Scr_Projet.Nom,
+      		Scr_Projet.IDScr_Projet
+      	FROM Scr_Projet
+      	
+      	[%sComplement%]
+      	
+      	ORDER BY Scr_Projet.Nom
+      	]
+      
+      ClZF_ObjDbLs.mg_oApp.Rsql(sdSource_Liste_Projet,sReq_Liste_Projet)
+      
+      POUR TOUT sdSource_Liste_Projet
+      	aRetour[sdSource_Liste_Projet.IDScr_Projet] = sdSource_Liste_Projet.Nom
+      FIN
+      
+      HAnnuleDéclaration(sdSource_Liste_Projet)
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : aoListeProjetsDeUsr
+     procedure_id : 1456280538152781437
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoListeProjetsDeUsr (<oUsr_p> est ClUsr [, <eTypeUsr> est ClUsr.ETypeUsr [, <bAvecProjetsFini_P> est booléen]])
+      //
+      // Paramètres :
+      //	oUsr_p (ClUsr) : <indiquez ici le rôle de oUsr_p>
+      //	eTypeUsr (ClUsr.ETypeUsr) : <indiquez ici le rôle de TypeUsr>
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      
+      // Valeur de retour :
+      // 	ClColProjet : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      //	bAvecProjetsFini_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bAvecProjetsFini_P>
+      FONCTION GLOBAL aoListeProjetsDeUsr(oUsr_p est un ClDbUsr, ...
+      	eTypeUsr est un ClDbUsr.ETypeUsr = ClDbUsr.ETypeUsr.usr_tous, ...
+      	bAvecProjetsFini_P est un booléen = faux):ClcolProjet
+      
+      oColRetour				est un ClcolProjet
+      sReq_Liste_Projet		est une chaîne
+      sComplement				est une chaîne
+      
+      
+      si pas bAvecProjetsFini_P ALORS
+      	sComplement = "AND Scr_Projet.Top_Termine = 0" + rc
+      FIN
+      
+      
+      selon eTypeUsr
+      	CAS ClDbUsr.ETypeUsr.usr_tous
+      		
+      	CAS ClDbUsr.ETypeUsr.usr_invite
+      		sComplement = "AND Scr_Usr_Projet.Top_Invite = 1" + rc
+      	CAS ClDbUsr.ETypeUsr.usr_chef_de_projet
+      		sComplement = "AND Scr_Usr_Projet.Top_Chef_Projet = 1" + rc
+      		
+      FIN
+      
+      
+      sReq_Liste_Projet = [
+      	SELECT
+      		Scr_Projet.*
+      		--Scr_Projet.IDScr_Projet
+      		
+      	FROM Scr_Projet
+      		INNER JOIN Scr_Usr_Projet ON (Scr_Usr_Projet.IDScr_Projet = Scr_Projet.IDScr_Projet)
+      	
+      	WHERE Scr_Usr_Projet.IDScr_Usr = [%oUsr_p.ZF_Get_IdUnique()%]
+      
+      	[%sComplement%]
+      	]
+      
+      oColRetour.ZF_LoadSQL(sReq_Liste_Projet)
+      
+      renvoyer oColRetour
      type : 458752
   procedure_templates : []
   property_templates : []

@@ -54,8 +54,13 @@ class :
       	sIDMembers est une chaine
       	sDate_Echeance est une chaine // date format iso-8601
       	aPieces_Jointes est un tableau de chaine
+      	astCommentaires est un tableau de ClGLPI_Ticket.STR_Suivi_Commentaire
       fin
       
+      STR_Commentaire_Trello est une structure
+      	sCommentaire	est une chaîne
+      	sID_Ticket		est une chaine
+      FIN
       
      type : 131072
   procedures :
@@ -128,14 +133,15 @@ class :
       sCheminDoc	est une chaine
       sFormulaire	est une chaine
       sRetour_Procédure est une chaine
+      sCommentaire est une chaine
       
       // paramètres pour l'ajout de la carte
       sParams += "&idList=" + stTicket_Trello_p.sIDStatut
       sParams += "&name=" + encode_param(stTicket_Trello_p.sSujet)
       sParams += "&desc=" + encode_param(stTicket_Trello_p.sDescription)
       
-      // regarde si le ticket est prioritaire
-      SI stTicket_Trello_p.sIDPrioritaire <> "" ALORS
+      // regarde si le ticket est prioritaire ou un bug
+      SI stTicket_Trello_p.sIDPrioritaire <> "" _OU_ stTicket_Trello_p.sIDLabel <> "5a9e4eac35b91abfde76e3c5" ALORS
       	sParams += "&pos=0"
       SINON
       	sParams += "&pos=bottom"
@@ -173,6 +179,43 @@ class :
       	sBody	= HTTPDonneRésultat(httpRésultat)
       	jsBody	= ChaîneVersJSON(sBody)
       	
+      	SI TableauOccurrence(stTicket_Trello_p.astCommentaires) > 0 ALORS
+      		
+      		stSuivi est un ClGLPI_Ticket.STR_Suivi_Commentaire
+      		
+      		TableauTrie(stTicket_Trello_p.astCommentaires, ttMembre, "-dhCreation")
+      		
+      		POUR TOUT stSuivi DE stTicket_Trello_p.astCommentaires
+      			sCommentaire = ""
+      			// nom formulaire
+      			sFormulaire	= "Doc"
+      			
+      			sCommentaire	= stSuivi.sUtilisateur + "(" + stSuivi.sDateAffichage + ")" + " : "
+      			sCommentaire	+= [RC] + stSuivi.buContent
+      			
+      			sCommentaire = HTMLVersTexte(sCommentaire)
+      
+      			
+      			// créé formulaire
+      			HTTPCréeFormulaire(sFormulaire)
+      			
+      			
+      			sReq		= ChaîneConstruit("https://api.trello.com/1/cards/%2/actions/comments%1", ClTrello_req.sAuth,jsBody.id,sCommentaire)
+      			
+      			HTTPAjouteParamètre(sFormulaire, "text", sCommentaire)
+      			
+      			// ajout de la pièce jointe
+      			SI HTTPEnvoieFormulaire(sFormulaire,sReq,httpPost,"","","multipart/form-data") ALORS
+      				// retour de l'ajout de la pièce jointe
+      				sReponse = HTTPDonneRésultat(httpRésultat)
+      			SINON
+      				// erreur
+      				sRetour_Procédure = ErreurInfo(errComplet)
+      			FIN
+      			
+      		FIN
+      		
+      	FIN
       	
       	// parcoure toutes les pièces jointes du ticket 
       	POUR nLigne = 1 _À_ TableauOccurrence(stTicket_Trello_p.aPieces_Jointes)		
@@ -218,6 +261,170 @@ class :
       	FIN
       
       RENVOYER sRetour_Procédure
+     type : 458752
+   -
+     name : Rechercher_Ticket
+     procedure_id : 1453866628973517590
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Rechercher_Ticket (<sTitre_p> est chaîne)
+      //
+      // Paramètres :
+      //	sTitre_p (chaîne ANSI) : <indiquez ici le rôle de sTitle_p>
+      // Valeur de retour :
+      // 	tableau (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GLOBALE Rechercher_Ticket(LOCAL sTitre_p est une chaine):Tableau de chaine
+      
+      // variables
+      rest_Requete	est un restRequête
+      rest_Reponse	est un restRéponse
+      vRetour			est un Variant
+      sContenu est une chaine
+      aID_Ticket_Retour est un tableau de chaine
+      
+      sTitre_p		= Remplace(sTitre_p,"\","\\")
+      sTitre_p		= Remplace(sTitre_p,Caract(34),"\" + Caract(34))
+      
+      
+      // url pour récupérer informations sur un utilisateur
+      rest_Requete..URL						= "https://api.trello.com/1/search" +  ClTrello_req.sAuth
+      
+      rest_Requete..Méthode					= httpGet
+      
+      rest_Requete..ContentType				= "application/json"
+      
+      sContenu = [
+      {
+      	"query":"[%sTitre_p%]"
+      }
+      ]
+      
+      rest_Requete..Contenu = ChaîneVersJSON(sContenu)
+      
+      // envoi de la requête
+      rest_Reponse							= RESTEnvoie(rest_Requete)
+      
+      SI rest_Reponse..CodeEtat PAS DANS (200,201,202) ALORS
+      	
+      SINON
+      	// récupère variant
+      	vRetour		= JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	POUR i = 1 _À_ TableauOccurrence(vRetour.cards)
+      		tableauajoute(aID_Ticket_Retour,vRetour.cards[i].id)
+      	FIN
+      FIN
+      
+      RENVOYER aID_Ticket_Retour
+     type : 458752
+   -
+     name : Recup_Commentaire_Ticket
+     procedure_id : 1453941619061900979
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Recup_Commentaire_Ticket (<sID_Ticket_p> est chaîne)
+      //
+      // Paramètres :
+      //	sID_Ticket_p (chaîne ANSI) : <indiquez ici le rôle de sID_Ticket_p>
+      // Valeur de retour :
+      // 	variant : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale Recup_Commentaire_Ticket(LOCAL sID_Ticket_p est une chaine)
+      
+      // variables
+      rest_Requete		est un restRequête
+      rest_Reponse		est un restRéponse
+      vRetour est un variant
+      aRetour				est un tableau de chaine
+      
+      
+      // url pour récupérer informations sur un utilisateur
+      rest_Requete..URL						= "https://api.trello.com/1/cards/" + sID_Ticket_p + "/actions" +  ClTrello_req.sAuth
+      
+      rest_Requete..Méthode					= httpGet
+      
+      rest_Requete..ContentType				= "application/json"
+      
+      
+      // envoi de la requête
+      rest_Reponse							= RESTEnvoie(rest_Requete)
+      
+      SI rest_Reponse..CodeEtat PAS DANS (200,201,202) ALORS
+      	
+      SINON
+      	// récupère variant
+      	vRetour		= JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	POUR i = 1 _À_ TableauOccurrence(vRetour)
+      		TableauAjoute(aRetour,vRetour[i].data.text)
+      	FIN
+      	
+      FIN
+      
+      
+      RENVOYER aRetour
+      
+      
+      
+      
+     type : 458752
+   -
+     name : ADD_Commentaire_Ticket
+     procedure_id : 1454221556490097144
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ADD_Commentaire_Ticket (<sCommentaire_p> est chaîne, <sID_Ticket_p> est chaîne)
+      //
+      // Paramètres :
+      //	sCommentaire_p (chaîne ANSI) : <indiquez ici le rôle de sCommentaire_p>
+      //	sID_Ticket_p (chaîne ANSI) : <indiquez ici le rôle de sID_Ticket_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GLOBALE ADD_Commentaire_Ticket(LOCAL sCommentaire_p est une chaine, LOCAL sID_Ticket_p est une chaine):booléen
+      
+      sFormulaire est une chaîne
+      sFormulaire = "doc"
+      sReq est une chaine
+      bRetour est un booléen
+      sReponse est une chaine
+      
+      // créé formulaire
+      HTTPCréeFormulaire(sFormulaire)
+      
+      
+      sReq		= ChaîneConstruit("https://api.trello.com/1/cards/%2/actions/comments%1", ClTrello_req.sAuth,sID_Ticket_p,sCommentaire_p)
+      
+      HTTPAjouteParamètre(sFormulaire, "text", sCommentaire_p)
+      
+      // ajout de la pièce jointe
+      SI HTTPEnvoieFormulaire(sFormulaire,sReq,httpPost,"","","multipart/form-data") ALORS
+      	// retour de l'ajout de la pièce jointe
+      	sReponse = HTTPDonneRésultat(httpRésultat)
+      	bRetour = vrai
+      SINON
+      	// erreur
+      	sReponse = ErreurInfo(errComplet)
+      	bRetour = faux
+      FIN
+      
+      RENVOYER bRetour
      type : 458752
   procedure_templates : []
   property_templates : []

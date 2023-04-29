@@ -19,7 +19,7 @@ procedure_set :
      procedure_id : 2200969387118385699
      type_code : 15
      code : |1+
-      PROCEDURE Init_typesInter()
+      PROCEDURE Init_typesInter_old()
       
       
       sType est une chaine = [
@@ -54,13 +54,13 @@ procedure_set :
       Scr_Usr.Top_Equip_Informatique	= Vrai
       HAjoute(Scr_Usr)
       
-      goApp.m_oUsrCnx <- ClUsr.GetObj(Scr_Usr.IDScr_Usr)
+      goApp.m_oUsrCnx <- ClDbUsr.GetObj(Scr_Usr.IDScr_Usr)
      type : 458752
    -
      name : InitAll
      procedure_id : 2200969970978089667
      type_code : 15
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //InitAll ()
@@ -94,13 +94,24 @@ procedure_set :
       
       ////////////////////////////////////////////////////////
       
-      ClZF_ObjDB.ZF_LibereInstancesMemo()
+      goApp.ZF_LibereInstancesMemo()
       
-      Init_EtatsComposantsCritereAccept()
-      Init_TypesComposantsCritereAccept()
-      Init_typesInter()
+      
+      
+      
+      //Init_EtatsComposantsCritereAccept()
+      //Init_TypesComposantsCritereAccept()
+      //Init_typesInter()
       Init_Sprint()
       Init_usrTest()
+      //Init_Environnements()
+      
+      
+      
+      ClDbEnvironnement.Init_Data()
+      ClDbProcess_Metier_Intervenant_Type.Init_Data()
+      ClDbCritereAccept_Composant_Type.Init_Data()
+      ClDbCritereAccept_Etat.Init_Data()
      type : 458752
    -
      name : Init_Sprint
@@ -155,7 +166,7 @@ procedure_set :
      procedure_id : 2203192152126405242
      type_code : 15
      code : |1+
-      PROCEDURE Init_TypesComposantsCritereAccept()
+      PROCEDURE Init_TypesComposantsCritereAccept_old()
       
       sType est une chaine = [
       Etant donné que	1
@@ -174,7 +185,7 @@ procedure_set :
      procedure_id : 2203531984919892013
      type_code : 15
      code : |1+
-      PROCEDURE Init_EtatsComposantsCritereAccept()
+      PROCEDURE Init_EtatsComposantsCritereAccept_old()
       
       sType est une chaine = [
       En cours de rédaction
@@ -247,6 +258,24 @@ procedure_set :
       POUR TOUT sdRechercheTache 
       	m_oTaches.addItemById(sdRechercheTache.IDscr_Tache)
       FIN
+     type : 458752
+   -
+     name : Init_Environnements_old
+     procedure_id : 1459177751506786705
+     type_code : 15
+     code : |1+
+      PROCEDURE Init_Environnements_old()
+      
+      HRAZ(Scr_Environnement)
+      Scr_Environnement.IDSrc_Environnement = 1
+      Scr_Environnement.Libelle = "prod"
+      HAjoute(Scr_Environnement, hFixeIdAuto)
+      
+      
+      HRAZ(Scr_Environnement)
+      Scr_Environnement.IDSrc_Environnement = 2
+      Scr_Environnement.Libelle = "pré prod"
+      HAjoute(Scr_Environnement, hFixeIdAuto)
      type : 458752
   procedure_templates : []
   property_templates : []

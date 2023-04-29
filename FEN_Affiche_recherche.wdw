@@ -182,17 +182,17 @@ window :
          //sTxt est une chaîne
          //sPrj est une chaîne
          
-         oUS est un ClUserStory dynamique
-         oTache est un ClTache dynamique
+         oUS est un ClDbUserStory dynamique
+         oTache est un ClDbTache dynamique
          
          
          SI TableSelect(TBL_Resultat) > 0 ALORS
          	SELON TBL_Resultat.COL_Type
          		CAS zcst_US
-         			oUS <- ClUserStory.GetObj(TBL_Resultat.COL_Id)
+         			oUS <- ClDbUserStory.GetObj(TBL_Resultat.COL_Id)
          			OuvreSoeur(FEN_User_Story_Detail_v2,oUS)
          		CAS zcst_tache
-         			oTache <- ClTache.GetObj(TBL_Resultat.COL_Id)
+         			oTache <- ClDbTache.GetObj(TBL_Resultat.COL_Id)
          			OuvreSoeur(FEN_User_Story_Detail_v2,oTache.p_oUserStoryParent,oTache.Get_IdUnique())
          		AUTRE CAS
          			
@@ -285,21 +285,21 @@ window :
       sTxt est une chaîne
       sPrj est une chaîne
       
-      oUS est un ClUserStory dynamique
-      oTache est un ClTache dynamique
+      oUS est un ClDbUserStory dynamique
+      oTache est un ClDbTache dynamique
       
       
       pour tout Element oTmp de zaoRes_P
       	
       	selon oTmp..classe
-      		cas "ClUserStory"
+      		cas ClDbUserStory
       			sType = zcst_US
       			oUS <- oTmp
       			sPrj = oUS.p_oProjetParent.p_sNom
       			sCode = oUS.p_sCodeUserStory
       			sTxt = oUS.sNommination_US()
       			
-      		cas "ClTache"
+      		cas ClDbTache
       			sType = zcst_tache
       			oTache <- oTmp
       			sPrj = oTache.p_oUserStoryParent.p_oProjetParent.p_sNom

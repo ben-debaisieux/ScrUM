@@ -1,0 +1,789 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenFenTable
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x144ad44401fd5a84
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_GenFenTable est une Classe
+      	hérite de ClZF_GenFen
+      
+      prive
+      	m_sChargementTbl est une chaine
+      	m_sNomChampsTbl est une chaine
+      	m_sNomColGlobale est une chaîne 
+      fin
+      
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1462214417591458436
+     type_code : 27
+     code : |1+
+      procédure Constructeur(oClasseGen	est un ClZF_GenCodeFic)
+      Ancêtre.Constructeur(oClasseGen)
+      
+      :m_sNomChampsTbl = "TBL_" + :m_oClasseGen.p_sNomUsage
+      :m_sNomColGlobale = "z" + :m_oClasseGen.sNomClasseColGen(Vrai) + "_p"
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1462214417591523972
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : Genere
+     procedure_id : 1462214417591589508
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_GenEltWD.Genere
+      PROCÉDURE Genere():Vide
+      
+      
+      
+      
+      sRub			est une chaîne
+      
+      
+      //-------------------------------------------------
+      //Récupération des membres déclarées dans la classe
+      Vars			est une Description de variable
+      Def				est une Définition	= RécupèreDéfinitionType(:m_oClasseGen.sNomClasseGen())
+      bEstObj			est un booléen
+      sChamps			est une chaîne
+      
+      
+      
+      
+      
+      
+      stProto_tmp est un ClZF_GenFen.STR_ProtoChamps
+      stProto_tmp.sNom		= "Id"
+      stProto_tmp.sSource		= ""
+      stProto_tmp.sLibelle	= ""
+      
+      
+      sChamps = :Gen_COL_ID(stProto_tmp)
+      :m_sChargementTbl = TAB + :m_sNomChampsTbl + ".COL_" + stProto_tmp.sNom + "[nLigne] = oTmp.ZF_Get_IdUnique()"
+      
+      
+      POUR TOUT Vars DE Def.Variable
+      	
+      	sRub = :sNomRubAsso(Vars)
+      	
+      	SI sRub <> "" ALORS
+      		
+      		//A faire : identifier plus proprement qu'il s'agit d'un objet
+      		SI Vars.AttributNote <> "" ALORS
+      			bEstObj = Vrai
+      		SINON
+      		 	bEstObj = Faux
+      		FIN
+      		
+      		
+      		InfoRub est un ClZF_GenCodeFic.str_DefRub
+      		
+      		
+      		InfoRub					= :m_oClasseGen.m_aRub[sRub]
+      		
+      		
+      		stProto_tmp.sNom		= sRub
+      		stProto_tmp.sSource		= ""
+      		stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
+      
+      		
+      		SELON InfoRub.nTypeRubHF
+      			CAS hRubBooléen : 
+      				sChamps += [RC] + :Gen_COL_Chk(stProto_tmp)
+      			CAS hRubDate6 , hRubDate8, hRubDateHeure
+      				sChamps += [RC] + :Gen_COL_Date(stProto_tmp)
+      			CAS hRubEntier1, hRubEntierNonSigné1, hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
+      				SI bEstObj ALORS
+      					sChamps += [RC] + :Gen_COL_Txt(stProto_tmp)
+      				SINON
+      					sChamps += [RC] + :Gen_COL_Entier(stProto_tmp)
+      				FIN
+      			CAS hRubMonétaire, hRubRéel4, hRubRéel8 :
+      				sChamps += [RC] + :Gen_COL_Monetaire(stProto_tmp)
+      			CAS hRubTexte, hRubTexteUnicode, hRubMémoTexte, hRubMémoUnicode :
+      				sChamps += [RC] + :Gen_COL_Txt(stProto_tmp)
+      //			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+      			AUTRE CAS
+      				Trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
+      		FIN
+      		
+      		
+      		:m_sChargementTbl += [RC] + TAB + :m_sNomChampsTbl + ".COL_" + stProto_tmp.sNom + "[nLigne] = "
+      		SI bEstObj ALORS
+      			:m_sChargementTbl += """[Afficher référence de " + Vars.Nom + "]"""
+      		sinon
+      			:m_sChargementTbl += "oTmp." + Vars.Nom
+      		fin
+      	FIN
+      FIN
+      
+      
+      
+      sRapport est une chaîne
+      
+      nAlignBtns est un entier = 490
+      
+      
+      sRapport = [
+      #To edit and compare internal_properties, use WINDEV integrated tools.
+      #Internal properties refer to the properties of controls in windows, reports, etc.
+      info :
+       name : [%:sNomFen()%]
+       major_version : 27
+       minor_version : 0
+       type : 2
+       description : ""
+       subtype : 0
+      window :
+       name : [%:sNomFen()%]
+       identifier : [%:GenProcIdent(1)%]
+       internal_properties : BwAAAAcAAABZTAiAsVRniYMkvnK7LP74VaQdcK8HpH9V7yEo/fga3y/RP0RKhAMK0kHjuBbh/V8VpWacNC39gSNKW6KtYzl667pE7kckEMAx6UvXsZ1eVY9i3jxMA6oSvsQJIPlTLOulh4nsChT9pJ+aEO+sdncafPyOqHkRyn1D17VVYZQQ1LzGsL9e0W0jbpg8WYgf2o81USdr2wPUzdBZKRnFkTiJJ+mz2hxh3ma7AfhzB+eQ7GZwCtOmsqs2rVJu56rhjrJm92m0bdPJBcKzg1nq6ze1qH4IhoABQwfW25WF9d3HwiYRl4imZojgLbSidlGvVKAoOSAGDqgfsFhWHlraK3HQMWAA+rwle+vefAo7AJAT60D0yq+q2qq3KUAsfHlQKXb3dVJxMB3HcirK+4gb8yXXKNw8n/X3O2vHsXB9ZX7u+DWb3ujM/P6wsxY+EcmoYUM5Ylqj2o5K/PZk0LNknbS44T4FwIYGWvdckbbcx3eawnK6eoHv92G0SJJ3urUi8ljreVP2/SHYWwH2AvfTaMZomaXu/Rmf3YVByNl1erI/8glxNLJVVTRXDfKtdw/NTnR2tolKoFzFfmqFoGhSJf3DnD6V1lpaurnr9+oUQ2iGIv3NAA3vNTkdrGgbw2FlFrreDumN8lLTsbizC0lE0di6vYK1FWnG/+aSWorGPlfjzvUTTlmHW+LhIJjjFya4cfVlSyYMVqqOWWYzmm/Qov+5hZqnslVZXXr2zL2QbuY1sZ6G72yfHTd8H/anA42cJDTV
+       properties :
+        width : 600
+        height : 248
+        widthClient : 600
+        heightClient : 216
+       controls :
+        -
+          name : [%:m_sNomChampsTbl%]
+          identifier : [%:GenProcIdent(2)%]
+          internal_properties : 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
+          properties :
+           x : 6
+           y : 6
+           width : 472
+           height : 204
+          columns :
+      [%sChamps%]
+          type : 9
+          controls : []
+          code_elements :
+           type_code : 9
+           p_codes :
+            -
+              type : 35
+              enabled : false
+            -
+              type : 22
+              enabled : false
+            -
+              type : 24
+              enabled : false
+            -
+              type : 23
+              enabled : false
+            -
+              type : 25
+              enabled : false
+            -
+              type : 230
+              enabled : false
+            -
+              type : 241
+              enabled : false
+            -
+              type : 263
+              enabled : false
+            -
+              type : 262
+              enabled : false
+            -
+              type : 222
+              enabled : false
+            -
+              type : 223
+              enabled : false
+            -
+              type : 224
+              enabled : false
+        -
+          name : BTN_Ajouter
+          identifier : [%:GenProcIdent(3)%]
+          internal_properties : BwAAAAcAAAAWhhXVd8UXZUUCqgYk2nhujOsauaxUmDJDDCn25KVsCvmw0U+w2jgkR/w0Xb8H62hCtqyfIylwJuqt273PtmKULJWcWO4ir8va4E19XY30qnCxi4ebgwcP1bzowrzvmrSOzFp/p8EVc3zdCK9GhNZ+eSmpUmdFxKRfTnKJ9d08KuyUhUIrheyLVQ84mJ4hqY/ex6XXZKQBDGPMxC+xfHXQvDQ+Ez19NLg+BSc7LkjsW9BZvNJQ/XMvvz3p5pX9KSxnF9OcvTLxrXzn3GRjMvYPKJ5XTN1UFRB2mtAyM7oTYLTKOT59yoRJFWsyXgePk4J2YJWoR0V4r8tydSckbD3QRAYFzCTfWeLCiGp/fgIB8fsHFk5vq9G0Ip+UvAjy2u8m1rPKkrbv1Bmed3Gl52NlP2zCOZyuJQkL9xRrvaYekSDM7Rks8R873AR1lAM2WKCCxpGjXwtDfFt+ZEE+m3VRYtf8a+Xn2Gt82X6MxUMR4kQ+3bGMuaaqhxliQMMRL+6eHE22XBgrmehBdi6utcUwQj12Sr0FG8Fvn8qBRSri0nS+KvVSWIWBR48pxiuy4Wdkg0QChnvsZ8kznkVnb7WX7hzNawdczz0DJhLCuxjWGWPjBxbZJkHfUzpd+QbnjSCSIYUID6P3wy2wCI6wyHkh6k973Xon0693uykbfQ8dK4WeYED+flw7LCuY7LEtDT63nhawiLcQzgnow8WS/MBU0uztPGt749PQXttp+Cex1vCWacuusIHH+qgTk3X5wnMNXFLGWc+7o2sLo/V1sjBokFTNrpSMvh0OiBDfLtFJDn+LCc2wSo0=
+          properties :
+           x : [%nAlignBtns%]
+           y : 6
+           width : 100
+           height : 24
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1-
+      [%:sIndentSpace(:Gen_btns_action_Ajout(), 9)%]
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : BTN_Modifier
+          identifier : [%:GenProcIdent(3)%]
+          internal_properties : BwAAAAcAAAAQd+5UdKYIUsMCi0ysex88nOANm7ouEgWqW9VCf+a67uqU1P/6tLLUQRKe/Wlbznm6jZAHTAJhgvukbelb+CFUhpWvugP3XSrnv0m1pqvyQ13ddUc9VlerJIUyaFRh9iDIi8tkhXBo5qabs0WWFxqOQoQlKCRf/UfT4sZdM4k+F2V0+Tqwq1uBT/VsX3ybcMDsbl7QFeEqk+M+shxqHKvPZsOw0XxJVyipGXSYY9DLoBjFROYpLCw+ndDuONQD4SK/RYoKvs/01YyODVJAGt/7JZjb11stH9pIRB8VchStDdXgS/yWO+IOE04EWoVUSTYXSfxII9POaJeNtbvwigdYxVVhTguVdIuDM1InN7OsZc/sDQeA/xea7kTWMK5AWseCiSM8IrhML4iuGItef4DhaRTh189smvGsDg8jS9usYbf//A6db8Svhysw/EHN1iTjOxqAIDGeDhjHGTtGIMsvLVxVrFJfa9GHgrtMB3wlcK2rrvalC79eGkQxdpt2XzIpWRb7tVauERHun0bsHJlmrZbr62LHYLWMVGv1VwW8VGexeTR1WJRFuAg2Mj115V/NZPF9hVvHA5hor8Vp2i0Pz5FGxn6UCJuM05MCLYFQ7QQwMPV85CzJeBOSTRysndKr4MiX6v2AWXBd2diM+VM5k1rZrg+5ltuyUBrLtwppiYqbQWUXjF/tkdih5jnAz56gPUkXs6UjfZey+WwTcPu5Blh0RovbKn5BGAlCmNIme4DMKxkI8QVYGCAncu4UnWwb+/e7MplsluZ14lZmetnA8atRxn5v/Oq8La8UUPTUmfBIv1D2XMVKMA==
+          properties :
+           x : [%nAlignBtns%]
+           y : 36
+           width : 100
+           height : 24
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1+
+      [%:sIndentSpace(:Gen_btns_action_Modif(), 9)%]
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : BTN_Supprimer
+          identifier : [%:GenProcIdent(3)%]
+          internal_properties : BwAAAAcAAADOzk19D5M921YfXy//JXI244BuO8jk9ZA91HmiZM5PYPopuq4wiO8F6WqC5JL4aaBzT2laTl77D0NQLAguaD4FGHTi1strIKbV9znJtECRe55HufUFEfWdw8K+8MpJON602oCtUXej+fJbhnXEFmSAbz+nTy2NUNRruBhpS9Ve1qry1bwVFUDrSUk6eBRpj08QCS0xypjJhPs2jvsjEF8s4toW1YshhEwKP61bxECW16K7OMC6xQ97d8ubTmudZxy9vYPGiz7R+WRx0rhNJvzH2lALus9kIXyaTC5agSr9CFZU6QDHImCpWbUYTtWfoSoYUqXyGa10B4+EHxfyvI8QOszNlmKzsaaOchhT8I4rjdGdqpytFxFUZg1mYKIehP9oGMucXPYb3PGgubXvM6258Qb6/NdDro4M+hfoMr9leMF/CPxH9hgQYZvE9cQXZ5ebaTz+AniEPejN84IzCKwQu6o/qrQkGSgJKM194iTUPSklNOhb6sNHYCSlJWD2Po0/N1Axx12Ebj34fccnjsCT5/yVLbAO+DoU7lnCWj89rVnVMQhFGQrK7BboV9A/sA7NxgdJVXA1LAL26aKspISOJ0fwShZRqBIkAX3PuPn1+ICSRlG0O0rkxK2Y5j9UJI97FPCbSkSkdIJHn6eJmSx8p17eZ+y1ZcFFySdlhxUXIZu0DhIoFPZVCkmmnmObn0yljARC+gUq58urHsit2cNH1XusEkh2C4Xvjqc92PtfetR8J/d4EsHiUGbJVabD8Qxkkil75h5g36u5ohd4wZlJVsaPHOBjmE3+yYTmHI4pcpuzISVoktU=
+          properties :
+           x : [%nAlignBtns%]
+           y : 66
+           width : 100
+           height : 24
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1-
+      [%:sIndentSpace(:Gen_btns_action_Supp(), 9)%]
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : BTN_Fermer
+          identifier : [%:GenProcIdent(3)%]
+          internal_properties : BwAAAAcAAACRwCcGDzMTb5JVEend1LvZaoRyBdbprEjRw//YsYCi7tH+EhoQK8mCQTOZLwrJMQgRWLla00ROkfdt/u7pjH860fRufoZKdzwhFeYFNe6eT3mhHOLjjW6z5AkDMk8zps3d6MPtPqRjldWIvPkvEDm5u8x02cuHWXJkXOqhjz/2iOisYhNb6QBLGrHJ+h9N3b7ITUk8i3Fv1XYxY2oZo5NDoDxVF9RAYOgyMCT1YVg8LSaKFszWgH2F93fFc9X9npMRfU05/tJ4+LqwcKbElT9TpuWnTE2RI43RBhA36g5A1BbOvIlhwBnYdKOE7yFhG1Utlh7INXkxeEuGY/qibaa9JEB7krt7THhxWSIWtiak5WjfhqhRqWAleVW43U2TjBilGeRkVsBwZKEOOgUxW4MUQqmwgNqrE+nOubcjgeukqKfYMw7mOFd5dwxdWiCL2V2HThtX3GK/ravOFHTV6rylNwkbrb2j4VboRxr36G8W03+TLLHGxtSVIjrL6fj9RFHAJzpGCskI6y1kEg54JqfBkMyiod0047sfWmZlDKu3pW426qo5GUPlBZOkRInofsFSGuDhPSpN1K8C/+m/c62Xdy7WGVcEsnBjdDcXLC/jfB0pngrIrOTuxsLn8yzGApmG8UlB1InVLZUjlMRAz1XPe1JSuq8Vot8pPMVAXQjKGh47lsmckW6yr/vYUGVWS5MS1dUoRoXCu/7QXLrnTUfI5dRUJEvwfGzu7G5/1gQptcClGNKYy9KkjbbqMGclzYcKGc4cBidzZlWwcgnQXh4gyDdkjinlVgairiPlfDV+n6ezhPPTnxJybhcjcyqd
+          properties :
+           x : [%nAlignBtns%]
+           y : 186
+           width : 100
+           height : 24
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1+
+               ferme()
+              type : 18
+            -
+              type : 161
+              enabled : false
+       menu :
+        name : _Menu
+        identifier : [%:GenProcIdent(4)%]
+        internal_properties : BwAAAAcAAABhHrstMa4Z9rl6OwYjS84TLQsX3FeSpLFLw6OvT/q0TTop6246LIQjRYH2rort/iXEVEG8h3nssqS9OS6nlahnSvHNwBZ3KPsCPDNV6DqMwv3sqAqt2U3nDV0zIOu+QVCE7sm+q8pvNYbcweI/Xf5+pTd110qVRHw/aPAqbcyH6tUlS/E0iUY84n4p3RgoGt7SEUhHX03No4MSlCtrbTApzAPbqfYJ36YXNFxnrnahZBQZtLha7RY6axUM6IhAnoOpGhtv9Xz9dSbxjTRMiNTba5ANViKqxytyMeFsUOpUDAB+A66iElDh
+        options : []
+       languages :
+        - fr-FR
+       popup_menus : []
+       message_bar :
+        internal_properties : BwAAAAcAAAC4NW9UkbRLpmE2Bdm7am3dd6gBY4dSxiW4OmFbI+J9Lr9ziDCIWPE31ZC0PezllIBY0TrcWtfGcb4X941q9mceVjwV/Te/mjEUypnSF4A=
+       code_elements :
+        type_code : 1
+        p_codes :
+         -
+           internal_properties : BwAAAAcAAABYxSC3Cp1yBTyrJ/2BTkhMB4j8437pso3GJmARvJbefoMzFHNVs9rPLVES9eVbPfgC65HHpasFtl6ZO/kjk6EEFE5DrzcSkvELUv2opdnOY7ofHWDpuTnI
+           code : |1+
+      [%:sIndentSpace(:GenCodeOuverture(), 7)%]
+         -
+           code : |1-
+            
+           type : 34
+         -
+           code : |1-
+            
+           type : 234
+         -
+           code : |1-
+            
+           type : 165
+         -
+           code : |1-
+            
+           type : 177
+         -
+           code : |1-
+            
+           type : 180
+         -
+           type : 230
+           enabled : false
+         -
+           code : |1-
+            
+           type : 2
+        procedures :
+      [%:sIndentSpace(:Gen_Proc_Actualise(), 3)%]
+        procedure_templates : []
+        property_templates : []
+       code_parameters :
+        internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+        original_name : [%:sNomFen()%]
+      resources :
+       string_res :
+        identifier : [%:GenProcIdent(5)%]
+        internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+      custom_note :
+       internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+      associated_test :
+       name : TEST_Fiche_RADFichierB.wxt
+      rad :
+       internal_properties : BwAAAAcAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe
+      ]
+      
+      :m_sCode = :sReCheckLignesCode(sRapport)
+      
+      
+      
+     type : 458752
+   -
+     name : sNomFen
+     procedure_id : 1462965319613658447
+     type_code : 12
+     code : |1-
+      PROCÉDURE sNomFen():chaîne
+      renvoyer "FEN_Tbl_" + :m_oClasseGen.p_sNomUsage
+     type : 458752
+   -
+     name : GenCodeOuverture
+     procedure_id : 1462214417591720580
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenCodeOuverture ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	oClasseGen (ClZF_GenCodeFic) : <indiquez ici le rôle de oClasseGen>
+      procédure GenCodeOuverture():chaine
+      
+      sCode est une chaîne
+      sCode = [
+      PROCÉDURE MaFenêtre([%:m_sNomColGlobale%] est un [%:m_oClasseGen.sNomClasseColGen()%])
+      
+      Actualise()
+      ]
+      
+      RENVOYER sCode
+     type : 458752
+   -
+     name : Gen_COL_ID
+     procedure_id : 1462478102875416885
+     type_code : 12
+     code : |1-
+      procedure prive Gen_COL_ID(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaîne
+      
+      renvoyer [
+           -
+             name : COL_[%stProto.sNom%]
+             identifier : [%GenProcIdent()%]
+             internal_properties : BwAAAAcAAAAgVgwCjn6O8aJaXRW/8NV0FJJeWDSWRoYHTpOpPS4y6MIPi3bo0yOYQfhsT4Egq9Ne9dlVpVzCt69AItJjr/ULDcYEXHfXiJRVP2Ql9PvvUJgGKd4kWKKrSWkD0/xRWR/5a46krKdK/oOlhQBn6g6wKH6XE3cUDuP502oyBhf4zxvwRSqUHJs=
+             type : 2
+             content :
+              internal_properties : BwAAAAcAAAA5cwjXy8rZvhBkZigqsx30UNftwkXMY2ORdTH68K5yofNHOVdsBdYfK+edz1DPMo2BC9RsDInzapordV1tn1Df3aVCMx3/bTososaYjU0UwCYecHnHSFL3t0BIPw4iFmJn1q8WrJqfFEEWUKeilgg7lw07GG8JG1h3dIRHoBwamq7OIBlpnlQU+SvNOa+2cIQjJBSAXt5t+8uxuY0JLJKXjU/ZnApCkHLvkReQXzY5J/ZA8vtmsbt2vSwJPM8wFaoZIhzRJGxysRNoaOtsDYC77wzrM7BT4LEZx01aLReMBkCqbdUx588En60OqhDUpoUkaOJDf5GtuY8SXKCZoVRwlpCC4+2GdUdVAUfdaGTelRr3TxuOcReLJq0ZgE0ZehafP63shIkccu9TAkrawYVwyp5kaRiK9ZA2Di5W97ihSSlfVjI+AO7Ynr+xyFViX75rboWWfArBSvU1pq3g/wVtU9MEkWVbp8pzEO3Nrl9Q9/7Osd5Et0KB/w3zP5wD1ivdX4nwD8WM9xoJcmJo4wTVWSi6Yggi1BfplgXidhXH5vHNMRLxdcefDh1xE2MhQZ8sL4Fm1ARYIDEbP0IEtSDPiZIZ/CKFc8jnyfOEAb9lgNOXMFG0TLHP4F40qfV4j15NU/Tq8SBLvAc7/JEIzWfRvUHHeFcrPsAyN0GOU0o6UWux3ueWnUIpQmp8ds8HLwsU6HAxquFwif6hfAKtBM7FU7ftxtwublFC6Ppv4z9p//Tnvn45DOWiojHqqSYTBTo4AAZB1xem5v4/q4mwjDvenkUz0/XWAe09ccMnuE/2p08ag2VICIuGYS9Txaq2Dn4g2LBpmbEeqknx9P3LKU8od22Xif4dh6B0dwU0jGgw4WXsPUBfBYI=
+              properties : {}
+              type : 2
+             code_elements :
+              internal_properties : BwAAAAcAAAD8IaEOS3s4r63zwlGSKZijaro6IKue1EPU7KXNohnik3Pu7K0WeAaSjgbxKTe8Qn8R/jJC85LdRh6U2WVkJg5r8p9MPvuQ
+              type_code : 3
+              p_codes :
+               -
+                code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+                type : 14
+               -
+                 type : 276
+                 enabled : false
+               -
+                 type : 277
+                 enabled : false
+               -
+                 type : 278
+                 enabled : false
+      ]
+     type : 458752
+   -
+     name : Gen_COL_Entier
+     procedure_id : 1462478124350323558
+     type_code : 12
+     code : |1-
+      procedure prive Gen_COL_Entier(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaîne
+      
+      RENVOYER [
+           -
+             name : COL_[%stProto.sNom%]
+             identifier : [%GenProcIdent()%]
+             internal_properties : BwAAAAcAAADswvcbU6zk6hDjliY271mlOLiTosZ5i5kY6cZszETiVE0aG/0jmWYaCPqRS2Yi129BewE50g6ppPLoMTFQLh54m5P7LpVZZ78cU+uHyNVykO5++ttj3TUzb9h/KFbHcD0O1/K8Kqa4gMonu3kUEx3nQ8agqp+vC61TLjMQoSJNJMWCRi979dKoLuJs
+             type : 2
+             content :
+              internal_properties : BwAAAAcAAAA5cwjXy8rZvhBkZigqsx30UNftwkXMY2ORdTH68K5yofNHOVdsBdYfK+edz1DPMo2BC9RsDInzapordV1tn1Df3aVCMx3/bTososaYjU0UwCYecHnHSFL3t0BIPw4iFmJn1q8WrJqfFEEWUKeilgg7lw07GG8JG1h3dIRHoBwamq7OIBlpnlQU+SvNOa+2cIQjJBSAXt5t+8uxuY0JLJKXjU/ZnApCkHLvkReQXzY5J/ZA8vtmsbt2vSwJPM8wFaoZIhzRJGxysRNoaOtsDYC77wzrM7BT4LEZx01aLReMBkCqbdUx588En60OqhDUpoUkaOJDf5GtuY8SXKCZoVRwlpCC4+2GdUdVAUfdaGTelRr3TxuOcReLJq0ZgE0ZehafP63shIkccu9TAkrawYVwyp5kaRiK9ZA2Di5W97ihSSlfVjI+AO7Ynr+xyFViX75rboWWfArBSvU1pq3g/wVtU9MEkWVbp8pzEO3Nrl9Q9/7Osd5Et0KB/w3zP5wD1ivdX4nwD8WM9xoJcmJo4wTVWSi6Yggi1BfplgXidhXH5vHNMRLxdcefDh1xE2MhQZ8sL4Fm1ARYIDEbP0IEtSDPiZIZ/CKFc8jnyfOEAb9lgNOXMFG0TLHP4F40qfV4j15NU/Tq8SBLvAc7/JEIzWfRvUHHeFcrPsAyN0GOU0o6UWux3ueWnUIpQmp8ds8HLwsU6HAxquFwif6hfAKtBM7FU7ftxtwublFC6Ppv4z9p//Tnvn45DOWiojHqqSYTBTo4AAZB1xem5v4/q4mwjDvenkUz0/XWAe09ccMnuE/2p08ag2VICIuGYS9Txaq2Dn4g2LBpmbEeqknx9P3LKU8od22Xif4dh6B0dwU0jGgw4WXsPUBfBYI=
+              properties : {}
+              type : 2
+             code_elements :
+              internal_properties : BwAAAAcAAAAug3qlPYUHtql7BxHJeASRL/8rXJV9MUg1Lqad3q1JmWux+G3SZeSg1JZNhUMK2ISIyw769hkZXEKSS+10g0+ZCC6KVoRu0gP3cTJyZxtR
+              type_code : 3
+              p_codes :
+               -
+                code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+                type : 14
+               -
+                 type : 276
+                 enabled : false
+               -
+                 type : 277
+                 enabled : false
+               -
+                 type : 278
+                 enabled : false
+      ]
+     type : 458752
+   -
+     name : Gen_COL_Chk
+     procedure_id : 1462478132940325436
+     type_code : 12
+     code : |1-
+      procedure prive Gen_COL_Chk(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaîne
+      
+      RENVOYER [
+           -
+             name : COL_[%stProto.sNom%]
+             identifier : [%GenProcIdent()%]
+             internal_properties : BwAAAAcAAAC7ggmwRHyM1jRkEPItdRpgCEfHKwImp9MtDBXewXSzEWq9+6da+E53DYnHIrqvEiLgHFfEOvuswx1hoXyukjjxQ1n9Ws6eNbTVnK0kIkNbAW9tL+klTIllzJ/4ibMbCbTX/3dC9dPnxUbnLKDbzFaC7+ZZTW3BkR5Qd6Qnf4lQSYYrMjU=
+             type : 5
+             content :
+              internal_properties : BwAAAAcAAADDjowNgFexFKpXdC4cmYB64rwiwq827wPh8QoGbx8ybHIVvEngvkN7kjHsou6+VVW/RHkBhrf8hSJz98EBb7JxhTLZcQ8tW8pr3iRBl59Cynv67bmmB1rx0ItzJsCyoAz/mhy6GuKpoww7vdFJVDRjLtDjD3ja+1AsEncXHfq8Ts0wJxBz1zMoJlzCFMCFup8DlklZy6/GhSK8iOny7czAGbd26+KBkIQ/tuVbpf/+bN8em5bo4inYQdLyo5tOI0VsRw7BWUqRncG5nNJaqwSkggN4wTWmPBN1AkAs8LO+9JFSDhQqtqKJnVgbjgISqc407y6dsnXjkQCIugzFRriqXm9Puv2MwNYUvgiQ5jD2JEmXGkD0LiSATP0uXeB0hpz6VHWmrZj5hC/jQntTz3fzXvBp1sGTMzexp7bJu5bICv0vC68sKcwUEx9flN+Sj3HA9C8aB5iyjGA1wixfKIPv/eG6d0Lri/CzfjVgS1rjyEE74xnL2eNT+aHgfBzRJpIPzRbp4JroZgePfKM0KgNDBc1f6NUvI0zB9X15aYrB8wJzZF/0MwfiwTX1vrZ+7Wis5OkCR4ooH7acjQxhNQjlwOraWAurWftURWJhyfFM7Pfe2ZUF56OpZLjOhRj2fr6J4aq0HoLZQjwUU98aEyTbDjz39fEx/cnNKzYgoj069ic=
+              properties : {}
+              options :
+               -
+                 internal_properties : BwAAAAcAAAAgOWCPXjwkc2Qhf4U+mgMZWD4tbsOuI49krVDMLB9kYkGIjbo=
+              type : 5
+             code_elements :
+              internal_properties : BwAAAAcAAAB1Dfygtiyr7MEI/C9dGksJFaFL0FJmP4Nv3I4s6PDcZjo6Pf2CR6x7K6yXx79mxfgru4oHDn9Uvoh28g==
+              type_code : 5
+              p_codes :
+               -
+                code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+                type : 14
+      ]
+     type : 458752
+   -
+     name : Gen_COL_Txt
+     procedure_id : 1462478141530327720
+     type_code : 12
+     code : |1-
+      procedure prive Gen_COL_Txt(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaîne
+      
+      RENVOYER [
+           -
+             name : COL_[%stProto.sNom%]
+             identifier : [%GenProcIdent()%]
+             internal_properties : BwAAAAcAAACei8JSNOiUuwG16BU2FR6LYIHpuCN3TKNoVF0vTDRoJ8F5uu/8hn9AV+aI2k/8bN0RPWzKhoN1cekT+XOvvNEmvm7jeEn5F11Kr21xjx1GrB2mj1rX5WIgQFrZ315gYkeqTefvRHX8rFKmabGDp8D/l7D+9U/wrvVdQsKq5S+lbsiGzlF4xr3Xl6pIVw==
+             type : 2
+             content :
+              internal_properties : BwAAAAcAAACeeO6yQzxLIsZQlesHNnirSEVfxeO4mB1nY8CwcCsmN7CoLSQNgj1wMpa59+9D4Z8p68tn7tGD6Nd/7sHsNlX+iOGcuBF/lMvsJpZDXdMcfp/e8ySFYpATI67jaghk+6rLlDBG68pfYrn3KmdmM+W/aufQo9s6dq87u03HRiCafMlvofEmfc8Of8AwHSkt0FwG+n6XG0Uy7tJEltNKlSEtLgNZQc2HQAi5AnZwoXlO4SuRTAe9bcF4OHeKE/L2LaB8uCQylJB1D9FH4re+UpVU/BE3AIZEMvycZ8Py2Cg89oxnPZOT7vjPigo1+BeJYCcNnxseW6JK8FtqJnWFarME0TQvrqlwrklWDBt2bL+cX7KoynoeTycHTQg6AFcSMTLyb4CbRzoD9BqOkPEEcAGYzyuKWRFrMJ6g9uMUuxYRd9L7KnEf1FfxgspzbB62g7cmFvJxpOANvXfI/9nTmcsosLEVvFF9l6OVpSSVH1FOYI0WlpFGKwxSm4iwaw8jGpD8rTrz9wM6XriiRZI/D3T6eBxLA7jEHmij11iyE00pl3zjLFnJFxnYymSmFbRFs4ZJ7SyXrJK2FaewxvrpQ7DI9JBCKQQhG/ctjpquelkvZUqn82asEjueJA2VKU7iHZmKC98hFQaD22Wiqc2vuQMW9JH6ZyfhjBvUdECojrxWHgJNN2xAuYgS5Oc/6GiTmwSj7hHk6C0UUIxCV+qysq60jI+AieKqFBCIuUV7+rv1/OcpAwmTsJGHSJ7Nwzf/L1t3uhNg4YeIT+J43mNneu9jmckalo/Cq7oo0PHz1rSMvHnzmQiPJ+HvIpuIVDOj9EJaVorfmoYZJvJtSFc=
+              properties : {}
+              type : 2
+             code_elements :
+              internal_properties : BwAAAAcAAABxOejscmgnaEWEaPuJ5qcFC5F3rHbiqD2pHGiyXEM7F4HvAFBkMaLxjbLbu6uKGUyfNw6DgsOQenRi7g==
+              type_code : 3
+              p_codes :
+               -
+                code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+                type : 14
+               -
+                 type : 276
+                 enabled : false
+               -
+                 type : 277
+                 enabled : false
+               -
+                 type : 278
+                 enabled : false
+      ]
+     type : 458752
+   -
+     name : Gen_COL_Date
+     procedure_id : 1462478150120329770
+     type_code : 12
+     code : |1-
+      procedure prive Gen_COL_Date(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaîne
+      
+      RENVOYER [
+           -
+             name : COL_[%stProto.sNom%]
+             identifier : [%GenProcIdent()%]
+             internal_properties : BwAAAAcAAAC0c4nwoAZnAS9nKxOuP4xeKudXGUhFMGhVw9oE4P6TN6Azre79LHCcs8OzwT8jVYQo0sfhv/V5AyLfQzVfMR7hjbr4Wo3VAUHpbvvZ/iDQmfebhoE5HlbpEPpq4zeVnDyxUZQOocN4t3RRiwxSzE08Ops7VKG8dlK8mNhmuPw0EGmRSxndtWdo3j03gekk1dgDl6fbpDTF861fwE7iW7TS5gmKxA3VyeDUXZU=
+             type : 2
+             content :
+              internal_properties : BwAAAAcAAADgGQKQ18tQY+QBoBjlQJu9t+lr2JQshw6Q02Xfdg5rsfbqIOLpHOkIRNogF37ZjQjVhFeUCH0XoV/CJDw0+t5cgpfh5j6J/GjreD/UXnIu+axljA+Ay/dgw5Gbdg/L+nmTr5JiwgJQ0T09K8qeEYvvWTYAgq/ty4W2nG+kKG5w/1RZgVxOj7N1vYV9GZZhYRqKiYfvJyCtVuPwXLcQFj5W5L93GyvBjLe74ywf0iZwkPHtJ4vAr6waEGqoHA6veM2yJWLUTSG819aPB/9NJ0vi++1gUkmpQpJ2g6nYGrz8G/fWLKWUcRm5sIxAz8uxTpfLejOhU6M+WGhNlBUd7v0VJOjeYYnm90WTN8AjqXrc0Op0FIl5WARL7nr/TApYDp1qdOef9FJodp7W8wm18UpcJ+DtKlPzouvSJ3jNJe05hBn5m/tAyc0gDZlr6rkjFnoZXAR4B6jGU/4rziB6j0AmLiSpwRDvdnNMGAv85vWXbAnr4jL5g/MYMvNX5qDXFQQwFnQwpsvlBrEf2mcIZWvyYFUb1stgk7poWBWfAGOiR3zsdIJgC6TmJUOp6GFjKKgbjpx6mR47GZon/Xeso7cKhnPWqmFV9K8yZ/NR+YnYJxzMOf0LZhZm30wMfMU8EntsWG326N7uI5KzolAs0ZRs+nBy2tq7X9u1CSGLSXq5WFwwMQe/baOql/4W+R8/yCgX4T3Zs02zbrc5bhuHbp8waC6QhEl8fxjhtk5ghV0sOJMGCVIGiOz/a100os6fXp1ZEUthnhGviUmrhXS2MNRNU+aY6VSIYs4FW0+OlklXumQtYidv1X0CyXrQgQf1sA1pf3tor8goaFCMGuw/Ppofx/UU9enEnkoNR3tYEas3vbsVQlNAAFMkBFjdLqEWrbRGLEF7vw==
+              properties : {}
+              type : 2
+             code_elements :
+              internal_properties : BwAAAAcAAABDVpZ1cjcnzPzPblaShP5aL99s5Qhl0o9YBYl0QehsgpIEJ+Y4B2pzSNtFFGAE/UAvhDvDI6l0BfrmaOxlGt9Qa6F8bNaaikSTm3JBvOs=
+              type_code : 3
+              p_codes :
+               -
+                code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+                type : 14
+               -
+                 type : 276
+                 enabled : false
+               -
+                 type : 277
+                 enabled : false
+               -
+                 type : 278
+                 enabled : false
+      ]
+     type : 458752
+   -
+     name : Gen_COL_Heure
+     procedure_id : 1462478163005300116
+     type_code : 12
+     code : |1-
+      procedure prive Gen_COL_Heure(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaîne
+      
+      RENVOYER [
+           -
+             name : COL_[%stProto.sNom%]
+             identifier : [%GenProcIdent()%]
+             internal_properties : BwAAAAcAAACwh/C+v732UTya7O1isr5pt/HyWF8rVEWQPibbug8nR4GmgUIaLYubwkmsjmGHO75J9S2G4luU8KF0/uDxjQnrHC6BRxrXZZY0DNXX9BjX4FcH9C8De5P8L8mnOIo2jcuBgFk9IL5aDwuoZAV/6A/HsNDOZidPXaqT6RxYJB+gqb0UC4OWnG1yGA==
+             type : 2
+             content :
+              internal_properties : BwAAAAcAAADaPQRb9fl78u2Ax5SqyVkWpOzA70sRQipc5SOTQGe7T0GoUG0cohekMd2w+sHcKZAzMdqJzh9z6NW/ZOP+zkjiCoSqbqTc3QR+FQpNx0P3cXkNZklJJqRjt1NkNtOigsSF4MM9X4oT8xA5faBJFRLw3wHtfRi2E2HieZdi7r01gjZO1OsVPwoDxXTlrF6tIiUvsuJ/ZFXzEz8sYI/MIJOJZwGteKgJnR3IMGdf/B3+0BSU3nL+aDeoNV4H2FQNhe7iLCB85zJyvqyeiY8m9o36KH/K0sWf3kErQAnAHMVyA+mQc3uB5O/cKOd+h2qtnxw9489qSkiQOHdrK1i2cMB3Gx2l8ekSCBiFIbpThlVDqyHabL/M94ZeudEJiYjCUs/Zj/hyPyvottaYd7wupT/61aKRmFFeyFcuDOTM1bDu97WxwzIYBOIQvrHO+Kk51K8FOGCBnvrhnRgzzQM5nw0yMSCDxhsPZ/cchgSRvyU8dtb54j/WB76QboXKF7szWH5ZQBxdhycGhqXR09R/swwGSUcf+d7CPlQaUF6SE1k5i3/QYoFzkfsmcbm280r7RWg2gNxbjtRG+W71svr1O3RQIaeEQf5LLc2oC1yUyB8hv3GoD7xevD+m+x5lYeyoiSHv8vVrv+hFIfhj49WLOV34vfSUn98F6Du517AmzkiI2LPwd/ic8Xwyu1BD3iZhJUZOd13ALsN85CWdd9JYeEY4RYKKzegQTMRh1H1xnoP/3nL+Cwt3YAU31/P933GJycUEzcGOr80kl+9buB1x5EsLxI4mRLc2VWYZ4//tBar3YmE51BxzaUQ+6D2X9Nq9Q7TLmuH8ZAgrM1TxlrM/Z81hZGHhhjpCd7+rKrNL/J1PzwzYVZ1TumJuvAM5zv8lgfz/RuWe
+              properties : {}
+              type : 2
+             code_elements :
+              internal_properties : BwAAAAcAAAABlEJgHOsLvDDzIkC82MIrOZhHJ9lTEZKlQFMWFcr8J9DKvezCBmz48gX3gl4GPDF2rWye7SQqyF0IZCUNlhiP2lg/h8vv3xu0fFoDfik=
+              type_code : 3
+              p_codes :
+               -
+                code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+                type : 14
+               -
+                 type : 276
+                 enabled : false
+               -
+                 type : 277
+                 enabled : false
+               -
+                 type : 278
+                 enabled : false
+      ]
+     type : 458752
+   -
+     name : Gen_COL_Monetaire
+     procedure_id : 1462478171595302134
+     type_code : 12
+     code : |1+
+      procedure prive Gen_COL_Monetaire(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaîne
+      
+      RENVOYER [
+           -
+             name : COL_[%stProto.sNom%]
+             identifier : [%GenProcIdent()%]
+             internal_properties : BwAAAAcAAAAO+jFz5TETgJjSi7AwSmxKhchEy673c/vGaKumTagkWW0oef693U1MLBEu6qZzgtIFNNj2yIvzzyj6zkV86GOa8Kkero8XKUxwbbE8J4gcDneej6NaHAd6BLOsPBRbVcgMZZxbilHmMHvKd26FbZqdAON28I0NuMR/zKKJ2YQ1lI0xFhwEu+Kjdsr8DYUy
+             type : 2
+             content :
+              internal_properties : BwAAAAcAAACbq3Za4DSH3VfIvJWyGt4qsAq0G5KQR0/27IO8aEEiEcinbSvaOCODc9PVXZnKp9BmQnX0dIo11pvJhmLcEOSh70SKcYe8gu7PvxGScolQD6CSUmuRO4Xa70yWw/i5KQ5tLlzIHgd0qXpMMVo2tOMyWeBuXFfkqlvTXExupHb+cp323cCQ2cKMXK1rH3pxydlEIu/97icj3EOjg0Vuieiy5wGOlN97Vb6pTLvim6ZXgmGApT8MR+ondY7DJHuS+poeUqG5difl3PLZQDb7Fys2BVpAOl+hOjO+Oa2IQ0VpHEI8YDv/paup1IVjuNi2Z24SuIQ7BC4nNkYKu0iyyHGWJ39nrkO1An3Yje8ssxCeNX/K/EeFUu5y4f1+fxjUkEvF6eOlqXhlifX3UV0s8REgUCthZZ8Hb0L6Q+S2w34vAJha9tpliF9EXr0qgt7mJm0LGiX83gUVGyU9Wpxtj+rS51uQB49mmzW9oBG8000BZPjor+K0Htw0gXcxjqGxUbg3AylcT5Jq4CbrAO8j689efSZMbsBb3GytaPsFPwHG4QVPd0wvSMuwaM+3yriR7M6uZaNCXAty5w8Du80J81V6u6wX/M42H0VhLfMX0mEWV48vDG8WSa/MDuQeUmSMKHW3kV7W2ZH/1R0Fmg473QJme8e5CgUk4m9eJ50lkNqXNN/lth/SiDzkTrCuWWjzGk6qAm69eirCGIhDMhd8SN98e5chqHq5NmBc9qRgFs881Ly5nCzrcQ//XCck4OcfPHVqvqChE7TgXbBpoU6T3kRP2usFeSeBxfotXWv47zuP+Kl+E9Pi1FrQiOKqifDjuO4/rYkGopvxlla6f3znNT+UmPdzkV4traocDa7Q2u0l/VXb9EVm07PZsw==
+              properties : {}
+              type : 2
+             code_elements :
+              internal_properties : BwAAAAcAAABxOejscmgnaEWEaPuJ5qcFC5F3rHbiqD2pHGiyXEM7F4HvAFBkMaLxjbLbu6uKGUyfNw6DgsOQenRi7g==
+              type_code : 3
+              p_codes :
+               -
+                code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+                type : 14
+               -
+                 type : 276
+                 enabled : false
+               -
+                 type : 277
+                 enabled : false
+               -
+                 type : 278
+                 enabled : false
+      ]
+      
+     type : 458752
+   -
+     name : Gen_Proc_Actualise
+     procedure_id : 1462497928446580900
+     type_code : 12
+     code : |1+
+      procedure prive Gen_Proc_Actualise()<metier> : chaine
+      
+      
+      renvoyer [
+         -
+           name : Actualise
+           procedure_id : [%:GenProcIdent()%]
+           type_code : 14
+           code : |1-
+            // Résumé : <indiquez ici ce que fait la procédure>
+            // Syntaxe :
+            // Actualise ()
+            //
+            // Paramètres :
+            //	Aucun
+            // Valeur de retour :
+            // 	Aucune
+            //
+            // Exemple :
+            // <Indiquez ici un exemple d'utilisation>
+            //
+            procédure Actualise(nIdSel_p est un entier = 0):vide
+            
+            oTmp est un [%:m_oClasseGen.sNomClasseGen()%] dynamique
+            nLigne			est un entier
+            nMemoLigneSel	est un entier
+            
+            [%:m_sNomChampsTbl%]..AffichageActif = faux
+            
+            TableSupprimeTout([%:m_sNomChampsTbl%])
+            
+            pour tout ELEMENT oTmp de [%:m_sNomColGlobale%].aItems()
+            	nLigne = TableAjoute([%:m_sNomChampsTbl%])
+            	
+            	si oTmp.ZF_Get_IdUnique() = nIdSel_p ALORS
+            		nMemoLigneSel = nLigne
+            	FIN
+            	
+      [%:sIndentSpace(:m_sChargementTbl, 6)%]
+            FIN
+            
+            si nMemoLigneSel > 0 ALORS
+            	TableSelectPlus(TBL_Usr,nMemoLigneSel)
+            FIN
+            
+            [%:m_sNomChampsTbl%]..AffichageActif = vrai
+           type : 458752
+      ]
+      
+     type : 458752
+   -
+     name : Gen_btns_action_Ajout
+     procedure_id : 1462972569519617792
+     type_code : 12
+     code : |1-
+      procedure prive Gen_btns_action_Ajout():chaine
+      
+      
+      oTmpFic est un ClZF_GenFenFic(:m_oClasseGen)
+      
+      
+      renvoyer [
+      nLigne est un entier
+      oUsr est un ClDbUsr
+      nLigne = Ouvre([%oTmpFic.sNomFen()%], oUsr)
+      SI nLigne <> 0 ALORS
+      [%TAB%]Actualise(nLigne)
+      FIN
+      ]
+     type : 458752
+   -
+     name : Gen_btns_action_Modif
+     procedure_id : 1462973278189321096
+     type_code : 12
+     code : |1+
+      procedure prive Gen_btns_action_Modif():chaine
+      
+      
+      oTmpFic est un ClZF_GenFenFic(:m_oClasseGen)
+      
+      RENVOYER [
+      nLigne est un entier
+      
+      SI TableOccurrence([%:m_sNomChampsTbl%]) > 0 ALORS
+      [%TAB%]oDb est un [%:m_oClasseGen.sNomClasseGen()%]([%:m_sNomChampsTbl%].COL_ID)
+      [%TAB%]nLigne = Ouvre([%oTmpFic.sNomFen()%], oDb)
+      [%TAB%]SI nLigne <> 0 ALORS
+      [%TAB%][%TAB%]Actualise(nLigne)
+      [%TAB%]FIN
+      FIN
+      ]
+     type : 458752
+   -
+     name : Gen_btns_action_Supp
+     procedure_id : 1462973334023908600
+     type_code : 12
+     code : |1+
+      procedure prive Gen_btns_action_Supp():chaine
+      
+      RENVOYER [
+      SI TableOccurrence([%:m_sNomChampsTbl%]) > 0 ALORS
+      [%TAB%]SI OuiNon(Non, "Confirmez-vous la suppression de l’enregistrement ?") ALORS
+      [%TAB%][%TAB%]oDb est un [%:m_oClasseGen.sNomClasseGen()%]([%:m_sNomChampsTbl%].COL_ID)
+      [%TAB%][%TAB%]QUAND EXCEPTION DANS
+      [%TAB%][%TAB%][%TAB%]oDb.ZF_Supprimer()
+      [%TAB%][%TAB%][%TAB%]oDb.ZF_Enregistre()
+      [%TAB%][%TAB%]FAIRE
+      [%TAB%][%TAB%][%TAB%]Erreur(ExceptionInfo(errMessage))
+      [%TAB%][%TAB%]SINON
+      [%TAB%][%TAB%][%TAB%]TableSupprime([%:m_sNomChampsTbl%])
+      [%TAB%][%TAB%]FIN
+      [%TAB%]FIN
+      FIN
+      ]
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x144bb1040371a7e8
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

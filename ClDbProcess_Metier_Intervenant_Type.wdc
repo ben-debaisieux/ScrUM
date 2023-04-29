@@ -1,0 +1,162 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbProcess_Metier_Intervenant_Type
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e5c13ad0077e
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbProcess_Metier_Intervenant_Type est une Classe
+      	hérite de ClZF_ObjDbLs
+      
+      PRIVÉ
+      	m_sLibelle	est un chaîne	<MAPPING=Libelle>
+      	oColProcess_Metier_Intervenant_IDScr_Process_Metier_Intervenant_Type est un ClColProcess_Metier_Intervenant
+      
+      GLOBAL
+      PUBLIC
+      	// mg_oEx_Exception1	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception2	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception3	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception4	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception5	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception6	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception7	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception8	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception9	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception10	est un ClZF_Exception dynamique
+      FIN
+      
+      // mg_oEx_Exception1	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception2	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception3	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception4	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception5	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception6	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception7	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception8	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception9	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
+      
+      constante
+      	cstTypeInter_Action_manuelle			= 1
+      	cstTypeInter_Action_par_intervenant		= 2
+      	cstTypeInter_Action_automatique			= 3
+      	cstTypeInter_Attente					= 4
+      	cstTypeInter_Sous_process				= 5
+      	cstTypeInter_Condition					= 6
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 815568031582074
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      Ancêtre.Constructeur(Scr_Process_Metier_Intervenant_Type..Nom, Scr_Process_Metier_Intervenant_Type.IDScr_Process_Metier_Intervenant_Type..Nom,nID_P)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 815568031582075
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 815568031582076
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbProcess_Metier_Intervenant_Type
+      
+      sClasse est une chaîne = ClDbProcess_Metier_Intervenant_Type
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 815568031582077
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉ init_ObjBD()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+     type : 458752
+   -
+     name : Init_Data
+     procedure_id : 1461098254470903373
+     type_code : 12
+     code : |1+
+      procedure globale Init_Data()
+      
+      
+      si pas hrecherche(Scr_Process_Metier_Intervenant_Type, IDScr_Process_Metier_Intervenant_Type, cstTypeInter_Action_manuelle) alors
+      	Scr_Process_Metier_Intervenant_Type.IDScr_Process_Metier_Intervenant_Type	= cstTypeInter_Action_manuelle
+      	Scr_Process_Metier_Intervenant_Type.Libelle									= "Action manuelle"
+      	HAjoute(Scr_Process_Metier_Intervenant_Type,hFixeIdAuto)
+      FIN
+      si pas hrecherche(Scr_Process_Metier_Intervenant_Type, IDScr_Process_Metier_Intervenant_Type, cstTypeInter_Action_par_intervenant) ALORS
+      	Scr_Process_Metier_Intervenant_Type.IDScr_Process_Metier_Intervenant_Type	= cstTypeInter_Action_par_intervenant
+      	Scr_Process_Metier_Intervenant_Type.Libelle									= "Action par un intervenant"
+      	HAjoute(Scr_Process_Metier_Intervenant_Type,hFixeIdAuto)
+      FIN
+      si pas hrecherche(Scr_Process_Metier_Intervenant_Type, IDScr_Process_Metier_Intervenant_Type, cstTypeInter_Action_automatique) ALORS
+      	Scr_Process_Metier_Intervenant_Type.IDScr_Process_Metier_Intervenant_Type	= cstTypeInter_Action_automatique
+      	Scr_Process_Metier_Intervenant_Type.Libelle									= "Action automatique"
+      	HAjoute(Scr_Process_Metier_Intervenant_Type,hFixeIdAuto)
+      FIN
+      si pas hrecherche(Scr_Process_Metier_Intervenant_Type, IDScr_Process_Metier_Intervenant_Type, cstTypeInter_Attente) ALORS
+      	Scr_Process_Metier_Intervenant_Type.IDScr_Process_Metier_Intervenant_Type	= cstTypeInter_Attente
+      	Scr_Process_Metier_Intervenant_Type.Libelle									= "Attente"
+      	HAjoute(Scr_Process_Metier_Intervenant_Type,hFixeIdAuto)
+      FIN
+      si pas hrecherche(Scr_Process_Metier_Intervenant_Type, IDScr_Process_Metier_Intervenant_Type, cstTypeInter_Sous_process) ALORS
+      	Scr_Process_Metier_Intervenant_Type.IDScr_Process_Metier_Intervenant_Type	= cstTypeInter_Sous_process
+      	Scr_Process_Metier_Intervenant_Type.Libelle									= "Sous prpcess"
+      	HAjoute(Scr_Process_Metier_Intervenant_Type,hFixeIdAuto)
+      FIN
+      si pas hrecherche(Scr_Process_Metier_Intervenant_Type, IDScr_Process_Metier_Intervenant_Type, cstTypeInter_Condition) ALORS
+      	Scr_Process_Metier_Intervenant_Type.IDScr_Process_Metier_Intervenant_Type	= cstTypeInter_Condition
+      	Scr_Process_Metier_Intervenant_Type.Libelle									= "Condition"
+      	HAjoute(Scr_Process_Metier_Intervenant_Type,hFixeIdAuto)
+      fin
+     type : 458752
+  properties :
+   -
+     name : p_sLibelle
+     identifier : 0x2e5c13ad00779
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_sLibelle() : chaîne
+         //Propriétés de m_sLibelle
+         
+         RENVOYER :m_sLibelle
+        type : 1966080
+      -
+        code : |1-
+         
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e5c13ad0077f
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

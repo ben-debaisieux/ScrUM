@@ -1,0 +1,133 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColMessage
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e56cd1bea460
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClColMessage est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVÉ
+      	m_aoMessage est un tableau ClDbMessage dynamique
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 815205491582049
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 815205491582050
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 815205491582051
+     type_code : 12
+     code : |1+
+      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem(ClDbMessage.GetObj(nId_P))
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 815205491582052
+     type_code : 12
+     code : |1+
+      PROCÉDURE aItems()<métier>:tableau de ClDbMessage dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :m_aoMessage
+     type : 458752
+   -
+     name : Init
+     procedure_id : 815205491582053
+     type_code : 12
+     code : |1+
+      PROCÉDURE Init()<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:m_aoMessage)
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 815205491582054
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un ClDbMessage(ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Message)
+     type : 458752
+   -
+     name : aoListeMessage
+     procedure_id : 1458737474445914034
+     type_code : 12
+     code : |1+
+      procédure globale aoListeMessage(oEntite_P est un ClZF_ObjDB dynamique):clcolmessage
+      
+      oRetour	est un ClColMessage <- oEntite_P.ZF_GetCol(ClDbMessage.cst_col_messages)
+      sReq		est une chaîne
+      sRubFiltre	est une chaîne
+      
+      
+      si pas oRetour.p_bEstCharge alors
+      	selon oEntite_P..classe
+      		cas ClDbTache
+      			sRubFiltre = Scr_Message.IDScr_Tache..nom
+      		cas ClDbUserStory
+      			sRubFiltre = Scr_Message.IDScr_UserStory..Nom
+      		cas ClDbUsr
+      			sRubFiltre = Scr_Message.IDScr_Usr..Nom
+      		cas ClDbMessage
+      			sRubFiltre = Scr_Message.IDScr_Message_Parent..Nom
+      		cas ClDbCritereAccept
+      			sRubFiltre = Scr_Message.IDScr_CritereAccept..Nom
+      		AUTRE CAS
+      			ExceptionDéclenche(1, ChaîneConstruit("L'entité %1 ne permet pas la gestion des messages.", oEntite_P..Classe))
+      	FIN
+      	
+      	//Récupération des messages de l'entité.
+      	sReq = ChaîneConstruit([
+      		SELECT
+      			Scr_Message.*
+      			
+      		from Scr_Message
+      		
+      		where Scr_Message.%2 = %1
+      			AND Scr_Message.Top_Visible = 1
+      		
+      		ORDER BY Scr_Message.DteCreation
+      	], oEntite_P.ZF_Get_IdUnique(), sRubFiltre)
+      	oRetour.ZF_LoadSQL(sReq)
+      FIN
+      
+      RENVOYER oRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e56cd1bea467
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -44,8 +44,8 @@ window :
          -
            code : |1-
             si CBO_Projet <> 0 alors
-            	COL_Graphes.InfoProjet(GRF_AvancementPrj..NomComplet, ClProjet.GetObj(CBO_Projet))
-            	ChargeEpics(ClProjet.GetObj(CBO_Projet))
+            	COL_Graphes.InfoProjet(GRF_AvancementPrj..NomComplet, ClDbProjet.GetObj(CBO_Projet))
+            	ChargeEpics(ClDbProjet.GetObj(CBO_Projet))
             fin
            type : 33
          -
@@ -86,14 +86,14 @@ window :
            enabled : false
          -
            code : |1-
-            oEpic est un ClEpic dynamique
+            oEpic est un ClDbEpic dynamique
             
             si CBO_Groupement <> cst_cbo_tous alors
-            	oEpic = ClEpic.GetObj(CBO_Groupement)
+            	oEpic = ClDbEpic.GetObj(CBO_Groupement)
             fin
             
             SI CBO_Projet <> 0 ALORS
-            	COL_Graphes.InfoProjet(GRF_AvancementPrj..NomComplet, ClProjet.GetObj(CBO_Projet), oEpic)
+            	COL_Graphes.InfoProjet(GRF_AvancementPrj..NomComplet, ClDbProjet.GetObj(CBO_Projet), oEpic)
             FIN
            type : 33
          -
@@ -115,11 +115,11 @@ window :
          -
            code : |1+
             SI CBO_Projet <> 0 ALORS
-            	oPrj est un ClProjet <- ClProjet.GetObj(CBO_Projet)
-            	oEpic est un ClEpic dynamique
+            	oPrj est un ClDbProjet <- ClDbProjet.GetObj(CBO_Projet)
+            	oEpic est un ClDbEpic dynamique
             	
             	si CBO_Groupement..ValeurMémorisée <> cst_cbo_tous ALORS
-            		oEpic <- ClEpic.GetObj(CBO_Groupement..ValeurMémorisée)
+            		oEpic <- ClDbEpic.GetObj(CBO_Groupement..ValeurMémorisée)
             	FIN
             	ouvre(FEN_User_Story_Liste_v2,oPrj, oEpic)
             	COL_Graphes.InfoProjet(GRF_AvancementPrj..NomComplet, oPrj, oEpic)
@@ -208,14 +208,14 @@ window :
      code : |1+
       PROCÉDURE Actualise()
       
-      oPrjTmp		est un ClProjet dynamique
+      oPrjTmp		est un ClDbProjet dynamique
       aoProjets	est un ClColProjet
       
       
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique ALORS
-      	aoProjets <- ClProjet.aoListeProjets(Faux)
+      	aoProjets <- ClColProjet.aoListeProjets(Faux)
       SINON
-      	aoProjets <- ClProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
+      	aoProjets <- ClColProjet.aoListeProjetsDeUsr(goApp.m_oUsrCnx)
       FIN
       
       
@@ -243,12 +243,12 @@ window :
      name : ChargeEpics
      procedure_id : 1323350527103349929
      type_code : 14
-     code : |1+
-      procédure ChargeEpics(oPrj_P est un ClProjet)
+     code : |1-
+      procédure ChargeEpics(oPrj_P est un ClDbProjet)
       
       asComplément est un tableau associatif de chaînes
       asComplément[cst_cbo_tous] = "<Tous>"
-      oPrj_P.Combo_Charge_Epic(MaFenêtre..Nom, CBO_Groupement..Nom, *, asComplément)
+      ClColEpic.Combo_Charge_from_projet(MaFenêtre..Nom, CBO_Groupement..Nom, oPrj_P, *, asComplément)
      type : 458752
   procedure_templates :
    -

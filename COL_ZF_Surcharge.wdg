@@ -1,0 +1,137 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : COL_ZF_Surcharge
+ major_version : 27
+ minor_version : 0
+ type : 7
+ description : ""
+ subtype : 0
+procedure_set :
+ identifier : 0x1406f9fa2da6f062
+ internal_properties : BwAAAAcAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ code_elements :
+  type_code : 31
+  p_codes :
+   -
+     code : |1+
+      //pat_ODb est une interface
+      //	propriete p_FicBd : Enregistrement //<lecture>
+      //fin
+      
+     type : 720896
+  procedures :
+   -
+     name : HLitRecherche
+     internal_properties : BwAAAAcAAAB/WFusTpZezWxuxthecdcCRyfGgWEr+fO4LPbrs8/5oc8MOGakd+x9kc1MGQq3ISF4MSarA+faFtw2ibpFV980V6txrHYk3n/H3o7bUqSpJVnBDB8/M7r9oSTJa6uNCTCEHmHqZnxkwrtz2kMMl8J2vHeaiDToYPCwET1mgR2EhFh6tJ2w/xsSAJdbceaV8awUYAZtHYQvP64Vmc4Cyt9c59As1IPAgHVtnYqWv/pRCdDm5qcn0MBodIgAfKigdZNk7A==
+     procedure_id : 1443115699486022153
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //HLitRecherche (<nomtable>, <cleRech>, <valeur> [, <options>])
+      //
+      // Paramètres :
+      //	nomtable : <indiquez ici le rôle de nomtable>
+      //	cleRech : <indiquez ici le rôle de cleRech>
+      //	valeur : <indiquez ici le rôle de valeur>
+      // 	options (valeur par défaut=0) : < indiquez ici le rôle de options >
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure HLitRecherche(nomtable, cleRech, valeur, options = 0)
+      
+      //Métrique : On compte les recherches faites
+      goapp.m_aMetriques[1].nNbRecherches++
+      
+      si options = 0 ALORS
+      	renvoyer WL.HLitRecherche(nomtable, cleRech,valeur,hIdentique+hLimiteParcours)
+      sinon
+      	RENVOYER WL.HLitRecherche(nomtable, cleRech,valeur,options)
+      FIN
+      
+     type : 458752
+   -
+     name : ExceptionDéclenche
+     procedure_id : 1443115888466002964
+     type_code : 15
+     code : |1+
+      procédure ExceptionDéclenche(nNum_p Est un entier, sMessage_P est une chaine):vide
+      
+      si pas EnModeTestAutomatique() alors stop
+      wl.ExceptionDéclenche(nNum_p, sMessage_P)
+     type : 458752
+   -
+     name : ChaineVersTableauAsso
+     procedure_id : 1447394513425255388
+     type_code : 15
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ChaineVersTableauAsso (<sTexte_p> est chaîne [, <sSep_p> est chaîne])
+      //
+      // Paramètres :
+      //	sTexte_p (chaîne ANSI) : <indiquez ici le rôle de sTexte_p>
+      // 	sSep_p (chaîne ANSI - valeur par défaut=";") : <indiquez ici le rôle de sSep_p>
+      
+      // Valeur de retour :
+      // 	tableau associatif (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ChaineVersTableauAsso(local sTexte_p est une chaîne, sSep_p est une chaîne = ";"):tableau associatif de chaînes
+      
+      aRetour est un tableau associatif de chaine
+      aTmp est un tableau de chaînes
+      sLigne est une chaîne
+      
+      ChaîneVersTableau(sTexte_p,aTmp,sSep_p)
+      pour tout sLigne de aTmp
+      	aRetour[ExtraitChaîne(sLigne, 1, "=")] = ExtraitChaîne(sLigne, 2, "=")
+      FIN
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : HLitPremier
+     internal_properties : BwAAAAcAAAAqum59OTAMkan9badRAm2irDQMFMFe8+w0guYS2JCqFnbcY5vrfhKgZrm0OOKF1i7D6xZCJAEAyId0r9wsoR0/9Q9lTwgrL+D1w1N8bSo5AKRtbBu46gmgg9xGviqS+lfCxRFpNDJU52amoWkrqzcvEOnRkNF31/6mwfJuKjFx/d6cYy/DuGQe91fmv1GdXGzqDqDXWrv201qHf+LfbDwFFlzXKpDM/gxT1y5Iv/ZGnOYLcLoOJmofITV+ivkQ0Tot
+     procedure_id : 1448483866848615459
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //HLitPremier (<NomTable_P> [, <nOption_P> est entier])
+      //
+      // Paramètres :
+      // 	NomTable_P : <indiquez ici le rôle de NomTable_P>
+      // 	nOption_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nOption_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure HLitPremier(NomTable_P, nOption_P est un entier = 0)
+      
+      si nOption_P = 0 ALORS
+      	wl.HLitPremier(NomTable_P, hSansRafraîchir)
+      sinon
+      	WL.HLitPremier(NomTable_P, nOption_P)
+      FIN
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : COL_SansNom1
+resources :
+ string_res :
+  identifier : 0x1406f9f32da4d1af
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

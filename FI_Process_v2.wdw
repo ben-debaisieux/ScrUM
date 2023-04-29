@@ -122,8 +122,8 @@ window :
             //
             //
             //
-            //zpclProcess.p_oProjet = ClProjet.GetObj(1)
-            ////zpclProcess.m_oProjet <- allouer un ClProjet(1)
+            //zpclProcess.p_oProjet = ClDbProjet.GetObj(1)
+            ////zpclProcess.m_oProjet <- allouer un ClDbProjet(1)
             //zpclProcess.Enregistre()
             //zpclProcess.Affiche()
             //
@@ -151,7 +151,7 @@ window :
          PROCEDURE MaFenêtre()
          
          zoProcess est un ClDessine_Fen_Schem dynamique
-         zaEvtCall est un tableau dynamique de ClProcess_Metier_Intervenant.STR_CallBack
+         zaEvtCall est un tableau dynamique de CldbProcess_Metier_Intervenant.STR_CallBack
          zsNomFenInterne est une chaîne
          znPositionBoxCliqué est un entier
       -
@@ -372,7 +372,7 @@ window :
       //
       PROCEDURE CallBackTimer()
       
-      stTmp est un ClProcess_Metier_Intervenant.STR_CallBack
+      stTmp est un CldbProcess_Metier_Intervenant.STR_CallBack
       
       si Dimension(zaEvtCall) alors
       	
@@ -380,22 +380,22 @@ window :
       	TableauSupprime(zaEvtCall, 1)
       	
       	SELON stTmp.nTypeEvt
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicBox
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicBox
       			znPositionBoxCliqué = stTmp.nPos
       			OuvreMenuContextuel(MNU_Clic_Inter)
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicDroitBox
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicDroitBox
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicPrev
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicPrev
       			CallBack_Deplace(stTmp.nPos,  -1)
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicSuiv
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicSuiv
       			CallBack_Deplace(stTmp.nPos, 1)
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicUp
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicUp
       			CallBack_ChangeAxe(stTmp.nPos, -1)
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicDown
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicDown
       			CallBack_ChangeAxe(stTmp.nPos, 1)
       			
       		AUTRE CAS

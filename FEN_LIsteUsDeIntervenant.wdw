@@ -142,7 +142,7 @@ window :
          nIdUserStory est un entier = ouvre(FEN_Sel_UserStory)
          si nIdUserStory <> 0 ALORS
          	quand exception dans
-         		zoInter_P.AjouteUS(ClUserStory.GetObj(nIdUserStory))
+         		zoInter_P.AjouteUS(ClDbUserStory.GetObj(nIdUserStory))
          	FAIRE
          		erreur(ExceptionInfo(errMessage))
          	sinon
@@ -180,7 +180,7 @@ window :
          	si ouinon("Confirmez-vous le retrait de l'US ?") ALORS
          
          		QUAND EXCEPTION DANS
-         			zoInter_P.RetireUS(ClUserStory.GetObj(TBLH_SelUS.COL_IdUS))
+         			zoInter_P.RetireUS(ClDbUserStory.GetObj(TBLH_SelUS.COL_IdUS))
          		FAIRE
          			Erreur(ExceptionInfo(errMessage))
          		SINON
@@ -250,20 +250,20 @@ window :
       
       STR_Prj est une Structure
       	sProjet est une chaîne
-      	aoUS est un tableau de ClUserStory
+      	aoUS est un tableau de ClDbUserStory
       FIN
       
       aOProjet est un tableau associatif de STR_Prj
       stPrj_tmp est un STR_Prj
       
-      oUS est un ClUserStory dynamique
+      oUS est un ClDbUserStory dynamique
       nLigneParent est un entier
       nLigne est un entier
       nIdPrj est un entier
       
       
       //Parcourt de toutes les US
-      POUR TOUT ELEMENT oUS DE zoInter_P.aoUS_Associees()
+      POUR TOUT ELEMENT oUS DE zoInter_P.aoUS_Associees().aItems()
       	nIdPrj = oUS.p_oProjetParent.ZF_Get_IdUnique()
       	SI aOProjet[nIdPrj]..Vide ALORS
       		aOProjet[nIdPrj] = allouer un STR_Prj

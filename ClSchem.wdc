@@ -24,7 +24,7 @@ class :
       	m_aoInter est un tableau de ClSchem_Inter dynamique
       protege
       PRIVÉ
-      	m_oProjet est un objet ClProjet dynamique
+      	m_oProjet est un objet ClDbProjet dynamique
       FIN
      type : 131072
   procedures :
@@ -80,7 +80,7 @@ class :
       		Scr_Process_Metier_Axe.Ordre
       	
       ], :ZF_Get_IdUnique())
-      goapp.RSQL(sdInterDeProcess,sReq)
+      ::mg_oApp.RSQL(sdInterDeProcess,sReq)
       POUR TOUT sdInterDeProcess
       	oAxeTmp <- ClSchem_Axe.GetObj(sdInterDeProcess.IDScr_Process_Metier_Axe)
              
@@ -113,7 +113,7 @@ class :
       	
       ], :ZF_Get_IdUnique())
       
-      goapp.RSQL(sdInterDeProcess,sReq)
+      ::mg_oApp.RSQL(sdInterDeProcess,sReq)
       
       POUR TOUT sdInterDeProcess
       	
@@ -162,7 +162,8 @@ class :
       //
       //	oSchem_P (ClSchem) : <indiquez ici le rôle de oSchem_P>
       PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClSchem
-      RENVOYER ClZF_ObjDB.ZF_GetObj("ClSchem", nIdUnique_P)
+      sClasse est une chaine = ClSchem
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
      type : 458752
    -
      name : nNbreInter
@@ -205,13 +206,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_oProjet() : ClProjet
+         procédure publique p_oProjet() : ClDbProjet
          
          renvoyer :m_oProjet
         type : 1966080
       -
         code : |1-
-         procédure publique p_oProjet(oValeur est ClProjet)
+         procédure publique p_oProjet(oValeur est ClDbProjet)
          
          :m_oProjet <- oValeur
         type : 2031616

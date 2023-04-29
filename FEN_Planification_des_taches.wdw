@@ -36,46 +36,17 @@ window :
       -
         code : |1+
          
-         //nIndiceSprintActuel est un entier
-         //nNumSprintActuel est un entier = goApp.m_nNumeroDuSprintActuel
-         //
-         //sNomCboComplet est une chaîne = "CBO_Sprint"
-         //
-         //ListeSupprimeTout(CBO_Sprint)
-         //
-         //sdSource_Liste_Sprint est une Source de Données
-         //sReq_Liste_Sprint est une chaîne
-         //
-         //sReq_Liste_Sprint = [
-         //	SELECT
-         //		Scr_Sprint.Num_Sprint
-         //	
-         //	FROM Scr_Sprint
-         //	
-         //	ORDER BY Scr_Sprint.Num_Sprint DESC
-         //	
-         //]
-         //
-         //SI goApp.Rsql(sdSource_Liste_Sprint,sReq_Liste_Sprint) ALORS
-         //	POUR TOUT sdSource_Liste_Sprint
-         //		ListeAjoute(CBO_Sprint, "Sprint " + sdSource_Liste_Sprint.Num_Sprint+gLien(sdSource_Liste_Sprint.Num_Sprint))
-         //	FIN
-         //FIN
-         //
-         //HAnnuleDéclaration(sdSource_Liste_Sprint)
-         
-         oSpr est un ClSprint dynamique
-         aoSpr est un tableau de ClSprint
+         oSpr est un ClDbSprint dynamique
+         oLstSpr est un ClcolSprint
          nInd est un entier
          nIndiceSprintActuel est un entier
          
          
          
          ListeSupprimeTout(CBO_Sprint)
-         
-         aoSpr = ClSprint.aoListeSprint().aItems()
-         POUR nInd = aoSpr..Occurrence a 1 pas -1
-         	oSpr <- aoSpr[nInd]
+         oLstSpr = ClColSprint.aoListeSprint()
+         POUR nInd = oLstSpr.ZF_nTaille() a 1 pas -1
+         	oSpr <- oLstSpr.oItem(nInd)
          	ListeAjoute(CBO_Sprint, "Sprint " + oSpr.ZF_Get_IdUnique() + gLien(oSpr.ZF_Get_IdUnique()))
          FIN
          
@@ -168,14 +139,14 @@ window :
      p_codes :
       -
         code : |1-
-         eSelecteur est un ClTache.ETypeCharge
+         eSelecteur est un ClDbTache.ETypeCharge
          selon SEL_Production_Prevision
          	// Production
          	CAS "1"
-         		eSelecteur = ClTache.ETypeCharge.Charge_réelle
+         		eSelecteur = ClDbTache.ETypeCharge.Charge_réelle
          	// Prévisionnel
          	CAS "2"
-         		eSelecteur = ClTache.ETypeCharge.Charge_prévisionelle
+         		eSelecteur = ClDbTache.ETypeCharge.Charge_prévisionelle
          FIN
          
          actualise(CBO_Sprint, SAI_Nombre_de_sprints, eSelecteur, SAI_Impond)
@@ -233,7 +204,7 @@ window :
   -
     name : GRF_Planification
     identifier : 0x2f9ddb6985153eb6
-    internal_properties : BwAAAAcAAAAyRJvN1Ax7xXhNcEbvkmLS9nJCaO6GqY6uoHMZ6selYTEZLQvJul1FJqALhr/rObz8DVpwpEVFx5y+0iQM7UOsIWBYcV8JQiN689UXoQLE/dWoK4a/TaF1DX+RYXZ2E3nuElcZjR+ndpn2cSeVsP4xgldpMtnR0gJAPfJQuUqwe5ruGQdCcIEeKwmFnNjYt2kkgVVA/nV4tXtZCFvs+G8BAYnZf+3R13/ZRZGoapGeVGsphdRlIvKhUxJtmse6QmPRtdcYfTeCjavvsA9E4DCqITka298NAkKjXTlBPI80TboRWaOmh1HX7CBmPSvlc6uJ3HxCUzQ9GjS9Du55sMGLMcitndTw2Mi+dwh5AbXQpXgcB7IY2iUHiAgFZCBrtA9hKC2CTQ+Tvx1+ocdu7Z1wtwkyrIBw0idQ6Z9wLQE0HltPpr6jWgJJE+qTOog1mfW1nJcUPKMbKxisKW0GjI7CFcEcEQmGRILPUSM1yDvEOu8LJ3RLXBRO+VBZSbHl/8uOTGlqh5VDd8gE38lbToozZfHkELx06ZJf6xWDHmLEcE1H+c1AOjzAdpMDSVCCHsbwMNqSClIlDtjEEfWK2sKJCDWXXK86/k3Wl9UMb2r7madY3CYsig/JhHZqbh+IQ6VWiqlHSoOvJUDYyWL2jCNpLtD57HRuxKDSpz7E3BxW8r2dPk2AWJOkGVFi2oagj67Iz09CPzq6PdM9MLUyr4Fci90tAKHAVCy0ceVuGHF7PwFvtOeccN02EelKx0bptQzlhbOz/KQwYSvlSWjppjE9fgYUL3RWoKJ8QLYaLyOp+4IHygfUV62odXoGg49pL6tuOz3UdCDM4KlbFeU5F8S9kateJztgy9NbCMyTvDpLRwe599tMpMCLwJibNFNo+EBBE5e/uz/NwRv3zm8DVqzIoHmcd652B8rkeAe3LHw2IejZ6HvskqRgy7RX4gDRAKA8q88MvI9bFA/ZVaDDPIxQCqsOZ7AiQ9d1b4QwtumidW+m1Bt7o0yerTbSPh0KxEfxyu6ONV568AAeHHuHlMW8D/Yc+fx9F6owqGBLJKOwxalUn2ssjyigYKxAjXVwjFnCIyfGWllfzpiLnz/cJ+Xp6bgsxbw2QEsnI2wlCoV1AT/tUzSW6NEnbvATAoJt1+NJ/2camVEbdL/Sgz07karglAY5ubmxYc9Asczrr+YVByNSKYNwIa1qqrJBu9d1CxeEXWceKwLiiKNJvUHq1xhAQvGAhtnOxOAK9kk+GPp6ZwM+9pcnft+17L/kHRC3pip8Vahgj80SMCHWgZs+lCW21moy8SQnDyP9BXrTkCcYWLNYuh+75dcMwVtAWizlm5xh/mIUl0VB3e/1QXdOlIXISuH3Rqnqq1u8SvoViZ5/4jPDH1yaT06jpX8uE1noFFoM6bo3mtsr79ZIyxpAEzBNKzZBeipFX6+d/rrIXWD3UsFkwUqJafIn6undUNaXwYFzEC7wr5zPCa1UDuYlgEo3R5XqEcvfRwtHzZvwMRowYRAZJQ==
+    internal_properties : BwAAAAcAAAApHi2MPG1xpK2wqrmoVg3VqkuOPlOf88q95AVnLA2bM48ZphziYuBvkEMR0v3GMZYorXMxXluIwsyFvBMsRHd1si+/vRCqhXZHfkx0hU01ps6TEndQLiys+Vv1Af8sKw6YDUIIDDBbSPRTt4kQgx/U31/aIVzzuP+l4xfeXKzefhwzDsSahnFReie3gq+1cWfDfZKRPuUqvJdU+tviBI0JxxW9luKdwFxQrffwXulvIWv2StC92E1tbNjAIABQ7wGHCQ/yE1MV7DaNQS+QleKhzky0/IcTScGpAPqulvqACoi12CE7zmxQIZk3lZfFedQ3I/CHe5XOoE72QrM83v7PVM+ax+V2ttr5+fRCugkRa2sNM2dwXHIE7UjOqFKiyfbd+Uo7dO4IdA10tJg5mNfaQiaX7nEX4krPAdSwIvoABa9ebRE4Kb/6tHwCAnvqqey/p6iwKUlsipqNK3nfKceAL7VWomcqb+HhDtVkcLvAMj0Y0Eshp0vHBA89QWMpOWOUsCFsFyDCFiktboZpxwTxCOk7KYdD1oCzu1EG71TbjdQMbSUN7bNgpPz5b6aqRU2xU9Fy94s2iZhQ7VTZZfIzUeRYaIIiiWnRxVHKRI4BL4i/Lt0bAR72twwtCwtafOV4KMQO034LgEL1WVGJtoac4374+YqC7E1M3440HW86xq/W4KmEjRgYx7ZKvNUdr9gFPUbiBWH80chg1hHyPVvkbzCZGZFX2iklR//g62DUvPnFy2ha21OVUwqUEBWlg+1F5XzLzcK/FC01/PO10qBeML3DpSXCIV80PRboNAvnucdiMUTtNDA6osNC+NPRiBcFVt7s5I6opNKursk8/wX5S2UssZUtSZoV4MS0MrhJiAhz+/nMmBzWLNVc5o7rLZzfEnjqR1wzP+81Zr3/Gtpj0YV3xO8rbxaWflJHIoswn1mKRHDb7hMZ9zG5cY8Oxv7VDBUlof/+rRCK3EI7HuPP0mqwQINyBWjG4MW51kYjRlnwGOxn1TrdNuLalQu5JRIaOTuk6o4RFSIfZNLKXYSn5sG4eGm/y1UDPGhFkDIDL3GhwhF6GKH2a8k73ASYZ251jk4e2LfaSvyuddtDJdTWjc9zoEVP5aXj7vbYmdItNY7rgxNAxRsjG1l1kOnnbI36LWJxmxSwgeD+gOtHj0MCsd4DSD65YJGouaIM/OIV8ZA29rlNP5V/lcsMDXMm+K3ITvPDD3djbvD09iI1rK6LzgzFbo7SiL1WyKs+K/iZixRFubfwL22Uf0+Vn2cvS0oGhZSID+lawcUyrrEbki3D8RlyXoF9T6Ila6JsNQGwXVFwGOXVCqIYegtEZRsdqFYg69SPCHovCi/HsKxyjj73+DhbeTpbrJNaVSf2AvmITNnjhKiXMQT/unHgRxUHBXna1ZfdZMd2ywv/PIJa+3LnwrsQnGkAOWYPsOqb/I/GrcL3cnJSmsUGJsmTTCoqqZCJudIDLp8S6XHlNodFqKNNiDoYahc7QoKgDwcW4uz+ACTzm7QEfHlXd0sc9G8fONDCARihcuxBE9lbMq4iuxwj
     properties :
      x : 6
      y : 41
@@ -336,7 +307,7 @@ window :
      code : |1-
       procédure Actualise(LOCAL znSprint est un entier, ...
       	LOCAL znNbSprint est un entier, ...
-      	LOCAL znSelecteur est un ClTache.ETypeCharge,...
+      	LOCAL znSelecteur est un ClDbTache.ETypeCharge,...
       	LOCAL nChargeReccurcive est un entier)
       		
       		
@@ -403,11 +374,11 @@ window :
       ////a faire : Déplacer dans la collection globale
       //
       //
-      //oPrj			est un ClProjet dynamique
+      //oPrj			est un ClDbProjet dynamique
       //oSprint			est un ClSprint dynamique
       //i,j				sont des entiers
       //nNumSprint		est un entier				= znSprint
-      //aTableauProjet	est un tableau de ClProjet	= ClProjet.aoProjets_sur_periode(nNumSprint, znNbSprint, znSelecteur)
+      //aTableauProjet	est un tableau de ClDbProjet	= ClDbProjet.aoProjets_sur_periode(nNumSprint, znNbSprint, znSelecteur)
       //nPoints			est un entier
       //
       //SELON znSelecteur

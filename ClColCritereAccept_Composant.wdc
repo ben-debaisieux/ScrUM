@@ -18,7 +18,7 @@ class :
       ClColCritereAccept_Composant est une Classe
       hérite de ClZF_ColObjDB
       PRIVÉ
-      m_aoCritereAccept_Composant est un tableau ClCritereAccept_Composant dynamique
+      m_aoCritereAccept_Composant est un tableau ClDbCritereAccept_Composant dynamique
       FIN
      type : 131072
   procedures :
@@ -43,14 +43,14 @@ class :
      code : |1+
       PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClCritereAccept_Composant.GetObj(nId_P))
+      :ZF_addItem(ClDbCritereAccept_Composant.GetObj(nId_P))
      type : 458752
    -
      name : aItems
      procedure_id : 1437760634949608400
      type_code : 12
      code : |1+
-      PROCÉDURE aItems():tableau de ClCritereAccept_Composant dynamique
+      PROCÉDURE aItems():tableau de ClDbCritereAccept_Composant dynamique
       // Redéfinition de la méthode ClColObjDB.aItems
       RENVOYER :m_aoCritereAccept_Composant
      type : 458752
@@ -70,7 +70,7 @@ class :
      code : |1-
       PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données):Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClCritereAccept_Composant
+      oObj est un ClDbCritereAccept_Composant(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept_Composant)
      type : 458752
   procedure_templates : []

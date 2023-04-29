@@ -61,70 +61,80 @@ window :
             
             
             //ClProcess_Metier.gsNomVarProcess = MaFenêtre..NomComplet + "zpclProcess"
-            zpclProcess = allouer un ClProcess_Metier(MaFenêtre..NomComplet + "." + zsNomFenInterne)
-            zpclProcess.m_sLibelle	= "Optim UM"
-            zpclProcess.m_sCMTR		= "Cmtr process"
+            zoProcess = allouer un CldbProcess_Metier(MaFenêtre..NomComplet + "." + zsNomFenInterne)
+            zoProcess.m_sLibelle	= "Optim UM"
+            zoProcess.m_sCMTR		= "Cmtr process"
             
             
-            oProcessAxeAg est un ClProcess_Metier_Axe(zpclProcess)
+            oProcessAxeAg est un CldbProcess_Metier_Axe()
+            oProcessAxeAg.p_oProcessParent = zoProcess
             oProcessAxeAg.Libelle = "Achat agence"
             
             
-            oProcessAxeOpt est un ClProcess_Metier_Axe(zpclProcess)
+            oProcessAxeOpt est un Cldbprocess_Metier_Axe()
+            oProcessAxeOpt.p_oProcessParent = zoProcess
             oProcessAxeOpt.Libelle = "Cellule Optim UM"
             
             
             
-            pclOInterTmp est un ClProcess_Metier_Intervenant dynamique
+            oInterTmp est un CldbProcess_Metier_Intervenant dynamique
             
             
-            pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Manu(oProcessAxeAg)
-            pclOInterTmp.Reference = "1"
-            pclOInterTmp.Description = "Saisie commande"
+            oInterTmp = allouer un CldbProcess_Metier_Intervenant_Manu()
+            oInterTmp.p_oAxeParent = oProcessAxeAg
+            oInterTmp.Reference = "1"
+            oInterTmp.Description = "Saisie commande"
             
             
-            pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Operateur(oProcessAxeAg)
-            pclOInterTmp.Reference = "2"
-            pclOInterTmp.Description = "Validation commande"
+            oInterTmp = allouer un CldbProcess_Metier_Intervenant_Operateur()
+            oInterTmp.p_oAxeParent = oProcessAxeAg
+            oInterTmp.Reference = "2"
+            oInterTmp.Description = "Validation commande"
             
             
-            pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Attente(oProcessAxeAg)
-            pclOInterTmp.Reference = "3"
-            pclOInterTmp.Description = "4h maxi"
+            oInterTmp = allouer un CldbProcess_Metier_Intervenant_Attente()
+            oInterTmp.p_oAxeParent = oProcessAxeAg
+            oInterTmp.Reference = "3"
+            oInterTmp.Description = "4h maxi"
             
-            pclOInterCondition est un ClProcess_Metier_Intervenant_Condition dynamique
-            pclOInterCondition = allouer un ClProcess_Metier_Intervenant_Condition(oProcessAxeOpt)
-            pclOInterCondition.Reference = "4"
-            pclOInterCondition.Description = "Délai expiré ?"
-            pclOInterCondition.nPosBoxLienFaux = 6
-            
-            
-            pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Auto(oProcessAxeOpt)
-            pclOInterTmp.Reference = "5"
-            pclOInterTmp.Description = "Envoi automatique au fournisseur"
+            oInterCondition est un CldbProcess_Metier_Intervenant_Condition dynamique
+            oInterCondition = allouer un CldbProcess_Metier_Intervenant_Condition()
+            oInterCondition.p_oAxeParent = oProcessAxeOpt
+            oInterCondition.Reference = "4"
+            oInterCondition.Description = "Délai expiré ?"
+            oInterCondition.nPosBoxLienFaux = 6
             
             
-            pclOInterTmp = allouer un ClProcess_Metier_Intervenant_Operateur(oProcessAxeOpt)
-            pclOInterTmp.Reference = "6"
-            pclOInterTmp.Description = "Controle commande"
+            oInterTmp = allouer un CldbProcess_Metier_Intervenant_Auto()
+            oInterTmp.p_oAxeParent = oProcessAxeOpt
+            oInterTmp.Reference = "5"
+            oInterTmp.Description = "Envoi automatique au fournisseur"
             
             
-            pclOInterCondition = allouer un ClProcess_Metier_Intervenant_Condition(oProcessAxeOpt)
-            pclOInterCondition.Reference = "7"
-            pclOInterCondition.Description = "Commande validée ?"
-            pclOInterCondition.nPosBoxLienFaux = 6
+            oInterTmp = allouer un CldbProcess_Metier_Intervenant_Operateur()
+            oInterTmp.p_oAxeParent = oProcessAxeOpt
+            oInterTmp.Reference = "6"
+            oInterTmp.Description = "Controle commande"
             
             
-            pclOInterTmp = allouer un ClProcess_Metier_Intervenant_SousProcess(oProcessAxeAg)
-            pclOInterTmp.Reference = "8"
-            pclOInterTmp.Description = "Correction commande"
+            oInterCondition = allouer un CldbProcess_Metier_Intervenant_Condition()
+            oInterCondition.p_oAxeParent = oProcessAxeOpt
+            oInterCondition.Reference = "7"
+            oInterCondition.Description = "Commande validée ?"
+            oInterCondition.nPosBoxLienFaux = 6
+            
+            
+            oInterTmp = allouer un CldbProcess_Metier_Intervenant_SousProcess()
+            oInterTmp.p_oAxeParent = oProcessAxeAg
+            oInterTmp.Reference = "8"
+            oInterTmp.Description = "Correction commande"
             
             
             
-            zpclProcess.p_oProjet = ClProjet.GetObj(1)
-            //zpclProcess.m_oProjet <- allouer un ClProjet(1)
-            zpclProcess.Enregistre()
-            zpclProcess.Affiche()
+            zoProcess.p_oProjet = ClDbProjet.GetObj(1)
+            //zpclProcess.m_oProjet <- allouer un ClDbProjet(1)
+            zoProcess.zf_Enregistre()
+            zoProcess.Affiche()
             
             
             
@@ -141,8 +151,8 @@ window :
         code : |1-
          PROCEDURE MaFenêtre()
          
-         zpclProcess est un ClProcess_Metier dynamique
-         zaEvtCall est un tableau dynamique de ClProcess_Metier_Intervenant.STR_CallBack
+         zoProcess est un CldbProcess_Metier dynamique
+         zaEvtCall est un tableau dynamique de CldbProcess_Metier_Intervenant.STR_CallBack
          zsNomFenInterne est une chaîne
          znPositionBoxCliqué est un entier
       -
@@ -176,10 +186,11 @@ window :
             SELON Saisie(<§?1E70CCEA1C37A944§>,sNom)
             	// OK
             	CAS 1
-            		oProcessAxeAg est un ClProcess_Metier_Axe(zpclProcess)
+            		oProcessAxeAg est un CldbProcess_Metier_Axe()
+            		oProcessAxeAg.p_oProcessParent = zoProcess
             		oProcessAxeAg.Libelle = sNom
-            		zpclProcess.Affiche() 
-            		zpclProcess.Enregistre()
+            		zoProcess.Affiche() 
+            		zoProcess.zf_Enregistre()
             	// Annuler
             	CAS 2
             		
@@ -196,9 +207,9 @@ window :
         p_codes :
          -
            code : |1+
-            si Ouvre(FEN_Process_Ajout_Intervenant,zpclProcess, Null) ALORS
-            	zpclProcess.Affiche()
-            	zpclProcess.Enregistre()
+            si Ouvre(FEN_Process_Ajout_Intervenant,zoProcess, Null) ALORS
+            	zoProcess.Affiche()
+            	zoProcess.ZF_Enregistre()
             FIN
            type : 32
      -
@@ -210,10 +221,10 @@ window :
         p_codes :
          -
            code : |1+
-            zpclProcess.m_bModeEdition = pas zpclProcess.m_bModeEdition
-            OPT_Mode_édition..Cochée = zpclProcess.m_bModeEdition
-            zpclProcess.Affiche()
-            zpclProcess.Enregistre()
+            zoProcess.m_bModeEdition = pas zoProcess.m_bModeEdition
+            OPT_Mode_édition..Cochée = zoProcess.m_bModeEdition
+            zoProcess.Affiche()
+            zoProcess.ZF_Enregistre()
             
            type : 32
      -
@@ -225,8 +236,9 @@ window :
         p_codes :
          -
            code : |1+
-            zpclProcess = allouer un ClProcess_Metier(zpclProcess.p_sNomFen, zpclProcess.ZF_Get_IdUnique())
-            zpclProcess.Affiche()
+            zoProcess = allouer un CldbProcess_Metier(zoProcess.ZF_Get_IdUnique())
+            zoProcess.p_sNomFen = zoProcess.p_sNomFen
+            zoProcess.Affiche()
             
            type : 32
     controls : []
@@ -247,10 +259,10 @@ window :
         p_codes :
          -
            code : |1+
-            oInter est un ClProcess_Metier_Intervenant <- zpclProcess.oInterDePosition(znPositionBoxCliqué)
-            SI Ouvre(FEN_Process_Ajout_Intervenant,zpclProcess, oInter) ALORS
-            	zpclProcess.Affiche()
-            	zpclProcess.Enregistre()
+            oInter est un CldbProcess_Metier_Intervenant <- zoProcess.oInterDePosition(znPositionBoxCliqué)
+            SI Ouvre(FEN_Process_Ajout_Intervenant,zoProcess, oInter) ALORS
+            	zoProcess.Affiche()
+            	zoProcess.ZF_Enregistre()
             FIN
             
            type : 32
@@ -308,10 +320,10 @@ window :
       //
       PROCEDURE CallBack_ChangeAxe(local nPosBox_P est un entier, LOCAL nOffSet_p est un entier)
       
-      oInter est un ClProcess_Metier_Intervenant <- zpclProcess.oInterDePosition(nPosBox_P)
+      oInter est un CldbProcess_Metier_Intervenant <- zoProcess.oInterDePosition(nPosBox_P)
       
       oInter:ChangeAxe(oInter:p_oAxeParent.Ordre + nOffSet_p)
-      zpclProcess.Affiche()
+      zoProcess.Affiche()
      type : 458752
    -
      name : CallBack_Deplace
@@ -333,10 +345,10 @@ window :
       //
       PROCEDURE CallBack_Deplace(LOCAL nPosBox_P est un entier, LOCAL nOffSet_p est un entier)
       
-      oInter est un ClProcess_Metier_Intervenant <- zpclProcess.oInterDePosition(nPosBox_P)
+      oInter est un CldbProcess_Metier_Intervenant <- zoProcess.oInterDePosition(nPosBox_P)
       
       oInter:ChangeOrdre(oInter:OrdreAbsolu + nOffSet_p)
-      zpclProcess.Affiche()
+      zoProcess.Affiche()
      type : 458752
    -
      name : CallBackTimer
@@ -357,7 +369,7 @@ window :
       //
       PROCEDURE CallBackTimer()
       
-      stTmp est un ClProcess_Metier_Intervenant.STR_CallBack
+      stTmp est un CldbProcess_Metier_Intervenant.STR_CallBack
       
       si Dimension(zaEvtCall) alors
       	
@@ -365,22 +377,22 @@ window :
       	TableauSupprime(zaEvtCall, 1)
       	
       	SELON stTmp.nTypeEvt
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicBox
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicBox
       			znPositionBoxCliqué = stTmp.nPos
       			OuvreMenuContextuel(MNU_Clic_Inter)
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicDroitBox
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicDroitBox
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicPrev
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicPrev
       			CallBack_Deplace(stTmp.nPos,  -1)
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicSuiv
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicSuiv
       			CallBack_Deplace(stTmp.nPos, 1)
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicUp
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicUp
       			CallBack_ChangeAxe(stTmp.nPos, -1)
       			
-      		CAS ClProcess_Metier_Intervenant.cstEvt_ClicDown
+      		CAS CldbProcess_Metier_Intervenant.cstEvt_ClicDown
       			CallBack_ChangeAxe(stTmp.nPos, 1)
       			
       		AUTRE CAS

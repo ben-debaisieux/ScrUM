@@ -93,14 +93,14 @@ window :
      p_codes :
       -
         code : |1-
-         oInterTmp est un ClProcess_Metier_Intervenant dynamique
+         oInterTmp est un CldbProcess_Metier_Intervenant dynamique
          
          si zoInter_p = null alors
          	//Récupération du 1er axe.
-         	oAxeTmp est un ClProcess_Metier_Axe dynamique <- zoProcess_p.m_aoAxes[1]
+         	oAxeTmp est un CldbProcess_Metier_Axe dynamique <- zoProcess_p.m_oAxes.oitem(1)
          	
          	//Création de l'intervenant
-         	oInterTmp				= ClProcess_Metier_Intervenant.oGetTypeInter(oAxeTmp,SEL_TypeInter..Valeur)
+         	oInterTmp				= CldbProcess_Metier_Intervenant.oGetTypeInter(oAxeTmp,SEL_TypeInter..Valeur)
          	oInterTmp.Reference		= SAI_Reference
          	oInterTmp.Description	= SAI_Description
          sinon
@@ -151,7 +151,7 @@ window :
   p_codes :
    -
      code : |1-
-      PROCEDURE MaFenêtre(zoProcess_p est un ClProcess_Metier, zoInter_p est un ClProcess_Metier_Intervenant dynamique)
+      PROCEDURE MaFenêtre(zoProcess_p est un CldbProcess_Metier, zoInter_p est un CldbProcess_Metier_Intervenant dynamique)
       
       zbRetour est un booléen
       
