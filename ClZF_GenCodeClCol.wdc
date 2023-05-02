@@ -46,27 +46,27 @@ class :
      procedure_id : 1443686078003854274
      type_code : 12
      code : |1-
-      procédure Genere(oGenCode est un ClZF_GenCodeFic):vide
+      procédure Genere():vide
       
       
       
       sClasse est une chaîne
       sProcsChargeCol est une chaîne
       
-      :m_sNomClasseBD = oGenCode.sNomClasseGen()
-      :m_sNomListeObj = "m_ao" + oGenCode.p_sNomUsage
+      :m_sNomClasseBD = :m_oClasseGen.sNomClasseGen()
+      :m_sNomListeObj = "m_ao" + :m_oClasseGen.p_sNomUsage
       
       
-      sClasse = :GenDeclaration(oGenCode) + RC
+      sClasse = :GenDeclaration(:m_oClasseGen) + RC
       sClasse += :GenConstructeur() + RC
       sClasse += :GenDestructeur() + RC
       sClasse += :GenProc_addItemById() + RC
       sClasse += :GenProc_aItems() + RC
       sClasse += :GenProc_Init() + RC
-      sClasse += :GenProc_addItemBySource(oGenCode) + RC
+      sClasse += :GenProc_addItemBySource(:m_oClasseGen) + RC
       
       
-      sProcsChargeCol = :GenChargeCol(oGenCode)
+      sProcsChargeCol = :GenChargeCol(:m_oClasseGen)
       SI sProcsChargeCol <> "" ALORS
       	sClasse += sProcsChargeCol + RC
       FIN

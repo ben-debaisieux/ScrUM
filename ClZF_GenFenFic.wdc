@@ -343,7 +343,7 @@ class :
       [%TAB%][%TAB%][%TAB%]ExceptionPropage()
       [%TAB%]FIN
       SINON
-      [%TAB%]MaFenêtre..ValeurRenvoyée = [%:sNomObjParamFen(:m_oClasseGen)%].Get_IdUnique()
+      [%TAB%]MaFenêtre..ValeurRenvoyée = [%:sNomObjParamFen(:m_oClasseGen)%].ZF_Get_IdUnique()
       [%TAB%]Ferme()
       FIN
       

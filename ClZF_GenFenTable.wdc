@@ -133,7 +133,7 @@ class :
       		SI bEstObj ALORS
       			:m_sChargementTbl += """[Afficher référence de " + Vars.Nom + "]"""
       		sinon
-      			:m_sChargementTbl += "oTmp." + Vars.Nom
+      			:m_sChargementTbl += "oTmp." + InfoRub.sNomMembre //Vars.Nom
       		fin
       	FIN
       FIN
@@ -432,7 +432,7 @@ class :
               p_codes :
                -
                 code : |1-
-      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+      [%:sIndentSpace(sCommenteCode(stProto), 12)%]
                 type : 14
                -
                  type : 276
@@ -468,7 +468,7 @@ class :
               p_codes :
                -
                 code : |1-
-      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+      [%:sIndentSpace(sCommenteCode(stProto), 12)%]
                 type : 14
                -
                  type : 276
@@ -507,7 +507,7 @@ class :
               p_codes :
                -
                 code : |1-
-      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+      [%:sIndentSpace(sCommenteCode(stProto), 12)%]
                 type : 14
       ]
      type : 458752
@@ -534,7 +534,7 @@ class :
               p_codes :
                -
                 code : |1-
-      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+      [%:sIndentSpace(sCommenteCode(stProto), 12)%]
                 type : 14
                -
                  type : 276
@@ -570,7 +570,7 @@ class :
               p_codes :
                -
                 code : |1-
-      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+      [%:sIndentSpace(sCommenteCode(stProto), 12)%]
                 type : 14
                -
                  type : 276
@@ -606,7 +606,7 @@ class :
               p_codes :
                -
                 code : |1-
-      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+      [%:sIndentSpace(sCommenteCode(stProto), 12)%]
                 type : 14
                -
                  type : 276
@@ -642,7 +642,7 @@ class :
               p_codes :
                -
                 code : |1-
-      [%:sIndentSpace(sCommenteCode(stProto), 10)%]
+      [%:sIndentSpace(sCommenteCode(stProto), 12)%]
                 type : 14
                -
                  type : 276
@@ -693,7 +693,7 @@ class :
             TableSupprimeTout([%:m_sNomChampsTbl%])
             
             pour tout ELEMENT oTmp de [%:m_sNomColGlobale%].aItems()
-            	nLigne = TableAjoute([%:m_sNomChampsTbl%])
+            	nLigne = TableAjouteLigne([%:m_sNomChampsTbl%])
             	
             	si oTmp.ZF_Get_IdUnique() = nIdSel_p ALORS
             		nMemoLigneSel = nLigne
@@ -724,9 +724,11 @@ class :
       
       renvoyer [
       nLigne est un entier
-      oUsr est un ClDbUsr
-      nLigne = Ouvre([%oTmpFic.sNomFen()%], oUsr)
+      oDb est un [%:m_oClasseGen.sNomClasseGen()%]
+      
+      nLigne = Ouvre([%oTmpFic.sNomFen()%], oDb)
       SI nLigne <> 0 ALORS
+      [%TAB%]zoColUsr_p.ZF_addItem(oDb)
       [%TAB%]Actualise(nLigne)
       FIN
       ]
@@ -770,6 +772,7 @@ class :
       [%TAB%][%TAB%]FAIRE
       [%TAB%][%TAB%][%TAB%]Erreur(ExceptionInfo(errMessage))
       [%TAB%][%TAB%]SINON
+      [%TAB%][%TAB%][%TAB%]zoColUsr_p.ZF_Supp(oDb)
       [%TAB%][%TAB%][%TAB%]TableSupprime([%:m_sNomChampsTbl%])
       [%TAB%][%TAB%]FIN
       [%TAB%]FIN

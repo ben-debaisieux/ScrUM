@@ -572,7 +572,7 @@ class :
      procedure_id : 1444052925069993716
      type_code : 12
      code : |1-
-      procédure Genere(oGenCode est un ClZF_GenCodeFic):vide
+      procédure Genere():vide
       
       
       sClasse			est une chaîne
@@ -581,22 +581,22 @@ class :
       //sProcsChargeCol	est une chaîne
       
       
-      POUR TOUT ÉLÉMENT sRub DE oGenCode.aLstRubs()
-      	sProprietes += :GenPropriete(oGenCode,sRub)
+      POUR TOUT ÉLÉMENT sRub DE :m_oClasseGen.aLstRubs()
+      	sProprietes += :GenPropriete(:m_oClasseGen,sRub)
       FIN
       
-      sClasse += :GenConstructeur(oGenCode) + rc
+      sClasse += :GenConstructeur(:m_oClasseGen) + rc
       sClasse += :GenDestructeur() + rc
       
       SI pas m_bNatif ALORS
       	sClasse += sProprietes + rc
       FIN
       
-      sClasse += :GenGetObj(oGenCode) + RC
-      sClasse += :GenInitObject(oGenCode) + RC
+      sClasse += :GenGetObj(:m_oClasseGen) + RC
+      sClasse += :GenInitObject(:m_oClasseGen) + RC
       
       SI PAS :m_bLectureSeule ALORS
-      	sClasse += :GenPreEnreg(oGenCode) + RC
+      	sClasse += :GenPreEnreg(:m_oClasseGen) + RC
       FIN
       //
       //sProcsChargeCol = :GenChargeCol(oGenCode)
@@ -605,7 +605,7 @@ class :
       //FIN
       
       
-      sClasse = :GenDeclaration(oGenCode) + rc + sClasse
+      sClasse = :GenDeclaration(:m_oClasseGen) + rc + sClasse
       
       
       SI m_bNatif ALORS
