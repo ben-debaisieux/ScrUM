@@ -95,11 +95,11 @@ class :
       
      type : 458752
    -
-     name : oColCritereAccept_Composant
+     name : oColCritereAccept_Composant_old
      procedure_id : 1445050145475461169
      type_code : 12
      code : |1+
-      PROCÉDURE oColCritereAccept_Composant():ClColCritereAccept_Composant
+      PROCÉDURE oColCritereAccept_Composant_old():ClColCritereAccept_Composant
       
       oRetour est un ClColCritereAccept_Composant
       sReq est une chaîne
@@ -124,31 +124,31 @@ class :
      procedure_id : 1461104314719993474
      type_code : 12
      code : |1-
-      procedure globale Init_Data()
+      procedure globale Init_Data()<metier>:vide
       
       
       SI pas hrecherche(Scr_CritereAccept_Composant_Type,IDScr_CritereAccept_Composant_Type,ClDbCritereAccept_Composant::cst_EtantDonneQue) ALORS
       	HRAZ(Scr_CritereAccept_Composant_Type)
-      	Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type = ClDbCritereAccept_Composant::cst_EtantDonneQue
-      	Scr_CritereAccept_Composant_Type.Libelle	= "Etant donné que"
-      	Scr_CritereAccept_Composant_Type.Ordre		= ClDbCritereAccept_Composant::cst_EtantDonneQue
+      	Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type	= ClDbCritereAccept_Composant::cst_EtantDonneQue
+      	Scr_CritereAccept_Composant_Type.Libelle							= "Etant donné que"
+      	Scr_CritereAccept_Composant_Type.Ordre								= ClDbCritereAccept_Composant::cst_EtantDonneQue
       	HAjoute(Scr_CritereAccept_Composant_Type,hFixeIDAuto)
       FIN
       
       SI PAS HRecherche(Scr_CritereAccept_Composant_Type,IDScr_CritereAccept_Composant_Type,ClDbCritereAccept_Composant::cst_AuMomentDe) ALORS
-      
+      	
       	HRAZ(Scr_CritereAccept_Composant_Type)
-      	Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type = ClDbCritereAccept_Composant::cst_AuMomentDe
-      	Scr_CritereAccept_Composant_Type.Libelle	= "Au moment de"
-      	Scr_CritereAccept_Composant_Type.Ordre		= ClDbCritereAccept_Composant::cst_AuMomentDe
+      	Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type	= ClDbCritereAccept_Composant::cst_AuMomentDe
+      	Scr_CritereAccept_Composant_Type.Libelle							= "Au moment de"
+      	Scr_CritereAccept_Composant_Type.Ordre								= ClDbCritereAccept_Composant::cst_AuMomentDe
       	HAjoute(Scr_CritereAccept_Composant_Type,hFixeIDAuto)
       FIN
       
       SI PAS HRecherche(Scr_CritereAccept_Composant_Type,IDScr_CritereAccept_Composant_Type,ClDbCritereAccept_Composant::cst_JattendQue) ALORS
       	HRAZ(Scr_CritereAccept_Composant_Type)
-      	Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type = ClDbCritereAccept_Composant::cst_JattendQue
-      	Scr_CritereAccept_Composant_Type.Libelle	= "J'attend que"
-      	Scr_CritereAccept_Composant_Type.Ordre		= ClDbCritereAccept_Composant::cst_JattendQue
+      	Scr_CritereAccept_Composant_Type.IDScr_CritereAccept_Composant_Type	= ClDbCritereAccept_Composant::cst_JattendQue
+      	Scr_CritereAccept_Composant_Type.Libelle							= "J'attends que"
+      	Scr_CritereAccept_Composant_Type.Ordre								= ClDbCritereAccept_Composant::cst_JattendQue
       	HAjoute(Scr_CritereAccept_Composant_Type,hFixeIDAuto)
       	
       FIN

@@ -57,16 +57,18 @@ class :
       :m_sNomListeObj = "m_ao" + :m_oClasseGen.p_sNomUsage
       
       
-      sClasse = :GenDeclaration(:m_oClasseGen) + RC
+      sClasse = :GenDeclaration() + RC
       sClasse += :GenConstructeur() + RC
       sClasse += :GenDestructeur() + RC
       sClasse += :GenProc_addItemById() + RC
       sClasse += :GenProc_aItems() + RC
       sClasse += :GenProc_Init() + RC
-      sClasse += :GenProc_addItemBySource(:m_oClasseGen) + RC
+      sClasse += :GenProc_addItemBySource() + RC
+      sClasse += :GenProc_GetAll() + RC
       
       
-      sProcsChargeCol = :GenChargeCol(:m_oClasseGen)
+      sProcsChargeCol = :GenProc_ChargeFrom()
+      //sProcsChargeCol = :GenChargeCol(:m_oClasseGen)
       SI sProcsChargeCol <> "" ALORS
       	sClasse += sProcsChargeCol + RC
       FIN
@@ -96,8 +98,10 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure privée GenDeclaration(oGenCode est un ClZF_GenCodeFic):chaine
-      sNom est une chaîne = "ClCol" + oGenCode.p_sNomUsage
+      procédure privée GenDeclaration():chaine
+      
+      sNom est une chaîne = "ClCol" + :m_oClasseGen.p_sNomUsage
+      
       sRetour est une chaine = [
       [%sNom%] est une Classe
       [%TAB%]hérite de ClZF_ColObjDB
@@ -224,23 +228,25 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //GenProc_addItemBySource ()
+      //[ <Résultat> = ] GenProc_addItemBySource ()
       //
       // Paramètres :
       //	Aucun
       // Valeur de retour :
-      // 	Aucune
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure privée GenProc_addItemBySource(oGenCode est un ClZF_GenCodeFic):chaine
+      procédure privée GenProc_addItemBySource():chaine
+      
       sNomProc est une chaîne = "addItemBySource"
+      
       sRetour est une chaine = [
       PROCÉDURE PROTÉGÉE VIRTUELLE [%sNomProc%](sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       oObj est un [%m_sNomClasseBD%](ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.[%oGenCode.p_sNomRubId%])
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.[%:m_oClasseGen.p_sNomRubId%])
       
       ]
       
@@ -320,23 +326,23 @@ class :
       renvoyer sRetour
      type : 458752
    -
-     name : GenChargeCol
+     name : GenChargeCol_old
      procedure_id : 1449626577093835576
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //GenChargeCol ()
+      //[ <Résultat> = ] GenChargeCol_old (<oGencode_p> est ClZF_GenCodeFic)
       //
       // Paramètres :
-      //	Aucun
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
       // Valeur de retour :
-      // 	Aucune
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure PRIVÉ GenChargeCol(oGencode_p est un ClZF_GenCodeFic):chaine
+      procédure PRIVÉ GenChargeCol_old(oGencode_p est un ClZF_GenCodeFic):chaine
       
       sModele		est une chaîne
       sNomProc	est une chaîne
@@ -383,6 +389,157 @@ class :
       fin
       
       renvoyer sRetour
+     type : 458752
+   -
+     name : GenProc_ChargeFrom
+     procedure_id : 1465033333510203932
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenProc_ChargeFrom ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenProc_ChargeFrom()<metier>:chaine
+      
+      
+      
+      
+      stRelTmp		est un ClZF_GenCodeFic.STR_Rel
+      sCode			est une chaîne
+      sRetour			est une chaîne
+      bGenere			est un booléen
+      
+      
+      //FONCTION GLOBALE aoFromUS(oUS_p est un ClDbUserStory, LOCAL bForceCharge_p est un booléen = Faux):ClColTaches
+      //
+      //sReq est une chaîne
+      //oColTachesRetour est un ClColTaches dynamique
+      //
+      //SI oUS_p.p_ZF_aListCol[cstTachesDeUS]..Vide ALORS
+      //	oUS_p.p_ZF_aListCol[cstTachesDeUS] = allouer un ClColTaches
+      //FIN
+      //
+      //oColTachesRetour <- oUS_p.p_ZF_aListCol[cstTachesDeUS]
+      //
+      //SI PAS oColTachesRetour.p_bEstCharge OU bForceCharge_p ALORS
+      //
+      //	oColTachesRetour.ZF_vider()
+      //	
+      //	
+      //FIN
+      //
+      //
+      //RENVOYER oColTachesRetour
+      
+      
+      
+      POUR TOUT ÉLÉMENT stRelTmp DE :m_oClasseGen.m_aPK_de_FK
+      	bGenere = faux
+      	
+      	oClGen_tmp est un ClZF_GenCodeFic(stRelTmp.sTablepK)
+      	oClGen_tmp.Analyse()
+      	
+      	sParams est une chaîne = "oParent_p est un " + oClGen_tmp.sNomClasseGen()
+      	
+      	sGenSource est une chaîne = chaineconstruit(-%"
+      	
+      		sReq = [
+      		%3SELECT 
+      		%3%3%1.*
+      		%3FROM %1
+      		%3WHERE %1.%2 = [%oParent_p.ZF_Get_IdUnique()%]
+      		]
+      		oColRetour.ZF_LoadSQL(sReq)
+      		
+      		", ...
+      		stRelTmp.sTableFK,...
+      		stRelTmp.sRubriqueFK, ...
+      		tab)
+      	
+      	
+      	selon stRelTmp.nTypeRel
+      		CAS ClZF_GenCodeFic.cstRelNonDef, ClZF_GenCodeFic.cstRelAgr
+      			//Pas de création de procédure de chargement pour ces types de liaisons
+      			
+      		CAS ClZF_GenCodeFic.cstRelAsso
+      			bGenere = vrai
+      			
+      		CAS ClZF_GenCodeFic.cstRelCompo
+      			bGenere = Vrai
+      			
+      			sConstRef est une chaîne = sNomConstanteColCompo(stRelTmp)
+      			sParams += ", LOCAL bForceCharge_p est un booléen = Faux"
+      			
+      			sGenSource = "
+      			
+      			// A faire : [%sConstRef%] à déclarer dans ClZF_App.CreeCol : "CAS [%sConstRef%] : oCol = allouer un [%oClGen_tmp.sNomClasseColGen()%]"
+      			oColRetour <- oParent_p.ZF_GetCol([%sConstRef%])
+      			
+      			SI PAS oColRetour.p_bEstCharge OU bForceCharge_p ALORS
+      			
+      			[%tab%]oColRetour.ZF_vider()
+      				
+      				[%sGenSource%]
+      			FIN
+      			
+      			"
+      		AUTRE CAS
+      			ExceptionDéclenche(1,"Type de relation non prévu.")
+      	FIN
+      	
+      	
+      	si bGenere alors
+      		sNomFct est une chaîne = "aoFrom" + oClGen_tmp.p_sNomUsage
+      		sCode = [
+      		FONCTION GLOBALE [%sNomFct%]([%sParams%])<métier>:[%:m_oClasseGen.sNomClasseColGen()%]
+      		
+      		sReq est une chaîne
+      		oColRetour est un [%:m_oClasseGen.sNomClasseColGen()%] dynamique
+      		
+      		[%sGenSource%]
+      		
+      		RENVOYER oColRetour
+      		
+      		]
+      		
+      		si :m_bNatif alors
+      			sRetour += genbloccl_procedure(sCode, sNomFct)
+      		sinon
+      			sRetour += sCode
+      		FIN
+      	FIN
+      FIN
+      
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenProc_GetAll
+     procedure_id : 1467781846261777608
+     type_code : 12
+     code : |1-
+      procédure GenProc_GetAll()<metier>:chaine
+      
+      sNomProc	est une chaîne	= "GetAll"
+      sRetour		est une chaîne	= [
+      PROCÉDURE [%sNomProc%]()<métier>:Vide
+      ZF_ChargeTblComplete([%:m_oClasseGen.p_sNomTable%]..nom)
+      ]
+      
+      SI :m_bNatif ALORS
+      	//Génération du code natif de l'objet pour WD
+      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      FIN
+      
+      RENVOYER sRetour
      type : 458752
   procedure_templates : []
   property_templates : []

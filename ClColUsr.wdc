@@ -237,20 +237,29 @@ class :
       si bForce_p ou pas oRetour.p_bEstCharge ALORS
       	oRetour.ZF_vider()
       	sReq = [
-      		SELECT<§cs:3§>
-      			Scr_Usr.*<§cs:3§>
-      			<§cs:3§>
-      		FROM Scr_Usr_Projet<§cs:3§>
-      			INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)<§cs:3§>
-      		<§cs:3§>
-      		WHERE Scr_Usr_Projet.IDScr_Projet = [%oPrj_p.ZF_Get_IdUnique()%]<§cs:3§>
-      			AND Scr_Usr_Projet.Top_Invite = 1<§cs:3§>
+      		SELECT
+      			Scr_Usr.*
+      			
+      		FROM Scr_Usr_Projet
+      			INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)
+      		
+      		WHERE Scr_Usr_Projet.IDScr_Projet = [%oPrj_p.ZF_Get_IdUnique()%]
+      			AND Scr_Usr_Projet.Top_Invite = 1
       	]
       	
       	oRetour.ZF_LoadSQL(sReq)
       fin
       
       renvoyer oRetour
+     type : 458752
+   -
+     name : GetAll
+     procedure_id : 1468676359118981094
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
+      PROCÉDURE public GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_Usr..nom)
      type : 458752
   procedure_templates : []
   property_templates : []

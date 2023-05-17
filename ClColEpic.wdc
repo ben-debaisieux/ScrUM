@@ -157,6 +157,15 @@ class :
       	ListeSelectPlus(sNomComplet, nInd)
       FIN
      type : 458752
+   -
+     name : GetAll
+     procedure_id : 1468673872307433592
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
+      PROCÉDURE prive GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_Epic..nom)
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

@@ -24,9 +24,10 @@ class :
       
       
       constante
-      	cstHauteurDefaut = 24
-      	cstLargeurBtnDefaut = 100
-      	cstMargeDefaut = 5
+      	cstHauteurDefaut	= 24
+      	cstLargeurBtnDefaut	= 100
+      	cstLargeurChampDefaut	= 350
+      	cstMargeDefaut		= 5
       fin
      type : 131072
   procedures :
@@ -56,7 +57,7 @@ class :
       
       
       
-      :m_nPosYActu = 5
+      :m_nPosYActu = cstMargeDefaut
       
       
       sRub			est une chaîne
@@ -68,7 +69,8 @@ class :
       Def				est une Définition	= RécupèreDéfinitionType(:m_oClasseGen.sNomClasseGen())
       bEstObj			est un booléen
       sChamps			est une chaîne
-      
+      sProcedures		est une chaîne
+      nNumChamp		est un entier
       
       
       POUR TOUT Vars DE Def.Variable
@@ -84,44 +86,62 @@ class :
       		 	bEstObj = Faux
       		FIN
       		
-      		stProto_tmp est un ClZF_GenFen.STR_ProtoChamps
-      		InfoRub est un ClZF_GenCodeFic.str_DefRub
+      		stProto_tmp	est un ClZF_GenFen.STR_ProtoChamps
+      		InfoRub		est un ClZF_GenCodeFic.str_DefRub
       		
       		
       		
       		InfoRub					= :m_oClasseGen.m_aRub[sRub]
-      		
-      		stProto_tmp.sNom		= sRub
-      		stProto_tmp.sSource		= Vars.Nom + " - " + InfoRub.sNomMembre
-      		stProto_tmp.sLibelle	= InfoRub.nTypeRub
-      		
-      		selon InfoRub.nTypeRubHF
-      			CAS hRubBooléen : 
-      				sChamps += [RC] + :GenChampsCheckBox(stProto_tmp)
-      			CAS hRubDate6 , hRubDate8
-      				sChamps += [RC] + :GenChampsDate(stProto_tmp)
-      //			CAS hRubDateHeure : 
-      			CAS hRubEntier1, hRubEntierNonSigné1 :
-      				sChamps = [rc] + :GenChampsRadio(stProto_tmp)
-      			CAS hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
-      				SI bEstObj ALORS
-      					sChamps += [RC] + :GenChampsCombo(stProto_tmp)
-      				SINON
-      					sChamps += [RC] + :GenChampsSaisieEntier(stProto_tmp)
-      				FIN
-      			CAS hRubMémoTexte, hRubMémoUnicode :
-      				sChamps += [RC] + :GenChampsTexteMultiLigne(stProto_tmp)
-      			CAS hRubMonétaire :
-      				sChamps += [RC] + :GenChampsSaisieMonetaire(stProto_tmp)
-      //			CAS hRubRéel4, hRubRéel8 :
-      			CAS hRubTexte, hRubTexteUnicode :
-      				sChamps += [RC] + :GenChampsSaisieTexte(stProto_tmp)
-      //			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
-      			AUTRE CAS
-      				trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
+      		si InfoRub.bVisibleInterface alors
+      			
+      			stProto_tmp.sNom		= sRub
+      			stProto_tmp.sSource		= sNomObjGlobal() + "." + InfoRub.sNomPropriete
+      			stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
+      			stProto_tmp.sBulle		= InfoRub.sLibelleRubrique
+      			
+      			nNumChamp++
+      			stProto_tmp.nTab		= nNumChamp
+      			
+      			selon InfoRub.nTypeRubHF
+      				CAS hRubBooléen : 
+      					sChamps += [RC] + :GenChampsCheckBox(stProto_tmp)
+      				CAS hRubDate6 , hRubDate8
+      					sChamps += [RC] + :GenChampsDate(stProto_tmp)
+      				CAS hRubDateHeure : 
+      					sChamps += [RC] + :GenChampsDateheure(stProto_tmp)
+      				CAS hRubEntier1, hRubEntierNonSigné1 :
+      					sChamps = [rc] + :GenChampsRadio(stProto_tmp)
+      				CAS hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
+      					SI bEstObj ALORS
+      						
+      						//On pilote l'objet source via sa propriété 'ID'
+      						stProto_tmp.sSource += "_ID"
+      						
+      						
+      						sChamps += [RC] + :GenChampsCombo(stProto_tmp)
+      						
+      						//Génération de la procédure de chargement de la combo
+      						stTemp				est un ClZF_GenCodeFic.STR_Rel
+      						stTemp				= :m_oClasseGen.m_aPK_de_FK[sRub]
+      						pclOClasseGen		est un ClZF_GenCodeFic(stTemp.sTablePK)
+      						pclOClasseGen.Analyse()
+      						sProcedures += [rc] + :sGenProcChargeCombo(stProto_tmp.sNom, pclOClasseGen, InfoRub.bNullable)
+      						
+      					SINON
+      						sChamps += [RC] + :GenChampsSaisieEntier(stProto_tmp)
+      					FIN
+      				CAS hRubMémoTexte, hRubMémoUnicode :
+      					sChamps += [RC] + :GenChampsTexteMultiLigne(stProto_tmp)
+      				CAS hRubMonétaire :
+      					sChamps += [RC] + :GenChampsSaisieMonetaire(stProto_tmp)
+      	//			CAS hRubRéel4, hRubRéel8 :
+      				CAS hRubTexte, hRubTexteUnicode :
+      					sChamps += [RC] + :GenChampsSaisieTexte(stProto_tmp)
+      	//			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+      				AUTRE CAS
+      					trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
+      			FIN
       		FIN
-      		
-      
       	FIN
       FIN
       
@@ -147,13 +167,14 @@ class :
       window :
        name : [%:sNomFen()%]
        identifier : [%GenProcIdent(1)%]
-       internal_properties : BwAAAAcAAABLyC58ygtyzcBFMUAXxeo/WcjMJzc0L0JIdo/eE6D3liXv7qIEJjmdY7nF35N6Ei14ycfW8kIZexCGReO+gmu4aYfGqJzxoI78hnP4S5d3fZC4JZzG9hKnOhioVPRv0oDthyfpXGB23HiCod2bVgX0fU1x4fq/HKrsxFykDlg0ERtTmhENaHpR+Ub68RFEQqpBwux8Jion0UPT5YRiq9tXSmBT3dG5lkP6e6BTyvot+DS2peFGIzda+hLgSOgN2IRQu5SZWE8TKlx/ZLlRFzX+7e1xXntPWb3NCUQYn039fbfJpCK8uGSmHHfMfvqAeLUy1xvxvaguVgaRmE9uy14+ONGmGCfMilCgM3PUzbAFBBUiYqA5cLaFWZgC7hfKCW4TDDS2mSp1XLQdV6ed4sJ7FA84PljKwc8/iA7e088NgrmKHkkpocTY7xcYOOM15nv3f8iWcRG+MNhBaopocrvgJvWP5U8TKI3oPnxlOwpzJBwbGprcJLHgrK+HH4+f2W658hUvSjC4pZ3PFKp561+UqUhEQMhSHop45Galn/6pUaABG/zzyV9M1n64PeBdIGMfMzOL1Q3ZVngIKtU0kiB98FdTcTkF8AfIPwCxvnmdvGhBHaLX5upvAwImd08CZ+4ZXBdP/iQsPhanpNxKHtOgq1umeglwkLKGnWJGMkLXuXv0JWpk+4bPgefIdKkvMnToiNZHuw1gdQcpshh1U1LXqZdNyutJZePWZQdA0qrdt47/KpkSddNYWYZBj1HNQsU=
+       internal_properties : BwAAAAcAAAA6G23ur5fGfQjmUPKklgOcL1lwcwqjG5j1G/AWNsbj6YTzRB1TO3KegXLZEaJBH3bR0TTVlMPlu3Ib8IC+foI6JoJRHPPCIItX8xuEXNVixrqoYWdGUg+EyTBookOs1RdRahKhkk9rjf9USTXTOZ/erU/H5NYLb+k5jcArG+amaSpZ2d1YieLU80g6grZIgnzOwZV7JEjJT61WBnQ/0IxDLASc1JL329Csqy7f+gtyhtfRrVEkG59psnQ4lvO/mbihSM9LLsm0GlpgbyFZ4dOU+gXWL8vIkR52NJs41FmzlZInixu78vs2kBVR5u3f3IIhMIEQkWamzT89g6rGHRAiRSNit/bj5a2pelbj9OLXl0Bgw7COaETcWq223Ee9HzSlfw52XUdTNn6r5M8QjNWL4rbDoHMlhYNFCxR6sFkohnREGcGqjWFFOwcKV2WJYNr85LnEwwlF1uIJ/lDi52zdVoCV66+tJdMn4gJi0HnUg2HnFwSxUW6/Ur6Q/6Bua7mF3zq1PlK3Oj91XlMuzaREn8wsOETaLRY64j2TR48J/JoNbwFuWSiQpxqDcP+w8EaeSRbjoqodyNja9Q7RmIShces2eGOnYkqooH/sd0a+aIKgfPHm2ivMkcLd6Aen9Y+Bjru4r10XfHltqJXHIEdnaemo/Yg8VO4KQM4JwxqmhiLQv723Jg9SExHqT/6Mtyr+IqOhLlfVXjrli+5ZepCdnggCSU0zc67OWXd82yHbKTw=
        properties :
         width : 486
         height : [%nHauteurTot%]
         widthClient : 484
         heightClient : [%nHauteurTot%]
        controls :
+      [%sChamps%]
         -
           name : BTN_Valider
           identifier : [%GenProcIdent(2)%]
@@ -203,7 +224,6 @@ class :
             -
               type : 161
               enabled : false
-      [%sChamps%]
        menu :
         name : _Menu
         identifier : [%GenProcIdent(4)%]
@@ -223,7 +243,7 @@ class :
       [%:sIndentSpace(:GenBlocDeclaration(), 6)%]
          -
            code : |1-
-            
+      [%:sIndentSpace(:GenBlocInitFen(), 6)%]
            type : 34
          -
            code : |1-
@@ -248,6 +268,10 @@ class :
            code : |1-
             
            type : 2
+        procedures :
+      [%:sIndentSpace(sProcedures, 3)%]
+        procedure_templates : []
+        property_templates : []
        code_parameters :
         internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
         original_name : [%:sNomFen()%]
@@ -270,16 +294,16 @@ class :
      procedure_id : 1462456202797996502
      type_code : 12
      code : |1-
-      PROCÉDURE PRIVÉ	sNomObjParamFen(oClasseGen_p est un ClZF_GenCodeFic)<metier>:chaine
-      renvoyer "o" + oClasseGen_p.p_sNomUsage + "_p"
+      PROCÉDURE PRIVÉ	sNomObjParamFen()<metier>:chaine
+      renvoyer "o" + :m_oClasseGen.p_sNomUsage + "_p"
      type : 458752
    -
      name : sNomObjGlobal
      procedure_id : 1462456202798062038
      type_code : 12
      code : |1+
-      procedure prive	sNomObjGlobal(oClasseGen_p est un ClZF_GenCodeFic)<metier>:chaine
-      RENVOYER "zo" + oClasseGen_p.p_sNomUsage
+      procedure prive	sNomObjGlobal()<metier>:chaine
+      RENVOYER "zo" + :m_oClasseGen.p_sNomUsage
      type : 458752
    -
      name : sNomFen
@@ -330,10 +354,10 @@ class :
       sCode = [
       
       QUAND EXCEPTION DANS 
-      [%TAB%]EcranVersSource(MaFenêtre,"[%:sNomObjGlobal(:m_oClasseGen)%]")
+      [%TAB%]EcranVersSource(MaFenêtre,"[%:sNomObjGlobal()%]")
       
-      [%TAB%][%:sNomObjGlobal(:m_oClasseGen)%].ZF_Enregistre()
-      [%TAB%][%:sNomObjParamFen(:m_oClasseGen)%] <= [%:sNomObjGlobal(:m_oClasseGen)%]
+      [%TAB%][%:sNomObjGlobal()%].ZF_Enregistre()
+      [%TAB%][%:sNomObjParamFen()%] <= [%:sNomObjGlobal()%]
       FAIRE
       [%TAB%]sInfo est une chaîne = ExceptionInfo(errMessage)
       [%TAB%]Erreur(sInfo)
@@ -343,7 +367,7 @@ class :
       [%TAB%][%TAB%][%TAB%]ExceptionPropage()
       [%TAB%]FIN
       SINON
-      [%TAB%]MaFenêtre..ValeurRenvoyée = [%:sNomObjParamFen(:m_oClasseGen)%].ZF_Get_IdUnique()
+      [%TAB%]MaFenêtre..ValeurRenvoyée = [%:sNomObjParamFen()%].ZF_Get_IdUnique()
       [%TAB%]Ferme()
       FIN
       
@@ -374,12 +398,15 @@ class :
       sCode est une chaîne
       
       sCode = [
-      procédure mafenetre([%:sNomObjParamFen(:m_oClasseGen)%] est un [%:m_oClasseGen.sNomClasseGen()%])
+      procédure mafenetre([%:sNomObjParamFen()%] est un [%:m_oClasseGen.sNomClasseGen()%])
       
+      
+      [%:sNomObjGlobal()%] est un [%:m_oClasseGen.sNomClasseGen()%] <- [%:sNomObjParamFen()%].ZR_Clone()
+      
+      MaFenêtre..Titre = "Fiche d'un [%:m_oClasseGen.p_sLibelle%]"
       MaFenêtre..ValeurRenvoyée = 0
       
-      [%:sNomObjGlobal(:m_oClasseGen)%] est un [%:m_oClasseGen.sNomClasseGen()%] <- [%:sNomObjParamFen(:m_oClasseGen)%].ZR_Clone()
-      SourceVersEcran(MaFenêtre,"[%:sNomObjGlobal(:m_oClasseGen)%]")
+      //SourceVersEcran(MaFenêtre,"[%:sNomObjGlobal()%]")
       ]
                
       RENVOYER sCode
@@ -413,15 +440,15 @@ class :
         -
           name : CBO_[%stProto.sNom%]
           identifier : [%GenProcIdent()%]
-          internal_properties : BwAAAAcAAADRMQXmGNJ8NKaG6huIHVHoeZMJDsS+/fyBCRZjxwpBwm3TKXV6jGvIKv3EpzUIh5wqUjEvem977l/GCABZM9IiJYqc28ZP5gIXRZUen4kSqjbO864UsUMhNgcaAIY1jE9mlYFXO/1eOGGXD5MMm4crGK+aOu4gRBKCxpxLhSJPCb5LMVq10IX+lD9eK7ywBjeU+rvkx9dd5XpsDYATavrygQEizRUeQViW+ty6rd8DcYIOvpkuCFV0gx2Ef/iXCs9WG7q99jwpubK8EVwTv+oz5AUCQypd05Og+w9kTqPRIWK//zlJCNV8Z1Vn/ZL0NsH49A279S8I+kXISUvMLk/P8fzGQGrie9BLr6XoA3LjTJTzVzl2mQfJYL1e88FElqCOHQqtHMXUPhudLIjS8vh/tRP4bFjzpfDtkTSwrEAa0cIIWN4IwhSfWlTUiRFsXfgkTdmiK2KyuBvcK2TH+FGX3RuP46Hx9Loyk4hUfpyMKK/5eLcxOxa5XTjw5gGU6sHEiyk+pbhB+aGXURuxr01hPZJ+8nR276DoIEXFUmsed1UGsEG+N28rLUMaLgHj+UW726Yeb/stl4JZG0nftwxidVDr7qKgNpfN0tl+puxNd/e0fjiK1UWOVdYnrnlWvl6Y6pgvZ21/AtE1iLidnkF9OoFtXKOfj+zz3/VEUJs5i9+tXSbCUqufuMYfULvLxDu5lEGLvvYiB74FMr7ifBZSXpD7SS/PJQWieDb/A8SQK+hZzIIQNTIl8PWXUdOSNwCrYiVO6YZJnYxEMi/ZrSjuWbqLnzS3LTDn0LM0rsj3itG+o1y1JTQ+iM1Xjx/ea0V0fushr2wAX9a0kzRa5vr6EOnylvJwmP+yIRpHerNvFZMf3aLDIcY1atltSqzG6Wka730joT0+GCmShEAw2gYVncLa+xy3Z5YMIvYfKOux5sm+4ENpZqUso+4YsbJ61gXDL
-      bvqhaPqbqbZoArdsSCM7R7QjD7M8lllYWpINGCJezu16HpfKpH7F55RTuF8GMiDbPmRuFmCMWl9hKF5lB/k2HxBcs0UOisBaYM0QCYoOLct4nsOUUgBSh5UuLD2B69smwfFDs/HZyFovhN4uRARzFyvRNdxh9e7QnLdf0wYPqVWfj9EnrBeNoqv4Ovh2+O5yZjH9OLtjTJSNL6ydyIhr8mHUmIuSK5Au1GdH0/kL7GJ8aU+iNIwEG84KMoEkoXQqix+dmCYmMPFOp9HTcTU7Qn1e3OehHf4faIG3BbwQh6+aTyUsdvD1qMT25cKXSiOl8Po+/5qwOeCI8xM8ggKO18gPyMLc/2s0J3DNujyThQmtBhqPbE2BPjm08krlytprDinFMGecXHDLprRKoBFTPvEkcMqieU61Yi8O3Xp+sqX+AMPEOQH1MgQ13youVW5O0HuszJ5vgnJUuaL1K9Eyb8R9p37uZK/d0BtrDrQvR2FmCIK8S0Mzpgs4FKXxZ5Ok72m6az1vKHtroD88VoxK5nrWKBkIUrZ8tJ6zoPsuHyeyXlFJqY0w2HsGmoRWt2eX56JlF/oarNHtn74SSUxl2RfJkquNhqDPxgdrn1E7EDBBHeuNF+MYAkRJ2qDUM+ALhCNcvQI2WehIOWhcE7sV44nuSjxV3Z3EpUpp70sHSPXgfaVmJo5vXVCVLYOxTrkLkLNOXzej6XehGHMOH+nd4mDzqaaJ3SQBAgJY5NX/4gKTagkxTO+VP+1DWbP2F4mSvtSdY3K
+          internal_properties : BwAAAAcAAAB5gsmGnjKU/jMgW6GgXfx4ZvqfMRcjeFGRAlIG9aM5zL45bPodc55hxqb9FpI7BwB/tE2W6gflrj4RUrzMyWN0XPJbAWXC0ooJciYmkR2JkCd4oGMZoF25hXhBTv1Nfhq47yOLs5MjaUToCR7hyjQo5YHJA0ws8uHfV4ish5sMqyNa2FjDPRCYdydFf00BiFKnvgh3ph2R2T5Z7CLTRZc65sTirSBQ3q6KTbQ4gwl0ZpPD4w1Slj9NJTBO/EbbITAUGRMxIH22U623efJNOA0eCSCIeBtQOqbOaQcLrHA2z8XAi8pl65GH5BwOhCq/uIsWBbYaLBzsm7ndfrty/itLSeFAgIGfuNszaHoUswjmE80TC1Q5XAtEc5G9Z98pwLhPCDsLUVABQIXuLD3bqSgD1QXKALroh3gUxc/u/vwg4RI282TvNqZDn3gg4lHOHlCPKwl48kduwAx3cuAtQ6J8xpGLYQZ/sHBmtFoNeF6FvYJYio0/eZpvsQQYy/yZ4LUQ7zx2BVf9UBIfySCX6i7dW7zw5JMmvArgdzisU7kowDxEOje1LOgOP1+lIUUkeRf2DkzylA3sxi/weg0lJvXwTOuny9UQxKDeK6TwcYbhfUdtJHFz92KiKeuo+7jAT3Y0JzOHGCjA2C9IHkhwG7L1ey8iYPRf8FFUG5VXpuULvohaxxN1XPbck9Of2RF3dxCHUWFM9YbL9rmzsymmQwm+Av6HMBiQ3qDgoLACh0/itl6g2c1DboXQI2dGXBPMw4jQMbsVSQLGoUTucZG3VjoNkljYkIgUjP1ZDYmibUdl4L/MpFrF79RJK/gfsM4b0+Xmb3gDe+rT0OoC+foByLsTpYqFmf2mZoJthw7W3rcziGMlqtN0Wpr7CyCflsKirdDSor813KVy68pULP1is+/rrvImUtCL0z4sACUeqPCkRSiFpFZL6IAfkzsxgmLf+iOtj
+      ryZ/4QJEgwzDvfx/hc3hDBzvxe4IvEqN6yPrgWp1dh7R5qgVcmQZIZiYPtqMzlGC7k5/EuzhPx03a+Q9jHtEg2n05rD01z/CcD2v6lpG265syKzw50BkcrODEfrLYAB+cmlTMoTLutTr2h6N6QcjSywJH2qhTDUWdMOmfSomjFnWnuv2WOE8UMZ8vJ7NK8Ecl9QooMRKt05Viah5Rsqvw6/ycYV0Yfb77X7KF/OT45suJIC8E9JkNDFyF0Ta4ypFh61vefmxDHRKMqrOhyf+PCBBcE18ityVSxw6YCUzX/DdT+9dH3XwgaIg3njiSbYCCiBAAJ/Y2E931EBnZbFI8W+7Z2fMO/LW56df8hRpdL0KXz4OZ986RQ+Lx7nvDugHnSUrimYkP6CteT/uQRT0uvHM0zBie4kCqP+GDLayoVV/9GTdTwjJPYc4oCiEnLETaRO2bT6ob8hlyyAwzPXHKHDvJmnKGYKRfD+wO8/GyzOyljgTlKfWWptAoNlHE1bPdzvVM9abzWbTGsO3DZWrdBu1a+qEp3svEEtDoZ8UCxFekyctZP5kz5wE1YScA99blody52qRLGKV/JUYJhsPzJ0sIAfQdTTRoNO33WDCaHVqSMBG8b6DxJuFWfp4LYaXbJwaJKhJRBN3KxwZmQlsiwIaKQjQRnNiP2YBaZuNNv5xNlpl1JfrGZNll+0dBgMx1SeRD0gJhXC0vzQ4uNiWBvCrK21wMs1LB76piMjiMCxhAkMyInTEQlXoAEsIUtgkHKWIY59j2ExnTY=
           properties :
            x : [%cstMargeDefaut%]
            y : [%:m_nPosYActu%]
-           width : 156
+           width : [%cstLargeurChampDefaut%]
            height : [%nHauteur%]
           dropdown :
-           internal_properties : BwAAAAcAAAAFcaDRw/wn/VLGlN+73CMDqD2HI6emkdAw47jwam14OQc+hSKzyKeajO+3gMY4L9fDRs1yWJkiGdoajoLEywo0o4p/I5D1Fe90rJ0omNJrEqiOOLOr042o8PqU9QKAlt3y8EelyhbeaejrJGpGBkGLeoVca3vbHDPsC7JyGzPr2az8TNfH+hIPj/HsRWofuAPZFyZcI+MCqRSCX8Y7zzxSbvvvdnAp6QkMzPsQfmHYYGBj3j4o+Xf2FSh5vQ9yCXbV9CYvmXeZD9m4svA9KRoO26UDof5OeVsNUcYHpEhMDvbVuw3La6fPgiYKRyAx+3LC9HSw7/5USqVc0lvErdTD3zsFG4f62oDN7tnvLiWaqyl5GFy7vCSOV4X40lLoHA7bRKugZX3igLjEy7EcjHzcIMgAMMwEWF3BTLuPLWQjOsJI8KFbuFCH5Z9XkZxyjnvkPsDjMYepbX6gV6PMVCgwHcVc6PT78DBEvo9uVrayGSPmdntFlvMZvuvoshZr0gXUThr0V0EaDAeU5H6u6cCEOOgBIHqeFO6xHcfSL+0fyVGllV1v8mzNv7PWOOML5U2Nu+zYGTyUEG4fi61JuSCacWNxAqTTWaiStoIcTtRO2sPnL5uHLiaQpYMOXktxOFPBIos9oDSPg14/oZI/wbEzoG7wNNUjyWtNMPOWhLxiZTInlO5SCuaCTjsrXmY3XkC8nAc38fntCER5wXXr6u/Jw1N34SG64MkUXd62VFMNVvgM
+           internal_properties : BwAAAAcAAACnk1pqyFz+ymwn6FtFDsevSMOX4wnYD2a4cfBo4JNkbbckQQ7Nyk2IxC23wIx2uzP3WIl2Nj+Uh5bkhj5WZXZ4E6gHq54LL1Wc4iV4ptgDqlj83Lcp6Z+G2MjUgcRS3qX2imspbOD0bwzdSN4Y2BmLdrdcmyVFuu2gJTaK4RkPRXTSGDOJfDANa6sI4VxheKuJNUZsPU3oexCsk+I1+ch+Qn0z6joL16ewho9UQON8tNRlRkZ+b4k8sYqdmVlk5QJ1+iozY1GHydVq6jxP8z5inweLSdR0EwFllypXesY4KkJnS72BcSmdShw+k6pr15Y+hhRY3ZROXKkOwqMay7Q7Ux0xX1EUqM6lXD2zgJfWR0F/DCBZipYku7htHR8r5W1ET5w/tnSrhxmfyLT5j+lPuXOxD+0jCYyyfwhCGqfYDX/HtWxw49WqesYYEIV5D9pF+claun5yaPsvIFoFC3HHhpBV7w2qAXuJnaClj00jkLQB3wLOTWxYeyLZeU8yExTVsRsDMOB7u/xjHf0vWElzxU+eg/cZ+ekycERlNPgIgJacguDEZUkoOB6jq7gGYtg6OrET7iep7zMO/ASSkN2trnIm3cn29uvzCXcnq4eTrSSywJqQLZcL3nYTESCMqQpSXawsofNAIjt+KkmQYJJiZWX9l2Ke/oJ2y3ARKddDtD82iflvdYvl75boWbMae3uJk6S6bgxKA3VUzmDoHThASOqcPNaFJQy0FS8+NjwreJqu
            type : 7
           type : 14
           code_elements :
@@ -429,7 +456,9 @@ class :
            p_codes :
             -
               code : |1+
+               [%:sNomProcChargeCbo(stProto.sNom)%]()
       [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
             -
               type : 35
               enabled : false
@@ -478,7 +507,7 @@ class :
           properties :
            x : [%cstMargeDefaut%]
            y : [%:m_nPosYActu%]
-           width : 351
+           width : [%cstLargeurChampDefaut%]
            height : [%nHauteur%]
           type : 2
           code_elements :
@@ -548,7 +577,7 @@ class :
           properties :
            x : [%cstMargeDefaut%]
            y : [%:m_nPosYActu%]
-           width : 351
+           width : [%cstLargeurChampDefaut%]
            height : [%nHauteur%]
           type : 2
           code_elements :
@@ -617,7 +646,7 @@ class :
           properties :
            x : [%cstMargeDefaut%]
            y : [%:m_nPosYActu%]
-           width : 351
+           width : [%cstLargeurChampDefaut%]
            height : [%nHauteur%]
           type : 2
           code_elements :
@@ -736,7 +765,7 @@ class :
           properties :
            x : [%cstMargeDefaut%]
            y : [%:m_nPosYActu%]
-           width : 100
+           width : [%cstLargeurChampDefaut%]
            height : [%nHauteur%]
           options :
            -
@@ -788,7 +817,7 @@ class :
           properties :
            x : [%cstMargeDefaut%]
            y : [%:m_nPosYActu%]
-           width : 351
+           width : [%cstLargeurChampDefaut%]
            height : [%nHauteur%]
           type : 2
           code_elements :
@@ -856,7 +885,7 @@ class :
           properties :
            x : [%cstMargeDefaut%]
            y : [%:m_nPosYActu%]
-           width : 351
+           width : [%cstLargeurChampDefaut%]
            height : [%nHauteur%]
           calendar :
            internal_properties : BwAAAAcAAACD+qjhJiaBQTVEFZEUKlLq5h1k27lT9xrG6ol6KPNYwDQYVpZNsa/FGb6GCXUp2r7rZoE4JShqrHo18aGppmALZtKDQ4jSQI9kSV/M42dtQwZ17RChq+3Q652UNNOQDNyzsSZiR/csW0HYkhZoOn+O5PqxNCBeMCB2FKvzRPEN7ho3vgNctE5M5+dA0Uux2jXvo5pVXdV8rPyuAVqX7R/jfL8AU8XcXjDzqDExHhr0qWHQLOLwJaaOZg96r0dRgNaUKD/nFqqFuEcd4FS42CaEhd0FWJ5HY1DYw4PMCjr5qjd31FcMQhHbpmltUP0TKyv9YJ08Jt6s1uZfIp0RGHqNe73abMVtCyL0Jb+vDWhKyLohGb9tWCxxOXKmH9JmDfbzWKNsDjkgbkww9BhbOJcjVdxpwiaGAvKm0YGgWE5LEGqAnfWhvkYLL2D2jrmqNdrVUiJ8qTfOdMfd3fLBKzT3eC3qYSmVuGJ5d9vde7dKU0Abj0cplF8j9HxvASLJ4/CCn3eXRAS8mZefDg/Fl6knFtVJNND/U1IsMsQPLmwwi+/7f9PweB1Z1gDwDpBKWPPlBarCgEIccLu1c50xtK5h4r9GS2+knzNs63RH5a9P4Kd9EI1Q3o36LQwrZnQMvBAYfUsrIya7cXgjcm7+2oTF9CD5qEB+Tcs/eqqA0PJ7AwtDLWpvajwFifErY3RFD+X9krcPYZxdCR65q3hAgcCz+Usx4IvsY+hUniH52qGyBnD4RbUEH3cRh5EoEeYxJcJ+iSHC9FdfU5dIIT3OfBKtzUOAgvi1NwO+wR2z3F2HiJtPHFky0Gppk7hmlbAv98AckLRSUF8Imo5iP2/4NzoD759zmYGSgZ/rEfS43akUql5+JxLnQoQ4Eop1Aj/W29mCElO6K01IeE2jlPWgC3lby0CyBLd4+FNTIO6wwaqeo9aBB4YOCeYDVpok8VDIOIE8
@@ -900,7 +929,7 @@ class :
      name : GenChampsHeure
      procedure_id : 1462456202798914006
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] GenChampsHeure (<stProto> est STR_ProtoChamps)
@@ -928,7 +957,7 @@ class :
           properties :
            x : [%cstMargeDefaut%]
            y : [%:m_nPosYActu%]
-           width : 351
+           width : [%cstLargeurChampDefaut%]
            height : [%nHauteur%]
           type : 2
           code_elements :
@@ -963,6 +992,135 @@ class :
       :m_nPosYActu += nHauteur + cstMargeDefaut
       
       renvoyer sReCheckLignesCode(sRetour)
+      
+     type : 458752
+   -
+     name : GenChampsDateheure
+     procedure_id : 1466213792365233096
+     type_code : 12
+     code : |1-
+      PROCÉDURE GenChampsDateheure(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      
+      sRetour est une chaîne
+      nHauteur est un entier = cstHauteurDefaut
+      
+      sRetour = [
+        -
+          name : SAI_[%stProto.sNom%]
+          identifier : [%GenProcIdent()%]
+          internal_properties : BwAAAAcAAADBLRHOTEWZtq7xY1kOCO+UM+464toHF678SktSgeCP7dm+UABvStoovaQya5hrgMROVzOOg7v6K5RZrlJCEbh6Dlcwx/LYGVKLrXOSm5Vgv157IJZSKTRrmQD+7pisMVy+ym+RvP6gBXnW8SGHOyqTTV4HAuHurEZlMA3peC8NuBejr15XhX4TcrxfGZNrE4XETjShWEspva8uoAnqcyoNtHLq49hm0uf6PKrevU7b/lkkvVpSBBLSCPz3cYK73VrIdLcGlpG4yBN10sRqtqWoN7QAsQI51/nij0WcwXDt8ygygifR1Jc9rP282oJRM3/6BFy9L4ITRX86vXueur+SgyWs5IL9D24ZfdGIeubBT2FuDAYeMmmyDVpXsD9oC4RSOOrL8G6C32OSbNyJRBtePCQXb57STLvcxm4EMBCFEVyxsr5MuyNr/ogcGgVzSWXpslQeoJNmBYTDmi5YlADkVNqdt3S84zups9dVazySAGVGT6o9ZoCB7KnGnzQoELPesUQq2bh/tXVetgUWmUscvU7yH3SVVAZOLodT13NhpqDjaQTcGZdE/V+sy5b1g8Qotpka2JmTTuXiQYgNDuFfKUQI6r18itGj8S8dUbpShkxQMhDnPQeStpexOzgJ8GlZPbhbvw+aGeRlwEvquUUCDclURDp6z1LX+IMHhhaxbyeaK8GLwBOI7o3XQ+oyobsB6KrSI1hRQOZoWS7equ0ntdz0uq8NYPTdSbc3JHs2ryBw6GlXCfyEVLR9wNkCaJ6jh+pPPUJUNhgLW4i4ebUJRxbwdDaQbUef6JqPgFHshST7TWLX7IG/cKg26qtMfRxb9fU8n7wdHGS98sACVmZMFm0MiyyFHZ1dgiBZgkW/NPj2a0UbnQUcI8KJKbVPHdjYyf9jTm6BO+jFetiTsJ1DZUYJp9hMxXFxvKdIqrHKgnmmCKgjUgPqFRLODSBCJTGUK
+      ZgasEt2iUYrNCje/KpzZduXxvVD1If2wKxHzcicUUYGcD8rXlzkmM8VKO+FDsozTACtL6pp1y3eoHyVCWvy3PtzgVnhPKRS+6hvje2q2haaetr3Csbu0RjgyRrYG1KvdyUk/ri6htRn4MpdtG4p1/QTOPzhcUbxobcMWq3/e9oSUosHKB9QvaR1g7FkNoLt6vXgwTJJN+smxM96f2nR+hPEJ+5nNsiiaGPLq776j9hjsGSRPi2Vxfrnv15kmlF3kMy2S6ITKQqMo7wM+xvmQm888NVObUqFGJzypx/jK7rjlJWTLh4SE9JKDxR3cMieJNXhJHk3Lit65QY0xIndnVAMDtKBBP01N6oYzqug4s04uw950GPjbuE0n6N2U0hcpoiDxCSv0Pz3LwLiaeYPp+jqDBmzRRoPMsVMAMJDRXehqIyed0nOYj3m6i8mshwG1mpmyIJjSqfNX0KvyLmQpyQCQCJiYVxQiZ4dMdrDXmuKsjHKc/4F0rfYeMi9qqLUc5hP5Q==
+          properties :
+           x : [%cstMargeDefaut%]
+           y : [%:m_nPosYActu%]
+           width : [%cstLargeurChampDefaut%]
+           height : [%nHauteur%]
+          type : 2
+          code_elements :
+           type_code : 3
+           p_codes :
+            -
+              code : |1-
+      [%:sIndentSpace(sCommenteCode(stProto), 9)%]
+              type : 14
+            -
+              code : |1-
+               
+              type : 15
+            -
+              code : |1-
+               
+              type : 16
+            -
+              type : 276
+              enabled : false
+            -
+              type : 277
+              enabled : false
+            -
+              type : 278
+              enabled : false
+            -
+              code : |1-
+               
+              type : 17
+      ]
+      :m_nPosYActu += nHauteur + cstMargeDefaut
+      
+      RENVOYER sReCheckLignesCode(sRetour)
+     type : 458752
+   -
+     name : sNomProcChargeCbo
+     procedure_id : 1467423697554300223
+     type_code : 12
+     code : |1-
+      procedure prive sNomProcChargeCbo(sNom_p est une chaîne)<metier>:chaine
+      renvoyer "Charge_Cbo_" + sNom_p
+     type : 458752
+   -
+     name : sGenProcChargeCombo
+     procedure_id : 1467424268785018305
+     type_code : 12
+     code : |1-
+      procedure prive sGenProcChargeCombo(sNom_p est une chaîne, clOEntiteLiee_p est un ClZF_GenCodeFic, bNullPossible_p est un booléen)<metier>:chaine
+      
+      sNomCbo est une chaîne = "CBO_" + sNom_p
+      
+      sRetour est une chaîne = "
+      PROCEDURE [%:sNomProcChargeCbo(sNom_p)%]()<ui>:Vide
+      
+      oCol est un [%clOEntiteLiee_p.sNomClasseColGen()%]()
+      oCol.GetAll()
+      
+      "
+      
+      si bNullPossible_p ALORS
+      	sRetour += "
+      	oCOl.ZF_ChargeCbo([%sNomCbo%]..NomComplet, *, "Aucun")
+      	"
+      sinon
+      	sRetour += "
+      	oCOl.ZF_ChargeCbo([%sNomCbo%]..NomComplet)
+      	
+      	SI ListeOccurrence([%sNomCbo%]) = 0 ALORS
+      	[%TAB%]Avertissement("Saisie impossible : Aucun ""[%clOEntiteLiee_p.p_sLibelle%]"" n'est paramétré.")
+      	[%TAB%]ferme()
+      	FIN
+      	"
+      FIN
+      
+      
+      sRetour = :GenBloc_ProcedureLoc(sRetour, :sNomProcChargeCbo(sNom_p))
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenBlocInitFen
+     procedure_id : 1469074751745451834
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBlocInitFen ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenBlocInitFen():chaine
+      
+      sCode est une chaîne
+      
+      sCode = [
+      	SourceVersEcran(MaFenêtre,"[%:sNomObjGlobal()%]")
+      	]
+      
+      RENVOYER sCode
      type : 458752
   procedure_templates : []
   property_templates : []
@@ -971,7 +1129,7 @@ class :
   original_name : Classe1
 resources :
  string_res :
-  identifier : 0x14345a8914469ef9
+  identifier : 0x145569f100954b64
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

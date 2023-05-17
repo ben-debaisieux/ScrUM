@@ -18,7 +18,7 @@ class :
       ClZF_ColObjDB est une Classe, abstraite
       prive
       	m_bEstCharge est un booléen
-      	m_aoObj est un tableau de ClZF_ObjDB dynamique
+      	m_aoObj est un tableau de ClZF_ObjDBls dynamique
       	
       public
       GLOBAL
@@ -168,14 +168,13 @@ class :
       //
       // Paramètres :
       //	Aucun
-      
       // Valeur de retour :
-      // 	tableau (ClZF_ObjDB dynamique) : <indiquez ici le rôle de la valeur de retour>
+      // 	tableau (ClZF_ObjDbLs dynamique) : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure abstraite aItems()<métier>:tableau de ClZF_ObjDB dynamique
+      procédure abstraite aItems()<métier>:tableau de ClZF_ObjDBls dynamique
       
      type : 458752
    -
@@ -504,9 +503,54 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure ZF_Tri(sOrdre_p est une chaîne):vide
+      procédure ZF_Tri(sOrdre_p est une chaîne)<metier>:vide
       
       TableauTrie(:m_aoObj, ttMembre, sOrdre_p)
+     type : 458752
+   -
+     name : ZF_ChargeCbo
+     procedure_id : 1467415051771389681
+     type_code : 12
+     code : |1+
+      procedure ZF_ChargeCbo(sCombo_p est une chaîne, sPropriete_p est une chaîne = "", sLibItemNull_p est une chaîne = "")<ui>:vide
+      
+      pclOTmp est un objet dynamique
+      ListeSupprimeTout(sCombo_p)
+      
+      si sLibItemNull_p <> "" ALORS
+      	ListeAjoute(sCombo_p, "<" + sLibItemNull_p + ">" + gLien(0))
+      FIN
+      
+      pour tout element pclOTmp de :aItems()
+      	si sPropriete_p = "" alors
+      		ListeAjoute(sCombo_p, pclOTmp.sRepresentation() + gLien(pclOTmp.ZF_Get_IdUnique()))
+      	sinon
+      		ListeAjoute(sCombo_p, {"pclOTmp." + sPropriete_p} + gLien(pclOTmp.ZF_Get_IdUnique()))
+       	fin
+      	
+      FIN
+      
+      ListeSelectPlus(sCombo_p, 1)
+     type : 458752
+   -
+     name : ZF_ChargeTblComplete
+     procedure_id : 1467780321537743548
+     type_code : 12
+     code : |1+
+      procedure protege ZF_ChargeTblComplete(sNomTable_p est une chaîne)<metier>:vide
+      
+      :ZF_LoadSQL([
+      SELECT *
+      FROM [%sNomTable_p%]
+      ])
+     type : 458752
+   -
+     name : GetAll
+     procedure_id : 1467781111812368545
+     type_code : 12
+     code : |1-
+      procedure abstraite GetAll()<metier>:vide
+      //ZF_ChargeTblComplete(MaTable..nom)
      type : 458752
   properties :
    -

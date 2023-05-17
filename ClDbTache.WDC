@@ -292,7 +292,7 @@ class :
       	SINON
       		
       		//User story parente
-      		si m_EnrOrigine.IDScr_UserStory <> :m_oUserStoryParent.Get_IdUnique() ALORS
+      		si m_EnrOrigine.IDScr_UserStory <> :m_oUserStoryParent.ZF_Get_IdUnique() ALORS
       			:AjouteHistorique("Changement d'user story")
       		FIN
       		

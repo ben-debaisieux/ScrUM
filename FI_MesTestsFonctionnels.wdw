@@ -301,7 +301,7 @@ window :
       	
       	
       	nNumLigne = TableAjouteLigne(TBL_MesTests)
-      	TBL_MesTests[nNumLigne].COL_IdUS			= oUs.Get_IdUnique()
+      	TBL_MesTests[nNumLigne].COL_IdUS			= oUs.ZF_Get_IdUnique()
       	TBL_MesTests[nNumLigne].COL_US				= oUs.sNommination_US()
       	TBL_MesTests[nNumLigne].COL_US..Bulle		= sBulle
       	TBL_MesTests[nNumLigne].COL_Projet			= oUs.p_oProjetParent.p_sNom

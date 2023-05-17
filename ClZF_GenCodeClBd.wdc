@@ -14,7 +14,7 @@ class :
   type_code : 10
   p_codes :
    -
-     code : |1+
+     code : |1-
       ClZF_GenCodeClBd est une Classe
       	herite de ClZF_GenCodeCl
       	
@@ -23,6 +23,11 @@ class :
       	m_bLectureSeule est un booléen
       	m_sEx_Decl est une chaîne
       	m_sEx_Inst est une chaîne
+      	m_aConstantes est un tableau de STR_Const
+      fin
+      STR_Const est une structure
+      	sCle est une chaîne
+      	sVal est une chaîne
       fin
      type : 131072
   procedures :
@@ -50,10 +55,10 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GenDeclaration (<oGencode_p> est ClZF_GenCodeFic)
+      //[ <Résultat> = ] GenDeclaration ()
       //
       // Paramètres :
-      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      //	Aucun
       
       // Valeur de retour :
       // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
@@ -61,20 +66,21 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure prive GenDeclaration(oGencode_p est un ClZF_GenCodeFic):chaîne
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      procédure prive GenDeclaration():chaîne
       
       
       sRetour			est une chaîne
       sListeMembres	est une chaîne
       stDefRub		est un ClZF_GenCodeFic.STR_DefRub
       sRub			est une chaine
-      stRubCol		est un ClZF_GenCodeFic.STR_InfoCol
+      //stRubCol		est un ClZF_GenCodeFic.STR_InfoCol
       sDecExcept		est une chaîne
       sInitExcept		est une chaîne
       sHerite			est une chaîne
       
       
-      pour tout stDefRub, sRub de oGencode_p.m_aRub
+      pour tout element stDefRub, sRub de :m_oClasseGen.m_aRub
       	sListeMembres += [rc] + TAB + stDefRub.sNomMembre + "	[%stDefRub.sNomDeclarationComplet%]"
       	
       	si stDefRub.nTypeRub <> ClZF_GenCodeFic.cstDefRubObj ALORS
@@ -85,9 +91,9 @@ class :
       FIN
       
       
-      POUR TOUT element stRubCol de oGencode_p.m_aCol_Enfant
-      	sListeMembres += [rc] + TAB + stRubCol.sDeclaration
-      FIN
+      //POUR TOUT element stRubCol de :m_oClasseGen.m_aCol_Enfant
+      //	sListeMembres += [rc] + TAB + stRubCol.sDeclaration
+      //FIN
       
       
       si :m_bLectureSeule ALORS
@@ -109,7 +115,7 @@ class :
       
       
       sRetour = [
-      [%oGencode_p.sNomClasseGen()%] est une Classe
+      [%:m_oClasseGen.sNomClasseGen()%] est une Classe
       [%TAB%]hérite de [%sHerite%]
       	
       PRIVÉ
@@ -122,10 +128,13 @@ class :
       
       [%sInitExcept%]
       
+      
+      [%:sDeclareConstantes()%]
+      
       ]
       
       si :m_bNatif ALORS
-      	sRetour = GenBlocCL_Init(sRetour, oGencode_p.sNomClasseGen())
+      	sRetour = GenBlocCL_Init(sRetour, :m_oClasseGen.sNomClasseGen())
       FIN
       
       renvoyer sRetour
@@ -137,10 +146,10 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GenGetObj (<oGencode_p> est ClZF_GenCodeFic)
+      //[ <Résultat> = ] GenGetObj ()
       //
       // Paramètres :
-      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      //	Aucun
       
       // Valeur de retour :
       // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
@@ -148,15 +157,16 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure PRIVÉ GenGetObj(oGencode_p est un ClZF_GenCodeFic):chaine
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      procédure PRIVÉ GenGetObj():chaine
       
       sRetour		est une chaîne
       sNomProc est une chaîne = "GetObj"
       
       sRetour = [
-      PROCÉDURE GLOBALE [%sNomProc%](LOCAL nIdUnique_P est un entier)<métier>:[%oGencode_p.sNomClasseGen()%]
+      PROCÉDURE GLOBALE [%sNomProc%](LOCAL nIdUnique_P est un entier)<métier>:[%:m_oClasseGen.sNomClasseGen()%]
       
-      sClasse est une chaîne = [%oGencode_p.sNomClasseGen()%]
+      sClasse est une chaîne = [%:m_oClasseGen.sNomClasseGen()%]
       RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
       
       ]
@@ -174,41 +184,22 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GenInitObject (<oGencode_p> est ClZF_GenCodeFic)
+      //[ <Résultat> = ] GenInitObject ()
       //
       // Paramètres :
-      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      //	Aucun
+      
       // Valeur de retour :
       // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure PRIVÉ GenInitObject(oGencode_p est un ClZF_GenCodeFic):chaine
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      procédure PRIVÉ GenInitObject():chaine
       
       sRetour		est une chaîne
       sListeInit	est une chaîne
-      //sCle		est une chaîne
-      //sLigne		est une chaîne
-      //stRubTmp	est un ClZF_GenCodeFic.STR_DefRub
-      
-      //pour tout element stRubTmp, sCle de oGencode_p.m_aRub
-      //	si stRubTmp.sNomClasseObjetCompse <> "" ALORS
-      //		
-      //		sLigne = tab + ":m_o[%sCle%]	<- [%stRubTmp.sNomClasseObjetCompse%].GetObj([%oGencode_p.p_sNomTable%].[%sCle%])"
-      //		
-      //		si stRubTmp.bNullable ALORS
-      //			
-      //			sLigne = [
-      //			[%TAB%]SI PAS [%oGencode_p.p_sNomTable%].[%sCle%]..Null ALORS
-      //			[%TAB%][%TAB%][%sLigne%]
-      //			[%TAB%]FIN
-      //			]
-      //		fin
-      //		
-      //		sListeInit += [rc + rc] + sLigne
-      //	FIN
-      //FIN
       
       si pas :m_bLectureSeule ALORS
       	sListeInit = [
@@ -244,17 +235,19 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GenPreEnreg (<oGencode_p> est ClZF_GenCodeFic)
+      //[ <Résultat> = ] GenPreEnreg ()
       //
       // Paramètres :
-      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      //	Aucun
+      
       // Valeur de retour :
       // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenPreEnreg(oGencode_p est un ClZF_GenCodeFic):chaine
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      procédure GenPreEnreg():chaine
       
       
       
@@ -265,13 +258,13 @@ class :
       sNomVarExc	est une chaîne
       
       
-      POUR TOUT ÉLÉMENT stTmp, sCle DE oGencode_p.m_aRub
+      POUR TOUT ÉLÉMENT stTmp, sCle DE :m_oClasseGen.m_aRub
       	si stTmp.oObj_Parent <> null alors
       		
       		si pas stTmp.bNullable ALORS
       			sNomVarExc = "mg_oEx_CompoNonInst_" + sCle
       			:m_sEx_Decl += [rc] + sNomVarExc + "	est un ClZF_Exception dynamique"
-      			:m_sEx_Inst += [rc] + sNomVarExc + "	= Allouer un ClZF_Exception(""Enregistrement impossible : [%stTmp.sNomMembre%] est requis."")"
+      			:m_sEx_Inst += [rc] + sNomVarExc + "	= Allouer un ClZF_Exception(""Enregistrement impossible : [%stTmp.sNomMembre%] est requis."")			// A faire : Reprendre le message"
       			
       			sRetour += [RC] + [
       			//
@@ -283,32 +276,6 @@ class :
       		FIN
       	FIN
       FIN
-      //POUR TOUT ÉLÉMENT stTmp, sCle DE oGencode_p.m_aRub
-      //	si stTmp.sNomClasseObjetCompse <> "" alors
-      //		
-      //		si stTmp.bNullable ALORS
-      //			sCondNull = oGencode_p.p_sNomTable + "." + sCle + "..Null	= Vrai"
-      //		sinon
-      //			sNomVarExc = "mg_oEx_CompoNonInst_" + sCle
-      //			sCondNull = sNomVarExc + ".ZF_Declenche()"
-      //			
-      //			:m_sEx_Decl += [rc] + sNomVarExc + "	est un ClZF_Exception dynamique"
-      //			:m_sEx_Inst += [rc] + sNomVarExc + "	= Allouer un ClZF_Exception(""Enregistrement impossible : [%stTmp.sNomMembre%] est requis."")"
-      //		FIN
-      //		
-      //		sRetour += [rc] + [
-      //		//
-      //		SI :[%stTmp.sNomMembre%] = Null _OU_ :[%stTmp.sNomMembre%].ZF_Get_IdUnique() = 0 ALORS
-      //		[%TAB%][%sCondNull%]
-      //		SINON
-      //		[%TAB%][%oGencode_p.p_sNomTable%].[%sCle%]	= :[%stTmp.sNomMembre%].ZF_Get_IdUnique()
-      //		FIN
-      //		
-      //		]
-      //		
-      //	FIN
-      //FIN
-      
       
       
       sNomProc est une chaîne = "Pre_Enregistre"
@@ -347,19 +314,20 @@ class :
       //
       // Paramètres :
       //	sRub_p (chaîne ANSI) : <indiquez ici le rôle de sRub_p>
+      
       // Valeur de retour :
       // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenPropriete(oGencode_p est un ClZF_GenCodeFic, sRub_p est une chaîne):chaine
+      procédure GenPropriete(sRub_p est une chaîne):chaine
       
       sRetour		est une chaîne
       sPropR		est une chaîne
       sPropw		est une chaîne
       sPropDecl	est une chaîne
-      stRub		est un ClZF_GenCodeFic.STR_DefRub	= oGencode_p.m_aRub[sRub_p]
+      stRub		est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.m_aRub[sRub_p]
       sPropriete	est une chaîne
       sMembre		est une chaîne
       sTestModif	est une chaîne
@@ -373,16 +341,16 @@ class :
       FIN
       
       si stRub.oObj_Parent = Null ALORS
-      	sMembre		= "m_" + oGencode_p.GetInfoRubPrefix(stRub.nTypeRubHF) + sRub_p
-      	sPropriete	= "p_" + oGencode_p.GetInfoRubPrefix(stRub.nTypeRubHF) + sRub_p
-      	sTestModif	= "SI :[%sMembre%] <> [%oGencode_p.GetInfoRubPrefix(stRub.nTypeRubHF)%]Valeur_p ALORS"
+      	sMembre		= stRub.sNomMembre
+      	sPropriete	= stRub.sNomPropriete
+      	sTestModif	= "SI :[%sMembre%] <> [%:m_oClasseGen.GetInfoRubPrefix(stRub.nTypeRubHF)%]Valeur_p ALORS"
       sinon
       	sMembre		= "m_o" + sRub_p
       	sPropriete	= "p_o" + sRub_p
       	sTestModif	= "SI PAS ZF_bObjEgal(:[%sMembre%], oValeur_p) ALORS"
       FIN
       
-      sParam = stRub.sPrefixe + "Valeur_p" + oGencode_p.GetInfoRubType(stRub.nTypeRubHF,Vrai)
+      sParam = stRub.sPrefixe + "Valeur_p" + :m_oClasseGen.GetInfoRubType(stRub.nTypeRubHF,Vrai)
       
       
       
@@ -415,7 +383,7 @@ class :
       
       
       si stRub.oObj_Parent <> Null ALORS
-      	sRetour += rc + GenProprieteID(oGencode_p, sRub_p)
+      	sRetour += rc + GenProprieteID(sRub_p)
       FIN
       
       
@@ -428,10 +396,9 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GenProprieteID (<oGencode_p> est ClZF_GenCodeFic, <sRub_p> est chaîne)
+      //[ <Résultat> = ] GenProprieteID (<sRub_p> est chaîne)
       //
       // Paramètres :
-      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
       //	sRub_p (chaîne ANSI) : <indiquez ici le rôle de sRub_p>
       
       // Valeur de retour :
@@ -440,13 +407,14 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenProprieteID(oGencode_p est un ClZF_GenCodeFic, sRub_p est une chaîne):chaine
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      procédure GenProprieteID(sRub_p est une chaîne):chaine
       
       sRetour		est une chaîne
       sPropR		est une chaîne
       sPropw		est une chaîne
       sPropDecl	est une chaîne
-      stRub		est un ClZF_GenCodeFic.STR_DefRub	= oGencode_p.m_aRub[sRub_p]
+      stRub		est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.m_aRub[sRub_p]
       sPropriete	est une chaîne
       sMembre		est une chaîne
       
@@ -579,33 +547,40 @@ class :
       sRub			est une chaîne
       sProprietes		est une chaîne
       //sProcsChargeCol	est une chaîne
+      stRel est un ClZF_GenCodeFic.STR_Rel
+      stConst est un STR_Const
+      
+      pour tout stRel de :m_oClasseGen.m_aFK_de_PK
+      	si stRel.nTypeRel = ClZF_GenCodeFic.cstRelCompo ALORS
+      		stConst.sCle = ClZF_GenCodeCl.sNomConstanteColCompo(stRel, faux)
+      		stConst.sVal = """" + stRel.sTableFK + "." + stRel.sRubriqueFK + """"
+      		TableauAjoute(:m_aConstantes, stConst)
+      	FIN
+      FIN
       
       
       POUR TOUT ÉLÉMENT sRub DE :m_oClasseGen.aLstRubs()
-      	sProprietes += :GenPropriete(:m_oClasseGen,sRub)
+      	sProprietes += :GenPropriete(sRub)
       FIN
       
-      sClasse += :GenConstructeur(:m_oClasseGen) + rc
+      sClasse += :GenConstructeur() + rc
       sClasse += :GenDestructeur() + rc
       
       SI pas m_bNatif ALORS
       	sClasse += sProprietes + rc
       FIN
       
-      sClasse += :GenGetObj(:m_oClasseGen) + RC
-      sClasse += :GenInitObject(:m_oClasseGen) + RC
+      sClasse += :GenGetObj() + RC
+      sClasse += :GenInitObject() + RC
       
       SI PAS :m_bLectureSeule ALORS
-      	sClasse += :GenPreEnreg(:m_oClasseGen) + RC
+      	sClasse += :GenPreEnreg() + RC
+      sinon
+      	sClasse += :GenInit_Data() + RC
       FIN
-      //
-      //sProcsChargeCol = :GenChargeCol(oGenCode)
-      //si sProcsChargeCol <> "" ALORS
-      //	sClasse += sProcsChargeCol + RC
-      //FIN
       
       
-      sClasse = :GenDeclaration(:m_oClasseGen) + rc + sClasse
+      sClasse = :GenDeclaration() + rc + sClasse
       
       
       SI m_bNatif ALORS
@@ -623,10 +598,10 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GenConstructeur (<oGencode_p> est ClZF_GenCodeFic)
+      //[ <Résultat> = ] GenConstructeur ()
       //
       // Paramètres :
-      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      //	Aucun
       
       // Valeur de retour :
       // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
@@ -634,11 +609,12 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure prive GenConstructeur(oGencode_p est un ClZF_GenCodeFic):chaîne
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      procédure prive GenConstructeur():chaîne
       
       sRetour			est une chaîne = [
       PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
-      Ancêtre.Constructeur([%oGencode_p.p_sNomTable%]..Nom, [%oGencode_p.p_sNomTable%].[%oGencode_p.p_sNomRubId%]..Nom,nID_P)
+      Ancêtre.Constructeur([%:m_oClasseGen.p_sNomTable%]..Nom, [%:m_oClasseGen.p_sNomTable%].[%:m_oClasseGen.p_sNomRubId%]..Nom,nID_P)
       
       ]
       
@@ -652,7 +628,7 @@ class :
      name : GenDestructeur
      procedure_id : 1444072115012523090
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] GenDestructeur ()
@@ -676,6 +652,67 @@ class :
       
       SI :m_bNatif ALORS
       	sRetour = GenBlocCL_Destructeur(sRetour)
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GenInit_Data
+     procedure_id : 1466285419553143388
+     type_code : 12
+     code : |1+
+      procedure prive GenInit_Data()<metier>:chaine
+      
+      sRetour			est une chaîne
+      stDefRub		est un ClZF_GenCodeFic.STR_DefRub
+      sRub			est une chaine
+      
+      sProcedure est une chaîne = "Init_data"
+      
+      sRetour = tab + "[%:m_oClasseGen.p_sNomTable%].[%:m_oClasseGen.p_sNomRubId%]	= cst"
+      
+      pour tout element stDefRub, sRub de :m_oClasseGen.m_aRub
+      	sRetour += rc + TAB + :m_oClasseGen.p_sNomTable + "." + sRub + "	= "
+      FIN
+      
+      sRetour = [
+      PROCÉDURE GLOBALE [%sProcedure%]()<métier>:Vide
+      
+      /*
+      SI PAS HRecherche([%:m_oClasseGen.p_sNomTable%], [%:m_oClasseGen.p_sNomRubId%], cst) ALORS
+      	HRAZ([%:m_oClasseGen.p_sNomTable%])
+      [%sRetour%]
+      	HAjoute([%:m_oClasseGen.p_sNomTable%],hFixeIDAuto)
+      FIN
+      */
+      ]
+      
+      
+      SI :m_bNatif ALORS
+      	sRetour = GenBlocCL_Procedure(sRetour, sProcedure)
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : sDeclareConstantes
+     procedure_id : 1466662217246811717
+     type_code : 12
+     code : |1-
+      procedure protege sDeclareConstantes()<métier>:chaine
+      sRetour est une chaîne
+      stConst est un STR_Const
+      
+      pour tout stConst de m_aConstantes
+      	sRetour += [rc] + tab + stConst.sCle + "	= " + stConst.sVal
+      FIN
+      
+      si sRetour <> "" ALORS
+      	sRetour = [
+      		CONSTANTE
+      		[%sRetour%]
+      		FIN
+      		]
       FIN
       
       renvoyer sRetour

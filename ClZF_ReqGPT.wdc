@@ -1,0 +1,103 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_ReqGPT
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x14648fa1004931fc
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClZF_ReqGPT est une Classe
+      
+      fin
+      
+      constante
+      	cstCle = "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"
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1469457300086993404
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1469457300087058940
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : Req
+     procedure_id : 1469458932174814843
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Req (<sMessage_p> est chaîne)
+      //
+      // Paramètres :
+      //	sMessage_p (chaîne ANSI) : <indiquez ici le rôle de sMessage_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale Req(sMessage_p est une chaîne)<metier>:chaine
+      
+      restRequete		est une restRequête
+      restReponse		est une restRéponse
+      
+      
+      restRequete..Méthode				= httpPost
+      restRequete..ContentType			= "application/json"
+      
+      
+      restRequete..URL					= "https://api.openai.com/v1/chat/completions"
+      restRequete["Authorization"]		= "Bearer " + cstCle
+      restRequete["OpenAI-Organization"]	= "org-yikcGSyHbYh7vbf5H9t0e1HD"
+      
+      restRequete..Contenu			= [
+      {
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": "[%textevershtml(sMessage_p)%]"}]
+      }
+      ]
+      
+      restReponse						= RESTEnvoie(restRequete)
+      
+      //SI PAS restReponse.CodeEtat DANS (200, 201) ALORS
+      //	Erreur("Impossible de récupérer le token")
+      //	RENVOYER Faux
+      //FIN
+      
+      soit json_Résultat = JSONVersVariant(restReponse.Contenu)
+      
+      renvoyer json_Résultat.choices[1].message.content
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x14648f7000437350
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

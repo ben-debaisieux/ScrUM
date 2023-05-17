@@ -138,7 +138,7 @@ class :
       	si :m_oUserStory = Null ALORS
       		Scr_Message.IDScr_UserStory..Null		= vrai
       	sinon
-      		Scr_Message.IDScr_UserStory				= :m_oUserStory.Get_IdUnique()
+      		Scr_Message.IDScr_UserStory				= :m_oUserStory.ZF_Get_IdUnique()
       		nNbreCle++
       	fin
       	

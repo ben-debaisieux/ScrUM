@@ -134,6 +134,15 @@ class :
       
       renvoyer ::mg_nNumSprint_max
      type : 458752
+   -
+     name : GetAll
+     procedure_id : 1468675684798997025
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
+      PROCÉDURE public GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_Sprint..nom)
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

@@ -310,7 +310,7 @@ window :
       			
       			si bAfficher alors
       				nNumLigne										= TableAjouteLigne(TBL_TachesACoter)
-      				TBL_TachesACoter[nNumLigne].COL_IdUS			= oUs.Get_IdUnique()
+      				TBL_TachesACoter[nNumLigne].COL_IdUS			= oUs.ZF_Get_IdUnique()
       				TBL_TachesACoter[nNumLigne].COL_US				= oUs.sNommination_US()
       				TBL_TachesACoter[nNumLigne].COL_US..Bulle		= sBulle
       				TBL_TachesACoter[nNumLigne].COL_Projet			= oUs.p_oProjetParent.p_sNom

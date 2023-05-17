@@ -329,7 +329,7 @@ window :
       	
       	nNumLigne = TableAjouteLigne(TBL_MesCritères)
       	TBL_MesCritères[nNumLigne].COL_IdCritere		= oCriteres.ZF_Get_IdUnique()
-      	TBL_MesCritères[nNumLigne].COL_IdUS				= oCriteres.p_oUserStoryParente.Get_IdUnique()
+      	TBL_MesCritères[nNumLigne].COL_IdUS				= oCriteres.p_oUserStoryParente.ZF_Get_IdUnique()
       	TBL_MesCritères[nNumLigne].COL_Critere			= oCriteres.p_sTitre
       	TBL_MesCritères[nNumLigne].COL_Critere..Bulle	= sBulle
       	TBL_MesCritères[nNumLigne].COL_Projet			= oCriteres.p_oUserStoryParente.p_oProjetParent.p_sNom

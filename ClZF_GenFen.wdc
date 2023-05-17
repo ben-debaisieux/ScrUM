@@ -15,17 +15,17 @@ class :
   p_codes :
    -
      code : |1+
-      ClZF_GenFen est une Classe
+      ClZF_GenFen est une Classe,abstraite
       	hérite de ClZF_GenEltWD
-      
-      
       fin
       
       
       STR_ProtoChamps est une structure
-      	sNom est une chaîne
-      	sLibelle est une chaîne
-      	sSource est une chaîne
+      	sNom		est une chaîne
+      	sLibelle	est une chaîne
+      	sBulle		est une chaîne
+      	sSource		est une chaîne
+      	nTab		est un entier
       FIN
      type : 131072
   procedures :
@@ -56,12 +56,30 @@ class :
       sRetour est une chaîne
       sLigne est une chaîne
       
-      sCode_P = "Libellé : " + stProto.sLibelle + rc
-      sCode_P += "Source : " + stProto.sSource
-      
+      sCode_P = "A faire : " + rc
+      sCode_P += "Libellé : " + stProto.sLibelle + rc
       pour chaque chaine sLigne de sCode_P separee par rc
       	sRetour += [rc] + "// " + sLigne
       FIN
+      
+      
+      sRetour += [rc] + [
+      	MoiMême..Libellé		= "[%stProto.sLibelle%]"
+      	MoiMême..Bulle			= "[%stProto.sBulle%]"
+      	]
+      
+      si stProto.sSource <> "" ALORS
+      	sRetour += [RC] + [
+      		MoiMême..LiaisonFichier	= ":[%stProto.sSource%]"
+      		]
+      FIN
+      
+      si stProto.nTab <> 0 ALORS
+      	sRetour += [RC] + [
+      		MoiMême..NumTAB	= [%stProto.nTab%]
+      		]
+      FIN
+      
       renvoyer sRetour
      type : 458752
    -
@@ -110,6 +128,40 @@ class :
      type_code : 12
      code : |1+
       PROCÉDURE ABSTRAITE sNomFen():chaîne
+      
+      
+     type : 458752
+   -
+     name : GenBloc_ProcedureLoc
+     procedure_id : 1467791432664175871
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBloc_ProcedureLoc (<sCode_p> est chaîne, <sNom_p> est chaîne)
+      //
+      // Paramètres :
+      //	sCode_p (chaîne ANSI) : <indiquez ici le rôle de sCode_p>
+      //	sNom_p (chaîne ANSI) : <indiquez ici le rôle de sNom_p>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      procédure protege GenBloc_ProcedureLoc(sCode_p est un chaine, sNom_p est un chaine):chaine
+      sRetour est une chaîne = [
+         -
+           name : [%sNom_p%]
+           procedure_id : [%GenProcIdent()%]
+           type_code : 14
+           code : |1+
+      [%sIndentSpace(sCode_p)%]
+           type : 458752
+      ]
+      RENVOYER sRetour
      type : 458752
   procedure_templates : []
   property_templates : []

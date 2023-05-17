@@ -218,7 +218,7 @@ class :
      name : GenBlocCL_Propriete
      procedure_id : 1455884069893584057
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] GenBlocCL_Propriete (<sCode_R_p> est chaîne, <sCode_W_p> est chaîne, <sNom_p> est chaîne)
@@ -274,6 +274,28 @@ class :
       ]
       
       RENVOYER sRetour
+     type : 458752
+   -
+     name : sNomConstanteColCompo
+     procedure_id : 1466666275991524507
+     type_code : 12
+     code : |1-
+      procedure globale sNomConstanteColCompo(stRel_p est un ClZF_GenCodeFic.STR_Rel, bAvecClasseParente_p est un booléen = vrai)<metier>:chaine
+      
+      sRetour est une chaîne
+      oInfoSource est un ClZF_GenCodeFic(stRel_p.sTablePK)
+      oInfoCible est un ClZF_GenCodeFic(stRel_p.sTableFK)
+      
+      oInfoSource.Analyse()
+      oInfoCible.Analyse()
+      
+      si bAvecClasseParente_p ALORS
+      	sRetour = oInfoSource.sNomClasseGen() + "."
+      FIN
+      sRetour += "cstGetCol_" + oInfoCible.p_sNomUsage
+      
+      
+      renvoyer sRetour
      type : 458752
   properties :
    -

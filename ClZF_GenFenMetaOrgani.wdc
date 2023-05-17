@@ -1,0 +1,382 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenFenMetaOrgani
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1464f23c01e761a7
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_GenFenMetaOrgani est une Classe
+      	herite de ClZF_GenFenMeta
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1469565717973590439
+     type_code : 27
+     code : |1+
+      procédure Constructeur(oClasseGen est un ClZF_GenCodeFic)
+      Ancêtre.Constructeur(oClasseGen)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1469565717973655975
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : Genere
+     procedure_id : 1469566370809098486
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_GenEltWD.Genere
+      PROCÉDURE  Genere()<métier>:Vide
+      
+      
+      :GenereFI()
+      
+      
+      
+      
+      
+      
+     type : 458752
+   -
+     name : sNomFI
+     procedure_id : 1469571447461624451
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_GenFenMeta.sNomFI
+      PROCÉDURE  sNomFI()<métier>:chaîne
+      renvoyer "FEN_Ora_" + :m_oClasseGen.p_sNomUsage
+     type : 458752
+   -
+     name : sNomFen
+     procedure_id : 1469571447461690159
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_GenFen.sNomFen
+      PROCÉDURE  sNomFen()<metier>:chaîne
+      RENVOYER "FI_Ora_" + :m_oClasseGen.p_sNomUsage
+      
+     type : 458752
+   -
+     name : GenereFI
+     procedure_id : 1469578156202889626
+     type_code : 12
+     code : |1+
+      PROCÉDURE prive GenereFI()<métier>:vide
+      
+      
+      sCodeFI est une chaîne
+      
+      sCodeFI = [
+      #To edit and compare internal_properties, use WINDEV integrated tools.
+      #Internal properties refer to the properties of controls in windows, reports, etc.
+      info :
+       name : FI_Map_Item
+       major_version : 27
+       minor_version : 0
+       type : 8
+       description : ""
+       subtype : 0
+      window :
+       name : [%sNomFI()%]
+       identifier : [%:GenProcIdent()%]
+       internal_properties : BwAAAAcAAAC8nf/BwQdGd4tk8cIZEoRlQPLy6NjiL7VRibRcJEVcGaoTYStONzKwU0XSKt0bRxHC80kmYZKnti2tavWquRXt9Ni8266kG1eNDTi9CNNsTUIQX7kHs1mZvlYK67qtAOfVHUgt9W9v7v9COnLgJGb/i+LGljb3DdRJThCuX8BUGFov5uwfGswLceVojzYs3BKB9UtJ9BMIO5ALeF/OnD1z8f01jZP57RiEWjDEO6mPbB+vo3lWZolirDlbEf6wR79k5I3OqF6pzVDSMvhEErPY7TwFuO+xH3c2sJL9Fo5oFXeZbYBGPW4NK5a1xCKQV60xDeQGM1wIXInkk2ksUpzlKpbGWGbvpVtXnOF9mo3FrSyJiAwUoovbv5PlLglIaQ6GVMhKy40BXNOmnTKazM5X0jynWtX/enz+r8rNoFP0Ln0H/l67m9I3GXGBghLpkIFeX9opULxmoYVuaTSMCycLou2c5CP8sgP38qXGmVBx1Oc9TSo2wbSaqB5HBuH9uGHeETyLcizr7Wb54CkhIEkd4kM2IeOtrVh7frWFii9C3M+E0CbxG3pJKpoD4bHf4pyu1I1q8aAPx3FaON9E26VwacUEEJ2Z8JPi5IDCe2MwWrEapqs8xAioR4R8DRDPMKUgQeOTGdXVn70Qpxm3piXiDT3Yz8WHdDGd17ivq0ZL6iUWv76iJ1pVN8qWfOvqlwXSPWzM7F4NVpD+1o4HnU8v6XxXJmct5AlghwspWLNRo7Y=
+       properties :
+        width : 392
+        height : 119
+       controls :
+        -
+          name : [%sNomFI()%]
+          identifier : [%:GenProcIdent()%]
+          internal_properties : BwAAAAcAAAAuF2tAp9TyaQ/BqTyog7rmuyjIxvM7u8voU6Kdpfx11LbHSLhdjNEE7aiV8uf5WKQPvbwQgVF5BAlTyzLMcAZhBPFsMiHy6GBYmPYLLOtfpxEPcT4A7q7gFWleIobGc/7mQrNPMvXTpe3mf042MaIzL6XBxOYZc0Sc4U4BUtkyN7VZSTZ1aALbj5GDImZ+i4gYdHIvkpM1Ssk2mJSA9S9C5MgyO6dTOUFBkB5TZRncW7d2t2kC7yjmQY912+YG90WQ6Hkgr8zmwyUkxcdrRTcqQ+FZIZQI3yXDz2hO+ipvfrAWPesyw0aseh4pYYveeIMdkdyQMRcJ//yfisejVfFXpgs+DmRG9DS+Rm+wXnLN6m0FTckCN3jDHAL6fiCnVXW8HVglR7igZQ8y72iTA71sNDjqxu0oervmSbaGI0OvekkMVW5hTnV6ZOAs7PMjWQ==
+          properties :
+           width : 392
+           height : 119
+          controls :
+           -
+             name : LIB_Libellé
+             identifier : [%:GenProcIdent()%]
+             internal_properties : BwAAAAcAAAD1xIe2Ish+t4YZymZJXppV5RoR7j9q8qDPqyNsgU8iytTfugu5TKgOylO5/oizjASaZmBl4kTRami2KjnyUbH2KNFEd/kcuoC7ExsMmdQRvd9TSTizu53tsQHW54scAA356RUarHFg2S3P/J1Js/gpGmfWxzL3CE7JzeLDuIgBVZtgtlAHof6dvKLKao2BLw35SKTRMVlQ738ZLjqhHfS5xKUoWKI5ui4jn9gRM/f+JUgaED63u8xyiyCplb0Vid22zpt0cOH6Q1iXlPamjFPU2fbYyj+i4C9gYLxgk+b+k2glWH6UUCTHPhj8uUE8u0Df8eLm+ctr0iamdelDQABKxokU72bmYrG+xu5dEo+VX9Yvk3wc1Sh0vUm71sWLpc0RpWmtZASKMQ9CYCE8PwWg702A01kd2eWY8JnuIVx+kKctGD5YL3/e0rKjqmR2OLEEAQPqJlawl8dzi/KQjWyJxKiFpCNCQNn2H1XcryCJI5qYr286xqZNbXgb3oYl7SPoiWRd1ig9YL0/tqj6CGr6bw==
+             properties :
+              width : 388
+              height : 89
+             type : 3
+             code_elements :
+              type_code : 2
+              p_codes :
+               -
+                 code : |1+
+                  // Version 1
+                  // Description 
+                  // Libellé simple
+                 type : 14
+               -
+                 code : |1+
+                  Ouvre(FEN_Fic_ProjetMap,zoItem)
+                  AffInfo()
+                  //ActuMap()
+                 type : 18
+           -
+             name : LIB_SansNom1
+             identifier : [%:GenProcIdent()%]
+             internal_properties : BwAAAAcAAADgUs4B5A+FlNcbkWKxz19m5zg+yN+TRhCZEeB0PF6CaSmzv5dSxfmb0dsA9N/ATFbJ4eVsrX/LIJG529/bBS4ChCS8lHp2qAt1IycHu2FRdWX+y/BVblmqwlXmDzKtBsvaa5dxLuxE09Av+5hZbXVcEECEIeUvyU+G3KqGhljiKYFulrz34q0pP958FZYnFiDWjMKUXmwk+HBRBH26MuxgcMpfNl9+3D280r9dDF7V/ceJfmNu+T43krnIfrz9E1NFJTjpQxerPPY9o3WJ8DqT2WUZktnw072MUnotUnpjOISRL9mWMX2vd4m32HbDWQdHQdnm+Bvwelx+rCHrWB3tYyJDhCtNvQmyuVNF90/j4wkuvFNvj0oGGGp+AZjFmIi3GII5XfOHHRuLScs6Lggn528=
+             properties :
+              y : 99
+              width : 100
+              height : 20
+             type : 3
+             code_elements :
+              type_code : 2
+              p_codes : []
+           -
+             name : BTN_Ajout
+             identifier : [%:GenProcIdent()%]
+             internal_properties : BwAAAAcAAACbIWqrPpF5enPUrRASKeq47eolwtbsQpHhqjGqe2Rm7DYZ51sn/mkzKF1/BRyoQ2Jdkbngs6zDT1Tzi1LoVdDqouTE0+25pgwuA8xF9SW/puP4aoyUJBI95kJuefJY525GtcbOsyqdSPBc3d8DyenPIIgGU32ArfU957/DcbmPDkSB/mhixTjV8EhK0wHQe64RTHTxFZLV5k0MDY7DovNKqxnD1Lhge3RZ7KCmQo6MgUlomxkEv7pyjwwDKz7rxzIN5ljBfTdd+9zeW/E8cy3/3AfmqSMe0JQX3yM051PmMSJdbopyBHl4Ir2Ekny6IonYNSCElnimYlts3kh5PVF1BLvQ2o4Pjpg0wiEw7GB3sMdRAoKHMjFzXXaCJpBJtvasfiMRDewTlf34gGSAGRy9fhJACIpBNj38idL/rdy7dXyUHhKBlevCnppyB48+B9WTIYmMG+wA2J0tXDdqoH7uWQAmryg1fMSORsaxMn2Q4jNjlafAXCIc6cSdEtn81zwcIWj9iOdl+N69P6aCNMCR9RzK5y6TlFzV2xNGJpJt1YBCWtmjhPA2qddSnthTus/EwUd6dwUlM8DP3/x51KAQWYRIJSPNy3hLgSsyDfiaGT+EWQv6tCsHabOh0KfaN+Tk/dg55l3uevj2u7nFnvRIgqQEkdiIGQsbPe0GBvwqIAbCp5k8aPyijWdQyr3OUIZS0yEUe5vroOwPsWReH2QnWr0kKVx43nQWI/QwYin98sow65ux4Wx0uB4aturnA31R4JCtDuq8ceayqhc9Zt8Ut5rM4WKWiDQP73MkjgMi0ByLnumjK0l54nbMthXNAuTclaSy/2dJ9LRsOpmF5ZKYp7R4
+             properties :
+              x : 345
+              y : 95
+              width : 47
+              height : 24
+             type : 4
+             code_elements :
+              type_code : 4
+              p_codes :
+               -
+                 code : |1-
+                  oItem_enf est un ClDbProjetMap()
+                  
+                  si zoProjet <> null ALORS
+                  	oItem_enf.p_oProjet = zoProjet
+                  FIN
+                  
+                  si zoItem <> null ALORS
+                  	oItem_enf.p_oProjetMap_Parent = zoItem
+                  FIN
+                  
+                  ouvre(FEN_Fic_ProjetMap,oItem_enf)
+                  
+                  ActuMap()
+                 type : 18
+               -
+                 type : 161
+                 enabled : false
+           -
+             name : BTN_Supp
+             identifier : [%:GenProcIdent()%]
+             internal_properties : BwAAAAcAAAANj+Bx7O/HsLn+g+LAf1iGR9jzKAS6iFeflDmeiEiOsGqBuyMr8qE7PF0n0ZjMy74pAQUYlwCrbwiTY+6EKcCk1yDIE+kb7kbAXy/QV0OlsvmciqyUqub/kM542cRSLXr0WRriK1SdGiZ0849NEUEXm0Y+u4XItX3Nz8+LscHHbjw5PshyNei1yGgyA1kwm/ZhjOzJbYoNvk20jQbzuvt684HjNGhQm1SBPAhmao6MmUl4IyFsx6LKH/SzYw6jv3LV3sjRnUftqxRus4Ekk803/Nf+4Tu2uJwHJwOsR/sucdq1zvoitFkYOr3MohR6YmEoxQjszjCuWgsUrjAZdYml/HNwSq5vrrjs8umQdGC3uOdRCuoPGhkLfU6ifqBRPqbEFkORHZyjdUWIeERY+Uxl/rIIsLLZzjWsQUL3XbRjlbTI+jbtYbeOUibWI9vS+1GXBdWQ99j8lLHpoBMW5LIqzeQCQ/RxqIByUupNjjFEjueXYUusqC4InTBhvoUgOxhQ5fRBNDNhRNKJc5Lu6JTtWbAG27oPALhJJ+eiQhbRQWSWFp3vcNwiTYPWeoQHHitIRTPugzGR35RLUxiVKORMrViUaV+JhxQfrS8OKdy+NcN4Ve/2sDczHQ9VzGMOG8D4kTQdAmn6Bnxyz/VxojgU9khANSREFVdvyQEyIlBeTOp2s02IJGg+MUOklnliNOIWpdDPNM7QtzNYCOeRHgdGQ+7bOENT8zv5+MdnUSyQfQ+JQnJoBJELE9+RodW24lhC+RjP2CQ6T/TodHlXwDVu2RB2a8QY3lolzaUWQOUQStZ5OIP17VfHIDQKcM8DVLoyY/rssbWbRtpCANP/m2TuHSLu
+             properties :
+              x : 292
+              y : 95
+              width : 47
+              height : 24
+             type : 4
+             code_elements :
+              type_code : 4
+              p_codes :
+               -
+                 code : |1+
+                  
+                  zoItem.ZF_Supprimer()
+                  
+                  ActuMap()
+                 type : 18
+               -
+                 type : 161
+                 enabled : false
+           -
+             name : BTN_Sauve
+             identifier : [%:GenProcIdent()%]
+             internal_properties : BwAAAAcAAACbR+Qbq9M5cBQn5q+6cd0f09T7bUmg6+wodsNxXas7wTHJ7hmLcomalsAuQLcUEf9n0QxVVfyHf6yMprBLtVx2UMwSf/9twtbajYM906uz75P+bZtvYdYoXe4F9cNy7r7pc81k3hOAxwI2Z/bMcs8aaCN7rCObvFX3gT+HT9IqJ0nOjx0aMvtBA8nU+TFqfQu+RECJzIpXnbi87itHWwubYj3SChm40k2SaSzDdAq6fiCTKsRHKbIWaIJE60CUYUM3drcFDeOKDkc4PK5PdVEIR45HIkjNP7Bgsmn+mTxtm+OFnolDlhKyefJn5u42c8hq9GnUCS4BdRhDWI2X7iKiTyAkHLL8oSAB/nPzzeqD+yTJF1J14QGo30i6Ya3pBJLq78DD70CN4/fUD5xBrSLfwqI7lRK9cPgsRbMiUIA12hp8fNdBEv0NsyV+7SemXLckqwbKWz0ulK+03Ibo43Y9HPBoFBZskgxneSWm1uaNpsWnHjORSwBwPWEuJGleLFfXOYRynAxsm+tThWtIRXLcfDR0I6/x4cR1bz+E5hrsVcprBKJ+Ck2+1jdDyUvcPiDTZ5aFmp4l1QOIk+beXESUh5hAaxR3DR8pZQTqcMuExk70cpO8R+5Z2MroQ11pJ5nyKgUYI+iXg0flANftJB0e+jHsV/ydX+7Du7JolpoivKuBN52JV10vFfXPfo/bl+XNpRxf39asCci1wcckPJpLaCycTA0mrAwnzi98NwzvF4+WmPSZs5/HODKZEdiJ/8VteiXF0/dxp2mnpxkYbuKABtvfUVM1ict50XC297397oDJk+8cFKLK02KiQMoJct70aNkCMk+G0Unw6BwuvyXUdoI=
+             properties :
+              x : 345
+              y : 65
+              width : 47
+              height : 24
+             type : 4
+             code_elements :
+              type_code : 4
+              p_codes :
+               -
+                 code : |1-
+                  
+                  QUAND EXCEPTION dans
+                  	ClColProjetMap.oColMapsDeProjet(zoProjet).Save_Items()
+                  	//zoItem.ZF_Enregistre()
+                  	ActuMap()
+                  faire
+                  	erreur(ExceptionInfo(errMessage))
+                  FIN
+                 type : 18
+               -
+                 type : 161
+                 enabled : false
+           -
+             name : BTN_Modif
+             identifier : [%:GenProcIdent()%]
+             internal_properties : BwAAAAcAAACqje7ZWYCrUMOwlAVCIjc2KcktZ+FKfRrxUnsa/7Uot6seCmfJuEf1vi6YQ9jPtZiH0QXpQo9JpTpy+Hdm6ytv8yXb8igQJ6ByZzL3KrfoDmOb5FH8jmfX6LLDC2dU1c+8xih6DomAZS7xrcFTZ9Y+7lROM3T74jfsbSosvJ+eyq9EF/8BWSgVsdXTZqpSWaeXSnx4yjunakl0tyk8fUfuhiqA1w4cQ2cxkS+/MdBE41IU8Jjr81F/U23vdVlUAesqjW1xXf4EfuaEN+ONZ6pkooYJiv6cPT6ftRRFAg76Dd/HuSPf5u48GQxGoSh19j/2zNrToQlWSKZwOWmBtTYViypRBb4dcJtpPtx8RaRSXpV0y+22H7ewTePJmd++LmygMWjpFYC0oaQ7v+HxJDlX/Dy4KdBOC7bJ1GVFvVEivS5jTmGlgzlFj7Z9ptcsLZX/QOf7vyQc5RQfYcpwFOZiSQMmsIjDqjOPdJUCkMsecG0E9+y+VsSPJlQAO0nQ1yT49ozQmJ85wSVZutd4RjoHx02AENIpuuV469iZwHhbYVCjMK4NCibtqkUTf2j3AnvE5EUBA7tDwnm1GpeF6obyF+1UAmNVfx/42faJ6wqsLY+tWexWKglwZAESqfP41XjkUl509FOMF98iWMi5xghqwA3AesL49SaARf7REBIwrsipq6SEyoa7DNsjF7fKYJTMWqceINq6pSs+JJwE/VoOQ2xABl135ilo0LVOdTIfIL+3OCkwmW3tPX6HyvOJ00BxVyL3DWwrzY5l8GKTXF120qNwVm3J05JvTBX93PN+GFke9ZwvTDPoCoHoRS7dEOchmU0qLt2oAZKjH8I1/IGbj1JhOQ0=
+             properties :
+              x : 345
+              y : 125
+              width : 47
+              height : 24
+             type : 4
+             code_elements :
+              type_code : 4
+              p_codes :
+               -
+                 code : |1+
+                  //code modif
+                 type : 18
+               -
+                 type : 161
+                 enabled : false
+          type : 32
+          code_elements :
+           type_code : 70
+           p_codes :
+            -
+              code : |1+
+               PROCEDURE MaFenêtre(gOrgaElement_p est un OrgaElément)
+               
+               zoItem est un ClDbProjetMap dynamique
+               zoProjet est un ClDbProjet dynamique
+               
+               selon gOrgaElement_p..Contenu
+               	CAS ClDbProjetMap
+               		zoItem <- ClDbProjetMap.GetObj(gOrgaElement_p.ID)
+               		BTN_Sauve..Visible = Faux
+               		si zoItem.p_oProjet = Null ALORS
+               			BTN_Sauve..Visible = Faux
+               		FIN
+               	CAS ClDbProjet
+               		zoProjet <- ClDbProjet.GetObj(gOrgaElement_p.ID)
+               		BTN_Supp..Visible = Faux
+               		BTN_Modif..Visible = Faux
+               		
+               	AUTRE CAS
+               		ExceptionDéclenche(1,"Erreur contenu")
+               FIN
+               
+               AffInfo()
+       menu :
+        name : _Menu
+        identifier : [%:GenProcIdent()%]
+        internal_properties : BwAAAAcAAAAmnmsMK+pSZJrizHlry5BJP+sbufa4zccF/7flbZf4xlv2rTJ5avaWvToZog8Bfg5qj5cqL9/K+JLwUxYFygPOe4+hQvOqbwHe/B4YH64plXyGcwsEwRu1H7jq/rNyP/R81O/USeI2/APkVZidyxtNh0Y/fytnunm/iyk7nElGG0atcn+8qJ8LBDnxES4mH02yeiwFrgWEo6ixqShEqe7e3BCIlx4J1qYpblIc431oi7HFGkFiVZlDyYxU+PQl0CTH8W8dFRumzgcOnys3VyceJZTYWUhKrQ==
+        options : []
+       languages :
+        - fr-FR
+       popup_menus : []
+       message_bar : {}
+       code_elements :
+        type_code : 71
+        p_codes : []
+        procedures :
+         -
+           name : ActuMap
+           procedure_id : 1446269798164725518
+           type_code : 14
+           code : |1+
+            // Résumé : <indiquez ici ce que fait la procédure>
+            // Syntaxe :
+            // ActuMap ()
+            //
+            // Paramètres :
+            //	Aucun
+            // Valeur de retour :
+            // 	Aucune
+            //
+            // Exemple :
+            // <Indiquez ici un exemple d'utilisation>
+            //
+            procédure ActuMap()
+            
+            ExécuteTraitement(MaFenêtre..Nom + ".affiche", trtProcédure)
+           type : 458752
+         -
+           name : AffInfo
+           procedure_id : 1453935688406278667
+           type_code : 14
+           code : |1+
+            // Résumé : <indiquez ici ce que fait la procédure>
+            // Syntaxe :
+            // AffInfo ()
+            //
+            // Paramètres :
+            //	Aucun
+            // Valeur de retour :
+            // 	Aucune
+            //
+            // Exemple :
+            // <Indiquez ici un exemple d'utilisation>
+            //
+            procédure AffInfo()
+            
+            si zoItem <> Null ALORS
+            	LIB_Libellé = zoItem.p_sLibelle
+            sinon
+            	SI zoProjet <> Null ALORS
+            		LIB_Libellé = zoProjet.p_sNom
+            	FIN
+            FIN
+            
+            LIB_SansNom1 = gOrgaElement_p.id + " - " + gOrgaElement_p.Contenu
+           type : 458752
+        procedure_templates : []
+        property_templates : []
+       code_parameters :
+        internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+        original_name : [%sNomFI()%]
+      resources :
+       string_res :
+        identifier : [%:GenProcIdent()%]
+        internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+      custom_note :
+       internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+      ]
+      
+      
+      :m_sCodeFI = sCodeFI
+      
+     type : 458752
+   -
+     name : GenereFen
+     procedure_id : 1469578388131177360
+     type_code : 12
+     code : |1+
+      PROCÉDURE prive GenereFen()<métier>:Vide
+      
+      sCodeFen est une chaîne
+      
+      sCodeFen = [
+      
+      ]
+      
+      :m_sCode = sCodeFen
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1464f23501e14507
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -1,0 +1,93 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenFenMeta
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1464f1b401dc4b2b
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_GenFenMeta est une Classe, abstraite
+      	herite de ClZF_GenFen
+      
+      PRotege
+      	m_sCodeFI est une chaîne
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1469565133857311531
+     type_code : 27
+     code : |1+
+      procédure Constructeur(oClasseGen est un ClZF_GenCodeFic)
+      Ancêtre.Constructeur(oClasseGen)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1469565133857377067
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : sNomFI
+     procedure_id : 1469571335792317699
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sNomFI ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure abstraite sNomFI():chaine
+      
+     type : 458752
+   -
+     name : bVerifMeta
+     procedure_id : 1469572972176090115
+     type_code : 12
+     code : |1-
+      procedure bVerifMeta():booléen
+      renvoyer vrai
+     type : 458752
+  properties :
+   -
+     name : p_sCodeFI
+     identifier : 0x1464f9af021b7acf
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sCodeFI() : chaîne
+         
+         renvoyer m_sCodeFI
+        type : 1966080
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1464f1a901d62236
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

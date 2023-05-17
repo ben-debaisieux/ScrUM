@@ -775,7 +775,7 @@ window :
       		FIN
       		
       		nLigne = TableAjouteLigne(TBL_Liste_User_Stories)
-      		TBL_Liste_User_Stories[nLigne].COL_ID				= oUs.Get_IdUnique()
+      		TBL_Liste_User_Stories[nLigne].COL_ID				= oUs.ZF_Get_IdUnique()
       		TBL_Liste_User_Stories[nLigne].COL_Code				= oUs.p_sCodeUserStory
       		TBL_Liste_User_Stories[nLigne].COL_EnTantQue		= oUs.p_sEnTantQue
       		TBL_Liste_User_Stories[nLigne].COL_Besoin			= oUs.p_sJaiBesoinDe

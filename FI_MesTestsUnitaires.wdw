@@ -334,7 +334,7 @@ window :
       
       pour tout element oUs de goApp.m_oUsrCnx.aoMesUS_En_Test(ClDbUsr.test_unitaire).aItems()
       	nNumLigne = TableAjouteLigne(TBL_MesTests)
-      	TBL_MesTests[nNumLigne].COL_IdTache			= oUs.Get_IdUnique()
+      	TBL_MesTests[nNumLigne].COL_IdTache			= oUs.ZF_Get_IdUnique()
       	TBL_MesTests[nNumLigne].COL_US				= oUs.sNommination_US()
       	TBL_MesTests[nNumLigne].COL_Projet			= oUs.p_oProjetParent.p_sNom
       	TBL_MesTests[nNumLigne].COL_UsrTestPresent	= (oUs.p_oUsr_Test_Dev <> null)

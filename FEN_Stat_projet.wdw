@@ -1,0 +1,815 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_Stat_projet
+ major_version : 27
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_Stat_projet
+ identifier : 0x245c9eb492781c20
+ internal_properties : BwAAAAcAAAACMpiLnkryhB8w0ByNMJHoV+ImEFot4irGEVrhB+eC1vilSACcI6hw2K3dliKiQleTypykH6yyQrAWVj3xm0jUC/8Lt1YNKvJPBDXaKzWrqQPsQiL7S5cDA2nDQFnIg6HXHB7moDyyx3GyHzlkfYmWpKtakrhwZaZiENbyLJTKA1t5ATZAV0/JabIPS+NED0aBL1RfzpSz8JL0KU0EDbpJm/QeFCEfGaoEjDU07WVUXChQZmmwYKQ2s+cqkNNT2ywKda2Vurf7GVMoLCGKquRsxSO2Am228kXTSk24DBJ4RBQ/Gz0I4R5xY4QiH0p9twDy88cUThg5gFWXO8AclB6VxjcTN1Wxo2FXUsu0UbyrTs8j3ANw2YJiRWulAv2BnxPl/Op3n6gr/Ow26COD3uaWwNkklDWlvkNwwJcf4wrSpLB+SfR8tOkUPNX6b4kW/K9JVQC1oAyWY3F4UY4356RUWEjuPQk42XEjd2A2XDZDal5VCH59S/OpFrErKqMOdZdHirowLGz7u4VCcyrw/yJmKtwwX5XVfBQ3sG1wqt9Nm15/I47VN6fhvQwxI41TszgDHbLdHO3+bc8vf/q44aCEfwRZ3ZaYYwtoD9m1J7zD7JP0iyUv+ZqvexS10UsjZ75UXTPO5CRDHpKbiDnOuSMK3FOf41fEU4C2XOAs8BIm8Db4NYix8tv9NL9qdX4e5kcDU4bT/WFD1wy93sU=
+ properties :
+  width : 720
+  height : 551
+  widthClient : 718
+  heightClient : 519
+ controls :
+  -
+    name : CMOD_SansNom1
+    identifier : 0x245c9f3a928e25ea
+    internal_properties : BwAAAAcAAABbpVBxuMoeDy2nVrmoQpUjxFKtsokAEs7qfg/b6vb32okq2f/2iM8XfHaSN1YcxKcO7z72J+sOOVaLKr0c2myrC/PqKqKjqW2nGbMrWtcHj88LbQS+IMC9Hqv1HPpSPO9jnhJ4PJz+3Qw2kiIA87uSaYgQcaTehEKadpV1Bfju11GqzYaaCOJ586YcAK0MBhnAJyF2Jhq0goljNJq3V284EtkX1xYBR56J7e6xntVDoLU2AjYFs1wLvZWFS1ORaSUAMFPvckocDX2FDPCK1kC3Qa6+tiPOfr6X4R3RFyEjrvS2WGN0k/8MxTMo/U1lbFjnNfCBbe+lm8pvLoOhUnyUnWpbcjN4QnNAlPZMQcpEXsBKfh1HPHU+B8Wq8cQGrTjJtxlzpFIR28BihzrwEJMBtpPkKZRH/VLGZEVisckv6oMIWkTvqhttdU1Bwhh5IYNZ45uGFfyYqglUhOPo1nF1lSsMdY9vtAx+bDIee0BMEMkrtt3x8GCDGyyTQKvt/X9AUmF1wbYCujXJvtX0zVAQnZNH18+cqU5EP9pIFK4aqPek8PChsqSHJaMBr8oaDhBR4UJWeibTWWL085lVwyYWQOibKSa/3dL9V1k6HXsbrssRyOWzeVfolDah5ZNr04NWC0Tvp6UDETMjVsFPMQzPwlTynf1MD9AgAoArwhzLlslr6JGjD0h+jnJq6lt37RZTLb9z9SyyclgZ0lEISYw2Tvaa9dFyMrFrVjHdFQe2899ma/Yxs5EVKkvV/GAXHcig0HX22OxEUAZntO2+zHaxxQNXuPWF9xfx
+    properties :
+     x : 6
+     y : 1
+     width : 186
+     height : 22
+    controls :
+     -
+       name : SAI_Sprint
+       identifier : 0x245c9f3a929c25f9
+       internal_properties : BwAAAAcAAAAS9pFF1VyaHjQdMnhhVb6RukA2z7tiYpyJi1yjzQmFQZrBoOj2wBM4xqj3/1txxsxlLd/w4ZPmTqiV/CRVcBb2SNnwZ1pqUwt9UwBOc8H5fWFCMBKH0pe0/keaO1U9XR1Ov89tRZ14BitHz5pYHH+LjAHpAOEypH43u42XIaWOw2UFMofeRqCy70pm/VrclMldJsVD9dhn5PxvUVui/8avQuScn+S6IgzJ7Cp3jAmk7fOw8UDzbjdOX5R4HRUqnpLG1S01KRPX2unuWHqHvaj4tczIDE7nvr81G/lGo/8rUIV/md8TmoaWmzKhugYoiPcaSz1g/gtNOkKnxs9rFfCGwDV6AbDlZa18n424yN/SpfvK2sdERf8gg2u97vDIizgUIYpkw4MHMQcgjIQdekPpKjdaxey81rqw1xTaGWIwsMt0lci0MtcJRoyfXCup8PKnfKcqkd73+lOGCRSIIMdrIxjVDub+F299iFog02U+QWiKGjtxPaiUuiirIBX1G5wKZNfKUWp8QwrJ5VPMfm8VHrk2pFX5p0qRQqslbq06vQqiPjeK+Yr9mOeXRhb30P9nPCT8iZ+w88MvQd4eppQrzyT0eY2QtYjgFrjbhzop1sS9tc6dGiDsqSRUcXHYYM40LEpAW+cUjaGXWk5cWfWBkXexvR6RJ3tJfJiXktFX2tbgKJ25M/ceoDefBPMH3OxTDmT5sr3kFy9ua5WIdX2i+3xBGODk8IJ0zijMXyMRYYtwqQ41NawbpBCswgbzgy5hlIOHtgSc+sgsqOoAMkFCaSUiUuWKvORX89cOnVChtBERZk77sfg1omdokvavJ78bUS0dcPnRvkTs8uDXp3bBxZoXVCj2Psc7wBLffuRYle0ymWuxbZry+bMaaiaXOTeO9UuGDvEfMuqqiF4cxmnsrmFrOSmVrF73od5ms3Qq50uBB1dVQ52yYtvR+Szlvo8r0n3skhKu8xtrQm6ncG6jfMfbaT/qsiGDiWjUXt0YWk/G0mpZmXQlh5fFeR/2MThIs2z0O4oK6HKHijRrT4aS7tMVzqGm+2U75mc4xwmyX+UvNlsSZLg89SZQRNM2J6cRbqUmDY03e9SPiDVzUAJbu0I2eK0eIE33QVXNFt9UEpIImhc5bybjWP9G0IZA0utUutWc8qlWqWZ7/zl8rZwKAvgt0QdzBlSNqb/4QyPxIHfplqxKp4qopcd2ZVKH2di9w21Y1hf5vIS9G3BujHm+D4babXmJ8v3f/gCi3s3BAOo+Cyl01/KpSKbyjfCwerPDCtq9HhzPR30ARSxqagbm7JlLEHSnFC2X5G/ex5uSVfJUGpc6qEB+tmw0W1O7llmrZKJHiqnMwXcbH1yvfyQ2uUIHnXfmj55yMaCdU0etMB5/3M7H29uwojQyeZaimgytqxTA99Q35v6MhKHIBrKjWmQ3xX1EM3UthhWv7uz6OCqcmekmnzRF7nJl2+Q/5uVhG1CX4l8L6cKnICGvYVcOY3Lt+Ls7/WtQX5rbWUG7ieRkT+T8IbV2a8xyhDLDXAI2yBP2/2wMNC4=
+       properties :
+        width : 172
+        height : 22
+       type : 2
+       code_elements :
+        internal_properties : BwAAAAcAAADcvIiH1zZ6owEqZl9hdQqZPXSwDZevo0kGNH5a/c9/mT4y1NHTNa4wGBbRHIdi38RX
+        type_code : 3
+        p_codes :
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            ExécuteAncêtre
+           type : 14
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            ExécuteAncêtre
+           type : 15
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            ExécuteAncêtre
+           type : 16
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            ExécuteAncêtre
+           type : 17
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            renvoyer ExécuteAncêtre
+           type : 65792
+        templates :
+         -
+           name : SAI_Sprint
+           identifier : 0x145cdf9511ea8b27
+           code_elements :
+            internal_properties : BwAAAAcAAAD0ZMBPD/7y22meFr+JBYKZdWRwDZ/va+nagDL+WWuj5cpmABWHKbKYsH5J5E+qF/xv
+            type_code : 3
+            p_codes :
+             -
+               type : 276
+               enabled : false
+             -
+               type : 277
+               enabled : false
+             -
+               type : 278
+               enabled : false
+             -
+               code : |1-
+                Maj_Spr()
+               type : 17
+             -
+               code : |1+
+                
+                nToucheUp est un entier = 0x26
+                nToucheDown est un entier = 0x28
+                
+                
+                SI ToucheEnfoncée(nToucheUp) ALORS
+                	mod_Sp(1)
+                	RENVOYER faux
+                FIN
+                
+                SI ToucheEnfoncée(nToucheDown) ALORS
+                	mod_Sp(-1)
+                	RENVOYER Faux
+                FIN
+               type : 65792
+     -
+       name : SPIN_SpinEntier
+       identifier : 0x245c9f3a929e25f9
+       internal_properties : BwAAAAcAAACxKoWBcO3VMKtYUFad5hDEGC90k2YeadGKM8hNvVMAHbQOH/qtNDwpXwwqeyhRjjrXGUAUaSmX6iQFsVbygW+Ce50GQmkDBvcuDL6d2yoaiNkhdvGMy90qE8x83wRHNulIlaYRYVrzAnBVe/BCPPSA9QZ1hYWEVk1VQ+rLqq1anRQP64tYvRFmwEgArlKP2ku60Y+y2khFohX0/Ou9tvB0yKXqu5OHNtWRUITEFul4ammbX6SVVxK+9PminqUvIsyPrt4hY/EPDwSkZJDq7gfL04sf37dpSuncz+Qy31EHNmc4QvU636+M3KMWkfTMiS5Jlj8aU526m1P+IQRKi/d1YF/1ASNEN40y+uxeT9gUW8GPILVmRh7OFn5mgwHTdstMcIeqolmb75UB5ViYIQhVAIZTfRltTRVX42yL+/N54/9NGhdUKsf7SXHbWgrZsxGASc60z7cvusgDhe/6CZJKm7S/iY4klqS6xKkk5aYySO/lqMd0QHabMJYWsn20Ad1inPcCkrK3NiGb6DH0VeHicrx3lAHbiHnR47Qxye6bZ+61lgLfRoB9C9FCj96/fV7RhnkK147c6vzPag3JhZqGZXHQ31YsCOMYOqU19X4SpLU=
+       properties :
+        x : 172
+        width : 14
+        height : 22
+       type : 11
+       code_elements :
+        internal_properties : BwAAAAcAAADyjBXjz6MiRSWjkaD0qZp/ok4vm+MLBl6+zB7EKIR4Ml5u/3lC8aZdzgOcGVnuBWiZp03cc+KP+wf1cQ==
+        type_code : 18
+        p_codes :
+         -
+           code : |1-
+            mod_Sp(1)
+           type : 26
+         -
+           code : |1-
+            mod_Sp(-1)
+           type : 27
+    type : 43
+    code_elements :
+     internal_properties : BwAAAAcAAAB702pZrSmWMZCX51ZtBnhxK4yKaUeN6QL7zjfMqElaPFA0o0/6kpKlvFBAsLzlL6po6A==
+     type_code : 93
+     p_codes :
+      -
+        code : |1-
+         
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 14
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 234
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 15
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 16
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 43
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         renvoyer ExécuteAncêtre
+        type : 42
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 17
+     procedures :
+      -
+        name : Maj_Spr
+        internal_properties : BwAAAAcAAAAVdQw7z8vwk7YQj87/kJB566aOVUnHd8TOl1YtT7L9GUvdNjwFj0XS3jKiFtrHzcQCAg==
+        procedure_id : 1467222650318235129
+        type_code : 14
+        code : |1+
+         // Résumé : <indiquez ici ce que fait la procédure>
+         // Syntaxe :
+         //Maj_Spr ()
+         //
+         // Paramètres :
+         //	Aucun
+         // Valeur de retour :
+         // 	Aucune
+         //
+         // Exemple :
+         // <Indiquez ici un exemple d'utilisation>
+         //
+         procédure privée Maj_Spr()
+         
+         si zoSpr = Null ALORS
+         	zoSpr <- allouer un ClDbSprint(SAI_Sprint)
+         FIN
+         
+         SAI_Sprint..Bulle = zoSpr.sSprint_Date()
+         SPIN_SpinEntier..Bulle = zoSpr.sSprint_Date()
+        type : 458752
+      -
+        name : mod_Sp
+        internal_properties : BwAAAAcAAAD+rAuaXDbPPL0zx8d5Ur9wIo7HF7gwuCXIAsSAoFwg9shVIuxj7cdba6JUaxzq0NFw99+euKkJL+MLJq0=
+        procedure_id : 1467222650318300665
+        type_code : 14
+        code : |1-
+         // Résumé : <indiquez ici ce que fait la procédure>
+         // Syntaxe :
+         //mod_Sp (<nPas_p> est entier)
+         //
+         // Paramètres :
+         //	nPas_p (entier) : <indiquez ici le rôle de nPas_p>
+         // Valeur de retour :
+         // 	Aucune
+         //
+         // Exemple :
+         // <Indiquez ici un exemple d'utilisation>
+         //
+         procédure privée mod_Sp(nPas_p est un entier):vide
+         
+         spFutur est un entier = SAI_Sprint + nPas_p
+         
+         si spFutur > 0 ALORS
+         	quand Exception dans 
+         		zoSpr <- ClDbSprint.GetObj(spFutur)
+         		Maj_Spr()
+         		SAI_Sprint = spFutur
+         	FAIRE
+         		//affectation impossible
+         	FIN
+         FIN
+        type : 458752
+     templates :
+      -
+        name : CMOD_SansNom1
+        identifier : 0x145cdb5a115f055b
+        code_elements :
+         internal_properties : BwAAAAcAAAAqKoaNzUQojS9QVH1fy8yvoxLOO4XFSY4tXhDYc0FVG4CczsfR53Ta9jT/LpFo0Tot
+         type_code : 93
+         p_codes :
+          -
+            code : |1-
+             zoSpr est un ClDbSprint dynamique
+          -
+            code : |1-
+             
+            type : 14
+          -
+            code : |1-
+             
+            type : 234
+          -
+            code : |1-
+             
+            type : 15
+          -
+            code : |1-
+             
+            type : 16
+          -
+            code : |1-
+             //libérer zoSpr
+             zoSpr <- moimeme..Valeur
+             SAI_Sprint = zoSpr.ZF_Get_IdUnique()
+             maj_spr()
+            type : 43
+          -
+            code : |1-
+             renvoyer zoSpr
+            type : 42
+          -
+            code : |1-
+             
+            type : 17
+     procedure_templates : []
+     property_templates : []
+  -
+    name : CMOD_SansNom2
+    identifier : 0x245c9f4292b0470e
+    internal_properties : BwAAAAcAAADSgJiMBEIocxWO9QIQRuSZ5rx6dTcOLvxF2QGKR9kQjaa4B4jPy2it3H7cuR9UzC/HBrX+Yr+JzHIoaxnlKKFFzOW8dnsYZcBuBEJDAq6ehfFbdBJmnrQrD+xDxcKe5mtVtxhb6To/mhOzPiEP+swjZXAWpgponsta4qGl/vqm4D9HbIfQPgQhqol3SmeaiNP7q4beQGyVZEvMsVfsJxeVBYxM2ZwOyE766VJbEr6+Tve3jwy5TVQll2+jD/AB9xetoR3Ca6coFIBr/UhFyr9cRoFaSkIpLaIy7UNlhW0W/tlNXTc/jd9qbt/M2rpWi7Q935HZl3vvU44QGTWaCaOC9tI+Tx4cHHX/1GN0jGy/mZdrfC9o0d4NeHv4AJNVy+Yqh/dGKUjcg/sp6+rYrMkwsfTaKjC+n47x6cPTvWlFq6Yd7lfpfRldENSxYWClkyo+gnOjb4UwkD6/iFDqGEGofmSCPIcErnhFXyqxd1DCA4ZOuCTNici5UM2dv0Wfvc4loeXO22/gUoSQoGgur/Qp+LqFIjchU+qNqprbPqhWWUJVsH1B7dj5mC7D0pAgfu3wZqZnCLv/D8+Zb1rvtZbnaV2x1Fiqw4KCwq1Znd/VGTjihmLz7BPOgQXFdP2tryQ9uE5c90p/89qC2rTVnyj2qVXcSm0f1Qhrn9hMutgdq4SAUto3/pIOqQeG1Z//j/tY5lfqU8k8lrvYBtpoDcKlv7uI6C2ZMptMcffCDdGb+4mNrqNRmBWv7t6Fwse7se7TuIIA2ZJHfq9Zl2GZra7CsWmtimd5UAYIMA==
+    properties :
+     x : 198
+     y : 1
+     width : 180
+     height : 22
+    controls :
+     -
+       name : SAI_Sprint
+       identifier : 0x245c9f4292c4472d
+       internal_properties : BwAAAAcAAAD+Gwve+ZB+wWGoZOSYJlm/9ZJ292cSQHuh1MWmftfzhtFj1F/BoJnSpcdCHtP6EenYKe5Rpo72Wm/qitWioMWPbkgnTYDhUbuqdOQ+QdnkeWFj6g/XvGM8qOWwPtgQUu1kKEuyeX+VnQlpPeRcTatE34Z4a1AoLCWhW5m50JSVllGMYpGHvgrupsy8zZcwYJ6lOIDuFiDKKofECorpUfb2SmcCvnTORE8r9GIqCmXnPXgeKGHoqxLYqPlLqkXnD0iEh010zsmw6bdqtKQp0EJz8Kv+5M2/8FJK3Y4W8Lts4NRFSVW7jRWRsA/vRUBfx6t17jPxDsAK9YYkH0OZjcnpn1zexpOnTUWY30lvJawN3UTq1g6tFThVzZR4wzNagmcSKvD2OXA/zGV+zIEx3IWwPKCjHlgHuwSLBjVppCE7Uqva5rISlTCkSgyTaJFJMqhlX1LkV4ABGbdb+k0UPI/JKyJs4/GQU4xBZ8JJJkTSvApsKYCTlk/gN3cyWHXOxHDM6vM5jQPokGXHFpWJeRV2gr6C4ugCiK1b+ujlt1n7yq7mF1xOnZ2uR0MlM9YUc2/cbmdMt/3QTfIEx+VdB1GfxFZ4je+HmU17m4kiTskFABrPDsX597asnuLrKcZC8zomic0vE9XWd8JSTvwFfQoE8aA8TLekgugpqz2QryNDDqFca5yjPubN4hq49m9SdgNNJxkxL5bvCHAdTJbhmU7r04kkR62KbvteG+DUSdS2M5GkSBJGB9yRN9//7mKsQyzuxoZJUfio0ZJz4RmpSEY8Ge18bomUEnA97+6Vob8BYkvZsmwgHWA8WYapXr+4e4POpveZk04+yplHZ/Hw/o0b8n50iJGl0l40BXTs6rjRebOcv1lBcoyHvnEmvCHkYv5SR8okImPTODo+JFtCMe8xUD2zhO1lgtDJsCjZRTB6yFa72lukCcsUvY+0sYPdYUStZ1ZSfiWvnyrx/I2PqjR0moxDqx0fpALiwkiZGe2BWrWJfq81W2m+5/XbtO3AkvdfbmxuecXbXU8nYp9aFuPGCR1RddyP7hZGtBKDWM/BLo99d4oP1gLzDrm3/MWtxDGRcN0kV4u5rmXOqqs5NsRV+DKqQ/ebztflf0FjZGB8tp3ENIIYrc0W2Aaqg593m8xg7Yp49MD4jAX2OoW4oUkkrTEP1Sb2p6tg1vDcSIlc8I9M1sdVYPH8jyPvy66dl6/kiEdwv/bFboHFdEnD1P+qLnS71PAynSGf8Do274y1BUGwQvNN6i/cR6NKiOKU2wZTjlYQ0wiFqRmWerkezL1VBiCUAHkELSxsiiv4JvGtCjvU8BplptRTwhBvmlFYHhEIbKPReLQLgc8iATi0PLsB8T5VJDvPUQdaBy1erJ0CDoiesnsuuBxCXI5dqcfDh8c/+n0TGhdWSj+BW64ykxsfatUDxodxZaV0CtJzAkr5dup2yI3kVbF0ynqEuXn4TOAu+UrbShmIrdXAu/bjPX2T9gQG81Zn3UkpWjaK9JSkyFzmqWix8hYGdoWn4UFTvzLTZw==
+       properties :
+        width : 166
+        height : 22
+       type : 2
+       code_elements :
+        internal_properties : BwAAAAcAAADcvIiH1zZ6owEqZl9hdQqZPXSwDZevo0kGNH5a/c9/mT4y1NHTNa4wGBbRHIdi38RX
+        type_code : 3
+        p_codes :
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            ExécuteAncêtre
+           type : 14
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            ExécuteAncêtre
+           type : 15
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            ExécuteAncêtre
+           type : 16
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            ExécuteAncêtre
+           type : 17
+         -
+           code : |1-
+            //Exécute le traitement défini dans le modèle
+            renvoyer ExécuteAncêtre
+           type : 65792
+        templates :
+         -
+           name : SAI_Sprint
+           identifier : 0x145cdfe311ebbb4a
+           code_elements :
+            internal_properties : BwAAAAcAAAD0ZMBPD/7y22meFr+JBYKZdWRwDZ/va+nagDL+WWuj5cpmABWHKbKYsH5J5E+qF/xv
+            type_code : 3
+            p_codes :
+             -
+               type : 276
+               enabled : false
+             -
+               type : 277
+               enabled : false
+             -
+               type : 278
+               enabled : false
+             -
+               code : |1-
+                Maj_Spr()
+               type : 17
+             -
+               code : |1+
+                
+                nToucheUp est un entier = 0x26
+                nToucheDown est un entier = 0x28
+                
+                
+                SI ToucheEnfoncée(nToucheUp) ALORS
+                	mod_Sp(1)
+                	RENVOYER faux
+                FIN
+                
+                SI ToucheEnfoncée(nToucheDown) ALORS
+                	mod_Sp(-1)
+                	RENVOYER Faux
+                FIN
+               type : 65792
+     -
+       name : SPIN_SpinEntier
+       identifier : 0x245c9f4292c6472d
+       internal_properties : BwAAAAcAAACGGaz62Yb8mUTB3cMaXYtThYYbdA/30F4zTEHWNjrf5J3hInGAaI41UTga//5tBiDdC2iyk6ldHnKVWYK4XS9AgS+GUHc3kJuMBCLV5WLCXj8rfv+Sh5demVAU28JbNud2I+5LW2Jhso5R4xDkfBS+F5BlR8toWLG7r/53uEEKy+ZNb132+VP20iR8Rrw/JtWMpS/68WPDJg8AyKOD7pSaPsuqJT17hGV/kNzACN1o1O9J3553+3B2Op3C7rsvml5ZJOL3JeUdQzYklEB4VodN8UGzOellYFUibzx2CcVrBJVy3o8Mc92oYzj7ZrGNJgmI95hDZOxHIP6fGuUbIFDAi8zaPiBnTILZn9krbD3ZyvzshcJTIfuvCY8P9KKoS+a3xXy3l0xcWAx+YoX9yrHs3z+EthIUSrIS9HU2jkaE7Kj0oa7Di0KWCtz29Z0sdoYJ0DXbnpDuYamWaLqNZIlTtEvW0PWNHY+3o4ibfLFJFcz4O6KvPeUGrf1FUTzvRJqLm2aBEaOS9eaqLxD7SExn6wvGMzg8O6QKbg/MTGlenK/0xUHGH6uEOMjxLq1I6sm679KhThdjc3VI0+TgnoPtyt5Fatmhg1yB087MTBf7k4I=
+       properties :
+        x : 166
+        width : 14
+        height : 22
+       type : 11
+       code_elements :
+        internal_properties : BwAAAAcAAADyjBXjz6MiRSWjkaD0qZp/ok4vm+MLBl6+zB7EKIR4Ml5u/3lC8aZdzgOcGVnuBWiZp03cc+KP+wf1cQ==
+        type_code : 18
+        p_codes :
+         -
+           code : |1-
+            mod_Sp(1)
+           type : 26
+         -
+           code : |1-
+            mod_Sp(-1)
+           type : 27
+    type : 43
+    code_elements :
+     internal_properties : BwAAAAcAAAAlxYLh061WszoZYkbAAe4HfFo03hWxh/uJrJgSIEQHlzvwR2nvoelt/3ZDRdA2Hpta6VYXMTCStnqSvdY=
+     type_code : 93
+     p_codes :
+      -
+        code : |1-
+         
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 14
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 234
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 15
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 16
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 43
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         renvoyer ExécuteAncêtre
+        type : 42
+      -
+        code : |1-
+         //Exécute le traitement défini dans le modèle
+         ExécuteAncêtre
+        type : 17
+     procedures :
+      -
+        name : Maj_Spr
+        internal_properties : BwAAAAcAAAAVdQw7z8vwk7YQj87/kJB566aOVUnHd8TOl1YtT7L9GUvdNjwFj0XS3jKiFtrHzcQCAg==
+        procedure_id : 1467222684678702893
+        type_code : 14
+        code : |1+
+         // Résumé : <indiquez ici ce que fait la procédure>
+         // Syntaxe :
+         //Maj_Spr ()
+         //
+         // Paramètres :
+         //	Aucun
+         // Valeur de retour :
+         // 	Aucune
+         //
+         // Exemple :
+         // <Indiquez ici un exemple d'utilisation>
+         //
+         procédure privée Maj_Spr()
+         
+         si zoSpr = Null ALORS
+         	zoSpr <- allouer un ClDbSprint(SAI_Sprint)
+         FIN
+         
+         SAI_Sprint..Bulle = zoSpr.sSprint_Date()
+         SPIN_SpinEntier..Bulle = zoSpr.sSprint_Date()
+        type : 458752
+      -
+        name : mod_Sp
+        internal_properties : BwAAAAcAAAD+rAuaXDbPPL0zx8d5Ur9wIo7HF7gwuCXIAsSAoFwg9shVIuxj7cdba6JUaxzq0NFw99+euKkJL+MLJq0=
+        procedure_id : 1467222684678768429
+        type_code : 14
+        code : |1-
+         // Résumé : <indiquez ici ce que fait la procédure>
+         // Syntaxe :
+         //mod_Sp (<nPas_p> est entier)
+         //
+         // Paramètres :
+         //	nPas_p (entier) : <indiquez ici le rôle de nPas_p>
+         // Valeur de retour :
+         // 	Aucune
+         //
+         // Exemple :
+         // <Indiquez ici un exemple d'utilisation>
+         //
+         procédure privée mod_Sp(nPas_p est un entier):vide
+         
+         spFutur est un entier = SAI_Sprint + nPas_p
+         
+         si spFutur > 0 ALORS
+         	quand Exception dans 
+         		zoSpr <- ClDbSprint.GetObj(spFutur)
+         		Maj_Spr()
+         		SAI_Sprint = spFutur
+         	FAIRE
+         		//affectation impossible
+         	FIN
+         FIN
+        type : 458752
+     templates :
+      -
+        name : CMOD_SansNom2
+        identifier : 0x145cdb5a116305f7
+        code_elements :
+         internal_properties : BwAAAAcAAAAqKoaNzUQojS9QVH1fy8yvoxLOO4XFSY4tXhDYc0FVG4CczsfR53Ta9jT/LpFo0Tot
+         type_code : 93
+         p_codes :
+          -
+            code : |1-
+             zoSpr est un ClDbSprint dynamique
+          -
+            code : |1-
+             
+            type : 14
+          -
+            code : |1-
+             
+            type : 234
+          -
+            code : |1-
+             
+            type : 15
+          -
+            code : |1-
+             
+            type : 16
+          -
+            code : |1-
+             //libérer zoSpr
+             zoSpr <- moimeme..Valeur
+             SAI_Sprint = zoSpr.ZF_Get_IdUnique()
+             maj_spr()
+            type : 43
+          -
+            code : |1-
+             renvoyer zoSpr
+            type : 42
+          -
+            code : |1-
+             
+            type : 17
+     procedure_templates : []
+     property_templates : []
+  -
+    name : BTN_Calcul
+    identifier : 0x245c9f4c930d6d82
+    internal_properties : BwAAAAcAAAA8BI/THiTouEOCW9Y65a1oxKKtG6DOMDVswRSpP2y03l4K0HvanEuc6dLWNeHjliFCBUg/ZEqpCtM85UETAIn8Tq0H0pvf5aK/pFAvHb1wnGcDmP5+P6A+BlevlyGnpMQ5Yf6wwAe855OkSJ6XS3/6eRVn/BWj2pLNTsvn+4Hx9elgm2HhbjZgRgtt8JVt0CcEYEV4aGgQmN4ru5sUSMFs2irz461uu9H5W/qUhwF57RROlad0ZyRzNWKrUtbPOCMmbPn5kw9LURo5LgdFVRnrxVAKiJRHGlA/md050HvBPoilDdZzsEBXTE1rOIYzcqtlPHScYpxIBP0N/9MAbaWgiu4R7FtaWz70PZuuKwYe/qRvCBeI39aF3R48rslzmQaRSnelDkYva1xBLUywqLeaw1G6gLlck0BkOteRQtyl1pCVtKLHk33lxuyA5DTmdTdFKz7piM/972ltXUdB5CF+jH/3jqH/NmQUHN6UlvRuVp7LZ7meqy1VfbQ6vURknXT1ByVYY7qa7cyJLOUBFAZlDjJNTvVko/ujL6abc+TFo5VsiVTWnUe1KcmF7d8W3sc1CwMtYk7EPyzmNQ6vtUKJO+cLgbaxoyDDzs5DcLEJELir2k/Y0T96pxb/XnXMXtUWDW+B7L9Vk6lDBvpPmWtqn0ilrMOzsKQgyKJTPxRXFwvgX+EHVlCQFFKcxBuAgVQWoIaQGhPwuG0VASbVHoA55mhk5tuLKo7BOLmC2GKmGyAMK4loUVV4CFDngv6UDVRD4650cwaPu9lmIzs7tRjroPAmY7O4U1ObgmRd54VliiEfjkspKM5WDA==
+    properties :
+     x : 607
+     y : 1
+     width : 80
+     height : 24
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1-
+         STR_InfoPrj est une structure
+         	oPrj est un ClDbProjet dynamique
+         	nCumulPts est un entier
+         	mMnt est un monétaire
+         fin
+         
+         oSprDeb		est un ClDbSprint	<- CMOD_SansNom1.zoSpr
+         oSprFin		est un ClDbSprint	<- CMOD_SansNom2.zoSpr
+         oTaches		est un ClColTaches	<- ClColTaches.aoFromPeriodeSprints(oSprDeb, oSprFin)
+         oPrjTmp		est un ClDbProjet dynamique
+         oTacheTmp	est un ClDbTache dynamique
+         aOLstPrj	est un tableau associatif de STR_InfoPrj
+         stPrjTmp	est un STR_InfoPrj
+         sId			est une chaine
+         mValPoint	est un monétaire
+         nSommePts	est un entier
+         
+         //Parcourt de toutes les taches
+         pour tout element oTacheTmp de oTaches.aItems()
+         	//Récupération du projet de la tache
+         	oPrjTmp <- oTacheTmp.p_oUserStoryParent.p_oProjetParent
+         	sId = oPrjTmp.ZF_Get_IdUnique()
+         	
+         	si aOLstPrj[sId]..Vide ALORS
+         		aOLstPrj[sId] = allouer un STR_InfoPrj
+         		stPrjTmp.oPrj <- oPrjTmp
+         	sinon
+         		stPrjTmp = aOLstPrj[sId]
+         	FIN
+         	
+         	//Cumul des points, pour le projet
+         	stPrjTmp.nCumulPts += oTacheTmp.p_nPoids
+         	
+         	//Cumul de tous les points
+         	nSommePts += oTacheTmp.p_nPoids
+         	
+         	aOLstPrj[sId] = stPrjTmp
+         FIN
+         mValPoint = SAI_Budget / nSommePts
+         
+         nLigne est un entier
+         TBL_StatProjets..AffichageActif = faux
+         TableSupprimeTout(TBL_StatProjets)
+         pour tout stPrjTmp, sId de aOLstPrj
+         	nLigne = TableAjouteLigne(TBL_StatProjets)
+         	TBL_StatProjets[nLigne].COL_ID		= sId
+         	TBL_StatProjets[nLigne].COL_Projet	= stPrjTmp.oPrj.p_sNom
+         	TBL_StatProjets[nLigne].COL_Pts		= stPrjTmp.nCumulPts
+         	TBL_StatProjets[nLigne].COL_Estim	= stPrjTmp.nCumulPts * mValPoint
+         FIN
+         TableTrie(TBL_StatProjets, "-" + COL_Pts..nom)
+         TableSelectPlus(TBL_StatProjets, 1)
+         TBL_StatProjets..AffichageActif = vrai
+        type : 18
+      -
+        type : 161
+        enabled : false
+  -
+    name : TBL_StatProjets
+    identifier : 0x245c9fb493780539
+    internal_properties : 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
+    properties :
+     x : 6
+     y : 31
+     width : 706
+     height : 482
+    columns :
+     -
+       name : COL_ID
+       identifier : 0x245c9fb4937b0548
+       internal_properties : BwAAAAcAAABlDOMQKrmCyHdSf+q44Nk8/IY12m0be5re8YFAbnxA7RMYuRigPPQPpo4js3Da8YCoPsTF9UVrL8MoxNio493nwdp1GrGAhFkMXNLE2UShlMy1iYa4K/yeusK7xYfe8wGsVECqFbKpMZQ2R4wOWcMRa6gIkrC1S/a+Ej6JkgSHKHpk5A==
+       type : 2
+       content :
+        internal_properties : BwAAAAcAAAA5cwjXy8rZvhBkZigqsx30UNftwkXMY2ORdTH68K5yofNHOVdsBdYfK+edz1DPMo2BC9RsDInzapordV1tn1Df3aVCMx3/bTososaYjU0UwCYecHnHSFL3t0BIPw4iFmJn1q8WrJqfFEEWUKeilgg7lw07GG8JG1h3dIRHoBwamq7OIBlpnlQU+SvNOa+2cIQjJBSAXt5t+8uxuY0JLJKXjU/ZnApCkHLvkReQXzY5J/ZA8vtmsbt2vSwJPM8wFaoZIhzRJGxysRNoaOtsDYC77wzrM7BT4LEZx01aLReMBkCqbdUx588En60OqhDUpoUkaOJDf5GtuY8SXKCZoVRwlpCC4+2GdUdVAUfdaGTelRr3TxuOcReLJq0ZgE0ZehafP63shIkccu9TAkrawYVwyp5kaRiK9ZA2Di5W97ihSSlfVjI+AO7Ynr+xyFViX75rboWWfArBSvU1pq3g/wVtU9MEkWVbp8pzEO3Nrl9Q9/7Osd5Et0KB/w3zP5wD1ivdX4nwD8WM9xoJcmJo4wTVWSi6Yggi1BfplgXidhXH5vHNMRLxdcefDh1xE2MhQZ8sL4Fm1ARYIDEbP0IEtSDPiZIZ/CKFc8jnyfOEAb9lgNOXMFG0TLHP4F40qfV4j15NU/Tq8SBLvAc7/JEIzWfRvUHHeFcrPsAyN0GOU0o6UWux3ueWnUIpQmp8ds8HLwsU6HAxquFwif6hfAKtBM7FU7ftxtwublFC6Ppv4z9p//Tnvn45DOWiojHqqSYTBTo4AAZB1xem5v4/q4mwjDvenkUz0/XWAe09ccMnuE/2p08ag2VICIuGYS9Txaq2Dn4g2LBpmbEeqknx9P3LKU8od22Xif4dh6B0dwU0jGgw4WXsPUBfBYI=
+        properties : {}
+        type : 2
+       code_elements :
+        internal_properties : BwAAAAcAAADEQqUDv5opA52Q0bRN9WHkO0Bp20FjCum4XurfThXxoJBH8DMvAHNc3+wgJOqh9ZjIlZZGck0P2mjNC0DsmLvEN+XHvA==
+        type_code : 3
+        p_codes :
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+     -
+       name : COL_Projet
+       identifier : 0x245c9fb4937d0558
+       internal_properties : BwAAAAcAAAC+/JqQGJScp/AIw6ttooM9fkhwkp70DPQnPrILxBahZ+VCbut1w0OZ4om8bJg/DIo/xrzjW8PC++eo8ooflz1rwUqo4lXNNt7zkXarVplNPuZOhJaMPFyrSZP9F9H65r4X7mnZmbI/fTqtmHWVV4+RJ7fCBNglyR0ngZjMmGUq/SmG05wmggU=
+       type : 2
+       content :
+        internal_properties : BwAAAAcAAACeeO6yQzxLIsZQlesHNnirSEVfxeO4mB1nY8CwcCsmN7CoLSQNgj1wMpa59+9D4Z8p68tn7tGD6Nd/7sHsNlX+iOGcuBF/lMvsJpZDXdMcfp/e8ySFYpATI67jaghk+6rLlDBG68pfYrn3KmdmM+W/aufQo9s6dq87u03HRiCafMlvofEmfc8Of8AwHSkt0FwG+n6XG0Uy7tJEltNKlSEtLgNZQc2HQAi5AnZwoXlO4SuRTAe9bcF4OHeKE/L2LaB8uCQylJB1D9FH4re+UpVU/BE3AIZEMvycZ8Py2Cg89oxnPZOT7vjPigo1+BeJYCcNnxseW6JK8FtqJnWFarME0TQvrqlwrklWDBt2bL+cX7KoynoeTycHTQg6AFcSMTLyb4CbRzoD9BqOkPEEcAGYzyuKWRFrMJ6g9uMUuxYRd9L7KnEf1FfxgspzbB62g7cmFvJxpOANvXfI/9nTmcsosLEVvFF9l6OVpSSVH1FOYI0WlpFGKwxSm4iwaw8jGpD8rTrz9wM6XriiRZI/D3T6eBxLA7jEHmij11iyE00pl3zjLFnJFxnYymSmFbRFs4ZJ7SyXrJK2FaewxvrpQ7DI9JBCKQQhG/ctjpquelkvZUqn82asEjueJA2VKU7iHZmKC98hFQaD22Wiqc2vuQMW9JH6ZyfhjBvUdECojrxWHgJNN2xAuYgS5Oc/6GiTmwSj7hHk6C0UUIxCV+qysq60jI+AieKqFBCIuUV7+rv1/OcpAwmTsJGHSJ7Nwzf/L1t3uhNg4YeIT+J43mNneu9jmckalo/Cq7oo0PHz1rSMvHnzmQiPJ+HvIpuIVDOj9EJaVorfmoYZJvJtSFc=
+        properties : {}
+        type : 2
+       code_elements :
+        internal_properties : BwAAAAcAAADEQqUDv5opA52Q0bRN9WHkO0Bp20FjCum4XurfThXxoJBH8DMvAHNc3+wgJOqh9ZjIlZZGck0P2mjNC0DsmLvEN+XHvA==
+        type_code : 3
+        p_codes :
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+     -
+       name : COL_Pts
+       identifier : 0x245c9fb4937f0568
+       internal_properties : BwAAAAcAAABsCBqpYdMGdisKJlnRu0Bt/38bjFZ6FG0xG3XlyCwJ4QlIQF+om0QbBWTQb+j0ubsZJNtwCWAfpTktYKB0Es1iA0/1z1pG+DH/cqDprghIqaiG3hcmEF7SGezkgzUpzF/kZtyBsdZg7iScqd9cLWtncv0AkRXJedgluqp/NLYNWhVjbx3gKiUk
+       type : 2
+       content :
+        internal_properties : BwAAAAcAAACkS2jmCSnFCq1IS5e2tQw9hqGZP3FW0qK55u1IHbaZFe/FAzYRV3atAjs5LP0UzCRev2XdT3Fn4X2Lzm3dBQhfOI7VuHivDkOn6vx4rGluCqqm4sLJ/LbFlKP3sa7V4yZFbvVfXKB9+j16RcZi5a1xlGNF9+B6njK42VFFH/2UYNwD8zo+nM76W08hv5ZUrWuiu3zl8JlmcvbSQcKUvI8wwR+83SAqOflnp9tyGX7DSVGzvJlCvyfa/iOBM1BCg3vfeS9pBvS1kiGlMBuBA/pDrWImG1AH7kMJiqXcP0sBNw7rOKCapZlLC81RA/P8I8/n0xAtpSB4poEw2b4oRzpMe2q9o9zImLp0lS7xgekOxN63TkGRF3TPBW+r5IH21FCbxxJqHE9Q0dO2AkTWmRViC1jL65RIn3uGrkCxRsMIdgVHfjc5upp1TgoCFtmN4u2p6//Pvv76N23qSEf0Nog2TSRqbtt7kC29aSvDRmxppnpF/0MKr1XcrzA7a4LyKzJ7gmtbi9/bIgpInuoaSmVSDRvWIcgMmQLTQwekKmwqXbdIeXdd22IgKrhtq6U6CCgmcKORMFbZW3USm0IKuOtSu1GJ6RDlihPbIDmiGTCCjwdOqJRGmO6yMi+6pwUtaJGTrq5jY0jGH61OEjcIMuKsw2IxIUkf4QHYXJFS6Wfb0qNQbDYO23PueI+8IuVEnLAk1XaG/qc//JRGdqylVUGaf2TNqTCE8ZDmCwgdX3TmXHbCvK0HtGofxjgCbbCAbOG2X5R+7ZPnvwhK36Ey8bJzolQHJCWU0DZ7mjox3Yvzd9z0OEieJw8gu3ueeqgllPkGeJBp7iwHFaWBaCXrdE1Q337p+UXLTYw=
+        properties : {}
+        type : 2
+       code_elements :
+        internal_properties : BwAAAAcAAADEQqUDv5opA52Q0bRN9WHkO0Bp20FjCum4XurfThXxoJBH8DMvAHNc3+wgJOqh9ZjIlZZGck0P2mjNC0DsmLvEN+XHvA==
+        type_code : 3
+        p_codes :
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+     -
+       name : COL_Estim
+       identifier : 0x245c9ff59395012d
+       internal_properties : BwAAAAcAAACuyXuT1h9FWJIeaIU+LRNT9pUYkKuvxRhCHw2a/XhoYcGavnXtZfzoakcy/ps9TmKaXhJTJzhca/X/CcT1NJnqN59yq2AFlnjwJ+H587WTlq9RMfwwJcD2MEb1LxGh74bBBhJaySIo+3dL+SloX6Ck8ZsrePzFp0557M5IDjdm5CUTj8Jsaw3Ih1TSqg6znpDMMgx6lT4=
+       type : 2
+       content :
+        internal_properties : BwAAAAcAAACo8aRXBC9j3zYRLkJw3x2G8Wxo9fbX/B1TgZDuXIazvDRAShigfgmyCU0wj3G0ujiaRynrfapw4ql+SBObchPmkFPoVlWGpyq7dmLeF5UCkcb90Q85h7l9omha3qQGaUsYaxJIYrowXrRMyAvfmmnrHkz0THEIYCA9ZOAsWGzoaQzg8AhqozfbIXf4HHztyoOVL/xs71X2w6ws/0x5gsKpZ0pdTrU987eeM7iIcw/NtOFDyCV/LaXNQ8mZrCnjZnBhWo5Y1V2NBaRI43+FRSLF/uWxOaEuG2DlJjcO/YUHD19PYQLsCQ4Yf7sLrUTjafv/r1iO4fIlssq2OWMTCIxwrv0YeOGFypKG07DQSB4FTrTMKyPWMSAdB3JkGPYs4VhffjhB0wOmquAFjhW4Jkr6uSpDk8QRUGGr/Ds61fGQEUczol2/A5AMU9fi30uFDiiSXGmG+TcWUD/OCCxOclCXlGt+mZKQ5LKrxaMkLhZBeUNmZ6iF0HkFoyIJ9HBunTHq0fEINvDPyfgsRFMc1tlRsvAY3NlPxdU7DYO1eIyebtjRf07iEn5j0lptOr++2O0z5XksvxuNfuMix+0+unVnQC7r+lWsjrTj8lXzrTL6plinqnGJWcIrTK92HHPpLkSwI2Zq2Ge4kul8dGT+trIDLGtnSEyQeQqI4s3DoW1z5aThxIH7IqvjqOls6xWaTE/5ojA9TRzHqW4C7nnPuYP7hoOL/n27DX8cW3x0udh2R135FqCsu2bObja4ZvLAII5NBo7lRsYn0DQYxQpu58iWcRv3Y7aHkFGR8lU0XuB5iwq6hS1tQp+pZdK3ktqaLozSDf3lLihEdG0j3Dut1KTHRAbFPIoNadeddzLseGr8inMApVI=
+        properties : {}
+        type : 2
+       code_elements :
+        internal_properties : BwAAAAcAAAC3Qy4eAF41Bu/aJiHHlJXMxWPEthqKuwebxJ6MbDYWjHwEK78ArTp7wH3ahX3YSwLV7bRtlPHCLDq4tA==
+        type_code : 3
+        p_codes :
+         -
+           type : 276
+           enabled : false
+         -
+           type : 277
+           enabled : false
+         -
+           type : 278
+           enabled : false
+    type : 9
+    controls : []
+    code_elements :
+     type_code : 9
+     p_codes :
+      -
+        type : 35
+        enabled : false
+      -
+        type : 22
+        enabled : false
+      -
+        type : 24
+        enabled : false
+      -
+        type : 23
+        enabled : false
+      -
+        type : 25
+        enabled : false
+      -
+        type : 230
+        enabled : false
+      -
+        type : 241
+        enabled : false
+      -
+        type : 263
+        enabled : false
+      -
+        type : 262
+        enabled : false
+      -
+        type : 222
+        enabled : false
+      -
+        type : 223
+        enabled : false
+      -
+        type : 224
+        enabled : false
+  -
+    name : SAI_Budget
+    identifier : 0x245ca00e93af63de
+    internal_properties : BwAAAAcAAACx1n0liMfF3gr+lN8FSAMfV6lS5LZR+20FAdJyHVzk6yRExq4Fuyw6kB3I4taqqcZYq/pJziUN/YpxyxQThznBPHmq8+MXP48k4RYHq5eEeBiF5y6LDeb4jPuveqaFv606f2mrWrQZCmI3U0GwMvQhOVmn95o/fvvCbw1DE23YooRpztAd15tPPzGnOdmlZXGJu71JiMBU38RcWyVyrO3cEz74O82mOLuWT2vy/C6RlhlISMnlGfDISdfiM4cpLXBKLu9k0XVwVE8ZqxMNhzaulwz9RnxQN0Z8PycHesVN4G3d3qgHQOtyVSbyCpWPIyBL0MIYOskZ3w3ui/5IiT2N6SC8VDKRxqMio6N5k6MvclTtVcOaaZRfDaBB5XuP8/+S1eUz3BZERQTFf/ujDO+LY80CqiDzjiYUnktHyOx4XMNTQ7ZepDTFYTMIRNoDH2kKqLNZ6f2iXkKPSyPpG0NMDQPJBzMXI28xn0XthxGJU8bRAs0kYu+y5SyKxnZY7S55TGDZJxYiP6K3y5Q4N0NlgMYbk7RopHnVGs9Ya9z73xodpEdeK2eDdvQeTuGZhKv7JTaWUteePrK5q6Ax/NIWOYbcJd+ky9FV9ML94Y7h1e+GegFPgen4EF/CeQQfLOep1uAkO9LtyvDKvHZPV4MIhWDvmTaUoOhnXoM4VMxL6gyAFqEKHzKf4n/fA7VFPTwDgqBq1pD1NFAHKSc+ZgXNg8wCKXcTShDaiIc1bvhHtr3wxkSsBEEX7prV99gOuIGNRBrneUft5qc/Tnsa6tovyF2vEdwGYFmr2wVYZnF5KNZhKT0e9gQ9FRByrr1DboBOxnthOD9Rehfu2yObpD7QqIVlE69w0ZFHFffJbjCm+lXbwdzNEus+rZYwgdDTua3gFM3jYDqEf2Lw8JGz6axwA2eGHK2q4tn+j2hMexxcSD36F1t1wb9+LrcHei+yzDlZfPTZy1ZtmfIrLXLKGUc4MH30qAylCymQzzepmho7/xEg8Fyd12u6p+iH6Jew/IYqzZvFBF8yOpZDhR45ADC+1D6RQhE0751ied3K3dXbgdpl8dLmyxlbhSHIQcVt89R3GZKe1nqStuU4QNrplwjMOIw7m6++F2/U9cJRsXSp47SHl6ntkmQOi6k6s7cbN9hOpZtixsx2erbuBe4Nqvgfyy1LEmHJytOMeldvG9XpemoB7VSkmy16O0XRMMMmKBahg37hy4j467xsyxWTAJoO6K2RypGlxYC6s/XWdSgK7XknefBECp/ywl+yWSpOfYeLQem2fd8QByOdvN38FkcKK/kpwUD8GByVwGgj3b5j4U5JB0if+z7sVl2WsX/RHFAp+SfeYK8MF5NqB8a1P/EBsKhyZxL8qdS3uLA=
+    properties :
+     x : 425
+     y : 1
+     width : 156
+     height : 22
+    type : 2
+    code_elements :
+     type_code : 3
+     p_codes :
+      -
+        type : 276
+        enabled : false
+      -
+        type : 277
+        enabled : false
+      -
+        type : 278
+        enabled : false
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BwAAAAcAAABHivBqFH8xYQq/QELUltmClIuqm9KM3lg0XSaBAQ41WqT06R9JfU0qGK5sHUl8/xHCuvP3y9tLeLLOVaAgM2FjnfwSCRBgXqneLsHogwTYpIXuB1zp2uXtmOXYyGd6i+ek6BBvtJ0ylgF/MxkRihdZ26pl/9Jf5c+sxo07G0ZzHfcLEu9WD07gTSld25EPGWjvi/e5TxaHOZSRE8C5Ig+YdJawYdK89l+x1ofEmw3pfCNLUe3tNoiwg4AbC1jLdufmJ97Xc0JHDAy7gJsHBzEWwcuroqy2By4PJ4c6Wg==
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BwAAAAcAAADG0006i3ptxMcUE+O5cGvDhb43eRlY9UEE1z/7izK93v/ToMiwACETQQw4eQhZuJRMFa6SBwwT+zSdDbdc5HEkXDob51ldPFNKsP+0MWY=
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE MaFenêtre()
+   -
+     code : |1-
+      CMOD_SansNom1 = ClDbSprint.GetObj(goApp.Sprint_Num_Actuel() - 20)
+      CMOD_SansNom2 = ClDbSprint.GetObj(goApp.Sprint_Num_Actuel())
+      SAI_Budget = 180000
+     type : 34
+   -
+     type : 180
+     enabled : false
+   -
+     type : 230
+     enabled : false
+ code_parameters :
+  internal_properties : BwAAAAcAAABmeTuenmwbc69bvvLee//dJqd0eAWMS+Ia+9dt/HhGIe+YxbI6l1jI8IYaTanK31Dh1uXhsBvEFYyBe/5EYn7aeKhp3UF0Ey2lTMue0cY=
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x145c9e750e9725aa
+  internal_properties : BwAAAAcAAAAa2Zm8J9E/zh+/WIrVvz1fER/So3PB0gjQuxc1xKQVWY4ZDm5lfg==
+custom_note :
+ internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BwAAAAcAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

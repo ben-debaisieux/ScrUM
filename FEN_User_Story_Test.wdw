@@ -468,7 +468,7 @@ window :
       				
       				
       				TBL_Liste_User_Stories[nLigne].COL_ChefDeProjet		= oUs.p_oUsrResponsable.p_sNom
-      				TBL_Liste_User_Stories[nLigne].COL_IDUserStory		= oUs.Get_IdUnique()
+      				TBL_Liste_User_Stories[nLigne].COL_IDUserStory		= oUs.ZF_Get_IdUnique()
       				TBL_Liste_User_Stories[nLigne].COL_Grp				= sGrp
       				TBL_Liste_User_Stories[nLigne].COL_US				= oUs.sNommination_US()
       				TBL_Liste_User_Stories[nLigne].COL_Taches			= sLstTaches

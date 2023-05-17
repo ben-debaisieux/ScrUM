@@ -111,6 +111,7 @@ window :
         code : |1-
          //libérer zoSpr
          zoSpr <- moimeme..Valeur
+         SAI_Sprint = zoSpr.ZF_Get_IdUnique()
          maj_spr()
         type : 43
       -

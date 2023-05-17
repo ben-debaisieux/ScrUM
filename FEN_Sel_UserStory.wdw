@@ -183,10 +183,10 @@ window :
       		//Ajoue de l'User story dans la liste
       		nLigne = TableAjouteFils(TBLH_SelUS,nLigneParent)
       		TBLH_SelUS[nLigne].COL_Arbre	= oUS.sNommination_US()
-      		TBLH_SelUS[nLigne].COL_IdUS		= oUS.Get_IdUnique()
+      		TBLH_SelUS[nLigne].COL_IdUS		= oUS.ZF_Get_IdUnique()
       		
       		//Est on sur la User storie demandée ?
-      		si oUS.Get_IdUnique() = znIdUs ALORS
+      		si oUS.ZF_Get_IdUnique() = znIdUs ALORS
       			//Oui : on mémorise
       			bOuvre = vrai
       		FIN

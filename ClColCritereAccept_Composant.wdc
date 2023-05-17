@@ -73,6 +73,15 @@ class :
       oObj est un ClDbCritereAccept_Composant(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept_Composant)
      type : 458752
+   -
+     name : GetAll
+     procedure_id : 1468676792952786910
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
+      PROCÉDURE public GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_CritereAccept_Composant_Type..nom)
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

@@ -130,7 +130,7 @@ window :
          
          nIdUS est un entier
          
-         nIdUS = ouvre(FEN_Sel_UserStory, zoCritere.p_oUserStoryParente.Get_IdUnique())
+         nIdUS = ouvre(FEN_Sel_UserStory, zoCritere.p_oUserStoryParente.ZF_Get_IdUnique())
          	
          si nIdUS <> 0 ALORS
          	

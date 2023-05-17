@@ -75,6 +75,15 @@ class :
       oObj est un ClDbRetro_Commentaire(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Retro_Commentaire)
      type : 458752
+   -
+     name : GetAll
+     procedure_id : 1468675216646273222
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
+      PROCÉDURE prive GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_Retro_Commentaire..nom)
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

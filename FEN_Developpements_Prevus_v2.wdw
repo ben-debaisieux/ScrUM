@@ -718,7 +718,7 @@ window :
          				//On change la couleur pour les lignes qui sont des us
          				TBLH_Projet[nLigneUserStory]..CouleurFond						= COL_Scrum.gnCouleur_Gris_TClair
          			fin
-         			TBLH_Projet[nLigneUserStory].COL_N									= oUS.Get_IdUnique()
+         			TBLH_Projet[nLigneUserStory].COL_N									= oUS.ZF_Get_IdUnique()
          			TBLH_Projet[nLigneUserStory].COL_EstUneUS							= vrai
          			TBLH_Projet[nLigneUserStory].COL_Num_Sprint							= nNumSprint
          			TBLH_Projet[nLigneUserStory].COL_Code								= oUS.p_sCodeUserStory

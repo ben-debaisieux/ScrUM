@@ -344,6 +344,15 @@ class :
       
       renvoyer oColRetour
      type : 458752
+   -
+     name : GetAll
+     procedure_id : 1468674885928471753
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
+      PROCÉDURE public GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_Projet..nom)
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

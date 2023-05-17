@@ -401,10 +401,10 @@ window :
       TBLH_SelUS.AffichageActif = faux
       TableSupprimeTout(TBLH_SelUS)
       
-      aoLstEpics <- ClColEpic.from_projet(zoPrj_P).aItems()
-      TableauInsère(aoLstEpics, 1, Null)
+      aOLstEpics <- ClColEpic.from_projet(zoPrj_P).aItems()
+      TableauInsère(aOLstEpics, 1, Null)
       
-      POUR TOUT ÉLÉMENT oEpic DE aoLstEpics
+      POUR TOUT ÉLÉMENT oEpic DE aOLstEpics
       	
       	//Ajout du projet dans la liste
       	nLigneEpic = TableAjouteLigne(TBLH_SelUS)
@@ -412,7 +412,7 @@ window :
       		
       		TBLH_SelUS[nLigneEpic].COL_Arbre	= zoPrj_P.p_sNom
       		
-      		SI Dimension(aoLstEpics) > 1 ALORS
+      		SI Dimension(aOLstEpics) > 1 ALORS
       			TBLH_SelUS[nLigneEpic].COL_Arbre	+= " (Sans groupement)"
       		FIN
       	SINON
@@ -467,7 +467,7 @@ window :
       			nLigneUs = TableAjouteFils(TBLH_SelUS, nLigneEpic)
       			TBLH_SelUS[nLigneUs].COL_Arbre			= oUS.sNommination_US()
       			TBLH_SelUS[nLigneUs].COL_Arbre..Bulle	= sCommentaire
-      			TBLH_SelUS[nLigneUs].COL_IdUS			= oUS.Get_IdUnique()
+      			TBLH_SelUS[nLigneUs].COL_IdUS			= oUS.ZF_Get_IdUnique()
       			TBLH_SelUS[nLigneUs].COL_Cmtr			= oUS.p_sCMTR_Global
       			TBLH_SelUS[nLigneUs].COL_Code			= oUS.p_sCodeUserStory
       			TBLH_SelUS[nLigneUs].COL_Statut			= oUS.sLibelleDeEtat()

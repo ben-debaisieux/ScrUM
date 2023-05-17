@@ -22,7 +22,7 @@ class :
       fin
       
       constante
-      	cstTachesDeUS	= 1
+      	cstTachesDeUS	= "TachesDeUS"
       fin
      type : 131072
   procedures :
@@ -301,13 +301,8 @@ class :
       FONCTION globale aoFromUS(oUS_p est un ClDbUserStory, LOCAL bForceCharge_p est un booléen = faux):ClColTaches
       
       sReq est une chaine
-      oColTachesRetour est un ClColTaches dynamique
       
-      si oUS_p.p_ZF_aListCol[cstTachesDeUS]..vide alors
-      	oUS_p.p_ZF_aListCol[cstTachesDeUS] = allouer un ClColTaches
-      FIN
-      
-      oColTachesRetour <- oUS_p.p_ZF_aListCol[cstTachesDeUS]
+      oColTachesRetour est un ClColTaches dynamique <- oUS_p.ZF_GetCol(cstTachesDeUS)
       
       si pas oColTachesRetour.p_bEstCharge ou bForceCharge_p alors
       
@@ -320,7 +315,7 @@ class :
       			
       		FROM Scr_Tache
       		
-      		WHERE Scr_Tache.IDScr_UserStory = [%oUS_p.Get_IdUnique()%]
+      		WHERE Scr_Tache.IDScr_UserStory = [%oUS_p.ZF_Get_IdUnique()%]
       		
       		ORDER BY Scr_Tache.Ordre,
       			Scr_Tache.CodeTache
@@ -363,6 +358,55 @@ class :
       oColTaches.ZF_LoadSQL(sReq)
       
       renvoyer oColTaches
+     type : 458752
+   -
+     name : aoFromPeriodeSprints
+     procedure_id : 1467278055397392185
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoFromPeriodeSprints (<oSpDeb_p> est ClDbSprint, <oSpFin_p> est ClDbSprint)
+      //
+      // Paramètres :
+      //	oSpDeb_p (ClDbSprint) : <indiquez ici le rôle de oUS_p>
+      //	oSpFin_p (ClDbSprint) : <indiquez ici le rôle de oSpFin_p>
+      
+      // Valeur de retour :
+      // 	ClColTaches : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      
+      //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
+      FONCTION globale aoFromPeriodeSprints(oSpDeb_p est un ClDbSprint, oSpFin_p est un ClDbSprint):ClColTaches
+      
+      sReq est une chaine
+      oColTachesRetour est un ClColTaches
+      
+      sReq = [
+      	SELECT 
+      		Scr_Tache.*
+      		
+      	FROM Scr_Tache
+      	
+      	WHERE Scr_Tache.Num_Sprint_Demarrage BETWEEN [%oSpDeb_p.ZF_Get_IdUnique()%] AND [%oSpFin_p.ZF_Get_IdUnique()%]
+      	
+      ]
+      oColTachesRetour.ZF_LoadSQL(sReq)
+      
+      
+      RENVOYER oColTachesRetour
+     type : 458752
+   -
+     name : GetAll
+     procedure_id : 1468675822239490091
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
+      PROCÉDURE prive GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_Tache..nom)
      type : 458752
   procedure_templates : []
   property_templates : []

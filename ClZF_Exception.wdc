@@ -27,6 +27,7 @@ class :
       constante
       	cstInfoLogSimple = 1
       	cstInfoLogHF = 2
+      	cstInfoDebug = 3
       fin
      type : 131072
   procedures :
@@ -60,7 +61,7 @@ class :
      name : ZF_Declenche
      procedure_id : 1424027314207830250
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //ZF_Declenche ( [<asParams_p> est tableau (chaîne)])
@@ -92,7 +93,12 @@ class :
       	FIN
       FIN
       
-      ExceptionDéclenche(:m_nCode, sMsg)
+      selon :m_nLog
+      	CAS cstInfoDebug
+      		SI EnModeTest() ALORS trace(sMsg)
+      	AUTRE CAS
+      		ExceptionDéclenche(:m_nCode, sMsg)
+      FIN
      type : 458752
   properties :
    -

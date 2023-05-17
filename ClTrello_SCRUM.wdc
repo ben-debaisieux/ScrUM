@@ -671,7 +671,7 @@ class :
       			
       			
       			//On mémorise les US à recalculer
-      			nIdUs = oTache.p_oUserStoryParent.Get_IdUnique()
+      			nIdUs = oTache.p_oUserStoryParent.ZF_Get_IdUnique()
       			SI TableauCherche(anUSARecalculer,tcLinéaire,nIdUs) = -1 ALORS
       				//			si nIdUs = 684 alors stop
       				TableauAjoute(anUSARecalculer,nIdUs)

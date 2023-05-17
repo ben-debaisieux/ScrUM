@@ -103,6 +103,15 @@ class :
       	ListeAjoute({sNomFen_p + "." + sCombo_p,indChamp}, oCmtrType.p_sType_Cmtr + gLien(oCmtrType.ZF_Get_IdUnique()))
       FIN
      type : 458752
+   -
+     name : GetAll
+     procedure_id : 1468675547359225496
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
+      PROCÉDURE public GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_Retro_Commentaire_Type..nom)
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

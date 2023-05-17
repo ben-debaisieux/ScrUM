@@ -39,12 +39,25 @@ class :
       	
       GLOBAL
       PUBLIC
-      	mg_aoInstances					est un tableau associatif de ClZF_ObjDBls dynamique
+      	mg_aoInstances						est un tableau associatif de ClZF_ObjDBls dynamique
       	mg_oExTypeColNonDefinit				est un ClZF_Exception dynamique
+      	mg_oExClasseNonParametree			est un ClZF_Exception dynamique
+      	
+      	
+      	gnCoul01	est un entier	= RVB(173, 35, 64)
+      	gnCoul02	est un entier	= RVB(64, 173, 35)
+      	gnCoul03	est un entier	= RVB(35, 64, 173)
+      	gnCoul04	est un entier	= RVB(173, 145, 35)
+      	gnCoul05	est un entier	= RVB(35, 173, 145)
+      	gnCoul06	est un entier	= RVB(145, 35, 173)
+      	gnCoul07	est un entier	= RVB(64, 173, 145)
+      	gnCoul08	est un entier	= RVB(173, 64, 145)
+      	gnCoul09	est un entier	= RVB(145, 173, 35)
+      	gnCoul10	est un entier	= RVB(35, 145, 173)
       prive
       	mg_oExPlusieursInstancesClAapp		est un ClZF_Exception dynamique
-      	mg_oExErreurSQL					est un ClZF_Exception dynamique
-      	mg_oExErreurTRS					est un ClZF_Exception dynamique
+      	mg_oExErreurSQL						est un ClZF_Exception dynamique
+      	mg_oExErreurTRS						est un ClZF_Exception dynamique
       protege
       	mg_aZF_aGetId						est un tableau associatif de chaine
       FIN
@@ -61,6 +74,13 @@ class :
       
       mg_oExTypeColNonDefinit = allouer un ClZF_Exception("Aucun prototype de collection trouvée dans le projet, pour la clé ""%1"".", ...
       	ClZF_Exception.cstInfoLogSimple)
+      
+      mg_oExClasseNonParametree = allouer un ClZF_Exception("La classe ""%1"" n'est pas paramétrée pour instancier des objets.", ...
+      	ClZF_Exception.cstInfoLogSimple)
+      
+      
+      
+      
      type : 131072
   procedures :
    -
@@ -307,6 +327,7 @@ class :
       
       oRetour est un ClZF_ObjDbLs dynamique
       
+      	
       SI mg_aZF_aGetId[sClasse_P]..Vide ALORS
       	sProc est une chaîne = "ZF_CreeObj_[%sClasse_P%]"
       	sCode est une chaîne = [
@@ -314,10 +335,18 @@ class :
       		oRetour est un [%sClasse_P%](nId_P)
       		RENVOYER oRetour
       		]
-      	Compile(sProc, sCode)
+      		
+      	si Compile(sProc, sCode) <> "" alors
+      		mg_oExClasseNonParametree.ZF_Declenche([sClasse_P])
+      	fin
       	mg_aZF_aGetId[sClasse_P] = sProc
       FIN
-      oRetour <- Exécute(mg_aZF_aGetId[sClasse_P], nId_P)
+      
+      QUAND EXCEPTION DANS
+      	oRetour <- Exécute(mg_aZF_aGetId[sClasse_P], nId_P)
+      FAIRE
+      	mg_oExClasseNonParametree.ZF_Declenche([sClasse_P])
+      fin
       
       
       renvoyer oRetour

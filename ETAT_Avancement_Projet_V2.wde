@@ -630,7 +630,7 @@ report :
       POUR TOUT ELEMENT oUs DE ClColUserStory.oFromProjet(oProjet_P).aitems()	//oProjet_P.aoListeUS().aItems()
       	VariableRAZ(stUserStorie)
       	
-      	stUserStorie.nIDUserStorie		= oUs.Get_IdUnique()
+      	stUserStorie.nIDUserStorie		= oUs.ZF_Get_IdUnique()
       	stUserStorie.sCodeUserStorie	= oUs.p_sCodeUserStory
       	stUserStorie.sEnTantQue			= oUs.p_sEntantQue
       	stUserStorie.sBesoinUserStorie	= oUs.p_sJaiBesoinDe

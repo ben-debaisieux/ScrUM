@@ -81,9 +81,9 @@ class :
       	//Affectation de la clé étrangère, correspondant à l'objet en cours
       	SELON objet..Classe
       		CAS CldbUserStory
-      			Scr_Historique.IDScr_UserStory	= :Get_IdUnique()
+      			Scr_Historique.IDScr_UserStory	= :ZF_Get_IdUnique()
       		CAS CldbTache
-      			Scr_Historique.IDScr_Tache		= :Get_IdUnique()
+      			Scr_Historique.IDScr_Tache		= :ZF_Get_IdUnique()
       		AUTRE CAS
       			ExceptionDéclenche(1, ChaîneConstruit(...
       				"La classe %1 n'est pas paramétré pour l'enregistrement des historique.",...
@@ -101,12 +101,13 @@ class :
       TableauSupprimeTout(:m_asHistorique)
      type : 458752
    -
-     name : Get_IdUnique
+     name : ZF_Get_IdUnique
      procedure_id : 2254444663359127737
      type_code : 12
-     code : |1+
-      procédure abstraite Get_IdUnique()
+     code : |1-
+      procédure /*abstraite*/ ZF_Get_IdUnique()
       //Les classes qui héritent, doivent obligatoirement cette procédure pour gérer l'ID unique.
+      renvoyer 0
      type : 458752
    -
      name : CleanHisto
@@ -123,7 +124,7 @@ class :
       DELETE FROM Scr_Historique
       WHERE %1 = %2
       ], :sNomCleEtrangereDeClasseActu(),...
-      	:Get_IdUnique())
+      	:ZF_Get_IdUnique())
       
       goApp.Rsql(sdDelHisto,sReq)
       HAnnuleDéclaration(sdDelHisto)
@@ -169,7 +170,7 @@ class :
       		Scr_Historique.Date_Evt desc
       	
       ], :sNomCleEtrangereDeClasseActu(),...
-      	:Get_IdUnique())
+      	:ZF_Get_IdUnique())
       
       goapp.RSQL(sdHistoUS,sReq)
       

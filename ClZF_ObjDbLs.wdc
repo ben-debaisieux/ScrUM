@@ -29,6 +29,7 @@ class :
       	
       	mg_oExPositionnementImpossible		est un ClZF_Exception dynamique
       	mg_oExRecipObjetImpossible			est un ClZF_Exception dynamique
+      	mg_oExReprNonRedefinie				est un ClZF_Exception dynamique
       fin
       
       constante
@@ -38,6 +39,7 @@ class :
       
       mg_oExPositionnementImpossible	= allouer un ClZF_Exception("Enregistrement introuvable : %1.%2 = %3", ClZF_Exception.cstInfoLogSimple)
       mg_oExRecipObjetImpossible		= allouer un ClZF_Exception("Récupération impossible de l'objet %1; ID %2.", ClZF_Exception.cstInfoLogSimple)
+      mg_oExReprNonRedefinie			= allouer un ClZF_Exception("Représentation de l'entité %1 non redéfinie : %2", ClZF_Exception.cstInfoDebug)
      type : 131072
   procedures :
    -
@@ -335,7 +337,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure ZR_Clone():objet ClZF_ObjDbLs
+      procédure ZR_Clone()<métier>:objet ClZF_ObjDbLs
       
       //nMemoID est un entier = :m_ZF_nIdUnique
       //:m_ZF_nIdUnique = 0
@@ -387,7 +389,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure protegé ZF_GetObjectsFromIds():vide
+      procédure protegé ZF_GetObjectsFromIds()<métier>:vide
       
       sRub			est une chaîne
       nVal			est un entier
@@ -451,7 +453,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure ZF_GetCol(sCle_p est une chaîne):ClZF_ColObjDB
+      procédure ZF_GetCol(sCle_p est une chaîne)<métier>:ClZF_ColObjDB
       renvoyer mg_oApp.GetCol(Objet, sCle_p)
      type : 458752
    -
@@ -471,8 +473,30 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure abstraite Init_Data()
+      procédure abstraite Init_Data()<métier>:Vide
       
+     type : 458752
+   -
+     name : sRepresentation
+     procedure_id : 1468704633020119664
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sRepresentation ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure sRepresentation() <métier>:chaine
+      
+      mg_oExReprNonRedefinie.ZF_Declenche([objet..classe, dbgInfo(dbgPile)])
+      renvoyer :ZF_sGetNomInstance()
      type : 458752
   properties :
    -

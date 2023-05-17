@@ -20,7 +20,6 @@ class :
       PROTÉGÉ
       	m_oClasseGen est un ClZF_GenCodeFic
       	m_sCode est une chaîne
-      
       fin
      type : 131072
   procedures :
@@ -31,7 +30,10 @@ class :
      code : |1+
       procédure Constructeur(oClasseGen est un ClZF_GenCodeFic)
       
-      :m_oClasseGen = oClasseGen
+      si oClasseGen <> Null ALORS
+      	:m_oClasseGen = oClasseGen
+      FIN
+      
      type : 589824
    -
      name : Destructeur

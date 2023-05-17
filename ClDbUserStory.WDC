@@ -165,7 +165,7 @@ class :
       	sReq = ChaîneConstruit([
       	DELETE FROM Scr_Historique
       	WHERE IDScr_UserStory = %1
-      	], :Get_IdUnique())
+      	], :ZF_Get_IdUnique())
       	::mg_oApp.Rsql(sdDelUserStoresHisto,sReq)
       	HAnnuleDéclaration(sdDelUserStoresHisto)
       	
@@ -411,7 +411,7 @@ class :
       		AND Scr_Tache.Top_Annule = 0
       		AND Scr_Tache.Top_Brouillon = 0
       
-      ], :Get_IdUnique())
+      ], :ZF_Get_IdUnique())
       
       ::mg_oApp.Rsql(sdPoidsUS,sReq)
       HLitPremier(sdPoidsUS)
@@ -910,12 +910,12 @@ class :
       FIN
      type : 458752
    -
-     name : Get_IdUnique
+     name : ZF_Get_IdUnique
      procedure_id : 1445047014240083339
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.Get_IdUnique
-      FONCTION Get_IdUnique():entier
+      FONCTION ZF_Get_IdUnique():entier
       
       //redéfinition obligatoire à cause de la déclaration 'abstraite' de la méthode, dans la classe d'historique
       renvoyer ClZF_ObjDB.ZF_Get_IdUnique()
@@ -991,7 +991,7 @@ class :
       oTache est un ClDbTache dynamique
       oCritere est un ClDbCritereAccept dynamique
       
-      sRetour.id								= :Get_IdUnique()
+      sRetour.id								= :ZF_Get_IdUnique()
       sRetour.code							= :m_sCodeUserStory
       sRetour.who								= :m_sEntantQue
       sRetour.what							= :m_sJaiBesoinDe
@@ -1109,7 +1109,7 @@ class :
       //	CAS ECompteNbUS.Toutes
       		
       	autres cas
-      		mg_oEx_EtatUsNonDefinit.ZF_Declenche([:Get_IdUnique()])
+      		mg_oEx_EtatUsNonDefinit.ZF_Declenche([:ZF_Get_IdUnique()])
       		//ExceptionDéclenche(1, "Etat de l'US ""ID : [%:Get_IdUnique()%]"" non prévu.")
       FIN
       
@@ -1181,7 +1181,7 @@ class :
       	Count(*) AS Nb
       FROM Scr_UserStory
       where Scr_UserStory.CodeUserStory = '[%sCode_P%]'
-      	AND Scr_UserStory.IDScr_UserStory <> [%:Get_IdUnique()%]
+      	AND Scr_UserStory.IDScr_UserStory <> [%:ZF_Get_IdUnique()%]
       ]
       mg_oApp.RSQL(sdVerifCode,sReq)
       HLitPremier(sdVerifCode)

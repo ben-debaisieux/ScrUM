@@ -1,0 +1,331 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenFenMenu
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1461449d02d5a6b9
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_GenFenMenu est une Classe
+      	herite de ClZF_GenFen
+      prive
+      	m_nBtnX est un entier
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1468530394647668409
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+      ancetre.constructeur(null)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1468530394647733945
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : sNomFen
+     procedure_id : 1468530673820738330
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_GenFen.sNomFen
+      PROCÉDURE  sNomFen():chaîne
+      renvoyer "Fen_Menu"
+     type : 458752
+   -
+     name : Genere
+     procedure_id : 1468530673820869559
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_GenEltWD.Genere
+      PROCÉDURE  Genere():Vide
+      
+      sCode est une chaîne
+      sBtns est une chaîne
+      
+      :m_nBtnX = 6
+      
+      
+      pclOClTmp est un ClZF_GenCodeFic dynamique
+      pour tout element pclOClTmp de :aGenClasses()
+      	si pas pclOClTmp.p_bClasseLS ALORS
+      		sBtns += [RC] + :Gen_Btn_Rub(pclOClTmp)
+      	FIN
+      FIN
+      
+      
+      
+      
+      sCode = [
+      #To edit and compare internal_properties, use WINDEV integrated tools.
+      #Internal properties refer to the properties of controls in windows, reports, etc.
+      info :
+       name : FEN_Menu
+       major_version : 27
+       minor_version : 0
+       type : 2
+       description : ""
+       subtype : 0
+      window :
+       name : FEN_Menu
+       identifier : [%:GenProcIdent(1)%]
+       internal_properties : BwAAAAcAAAD5MoLwWQpoxtk6C26IFIpyo9l7qoZpjfTMUkG5310HsDf0xiJlv/97Ii6nOpOyySe0ch+gsx0C5I9TM7yfyf7rDO7ueLYCF51g8+w/5O4E6hQk1vQQYQ09SoRAiRUsRPREass4917PhnWhRmS1s3l9o6aNkiOaV7c9GQUSAlkw9TalTp79GXpg6Fcih+SF80jWqHro2h2S/v+3U43fdkmRT9MJlfGZVFG2UE4mZHRbeWOIcJ6hunXFjQuDGLhbXsPSQNDy8k11Gq4cg0OBEKUZg0prnfQdyNGFAE6eK7r5wurCNyIncSuQ2GqjCvBH40o1bd5ZBWpuo7xyScnQRjglt9VaOUaIUObKDRECVRsS6x1fOjrx2ESDmV1ecn4ceZAwziTl0Vl3/iS/OZU+3jLp5sV0eAiixIOM9w11j7/77iSZf9w8jjPO+3q8qJg6R/jK9GcNeFMq0ZnGV+RGKzDIhBAxCWDDYE188XUNUCm3P4vaeBdHryNalP8xj38DT4exxJxDgxvbtrE0HtbbQna1V6kMRTY1id6z9ESFBj0JKlPz7KPnqSeXlO/Ai24g2IlpFdYktR9B8knQ6gcCViRJnfya6BX+/pnMn6W3Z0tMem8Ti5Vf2y/CAvAvoW+XhXjLHAxUK8fjAw7FZKTcHNsVNPvhCafJqLBCQXAS6p7yLNKHzKAM1vBx
+       properties :
+        width : 1024
+        height : 740
+        widthClient : 1022
+        heightClient : 708
+       controls :
+        -
+          name : RUBAN_Principal
+          identifier : [%:GenProcIdent(2)%]
+          internal_properties : BwAAAAcAAAD1UcdEkQ4YRusyJeWtcEIfxdpwl1zmLA3ecstWDsk+2zYFiawQJJ4qFCnNKrwkVjthsMylrGNBZcPwKpnsVXjI6a7AimO99GYn4EJV9eaX+TH13Vkf9VT0DxP7m+9wsnyto2Je+E+yjwunIOqWzSsIfYG5E+CPH+POpKDxxcrz6weWEjNXT3HYm7lJXi9WutZn6Yjif2zNU6hgJrubweVPbZSay27GP5TUSZg+svNBJCt5wKjL6WjSFxEStE+TFpcU/gviEhzQgNiiqaMpBCf1Y+onySYzxIxva8vkg0yB/7nCTJMjDyPbUWXNxG/R/ZLWwYvzsv5MQrgxBa6+onfY8bcLXwXuUCh7gxd+vaOIyjfuVhVUC41LElFo2x1rwa3/s7k5S6I5cquW1GIIhihqNPnFlWYjZVvpJGROpGeqev9gLEN4vJYnBRqFYlhxBzl9t6axxoA71QS6ypwXWQzwiJQG0jg0cddSycXU95RsCw+PuaGZNzG1hXqcDf59jdNtbX0FBCog80YJWx3hfzV5qgBFd3DgG670xxCSC9G076zKGkibCPd91hI7ydjbSURZtSc7ZNFhSsL+eMo1/ES2ysVqmcxRnf+J7+5K8iuT2hEFl8cs2ryMRE6UfIZUneT8IFf53aPjnKAQ0RzO6D6Ct6ZSpunvFKZQvbY7MiZMIuzLlu1h6gcC6VRP/1PYMo00k/K6Xq57GxP6dlhKHEGNXLCNZqfSGJH2NhwBvzGbVfV4iv3sST6Pb5sxXxuTlGZw148EakyKaX80oVZ/lW8rqC20WNWKEj7sICE63ozcYdwmoHKZCaF8DZKXroZoJDubd41FbuYpKwVUmAT2gxYroD/7f9YkguAap8uh8/4tWL2/FV/n0RpB3XDOGwaNL7MSNfEAHQ9SG63LsWkPL1LCvCIaJ3FnGuFLzJz3hqoxLGsCb8EkG9mQ6mse8GnDTFE0h
+      alB2noKuXrEIe6CnkWGoShsCXLzewLeO5SKdcOSNcOTe+vNZVfXKeiasXbQhU72f++ZX+SU4rzu3f9s4iMl49MvkXhHyNWul0zD1vnO/4akfMQgY5xd
+          properties :
+           width : 1022
+           height : 110
+          tabs :
+           -
+             internal_properties : BwAAAAcAAACgcFrnZrUjLHXkzMSUsRx2hie76kqr94EPawVG7wolGBcxhqGcxDvCeN+Yg4gSsC3Ms+CQzFe+D49pCbeVaOrDPBoikYOxUEmeuVfa1NS7EZsFKnlSv6BlUSKMCxXrowqqizj0vzbrDDVh4TBtydOfsj2dSg==
+             ribbon_groups :
+              -
+                name : GRPRUB_Accueil1
+                identifier : [%:GenProcIdent(3)%]
+                internal_properties : BwAAAAcAAABlheGLgGvQyVvc4XqaTIHLxwajAI+5AbrEy6/0DogwLqj9FDTJc1Ae2Ml/d3MmwPXH/Kj/RpXPmuI2/zKZ8tF0+MUKWXPZOvFXl+p+xhaei/H/pXqBPYUTKVREs7qSspQwnJl7KIsg7Ys7GBgpzW6QEmig5bYIBgVmoMCoGy5uvXQkUS3jBsY9C1KW5rS6KG2PKk3w0fmhzUcfw/cXnw1ravfaOWTNEhQKKilgGipPFg+ofO3HLhKsvttl+P6DRnTBJ6RJqrpIZ2lwnRzCuv4w3U8R2fyRiEMxTN/ecAGJXxCrQWhu9vbNpdlXGPB+kId4Z6owvO1NgTiMYzzunlziy5xGE5grzn6nQDvdGlK364Bedk6t4165Xt45HbuHHdNfaJhgrZ+Zqczv1ug7MCaONx0II0jABWCNBD0JMQLMTa6pDIqtWvkk14/J7L8eZiEi/D2cYqX4dcDWg2JKqeMEThADOr7cBvmSoX6OCS1KpAclzsrBOX4=
+                properties :
+                 y : 3
+                 width : 60
+                 height : 81
+                controls : []
+                type : 88
+                code_elements :
+                 type_code : 123
+                 p_codes : []
+              -
+                name : GRPRUB_Accueil2
+                identifier : [%:GenProcIdent(4)%]
+                internal_properties : BwAAAAcAAABoi98hQ+JCgReNbXhMHNpbJkV0dlXHJ49Ih5Pi33sBM3+XpzRe3OupEJDGXVklFSq4fVOv0ZglwxTF8mSuKgXx3RZ9Hwl72uIYkOPt+YBa7XycICHjewWwBwVuZBarZWNq0Rbh8AB+Vg1JjYyYWOa8gC4MIWZJmJfw8LeTcYN7Ytwld+VZkr/g1lPfhFeLRxpilHHzUsPhT7leWa2FIZ7Bpb5kBrbfIQrwCH86IHbV9B+NwLvo3aq+jhXcdWfIXvACev4dN5K5Cjjy8oN7onDJkqg9+REybLiBEIaFzU/vbgZDczVZFWpiHW5WC2kYOulCAVTF5GyjUX60B1OTykdv0+QSJx6XF/5jS0PJBAW6x9N4UzSOJ/+zgUptXJjB4aSoj85xNt7Tfno7eRFzQ3c+ucyM1EWfLS0SMUFR+1QX3ty2MPORGZLTgXgfppK6gpHK8QWuVultILAfiNHgunFmhwU/oeyC64ralsBZ6rwdrV45jH3nwVve
+                properties :
+                 x : 60
+                 y : 3
+                 width : 205
+                 height : 81
+                controls : []
+                type : 88
+                code_elements :
+                 type_code : 123
+                 p_codes : []
+             controls : []
+           -
+             internal_properties : BwAAAAcAAADK6isSWURZqebmUOdBLjXTYdR3llYxbu8uWiyY3mT8Z2agAeJ58oMDtIp+J4aWXs1ksMDSZtx2HMVXYzZVD8LXIXo/1BOIXm3ZIZFUx3qXIAjU9+Ihk8Y9hgQSrem0UFylW5GFmjGg1uggpbP8E45v0JxywTwWUQ==
+             ribbon_groups :
+              -
+                name : GRPRUB_Param
+                identifier : [%:GenProcIdent(5)%]
+                internal_properties : BwAAAAcAAAB532PuFZdIt7GQNTNe9nC5qFURiRkxek+jrMc5KkNDXlCl5WwJXSzK4qR0qjMfuLllg8RgXamLWf6fsVgJwaBV+I+AeB6TALJH4Z9yHZcVk4JwEnyv/8/zRt20FlrMFUIQer8drqqHWkz+FGni8PV+ah7wY9bVm/u0zVza90/p8Fewkf4NKgBEY5I0jA0f2denAJl9rvj+k4Nv9Vjzv7/yQRJKdizKCx1+oafMMGbPselyyVxK6DQT53V801z4MLoKOHly55xpC/LNnl7yFyLU+qrwDHNBg18ikYjKIppVyQuclht9uP8TmMhyxsSf3tljQOcRMRNuhRlr7hpmo7wcMmuR6DHzfWh+i2pNxDNNgUW3wweiEZNV6S9Wr6ty80dmtRGF/i82fWNqZXitY1rICNZFcqP4ZoZALzxb9dneA2t0WzemAgwyxKA2iCGB4PnND/x7DRGjxgpIkSOhg6JlvLe4e8shHV/6rWdmUQfy5ISCGM5Fle8TyQ==
+                properties :
+                 y : 3
+                 width : 89
+                 height : 81
+                controls :
+      [%sBtns%]
+                type : 88
+                code_elements :
+                 type_code : 123
+                 p_codes : []
+             controls : []
+          type : 87
+          controls : []
+          code_elements :
+           type_code : 119
+           p_codes :
+            -
+              type : 292
+              enabled : false
+            -
+              type : 293
+              enabled : false
+        -
+          name : TDB_SansNom1
+          identifier : [%:GenProcIdent(6)%]
+          internal_properties : BwAAAAcAAAA3cghWP8CL3wyKSGrGQdSJgnzsg8Z4pw/pM4pH2QsvDpvv6zAp42RWMFHcooTeHWjTeU0I+cXujAiLRs4yUaEUFsPEShYI/a1PI7JxXcOUwXTgP6jSjBMTH7Y9+lQSY0VrRklu39s/dUdSHMub1dYTXC5Evccgbi8zwih9gvxSUdS+nzDW+qSnrB0A7xkRHLN7iDpe4b+tgYtjNuWBIpNhkoMQ0HfDg6LWU3kkPmmp+JYzkdxrsNdkGIEn/BBQMoodF1ZqD6Ze1vNwONWXJq2SN6XOQL1Mm8L5JX4aKIqRONhjIoIh2pZQJ+u3naYWNP+ez8gBdPMol+jUjcdnHlMuB5/AYFbSBu4VO1qmOnjNI5QZb/xlhauOr1lK9TibVJWJSUVOM/4Z7S93Hslgtz2wPkK3AcKai5I7NQnndIRJVnxzsMZbuxUHRZMLRGAGxDD5GXTw38Umv8vgq9An9ymcA0CAXinZcy9azTIcxTbAFj9Qzpm6Nnd6xtOlqrsxTs2XJIYLKnvDy+BT9+lIHFaoBZ8Sxfdpm7RUL8ipNPsrye6+RGLBaQTM9AMKwE29p7kIn9PZIKAyh6PHbR6ieWe+ZKFQEuhTFNbCZe22Fj+5cQ+TuDrTMZHV7Ek//v77Z1xYPhzCPV7t5IG8eSvDLagy5E2Saq8FCZ3sArzOLvfmVFImwTjbsJznAYGDYrYfeQs3XRjCSgtZOu1xOY24pLDLT5K1vDPbsnmB0YBTe02Kaqi/zrvTFew5cSLPM7CmaIpnMeMqaYIfOgZhQyBnCvKo+2D6HeGWef2/j594quNNFEIAs4RCIpYBuNaalO/IXU1EJI1BYYTE4UcZcnw3BY/DCfPGSh0+1vUSqFSX7hPtayb3vFMP/KHp9XjmNbc/j0VLz8lrZwK3whjUJc92ZKVDPmjSkVjZN0oo39fobOM+lOINk9j8Mtbkn2Px7g==
+          properties :
+           x : 6
+           y : 116
+           width : 1010
+           height : 586
+          widgets : []
+          type : 111
+          code_elements :
+           type_code : 134
+           p_codes :
+            -
+              code : |1+
+               PROCEDURE AjoutWidget(Widget)
+              type : 194
+            -
+              code : |1+
+               PROCEDURE SuppressionWidget(Widget)
+              type : 195
+            -
+              code : |1+
+               PROCEDURE DéplacementWidget(Widget)
+              type : 196
+            -
+              code : |1+
+               PROCEDURE RedimensionnementWidget(Widget)
+              type : 197
+       menu :
+        name : _Menu
+        identifier : [%:GenProcIdent(7)%]
+        internal_properties : BwAAAAcAAABHivBqFH8xYQq/QELUltmClIuqm9KM3lg0XSaBAQ41WqT06R9JfU0qGK5sHUl8/xHCuvP3y9tLeLLOVaAgM2FjnfwSCRBgXqneLsHogwTYpIXuB1zp2uXtmOXYyGd6i+ek6BBvtJ0ylgF/MxkRihdZ26pl/9Jf5c+sxo07G0ZzHfcLEu9WD07gTSld25EPGWjvi/e5TxaHOZSRE8C5Ig+YdJawYdK89l+x1ofEmw3pfCNLUe3tNoiwg4AbC1jLdufmJ97Xc0JHDAy7gJsHBzEWwcuroqy2By4PJ4c6Wg==
+        options : []
+       languages :
+        - fr-FR
+       popup_menus : []
+       message_bar :
+        internal_properties : BwAAAAcAAADG0006i3ptxMcUE+O5cGvDhb43eRlY9UEE1z/7izK93v/ToMiwACETQQw4eQhZuJRMFa6SBwwT+zSdDbdc5HEkXDob51ldPFNKsP+0MWY=
+       code_elements :
+        type_code : 1
+        p_codes :
+         -
+           code : |1+
+            PROCEDURE MaFenêtre()
+         -
+           type : 180
+           enabled : false
+         -
+           type : 230
+           enabled : false
+       code_parameters :
+        internal_properties : BwAAAAcAAAARaqIs1pWWTrjJkc2sbefp8NGAHSVvdRgpQIePRe9rhkbpERRVEF+Nx8mIqTxrVGdwHX99jtU=
+        original_name : Modele1
+      resources :
+       string_res :
+        identifier : 0x14613e7c02c3b6ac
+        internal_properties : BwAAAAcAAAAZ++HSz2luvwiNhadWl8v3mh2d0Pq0fCIps02kogrcwVHmCg==
+      custom_note :
+       internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+      rad :
+       internal_properties : BwAAAAcAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe
+      ]
+      
+      
+      
+      :m_sCode = :sReCheckLignesCode(sCode)
+     type : 458752
+   -
+     name : Gen_Btn_Rub
+     procedure_id : 1468534264414562123
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Gen_Btn_Rub (<clOGenEntite_p> est ClZF_GenCodeFic)
+      //
+      // Paramètres :
+      //	clOGenEntite_p (ClZF_GenCodeFic) : <indiquez ici le rôle de clOGenEntite_p>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure Gen_Btn_Rub(clOGenEntite_p est un ClZF_GenCodeFic)<metier>:chaine
+      
+      sRetour est une chaîne
+      sDef est une chaîne
+      oFenTbl est un ClZF_GenFenTable(clOGenEntite_p)
+      stProto est un ClZF_GenFen.STR_ProtoChamps
+      
+      stProto.sLibelle = ""
+      stProto.sBulle = "Liste des [%minuscule(clOGenEntite_p.p_sLibelle)%]s"
+      
+      sDef = :sCommenteCode(stProto)
+      
+      sRetour = [
+                 -
+                   name : BTN_Tbl[%clOGenEntite_p.p_sNomUsage%]
+                   identifier : [%:GenProcIdent()%]
+                   internal_properties : BwAAAAcAAABxn7cndNDrPglhp4uoztbrBj1m4D6VcSqPG+lXiVUF+NQhQE8GmvCYVUtLY/38iUw97Y8gwtU3XzgCfkFRZyPQihtGJu/Qg2sURPHO6TIJApjSdSMFKb8Y9STivvjxojtRfIYqcQQJkzBBHZ8z9iBAc93dsTwK0/9p/btkdcolsUjSVF7h9KkegxG+NDiiaSgJLAlieVkFY+xU/KIlB/9pucs4yebcRsKSvJGuUDoQ4g22bhOIc/ARzWknOsQZoRX3YtxKGny6ioyEvhPx7cKIydz52pSblJ+gQJqnSc9I3rHAb8fSyPkYUV+jqK2q+onmHmTrkIG2cLE1XomRmElEbA8AYRzuJNS1awrbGPqBp7GvnAOImZcsb87rMIZtzNH9I1+f9Df6Tu9FxRtmnf/i6Bh363LBYJC/ZqGPuOofmNgIe/fhYk6f0Wu9iVGUEpm+fcOVDNo1vmBP2SVqT+J+TYueTBA0A7LTHzLD5c9+dJjc/8t3cjbUPk1jE3MennN0m5aZ1cmQgBz8dCaJHfsvWct8vA6iQQyu1mA6TunfwbkCURFrWPQIHnGcd3im8jZVuUvA/FG31OFoaIlGvdE09DiyBhp9Ff/FecLOuJh1PtIWMFInwUniTlD6KzNyy0CBzhbmqxB4twKwJae66tw4HFi4gJo28sriRUHyHIfkzCz6JT8Awqq8TL4A/DIW25Txb5fxHAYrS6EEdvkTxuIxpv2QSDpWZymOx8I4mTB93K4gSQLZugM7RMqQFzjektCqY71RqbD6WUn/LxECkgzGi6+RV73OdGawYETtXm7E+yexxF7vOZ0D2DU+rXt4jbM3D1Z2yTylkyn1exUSeO7ETNg=
+                   properties :
+                    x : [%:m_nBtnX%]
+                    y : 3
+                    width : 24
+                    height : 24
+                   type : 4
+                   code_elements :
+                    type_code : 4
+                    p_codes :
+                     -
+                       code : |1+
+      [%:sIndentSpace(sDef, 18)%]
+                       type : 14
+                     -
+                       code : |1+
+                        ouvre([%oFenTbl.sNomFen()%])
+                       type : 18
+                     -
+                       type : 161
+                       enabled : false
+      ]
+      
+      :m_nBtnX += 30
+      
+      renvoyer sRetour
+      
+     type : 458752
+   -
+     name : aGenClasses
+     procedure_id : 1468893774649913652
+     type_code : 12
+     code : |1-
+      procedure privee aGenClasses()<metier>:tableau de ClZF_GenCodeFic dynamique
+      
+      aRetour est un tableau de ClZF_GenCodeFic dynamique
+      sFic est une chaine
+      pclOTmp est un ClZF_GenCodeFic dynamique
+      
+      
+      pour toute chaine sFic de ClZF_GenCodeFic.sListeFicAna() separee par RC
+      	
+      	pclOTmp = allouer un ClZF_GenCodeFic(sFic)
+      	pclOTmp.Analyse()
+      	
+      	si pclOTmp.p_bClasseExiste ALORS
+      		TableauAjouteRéférence(aRetour, pclOTmp)
+      	FIN
+      	
+      FIN
+      
+      
+      
+      renvoyer aRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1461449402cf8381
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

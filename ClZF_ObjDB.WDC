@@ -173,7 +173,7 @@ class :
       	SINON
       		
       		SI :m_ZF_bEstSupprime ALORS
-      			
+      			:ZF_Charge(Vrai)	//Bug WD : si on ne se repositionne pas : il n'est plus positionné
       			SI PAS HSupprime(:p_sNomTable) ALORS
       				mg_oExEchecEnregistrement.ZF_Declenche()
       			sinon
@@ -396,7 +396,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       procédure abstraite GetObj(LOCAL nIdUnique_P est un entier <utile>)
-      //a faire : repasser la méthode en abstrait
+      
      type : 458752
    -
      name : ZF_Charge

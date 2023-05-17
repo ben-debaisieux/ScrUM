@@ -8,7 +8,7 @@ info :
  description : ""
  subtype : 0
 class :
- identifier : 0x02E5C13AD00B68
+ identifier : 0x2e5c13ad00b68
  internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
@@ -42,42 +42,47 @@ class :
      name : addItemById
      procedure_id : 815568031583083
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
       :ZF_addItem(ClDbProcess_Metier_Intervenant_Type.GetObj(nId_P))
-      
      type : 458752
    -
      name : aItems
      procedure_id : 815568031583084
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE aItems()<métier>:tableau de ClDbProcess_Metier_Intervenant_Type dynamique
       // Redéfinition de la méthode ClColObjDB.aItems
       RENVOYER :m_aoProcess_Metier_Intervenant_Type
-      
      type : 458752
    -
      name : Init
      procedure_id : 815568031583085
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoProcess_Metier_Intervenant_Type)
-      
      type : 458752
    -
      name : addItemBySource
      procedure_id : 815568031583086
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       oObj est un ClDbProcess_Metier_Intervenant_Type(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Process_Metier_Intervenant_Type)
-      
+     type : 458752
+   -
+     name : GetAll
+     procedure_id : 1468677660541428942
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
+      PROCÉDURE public GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_Process_Metier_Intervenant_Type..Nom)
      type : 458752
   procedure_templates : []
   property_templates : []
@@ -86,7 +91,7 @@ class :
   original_name : Classe1
 resources :
  string_res :
-  identifier : 815568031583087
+  identifier : 0x2e5c13ad00b6f
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
