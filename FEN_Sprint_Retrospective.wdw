@@ -833,7 +833,12 @@ window :
       
       pour TOUT sdRechercheCommentaire 
       	
-      	oCmtrRetro <- ClDbRetro_Commentaire.GetObj(sdRechercheCommentaire.IDScr_Retro_Commentaire)
+      	si pas sdRechercheCommentaire.IDScr_Retro_Commentaire..null alors
+      		oCmtrRetro <- ClDbRetro_Commentaire.GetObj(sdRechercheCommentaire.IDScr_Retro_Commentaire)
+      	sinon
+      		oCmtrRetro = allouer un  ClDbRetro_Commentaire()
+      	fin
+      	
       	oCmtrRetro_Type <- ClDbRetro_Commentaire_Type.GetObj(sdRechercheCommentaire.IDScr_Retro_Commentaire_Type)
       
       	si oCmtrRetro_Type.p_bTop_Par_Defaut _OU_ sdRechercheCommentaire.IDScr_Retro_Commentaire <> 0 alors

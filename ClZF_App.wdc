@@ -345,7 +345,12 @@ class :
       QUAND EXCEPTION DANS
       	oRetour <- Exécute(mg_aZF_aGetId[sClasse_P], nId_P)
       FAIRE
-      	mg_oExClasseNonParametree.ZF_Declenche([sClasse_P])
+      	selon ExceptionInfo(errCode)
+      		CAS ClZF_ObjDbLs.mg_oExPositionnementImpossible.ZF_Code
+      			exceptionpropage()
+      		AUTRE CAS
+      			mg_oExClasseNonParametree.ZF_Declenche([sClasse_P])
+      	FIN
       fin
       
       

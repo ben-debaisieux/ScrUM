@@ -1,0 +1,488 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : CLZF_GenDataMSSQL
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x147657be00978709
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      CLZF_GenDataMSSQL est une Classe
+      	herite de CLZF_GenData
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1474462401575814921
+     type_code : 27
+     code : |1+
+      procédure Constructeur(OlGen_p est un ClZF_GenCodeFic)
+      ancetre.constructeur(OlGen_p)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1474462401575880457
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+     type : 655360
+   -
+     name : sRubSqlDeTypeHF
+     procedure_id : 1474468380170634330
+     type_code : 12
+     code : |1+
+      procedure sRubSqlDeTypeHF(nType_p est un entier, nTaille_p est un entier = 0)<metier>:chaine
+      
+      sRetour est une chaîne
+      selon nType_p
+      	CAS hRubBinaire
+      //		stRubHF_Tmp:sType = "Binaire"
+      		sRetour = "BINARY"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (173) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubBooléen
+      //		stRubHF_Tmp:sType = "Booléen"
+      		sRetour = "Bit"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (104) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubCaractère
+      //		stRubHF_Tmp:sType = "Caractère"
+      		sRetour = "CHAR(" + nTaille_p + ")"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (175,167) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		SI stRubHF_Tmp.nTaille <> stRubSQL_Tmp.nTaille ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		
+      //	CAS hRubDate6
+      //		stRubHF_Tmp:sType			= "Date au format AAMMJJ"
+      //		stCompRub:bTypeHFInterdit	= Vrai
+      //		
+      		//SI PAS stR_RubSQL_Tmp:nCodeType DANS () ALORS
+      		//	bTypeIncompatible = Vrai
+      		//FIN
+      		
+      	CAS hRubDate8
+      //		stRubHF_Tmp:sType = "Date au format AAAAMMJJ"
+      		sRetour = "DATE"			//*
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (40) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      		//			//Pour les dates qui ont une contrainte chaine vide, on met des simple quote comme en HF
+      		//			si stRubSQL_Tmp.bContrainteDefaut_SQL et stRubSQL_Tmp.sValDefaut=""  ALORS
+      		//				stRubSQL_Tmp.sValDefaut = "''"
+      		//			FIN
+      		
+      		
+      	CAS hRubDateHeure
+      //		stRubHF_Tmp:sType = "Date/Heure"
+      		sRetour = "Datetime2"		//*
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (61,42) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      		//			//Pour les dates qui ont une contrainte chaine vide, on met des simple quote comme en HF
+      		//			SI stRubSQL_Tmp.bContrainteDefaut_SQL ET stRubSQL_Tmp.sValDefaut="" ALORS
+      		//				stRubSQL_Tmp.sValDefaut = "'00000000000000000'"
+      		//			FIN
+      		
+      	CAS hRubDurée
+      //		stRubHF_Tmp:sType = "Durée"
+      		sRetour = "Datetime2"		//*
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (61,42) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      		//			//Pour les dates qui ont une contrainte chaine vide, on met des simple quote comme en HF
+      		//			SI stRubSQL_Tmp.bContrainteDefaut_SQL ET stRubSQL_Tmp.sValDefaut="" ALORS
+      		//				stRubSQL_Tmp.sValDefaut = "''"
+      		//			FIN
+      		
+      	CAS hRubEntier1
+      //		stRubHF_Tmp:sType = "Entier sur 1 octet"
+      		sRetour = "smallint"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (52) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubEntier2
+      //		stRubHF_Tmp:sType = "Entier sur 2 octets"
+      		sRetour = "smallint"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (52) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubEntier4
+      //		stRubHF_Tmp:sType = "Entier sur 4 octets"
+      		sRetour = "int"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (56) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubEntier8
+      //		stRubHF_Tmp:sType = "Entier sur 8 octets"
+      		sRetour = "bigint"
+      //		stCompRub:bTypeHFDeprecie = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (127) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubEntierNonSigné1
+      //		stRubHF_Tmp:sType = "Entier non signé sur 1 octet"
+      		sRetour = "tinyint"
+      		//stCompRub:bTypeHFInterdit = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (48) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubEntierNonSigné2
+      //		stRubHF_Tmp:sType = "Entier non signé sur 2 octets"
+      		sRetour = "smallint"
+      //		stCompRub:bTypeHFInterdit = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (52) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubEntierNonSigné4
+      //		stRubHF_Tmp:sType = "Entier non signé sur 4 octets"
+      		sRetour = "int"
+      //		stCompRub:bTypeHFInterdit = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (56) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubEntierNonSigné8
+      //		stRubHF_Tmp:sType = "Entier non signé sur 8 octets"
+      		sRetour = "bigint"
+      //		stCompRub:bTypeHFInterdit = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (127) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubHeure
+      //		stRubHF_Tmp:sType = "Heure"
+      		sRetour = "Time(0)"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (41) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		
+      		//			//Pour les heures qui ont une contrainte chaine vide, on met des simple quote comme en HF.
+      		//			SI stRubSQL_Tmp.bContrainteDefaut_SQL et stRubSQL_Tmp.sValDefaut = "" ALORS
+      		//				stRubSQL_Tmp.sValDefaut = "''"
+      		//			FIN
+      		
+      	CAS hRubIDAuto
+      //		stRubHF_Tmp:sType = "Identifiant automatique (8 octets)"
+      		sRetour= "bigint"
+      //		stCompRub:bTypeHFDeprecie = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (127) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		
+      //		//Pour les identifiants auto, on a pas de valeurs par défaut sous SQL. On reprend la valeur par défaut tel que paramétrée dans l'analyse
+      //		stRubSQL_Tmp.sValDefaut = "0"
+      //		
+      		
+      	CAS hRubIDAuto4
+      //		stRubHF_Tmp:sType = "Identifiant automatique (4 octets)"
+      		sRetour = "int"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (56) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		
+      //		//Pour les identifiants auto, on a pas de valeurs par défaut sous SQL. On reprend la valeur par défaut tel que paramétrée dans l'analyse
+      //		stRubSQL_Tmp.sValDefaut = "0"
+      //		
+      		
+      	CAS hRubImage
+      //		stRubHF_Tmp:sType = "Image"
+      		sRetour = "IMAGE"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (24) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      //	CAS hRubInvalide
+      //		SI stCompRub.nModeActionRubrique = cstModeGestionRub_Supp ALORS
+      //			stRubHF_Tmp:sType = "A supprimer"
+      //		SINON
+      //			stRubHF_Tmp:sType = "Invalide"
+      //		FIN
+      //		
+      //		stCompRub:bTypeHFInterdit = Vrai
+      //		
+      		//SI PAS stR_RubSQL_Tmp:nCodeType DANS () ALORS
+      		//	bTypeIncompatible = Vrai
+      		//FIN
+      		
+      	CAS hRubMémoBinaire
+      //		stRubHF_Tmp:sType = "Mémo binaire"
+      		sRetour = "VARBINARY(max)"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (165,173,34) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		
+      //		SI stRubSQL_Tmp.nTaille <> -1 ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      		//			//Pour les champs 'mémo' n'ont pas de valeur par défaut, on reprend la valeur proposé tel que représenté sous HF.
+      		//			SI stRubSQL_Tmp.bContrainteDefaut_SQL ET stRubSQL_Tmp.sValDefaut = "" ALORS
+      		//				stRubSQL_Tmp.sValDefaut = "''"
+      		//			FIN
+      		
+      	CAS hRubMémoBinaire4
+      //		stRubHF_Tmp:sType = "Mémo binaire (4 octets)"
+      		sRetour = "VARBINARY(max)"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (165,173,34) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		
+      //		SI stRubSQL_Tmp.nTaille <> -1 ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubMémoTexte
+      //		stRubHF_Tmp:sType = "Mémo texte"
+      		sRetour = "Text"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (35) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      		//			//Pour les champs 'mémo' n'ont pas de valeur par défaut, on reprend la valeur proposé tel que représenté sous HF.
+      		//			SI stRubSQL_Tmp.bContrainteDefaut_SQL et stRubSQL_Tmp.sValDefaut = "" ALORS
+      		//				stRubSQL_Tmp.sValDefaut = "''"
+      		//			FIN
+      		
+      	CAS hRubMémoUnicode
+      //		stRubHF_Tmp:sType = "Mémo texte Unicode"
+      		sRetour = "nText"
+      //		stCompRub:bTypeHFDeprecie = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (99) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      		//			//Pour les champs 'mémo' n'ont pas de valeur par défaut, on reprend la valeur proposé tel que représenté sous HF.
+      		//			SI stRubSQL_Tmp.bContrainteDefaut_SQL et stRubSQL_Tmp.sValDefaut = "" ALORS
+      		//				stRubSQL_Tmp.sValDefaut = "''"
+      		//			FIN
+      		
+      	CAS hRubMonétaire
+      //		stRubHF_Tmp:sType = "Monétaire"
+      		sRetour = "Money"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (60) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      //	CAS hRubNumEnr
+      //		stRubHF_Tmp:sType			= "Numéro d'enregistrement"
+      //		stCompRub:bTypeHFInterdit	= Vrai
+      		
+      		//SI PAS stR_RubSQL_Tmp:nCodeType DANS () ALORS
+      		//	bTypeIncompatible = Vrai
+      		//FIN
+      		
+      	CAS hRubNumérique
+      //		stRubHF_Tmp:sType = "Numérique"
+      		sRetour = "Float(" + nTaille_p + ")"		// !!!!
+      //		stCompRub:bTypeHFInterdit = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (108,59) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		SI stRubHF_Tmp.nTaille <> stRubSQL_Tmp.nTaille ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubRéel4
+      //		stRubHF_Tmp:sType = "Réel sur 4 octets"
+      		sRetour = "Real"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (59) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubRéel8
+      //		stRubHF_Tmp:sType = "Réel sur 8 octets"
+      		sRetour = "Float"
+      //		//stCompRub:sCodeDeclarationVar_Sql += "Float(" + stR_RubHF_Tmp.sTaille + ")"
+      //		stCompRub:bTypeHFDeprecie = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (62) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		SI stRubHF_Tmp.nTaille <> stRubSQL_Tmp.nTaille ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      	CAS hRubRéelTurbo
+      //		stRubHF_Tmp:sType = "Réel turbo"
+      		sRetour = "Real"
+      //		stCompRub:bTypeHFDeprecie = Vrai
+      		
+      		//SI PAS stR_RubSQL_Tmp:nCodeType DANS () ALORS
+      		//	bTypeIncompatible = Vrai
+      		//FIN
+      		
+      	CAS hRubTexte
+      //		stRubHF_Tmp:sType = "Texte"
+      		sRetour = "Varchar(" + nTaille_p + ")"
+      		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (175,167) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		SI stRubHF_Tmp.nTaille <> stRubSQL_Tmp.nTaille ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      		
+      		
+      	CAS hRubTexteUnicode
+      //		stRubHF_Tmp:sType = "Texte unicode"
+      		sRetour = "nVarchar(" + nTaille_p + ")"
+      //		stCompRub:bTypeHFDeprecie = Vrai
+      //		
+      //		SI PAS stRubSQL_Tmp:nCodeType DANS (239,231) ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		SI stRubHF_Tmp.nTaille <> stRubSQL_Tmp.nTaille / 2 ALORS
+      //			bTypeIncompatible = Vrai
+      //		FIN
+      //		
+      		
+      	AUTRE CAS
+      		ExceptionDéclenche(1, "Type non défini : [%nType_p%]")
+      FIN
+      
+      renvoyer sRetour
+      
+      
+     type : 458752
+   -
+     name : stGenSQLRub
+     procedure_id : 1474472812576933184
+     type_code : 12
+     code : |1-
+      procedure stGenSQLRub(sRub_p est une chaine, bCreeTable_p est un booléen, stRubSql est un CLZF_GenData.STR_RubSQL)<metier>:CLZF_GenData.STR_RubSQL
+      
+      
+      stRetour est un CLZF_GenData.STR_RubSQL
+      //nType est un entier
+      //sCode est une chaine
+      stInfoRub est un ClZF_GenCodeFic.STR_DefRub
+      //sTypeSQL est une chaîne
+      
+      //cstTypeAlterRub_RAS			= 0
+      //cstTypeAlterRub_CreeTable	= 1
+      //cstTypeAlterRub_CreeRub		= 2
+      //cstTypeAlterRub_ModRub		= 3
+      //cstTypeAlterRub_SuppRub		= 4
+      //
+      //cstTypeAlterFK_RAS			= 0
+      //cstTypeAlterFK_Cree			= 1
+      //cstTypeAlterFK_Supp			= 2
+      
+      stRetour.nTypeAlterRub = cstTypeAlterRub_RAS
+      
+      si :m_oCOlGen.m_aRub[sRub_p]..vide et stRubSql.stype <> "" ALORS
+      	stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_SuppRub
+      sinon
+      	stInfoRub = :m_oCOlGen.m_aRub[sRub_p]
+      	stRetour.sType = sRubSqlDeTypeHF(stInfoRub.nTypeRubHF, stInfoRub.nTaille)
+      FIN
+      
+      SI pas :m_oCOlGen.m_aRub[sRub_p]..Vide ET stRubSql.sType = "" ALORS
+      	si bCreeTable_p alors
+      		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable
+      	sinon
+      		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeRub
+      	FIN
+      FIN
+      
+      si stRetour.nTypeAlterRub = cstTypeAlterRub_RAS ALORS
+      	si stRetour.sType <> stRubSql.sType ou ...
+      			stInfoRub.bNullable <> stRubSql.bEstNullable alors
+      			
+      		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_ModRub
+      	FIN
+      FIN
+      
+      
+      si pas stRetour.nTypeAlterRub dans(CLZF_GenData.cstTypeAlterRub_CreeTable, CLZF_GenData.cstTypeAlterRub_RAS) ALORS
+      	stRetour.sCodeSQL = "ALTER TABLE [%:m_oCOlGen.p_sNomTable%] "
+      FIN
+      
+      selon stRetour.nTypeAlterRub
+      	CAS CLZF_GenData.cstTypeAlterRub_SuppRub
+      		stRetour.sCodeSQL += "DROP COLUMN [%sRub_p%]"
+      	CAS CLZF_GenData.cstTypeAlterRub_CreeTable
+      		stRetour.sCodeSQL += sRub_p
+      	CAS CLZF_GenData.cstTypeAlterRub_CreeRub
+      		stRetour.sCodeSQL += "ADD [%sRub_p%]"
+      	CAS CLZF_GenData.cstTypeAlterRub_ModRub
+      		stRetour.sCodeSQL += "ALTER COLUMN [%sRub_p%]"
+      		
+      	AUTRE CAS
+      		
+      FIN
+      
+      SI PAS stRetour.nTypeAlterRub DANS(CLZF_GenData.cstTypeAlterRub_SuppRub, CLZF_GenData.cstTypeAlterRub_RAS) ALORS
+      	stRetour.sCodeSQL += " " + stRetour.sType
+      	
+      	si pas stInfoRub.bNullable ALORS
+      		stRetour.sCodeSQL += " NOT"
+      	FIN
+      	stRetour.sCodeSQL += " NULL"
+      FIN
+      
+      
+      
+      renvoyer stRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x147657b90091718d
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -21,6 +21,11 @@ class :
       PRotege
       	m_sCodeFI est une chaîne
       fin
+      
+      constante
+      	cstMetaoOrgani			= "Organigramme"
+      	cstMetaoOrgani_parent	= "Organigramme parent"
+      fin
      type : 131072
   procedures :
    -
@@ -39,6 +44,18 @@ class :
       procédure Destructeur()
       
      type : 655360
+   -
+     name : Charge_Cbo_Meta
+     procedure_id : 1474319615386206161
+     type_code : 12
+     code : |1+
+      Procedure globale Charge_Cbo_Meta(sCbo_p est une chaîne)<ui>:vide
+      
+      ListeSupprimeTout(sCbo_p)
+      ListeAjoute(sCbo_p, "")
+      ListeAjoute(sCbo_p, cstMetaoOrgani)
+      ListeAjoute(sCbo_p, cstMetaoOrgani_parent)
+     type : 458752
    -
      name : sNomFI
      procedure_id : 1469571335792317699

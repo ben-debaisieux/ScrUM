@@ -548,9 +548,34 @@ class :
      name : GetAll
      procedure_id : 1467781111812368545
      type_code : 12
-     code : |1-
+     code : |1+
       procedure abstraite GetAll()<metier>:vide
       //ZF_ChargeTblComplete(MaTable..nom)
+      
+     type : 458752
+   -
+     name : ZF_SaveItems
+     procedure_id : 1472810686079956035
+     type_code : 12
+     code : |1-
+      procedure ZF_SaveItems()<métier>:vide
+      
+      
+      oItem_tmp est un objet dynamique
+      
+      QUAND EXCEPTION DANS
+      	goapp.TranDebut()
+      	
+      	POUR TOUT ÉLÉMENT oItem_tmp DE :aItems()
+      		oItem_tmp.ZF_Enregistre()
+      	FIN
+      	
+      	goapp.TranFin()
+      	
+      FAIRE
+      	goapp.TranAnnule()
+      	ExceptionPropage()
+      FIN
      type : 458752
   properties :
    -

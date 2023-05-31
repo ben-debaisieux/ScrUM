@@ -17,6 +17,17 @@ class :
      code : |1+
       ClZF_GenFenMetaOrgani est une Classe
       	herite de ClZF_GenFenMeta
+      	
+      PRIVE
+      	m_bMultiTopHierarchie	est un booléen
+      	m_sCleColParent			est une chaîne
+      	//m_sNomColParent			est une chaîne
+      	m_sCleColTop			est une chaîne
+      	m_sNomColTop			est une chaîne
+      	m_sNomDbTop				est une chaîne
+      	
+      	m_sNomFenFic			est une chaîne
+      	m_sNomProprieteObjParent	est une chaîne
       fin
      type : 131072
   procedures :
@@ -46,32 +57,75 @@ class :
       PROCÉDURE  Genere()<métier>:Vide
       
       
+      stTmp		est un ClZF_GenCodeFic.STR_DescRub
+      stRel		est un ClZF_GenCodeFic.STR_Rel
+      sRub		est une chaîne
+      oColTmp		est un ClZF_GenCodeFic dynamique
+      
+      
+      
+      POUR TOUT ÉLÉMENT stTmp, sRub DE :m_oClasseGen.m_stConfigTbl.taRubs
+      	
+      	VariableRAZ(stRel)
+      	si stTmp.sMeta dans(cstMetaoOrgani, cstMetaoOrgani_parent) alors
+      		
+      		SI pas :m_oClasseGen.m_aPK_de_FK[sRub]..Vide ALORS
+      			stRel	= :m_oClasseGen.m_aPK_de_FK[sRub]
+      			oColTmp	= allouer un ClZF_GenCodeFic(stRel.sTablePK)
+      		SINON
+      			ExceptionDéclenche(1, "Le méta-type ""[%stTmp.sMeta%]"" doit être créé sur une relation")
+      		fin
+      		
+      		SELON stTmp.sMeta
+      			CAS cstMetaoOrgani_parent
+      				
+      				:m_sCleColTop				= ClZF_GenCodeClCol.sNomFct_ChargeFrom(oColTmp)
+      				:m_sNomColTop				= oColTmp.sNomClasseColGen()
+      				:m_sNomDbTop				= oColTmp.sNomClasseGen()
+      				:m_bMultiTopHierarchie		= Vrai
+      				
+      			CAS cstMetaoOrgani
+      				
+      				:m_sCleColParent			= ClZF_GenCodeClCol.sNomFct_ChargeFrom(oColTmp)
+      				
+      				stRub est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.m_aRub[sRub]
+      				:m_sNomProprieteObjParent	= stRub.sNomPropriete
+      				
+      			AUTRE CAS
+      				
+      		FIN
+      	FIN
+      
+      FIN
+      
+      
+      //Récupération du nom de la fenetre d'édition d'un enregistrement
+      oFenFic est un ClZF_GenFenFic(:m_oClasseGen)
+      :m_sNomFenFic = oFenFic.sNomFen()
+      
+      
+      
+      :GenereFen()
+      
       :GenereFI()
-      
-      
-      
-      
-      
-      
      type : 458752
    -
      name : sNomFI
      procedure_id : 1469571447461624451
      type_code : 12
-     code : |1+
+     code : |1-
       // Redéfinition de la méthode ClZF_GenFenMeta.sNomFI
       PROCÉDURE  sNomFI()<métier>:chaîne
-      renvoyer "FEN_Ora_" + :m_oClasseGen.p_sNomUsage
+      renvoyer "FI_Ora_" + :m_oClasseGen.p_sNomUsage
      type : 458752
    -
      name : sNomFen
      procedure_id : 1469571447461690159
      type_code : 12
-     code : |1+
+     code : |1-
       // Redéfinition de la méthode ClZF_GenFen.sNomFen
       PROCÉDURE  sNomFen()<metier>:chaîne
-      RENVOYER "FI_Ora_" + :m_oClasseGen.p_sNomUsage
-      
+      RENVOYER "FEN_Ora_" + :m_oClasseGen.p_sNomUsage
      type : 458752
    -
      name : GenereFI
@@ -87,7 +141,7 @@ class :
       #To edit and compare internal_properties, use WINDEV integrated tools.
       #Internal properties refer to the properties of controls in windows, reports, etc.
       info :
-       name : FI_Map_Item
+       name : [%sNomFI()%]
        major_version : 27
        minor_version : 0
        type : 8
@@ -95,15 +149,15 @@ class :
        subtype : 0
       window :
        name : [%sNomFI()%]
-       identifier : [%:GenProcIdent()%]
+       identifier : [%:GenProcIdent(1)%]
        internal_properties : BwAAAAcAAAC8nf/BwQdGd4tk8cIZEoRlQPLy6NjiL7VRibRcJEVcGaoTYStONzKwU0XSKt0bRxHC80kmYZKnti2tavWquRXt9Ni8266kG1eNDTi9CNNsTUIQX7kHs1mZvlYK67qtAOfVHUgt9W9v7v9COnLgJGb/i+LGljb3DdRJThCuX8BUGFov5uwfGswLceVojzYs3BKB9UtJ9BMIO5ALeF/OnD1z8f01jZP57RiEWjDEO6mPbB+vo3lWZolirDlbEf6wR79k5I3OqF6pzVDSMvhEErPY7TwFuO+xH3c2sJL9Fo5oFXeZbYBGPW4NK5a1xCKQV60xDeQGM1wIXInkk2ksUpzlKpbGWGbvpVtXnOF9mo3FrSyJiAwUoovbv5PlLglIaQ6GVMhKy40BXNOmnTKazM5X0jynWtX/enz+r8rNoFP0Ln0H/l67m9I3GXGBghLpkIFeX9opULxmoYVuaTSMCycLou2c5CP8sgP38qXGmVBx1Oc9TSo2wbSaqB5HBuH9uGHeETyLcizr7Wb54CkhIEkd4kM2IeOtrVh7frWFii9C3M+E0CbxG3pJKpoD4bHf4pyu1I1q8aAPx3FaON9E26VwacUEEJ2Z8JPi5IDCe2MwWrEapqs8xAioR4R8DRDPMKUgQeOTGdXVn70Qpxm3piXiDT3Yz8WHdDGd17ivq0ZL6iUWv76iJ1pVN8qWfOvqlwXSPWzM7F4NVpD+1o4HnU8v6XxXJmct5AlghwspWLNRo7Y=
        properties :
-        width : 392
-        height : 119
+        width : 400
+        height : 120
        controls :
         -
           name : [%sNomFI()%]
-          identifier : [%:GenProcIdent()%]
+          identifier : [%:GenProcIdent(2)%]
           internal_properties : BwAAAAcAAAAuF2tAp9TyaQ/BqTyog7rmuyjIxvM7u8voU6Kdpfx11LbHSLhdjNEE7aiV8uf5WKQPvbwQgVF5BAlTyzLMcAZhBPFsMiHy6GBYmPYLLOtfpxEPcT4A7q7gFWleIobGc/7mQrNPMvXTpe3mf042MaIzL6XBxOYZc0Sc4U4BUtkyN7VZSTZ1aALbj5GDImZ+i4gYdHIvkpM1Ssk2mJSA9S9C5MgyO6dTOUFBkB5TZRncW7d2t2kC7yjmQY912+YG90WQ6Hkgr8zmwyUkxcdrRTcqQ+FZIZQI3yXDz2hO+ipvfrAWPesyw0aseh4pYYveeIMdkdyQMRcJ//yfisejVfFXpgs+DmRG9DS+Rm+wXnLN6m0FTckCN3jDHAL6fiCnVXW8HVglR7igZQ8y72iTA71sNDjqxu0oervmSbaGI0OvekkMVW5hTnV6ZOAs7PMjWQ==
           properties :
            width : 392
@@ -111,7 +165,7 @@ class :
           controls :
            -
              name : LIB_Libellé
-             identifier : [%:GenProcIdent()%]
+             identifier : [%:GenProcIdent(3)%]
              internal_properties : BwAAAAcAAAD1xIe2Ish+t4YZymZJXppV5RoR7j9q8qDPqyNsgU8iytTfugu5TKgOylO5/oizjASaZmBl4kTRami2KjnyUbH2KNFEd/kcuoC7ExsMmdQRvd9TSTizu53tsQHW54scAA356RUarHFg2S3P/J1Js/gpGmfWxzL3CE7JzeLDuIgBVZtgtlAHof6dvKLKao2BLw35SKTRMVlQ738ZLjqhHfS5xKUoWKI5ui4jn9gRM/f+JUgaED63u8xyiyCplb0Vid22zpt0cOH6Q1iXlPamjFPU2fbYyj+i4C9gYLxgk+b+k2glWH6UUCTHPhj8uUE8u0Df8eLm+ctr0iamdelDQABKxokU72bmYrG+xu5dEo+VX9Yvk3wc1Sh0vUm71sWLpc0RpWmtZASKMQ9CYCE8PwWg702A01kd2eWY8JnuIVx+kKctGD5YL3/e0rKjqmR2OLEEAQPqJlawl8dzi/KQjWyJxKiFpCNCQNn2H1XcryCJI5qYr286xqZNbXgb3oYl7SPoiWRd1ig9YL0/tqj6CGr6bw==
              properties :
               width : 388
@@ -122,19 +176,16 @@ class :
               p_codes :
                -
                  code : |1+
-                  // Version 1
-                  // Description 
-                  // Libellé simple
+                  
                  type : 14
                -
                  code : |1+
-                  Ouvre(FEN_Fic_ProjetMap,zoItem)
+                  Ouvre([%:m_sNomFenFic%], zoItem)
                   AffInfo()
-                  //ActuMap()
                  type : 18
            -
              name : LIB_SansNom1
-             identifier : [%:GenProcIdent()%]
+             identifier : [%:GenProcIdent(4)%]
              internal_properties : BwAAAAcAAADgUs4B5A+FlNcbkWKxz19m5zg+yN+TRhCZEeB0PF6CaSmzv5dSxfmb0dsA9N/ATFbJ4eVsrX/LIJG529/bBS4ChCS8lHp2qAt1IycHu2FRdWX+y/BVblmqwlXmDzKtBsvaa5dxLuxE09Av+5hZbXVcEECEIeUvyU+G3KqGhljiKYFulrz34q0pP958FZYnFiDWjMKUXmwk+HBRBH26MuxgcMpfNl9+3D280r9dDF7V/ceJfmNu+T43krnIfrz9E1NFJTjpQxerPPY9o3WJ8DqT2WUZktnw072MUnotUnpjOISRL9mWMX2vd4m32HbDWQdHQdnm+Bvwelx+rCHrWB3tYyJDhCtNvQmyuVNF90/j4wkuvFNvj0oGGGp+AZjFmIi3GII5XfOHHRuLScs6Lggn528=
              properties :
               y : 99
@@ -146,7 +197,7 @@ class :
               p_codes : []
            -
              name : BTN_Ajout
-             identifier : [%:GenProcIdent()%]
+             identifier : [%:GenProcIdent(5)%]
              internal_properties : BwAAAAcAAACbIWqrPpF5enPUrRASKeq47eolwtbsQpHhqjGqe2Rm7DYZ51sn/mkzKF1/BRyoQ2Jdkbngs6zDT1Tzi1LoVdDqouTE0+25pgwuA8xF9SW/puP4aoyUJBI95kJuefJY525GtcbOsyqdSPBc3d8DyenPIIgGU32ArfU957/DcbmPDkSB/mhixTjV8EhK0wHQe64RTHTxFZLV5k0MDY7DovNKqxnD1Lhge3RZ7KCmQo6MgUlomxkEv7pyjwwDKz7rxzIN5ljBfTdd+9zeW/E8cy3/3AfmqSMe0JQX3yM051PmMSJdbopyBHl4Ir2Ekny6IonYNSCElnimYlts3kh5PVF1BLvQ2o4Pjpg0wiEw7GB3sMdRAoKHMjFzXXaCJpBJtvasfiMRDewTlf34gGSAGRy9fhJACIpBNj38idL/rdy7dXyUHhKBlevCnppyB48+B9WTIYmMG+wA2J0tXDdqoH7uWQAmryg1fMSORsaxMn2Q4jNjlafAXCIc6cSdEtn81zwcIWj9iOdl+N69P6aCNMCR9RzK5y6TlFzV2xNGJpJt1YBCWtmjhPA2qddSnthTus/EwUd6dwUlM8DP3/x51KAQWYRIJSPNy3hLgSsyDfiaGT+EWQv6tCsHabOh0KfaN+Tk/dg55l3uevj2u7nFnvRIgqQEkdiIGQsbPe0GBvwqIAbCp5k8aPyijWdQyr3OUIZS0yEUe5vroOwPsWReH2QnWr0kKVx43nQWI/QwYin98sow65ux4Wx0uB4aturnA31R4JCtDuq8ceayqhc9Zt8Ut5rM4WKWiDQP73MkjgMi0ByLnumjK0l54nbMthXNAuTclaSy/2dJ9LRsOpmF5ZKYp7R4
              properties :
               x : 345
@@ -159,26 +210,14 @@ class :
               p_codes :
                -
                  code : |1-
-                  oItem_enf est un ClDbProjetMap()
-                  
-                  si zoProjet <> null ALORS
-                  	oItem_enf.p_oProjet = zoProjet
-                  FIN
-                  
-                  si zoItem <> null ALORS
-                  	oItem_enf.p_oProjetMap_Parent = zoItem
-                  FIN
-                  
-                  ouvre(FEN_Fic_ProjetMap,oItem_enf)
-                  
-                  ActuMap()
+                  AjouteFils()
                  type : 18
                -
                  type : 161
                  enabled : false
            -
              name : BTN_Supp
-             identifier : [%:GenProcIdent()%]
+             identifier : [%:GenProcIdent(6)%]
              internal_properties : BwAAAAcAAAANj+Bx7O/HsLn+g+LAf1iGR9jzKAS6iFeflDmeiEiOsGqBuyMr8qE7PF0n0ZjMy74pAQUYlwCrbwiTY+6EKcCk1yDIE+kb7kbAXy/QV0OlsvmciqyUqub/kM542cRSLXr0WRriK1SdGiZ0849NEUEXm0Y+u4XItX3Nz8+LscHHbjw5PshyNei1yGgyA1kwm/ZhjOzJbYoNvk20jQbzuvt684HjNGhQm1SBPAhmao6MmUl4IyFsx6LKH/SzYw6jv3LV3sjRnUftqxRus4Ekk803/Nf+4Tu2uJwHJwOsR/sucdq1zvoitFkYOr3MohR6YmEoxQjszjCuWgsUrjAZdYml/HNwSq5vrrjs8umQdGC3uOdRCuoPGhkLfU6ifqBRPqbEFkORHZyjdUWIeERY+Uxl/rIIsLLZzjWsQUL3XbRjlbTI+jbtYbeOUibWI9vS+1GXBdWQ99j8lLHpoBMW5LIqzeQCQ/RxqIByUupNjjFEjueXYUusqC4InTBhvoUgOxhQ5fRBNDNhRNKJc5Lu6JTtWbAG27oPALhJJ+eiQhbRQWSWFp3vcNwiTYPWeoQHHitIRTPugzGR35RLUxiVKORMrViUaV+JhxQfrS8OKdy+NcN4Ve/2sDczHQ9VzGMOG8D4kTQdAmn6Bnxyz/VxojgU9khANSREFVdvyQEyIlBeTOp2s02IJGg+MUOklnliNOIWpdDPNM7QtzNYCOeRHgdGQ+7bOENT8zv5+MdnUSyQfQ+JQnJoBJELE9+RodW24lhC+RjP2CQ6T/TodHlXwDVu2RB2a8QY3lolzaUWQOUQStZ5OIP17VfHIDQKcM8DVLoyY/rssbWbRtpCANP/m2TuHSLu
              properties :
               x : 292
@@ -191,17 +230,14 @@ class :
               p_codes :
                -
                  code : |1+
-                  
-                  zoItem.ZF_Supprimer()
-                  
-                  ActuMap()
+                  SupprimeItem()
                  type : 18
                -
                  type : 161
                  enabled : false
            -
              name : BTN_Sauve
-             identifier : [%:GenProcIdent()%]
+             identifier : [%:GenProcIdent(7)%]
              internal_properties : BwAAAAcAAACbR+Qbq9M5cBQn5q+6cd0f09T7bUmg6+wodsNxXas7wTHJ7hmLcomalsAuQLcUEf9n0QxVVfyHf6yMprBLtVx2UMwSf/9twtbajYM906uz75P+bZtvYdYoXe4F9cNy7r7pc81k3hOAxwI2Z/bMcs8aaCN7rCObvFX3gT+HT9IqJ0nOjx0aMvtBA8nU+TFqfQu+RECJzIpXnbi87itHWwubYj3SChm40k2SaSzDdAq6fiCTKsRHKbIWaIJE60CUYUM3drcFDeOKDkc4PK5PdVEIR45HIkjNP7Bgsmn+mTxtm+OFnolDlhKyefJn5u42c8hq9GnUCS4BdRhDWI2X7iKiTyAkHLL8oSAB/nPzzeqD+yTJF1J14QGo30i6Ya3pBJLq78DD70CN4/fUD5xBrSLfwqI7lRK9cPgsRbMiUIA12hp8fNdBEv0NsyV+7SemXLckqwbKWz0ulK+03Ibo43Y9HPBoFBZskgxneSWm1uaNpsWnHjORSwBwPWEuJGleLFfXOYRynAxsm+tThWtIRXLcfDR0I6/x4cR1bz+E5hrsVcprBKJ+Ck2+1jdDyUvcPiDTZ5aFmp4l1QOIk+beXESUh5hAaxR3DR8pZQTqcMuExk70cpO8R+5Z2MroQ11pJ5nyKgUYI+iXg0flANftJB0e+jHsV/ydX+7Du7JolpoivKuBN52JV10vFfXPfo/bl+XNpRxf39asCci1wcckPJpLaCycTA0mrAwnzi98NwzvF4+WmPSZs5/HODKZEdiJ/8VteiXF0/dxp2mnpxkYbuKABtvfUVM1ict50XC297397oDJk+8cFKLK02KiQMoJct70aNkCMk+G0Unw6BwuvyXUdoI=
              properties :
               x : 345
@@ -214,21 +250,14 @@ class :
               p_codes :
                -
                  code : |1-
-                  
-                  QUAND EXCEPTION dans
-                  	ClColProjetMap.oColMapsDeProjet(zoProjet).Save_Items()
-                  	//zoItem.ZF_Enregistre()
-                  	ActuMap()
-                  faire
-                  	erreur(ExceptionInfo(errMessage))
-                  FIN
+                  EnregItem()
                  type : 18
                -
                  type : 161
                  enabled : false
            -
              name : BTN_Modif
-             identifier : [%:GenProcIdent()%]
+             identifier : [%:GenProcIdent(8)%]
              internal_properties : BwAAAAcAAACqje7ZWYCrUMOwlAVCIjc2KcktZ+FKfRrxUnsa/7Uot6seCmfJuEf1vi6YQ9jPtZiH0QXpQo9JpTpy+Hdm6ytv8yXb8igQJ6ByZzL3KrfoDmOb5FH8jmfX6LLDC2dU1c+8xih6DomAZS7xrcFTZ9Y+7lROM3T74jfsbSosvJ+eyq9EF/8BWSgVsdXTZqpSWaeXSnx4yjunakl0tyk8fUfuhiqA1w4cQ2cxkS+/MdBE41IU8Jjr81F/U23vdVlUAesqjW1xXf4EfuaEN+ONZ6pkooYJiv6cPT6ftRRFAg76Dd/HuSPf5u48GQxGoSh19j/2zNrToQlWSKZwOWmBtTYViypRBb4dcJtpPtx8RaRSXpV0y+22H7ewTePJmd++LmygMWjpFYC0oaQ7v+HxJDlX/Dy4KdBOC7bJ1GVFvVEivS5jTmGlgzlFj7Z9ptcsLZX/QOf7vyQc5RQfYcpwFOZiSQMmsIjDqjOPdJUCkMsecG0E9+y+VsSPJlQAO0nQ1yT49ozQmJ85wSVZutd4RjoHx02AENIpuuV469iZwHhbYVCjMK4NCibtqkUTf2j3AnvE5EUBA7tDwnm1GpeF6obyF+1UAmNVfx/42faJ6wqsLY+tWexWKglwZAESqfP41XjkUl509FOMF98iWMi5xghqwA3AesL49SaARf7REBIwrsipq6SEyoa7DNsjF7fKYJTMWqceINq6pSs+JJwE/VoOQ2xABl135ilo0LVOdTIfIL+3OCkwmW3tPX6HyvOJ00BxVyL3DWwrzY5l8GKTXF120qNwVm3J05JvTBX93PN+GFke9ZwvTDPoCoHoRS7dEOchmU0qLt2oAZKjH8I1/IGbj1JhOQ0=
              properties :
               x : 345
@@ -252,31 +281,10 @@ class :
            p_codes :
             -
               code : |1+
-               PROCEDURE MaFenêtre(gOrgaElement_p est un OrgaElément)
-               
-               zoItem est un ClDbProjetMap dynamique
-               zoProjet est un ClDbProjet dynamique
-               
-               selon gOrgaElement_p..Contenu
-               	CAS ClDbProjetMap
-               		zoItem <- ClDbProjetMap.GetObj(gOrgaElement_p.ID)
-               		BTN_Sauve..Visible = Faux
-               		si zoItem.p_oProjet = Null ALORS
-               			BTN_Sauve..Visible = Faux
-               		FIN
-               	CAS ClDbProjet
-               		zoProjet <- ClDbProjet.GetObj(gOrgaElement_p.ID)
-               		BTN_Supp..Visible = Faux
-               		BTN_Modif..Visible = Faux
-               		
-               	AUTRE CAS
-               		ExceptionDéclenche(1,"Erreur contenu")
-               FIN
-               
-               AffInfo()
+      [%:sIndentSpace(sGenOuvertureFi(), 9)%]
        menu :
         name : _Menu
-        identifier : [%:GenProcIdent()%]
+        identifier : [%:GenProcIdent(9)%]
         internal_properties : BwAAAAcAAAAmnmsMK+pSZJrizHlry5BJP+sbufa4zccF/7flbZf4xlv2rTJ5avaWvToZog8Bfg5qj5cqL9/K+JLwUxYFygPOe4+hQvOqbwHe/B4YH64plXyGcwsEwRu1H7jq/rNyP/R81O/USeI2/APkVZidyxtNh0Y/fytnunm/iyk7nElGG0atcn+8qJ8LBDnxES4mH02yeiwFrgWEo6ixqShEqe7e3BCIlx4J1qYpblIc431oi7HFGkFiVZlDyYxU+PQl0CTH8W8dFRumzgcOnys3VyceJZTYWUhKrQ==
         options : []
        languages :
@@ -289,7 +297,7 @@ class :
         procedures :
          -
            name : ActuMap
-           procedure_id : 1446269798164725518
+           procedure_id : [%:GenProcIdent(10)%]
            type_code : 14
            code : |1+
             // Résumé : <indiquez ici ce que fait la procédure>
@@ -306,37 +314,12 @@ class :
             //
             procédure ActuMap()
             
-            ExécuteTraitement(MaFenêtre..Nom + ".affiche", trtProcédure)
+            ExécuteTraitement(MaFenêtre..Nom + ".Affiche", trtProcédure)
            type : 458752
-         -
-           name : AffInfo
-           procedure_id : 1453935688406278667
-           type_code : 14
-           code : |1+
-            // Résumé : <indiquez ici ce que fait la procédure>
-            // Syntaxe :
-            // AffInfo ()
-            //
-            // Paramètres :
-            //	Aucun
-            // Valeur de retour :
-            // 	Aucune
-            //
-            // Exemple :
-            // <Indiquez ici un exemple d'utilisation>
-            //
-            procédure AffInfo()
-            
-            si zoItem <> Null ALORS
-            	LIB_Libellé = zoItem.p_sLibelle
-            sinon
-            	SI zoProjet <> Null ALORS
-            		LIB_Libellé = zoProjet.p_sNom
-            	FIN
-            FIN
-            
-            LIB_SansNom1 = gOrgaElement_p.id + " - " + gOrgaElement_p.Contenu
-           type : 458752
+      [%:sGenProcAjouteFilsFi()%]
+      [%:sGenProcSupprimeItemFi()%]
+      [%:sGenProcEnregItemFi()%]
+      [%:sGenProcAffInfoFi()%]
         procedure_templates : []
         property_templates : []
        code_parameters :
@@ -344,14 +327,14 @@ class :
         original_name : [%sNomFI()%]
       resources :
        string_res :
-        identifier : [%:GenProcIdent()%]
+        identifier : [%:GenProcIdent(12)%]
         internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
       custom_note :
        internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
       ]
       
       
-      :m_sCodeFI = sCodeFI
+      :m_sCodeFI = :sReCheckLignesCode(sCodeFI)
       
      type : 458752
    -
@@ -363,11 +346,415 @@ class :
       
       sCodeFen est une chaîne
       
+      
+      
       sCodeFen = [
+      #To edit and compare internal_properties, use WINDEV integrated tools.
+      #Internal properties refer to the properties of controls in windows, reports, etc.
+      info :
+       name : [%:sNomFen()%]
+       major_version : 27
+       minor_version : 0
+       type : 2
+       description : ""
+       subtype : 0
+      window :
+       name : [%:sNomFen()%]
+       identifier : [%GenProcIdent(1)%]
+       internal_properties : BwAAAAcAAADVJhEQHDR5CCaMpFhIbT6jJq8XgM362xr1JUiqTnsV+Mraq4eaOI62TVAsLbFSwRppEDewI208ax7s974e1D5gz6JgeKAX50owNo4mgItyeIwXHZ+OzuiBzMA/J+wHHpXh31q8//lEA9sb/OEaj7CEk9rNHQwi0qxGDnLo/VFUafjgGQRzmMFumMYHTjEoX13uzWXdZNp+6z8fX8+rqKR2KsM2ik8/0l3++SaU+LpP9/2vCuTicYBi+S1jMhpr6UbnbR3QWotgKYrw1blWpPXTFlM+fibRMEg8ETsdVOLlC5DK8VxpVJXcQd2k+G8uX8oeKJcyx2SehuLcSTswX4lqJ555d/30V4L9qSe0kidAFodSVKj4SseU6lUFFGpuji/R135Q3aEApGUwWLEgF+tGkOZqwxVeodX/yHVr1l0xlHChg9WmK44srUs+80wZ/yFrbtpozve392Kcz4oYLClusus60t/ROL0U1XS6Af9c7GBQ/E33QoRJWetLqtYpBLOjd8bv2kX0P37Qa3grXoC5z2qdPsM+QaQlT05eWZNb3jPQT/W8e8I50Ai8JvPDjali8HqxE780iI3idCekczRpUrD2u9MUHd4GzPAkv4EKzuffG6GqX0/KrgsCQP3yLhZr828DjCBYOc0prT5dWDUoulYuhITeriBrffvShtYg
+       properties :
+        width : 1024
+        height : 768
+        widthClient : 1022
+        heightClient : 736
+       controls :
+        -
+          name : ORGA_SansNom1
+          identifier : [%GenProcIdent(2)%]
+          internal_properties : BwAAAAcAAAC3nMV+TLESeiEyU3SVyg+ziDkYYaFWB2fcZmbAARQKYEiHe+uONmsKOg3tIjefaZFp4FftwKWskl09AEF5xn+i3J1q0gTIHpchJC3QkQ0LlwEi1OAyDo8Hl4jvdvuKqXXcE/YPdTOTE2ot67x/c9AdV1U0wWATEOW31z49XyKRWyueyDpBn8jihNb7YS4rnneAa9yTWp76Fa/bnlXyQCpC2FWqvI0ms6iN884inFX6ys3jTHfudem0YOQqMkxkma4q8iwFPPFhtk780QmvXXb+wMWgsPR+EESOGs6ltNsRe2XIQdwgCkMVsGClIgQ7aHo8T475+/1GN78YaBINRuU8xznhGrExgqDs8Q/TpNntYbaD1dV2aiH2Hb2a0/o8r3MpK1VL4YeCYWYVi6VhOxiWzM++Y+b+bxreTKLibKfaEGzGAxTBq+dE8EZR+PycPwffgXP+NIHs2ZFZyrp2xwlhEQSMkyPBr6DlepmS/uT7/qXqxcqvPCBprbfU/xQ5wRuKj8914wz44qJOTztHaSzYy6IUjEA1pq29a0kMKfRq6faAj/fMGjHUULCixeBK9rJ38X1r2NWEa2o9XCrDOgDhiz1pxdmOGa2v1iRzNmxNdwU9vez6taEE+3zYMu1LlxelTqTfEgMm2i0gzfyMb/kyJSQtDdKvSa6O0I2+xQobNTVmBuCakg/Vi6xuBAlbDG1DXF0zc2rc6QW5VCIsgsno4BOvZxTFoaDe3MLiPO0VWNmk6xvSncB0Vq2pW6PhjIzpzNpO15d4f8kItWiEys/Dm60LFttgQSJNmq4Sgz2hWRBwSwBJpS2up8uNfkRwRrbGpJxq4KwdDO348o1EHBV2KEyoEYmBgdt680hGHcI0QPhfQygxgxcJBu9TGOMB5SxxKA3vRTSpV92d4Kn7YFo26E+rJNJRwjLPihf03ubL22lgJX2zK5BvpGMkMEUIAjKpK
+      vBVXIE95sS3ZlFzbIXmY+5sZ5gbhYv1UOzzyLE1FoIEyGRyUEYkOHx0K/fI0nXqOeZhZpYiwLHc9rtOB7xst+LuFnlrGDo0gdBkC6/A0a7NlCMvyp/1fCtdkQbrl3WU9MvjQEs=
+          properties :
+           x : 6
+           y : 6
+           width : 1010
+           height : 724
+          type : 86
+          code_elements :
+           type_code : 118
+           p_codes :
+            -
+              code : |1-
+               
+              type : 14
+            -
+              code : |1-
+               
+              type : 160
+       menu :
+        name : _Menu
+        identifier : [%GenProcIdent(3)%]
+        internal_properties : BwAAAAcAAABHivBqFH8xYQq/QELUltmClIuqm9KM3lg0XSaBAQ41WqT06R9JfU0qGK5sHUl8/xHCuvP3y9tLeLLOVaAgM2FjnfwSCRBgXqneLsHogwTYpIXuB1zp2uXtmOXYyGd6i+ek6BBvtJ0ylgF/MxkRihdZ26pl/9Jf5c+sxo07G0ZzHfcLEu9WD07gTSld25EPGWjvi/e5TxaHOZSRE8C5Ig+YdJawYdK89l+x1ofEmw3pfCNLUe3tNoiwg4AbC1jLdufmJ97Xc0JHDAy7gJsHBzEWwcuroqy2By4PJ4c6Wg==
+        options : []
+       languages :
+        - fr-FR
+       popup_menus : []
+       message_bar :
+        internal_properties : BwAAAAcAAADG0006i3ptxMcUE+O5cGvDhb43eRlY9UEE1z/7izK93v/ToMiwACETQQw4eQhZuJRMFa6SBwwT+zSdDbdc5HEkXDob51ldPFNKsP+0MWY=
+       code_elements :
+        type_code : 1
+        p_codes :
+         -
+           code : |1+
+      [%:sIndentSpace(:sGenOuvertureFen(), 6)%]
+         -
+           code : |1-
+            Affiche()
+           type : 34
+         -
+           type : 180
+           enabled : false
+         -
+           type : 230
+           enabled : false
+        procedures :
+      [%:sGenProcAfficheFen()%]
+      [%:sGenProcAffEnfantsFen()%]
+        procedure_templates : []
+        property_templates : []
+       code_parameters :
+        internal_properties : BwAAAAcAAAARaqIs1pWWTrjJkc2sbefp8NGAHSVvdRgpQIePRe9rhkbpERRVEF+Nx8mIqTxrVGdwHX99jtU=
+        original_name : [%:sNomFen()%]
+      resources :
+       string_res :
+        identifier : [%GenProcIdent(4)%]
+        internal_properties : BwAAAAcAAAAZ++HSz2luvwiNhadWl8v3mh2d0Pq0fCIps02kogrcwVHmCg==
+      custom_note :
+       internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+      rad :
+       internal_properties : BwAAAAcAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe
+      ]
+      
+      :m_sCode = :sReCheckLignesCode(sCodeFen)
+      
+     type : 458752
+   -
+     name : sGenOuvertureFen
+     procedure_id : 1472247104702453969
+     type_code : 12
+     code : |1+
+      procedure PRIVÉ sGenOuvertureFen()<métier>:chaine
+      
+      sRetour est une chaîne
+      
+      si :m_bMultiTopHierarchie ALORS
+      	
+      	//On va charger les hierarchies enfant de l'objet passé
+      	sRetour = [
+      		PROCEDURE MaFenêtre(zoParent_p est un [%:m_sNomColTop%] dynamique = null)
+      		
+      		si zoParent_p = Null ALORS
+      			HLitDernier(Scr_Projet)
+      			zoParent_p <- ClDbProjet.GetObj(Scr_Projet.IDScr_Projet)
+      		FIN
+      		
+      		zoColTop est un [%:m_sNomColTop%] <- zoParent_p
+      		
+      		]
+      	
+      sinon
+      	
+      	//On va charger la hierarchie l'objet passé
+      	sRetour = [
+      		PROCEDURE MaFenêtre(zoParent_p est un [%:m_oClasseGen.sNomClasseColGen()%] dynamique = null)
+      		
+      		si zoParent_p = Null ALORS
+      			HLitDernier(Scr_Projet)
+      			zoParent_p <- ClDbProjet.GetObj(Scr_Projet.IDScr_Projet)
+      		FIN
+      		
+      		zoColTop est un [%:m_oClasseGen.sNomClasseColGen()%] <- zoParent_p
+      		
+      	]
+      	
+      FIN
+      
+      
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : sGenProcAfficheFen
+     procedure_id : 1472253972355251601
+     type_code : 12
+     code : |1+
+      PROCÉDURE PRIVÉ sGenProcAfficheFen()<métier>:chaîne
+      
+      sRetour		est une chaîne
+      sNomProc	est une chaîne	= "Affiche"
+      sTypeObj	est une chaîne
+      sNomProcCol	est une chaîne
+      
+      
+      SI :m_bMultiTopHierarchie ALORS
+      	sTypeObj	= :m_sNomDbTop
+      	sNomProcCol	= :m_sCleColTop
+      SINON
+      	sTypeObj	= :m_oClasseGen.sNomClasseGen()
+      	sNomProcCol	= :m_sCleColParent
+      FIN
+      
+      
+      sRetour = [
+      procédure [%sNomProc%]()<UI>:vide<§cs:2§>
+      <§cs:2§>
+      nRacine			est un entier<§cs:2§>
+      OrgaElement		est un OrgaElément<§cs:2§>
+      oEltAncetre		est un [%sTypeObj%] dynamique<§cs:2§>
+      <§cs:2§>
+      <§cs:2§>
+      ORGA_SansNom1..AffichageActif = Faux<§cs:2§>
+      OrgaSupprimeTout(ORGA_SansNom1)<§cs:2§>
+      <§cs:2§>
+      POUR TOUT ELEMENT oEltAncetre DE zoColTop.aItems()<§cs:2§>
+      [%TAB%]OrgaElement.ID			= oEltAncetre.ZF_Get_IdUnique()<§cs:2§>
+      [%TAB%]OrgaElement.Contenu		= oEltAncetre..Classe<§cs:2§>
+      [%TAB%]OrgaElement.FiDessin		= "[%:sNomFI()%]"<§cs:2§>
+      [%TAB%]nRacine					= OrgaAjoute(ORGA_SansNom1, OrgaElement)<§cs:2§>
+      [%TAB%]AffEnfants(nRacine, [%:m_oClasseGen.sNomClasseColGen()%].[%sNomProcCol%](oEltAncetre))<§cs:2§>
+      FIN<§cs:2§>
+      <§cs:2§>
+      ORGA_SansNom1..AffichageActif = vrai<§cs:2§>
+      ]
+      
+      
+      RENVOYER :GenBloc_ProcedureLoc(sRetour, sNomProc)
+      
+     type : 458752
+   -
+     name : sGenProcAffEnfantsFen
+     procedure_id : 1472376477707712331
+     type_code : 12
+     code : |1-
+      PROCÉDURE PRIVÉ sGenProcAffEnfantsFen()<métier>:chaîne
+      
+      
+      sRetour		est une chaîne
+      sNomProc	est une chaîne	= "AffEnfants"
+      sTypeObj	est une chaîne
+      sNomProcCol	est une chaîne
+      
+      
+      SI :m_bMultiTopHierarchie ALORS
+      	sTypeObj	= :m_sNomColTop
+      	sNomProcCol	= :m_sCleColTop
+      SINON
+      	sTypeObj	= :m_oClasseGen.sNomClasseGen()
+      	sNomProcCol	= :m_sCleColParent
+      FIN
+      
+      
+      sRetour = [
+      procédure [%sNomProc%](nIdParent_p est un entier, oColAff_p est un [%:m_oClasseGen.sNomClasseColGen()%])<UI>:vide<§cs:2§>
+      <§cs:2§>
+      OrgaElement		est un OrgaElément<§cs:2§>
+      nFeuille		est un entier<§cs:2§>
+      oItemActu		est un [%:m_oClasseGen.sNomClasseGen()%] dynamique<§cs:2§>
+      <§cs:2§>
+      POUR TOUT ÉLÉMENT oItemActu DE oColAff_p.aItems()<§cs:2§>
+      [%tab%]si pas oItemActu.ZF_bEstsupprime() alors<§cs:2§>
+      [%TAB%][%TAB%]VariableRAZ(OrgaElement)<§cs:2§>
+      [%TAB%][%TAB%]OrgaElement.id			= oItemActu.ZF_Get_IdUnique()<§cs:2§>
+      [%TAB%][%TAB%]OrgaElement.Contenu	= oItemActu..classe<§cs:2§>
+      [%TAB%][%TAB%]OrgaElement.FiDessin	= "[%:sNomFI()%]"<§cs:2§>
+      [%TAB%][%TAB%]nFeuille				= OrgaAjouteFils(ORGA_SansNom1, nIdParent_p, OrgaElement)<§cs:2§>
+      		<§cs:2§>
+      [%TAB%][%TAB%][%sNomProc%](nFeuille, [%:m_oClasseGen.sNomClasseColGen()%].[%:m_sCleColParent%](oItemActu, Vrai))<§cs:2§>
+      [%TAB%]fin<§cs:2§>
+      FIN<§cs:2§>
+      <§cs:2§>
+      ]
+      
+      
+      RENVOYER :GenBloc_ProcedureLoc(sRetour, sNomProc)
+     type : 458752
+   -
+     name : sGenProcAjouteFilsFi
+     procedure_id : 1473362391726928584
+     type_code : 12
+     code : |1+
+      PROCÉDURE PRIVÉ sGenProcAjouteFilsFi()<métier>:chaîne
+      
+      sRetour		est une chaîne
+      sNomProc	est une chaîne	= "AjouteFils"
+      
+      sRetour = [
+      procédure [%sNomProc%]()<UI>:vide<§cs:2§>
+      <§cs:2§>
+      oItem_enf est un ClDbTheme()<§cs:2§>
+      <§cs:2§>
+      SI zoItem <> Null ALORS<§cs:2§>
+      	oItem_enf.[%:m_sNomProprieteObjParent%] = zoItem<§cs:2§>
+      FIN<§cs:2§>
+      <§cs:2§>
+      SI Ouvre([%:m_sNomFenFic%], oItem_enf) <> 0 ALORS<§cs:2§>
+      	ActuMap()<§cs:2§>
+      FIN<§cs:2§>
+      ]
+      
+      
+      RENVOYER :GenBloc_ProcedureLoc(sRetour, sNomProc)
+      
+     type : 458752
+   -
+     name : sGenProcSupprimeItemFi
+     procedure_id : 1473366630860046490
+     type_code : 12
+     code : |1+
+      PROCÉDURE PRIVÉ sGenProcSupprimeItemFi()<métier>:chaîne
+      
+      sRetour		est une chaîne
+      sNomProc	est une chaîne	= "SupprimeItem"
+      sMsgConfirm	est une chaîne	= -%"Comfirmez-vous la suppression de l'item ""[%zoItem.sRepresentation()%]"" ?"
+      
+      sRetour = [
+      procédure [%sNomProc%]()<UI>:vide
+      
+      SI OuiNon("[%sMsgConfirm%]") ALORS
+      	zoItem.ZF_Supprimer()
+      	ActuMap()
+      fin
+      ]
+      
+      RENVOYER :GenBloc_ProcedureLoc(sRetour, sNomProc)
+     type : 458752
+   -
+     name : sGenProcEnregItemFi
+     procedure_id : 1473367202090764353
+     type_code : 12
+     code : |1+
+      PROCÉDURE PRIVÉ sGenProcEnregItemFi()<métier>:chaîne
+      
+      sRetour		est une chaîne
+      sNomProc	est une chaîne	= "EnregItem"
+      
+      sRetour = [
+      PROCÉDURE [%sNomProc%]()<UI>:Vide
+      
+      QUAND EXCEPTION DANS
+      	oColSave est un [%:m_oClasseGen.sNomClasseColGen()%] <- [%:m_oClasseGen.sNomClasseColGen()%].[%:m_sCleColParent%](zoItem)
+      	oColSave.ZF_SaveItems()
+      	ActuMap()
+      FAIRE
+      	Erreur(ExceptionInfo(errMessage))
+      FIN
+      ]
+      
+      RENVOYER :GenBloc_ProcedureLoc(sRetour, sNomProc)
+     type : 458752
+   -
+     name : sGenProcAffInfoFi
+     procedure_id : 1473370419021755538
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sGenProcAffInfoFi ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure prive sGenProcAffInfoFi()<métier>:chaîne
+      
+      sRetour		est une chaîne
+      sNomProc	est une chaîne	= "AffInfo"
+      
+      sRetour = [
+      PROCÉDURE [%sNomProc%]()<UI>:Vide
+      
+      
+      SI zoItem <> Null ALORS
+      	LIB_Libellé = zoItem.sRepresentation()
+      SINON
+      	SI zoParent <> Null ALORS
+      		LIB_Libellé = zoParent.sRepresentation()
+      	FIN
+      FIN
+      
+      LIB_SansNom1 = gOrgaElement_p.ID + " - " + gOrgaElement_p.Contenu
       
       ]
       
-      :m_sCode = sCodeFen
+      RENVOYER :GenBloc_ProcedureLoc(sRetour, sNomProc)
+      
+      
+      
+     type : 458752
+   -
+     name : sGenOuvertureFi
+     procedure_id : 1473371385389556634
+     type_code : 12
+     code : |1+
+      procedure PRIVÉ sGenOuvertureFi()<métier>:chaine
+      
+      sRetour est une chaîne
+      
+      si :m_bMultiTopHierarchie ALORS
+      	
+      	//On va charger les hierarchies enfant de l'objet passé
+      	sRetour = [
+      		PROCÉDURE MaFenêtre(gOrgaElement_p est un OrgaElément)
+      	
+      		zoItem		est un [%:m_oClasseGen.sNomClasseGen()%] dynamique
+      		zoParent	est un [%:m_sNomDbTop%] dynamique
+      		
+      		SELON gOrgaElement_p..Contenu
+      			CAS [%:m_oClasseGen.sNomClasseGen()%]
+      				zoItem <- [%:m_oClasseGen.sNomClasseGen()%].GetObj(gOrgaElement_p.ID)
+      				
+      				SI zoItem.[%:m_sNomProprieteObjParent%] = Null ALORS
+      					BTN_Sauve..Visible = Vrai
+      				SINON
+      					BTN_Sauve..Visible = Faux
+      				FIN
+      				
+      				
+      			CAS [%:m_sNomDbTop%]
+      				zoParent <- [%:m_sNomDbTop%].GetObj(gOrgaElement_p.ID)
+      				BTN_Supp..Visible = Faux
+      				BTN_Sauve..Visible	= Faux
+      				
+      			AUTRE CAS
+      				ExceptionDéclenche(1,"Erreur contenu")
+      		FIN
+      		
+      		AffInfo()
+      		]
+      	
+      sinon
+      	
+      //	//On va charger la hierarchie l'objet passé
+      //	sRetour = [
+      //		PROCEDURE MaFenêtre(zoParent_p est un [%:m_oClasseGen.sNomClasseColGen()%] dynamique = null)
+      //		
+      //		si zoParent_p = Null ALORS
+      //			HLitDernier(Scr_Projet)
+      //			zoParent_p <- ClDbProjet.GetObj(Scr_Projet.IDScr_Projet)
+      //		FIN
+      //		
+      //		zoColTop est un [%:m_oClasseGen.sNomClasseColGen()%] <- zoParent_p
+      //		
+      //	]
+      	
+      FIN
+      
+      
+      
+      renvoyer sRetour
      type : 458752
   procedure_templates : []
   property_templates : []

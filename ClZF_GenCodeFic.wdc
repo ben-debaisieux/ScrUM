@@ -32,6 +32,7 @@ class :
       	nTaille					est un entier
       	sValDef					est une chaine
       	nTypeCle				est un entier
+      	//sMeta					est une chaîne
       	
       	oObj_Parent				est un ClZF_GenCodeFic dynamique
       fin
@@ -51,6 +52,22 @@ class :
       	nTypeRel		est un entier
       FIN
       
+      
+      STR_DescRub est une structure
+      	sValMin		est une chaîne
+      	sValMax		est une chaîne
+      	nPctNull	est un entier
+      	sMeta		est une chaîne
+      	sGrpExclu	est une chaîne
+      FIN
+      
+      STR_DescFic est une structure
+      	bTopLs		est un booléen
+      	bTopHisto	est un booléen
+      	nNbLigneGen	est un entier
+      	taRubs		est un tableau associatif de STR_DescRub
+      FIN
+      
       //////////////////////////////////////////////////////////////////////////////////////////////
       
       ClZF_GenCodeFic est une Classe
@@ -59,6 +76,7 @@ class :
       	m_aCol_Enfant	est un tableau de STR_InfoCol		// a faire : vérifier utilité ?
       	m_aFK_de_PK		est un tableau de str_rel
       	m_aPK_de_FK		est un tableau associatif de str_rel
+      	m_stConfigTbl	est un STR_DescFic
       PRIVE
       	m_sNomTable		est une chaîne
       	m_sNomUsage		est une chaîne
@@ -87,6 +105,9 @@ class :
       	cstTypeCleAucune	= 0
       	cstTypeCleUnique	= 1
       	cstTypeCleDoublon	= 2
+      	
+      	
+      	
       fin
      type : 131072
   procedures :
@@ -401,6 +422,7 @@ class :
       		stRubTmp.nTaille			= {:m_sNomTable + "." + sRub,indRubrique}..Taille
       		stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}..ValeurParDéfaut
       		stRubTmp.bVisibleInterface	= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
+      		//stRubTmp.sMeta				= {:m_sNomTable + "." + sRub,indRubrique}..Métadonnées
       		
       		
       		selon {:m_sNomTable + "." + sRub,indRubrique}..TypeClé
@@ -544,7 +566,7 @@ class :
      name : mEval
      procedure_id : 1469527698899029832
      type_code : 12
-     code : |1-
+     code : |1+
       procedure mEval()<metier>:monetaire
       
       nCleTable		est un entier	= 1
@@ -553,6 +575,7 @@ class :
       nCleRubFKAgr	est un entier	= 4
       nCleRubFKCompo	est un entier	= 5
       nCleFen			est un entier	= 6
+      nCleFenMetOrga	est un entier	= 7
       
       
       taVals est un tableau associatif de monétaires
@@ -563,6 +586,7 @@ class :
       taVals[nCleRubFKAgr]	= 5
       taVals[nCleRubFKCompo]	= 15
       taVals[nCleFen]			= 50
+      taVals[nCleFenMetOrga]			= 100
       
       
       moRetour	est un monetaire
@@ -580,6 +604,18 @@ class :
       		si pas :m_bClasseLS ALORS
       			AddPx(nCleFen)
       		FIN
+      		
+      		//Eval mnt des méta types
+      		selon :m_stConfigTbl.taRubs[sRub].sMeta
+      			CAS ClZF_GenFenMeta.cstMetaoOrgani:
+      				AddPx(nCleFenMetOrga)
+      				
+      			cas ClZF_GenFenMeta.cstMetaoOrgani_parent:
+      				//Ras
+      			AUTRE CAS
+      				
+      		FIN
+      		
       		
       		si pas :M_aPK_de_FK[sRub]..vide ALORS
       			stRel = :m_aPK_de_FK[sRub]
@@ -603,6 +639,52 @@ class :
       procédure interne AddPx(nCle_p est un entier):vide
       	moRetour += taVals[nCle_p]
       fin
+      
+      
+      
+     type : 458752
+   -
+     name : sNomFicConf
+     procedure_id : 1472168425190691182
+     type_code : 12
+     code : |1-
+      procedure prive sNomFicConf()<metier>:chaine
+      renvoyer :m_sNomTable + ".json"
+     type : 458752
+   -
+     name : chargeConfTable
+     procedure_id : 1472108682186412195
+     type_code : 12
+     code : |1+
+      PROCÉDURE chargeConfTable()<métier>:Vide
+      
+      sFicJSON		est une chaîne	= sNomFicConf()
+      sJson			est une chaîne
+      stRubAnaTmp		est un str_DefRub
+      
+      
+      SI fFichierExiste(sFicJSON) ALORS
+      	sJson			= fChargeTexte(sFicJSON)
+      	Désérialise(m_stConfigTbl, sJson, psdJSON)
+      FIN
+      
+      //S'il y a plus de rubriques que ce qui est récupéré, on complète
+      POUR TOUT ÉLÉMENT stRubAnaTmp, sRub DE :m_aRub
+      	si m_stConfigTbl.taRubs[sRub]..Vide ALORS
+      		m_stConfigTbl.taRubs[sRub] = allouer un STR_DescRub
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : sauveConfTable
+     procedure_id : 1472164834592412051
+     type_code : 12
+     code : |1+
+      PROCÉDURE sauveConfTable(stSauve est un STR_DescFic)<métier>:Vide
+      
+      sJson		est une chaîne
+      Sérialise(stSauve, sJson, psdJSON)
+      fSauveTexte(sNomFicConf(),sJson)
      type : 458752
   properties :
    -

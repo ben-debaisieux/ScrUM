@@ -154,9 +154,9 @@ window :
       //
       procédure privée Maj_Spr()
       
-      si zoSpr = Null ALORS
-      	zoSpr <- allouer un ClDbSprint(SAI_Sprint)
-      FIN
+      //si zoSpr = Null ALORS
+      	zoSpr <- ClDbSprint.GetObj(SAI_Sprint)
+      //FIN
       
       SAI_Sprint..Bulle = zoSpr.sSprint_Date()
       SPIN_SpinEntier..Bulle = zoSpr.sSprint_Date()

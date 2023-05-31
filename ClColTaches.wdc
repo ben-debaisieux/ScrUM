@@ -391,7 +391,7 @@ class :
       		
       	FROM Scr_Tache
       	
-      	WHERE Scr_Tache.Num_Sprint_Demarrage BETWEEN [%oSpDeb_p.ZF_Get_IdUnique()%] AND [%oSpFin_p.ZF_Get_IdUnique()%]
+      	WHERE Scr_Tache.Num_Sprint_Realisation BETWEEN [%oSpDeb_p.ZF_Get_IdUnique()%] AND [%oSpFin_p.ZF_Get_IdUnique()%]
       	
       ]
       oColTachesRetour.ZF_LoadSQL(sReq)

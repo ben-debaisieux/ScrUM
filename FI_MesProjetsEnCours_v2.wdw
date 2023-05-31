@@ -459,7 +459,8 @@ window :
          -
            code : |1+
             SI TableOccurrence(TBL_MesProjets) >= 1 ALORS
-            	Ouvre(FEN_ProjectMap, ClDbProjet.GetObj(TBL_MesProjets.COL_IdProjet))
+            //	ClColProjetMap.
+            //	Ouvre(FEN_ProjectMap, ClDbProjet.GetObj(TBL_MesProjets.COL_IdProjet))
             FIN
             
             

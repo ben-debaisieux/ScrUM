@@ -1,0 +1,343 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : CLZF_GenData
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1474fee70285aea9
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      STR_Export_rubs est une Structure
+      	sValeur		est une chaîne
+      	bNull		est un booléen
+      	bAProteger	est un booléen
+      fin
+      	
+      STR_Export est une Structure
+      	sNomPropriete	est une chaîne
+      	sNomRub			est une chaîne
+      	sLibelle		est une chaîne
+      	bTypeTexte		est un booléen
+      	sValeurs		est un tableau de STR_Export_rubs
+      FIN
+      
+      STR_RubSQL est une structure
+      	//nCodeType		est un entier
+      	sType			est une chaîne
+      	nTaille			est un entier
+      	bEstNullable	est un booléen
+      	sValeurDefaut	est une chaîne
+      	bEstIndexUnique	est un booléen
+      	sRefTablePK		est une chaîne
+      	sRefRubIdPK		est une chaîne
+      	
+      	nTypeAlterRub	est un entier
+      	nTypeAlterFK	est un entier
+      	sCodeSQL		est une chaîne
+      	sWarning		est une chaîne
+      fin
+      
+      CLZF_GenData est une Classe
+      protege
+      	m_oCOlGen est un ClZF_GenCodeFic dynamique
+      	m_aExport		est un tableau de STR_Export
+      	
+      	m_taRubsSQLReel est un tableau associatif de STR_RubSQL
+      	m_taRubsSQLAttendu est un tableau associatif de STR_RubSQL
+      fin
+      
+      
+      
+      constante
+      	cstTypeAlterRub_RAS			= 0
+      	cstTypeAlterRub_CreeTable	= 1
+      	cstTypeAlterRub_CreeRub		= 2
+      	cstTypeAlterRub_ModRub		= 3
+      	cstTypeAlterRub_SuppRub		= 4
+      	
+      	cstTypeAlterFK_RAS			= 0
+      	cstTypeAlterFK_Cree			= 1
+      	cstTypeAlterFK_Supp			= 2
+      fin
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1474083246190276265
+     type_code : 27
+     code : |1+
+      procédure Constructeur(OlGen_p est un ClZF_GenCodeFic)
+      :m_oCOlGen <- OlGen_p
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1474083246190341801
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GenereData
+     procedure_id : 1474083735816924746
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GenereData ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GenereData()
+      
+      nInd		est un entier
+      stRubActu	est un STR_Export
+      stVal		est un STR_Export_rubs
+      
+      SI :m_oCOlGen.p_bClasseExiste ALORS
+      	
+      	sRub			est une chaîne
+      	stRubAnaTmp		est un ClZF_GenCodeFic.str_DefRub
+      	
+      	POUR TOUT ÉLÉMENT stRubAnaTmp, sRub DE :m_oCOlGen.m_aRub
+      		
+      		VariableRAZ(stRubActu)
+      		
+      		stConfRub est un ClZF_GenCodeFic.STR_DescRub
+      		stConfRub				= :m_oCOlGen.m_stConfigTbl.taRubs[sRub]
+      		
+      		
+      		stRubActu.sNomPropriete	= stRubAnaTmp.sNomPropriete
+      		stRubActu.sLibelle		= stRubAnaTmp.sLibelleRubrique
+      		stRubActu.sNomRub		= sRub
+      		stRubActu.bTypeTexte	= (stRubAnaTmp.nTypeRub = ClZF_GenCodeFic.cstDefRubChaine)
+      		
+      		SI :m_oCOlGen.m_aPK_de_FK[sRub]..Vide ALORS
+      			//La rubrique n'est pas FK : génération de données aléatoires
+      			POUR nInd = 1 _À_ :m_oCOlGen.m_stConfigTbl.nNbLigneGen
+      				
+      				VariableRAZ(stVal)
+      				
+      				
+      				SELON stRubAnaTmp.nTypeRubHF
+      					CAS hRubTexte, hRubTexteUnicode, hRubMémoTexte, hRubMémoUnicode
+      						nTaille		est un entier	= Hasard(taille(stConfRub.sValMin), taille(stConfRub.sValMax))
+      						nNumChar	est un entier
+      						POUR nNumChar = 1 _À_ nTaille
+      							SI Hasard(6) = 1 ALORS
+      								stVal.sValeur += " "
+      							SINON
+      								stVal.sValeur += Caract(Hasard(33, 126))
+      							FIN
+      						FIN
+      						
+      						stVal.bAProteger = Vrai
+      						
+      					CAS hRubEntier1, hRubEntier2, hRubEntier4, hRubEntier8, hRubEntierNonSigné1, hRubEntierNonSigné2, hRubEntierNonSigné4, hRubEntierNonSigné8
+      						stVal.sValeur = NumériqueVersChaîne(Hasard(Val(stConfRub.sValMin), Val(stConfRub.sValMax)))
+      						
+      					CAS hRubMonétaire
+      						stVal.sValeur = NumériqueVersChaîne(Hasard(Val(stConfRub.sValMin) * 100, Val(stConfRub.sValMax) * 100) / 100)
+      						
+      					CAS hRubDate8, hRubDate6, hRubDateHeure
+      						nJour est un entier = DateVersEntier(datesys)
+      						nJour	= Hasard(nJour - 1500, nJour)
+      						stVal.sValeur	= EntierVersDate(nJour)
+      						
+      						stVal.bAProteger = Vrai
+      						
+      					AUTRE CAS
+      						
+      						SI stRubActu.bTypeTexte ALORS
+      							stVal.sValeur = "azertyuiop"
+      							stVal.bAProteger = vrai
+      						SINON
+      							stVal.sValeur = "999"
+      						FIN
+      				FIN
+      				
+      				TableauAjoute(stRubActu.sValeurs, stVal)
+      			FIN
+      			
+      			
+      		SINON
+      			VariableRAZ(stVal)
+      			stRelTmp est un ClZF_GenCodeFic.STR_Rel = :m_oCOlGen.m_aPK_de_FK[sRub]
+      			oColFicPK est un ClZF_GenCodeFic(stRelTmp.sTablePK)
+      			oColFicPK.Analyse()
+      			tabAValeurs est un tableau de entiers = nIdExist(oColFicPK)
+      			
+      			//La rubrique est FK : Récupération de données existantes
+      			POUR nInd = 1 _À_ :m_oCOlGen.m_stConfigTbl.nNbLigneGen
+      				SI bNullRand(stConfRub.nPctNull) ALORS
+      					stVal.sValeur = "NULL"
+      					stVal.bNull = vrai
+      				SINON
+      					stVal.sValeur = nIdRand(tabAValeurs)
+      				FIN
+      				TableauAjoute(stRubActu.sValeurs, stVal)
+      			FIN
+      		FIN
+      		
+      		TableauAjoute(m_aExport, stRubActu)
+      	FIN
+      FIN
+      
+      
+      
+      	PROCÉDURE INTERNE bNullRand(nPct_P est un entier):booléen
+      		SI Hasard(100) < nPct_P ALORS
+      			RENVOYER Vrai
+      		SINON
+      			RENVOYER Faux
+      		FIN
+      		
+      	FIN
+      
+      
+      	PROCÉDURE INTERNE nIdExist(oClasseGen_p est un ClZF_GenCodeFic):tableau d'entiers
+      		aRetour	est un tableau d'entiers
+      		sdIds	est une source de données
+      		sReq	est une chaîne	= [
+      		SELECT [%oClasseGen_p.p_sNomRubId%] AS Id
+      		FROM [%oClasseGen_p.p_sNomTable%]
+      		]
+      		goapp.Rsql(sdIds, sReq)
+      		POUR TOUT sdIds
+      			TableauAjoute(aRetour,sdIds.Id)
+      		FIN
+      		
+      		RENVOYER aRetour
+      	FIN
+      
+      
+      	PROCÉDURE INTERNE nIdRand(aIds est un tableau d'entiers):entier
+      		nIndTbl est un entier = Hasard(aIds..Occurrence)
+      		RENVOYER aIds[nIndTbl]
+      	FIN
+      
+      
+     type : 458752
+   -
+     name : VersTexte
+     procedure_id : 1474083877550943738
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] VersTexte ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure VersTexte()<metier>:chaine
+      
+      
+      sRetour	est une chaîne
+      sLigne	est une chaîne
+      nInd est un entier
+      stRubActu	est un STR_Export
+      
+      
+      sLigne = "ID"
+      POUR TOUT stRubActu DE m_aExport
+      	sLigne += [TAB] + stRubActu.sLibelle
+      FIN
+      sRetour += [RC] + sLigne
+      
+      /*
+      sLigne = "ID"<§cs:10§>
+      POUR TOUT stRubActu DE aExport<§cs:10§>
+      	sLigne += [TAB] + stRubActu.sNomPropriete<§cs:10§>
+      FIN<§cs:10§>
+      sRetour += [RC] + sLigne<§cs:10§>
+      */
+      
+      POUR nInd = 1 _À_ :m_oCOlGen.m_stConfigTbl.nNbLigneGen
+      	sLigne = nInd
+      	POUR TOUT stRubActu DE m_aExport
+      		sLigne += [TAB] + stRubActu.sValeurs[nInd].sValeur
+      	FIN
+      	sRetour += [RC] + sLigne
+      FIN
+      
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : VersSQL
+     procedure_id : 1474088894073454542
+     type_code : 12
+     code : |1+
+      procedure VersSQL()<metier>:chaine
+      
+      sRetour		est une chaîne
+      sLigne		est une chaîne
+      nInd		est un entier
+      stVal		est un STR_Export_rubs
+      sPatern		est une chaîne
+      sVal		est une chaine
+      stRubActu	est un STR_Export
+      
+      
+      POUR TOUT stRubActu DE m_aExport
+      	sPatern += [", "] + stRubActu.sNomRub
+      FIN
+      
+      sPatern = "INSERT INTO [%:m_oCOlGen.p_sNomTable%] ([%sPatern%]) VALUES (%1)"
+      
+      POUR nInd = 1 _À_ :m_oCOlGen.m_stConfigTbl.nNbLigneGen
+      	sLigne = ""
+      	POUR TOUT stRubActu DE m_aExport
+      		
+      		stVal	= stRubActu.sValeurs[nInd]
+      		sVal	= stVal.sValeur
+      		
+      		si stVal.bAProteger ALORS
+      			
+      			sVal = Remplace(sVal, "'", "''")
+      			
+      			sVal = "'" + sVal + "'"
+      		FIN
+      		
+      		sLigne += [", "] + sVal
+      	FIN
+      	
+      	sRetour += [RC] + ChaîneConstruit(sPatern, sLigne)
+      FIN
+      
+      
+      RENVOYER sRetour
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1474fed5027f69ff
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

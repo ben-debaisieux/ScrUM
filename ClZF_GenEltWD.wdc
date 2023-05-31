@@ -15,8 +15,12 @@ class :
   p_codes :
    -
      code : |1+
-      ClZF_GenEltWD est une Classe, abstraite
       
+      
+      
+      ClZF_GenEltWD est une Classe, abstraite
+      public
+      	
       PROTÉGÉ
       	m_oClasseGen est un ClZF_GenCodeFic
       	m_sCode est une chaîne
@@ -110,6 +114,16 @@ class :
      type_code : 12
      code : |1+
       PROCÉDURE ABSTRAITE Genere():Vide
+     type : 458752
+   -
+     name : chargeConfTable
+     procedure_id : 1472107415169454796
+     type_code : 12
+     code : |1-
+      PROCÉDURE chargeConfTable()<métier>:Vide
+      
+      
+      :m_oClasseGen
      type : 458752
   properties :
    -

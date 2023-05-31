@@ -171,21 +171,21 @@ window :
          zoItem est un ClDbProjetMap dynamique
          zoProjet est un ClDbProjet dynamique
          
-         selon gOrgaElement_p..Contenu
-         	CAS ClDbProjetMap
+         //selon gOrgaElement_p..Contenu
+         //	CAS ClDbProjetMap
          		zoItem <- ClDbProjetMap.GetObj(gOrgaElement_p.ID)
          		BTN_Sauve..Visible = Faux
-         		si zoItem.p_oProjet = Null ALORS
+         		si zoItem.p_oProjetMap_Parent <> Null ALORS
          			BTN_Sauve..Visible = Faux
          		FIN
-         	CAS ClDbProjet
-         		zoProjet <- ClDbProjet.GetObj(gOrgaElement_p.ID)
-         		BTN_Supp..Visible = Faux
-         		BTN_Modif..Visible = Faux
-         		
-         	AUTRE CAS
-         		ExceptionDéclenche(1,"Erreur contenu")
-         FIN
+         //	CAS ClDbProjet
+         //		zoProjet <- ClDbProjet.GetObj(gOrgaElement_p.ID)
+         //		BTN_Supp..Visible = Faux
+         //		BTN_Modif..Visible = Faux
+         //		
+         //	AUTRE CAS
+         //		ExceptionDéclenche(1,"Erreur contenu")
+         //FIN
          
          AffInfo()
  menu :
@@ -241,15 +241,15 @@ window :
       //
       procédure AffInfo()
       
-      si zoItem <> Null ALORS
+      //si zoItem <> Null ALORS
       	LIB_Libellé = zoItem.p_sLibelle
-      sinon
-      	SI zoProjet <> Null ALORS
-      		LIB_Libellé = zoProjet.p_sNom
-      	FIN
-      FIN
+      //sinon
+      //	SI zoProjet <> Null ALORS
+      //		LIB_Libellé = zoProjet.p_sNom
+      //	FIN
+      //FIN
       
-      LIB_SansNom1 = gOrgaElement_p.id + " - " + gOrgaElement_p.Contenu
+      LIB_SansNom1 = gOrgaElement_p.id //+ " - " + gOrgaElement_p.Contenu
      type : 458752
   procedure_templates : []
   property_templates : []

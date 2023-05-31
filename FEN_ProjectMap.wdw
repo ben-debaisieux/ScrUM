@@ -62,7 +62,7 @@ window :
          
          HSupprimeTout(SCR_ProjetMap)
          
-         oMap.p_oProjet = zoGoPrj
+         //oMap.p_oProjet = zoGoPrj
          oMap.p_sLibelle = "zoGoPrj"
          
          POUR i = 1 a nNbNiv
@@ -101,18 +101,21 @@ window :
   p_codes :
    -
      code : |1+
-      PROCEDURE MaFenêtre(zoGoPrj est un ClDbProjet dynamique = null)
+      PROCEDURE MaFenêtre(zoColItems_p est un ClColProjetMap dynamique = null)
       
-      si zoGoPrj = Null ALORS
+      zoColTop est un ClColProjetMap dynamique
+      
+      si zoColItems_p = Null ALORS
       	HLitDernier(Scr_Projet)
-      	zoGoPrj <- ClDbProjet.GetObj(Scr_Projet.IDScr_Projet)
+      	oPrj est un ClDbProjet(Scr_Projet.IDScr_Projet)
+      	zoColTop <- ClcolProjetMap.oColMapsDeProjet(oPrj)
+      sinon
+      	zoColTop <- zoColItems_p
       FIN
-      oColTop est un ClColProjetMap <- ClcolProjetMap.oColMapsDeProjet(zoGoPrj)
+      
       
    -
      code : |1-
-      
-      
       
       affiche()
      type : 34
@@ -147,15 +150,14 @@ window :
       gOrgaElement	est un OrgaElément
       nPrj			est un entier
       oMap_Top		est un ClDbProjetMap dynamique
-      //buff			est une chaîne
       
       POUR TOUT ÉLÉMENT oMap_Top DE oColMap_p.aItems()
       	
       	si pas oMap_Top.ZF_bEstsupprime() alors
       		VariableRAZ(gOrgaElement)
-      		gOrgaElement.id = oMap_Top.ZF_Get_IdUnique()
-      		gOrgaElement.Contenu = oMap_Top..classe
-      		nPrj = OrgaAjouteFils(ORGA_SansNom1, nIdParent_p, gOrgaElement)
+      		gOrgaElement.id			= oMap_Top.ZF_Get_IdUnique()
+      //		gOrgaElement.Contenu	= oMap_Top..classe
+      		nPrj					= OrgaAjouteFils(ORGA_SansNom1, nIdParent_p, gOrgaElement)
       		
       		AffMap(nPrj,ClColProjetMap.oColProjetMap_Enfant(oMap_Top))
       	fin
@@ -181,14 +183,13 @@ window :
       procédure affiche()
       
       nRacine est un entier
-      OrgaSupprimeTout(ORGA_SansNom1)
-      gOrgaElement est un OrgaElément
-      gOrgaElement.ID = zoGoPrj.ZF_Get_IdUnique()
-      gOrgaElement.Contenu = zoGoPrj..Classe
-      nRacine = OrgaAjoute(ORGA_SansNom1, gOrgaElement)
+      //gOrgaElement est un OrgaElément
       
-      //nRacine = OrgaAjoute(ORGA_SansNom1,zoGoPrj.p_sNom,"info")
-      AffMap(nRacine, ClcolProjetMap.oColMapsDeProjet(zoGoPrj))
+      //OrgaSupprimeTout(ORGA_SansNom1)
+      //gOrgaElement.ID			= 0//zoGoPrj.ZF_Get_IdUnique()
+      ////gOrgaElement.Contenu	= zoGoPrj..Classe
+      //nRacine					= OrgaAjoute(ORGA_SansNom1, gOrgaElement)
+      AffMap(nRacine, zoColTop)
      type : 458752
   procedure_templates : []
   property_templates : []
