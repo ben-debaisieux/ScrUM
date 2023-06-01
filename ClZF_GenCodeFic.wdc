@@ -317,20 +317,40 @@ class :
       FIN
       
       
+      nIndRech est un entier
       
-      //Identification de la PK de la table
-      POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
-      	VariableRAZ(stRubTmp)
-      	sRub = ExtraitChaîne(sLigne, 1)
-      	
-      	stRubTmp.nTypeRubHF = ExtraitChaîne(sLigne, 3)
-      	
-      	//Est on sur la clé primaire ?
-      	SI stRubTmp.nTypeRubHF DANS (hRubIDAuto, hRubIDAuto4) ALORS
-      		//Oui
-      		sRubIdAuto = sRub
+      pour nIndRech = 1 a 2
+      	si sRubIdAuto = "" alors
+      		//Identification de la PK de la table
+      		POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
+      			VariableRAZ(stRubTmp)
+      			sRub = ExtraitChaîne(sLigne, 1)
+      			
+      			stRubTmp.nTypeRubHF = ExtraitChaîne(sLigne, 3)
+      			
+      			selon nIndRech
+      				CAS 1
+      					//Est on sur la clé primaire ?
+      					SI stRubTmp.nTypeRubHF DANS (hRubIDAuto, hRubIDAuto4) ALORS
+      						//Oui
+      						sRubIdAuto = sRub
+      					FIN
+      					
+      				CAS 2
+      					//Est on sur la clé primaire ?
+      					SI stRubTmp.nTypeRubHF DANS (hRubEntier1, hRubEntier2, hRubEntier4, hRubEntier8, hRubEntierNonSigné1, hRubEntierNonSigné2, hRubEntierNonSigné4, hRubEntierNonSigné8) et ...
+      							{:m_sNomTable + "." + sRub,indRubrique}..TypeClé = hCléUnique ALORS
+      						//Oui
+      						sRubIdAuto = sRub
+      					FIN
+      					
+      				AUTRE CAS
+      					
+      			FIN
+      		fin
       	fin
       fin
+      
       
       
       
@@ -685,6 +705,69 @@ class :
       sJson		est une chaîne
       Sérialise(stSauve, sJson, psdJSON)
       fSauveTexte(sNomFicConf(),sJson)
+     type : 458752
+   -
+     name : aTableDependances
+     procedure_id : 1474825930687461673
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aTableDependances ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	tableau (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale aTableDependances()<metier>:tableau de chaines
+      
+      taTbls	est un tableau associatif de ClZF_GenCodeFic dynamique
+      pclStTblTmp	est un ClZF_GenCodeFic dynamique
+      aRetour	est un tableau de chaînes
+      sTbl	est une chaîne
+      bMqt	est un booléen
+      stRel	est un ClZF_GenCodeFic.STR_Rel
+      
+      
+      pour toute chaine sTbl de sListeFicAna() separee par rc
+      	taTbls[sTbl] = allouer un ClZF_GenCodeFic(sTbl)
+      	taTbls[sTbl].Analyse()
+      FIN
+      
+      
+      tantque taTbls..Occurrence > 0
+      	
+      	
+      	pour tout pclStTblTmp, sTbl de taTbls
+      		bMqt = faux
+      		
+      		pour tout stRel de pclStTblTmp.m_aPK_de_FK
+      			si stRel.sTablePK <> sTbl _et_ TableauCherche(aRetour,tcLinéaire,stRel.sTablePK) <= 0 ALORS
+      				bMqt = vrai
+      			FIN
+      		FIN
+      		
+      		
+      		
+      		si pas bMqt ALORS
+      			TableauAjoute(aRetour, sTbl)
+      			TableauSupprime(taTbls, sTbl)
+      		FIN
+      	FIN
+      	
+      	
+      	
+      FIN
+      
+      
+      
+      
+      renvoyer aRetour
      type : 458752
   properties :
    -

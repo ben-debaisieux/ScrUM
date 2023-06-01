@@ -403,20 +403,7 @@ class :
       
       
       stRetour est un CLZF_GenData.STR_RubSQL
-      //nType est un entier
-      //sCode est une chaine
       stInfoRub est un ClZF_GenCodeFic.STR_DefRub
-      //sTypeSQL est une chaîne
-      
-      //cstTypeAlterRub_RAS			= 0
-      //cstTypeAlterRub_CreeTable	= 1
-      //cstTypeAlterRub_CreeRub		= 2
-      //cstTypeAlterRub_ModRub		= 3
-      //cstTypeAlterRub_SuppRub		= 4
-      //
-      //cstTypeAlterFK_RAS			= 0
-      //cstTypeAlterFK_Cree			= 1
-      //cstTypeAlterFK_Supp			= 2
       
       stRetour.nTypeAlterRub = cstTypeAlterRub_RAS
       
@@ -469,11 +456,204 @@ class :
       		stRetour.sCodeSQL += " NOT"
       	FIN
       	stRetour.sCodeSQL += " NULL"
+      	
+      	
+      	//Génération du code de contrainte par défaut
+      	si pas stInfoRub.bNullable et :m_oCOlGen.m_aRub[sRub_p]..vide alors
+      		sValDef est une chaîne = stInfoRub.sValDef
+      		si ::bProteger(stInfoRub.nTypeRubHF) ALORS
+      			sValDef = "'" + sValDef + "'"
+      		FIN
+      		
+      		stRetour.sCodeSQL += " CONSTRAINT [DF_[%:m_oCOlGen.p_sNomTable%]_[%sRub_p%]]  DEFAULT (([%sValDef%])) FOR [[%sRub_p%]]"
+      	FIN
+      
+      	//Génération du code de contrainte FK
+      	stRel_tmp est un ClZF_GenCodeFic.STR_Rel
+      	si :m_oCOlGen.m_aPK_de_FK[sRub_p]..Occurrence > 0 alors
+      		stRel_tmp = :m_oCOlGen.m_aPK_de_FK[sRub_p]
+      		
+      		stRetour.sRefTablePK = stRel_tmp.sTablePK
+      		stRetour.sRefRubIdPK = stRel_tmp.sRubriquePK
+      	fin
+      	
+      	SI stRetour.sRefTablePK <> "" ALORS
+      		
+      		sNomFK est une chaîne
+      		sNomFK = ::sNomRelFK(:m_oCOlGen.p_sNomTable, sRub_p, stRetour.sRefTablePK, stRetour.sRefRubIdPK)
+      		
+      		SI stRetour.nTypeAlterRub DANS(CLZF_GenData.cstTypeAlterRub_CreeTable) ALORS
+      			stRetour.sCodeKey = "CONSTRAINT [%sNomFK%] FOREIGN KEY ([%sRub_p%]) REFERENCES [%stRetour.sRefTablePK%] ([%stRetour.sRefRubIdPK%]) ON DELETE NO ACTION ON UPDATE NO ACTION"
+      		sinon
+      			stRetour.sCodeKey = [
+      				ALTER TABLE [[%:m_oCOlGen.p_sNomTable%]] WITH CHECK ADD CONSTRAINT [[%sNomFK%]] FOREIGN KEY([[%sRub_p%]])
+      				REFERENCES [[%stRetour.sRefTablePK%]] ([[%stRetour.sRefRubIdPK%]]) ON DELETE NO ACTION ON UPDATE NO ACTION
+      				]
+      		FIN
+      	FIN
       FIN
       
-      
-      
       renvoyer stRetour
+     type : 458752
+   -
+     name : GetDefRubSQL
+     procedure_id : 1475212517645710165
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetDefRubSQL ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	tableau associatif (STR_RubSQL) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetDefRubSQL()<metier>:tableau associatif de CLZF_GenData.STR_RubSQL
+      
+      
+      sReq		est une chaîne
+      sdDefTbl	est une source de données
+      stRub		est un CLZF_GenData.STR_RubSQL
+      aRetour		est un tableau associatif de CLZF_GenData.STR_RubSQL
+      
+      
+      sReq = [
+      
+      SELECT
+      --	sys.columns.column_id AS ObjectID_RubriqueDansTable,
+      --	columns.object_id AS ID_Table,
+      --	tables.name AS NomTable,
+      	columns.NAME AS Rubrique,
+      --	columns.system_type_id AS CodeType,
+      	types.NAME AS Type,
+      	columns.max_length AS Taille,
+      	columns.is_nullable AS EstNullable,
+      	NULLIF(default_constraints.definition, '(NULL)') As ValeurDefaut,	--Si on a déja une contrainte, qui met 'NULL' par défaut, on considère qu'il n'y a pas de contrainte (on généralise le traitement)
+      			
+      	CASE WHEN TmpInfoIndex.object_id IS NULL
+      		THEN 0
+      		ELSE 1
+      	END AS EstIndex,
+      	isnull(TmpInfoIndex.is_unique, 0) AS EstIndexUnique,
+      			
+      	CASE WHEN tmpColFullText.object_id IS NULL
+      		THEN 0
+      		ELSE 1
+      	END AS EstFullText,
+      			
+      	CASE WHEN tmpColCleEtrangere.ID_CleEtrangere IS NULL
+      		THEN 0
+      		ELSE 1
+      	END AS EstCleEtrangere,
+      	tmpColCleEtrangere.Nom_Table_CleReferencee,
+      	tmpColCleEtrangere.Nom_CleReference
+      		
+      --		INTO #DefTable
+      		
+      FROM sys.columns
+      	INNER JOIN sys.tables ON (tables.object_id = columns.object_id)
+      	LEFT OUTER JOIN sys.types ON (types.system_type_id = columns.system_type_id)
+      	LEFT OUTER JOIN sys.default_constraints ON (default_constraints.parent_object_id = columns.object_id
+      		AND default_constraints.parent_column_id = columns.column_id)
+      		
+      -- Rubrique index ?
+      LEFT OUTER JOIN (
+      		
+      	SELECT 
+      	indexes.object_id,
+      	index_columns.index_id,
+      	MAX(index_columns.column_id) AS column_id,
+      	max(cast(indexes.is_unique as tinyint)) AS is_unique
+      			
+      	FROM sys.index_columns
+      	INNER JOIN sys.indexes ON (indexes.index_id = index_columns.index_id
+      	AND indexes.object_id = index_columns.object_id)
+      			
+      	WHERE index_columns.is_included_column = 0
+      	--AND OBJECT_NAME(indexes.object_id) = 'CLIENT_BL_DET2016'
+      		
+      GROUP BY indexes.object_id,
+      index_columns.index_id
+      HAVING count(*) = 1
+      		
+      ) AS TmpInfoIndex 
+      ON (TmpInfoIndex.object_id = columns.object_id AND TmpInfoIndex.column_id = columns.column_id)
+      		
+      -- Rubrique full text ?
+      LEFT OUTER JOIN (
+      		
+      	SELECT fulltext_index_columns.object_id,
+      	fulltext_index_columns.column_id
+      	FROM sys.fulltext_index_columns
+      		
+      ) AS tmpColFullText 
+      ON (tmpColFullText.object_id = columns.object_id AND tmpColFullText.column_id = columns.column_id)
+      		
+      -- Rubrique clé étrangère ?
+      LEFT OUTER JOIN (
+      		
+      	SELECT 
+      	foreign_key_columns.parent_column_id AS ID_CleEtrangere,
+      	foreign_key_columns.parent_object_id AS ID_TableEtrangere,
+      	object_name(foreign_key_columns.parent_object_id) AS Nom_Table_CleEtrangere,
+      	ColPrim.name AS Nom_CleEtrangere,
+      			
+      	foreign_key_columns.referenced_column_id AS ID_CleReference,
+      	foreign_key_columns.referenced_object_id AS ID_TableReferencee,
+      	object_name(foreign_key_columns.referenced_object_id) AS Nom_Table_CleReferencee,
+      	colEtrangere.name AS Nom_CleReference
+      			
+      	FROM sys.foreign_key_columns
+      			
+      	INNER JOIN sys.columns AS colEtrangere 
+      	ON (colEtrangere.object_id = foreign_key_columns.parent_object_id and colEtrangere.column_id = foreign_key_columns.parent_column_id)
+      			
+      	INNER JOIN sys.columns AS ColPrim 
+      	ON (ColPrim.object_id = foreign_key_columns.referenced_object_id and ColPrim.column_id = foreign_key_columns.referenced_column_id) 
+      		
+      ) AS tmpColCleEtrangere
+      ON (tmpColCleEtrangere.ID_CleEtrangere = sys.columns.column_id	AND tmpColCleEtrangere.ID_TableEtrangere = columns.object_id )
+      		
+      where sys.tables.name = '[%:m_oCOlGen.p_sNomTable%]'
+      ]
+      goApp.Rsql(sdDefTbl, sReq)
+      
+      
+      pour tout sdDefTbl
+      	VariableRAZ(stRub)
+      	// ???				EstIndex		EstFullText	EstCleEtrangere		
+      	//nCodeType		est un entier
+      	stRub.sType				= sdDefTbl.Type
+      	stRub.nTaille			= sdDefTbl.Taille
+      	stRub.bEstNullable		= sdDefTbl.EstNullable
+      	stRub.sValeurDefaut		= sdDefTbl.ValeurDefaut
+      	stRub.bEstIndexUnique	= sdDefTbl.EstIndexUnique
+      	stRub.sRefTablePK		= sdDefTbl.Nom_Table_CleReferencee
+      	stRub.sRefRubIdPK		= sdDefTbl.	Nom_CleReference
+      	
+      	aRetour[sdDefTbl.Rubrique] = stRub
+      FIN
+      
+      renvoyer aRetour
+      
+      
+      
+     type : 458752
+   -
+     name : sNomRelFK
+     procedure_id : 1475218633680694444
+     type_code : 12
+     code : |1+
+      procedure globale sNomRelFK(sTableFK_p, sRubriqueFK_p, sTablePK_p, sRubriquePK_p)<metier>:chaine
+      
+      renvoyer "FK_[%sTableFK_p%]_[%sRubriqueFK_p%]_[%sTablePK_p%]_[%sRubriquePK_p%]"
+      
+      
      type : 458752
   procedure_templates : []
   property_templates : []

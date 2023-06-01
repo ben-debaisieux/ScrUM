@@ -240,7 +240,7 @@ window :
       
       TableSupprimeTout(TBL_MesBrouiillons)
       
-      pour tout element oTache de ClColTaches.oTaches_MesBrouillons(goApp.m_oUsrCnx).aItems()
+      pour tout element oTache de ClColTache.oTaches_MesBrouillons(goApp.m_oUsrCnx).aItems()
       	nNumLigne = TableAjouteLigne(TBL_MesBrouiillons)
       	TBL_MesBrouiillons[nNumLigne].COL_IdTache	= oTache.Get_IdUnique()
       	TBL_MesBrouiillons[nNumLigne].COL_Tache		= oTache.p_sDescription

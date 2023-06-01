@@ -322,7 +322,7 @@ procedure_set :
       
       oPrj <- ClDbProjet.GetObj(znIdProjet_P)
       stRetour.sTitre += oPrj.p_sNom
-      POUR TOUT ELEMENT oTache DE ClColTaches.oFromProjet(oPrj).aItems()	//oPrj.aoListeTaches().aItems()
+      POUR TOUT ELEMENT oTache DE ClColTache.oFromProjet(oPrj).aItems()	//oPrj.aoListeTaches().aItems()
       	si (oTache.p_bEstRealise ou oTache.p_bAnnule) et oTache.p_nNum_Sprint_Realisation <> 0 alors
       		nAnticipation = oTache.p_nNum_Sprint_Realisation - oTache.p_nNum_Sprint_Creation
       		stRetour.aStSeries[nAnticipation].sEtiquette = nAnticipation
@@ -471,7 +471,7 @@ procedure_set :
       
       oPrj <- ClDbProjet.GetObj(znIdProjet_P)
       stRetour.sTitre += oPrj.p_sNom
-      POUR TOUT ELEMENT oTache DE ClColTaches.oFromProjet(oPrj).aItems()		//oPrj.aoListeTaches().aItems()
+      POUR TOUT ELEMENT oTache DE ClColTache.oFromProjet(oPrj).aItems()		//oPrj.aoListeTaches().aItems()
       	stRetour.aStSeries[oTache.p_nNum_Sprint_Creation].nCharge			+= oTache.p_nPoids
       	stRetour.aStSeries[oTache.p_nNum_Sprint_Realisation].nChargeEngage	+= oTache.p_nPoids
       FIN
@@ -546,7 +546,7 @@ procedure_set :
       	oPrj <- ClDbProjet.GetObj(nIdProjet_P)
       
       	//Projet en cours
-      	POUR TOUT ELEMENT oTache DE ClColTaches.oFromProjet(oPrj).aItems()		//oPrj.aoListeTaches().aItems()
+      	POUR TOUT ELEMENT oTache DE ClColTache.oFromProjet(oPrj).aItems()		//oPrj.aoListeTaches().aItems()
       		//trace(ChaîneConstruit("Début*%1*Fin*%2*poids*%3*code%4", oTache.p_nNum_Sprint_Demarrage, oTache.p_nNum_Sprint_Fin, oTache.p_nPoids, oTache.p_sCodeTache))
       		SI oTache.p_nNum_Sprint_Demarrage <> 0 ALORS
       			stRetour.aStSeries[oTache.p_nNum_Sprint_Demarrage].nDemarre += oTache.p_nPoids

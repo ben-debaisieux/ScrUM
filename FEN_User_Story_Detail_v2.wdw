@@ -2840,7 +2840,7 @@ window :
       
       TableSupprimeTout(TBL_taches)
       
-      POUR TOUT ELEMENT oTacheTmp, nInd DE ClColTaches.aoFromUS(zoUs_Source).aItems()	//zoUs_Source.aoListeTaches(Vrai).aItems()
+      POUR TOUT ELEMENT oTacheTmp, nInd DE ClColTache.aoFromUS(zoUs_Source).aItems()	//zoUs_Source.aoListeTaches(Vrai).aItems()
       	nLigne = TableAjouteLigne(TBL_taches)
       	TBL_taches[nLigne].COL_Indice		= nInd
       	TBL_taches[nLigne].COL_IdTache		= oTacheTmp.Get_IdUnique()
@@ -2903,7 +2903,7 @@ window :
       oUsr est un ClDbUsr dynamique
       
       si TBL_taches.COL_Indice > 0 ALORS
-      	aTaches est un ClColTaches <- ClColTaches.aoFromUS(zoUs_Source)	//zoUs_Source.aoListeTaches()
+      	aTaches est un ClColTache <- ClColTache.aoFromUS(zoUs_Source)	//zoUs_Source.aoListeTaches()
       	zoTache <- aTaches.ZF_oItem(TBL_taches.COL_Indice)
       	
       	oUsr <- zoTache.p_oUsr_Dev

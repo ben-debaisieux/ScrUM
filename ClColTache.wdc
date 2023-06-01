@@ -1,21 +1,21 @@
 #To edit and compare internal_properties, use WINDEV integrated tools.
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
- name : ClColTaches
+ name : ClColTache
  major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
- identifier : 0x136ea9ae232bdb11
+ identifier : 0x1476e66f025f1bff
  internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
   p_codes :
    -
      code : |1-
-      ClColTaches est une Classe
+      ClColTache est une Classe
       	hérite de ClZF_ColObjDB
       prive
       	m_aoTaches est un tableau de ClDbTache dynamique
@@ -28,7 +28,7 @@ class :
   procedures :
    -
      name : Constructeur
-     procedure_id : 1400243099538348817
+     procedure_id : 1474619292466027519
      type_code : 27
      code : |1+
       procédure Constructeur()
@@ -36,7 +36,7 @@ class :
      type : 589824
    -
      name : Destructeur
-     procedure_id : 1400243099538414353
+     procedure_id : 1474619292466093055
      type_code : 28
      code : |1+
       procédure Destructeur()
@@ -44,7 +44,7 @@ class :
      type : 655360
    -
      name : addItemById
-     procedure_id : 1400243550522537617
+     procedure_id : 1474619292466158591
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
@@ -53,7 +53,7 @@ class :
      type : 458752
    -
      name : Init
-     procedure_id : 1400244594205273017
+     procedure_id : 1474619292466224127
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClColObjDB.Init
@@ -62,7 +62,7 @@ class :
      type : 458752
    -
      name : aItems
-     procedure_id : 1400245552047362066
+     procedure_id : 1474619292466289663
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.aItems
@@ -71,7 +71,7 @@ class :
      type : 458752
    -
      name : addItemBySource
-     procedure_id : 1420665888001478384
+     procedure_id : 1474619292466355199
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemBySource
@@ -82,7 +82,7 @@ class :
      type : 458752
    -
      name : pre_load
-     procedure_id : 1429594557999032597
+     procedure_id : 1474619292466420735
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClZF_ColObjDB.pre_load
@@ -119,7 +119,7 @@ class :
      type : 458752
    -
      name : oTaches_MesBrouillons
-     procedure_id : 1456279292602866108
+     procedure_id : 1474619292466486271
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
@@ -135,11 +135,11 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
-      FONCTION globale oTaches_MesBrouillons(oUser_p est un ClDbUsr):ClColTaches
+      FONCTION globale oTaches_MesBrouillons(oUser_p est un ClDbUsr):ClColTache
       
       //sdMesBrouillons est une Source de Données
       sReq est une chaîne
-      oTaches est un ClColTaches
+      oTaches est un ClColTache
       
       	
       //Récupération des taches en brouillon, de l'utilisateur.
@@ -159,7 +159,7 @@ class :
      type : 458752
    -
      name : oTaches_MesTaches
-     procedure_id : 1456279296898030950
+     procedure_id : 1474619292466551807
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
@@ -176,10 +176,10 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
-      FONCTION globale oTaches_MesTaches(oUser_p est un ClDbUsr):ClColTaches
+      FONCTION globale oTaches_MesTaches(oUser_p est un ClDbUsr):ClColTache
       
       sReq			est une chaîne
-      oTachesEnDev	est un ClColTaches
+      oTachesEnDev	est un ClColTache
       
       
       //Récupération des taches en cours, de l'utilisateur.
@@ -202,7 +202,7 @@ class :
      type : 458752
    -
      name : Sprint_Taches
-     procedure_id : 1456283304118786604
+     procedure_id : 1474619292466617343
      type_code : 12
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
@@ -280,7 +280,7 @@ class :
      type : 458752
    -
      name : aoFromUS
-     procedure_id : 1456584042325903609
+     procedure_id : 1474619292466682879
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
@@ -298,11 +298,11 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       
-      FONCTION globale aoFromUS(oUS_p est un ClDbUserStory, LOCAL bForceCharge_p est un booléen = faux):ClColTaches
+      FONCTION globale aoFromUS(oUS_p est un ClDbUserStory, LOCAL bForceCharge_p est un booléen = faux):ClColTache
       
       sReq est une chaine
       
-      oColTachesRetour est un ClColTaches dynamique <- oUS_p.ZF_GetCol(cstTachesDeUS)
+      oColTachesRetour est un ClColTache dynamique <- oUS_p.ZF_GetCol(cstTachesDeUS)
       
       si pas oColTachesRetour.p_bEstCharge ou bForceCharge_p alors
       
@@ -328,7 +328,7 @@ class :
      type : 458752
    -
      name : oFromProjet
-     procedure_id : 1456656013245888900
+     procedure_id : 1474619292466748415
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
@@ -343,9 +343,9 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure publique globale oFromProjet(oPrj_p est un ClDbProjet):ClColTaches
+      procédure publique globale oFromProjet(oPrj_p est un ClDbProjet):ClColTache
       
-      oColTaches		est un ClColTaches
+      oColTaches		est un ClColTache
       sReq			est une chaîne
       
       sReq = [
@@ -361,7 +361,7 @@ class :
      type : 458752
    -
      name : aoFromPeriodeSprints
-     procedure_id : 1467278055397392185
+     procedure_id : 1474619292466813951
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
@@ -380,10 +380,10 @@ class :
       //
       
       //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
-      FONCTION globale aoFromPeriodeSprints(oSpDeb_p est un ClDbSprint, oSpFin_p est un ClDbSprint):ClColTaches
+      FONCTION globale aoFromPeriodeSprints(oSpDeb_p est un ClDbSprint, oSpFin_p est un ClDbSprint):ClColTache
       
       sReq est une chaine
-      oColTachesRetour est un ClColTaches
+      oColTachesRetour est un ClColTache
       
       sReq = [
       	SELECT 
@@ -401,7 +401,7 @@ class :
      type : 458752
    -
      name : GetAll
-     procedure_id : 1468675822239490091
+     procedure_id : 1474619292466879487
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll

@@ -184,7 +184,7 @@ class :
       	:CleanHisto()
       	
       	//Desenregistrement de la tache de l'US parente
-      	ClColTaches.aoFromUS(:p_oUserStoryParent).ZF_Supp(objet)
+      	ClColTache.aoFromUS(:p_oUserStoryParent).ZF_Supp(objet)
       SINON
       	SI PAS :ZF_bModeAjout() ALORS
       		//En modification :
@@ -485,11 +485,11 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale Taches_a_faire(eFiltre est un ETypeEtatTacheAFaire):ClColTaches
+      PROCEDURE globale Taches_a_faire(eFiltre est un ETypeEtatTacheAFaire):ClColTache
       
       //sdTachesAFaire est une Source de Données
       sReq est une chaîne
-      oTaches est un ClColTaches
+      oTaches est un ClColTache
       
       sFilre est une chaîne
       
@@ -720,12 +720,12 @@ class :
      procedure_id : 1444819982169819732
      type_code : 12
      code : |1+
-      procédure publique globale oTachesSelonStatut(nStatut_P est un entier):ClColTaches
+      procédure publique globale oTachesSelonStatut(nStatut_P est un entier):ClColTache
       
       
       //sdMesBrouillons est une Source de Données
       sReq est une chaîne
-      oTaches est un ClColTaches
+      oTaches est un ClColTache
       
       	
       //Récupération des taches en brouillon, de l'utilisateur.
@@ -900,7 +900,7 @@ class :
       nPosInit		est un entier
       nNouvPos		est un entier
       nNbPos			est un entier
-      oLstTachesUS	est un ClColTaches	= ClColTaches.aoFromUS(:m_oUserStoryParent)	//:m_oUserStoryParent.aoListeTaches()
+      oLstTachesUS	est un ClColTache	= ClColTache.aoFromUS(:m_oUserStoryParent)	//:m_oUserStoryParent.aoListeTaches()
       oTacheTmp		est un ClDbTache dynamique
       bModifTache		est un booléen
       nDecalage		est un entier

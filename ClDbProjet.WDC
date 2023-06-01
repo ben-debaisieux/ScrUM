@@ -769,7 +769,7 @@ class :
       
       oUsTmp			est un ClDbUserStory dynamique
       nEtat			est un ClDbUserStory.ECompteNbUS
-      aColTachesParUs	est un tableau associatif de ClColTaches
+      aColTachesParUs	est un tableau associatif de ClColTache
       sCle			est une chaîne
       oTache			est un ClDbTache dynamique
       
@@ -779,10 +779,10 @@ class :
       	
       	//Préchargement de toutes les taches, dans les collections pour les US	
       	
-      	pour tout element oTache de ClColTaches.oFromProjet(objet).aItems()
+      	pour tout element oTache de ClColTache.oFromProjet(objet).aItems()
       		sCle = oTache.p_oUserStoryParent.ZF_Get_IdUnique()
       		si aColTachesParUs[sCle]..Vide ALORS
-      			aColTachesParUs[sCle]				= allouer un ClColTaches
+      			aColTachesParUs[sCle]				= allouer un ClColTache
       			aColTachesParUs[sCle].p_bEstCharge	= Vrai
       		FIN
       		aColTachesParUs[sCle].ZF_addItem(oTache)
@@ -795,7 +795,7 @@ class :
       		//Envoi de la collection de tache, à l'US
       		sCle = oUsTmp.ZF_Get_IdUnique()
       		si pas aColTachesParUs[sCle]..Vide ALORS
-      			oUsTmp.m_ZF_aListCol[ClColTaches.cstTachesDeUS] = aColTachesParUs[sCle]
+      			oUsTmp.m_ZF_aListCol[ClColTache.cstTachesDeUS] = aColTachesParUs[sCle]
       		FIN
       		
       		//Comptage de tous les US, classés par type.
@@ -957,7 +957,7 @@ class :
       
       
       //Récupération du prévisionnel de toutes les taches non positionnés ou non commencé
-      POUR TOUT ELEMENT oTache_Tmp DE ClColTaches.oFromProjet(objet).aitems()		//:aoListeTaches().aItems()
+      POUR TOUT ELEMENT oTache_Tmp DE ClColTache.oFromProjet(objet).aitems()		//:aoListeTaches().aItems()
       	SI oTache_Tmp.p_nNum_Sprint_Realisation = 0 OU oTache_Tmp.p_nNum_Sprint_Realisation >= nNumSprintDepart_P ALORS
       		nChargeARealiser += oTache_Tmp.p_nPoids_Previsionnel
       	FIN
@@ -1085,7 +1085,7 @@ class :
       
       pour tout element oUs de ClColUserStory.oFromProjet(objet).aitems()	//:aoListeUS().aItems()
       	
-      	pour tout element oTache de ClColTaches.aoFromUS(oUs).aItems()	//oUs:aoListeTaches().aItems()
+      	pour tout element oTache de ClColTache.aoFromUS(oUs).aItems()	//oUs:aoListeTaches().aItems()
       		
       		aoMessages <- ClcolMessage.aoListeMessage(oTache)
       		pour tout element oMessage de aoMessages.aItems()

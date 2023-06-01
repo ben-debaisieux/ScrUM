@@ -748,7 +748,7 @@ window :
          			
          			
          			si bAvecTache alors
-         				POUR TOUT ELEMENT oTache DE ClColTaches.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
+         				POUR TOUT ELEMENT oTache DE ClColTache.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
          					
          					
          					nLigneTache														= TableAjouteFils(TBLH_Projet,nLigneUserStory)

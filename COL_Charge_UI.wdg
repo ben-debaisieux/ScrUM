@@ -102,7 +102,7 @@ procedure_set :
       	fin
       	
       	sRetour += RC + "Taches :"
-      	POUR TOUT ÉLÉMENT oTache DE ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      	POUR TOUT ÉLÉMENT oTache DE ClColTache.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       		sRetour += RC + ChaîneConstruit("> %1", oTache.p_sDescription)
       	FIN
       	

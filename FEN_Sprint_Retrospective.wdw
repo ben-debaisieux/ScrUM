@@ -610,7 +610,7 @@ window :
          
          POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
          	POUR TOUT ELÉMENT oUS DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS(Vrai).aItems()
-         		POUR TOUT ELÉMENT oTache DE ClColTaches.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
+         		POUR TOUT ELÉMENT oTache DE ClColTache.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
          			selon oTache.p_nStatut 
          				
          				cas ClDbTache.cstStatut_Suspendu
@@ -750,7 +750,7 @@ window :
       
       nLigne		est un entier
       oTache		est un ClDbTache dynamique
-      oColTache	est un ClcolTaches
+      oColTache	est un ClcolTache
       sReq		est une chaîne
       
       TBL_TachesRealise..AffichageActif = Faux

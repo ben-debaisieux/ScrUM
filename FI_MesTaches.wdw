@@ -317,7 +317,7 @@ window :
       TBL_MesTaches..AffichageActif = faux
       TableSupprimeTout(TBL_MesTaches)
       
-      POUR TOUT ELÉMENT oTache DE ClColTaches.oTaches_MesTaches(goApp.m_oUsrCnx).aItems()
+      POUR TOUT ELÉMENT oTache DE ClColTache.oTaches_MesTaches(goApp.m_oUsrCnx).aItems()
       	nNumLigne = TableAjouteLigne(TBL_MesTaches)
       	TBL_MesTaches[nNumLigne].COL_IdTache		= oTache.Get_IdUnique()
       	TBL_MesTaches[nNumLigne].COL_Tache			= oTache.p_sDescription

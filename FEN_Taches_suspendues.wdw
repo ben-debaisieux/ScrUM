@@ -508,7 +508,7 @@ window :
       
       POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
       	POUR TOUT ELÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
-      		POUR TOUT ELÉMENT oTache_Tmp DE ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      		POUR TOUT ELÉMENT oTache_Tmp DE ClColTache.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       			SI oTache_Tmp.p_nStatut = ClDbTache.cstStatut_Suspendu ALORS
       				
       				VariableRAZ(stTacheTmp)

@@ -338,7 +338,7 @@ window :
         code : |1+
          si COL_Numéro <= goApp.m_nNumeroDuSprintActuel alors
          	oSprint				est un ClDbSprint			<- ClDbSprint.GetObj(COL_Numéro)
-         	aStTachesDuSprint	est un tableau de STR_Tache	= ClColTaches.Sprint_Taches(oSprint)
+         	aStTachesDuSprint	est un tableau de STR_Tache	= ClColTache.Sprint_Taches(oSprint)
          	
          	iAperçu()
          	iImprimeEtat(ETAT_Sprint, COL_Numéro, aStTachesDuSprint)

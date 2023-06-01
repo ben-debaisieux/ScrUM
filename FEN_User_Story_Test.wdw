@@ -460,7 +460,7 @@ window :
       				FIN
       				
       				
-      				pour tout element oTache de ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      				pour tout element oTache de ClColTache.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       					si pas oTache.p_nStatut dans (ClDbTache.cstStatut_realise, ClDbTache.cstStatut_Annulee) alors
       						sLstTaches += [rc] + oTache.p_sCodeTache + " - " + oTache.p_sDescription + " (" + oTache.sLibDeStatut() + ")"
       					FIN
@@ -508,7 +508,7 @@ window :
       bPresTacheATester est un booléen
       
       SI PAS oUS_p.p_bTermine ALORS
-      	POUR TOUT ÉLÉMENT oTache DE ClColTaches.aoFromUS(oUS_p).aItems()	//oUS_p.aoListeTaches().aItems()
+      	POUR TOUT ÉLÉMENT oTache DE ClColTache.aoFromUS(oUS_p).aItems()	//oUS_p.aoListeTaches().aItems()
       		SI oTache.p_nNum_Sprint_Demarrage _ET_ ...
       				oTache.p_nNum_Sprint_Fin = Null _et_ ...
       				pas oTache.bEstValidee() _et_ ...

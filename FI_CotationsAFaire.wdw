@@ -301,7 +301,7 @@ window :
       			bAfficher	= faux
       			sBulle		= "Taches à coter :"
       			
-      			pour tout element oTache_Tmp de ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      			pour tout element oTache_Tmp de ClColTache.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       				si oTache_Tmp.bCotationAFaire() ALORS
       					bAfficher = vrai
       					sBulle += [rc] + oTache_Tmp.p_sCodeTache + " - " + oTache_Tmp.p_sDescription

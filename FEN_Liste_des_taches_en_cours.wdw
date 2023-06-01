@@ -271,7 +271,7 @@ window :
       POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
       	POUR TOUT ELÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
       		
-      		POUR TOUT ELÉMENT oTache_Tmp DE ClColTaches.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      		POUR TOUT ELÉMENT oTache_Tmp DE ClColTache.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       			
       //			Trace("Tache : " + oTache_Tmp.p_sCodeTache)
       //			Trace("Aff" + oTache_Tmp:p_nPoids + "-" + oTache_Tmp:p_nPoids_Previsionnel + "-" + oTache_Tmp:p_bAnnule + "-" + oTache_Tmp.p_bBrouillon)
