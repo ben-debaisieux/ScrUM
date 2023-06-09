@@ -311,7 +311,6 @@ class :
       	sReq = [
       		SELECT 
       			Scr_Tache.*
-      			--Scr_Tache.IDScr_Tache
       			
       		FROM Scr_Tache
       		
@@ -407,6 +406,50 @@ class :
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
       PROCÉDURE prive GetAll()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Tache..nom)
+     type : 458752
+   -
+     name : oTaches_MesTaches_NonFinies
+     procedure_id : 1477678619179869155
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oTaches_MesTaches_NonFinies (<oUser_p> est ClDbUsr)
+      //
+      // Paramètres :
+      //	oUser_p (ClDbUsr) : <indiquez ici le rôle de oUser_p>
+      
+      // Valeur de retour :
+      // 	ClColTaches : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
+      FONCTION globale oTaches_MesTaches_NonFinies(oUser_p est un ClDbUsr):ClColTache
+      
+      sReq			est une chaîne
+      oTachesEnDev	est un ClColTache
+      
+      
+      //Récupération des taches en cours, de l'utilisateur.
+      sReq = [
+      	SELECT<§cs:3§>
+      		Scr_Tache.*<§cs:3§>
+      		--Scr_Tache.IDScr_Tache<§cs:3§>
+      	FROM Scr_Tache<§cs:3§>
+      	WHERE Scr_Tache.Top_Brouillon = 0<§cs:3§>
+      		AND Scr_Tache.Top_Annule = 0<§cs:3§>
+      		AND Scr_Tache.Top_Realise = 0<§cs:3§>
+      		AND Scr_Tache.Num_Sprint_Demarrage is not Null<§cs:3§>
+      		AND Scr_Tache.Num_Sprint_Fin is Null<§cs:3§>
+      		AND Scr_Tache.IDScr_Usr_Dev = [%oUser_p.ZF_Get_IdUnique()%]<§cs:3§>
+      		AND Scr_Tache.Statut <> [%ClDbTache.cstStatut_Suspendu%]<§cs:3§>
+      ]
+      
+      oTachesEnDev.ZF_LoadSQL(sReq)
+      
+      renvoyer oTachesEnDev
      type : 458752
   procedure_templates : []
   property_templates : []

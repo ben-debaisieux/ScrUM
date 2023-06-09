@@ -816,13 +816,13 @@ class :
         type : 2031616
      template_refs : []
    -
-     name : p_sCommentaireDemand
+     name : p_sCommentaireDemandeur
      identifier : 0x14415e7803b50414
      type_code : 103
      p_codes :
       -
         code : |1+
-         procédure publique p_sCommentaireDemand() : chaîne
+         procédure publique p_sCommentaireDemandeur() : chaîne
          //Propriétés de m_sCommentaireDemand
          
          RENVOYER :m_sCommentaireDemandeur
@@ -830,7 +830,7 @@ class :
         type : 1966080
       -
         code : |1+
-         procédure publique p_sCommentaireDemand(sValeur_p est un chaîne):Vide
+         procédure publique p_sCommentaireDemandeur(sValeur_p est un chaîne):Vide
          
          SI :m_sCommentaireDemandeur <> sValeur_p ALORS
          	:ZF_EstModif()

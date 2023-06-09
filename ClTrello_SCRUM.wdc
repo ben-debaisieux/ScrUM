@@ -37,6 +37,7 @@ class :
       	cst_Label_Suspend					= "5e6f30a17669b2254985944c"
       	cst_Label_Attente					= "5e6f30a17669b22549859449"
       	cst_Label_Comptabilise				= "5e6f30a17669b22549859465"
+      	cst_Label_Annule					= "5fae46ae7f26ca5c732c6150"
       	
       	cst_TableauScrum					= "AcWZ1BSV"
       fin
@@ -484,15 +485,16 @@ class :
       		
       		SI oTache <> Null ALORS
       			
-      			bSuspendue est un booléen = Faux
-      			POUR nLigneLabel = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel)
-      				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel[nLigneLabel] DANS(cst_Label_Suspend, cst_Label_Attente) ALORS
-      					bSuspendue = Vrai
-      				FIN
-      			FIN
+      			
+      //			bSuspendue est un booléen = Faux
+      //			POUR nLigneLabel = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel)
+      //				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel[nLigneLabel] DANS(cst_Label_Suspend, cst_Label_Attente) ALORS
+      //					bSuspendue = Vrai
+      //				FIN
+      //			FIN
       			
       			//La tache est elle suspendue ?
-      			SI bSuspendue ALORS
+      			SI ::bLabelPresent(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel, [cst_Label_Suspend, cst_Label_Attente]) ALORS
       				//Oui : on s'assure qu'il y ait le motif.
       				SI oTache.p_sCMTR_Blocage = "" ALORS
       					oTache.p_nStatut = ClDbTache.cstStatut_Suspendu
@@ -511,6 +513,19 @@ class :
       				FIN
       			FIN
       			
+      			
+      			
+      			//La tache est elle annulée ?
+      			SI ::bLabelPresent(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel, [cst_Label_Annule]) ALORS
+      				si oTache.p_nStatut <> ClDbTache.cstStatut_Annulee ALORS
+      					Trace("La tache [%oTache.p_sCodeTache%] est annulée dans trello, mais n'est pas dans SCRUM ([%oTache.p_sDescription%]).")
+      				FIN
+      			sinon
+      				SI oTache.p_nStatut = ClDbTache.cstStatut_Annulee ALORS
+      					Trace("La tache [%oTache.p_sCodeTache%] n'est pas annulée dans trello, mais l'est dans SCRUM ([%oTache.p_sDescription%]).")
+      				FIN
+      			FIN
+      				
       			
       			
       			SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev <> "" ALORS

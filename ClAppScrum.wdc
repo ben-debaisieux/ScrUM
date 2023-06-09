@@ -72,7 +72,7 @@ class :
      name : cnxBdd
      procedure_id : 1409157677390349015
      type_code : 12
-     code : |1+
+     code : |1-
       // Redéfinition de la méthode ClApp.cnxBdd
       PROCÉDURE  cnxBdd()
       
@@ -89,30 +89,30 @@ class :
       	
       	SI PAS EnModeTest() OU PAS Droite(SysEnvironnement("USERNAME"),4) DANS ("x2777") ALORS 
       		
-      		:m_sMsgCnx					= "Connexion : SQlServer"
-      		// Paramètres de la connexion
-      		:m_ZF_cnxBDD..Provider			= hAccèsNatifSQLServer
-      		:m_ZF_cnxBDD..Accès			= hOLectureEcriture
-      		:m_ZF_cnxBDD..Utilisateur		= "sa"
-      		:m_ZF_cnxBDD..MotDePasse		= "sa@sql2016"
-      		:m_ZF_cnxBDD..Serveur			= "10.20.30.140"
-      		
-      		:m_ZF_cnxBDD..BaseDeDonnées	= "SCRUM"
-      //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
-      		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
-      		:m_ZF_cnxBDD..InfosEtendues	= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
-      
-      //		:m_sMsgCnx					= "Connexion : HF/CS"
+      //		:m_sMsgCnx					= "Connexion : SQlServer"
       //		// Paramètres de la connexion
-      //		:m_ZF_cnxBDD..Provider			= hAccèsHFClientServeur
+      //		:m_ZF_cnxBDD..Provider			= hAccèsNatifSQLServer
       //		:m_ZF_cnxBDD..Accès			= hOLectureEcriture
-      //		:m_ZF_cnxBDD..Utilisateur		= "cnx_scrum"
-      //		:m_ZF_cnxBDD..MotDePasse		= "cnx_scrum"
-      //		:m_ZF_cnxBDD..Serveur			= "prod-vm-ast02"
+      //		:m_ZF_cnxBDD..Utilisateur		= "sa"
+      //		:m_ZF_cnxBDD..MotDePasse		= "sa@sql2016"
+      //		:m_ZF_cnxBDD..Serveur			= "10.20.30.140"
       //		
-      //		:m_ZF_cnxBDD..BaseDeDonnées	= "SCRUM-BDD"
-      //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      //		:m_ZF_cnxBDD..BaseDeDonnées	= "SCRUM"
+      ////		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
       //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
+      ////		:m_ZF_cnxBDD..InfosEtendues	= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
+      
+      		:m_sMsgCnx						= "Connexion : HF/CS"
+      		// Paramètres de la connexion
+      		:m_ZF_cnxBDD..Provider			= hAccèsHFClientServeur
+      		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      		:m_ZF_cnxBDD..Utilisateur		= "cnx_scrum"
+      		:m_ZF_cnxBDD..MotDePasse		= "cnx_scrum"
+      		:m_ZF_cnxBDD..Serveur			= "prod-vm-ast02"
+      		
+      		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM-BDD"
+      		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
       		
       		sMsgErrCnx						= "Impossible d'ouvrir les tables de la base de donnés sur le serveur : [%:m_ZF_cnxBDD..Serveur%]."
       	SINON
@@ -170,8 +170,9 @@ class :
       				SI HNbEnr(Scr_Usr) = 0 ALORS
       					//Il s'agit du 1er lancement : on crée l'utilisateur avec les infos de l’utilisateur courant.
       					oUsr = allouer un ClDbUsr
-      					oUsr.p_sLogin_AD = sLoginAD
-      					oUsr.p_sNom = sLoginAD
+      					oUsr.p_sLogin_AD				= sLoginAD
+      					oUsr.p_sNom						= sLoginAD
+      					oUsr.p_bTop_Equip_Informatique	= vrai
       					oUsr.ZF_Enregistre()
       				SINON
       					//Sinon on bloque l'acces à l'application en fermant le programme
@@ -204,6 +205,7 @@ class :
       :m_bUsrDev = :m_oUsrCnx.p_bTop_Equip_Informatique
       
       :m_sMsgCnx += [" - "] + :m_oUsrCnx.p_sNom
+      	
      type : 458752
    -
      name : ExceptGenerale

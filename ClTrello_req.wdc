@@ -426,6 +426,38 @@ class :
       
       RENVOYER bRetour
      type : 458752
+   -
+     name : bLabelPresent
+     procedure_id : 1475401835498686072
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] bLabelPresent (<aListeLabel_p> est tableau (chaîne), <aLabelRech_p> est tableau (chaîne))
+      //
+      // Paramètres :
+      //	aListeLabel_p (tableau (chaîne ANSI)) : <indiquez ici le rôle de aListeLabel_p>
+      //	aLabelRech_p (tableau (chaîne ANSI)) : <indiquez ici le rôle de sLabel_p>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale bLabelPresent(aListeLabel_p est un tableau de chaine, aLabelRech_p  est un tableau de chaine)<metier>:booleen
+      
+      bTrouve est un booléen
+      nLigneLabel est un entier
+      
+      POUR nLigneLabel = 1 _À_ TableauOccurrence(aListeLabel_p)
+      	SI TableauCherche(aLabelRech_p,tcLinéaire,aListeLabel_p[nLigneLabel]) > 0 ALORS
+      		bTrouve = Vrai
+      	FIN
+      FIN
+      
+      renvoyer bTrouve
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

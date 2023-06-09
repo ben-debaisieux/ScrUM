@@ -40,7 +40,7 @@ class :
      procedure_id : 1474468380170634330
      type_code : 12
      code : |1+
-      procedure sRubSqlDeTypeHF(nType_p est un entier, nTaille_p est un entier = 0)<metier>:chaine
+      procedure globale sRubSqlDeTypeHF(nType_p est un entier, nTaille_p est un entier = 0)<metier>:chaine
       
       sRetour est une chaîne
       selon nType_p
@@ -54,7 +54,7 @@ class :
       		
       	CAS hRubBooléen
       //		stRubHF_Tmp:sType = "Booléen"
-      		sRetour = "Bit"
+      		sRetour = "BIT"
       		
       //		SI PAS stRubSQL_Tmp:nCodeType DANS (104) ALORS
       //			bTypeIncompatible = Vrai
@@ -163,7 +163,7 @@ class :
       		
       	CAS hRubEntierNonSigné2
       //		stRubHF_Tmp:sType = "Entier non signé sur 2 octets"
-      		sRetour = "smallint"
+      		sRetour = "INT"
       //		stCompRub:bTypeHFInterdit = Vrai
       //		
       //		SI PAS stRubSQL_Tmp:nCodeType DANS (52) ALORS
@@ -399,7 +399,7 @@ class :
      procedure_id : 1474472812576933184
      type_code : 12
      code : |1-
-      procedure stGenSQLRub(sRub_p est une chaine, bCreeTable_p est un booléen, stRubSql est un CLZF_GenData.STR_RubSQL)<metier>:CLZF_GenData.STR_RubSQL
+      procedure stGenSQLRub(sRub_p est une chaine, bCreeTable_p est un booléen, stRubSql_p est un CLZF_GenData.STR_RubSQL)<metier>:CLZF_GenData.STR_RubSQL
       
       
       stRetour est un CLZF_GenData.STR_RubSQL
@@ -407,24 +407,30 @@ class :
       
       stRetour.nTypeAlterRub = cstTypeAlterRub_RAS
       
-      si :m_oCOlGen.m_aRub[sRub_p]..vide et stRubSql.stype <> "" ALORS
+      si :m_oCOlGen.m_aRub[sRub_p]..vide et stRubSql_p.stype <> "" et pas sRub_p = :m_oCOlGen.p_sNomRubId ALORS
       	stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_SuppRub
       sinon
       	stInfoRub = :m_oCOlGen.m_aRub[sRub_p]
+      	
+      	//Récupération du type
       	stRetour.sType = sRubSqlDeTypeHF(stInfoRub.nTypeRubHF, stInfoRub.nTaille)
       FIN
       
-      SI pas :m_oCOlGen.m_aRub[sRub_p]..Vide ET stRubSql.sType = "" ALORS
-      	si bCreeTable_p alors
-      		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable
-      	sinon
+      //Est on en création de table ?
+      si bCreeTable_p alors
+      	stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable
+      SINON
+      	//Non :
+      	//La rubrique existe t elle ?
+      	SI PAS :m_oCOlGen.m_aRub[sRub_p]..Vide ET stRubSql_p.sType = "" ALORS
       		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeRub
       	FIN
       FIN
       
       si stRetour.nTypeAlterRub = cstTypeAlterRub_RAS ALORS
-      	si stRetour.sType <> stRubSql.sType ou ...
-      			stInfoRub.bNullable <> stRubSql.bEstNullable alors
+      	si pas bRubCompatible(stInfoRub.nTypeRubHF, stRubSql_p.sType) ou ...
+      			stInfoRub.nTaille <> stRubSql_p.nTaille ou ...
+      			stInfoRub.bNullable <> stRubSql_p.bEstNullable alors
       			
       		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_ModRub
       	FIN
@@ -459,14 +465,65 @@ class :
       	
       	
       	//Génération du code de contrainte par défaut
-      	si pas stInfoRub.bNullable et :m_oCOlGen.m_aRub[sRub_p]..vide alors
-      		sValDef est une chaîne = stInfoRub.sValDef
-      		si ::bProteger(stInfoRub.nTypeRubHF) ALORS
-      			sValDef = "'" + sValDef + "'"
+      	sNomDF est une chaîne
+      	sNomDF = sNomRelDF(:m_oCOlGen.p_sNomTable, sRub_p)
+      	sValDef est une chaîne = stInfoRub.sValDef
+      	
+      	SI ::bProteger(stInfoRub.nTypeRubHF) ALORS
+      		sValDef = "'" + sValDef + "'"
+      	FIN
+      	
+      	SI stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable ALORS
+      		
+      		SI PAS stInfoRub.bNullable ALORS
+      			stRetour.sCodeSQL += " CONSTRAINT [%sNomDF%] DEFAULT ([%sValDef%])"
       		FIN
       		
-      		stRetour.sCodeSQL += " CONSTRAINT [DF_[%:m_oCOlGen.p_sNomTable%]_[%sRub_p%]]  DEFAULT (([%sValDef%])) FOR [[%sRub_p%]]"
+      	sinon
+      		
+      		si stRetour.nTypeAlterRub dans (CLZF_GenData.cstTypeAlterRub_SuppRub, CLZF_GenData.cstTypeAlterRub_ModRub) Ou ...	//Modification rubrique
+      				stInfoRub.bNullable ET stRubSql_p.sNomContrainteDef <> "" ALORS												//Contrainte défaut à supprimer
+      			
+      			stRetour.sCodeDropDef = [
+      				ALTER TABLE [%:m_oCOlGen.p_sNomTable%]
+      					DROP CONSTRAINT [%stRubSql_p.sNomContrainteDef%]
+      				]
+      		FIN
+      		
+      		si pas stInfoRub.bNullable et stRubSql_p.sNomContrainteDef = "" ou ...	//Contrainte défaut manquante
+      				stRetour.nTypeAlterRub DANS (CLZF_GenData.cstTypeAlterRub_CreeRub, CLZF_GenData.cstTypeAlterRub_ModRub) alors
+      			
+      			stRetour.sCodeAddDef = [
+      				ALTER TABLE [%:m_oCOlGen.p_sNomTable%]
+      					ADD CONSTRAINT [%sNomDF%] DEFAULT ([%sValDef%]) FOR [[%sRub_p%]]
+      				]
+      		FIN
       	FIN
+      //	si pas stInfoRub.bNullable et :m_oCOlGen.m_aRub[sRub_p]..vide alors
+      //		sValDef est une chaîne = stInfoRub.sValDef
+      //		si ::bProteger(stInfoRub.nTypeRubHF) ALORS
+      //			sValDef = "'" + sValDef + "'"
+      //		FIN
+      //		sNomDF est une chaîne
+      //		sNomDF = sNomRelDF(:m_oCOlGen.p_sNomTable, sRub_p)
+      //		
+      //		si stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable alors
+      //			stRetour.sCodeSQL += " CONSTRAINT [%sNomDF%] DEFAULT ([%sValDef%]) FOR [[%sRub_p%]]"
+      //		sinon
+      //			stRetour.sCodeDropDef = [
+      //			ALTER TABLE [%:m_oCOlGen.p_sNomTable%]
+      //				DROP CONSTAINT [%stRubSql_p.sNomContrainteDef%]
+      //			]
+      //			
+      //			stRetour.sCodeAddDef = [
+      //			ALTER TABLE [%:m_oCOlGen.p_sNomTable%]
+      //				CONSTRAINT [%sNomDF%] DEFAULT ([%sValDef%]) FOR [[%sRub_p%]]
+      //			]
+      //		FIN
+      //	FIN
+      	
+      	
+      	
       
       	//Génération du code de contrainte FK
       	stRel_tmp est un ClZF_GenCodeFic.STR_Rel
@@ -533,6 +590,8 @@ class :
       	types.NAME AS Type,
       	columns.max_length AS Taille,
       	columns.is_nullable AS EstNullable,
+      
+      	default_constraints.name as NomContainteDef,
       	NULLIF(default_constraints.definition, '(NULL)') As ValeurDefaut,	--Si on a déja une contrainte, qui met 'NULL' par défaut, on considère qu'il n'y a pas de contrainte (on généralise le traitement)
       			
       	CASE WHEN TmpInfoIndex.object_id IS NULL
@@ -553,7 +612,6 @@ class :
       	tmpColCleEtrangere.Nom_Table_CleReferencee,
       	tmpColCleEtrangere.Nom_CleReference
       		
-      --		INTO #DefTable
       		
       FROM sys.columns
       	INNER JOIN sys.tables ON (tables.object_id = columns.object_id)
@@ -565,59 +623,60 @@ class :
       LEFT OUTER JOIN (
       		
       	SELECT 
-      	indexes.object_id,
-      	index_columns.index_id,
-      	MAX(index_columns.column_id) AS column_id,
-      	max(cast(indexes.is_unique as tinyint)) AS is_unique
+      		indexes.object_id,
+      		index_columns.index_id,
+      		MAX(index_columns.column_id) AS column_id,
+      		max(cast(indexes.is_unique as tinyint)) AS is_unique
       			
       	FROM sys.index_columns
-      	INNER JOIN sys.indexes ON (indexes.index_id = index_columns.index_id
-      	AND indexes.object_id = index_columns.object_id)
+      		INNER JOIN sys.indexes ON (indexes.index_id = index_columns.index_id
+      			AND indexes.object_id = index_columns.object_id)
       			
       	WHERE index_columns.is_included_column = 0
-      	--AND OBJECT_NAME(indexes.object_id) = 'CLIENT_BL_DET2016'
       		
       GROUP BY indexes.object_id,
-      index_columns.index_id
-      HAVING count(*) = 1
+      	index_columns.index_id
+      	HAVING count(*) = 1
       		
-      ) AS TmpInfoIndex 
-      ON (TmpInfoIndex.object_id = columns.object_id AND TmpInfoIndex.column_id = columns.column_id)
+      ) AS TmpInfoIndex
+      	ON (TmpInfoIndex.object_id = columns.object_id AND TmpInfoIndex.column_id = columns.column_id)
       		
       -- Rubrique full text ?
       LEFT OUTER JOIN (
       		
-      	SELECT fulltext_index_columns.object_id,
-      	fulltext_index_columns.column_id
+      	SELECT
+      		fulltext_index_columns.object_id,
+      		fulltext_index_columns.column_id
       	FROM sys.fulltext_index_columns
       		
       ) AS tmpColFullText 
-      ON (tmpColFullText.object_id = columns.object_id AND tmpColFullText.column_id = columns.column_id)
+      	ON (tmpColFullText.object_id = columns.object_id AND tmpColFullText.column_id = columns.column_id)
       		
       -- Rubrique clé étrangère ?
       LEFT OUTER JOIN (
       		
-      	SELECT 
-      	foreign_key_columns.parent_column_id AS ID_CleEtrangere,
-      	foreign_key_columns.parent_object_id AS ID_TableEtrangere,
-      	object_name(foreign_key_columns.parent_object_id) AS Nom_Table_CleEtrangere,
-      	ColPrim.name AS Nom_CleEtrangere,
-      			
-      	foreign_key_columns.referenced_column_id AS ID_CleReference,
-      	foreign_key_columns.referenced_object_id AS ID_TableReferencee,
-      	object_name(foreign_key_columns.referenced_object_id) AS Nom_Table_CleReferencee,
-      	colEtrangere.name AS Nom_CleReference
+      	SELECT
+      		foreign_key_columns.parent_column_id AS ID_CleEtrangere,
+      		foreign_key_columns.parent_object_id AS ID_TableEtrangere,
+      		object_name(foreign_key_columns.parent_object_id) AS Nom_Table_CleEtrangere,
+      		ColPrim.name AS Nom_CleEtrangere,
+      				
+      		foreign_key_columns.referenced_column_id AS ID_CleReference,
+      		foreign_key_columns.referenced_object_id AS ID_TableReferencee,
+      		object_name(foreign_key_columns.referenced_object_id) AS Nom_Table_CleReferencee,
+      		colEtrangere.name AS Nom_CleReference
       			
       	FROM sys.foreign_key_columns
       			
       	INNER JOIN sys.columns AS colEtrangere 
-      	ON (colEtrangere.object_id = foreign_key_columns.parent_object_id and colEtrangere.column_id = foreign_key_columns.parent_column_id)
+      		ON (colEtrangere.object_id = foreign_key_columns.parent_object_id and colEtrangere.column_id = foreign_key_columns.parent_column_id)
       			
       	INNER JOIN sys.columns AS ColPrim 
-      	ON (ColPrim.object_id = foreign_key_columns.referenced_object_id and ColPrim.column_id = foreign_key_columns.referenced_column_id) 
+      		ON (ColPrim.object_id = foreign_key_columns.referenced_object_id and ColPrim.column_id = foreign_key_columns.referenced_column_id) 
       		
       ) AS tmpColCleEtrangere
-      ON (tmpColCleEtrangere.ID_CleEtrangere = sys.columns.column_id	AND tmpColCleEtrangere.ID_TableEtrangere = columns.object_id )
+      	ON (tmpColCleEtrangere.ID_CleEtrangere = sys.columns.column_id 
+      		AND tmpColCleEtrangere.ID_TableEtrangere = columns.object_id)
       		
       where sys.tables.name = '[%:m_oCOlGen.p_sNomTable%]'
       ]
@@ -634,7 +693,8 @@ class :
       	stRub.sValeurDefaut		= sdDefTbl.ValeurDefaut
       	stRub.bEstIndexUnique	= sdDefTbl.EstIndexUnique
       	stRub.sRefTablePK		= sdDefTbl.Nom_Table_CleReferencee
-      	stRub.sRefRubIdPK		= sdDefTbl.	Nom_CleReference
+      	stRub.sRefRubIdPK		= sdDefTbl.Nom_CleReference
+      	stRub.sNomContrainteDef	= sdDefTbl.NomContainteDef
       	
       	aRetour[sdDefTbl.Rubrique] = stRub
       FIN
@@ -651,7 +711,93 @@ class :
      code : |1+
       procedure globale sNomRelFK(sTableFK_p, sRubriqueFK_p, sTablePK_p, sRubriquePK_p)<metier>:chaine
       
-      renvoyer "FK_[%sTableFK_p%]_[%sRubriqueFK_p%]_[%sTablePK_p%]_[%sRubriquePK_p%]"
+      renvoyer gauche("FK_[%sTableFK_p%]_[%sRubriqueFK_p%]_[%sTablePK_p%]_[%sRubriquePK_p%]", 128)
+      
+     type : 458752
+   -
+     name : sNomRelDF
+     procedure_id : 1475955650095043915
+     type_code : 12
+     code : |1+
+      procedure globale sNomRelDF(sTable_p, sRubrique_p)<metier>:chaine
+      
+      renvoyer "DF_[%sTable_p%]_[%sRubrique_p%]"
+     type : 458752
+   -
+     name : bRubCompatible
+     procedure_id : 1476194235531916167
+     type_code : 12
+     code : |1+
+      procedure globale  bRubCompatible(nTypeHF_p est un entier, sTypeSQL_P est une chaîne)<metier>:booleen
+      
+      bRetour est un booléen
+      selon majuscule(sTypeSQL_P)
+      	CAS "BINARY"
+      		bRetour = nTypeHF_p dans (hRubBinaire)
+      	CAS "BIT"
+      		bRetour = nTypeHF_p DANS (hRubBooléen)
+      		
+      	CAS "CHAR"
+      		bRetour = nTypeHF_p DANS (hRubCaractère)
+      		
+      	CAS "DATE"
+      		bRetour = nTypeHF_p DANS (hRubDate8)
+      		
+      	CAS "DAYETIME2"
+      		bRetour = nTypeHF_p DANS (hRubDateHeure, hRubDurée)
+      		
+      	CAS "SMALLINT"
+      		bRetour = nTypeHF_p DANS (hRubEntier1, hRubEntier2)
+      		
+      	CAS "INT"
+      		bRetour = nTypeHF_p DANS (hRubEntier4, hRubEntierNonSigné2, hRubIDAuto4)
+      		
+      	CAS "BIGINT"
+      		bRetour = nTypeHF_p DANS (hRubEntier8, hRubEntierNonSigné8, hRubEntierNonSigné4, hRubIDAuto)
+      		
+      	CAS "TINYINT"
+      		bRetour = nTypeHF_p DANS (hRubEntierNonSigné1)
+      		
+      	CAS "TIME"
+      		bRetour = nTypeHF_p DANS (hRubHeure)
+      		
+      	CAS "IMAGE"
+      		bRetour = nTypeHF_p DANS (hRubImage)
+      		
+      	CAS "VARBINARY"
+      		bRetour = nTypeHF_p DANS (hRubMémoBinaire, hRubMémoBinaire4)
+      		
+      	CAS "TEXT"
+      		bRetour = nTypeHF_p DANS (hRubMémoTexte)
+      		
+      	CAS "NTEXT"
+      		bRetour = nTypeHF_p DANS (hRubMémoUnicode)
+      		
+      	CAS "MONEY"
+      		bRetour = nTypeHF_p DANS (hRubMonétaire)
+      		
+      /*	CAS hRubNumérique
+      		sRetour = "Float(" + nTaille_p + ")"		// !!!!<§cs:10§>
+      		bRetour = nTypeHF_p DANS ()<§cs:10§>
+      		*/
+      	CAS "REAL"
+      		bRetour = nTypeHF_p DANS (hRubRéel4, hRubRéelTurbo)
+      		
+      	CAS "FLOAT"
+      		bRetour = nTypeHF_p DANS (hRubRéel8)
+      		
+      	CAS "VARCHAR"
+      		bRetour = nTypeHF_p DANS (hRubTexte)
+      		
+      	CAS "NVARCHAR"
+      		bRetour = nTypeHF_p DANS (hRubTexteUnicode)
+      		
+      	AUTRE CAS
+      		//ExceptionDéclenche(1, "Type non défini : [%sTypeSQL_P%]")
+      		bRetour = faux
+      FIN
+      
+      renvoyer bRetour
       
       
      type : 458752

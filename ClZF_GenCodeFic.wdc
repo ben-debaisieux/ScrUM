@@ -49,6 +49,7 @@ class :
       	sRubriquePK		est une chaîne
       	sTableFK		est une chaîne
       	sRubriqueFK		est une chaîne
+      	bRubFKOblig		est un booléen
       	nTypeRel		est un entier
       FIN
       
@@ -82,8 +83,10 @@ class :
       	m_sNomUsage		est une chaîne
       	m_sLibelle		est une chaîne
       	m_sNomRubId		est une chaîne
+      	m_nTypeHfRubId	est un entier
       	m_bClasseExiste	est un booléen
       	m_bClasseLS		est un booléen
+      	m_bTableHyerarchisee est un booléen
       globale
       public
       	mg_sPrefixeTable est une chaîne ANSI
@@ -101,6 +104,8 @@ class :
       	cstRelAgr_Suf		= "Agr"
       	cstRelCompo			= 3
       	cstRelCompo_Suf		= "Compo"
+      	cstRelIncl			= 4
+      	cstRelIncl_Suf		= "Inc"
       	
       	cstTypeCleAucune	= 0
       	cstTypeCleUnique	= 1
@@ -115,7 +120,7 @@ class :
      name : Constructeur
      procedure_id : 1443681465206134430
      type_code : 27
-     code : |1+
+     code : |1-
       procédure Constructeur(local sNomTable_P est une chaîne = "")
       
       :m_sNomTable = sNomTable_P
@@ -123,7 +128,6 @@ class :
       si sNomTable_P <> "" ALORS
       	:m_sLibelle = {sNomTable_P,indFichier}..Libellé
       FIN
-      
      type : 589824
    -
      name : Destructeur
@@ -225,7 +229,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GetInfoRubType(nTypeHF_p est un entier, bComplet_p est un booléen = faux):chaine
+      procédure globale GetInfoRubType(nTypeHF_p est un entier, bComplet_p est un booléen = faux):chaine
       
       sRetour est une chaîne
       sDeclare est une chaîne
@@ -237,8 +241,8 @@ class :
       	CAS hRubDateHeure : sRetour = "DateHeure"
       	CAS hRubEntier1 : sRetour = "Entier sur 1 octet"
       	CAS hRubEntier2 : sRetour = "Entier sur 2 octets"
-      	CAS hRubEntier4 : sRetour = "Entier"
-      	CAS hRubEntier8 : sRetour = "Entier sur 8 octets"
+      	CAS hRubEntier4, hRubIDAuto4 : sRetour = "Entier"
+      	CAS hRubEntier8, hRubIDAuto : sRetour = "Entier sur 8 octets"
       	CAS hRubEntierNonSigné1 : sRetour = "Entier sans signe sur 1 octet"
       	CAS hRubEntierNonSigné2 : sRetour = "Entier sans signe sur 2 octets"
       	CAS hRubEntierNonSigné4 : sRetour = "Entier sans signe"
@@ -297,10 +301,18 @@ class :
       oGenTmp		est un ClZF_GenCodeFic dynamique
       sRubIdAuto	est une chaîne
       stRelTmp	est un str_rel
-      
-      
-      
       sDeclareObj est une chaîne
+      
+      
+      
+      TableauSupprimeTout(m_aRub)
+      TableauSupprimeTout(m_aCol_Enfant)
+      TableauSupprimeTout(m_aFK_de_PK)
+      TableauSupprimeTout(m_aPK_de_FK)
+      VariableRAZ(m_stConfigTbl)
+      
+      
+      
       //On vérifie si la classe existe
       sDeclareObj = "oTmp est un " + :sNomClasseGen()
       si compile(sDeclareObj) = "" ALORS
@@ -318,6 +330,7 @@ class :
       
       
       nIndRech est un entier
+      bOk est un booléen
       
       pour nIndRech = 1 a 2
       	si sRubIdAuto = "" alors
@@ -333,7 +346,7 @@ class :
       					//Est on sur la clé primaire ?
       					SI stRubTmp.nTypeRubHF DANS (hRubIDAuto, hRubIDAuto4) ALORS
       						//Oui
-      						sRubIdAuto = sRub
+      						bOk = vrai
       					FIN
       					
       				CAS 2
@@ -341,11 +354,17 @@ class :
       					SI stRubTmp.nTypeRubHF DANS (hRubEntier1, hRubEntier2, hRubEntier4, hRubEntier8, hRubEntierNonSigné1, hRubEntierNonSigné2, hRubEntierNonSigné4, hRubEntierNonSigné8) et ...
       							{:m_sNomTable + "." + sRub,indRubrique}..TypeClé = hCléUnique ALORS
       						//Oui
-      						sRubIdAuto = sRub
+      						bOk = vrai
       					FIN
       					
       				AUTRE CAS
       					
+      			FIN
+      			
+      			si bOk ALORS
+      				sRubIdAuto		= sRub
+      				:m_nTypeHfRubId	= stRubTmp.nTypeRubHF
+      				sortir
       			FIN
       		fin
       	fin
@@ -363,7 +382,8 @@ class :
       		stRelTmp.sRubriquePK	= sRubIdAuto
       		stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,5,TAB)
       		stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,6,TAB)
-      		stRelTmp.nTypeRel		=  nTypeRelDeNom(stRelTmp.sNomRel)
+      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
+      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
       		TableauAjoute(m_aFK_de_PK,stRelTmp)
       	FIN
       
@@ -373,7 +393,8 @@ class :
       		stRelTmp.sRubriquePK	= sRubIdAuto
       		stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,2,TAB)
       		stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,3,TAB)
-      		stRelTmp.nTypeRel		=  nTypeRelDeNom(stRelTmp.sNomRel)
+      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
+      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
       		TableauAjoute(m_aFK_de_PK,stRelTmp)
       	FIN
       
@@ -386,7 +407,8 @@ class :
       		stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,6,TAB)
       		stRelTmp.sTableFK		= :m_sNomTable
       		stRelTmp.sRubriqueFK	= sRub
-      		stRelTmp.nTypeRel		=  nTypeRelDeNom(stRelTmp.sNomRel)
+      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
       		m_aPK_de_FK[sRub]		= stRelTmp
       	FIN
       	
@@ -397,10 +419,17 @@ class :
       		stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,3,TAB)
       		stRelTmp.sTableFK		= :m_sNomTable
       		stRelTmp.sRubriqueFK	= sRub
-      		stRelTmp.nTypeRel		=  nTypeRelDeNom(stRelTmp.sNomRel)
+      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
+      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
       		m_aPK_de_FK[sRub]		= stRelTmp
       	FIN
+      	
+      	
+      	si ExtraitChaîne(sLigneCle, 2, TAB) = ExtraitChaîne(sLigneCle, 5, TAB) ALORS
+      		:m_bTableHyerarchisee = vrai
+      	FIN
       FIN
+      
       
       
       
@@ -436,7 +465,7 @@ class :
       				
       		FIN
       		
-      		stRubTmp.bNullable			= {:m_sNomTable + "." + sRub,indRubrique}..NullAutorisé
+      		stRubTmp.bNullable			= {:m_sNomTable + "." + sRub,indRubrique}..NullAutorisé et pas stRubTmp.nTypeRubHF dans(hRubMémoTexte, hRubMémoUnicode)
       		stRubTmp.sLibelleRubrique	= {:m_sNomTable + "." + sRub,indRubrique}..libelle
       		stRubTmp.bVisibleUsr		= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
       		stRubTmp.nTaille			= {:m_sNomTable + "." + sRub,indRubrique}..Taille
@@ -480,8 +509,8 @@ class :
       				stRubTmp.sNomDeclarationCourt	= stRubTmp.oObj_Parent.sNomClasseGen()
       			AUTRE CAS
       				stRubTmp.sPrefixe				= :GetInfoRubPrefix(stRubTmp.nTypeRubHF)
-      				stRubTmp.sNomDeclarationComplet	= :GetInfoRubType(stRubTmp.nTypeRubHF, Vrai)
-      				stRubTmp.sNomDeclarationCourt	= :GetInfoRubType(stRubTmp.nTypeRubHF)
+      				stRubTmp.sNomDeclarationComplet	= ::GetInfoRubType(stRubTmp.nTypeRubHF, Vrai)
+      				stRubTmp.sNomDeclarationCourt	= ::GetInfoRubType(stRubTmp.nTypeRubHF)
       			
       		FIN
       		
@@ -492,6 +521,17 @@ class :
       	FIN
       	
       FIN
+     type : 458752
+   -
+     name : analyseFkOblig
+     procedure_id : 1477795270606607052
+     type_code : 12
+     code : |1-
+      procedure prive analyseFkOblig(sSymbole_p est une chaîne)<metier>:booleen
+      si pas sSymbole_p dans("0,1", "1,1") ALORS
+      	ExceptionDéclenche(1,"Erreur d'analyse du type de relation (""0,1"" ou ""1,1"" attendu)")
+      FIN
+      renvoyer sSymbole_p ="1,1"
      type : 458752
    -
      name : sNomClasseColGen
@@ -569,6 +609,8 @@ class :
       		renvoyer cstRelAgr
       	CAS Majuscule(cstRelCompo_Suf)
       		renvoyer cstRelCompo
+      	CAS Majuscule(cstRelincl_Suf)
+      		renvoyer cstRelincl
       	AUTRE CAS
       		renvoyer cstRelNonDef
       FIN
@@ -594,8 +636,9 @@ class :
       nCleRubFKAsso	est un entier	= 3
       nCleRubFKAgr	est un entier	= 4
       nCleRubFKCompo	est un entier	= 5
-      nCleFen			est un entier	= 6
-      nCleFenMetOrga	est un entier	= 7
+      nCleRubFKIncl	est un entier	= 6
+      nCleFen			est un entier	= 7
+      nCleFenMetOrga	est un entier	= 8
       
       
       taVals est un tableau associatif de monétaires
@@ -605,6 +648,7 @@ class :
       taVals[nCleRubFKAsso]	= 10
       taVals[nCleRubFKAgr]	= 5
       taVals[nCleRubFKCompo]	= 15
+      taVals[nCleRubFKIncl]	= 15
       taVals[nCleFen]			= 50
       taVals[nCleFenMetOrga]			= 100
       
@@ -646,6 +690,8 @@ class :
       					AddPx(nCleRubFKAgr)
       				CAS cstRelCompo
       					AddPx(nCleRubFKCompo)
+      				CAS cstRelIncl
+      					AddPx(nCleRubFKIncl)
       				AUTRE CAS
       					
       			FIN
@@ -742,11 +788,12 @@ class :
       
       tantque taTbls..Occurrence > 0
       	
-      	
+      	//Parcourt de toutes les entités non traitées
       	pour tout pclStTblTmp, sTbl de taTbls
       		bMqt = faux
-      		
+      		//On liste toutes les FK qui la compose
       		pour tout stRel de pclStTblTmp.m_aPK_de_FK
+      			//Pour chaque relations, on regarde si on traité
       			si stRel.sTablePK <> sTbl _et_ TableauCherche(aRetour,tcLinéaire,stRel.sTablePK) <= 0 ALORS
       				bMqt = vrai
       			FIN
@@ -778,7 +825,6 @@ class :
       -
         code : |1-
          procédure publique p_sNomTable() : chaîne
-         
          renvoyer m_sNomTable
         type : 1966080
      template_refs : []
@@ -790,7 +836,6 @@ class :
       -
         code : |1-
          procédure publique p_sNomRubId() : chaîne
-         
          renvoyer m_sNomRubId
         type : 1966080
      template_refs : []
@@ -802,7 +847,6 @@ class :
       -
         code : |1-
          procédure publique p_sNomUsage() : chaîne
-         
          renvoyer m_sNomUsage
         type : 1966080
      template_refs : []
@@ -814,7 +858,6 @@ class :
       -
         code : |1-
          procédure publique p_bClasseExiste() : booléen
-         
          renvoyer m_bClasseExiste
         type : 1966080
      template_refs : []
@@ -826,7 +869,6 @@ class :
       -
         code : |1-
          procédure publique p_sLibelle() : chaîne
-         
          renvoyer m_sLibelle
         type : 1966080
      template_refs : []
@@ -838,8 +880,30 @@ class :
       -
         code : |1-
          procédure publique p_bClasseLS() : booléen
-         
          renvoyer m_bClasseLS
+        type : 1966080
+     template_refs : []
+   -
+     name : p_bTableHyerarchisee
+     identifier : 0x147e3cbb02c0d915
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bTableHyerarchisee() : booléen
+         renvoyer m_bTableHyerarchisee
+        type : 1966080
+     template_refs : []
+   -
+     name : p_nTypeHfRubId
+     identifier : 0x147f910c04d6352f
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_nTypeHfRubId() : entier
+         
+         renvoyer m_nTypeHfRubId
         type : 1966080
      template_refs : []
   procedure_templates : []

@@ -350,7 +350,7 @@ class :
       	sTestModif	= "SI PAS ZF_bObjEgal(:[%sMembre%], oValeur_p) ALORS"
       FIN
       
-      sParam = stRub.sPrefixe + "Valeur_p" + :m_oClasseGen.GetInfoRubType(stRub.nTypeRubHF,Vrai)
+      sParam = stRub.sPrefixe + "Valeur_p" + ClZF_GenCodeFic.GetInfoRubType(stRub.nTypeRubHF,Vrai)
       
       
       

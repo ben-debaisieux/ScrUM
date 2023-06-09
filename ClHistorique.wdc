@@ -15,8 +15,8 @@ class :
   p_codes :
    -
      code : |1+
-      ClHistorique est une Classe
-      	
+      
+      ClHistorique est une Classe, abstraite
       prive
       	m_asHistorique est un tableau de chaîne
       fin
@@ -105,9 +105,9 @@ class :
      procedure_id : 2254444663359127737
      type_code : 12
      code : |1-
-      procédure /*abstraite*/ ZF_Get_IdUnique()
+      procédure abstraite ZF_Get_IdUnique()
       //Les classes qui héritent, doivent obligatoirement cette procédure pour gérer l'ID unique.
-      renvoyer 0
+      //renvoyer 0
      type : 458752
    -
      name : CleanHisto

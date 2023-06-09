@@ -38,11 +38,14 @@ class :
       	bEstIndexUnique	est un booléen
       	sRefTablePK		est une chaîne
       	sRefRubIdPK		est une chaîne
+      	sNomContrainteDef est une chaîne
       	
       	nTypeAlterRub	est un entier
       	nTypeAlterFK	est un entier
       	sCodeSQL		est une chaîne
       	sCodeKey		est une chaîne
+      	sCodeDropDef	est une chaîne
+      	sCodeAddDef		est une chaîne
       	sWarning		est une chaîne
       fin
       
@@ -53,6 +56,10 @@ class :
       	
       	m_taRubsSQLReel est un tableau associatif de STR_RubSQL
       	m_taRubsSQLAttendu est un tableau associatif de STR_RubSQL
+      
+      GLOBAL
+      public
+      	gm_oExRecupValsTest est un ClZF_Exception dynamique
       fin
       
       
@@ -69,6 +76,7 @@ class :
       	cstTypeAlterFK_Supp			= 2
       fin
       
+      gm_oExRecupValsTest = allouer un ClZF_Exception("Impossible de récupérer les valeurs de clé étrangère de la table : %1")
      type : 131072
   procedures :
    -
@@ -110,13 +118,15 @@ class :
       stRubActu	est un STR_Export
       stVal		est un STR_Export_rubs
       
+      TableauSupprimeTout(m_aExport)
+      
       SI :m_oCOlGen.p_bClasseExiste ALORS
       	
       	sRub			est une chaîne
       	stRubAnaTmp		est un ClZF_GenCodeFic.str_DefRub
       	
       	POUR TOUT ÉLÉMENT stRubAnaTmp, sRub DE :m_oCOlGen.m_aRub
-      		
+      		//trace(sRub)
       		VariableRAZ(stRubActu)
       		
       		stConfRub est un ClZF_GenCodeFic.STR_DescRub
@@ -139,7 +149,9 @@ class :
       					CAS hRubTexte, hRubTexteUnicode, hRubMémoTexte, hRubMémoUnicode
       						nTaille		est un entier	= Hasard(taille(stConfRub.sValMin), taille(stConfRub.sValMax))
       						nNumChar	est un entier
-      						POUR nNumChar = 1 _À_ nTaille
+      						
+      						stVal.sValeur = droite(:m_oCOlGen.p_sNomUsage + " " + DonneIdentifiant() + " ", nTaille)
+      						POUR nNumChar = taille(stVal.sValeur) _À_ nTaille
       							SI Hasard(6) = 1 ALORS
       								stVal.sValeur += " "
       							SINON
@@ -154,6 +166,9 @@ class :
       						
       					CAS hRubMonétaire
       						stVal.sValeur = NumériqueVersChaîne(Hasard(Val(stConfRub.sValMin) * 100, Val(stConfRub.sValMax) * 100) / 100)
+      						
+      					CAS hRubBooléen
+      						stVal.sValeur = (hasard(2) = 1)
       						
       					CAS hRubDate8, hRubDate6, hRubDateHeure
       						nJour est un entier = DateVersEntier(datesys)
@@ -185,10 +200,11 @@ class :
       			
       			//La rubrique est FK : Récupération de données existantes
       			POUR nInd = 1 _À_ :m_oCOlGen.m_stConfigTbl.nNbLigneGen
-      				SI bNullRand(stConfRub.nPctNull) ALORS
+      				SI bNullRand(stConfRub.nPctNull) ou TableauOccurrence(tabAValeurs) = 0 ALORS
       					stVal.sValeur = "NULL"
       					stVal.bNull = vrai
       				SINON
+      					//trace(sRub)
       					stVal.sValeur = nIdRand(tabAValeurs)
       				FIN
       				TableauAjoute(stRubActu.sValeurs, stVal)
@@ -214,14 +230,20 @@ class :
       	PROCÉDURE INTERNE nIdExist(oClasseGen_p est un ClZF_GenCodeFic):tableau d'entiers
       		aRetour	est un tableau d'entiers
       		sdIds	est une source de données
-      		sReq	est une chaîne	= [
+      		sReq	est une chaîne
+      		
+      		sReq	= [
       		SELECT [%oClasseGen_p.p_sNomRubId%] AS Id
       		FROM [%oClasseGen_p.p_sNomTable%]
       		]
-      		goapp.Rsql(sdIds, sReq)
-      		POUR TOUT sdIds
-      			TableauAjoute(aRetour,sdIds.Id)
-      		FIN
+      		quand exception dans
+      			goapp.Rsql(sdIds, sReq)
+      			POUR TOUT sdIds
+      				TableauAjoute(aRetour,sdIds.Id)
+      			FIN
+      		FAIRE
+      			gm_oExRecupValsTest.ZF_Declenche([oClasseGen_p.p_sNomTable])
+      		fin
       		
       		RENVOYER aRetour
       	FIN
@@ -289,7 +311,7 @@ class :
      name : VersSQL
      procedure_id : 1474088894073454542
      type_code : 12
-     code : |1+
+     code : |1-
       procedure VersSQL()<metier>:chaine
       
       sRetour		est une chaîne
@@ -299,7 +321,7 @@ class :
       sPatern		est une chaîne
       sVal		est une chaine
       stRubActu	est un STR_Export
-      
+      nNbOccurence est un entier
       
       POUR TOUT stRubActu DE m_aExport
       	sPatern += [", "] + stRubActu.sNomRub
@@ -307,7 +329,14 @@ class :
       
       sPatern = "INSERT INTO [%:m_oCOlGen.p_sNomTable%] ([%sPatern%]) VALUES (%1)"
       
-      POUR nInd = 1 _À_ :m_oCOlGen.m_stConfigTbl.nNbLigneGen
+      
+      si :m_oCOlGen.p_bTableHyerarchisee ALORS
+      	nNbOccurence = 1
+      sinon
+      	nNbOccurence = :m_oCOlGen.m_stConfigTbl.nNbLigneGen
+      FIN
+      
+      POUR nInd = 1 _À_ nNbOccurence
       	sLigne = ""
       	POUR TOUT stRubActu DE m_aExport
       		
@@ -327,12 +356,7 @@ class :
       	sRetour += [RC] + ChaîneConstruit(sPatern, sLigne)
       FIN
       
-      
       RENVOYER sRetour
-      
-      
-      
-      
      type : 458752
    -
      name : bProteger
