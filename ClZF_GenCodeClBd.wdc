@@ -19,11 +19,11 @@ class :
       	herite de ClZF_GenCodeCl
       	
       PRIVE
-      	m_bGenCodeFinal est un booléen
-      	m_bLectureSeule est un booléen
-      	m_sEx_Decl est une chaîne
-      	m_sEx_Inst est une chaîne
-      	m_aConstantes est un tableau de STR_Const
+      	m_bGenCodeFinal	est un booléen
+      	m_bLectureSeule	est un booléen
+      	m_sEx_Decl		est une chaîne
+      	m_sEx_Inst		est une chaîne
+      	m_aConstantes	est un tableau de STR_Const
       fin
       STR_Const est une structure
       	sCle est une chaîne
@@ -35,18 +35,16 @@ class :
      name : Constructeur
      procedure_id : 1444047251387580545
      type_code : 27
-     code : |1+
+     code : |1-
       procédure Constructeur(oClasseGen est un ClZF_GenCodeFic)
       Ancêtre.Constructeur(oClasseGen)
-      
      type : 589824
    -
      name : Destructeur
      procedure_id : 1444047251387646081
      type_code : 28
-     code : |1+
+     code : |1-
       procédure Destructeur()
-      
      type : 655360
    -
      name : GenDeclaration
@@ -74,33 +72,36 @@ class :
       sListeMembres	est une chaîne
       stDefRub		est un ClZF_GenCodeFic.STR_DefRub
       sRub			est une chaine
-      //stRubCol		est un ClZF_GenCodeFic.STR_InfoCol
       sDecExcept		est une chaîne
       sInitExcept		est une chaîne
       sHerite			est une chaîne
       
       
       pour tout element stDefRub, sRub de :m_oClasseGen.m_aRub
+      	
+      //	//Est on sur uns rubrique de type inclusion ?
+      //	si stDefRub.nTypeRub = ClZF_GenCodeFic.cstDefRubInclusion alors
+      //		//Oui : on hérite de cette classe parente.
+      //		sHerite = stDefRub.oObj_Parent.sNomClasseGen()
+      //	FIN
+      	
       	sListeMembres += [rc] + TAB + stDefRub.sNomMembre + "	[%stDefRub.sNomDeclarationComplet%]"
       	
-      	si stDefRub.nTypeRub <> ClZF_GenCodeFic.cstDefRubObj ALORS
-      		sListeMembres +="	<MAPPING=[%sRub%]>"
+      	si stDefRub.oObj_Parent = null ALORS
+      		sListeMembres += "	<MAPPING=[%sRub%]>"
       	sinon
-      		sListeMembres +="	<note=""mapping=[%sRub%]"">"
+      		sListeMembres += "	<note=""mapping=[%sRub%]"">"
       	FIN
       FIN
       
       
-      //POUR TOUT element stRubCol de :m_oClasseGen.m_aCol_Enfant
-      //	sListeMembres += [rc] + TAB + stRubCol.sDeclaration
-      //FIN
       
       
       si :m_bLectureSeule ALORS
       	sHerite = ClZF_ObjDbLs
       sinon
       	sHerite = ClZF_ObjDb
-      FIN
+      fin
       
       
       
@@ -161,7 +162,7 @@ class :
       procédure PRIVÉ GenGetObj():chaine
       
       sRetour		est une chaîne
-      sNomProc est une chaîne = "GetObj"
+      sNomProc	est une chaîne	= "GetObj"
       
       sRetour = [
       PROCÉDURE GLOBALE [%sNomProc%](LOCAL nIdUnique_P est un entier)<métier>:[%:m_oClasseGen.sNomClasseGen()%]
@@ -200,13 +201,27 @@ class :
       
       sRetour		est une chaîne
       sListeInit	est une chaîne
+      stRub	est un ClZF_GenCodeFic.STR_DefRub
+      sRub	est une chaine
+      
       
       si pas :m_bLectureSeule ALORS
-      	sListeInit = [
-      	SI PAS :ZF_bModeAjout() ALORS
-      	[%sListeInit%]
+      	
+      	pour tout stRub, sRub de :m_oClasseGen.m_aRub
+      		si stRub.stRelFkAsso.nTypeRel = ClZF_GenCodeFic.cstRelIncl ALORS
+      			sListeInit += [rc] + tab + ":[%stRub.sNomMembre%]	= allouer un [%stRub.sNomDeclarationCourt%]()"
+      		FIN
       	FIN
-      	]
+      	
+      	
+      	si sListeInit<> "" alors
+      		sListeInit = [
+      		SI :ZF_bModeAjout() ALORS
+      		[%sListeInit%]
+      		FIN
+      		]
+      	FIN
+      	
       FIN
       
       
@@ -217,7 +232,6 @@ class :
       // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
       
       [%sListeInit%]
-      
       
       ]
       
@@ -254,12 +268,20 @@ class :
       sRetour		est une chaine
       stTmp		est un ClZF_GenCodeFic.STR_DefRub
       sCle		est une chaîne
-      //sCondNull	est une chaîne
       sNomVarExc	est une chaîne
       
       
       POUR TOUT ÉLÉMENT stTmp, sCle DE :m_oClasseGen.m_aRub
       	si stTmp.oObj_Parent <> null alors
+      		
+      		// la rubrique en cours est elle liés à une relation d'inclusion ?
+      		si :m_oClasseGen.bRubriqueRelationInclusion(sCle) ALORS
+      			sRetour += [RC] + [
+      			[%TAB%]//Enregistrement de ""[%stTmp.oObj_Parent.p_sNomUsage%]"" parent.
+      			[%TAB%]:[%stTmp.sNomMembre%].ZF_Enregistre()
+      			
+      			]
+      		FIN
       		
       		si pas stTmp.bNullable ALORS
       			sNomVarExc = "mg_oEx_CompoNonInst_" + sCle
@@ -267,13 +289,14 @@ class :
       			:m_sEx_Inst += [rc] + sNomVarExc + "	= Allouer un ClZF_Exception(""Enregistrement impossible : [%stTmp.sNomMembre%] est requis."")			// A faire : Reprendre le message"
       			
       			sRetour += [RC] + [
-      			//
-      			SI :[%stTmp.sNomMembre%] = Null ALORS
-      			[%TAB%][%sNomVarExc%].ZF_Declenche()
-      			FIN
+      			[%TAB%]//
+      			[%TAB%]SI :[%stTmp.sNomMembre%] = Null ALORS
+      			[%TAB%][%TAB%][%sNomVarExc%].ZF_Declenche()
+      			[%TAB%]FIN
       			
       			]
       		FIN
+      		
       	FIN
       FIN
       
@@ -382,6 +405,7 @@ class :
       FIN
       
       
+      //Génération des acces a la popriété objet
       si stRub.oObj_Parent <> Null ALORS
       	sRetour += rc + GenProprieteID(sRub_p)
       FIN
@@ -546,10 +570,11 @@ class :
       sClasse			est une chaîne
       sRub			est une chaîne
       sProprietes		est une chaîne
-      //sProcsChargeCol	est une chaîne
-      stRel est un ClZF_GenCodeFic.STR_Rel
-      stConst est un STR_Const
+      stRel			est un ClZF_GenCodeFic.STR_Rel
+      stConst			est un STR_Const
       
+      
+      //Création des Constantes qu'on va retrouver pour le chargement des collection (pour les relation de composition)
       pour tout stRel de :m_oClasseGen.m_aFK_de_PK
       	si stRel.nTypeRel = ClZF_GenCodeFic.cstRelCompo ALORS
       		stConst.sCle = ClZF_GenCodeCl.sNomConstanteColCompo(stRel, faux)
@@ -558,7 +583,7 @@ class :
       	FIN
       FIN
       
-      
+      //Génération des propriétés
       POUR TOUT ÉLÉMENT sRub DE :m_oClasseGen.aLstRubs()
       	sProprietes += :GenPropriete(sRub)
       FIN
@@ -575,6 +600,7 @@ class :
       
       SI PAS :m_bLectureSeule ALORS
       	sClasse += :GenPreEnreg() + RC
+      	sClasse += :GenPostEnreg() + RC
       sinon
       	sClasse += :GenInit_Data() + RC
       FIN
@@ -717,6 +743,91 @@ class :
       
       renvoyer sRetour
      type : 458752
+   -
+     name : GenPostEnreg
+     procedure_id : 1478929751721775891
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenPostEnreg ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
+      procédure GenPostEnreg():chaine
+      
+      
+      
+      
+      sRetour		est une chaine
+      stTmp		est un ClZF_GenCodeFic.STR_DefRub
+      sCle		est une chaîne
+      //sNomVarExc	est une chaîne
+      
+      
+      POUR TOUT ÉLÉMENT stTmp, sCle DE :m_oClasseGen.m_aRub
+      //	si stTmp.oObj_Parent <> null alors
+      		
+      		// la rubrique en cours est elle liés à une relation d'inclusion ?
+      		si :m_oClasseGen.bRubriqueRelationInclusion(sCle) ALORS
+      			sRetour += [RC] + [
+      			[%TAB%]//Suppression de ""[%stTmp.oObj_Parent.p_sNomUsage%]"" parent.
+      			[%TAB%]:[%stTmp.sNomMembre%].ZF_Supprimer()
+      			[%TAB%]:[%stTmp.sNomMembre%].ZF_Enregistre()
+      			
+      			]
+      		FIN
+      		
+      //		si pas stTmp.bNullable ALORS
+      //			sNomVarExc = "mg_oEx_CompoNonInst_" + sCle
+      //			:m_sEx_Decl += [rc] + sNomVarExc + "	est un ClZF_Exception dynamique"
+      //			:m_sEx_Inst += [rc] + sNomVarExc + "	= Allouer un ClZF_Exception(""Enregistrement impossible : [%stTmp.sNomMembre%] est requis."")			// A faire : Reprendre le message"
+      //			
+      //			sRetour += [RC] + [
+      //			[%TAB%]//
+      //			[%TAB%]SI :[%stTmp.sNomMembre%] = Null ALORS
+      //			[%TAB%][%TAB%][%sNomVarExc%].ZF_Declenche()
+      //			[%TAB%]FIN
+      //			
+      //			]
+      //		FIN
+      		
+      //	FIN
+      FIN
+      
+      
+      sNomProc est une chaîne = "post_enregistre"
+      
+      sRetour = [
+      PROCÉDURE PROTÉGÉ [%sNomProc%]()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.post_enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      	// . . .
+      	
+      [%sRetour%]
+      	
+      FIN
+      ]
+      
+      
+      SI :m_bNatif ALORS
+      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      FIN
+      
+      
+      renvoyer sRetour
+      
+     type : 458752
   properties :
    -
      name : GetCode
@@ -726,7 +837,6 @@ class :
       -
         code : |1-
          procédure GetCode() : chaîne
-         
          renvoyer m_sCode
         type : 1966080
      template_refs : []
@@ -738,13 +848,11 @@ class :
       -
         code : |1-
          procédure publique p_bLectureSeule() : booléen
-         
          renvoyer m_bLectureSeule
         type : 1966080
       -
         code : |1-
          procédure publique p_bLectureSeule(bValeur est un booléen)
-         
          m_bLectureSeule=bValeur
         type : 2031616
      template_refs : []
@@ -756,7 +864,6 @@ class :
       -
         code : |1-
          procédure publique p_bGenCodeFinal(bValeur est un booléen)
-         
          m_bGenCodeFinal=bValeur
         type : 2031616
      template_refs : []

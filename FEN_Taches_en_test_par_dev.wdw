@@ -188,16 +188,16 @@ window :
       	nNbPts est un entier
       fin
       
-      oColUsr est un ClColUsr()
-      oUsrTmp est un ClDbUsr dynamique
-      oColTache est un ClColTache dynamique
-      oDbTache est un ClDbTache dynamique
+      oColUsr		est un ClColUsr()
+      oUsrTmp		est un ClDbUsr dynamique
+      oColTache	est un ClColTache dynamique
+      oDbTache	est un ClDbTache dynamique
+      stLigne		est STR_LigneDev
+      aLignes		est un tableau associatif de STR_LigneDev
       
-      stLigne est STR_LigneDev
-      aLignes est un tableau associatif de STR_LigneDev
       
       oColUsr.GetAll()
-      pour tout oUsrTmp de oColUsr.aItems()
+      pour tout element oUsrTmp de oColUsr.aItems()
       	si oUsrTmp.p_bTop_Equip_Informatique ALORS
       		VariableRAZ(stLigne)
       		stLigne.sDev = oUsrTmp.p_sNom

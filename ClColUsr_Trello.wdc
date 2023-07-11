@@ -1,0 +1,100 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColUsr_Trello
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x02E6454B7CA8B4
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClColUsr_Trello est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVÉ
+      	m_aoUsr_Trello est un tableau ClDbUsr_Trello dynamique
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 816135247014069
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 816135247014070
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : addItemById
+     procedure_id : 816135247014071
+     type_code : 12
+     code : |1-
+      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemById
+      :ZF_addItem(ClDbUsr_Trello.GetObj(nId_P))
+      
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 816135247014072
+     type_code : 12
+     code : |1-
+      PROCÉDURE aItems()<métier>:tableau de ClDbUsr_Trello dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :m_aoUsr_Trello
+      
+     type : 458752
+   -
+     name : Init
+     procedure_id : 816135247014073
+     type_code : 12
+     code : |1-
+      PROCÉDURE Init()<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:m_aoUsr_Trello)
+      
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 816135247014074
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.addItemBySource
+      oObj est un ClDbUsr_Trello(ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Usr_Trello)
+      
+     type : 458752
+   -
+     name : GetAll
+     procedure_id : 816135247014075
+     type_code : 12
+     code : |1-
+      PROCÉDURE GetAll()<métier>:Vide
+      ZF_ChargeTblComplete(Scr_Usr_Trello..nom)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 816135247014076
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

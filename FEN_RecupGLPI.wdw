@@ -167,44 +167,46 @@ window :
         code : |1+
          nIndice			est un entier
          sCommentaire	est une chaine
-         nLigne est un entier
-         image_Doc est une Image
+         nLigne			est un entier
+         image_Doc		est une Image
          
-         nIndice				= TableauCherche(zaoTickets,tcLinéaire,"m_nId",TBL_GLPI.COL_ID)
+         nIndice					= TableauCherche(zaoTickets,tcLinéaire,"m_nId",TBL_GLPI.COL_ID)
          
-         SAI_Infos_ticket	= HTMLVersTexte(zaoTickets[nIndice].m_bufDescription)
-         
-         SAI_Infos_ticket += RC + RC + "Commentaires :" + RC + RC
-         
-         POUR TOUT stCommentaire de zaoTickets[nIndice].m_astSuiviCom
-         	sCommentaire	= stCommentaire.sUtilisateur + "(" + stCommentaire.sDateAffichage + ")" + " : "
-         	sCommentaire	+= [RC] + stCommentaire.buContent
+         si nIndice > 0 alors
+         	SAI_Infos_ticket	= HTMLVersTexte(zaoTickets[nIndice].m_bufDescription)
          	
-         	sCommentaire	= HTMLVersTexte(sCommentaire)
+         	SAI_Infos_ticket	+= RC + RC + "Commentaires :" + RC + RC
          	
-         	SAI_Infos_ticket += RC + RC + sCommentaire
-         FIN
-         
-         TableSupprimeTout(TBL_Piece_Jointe)
-         
-         // pieces jointes
-         POUR TOUT stDoc DE zaoTickets[nIndice].m_astDocument
-         	// ajoute le fichier temp
-         	nLigne = TableAjouteLigne(TBL_Piece_Jointe)
-         	
-         	SELON Minuscule(stDoc.sExtension)
-         		CAS "xlsx","xls"
-         			image_Doc = IMG_Exel
-         		CAS "pdf"
-         			image_Doc = IMG_PDF
-         		CAS "txt","odt","doc","docx"
-         			image_Doc = IMG_Word
-         		AUTRE CAS
-         			image_Doc = stDoc.buFFichier
+         	POUR TOUT stCommentaire de zaoTickets[nIndice].m_astSuiviCom
+         		sCommentaire	= stCommentaire.sUtilisateur + "(" + stCommentaire.sDateAffichage + ")" + " : "
+         		sCommentaire	+= [RC] + stCommentaire.buContent
+         		
+         		sCommentaire	= HTMLVersTexte(sCommentaire)
+         		
+         		SAI_Infos_ticket += RC + RC + sCommentaire
          	FIN
          	
-         	TBL_Piece_Jointe[nLigne].COL_Piece_Jointe = image_Doc
+         	TableSupprimeTout(TBL_Piece_Jointe)
          	
+         	// pieces jointes
+         	POUR TOUT stDoc DE zaoTickets[nIndice].m_astDocument
+         		// ajoute le fichier temp
+         		nLigne = TableAjouteLigne(TBL_Piece_Jointe)
+         		
+         		SELON Minuscule(stDoc.sExtension)
+         			CAS "xlsx","xls"
+         				image_Doc = IMG_Exel
+         			CAS "pdf"
+         				image_Doc = IMG_PDF
+         			CAS "txt","odt","doc","docx"
+         				image_Doc = IMG_Word
+         			AUTRE CAS
+         				image_Doc = stDoc.buFFichier
+         		FIN
+         		
+         		TBL_Piece_Jointe[nLigne].COL_Piece_Jointe = image_Doc
+         		
+         	FIN
          FIN
          
         type : 33
@@ -273,7 +275,7 @@ window :
       -
         code : |1+
          SI CBO_Action..ValeurMémorisée = 0 ALORS
-         	ListSelectPlus(CBO_Statuts_GLPI,5)
+         	ListSelectPlus(CBO_Statuts_GLPI,6)
          	GR_Trello..Etat = Grisé
          SINON
          	ListSelectPlus(CBO_Statuts_GLPI,2)
@@ -319,7 +321,7 @@ window :
      type_code : 4
      p_codes :
       -
-        code : |1+
+        code : |1-
          // variable
          stTicket			est un ClTrello_req.STR_TICKET_TRELLO
          nIndice				est un entier
@@ -395,6 +397,8 @@ window :
          	
          	// création du ticket trello 
          	sRetour = ClTrello_req.Add_Trello_Ticket(stTicket)
+         	
+         	ToastAffiche("Création ticket OK !",toastCourt)
          FIN
          
          
@@ -408,18 +412,24 @@ window :
          		SI PAS oMoteur.CreateFollowup(SAI_Commentaire) ALORS
          			Erreur("Erreur lors de l'ajout d'un commentaire dans le ticket Glpi avant le changement de statut.")
          			RepriseSaisie(MaFenêtre)
+         		SINON
+         			ToastAffiche("Ajout commentaire GLPI ok",toastCourt)
          		FIN
          	FIN
          	
          	SI PAS oMoteur.UpdateTicketCategory(zaoTickets[nIndice].m_nId, CBO_Categories_GLPI..ValeurMémorisée) ALORS
          		Erreur("Impossible de mettre à jour la category du ticket dans GLPI.")
          		RepriseSaisie(MaFenêtre)
+         	SINON
+         		ToastAffiche("Mise à jour de la catégorie du ticket GLPI ok",toastCourt)
          	FIN
          	
          	
          	SI PAS oMoteur.UpdateTicketStatut(zaoTickets[nIndice].m_nId, CBO_Statuts_GLPI..ValeurMémorisée) ALORS
          		Erreur("Impossible de mettre à jour le statut du ticket dans GLPI.")
          		RepriseSaisie(MaFenêtre)
+         	SINON
+         		ToastAffiche("Mise à jour du statut du ticket GLPI ok",toastCourt)
          	FIN
          	
          	SI CBO_Affecter_A..ValeurMémorisée <> 0 ALORS
@@ -436,13 +446,11 @@ window :
          			SI PAS oMoteur.UpdateTicketAssign(zaoTickets[nIndice].m_nId, CBO_Affecter_A..ValeurMémorisée) ALORS
          				Erreur("Impossible de mettre à jour le champ assigné à dans GLPI.")
          				RepriseSaisie(MaFenêtre)
+         			SINON
+         				ToastAffiche("Affectation ok",toastCourt)
          			FIN
          		FIN
          	FIN
-         	
-         	
-         	
-         	Info("Création ticket OK !")
          	
          FIN
          
@@ -456,6 +464,11 @@ window :
          FIN
          
          SAI_Commentaire = ""
+         
+         SI CBO_Statuts_GLPI..ValeurMémorisée <> nIDNouveau_GLPI ALORS
+         	TableSupprimeSelect(TBL_GLPI)
+         	ExécuteTraitement(TBL_GLPI,trtSélection)
+         FIN
         type : 18
       -
         type : 161
@@ -505,11 +518,11 @@ window :
          POUR nLigne = 1 _À_ TableauOccurrence(zaoTickets)
          	nIndice_Table = TableAjouteLigne(TBL_GLPI)
          
-         	TBL_GLPI[nIndice_Table].COL_ID = zaoTickets[nLigne].m_nId
-         	TBL_GLPI[nIndice_Table].COL_Sujet = zaoTickets[nLigne].m_sSujet
-         	TBL_GLPI[nIndice_Table].COL_DEMANDEUR = zaoTickets[nLigne].m_sUtilisateur
-         	TBL_GLPI[nIndice_Table].COL_Date_Creation = zaoTickets[nLigne].m_dhDateCreation
-         	TBL_GLPI[nIndice_Table].COL_Agence =  zaoTickets[nLigne].m_sLieu
+         	TBL_GLPI[nIndice_Table].COL_ID				= zaoTickets[nLigne].m_nId
+         	TBL_GLPI[nIndice_Table].COL_Sujet			= zaoTickets[nLigne].m_sSujet
+         	TBL_GLPI[nIndice_Table].COL_DEMANDEUR		= zaoTickets[nLigne].m_sUtilisateur
+         	TBL_GLPI[nIndice_Table].COL_Date_Creation	= zaoTickets[nLigne].m_dhDateCreation
+         	TBL_GLPI[nIndice_Table].COL_Agence			=  zaoTickets[nLigne].m_sLieu
          	
          FIN
          
@@ -808,7 +821,7 @@ window :
        internal_properties : BwAAAAcAAADa7KJMW9IgE1EPj3Y/4v4935kHQqiCHXInBvqoL4DAtt3BXtAZr+Mcv1nULameGhfHTCXtrjXjfE+zV0pR+RdzpB6cQZsmOWg+c/GhD/CJeBhdsKg/5hb/2fPJ7EZRIinPwfiYvjMFuJEtB1dqRTQ2ABV1PtJtkLZjhEDqBQqtXAMLfDZLUMW1ot/NogJRAAHrC5JL+w==
        type : 8
        content :
-        internal_properties : BwAAAAcAAACf1yzK6RqWbBzRs2KQuDFpG0DBvgSe7Lyt0KQoXnGuQz/lUqoGhNq5+SgQAdSz0W3LxHL+1aUDpgloigVPurReUiqvxgIPKTCm9rbC+RtBOQvsyd8iASZkJzDm7HqP6xGuD+IzCOnQNwA5YfihfiIIKAUJ1XumtGjuS/KxB3Ffc61emkto0gAr+k7EYcLAnOQ9evjn31dxH4XM/dbcUPTwsqJLFXOdtD6AyM0wJlMS60PP30jZwdxFFitdyTDedJiKQD783NagXIv6lxj/1EHf1xNnnBDWMDk/u3VMwcR4EtqBoLnyfYe39JtxW1Q6RL/8Jw8+iDwLMQe+rZSmvgyApJArRr66hhpE5df/ES9RNWiq8oB77HV199DsXMbKlQh3ivgFogpFv7cNJ3xiwHTjbaRP5QO8Vj95yqMcDywNbJqVxk1fntWA30aXBXt/hKHnZrzoSq5Q1CNG1U+5SrcjxTXqXOD5COfYlKPDdxDhIlFoIzrimi0G1BY/hrwWWT/XzdyVwtkIyi/7M/DI3sgcPq5DYrGIiX0jH8ye5s1tEiniCrEvFx/LKbymavgqb9UxA4QOwJOxIZlY+U0blHTaPtLd7Bg=
+        internal_properties : BwAAAAcAAAAOkkI2PnG6Nye+ZLKagD9QrUuDVnPxNh3GrpftwJGCTl3wVFLRZwo2lEZ8dNRJH+DvBdagijoHF3q/fqgL8CoLul17tDmY9QtHDyhjY/uj3kfNJadVu55bhC0wxRjveSjurFqH56K+GEXsQyMtcFqx8iQ1a1LrnJOPtlZqf8VX4MvjShjp6LBcwA1OwB8jn3BWXVJ4s5C4zUTKG0IgKgvhd84QJn8E6eQRhSES6i86XLfDx6EoKOvWvYYi9s7j7wmekrWXX5PU7qqiC/+l4PXGYusBZd5XnhmdPpMPXfsO1AOoMmHvSd8uIbxxa6ARHkBWpT7kd4GrKL0mQg/FRkGhBx/kIbAlqajhoeR5qqVlQzwEMU8zLYR156m3dAAy83OXGOuWEqssoD4e5ObF+/zJfGXFlotX9qAsn/2nwnjKNYj4rtQXt4euu5I24L0YmY7qV9Y8M6lV6HDb2uCu+MO6r4FBY/OFB9wIOwgDer4qxVvHqV7smh90b9SLGW/FxeEM9imbxd55nG8lCKDoxigw460staXtlqlbnWuqBZSi6Rlegb5NCx7VlvHShoKYJxyzDJ2o1NdpEOz2QT23mSHi
         properties : {}
         type : 8
        code_elements :
@@ -1068,6 +1081,7 @@ window :
       stUnCommentaire				est un ClTrello_req.STR_Commentaire_Trello
       nIndice_Com					est un entier
       
+      
       Sablier(Vrai)
       
       TableSupprimeTout(TBL_GLPI)
@@ -1117,7 +1131,12 @@ window :
       					
       					sCommentaire	= HTMLVersTexte(sCommentaire)
       					
+      					
       					nIndice			= aCommentaire_Ticket_Trello.Cherche(tcLinéairePremier, sCommentaire)
+      					
+      					
+      					sCommentaire = ChaîneVersUTF8(sCommentaire)
+      					
       					
       					SI nIndice = -1 ALORS
       						stUnCommentaire.sCommentaire	= sCommentaire

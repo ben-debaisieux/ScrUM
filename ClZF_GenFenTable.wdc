@@ -19,9 +19,11 @@ class :
       	hérite de ClZF_GenFen
       
       prive
-      	m_sChargementTbl est une chaine
-      	m_sNomChampsTbl est une chaine
-      	m_sNomColGlobale est une chaîne 
+      	m_sChargementTbl	est une chaine
+      	m_sNomChampsTbl		est une chaine
+      	m_sNomColGlobale	est une chaîne 
+      	
+      	m_sCodeCols			est une chaîne 
       fin
       
       
@@ -58,16 +60,15 @@ class :
       
       
       
-      sRub			est une chaîne
+      //sRub			est une chaîne
       
       
       //-------------------------------------------------
       //Récupération des membres déclarées dans la classe
-      Vars			est une Description de variable
+      //Vars			est une Description de variable
       Def				est une Définition	= RécupèreDéfinitionType(:m_oClasseGen.sNomClasseGen())
-      bEstObj			est un booléen
-      sChamps			est une chaîne
-      
+      //bEstObj			est un booléen
+      //sChamps			est une chaîne
       
       
       
@@ -79,67 +80,71 @@ class :
       stProto_tmp.sLibelle	= ""
       
       
-      sChamps = :Gen_COL_ID(stProto_tmp)
+      :m_sCodeCols = :Gen_COL_ID(stProto_tmp)
       :m_sChargementTbl = TAB + :m_sNomChampsTbl + ".COL_" + stProto_tmp.sNom + "[nLigne] = oTmp.ZF_Get_IdUnique()"
       
       
-      POUR TOUT Vars DE Def.Variable
-      	
-      	sRub = :sNomRubAsso(Vars)
-      	
-      	SI sRub <> "" ALORS
-      		
-      		//A faire : identifier plus proprement qu'il s'agit d'un objet
-      		SI Vars.AttributNote <> "" ALORS
-      			bEstObj = Vrai
-      		SINON
-      		 	bEstObj = Faux
-      		FIN
-      		
-      		
-      		InfoRub est un ClZF_GenCodeFic.str_DefRub
-      		
-      		
-      		InfoRub					= :m_oClasseGen.m_aRub[sRub]
-      		
-      		SI InfoRub.bVisibleInterface ALORS
-      			
-      			stProto_tmp.sNom		= sRub
-      			stProto_tmp.sSource		= ""
-      			stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
-      			stProto_tmp.sBulle		= InfoRub.sLibelleRubrique
-      			
-      			
-      			SELON InfoRub.nTypeRubHF
-      				CAS hRubBooléen : 
-      					sChamps += [RC] + :Gen_COL_Chk(stProto_tmp)
-      				CAS hRubDate6 , hRubDate8, hRubDateHeure
-      					sChamps += [RC] + :Gen_COL_Date(stProto_tmp)
-      				CAS hRubEntier1, hRubEntierNonSigné1, hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
-      					SI bEstObj ALORS
-      						sChamps += [RC] + :Gen_COL_Txt(stProto_tmp)
-      					SINON
-      						sChamps += [RC] + :Gen_COL_Entier(stProto_tmp)
-      					FIN
-      				CAS hRubMonétaire, hRubRéel4, hRubRéel8 :
-      					sChamps += [RC] + :Gen_COL_Monetaire(stProto_tmp)
-      				CAS hRubTexte, hRubTexteUnicode, hRubMémoTexte, hRubMémoUnicode :
-      					sChamps += [RC] + :Gen_COL_Txt(stProto_tmp)
-      	//			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
-      				AUTRE CAS
-      					Trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
-      			FIN
-      			
-      			
-      			:m_sChargementTbl += [RC] + TAB + :m_sNomChampsTbl + ".COL_" + stProto_tmp.sNom + "[nLigne] = "
-      			SI bEstObj ALORS
-      				:m_sChargementTbl += "oTmp.[%InfoRub.sNomPropriete%] = Null ? """" SINON oTmp.[%InfoRub.sNomPropriete%].sRepresentation()"
-      			sinon
-      				:m_sChargementTbl += "oTmp." + InfoRub.sNomPropriete
-      			fin
-      		fin
-      	FIN
-      FIN
+      
+      GenToutChamps("oTmp", :m_oClasseGen)
+      
+      
+      //POUR TOUT Vars DE Def.Variable
+      //	
+      //	sRub = :sNomRubAsso(Vars)
+      //	
+      //	SI sRub <> "" ALORS
+      //		
+      //		//A faire : identifier plus proprement qu'il s'agit d'un objet
+      //		SI Vars.AttributNote <> "" ALORS
+      //			bEstObj = Vrai
+      //		SINON
+      //		 	bEstObj = Faux
+      //		FIN
+      //		
+      //		
+      //		InfoRub est un ClZF_GenCodeFic.str_DefRub
+      //		
+      //		
+      //		InfoRub					= :m_oClasseGen.m_aRub[sRub]
+      //		
+      //		SI InfoRub.bVisibleInterface ALORS
+      //			
+      //			stProto_tmp.sNom		= sRub
+      //			stProto_tmp.sSource		= ""
+      //			stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
+      //			stProto_tmp.sBulle		= InfoRub.sLibelleRubrique
+      //			
+      //			
+      //			SELON InfoRub.nTypeRubHF
+      //				CAS hRubBooléen : 
+      //					sChamps += [RC] + :Gen_COL_Chk(stProto_tmp)
+      //				CAS hRubDate6 , hRubDate8, hRubDateHeure
+      //					sChamps += [RC] + :Gen_COL_Date(stProto_tmp)
+      //				CAS hRubEntier1, hRubEntierNonSigné1, hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
+      //					SI bEstObj ALORS
+      //						sChamps += [RC] + :Gen_COL_Txt(stProto_tmp)
+      //					SINON
+      //						sChamps += [RC] + :Gen_COL_Entier(stProto_tmp)
+      //					FIN
+      //				CAS hRubMonétaire, hRubRéel4, hRubRéel8 :
+      //					sChamps += [RC] + :Gen_COL_Monetaire(stProto_tmp)
+      //				CAS hRubTexte, hRubTexteUnicode, hRubMémoTexte, hRubMémoUnicode :
+      //					sChamps += [RC] + :Gen_COL_Txt(stProto_tmp)
+      //	//			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+      //				AUTRE CAS
+      //					Trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
+      //			FIN
+      //			
+      //			
+      //			:m_sChargementTbl += [RC] + TAB + :m_sNomChampsTbl + ".COL_" + stProto_tmp.sNom + "[nLigne] = "
+      //			SI bEstObj ALORS
+      //				:m_sChargementTbl += "oTmp.[%InfoRub.sNomPropriete%] = Null ? """" SINON oTmp.[%InfoRub.sNomPropriete%].sRepresentation()"
+      //			sinon
+      //				:m_sChargementTbl += "oTmp." + InfoRub.sNomPropriete
+      //			fin
+      //		fin
+      //	FIN
+      //FIN
       
       
       
@@ -184,7 +189,7 @@ class :
            width : 472
            height : 204
           columns :
-      [%sChamps%]
+      [%:m_sCodeCols%]
           type : 9
           controls : []
           code_elements :
@@ -855,6 +860,148 @@ class :
       ]
       
       RENVOYER sCode
+     type : 458752
+   -
+     name : GenToutChamps
+     procedure_id : 1479498993856836112
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GenToutChamps (<sRacineLiaison_p> est chaîne, <oClEntite_p> est ClZF_GenCodeFic)
+      //
+      // Paramètres :
+      //	sRacineLiaison_p (chaîne ANSI) : <indiquez ici le rôle de sRacineLiaison_p>
+      //	oClEntite_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oClEntite>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GenToutChamps(sRacineLiaison_p est une chaîne, oClEntite_p est un ClZF_GenCodeFic)<métier>:vide
+      
+      sRub			est une chaîne
+      bEstObj			est un booléen
+      stProto_tmp		est un ClZF_GenFen.STR_ProtoChamps
+      InfoRub			est un ClZF_GenCodeFic.str_DefRub
+      
+      
+      //POUR TOUT InfoRub, sRub de oClEntite_p.m_aRub
+      // 	
+      // 	bEstObj	= (InfoRub.oObj_Parent <> Null)
+      // 	
+      // 	SI InfoRub.bVisibleInterface ALORS
+      // 		
+      // 		stProto_tmp.sNom		= sRub
+      // 		stProto_tmp.sSource		= sRacineLiaison_p + "." + InfoRub.sNomPropriete
+      // 		stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
+      // 		stProto_tmp.sBulle		= InfoRub.sLibelleRubrique
+      // 		
+      // 		:m_nNumChamps++
+      // 		stProto_tmp.nTab		= :m_nNumChamps
+      // 		
+      // 		SELON InfoRub.nTypeRubHF
+      // 			CAS hRubBooléen : 
+      // 				:m_sCodeCols += [RC] + :GenChampsCheckBox(stProto_tmp)
+      // 			CAS hRubDate6 , hRubDate8
+      // 				:m_sCodeCols += [RC] + :GenChampsDate(stProto_tmp)
+      // 			CAS hRubDateHeure : 
+      // 				:m_sCodeCols += [RC] + :GenChampsDateheure(stProto_tmp)
+      // 			CAS hRubEntier1, hRubEntierNonSigné1 :
+      // 				:m_sCodeCols = [RC] + :GenChampsRadio(stProto_tmp)
+      // 			CAS hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
+      // 				SI bEstObj ALORS
+      // 					
+      // 					stTemp				est un ClZF_GenCodeFic.STR_Rel
+      // 					stTemp				= oClEntite_p.m_aPK_de_FK[sRub]
+      // 					oClasseGen			est un ClZF_GenCodeFic(stTemp.sTablePK)
+      // 					oClasseGen.Analyse()
+      // 					
+      // 					si stTemp.nTypeRel = ClZF_GenCodeFic::cstRelIncl ALORS
+      // 						:sGenToutChamps(stProto_tmp.sSource, oClasseGen)
+      // 					sinon
+      // 						//On pilote l'objet source via sa propriété 'ID'
+      // 						stProto_tmp.sSource += "_ID"
+      // 						
+      // 						:m_sCodeCols += [RC] + :GenChampsCombo(stProto_tmp)
+      // 						
+      // 						//Génération de la procédure de chargement de la combo
+      // 						:m_sCodeChargeBco += [RC] + :sGenProcChargeCombo(stProto_tmp.sNom, oClasseGen, InfoRub.bNullable)
+      // 					FIN
+      // 				SINON
+      // 					:m_sCodeCols += [RC] + :GenChampsSaisieEntier(stProto_tmp)
+      // 				FIN
+      // 			CAS hRubMémoTexte, hRubMémoUnicode :
+      // 				:m_sCodeCols += [RC] + :GenChampsTexteMultiLigne(stProto_tmp)
+      // 			CAS hRubMonétaire :
+      // 				:m_sCodeCols += [RC] + :GenChampsSaisieMonetaire(stProto_tmp)
+      // 			//			CAS hRubRéel4, hRubRéel8 :
+      // 			CAS hRubTexte, hRubTexteUnicode :
+      // 				:m_sCodeCols += [RC] + :GenChampsSaisieTexte(stProto_tmp)
+      // 			//			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+      // 			AUTRE CAS
+      //				Trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%oClEntite_p.p_sNomTable%].[%sRub%]""")
+      //		FIN
+      // 	FIN
+      //FIN
+      
+      
+      
+      bAfficher est un booléen
+      
+      POUR TOUT InfoRub, sRub de oClEntite_p.m_aRub
+      	
+      		
+      	SI InfoRub.bVisibleInterface ALORS
+      		
+      		bAfficher				= vrai
+      		stProto_tmp.sNom		= sRub
+      		stProto_tmp.sSource		= ""
+      		stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
+      		stProto_tmp.sBulle		= InfoRub.sLibelleRubrique
+      		
+      		
+      		SELON InfoRub.nTypeRubHF
+      			CAS hRubBooléen : 
+      				:m_sCodeCols += [RC] + :Gen_COL_Chk(stProto_tmp)
+      			CAS hRubDate6 , hRubDate8, hRubDateHeure
+      				:m_sCodeCols += [RC] + :Gen_COL_Date(stProto_tmp)
+      			CAS hRubEntier1, hRubEntierNonSigné1, hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
+      				SI InfoRub.oObj_Parent = null ALORS
+      					:m_sCodeCols += [RC] + :Gen_COL_Txt(stProto_tmp)
+      				SINON
+      					
+      					si InfoRub.stRelFkAsso.nTypeRel = ClZF_GenCodeFic.cstRelIncl ALORS
+      						bAfficher	= faux
+      						oClasseGen	est un ClZF_GenCodeFic(InfoRub.stRelFkAsso.sTablePK)
+      						oClasseGen.Analyse()
+      						GenToutChamps(sRacineLiaison_p + "." + InfoRub.sNomPropriete, oClasseGen)
+      					sinon
+      						:m_sCodeCols += [RC] + :Gen_COL_Entier(stProto_tmp)
+      					FIN
+      					
+      				FIN
+      			CAS hRubMonétaire, hRubRéel4, hRubRéel8 :
+      				:m_sCodeCols += [RC] + :Gen_COL_Monetaire(stProto_tmp)
+      			CAS hRubTexte, hRubTexteUnicode, hRubMémoTexte, hRubMémoUnicode :
+      				:m_sCodeCols += [RC] + :Gen_COL_Txt(stProto_tmp)
+      //			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+      			AUTRE CAS
+      				ExceptionDéclenche(1, "Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
+      		FIN
+      		
+      		
+      		si bAfficher alors
+      			:m_sChargementTbl += [RC] + TAB + :m_sNomChampsTbl + ".COL_" + stProto_tmp.sNom + "[nLigne] = "
+      			SI bEstObj ALORS
+      				:m_sChargementTbl += "[%sRacineLiaison_p%].[%InfoRub.sNomPropriete%] = Null ? """" SINON [%sRacineLiaison_p%].[%InfoRub.sNomPropriete%].sRepresentation()"
+      			SINON
+      				:m_sChargementTbl += "[%sRacineLiaison_p%].[%InfoRub.sNomPropriete%]"
+      			FIN
+      		FIN
+      	FIN
+      FIN
      type : 458752
   procedure_templates : []
   property_templates : []

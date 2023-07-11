@@ -19,19 +19,19 @@ class :
       	herite de ClZF_ObjDB
       	
       
-      	m_oMsgparent				est un ClDbMessage dynamique
+      	m_oMsgparent			est un ClDbMessage dynamique
       	
       prive
       	m_oUsr					est un ClDbUsr dynamique
-      	m_oUserStory				est un ClDbUserStory dynamique
-      	m_oTache					est un ClDbTache dynamique
-      	m_oCritereAccept			est un ClDbCritereAccept dynamique
+      	m_oUserStory			est un ClDbUserStory dynamique
+      	m_oTache				est un ClDbTache dynamique
+      	m_oCritereAccept		est un ClDbCritereAccept dynamique
       
       	m_sCMTR					est une chaîne		<MAPPING=CMTR>
       	m_bTop_Visible			est un booléen 		<MAPPING=Top_Visible>
-      	m_dhDteCreation			est une dateheure		<mapping=DteCreation>
+      	m_dhDteCreation			est une dateheure	<mapping=DteCreation>
       	
-      	m_oMsgEnfant				est un ClcolMessage dynamique
+      	m_oMsgEnfant			est un ClcolMessage
       	m_bGererParent			est un booléen	//Précise, lors de l'ajout ou suppression, qu'il faut ajouter le message actuel, au message parent.
       fin
       

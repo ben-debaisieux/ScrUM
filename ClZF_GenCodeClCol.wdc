@@ -68,7 +68,7 @@ class :
       
       
       sProcsChargeCol = :GenProc_ChargeFrom()
-      //sProcsChargeCol = :GenChargeCol(:m_oClasseGen)
+      
       SI sProcsChargeCol <> "" ALORS
       	sClasse += sProcsChargeCol + RC
       FIN
@@ -533,7 +533,7 @@ class :
       
       
       SELON stRelTmp_p.nTypeRel
-      	CAS ClZF_GenCodeFic.cstRelNonDef, ClZF_GenCodeFic.cstRelAgr
+      	CAS ClZF_GenCodeFic.cstRelNonDef, ClZF_GenCodeFic.cstRelAgr, ClZF_GenCodeFic.cstRelIncl
       		//Pas de création de procédure de chargement pour ces types de liaisons
       		
       	CAS ClZF_GenCodeFic.cstRelAsso

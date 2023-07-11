@@ -1,0 +1,225 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbUsr_Trello
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e643a425cbd8
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbUsr_Trello est une Classe
+      	hérite de ClZF_ObjDB
+      
+      PRIVÉ
+      	m_sIdTrello	est un chaîne	<MAPPING=IdTrello>
+      	m_oIDScr_Usr	est un ClDbUsr dynamique	<note="mapping=IDScr_Usr">
+      
+      GLOBAL
+      PUBLIC
+      mg_oEx_CompoNonInst_IDScr_Usr	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception1	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception2	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception3	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception4	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception5	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception6	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception7	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception8	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception9	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception10	est un ClZF_Exception dynamique
+      FIN
+      
+      mg_oEx_CompoNonInst_IDScr_Usr	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Usr est requis.")			// A faire : Reprendre le message
+      // mg_oEx_Exception1	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception2	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception3	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception4	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception5	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception6	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception7	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception8	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception9	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
+      
+      
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 816128144559058
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      Ancêtre.Constructeur(Scr_Usr_Trello..Nom, Scr_Usr_Trello.IDScr_Usr_Trello..Nom,nID_P)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 816128144559059
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 816128144559060
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbUsr_Trello
+      
+      sClasse est une chaîne = ClDbUsr_Trello
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 816128144559061
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉ init_ObjBD()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      SI PAS :ZF_bModeAjout() ALORS
+      
+      
+      
+      sinon
+      	:m_oIDScr_Usr = allouer un ClDbUsr()
+      FIN
+      
+     type : 458752
+   -
+     name : Pre_Enregistre
+     procedure_id : 816128144559062
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ Pre_Enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.Pre_Enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      //. . .
+      SINON
+      
+      	//Enregistrement de ""Usr"" parent.
+      	:m_oIDScr_Usr.ZF_Enregistre()
+      	//
+      	SI :m_oIDScr_Usr = Null ALORS
+      		mg_oEx_CompoNonInst_IDScr_Usr.ZF_Declenche()
+      	FIN
+      
+      
+      FIN
+     type : 458752
+   -
+     name : post_enregistre
+     procedure_id : 816128144559063
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ post_enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.post_enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      // . . .
+      
+      	//Suppression de ""Usr"" parent.
+      	:m_oIDScr_Usr.ZF_Supprimer()
+      	:m_oIDScr_Usr.ZF_Enregistre()
+      
+      
+      FIN
+     type : 458752
+  properties :
+   -
+     name : p_sIdTrello
+     identifier : 0x2e643a425cbd0
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_sIdTrello() : chaîne
+         //Propriétés de m_sIdTrello
+         
+         RENVOYER :m_sIdTrello
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_sIdTrello(sValeur_p est un chaîne):Vide
+         
+         SI :m_sIdTrello <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sIdTrello = sValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Usr
+     identifier : 0x2e643a425cbd1
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Usr() : ClDbUsr
+         //Propriétés de m_oIDScr_Usr
+         
+         RENVOYER :m_oIDScr_Usr
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Usr(oValeur_p est un ClDbUsr dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_Usr, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_Usr = oValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Usr_ID
+     identifier : 0x148788190562c093
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_oIDScr_Usr_ID():entier
+         //Propriétés de l'objet m_oIDScr_Usr, accessible via son ID
+         SI :p_oIDScr_Usr = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_Usr.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         procédure p_oIDScr_Usr_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oIDScr_Usr = Null
+         SINON
+         	:p_oIDScr_Usr = ClDbUsr.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e643a425cbd9
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

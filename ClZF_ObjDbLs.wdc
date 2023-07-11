@@ -44,7 +44,7 @@ class :
   procedures :
    -
      name : Constructeur
-     internal_properties : BwAAAAcAAACajsv7pemPkCvSQtNIhRl856YHs/sW7WIjO0ObOaT/WsT7lA8CpTO7QPiWjG4ttlJQxe+l/uAjUue1R+m3ao+Rp79Y7+M2vq350NXn10Ntly+6nwUlJDk5XF3CH4dv9mVUMm6otAHo2m1PbZv7RWUkUdRTzMYkh9J62BiTiudW3g4I4eWVrzU9aXTBYPZb44ZhY5cUj5sBZ3H5cG7VA/+rXcHzqOfGmSFLtJXaUYspBtVEzDLPO26Rvt3pJxqJfj5NBby/5ZrImqRh7lbRF8XZIXw7r58xOuKYcpTwNBQ47mO4h6YTGoGxkuaqyqf1iyHkWz5N8oIWeREQRq44T1ZCu0vXgHyKQ4kIbrgpNtct
+     internal_properties : BwAAAAcAAACkG74KMBMUU+rk5PsRR4CxGRvZSFrsg3Azn7U3z1wk8SidCqAAHXfQSHq5H4vNCqBGwFAee0zUUywA3JXccUXscXh3c89bPNcKjkVfKXZFbqhUStWsQIAnJXJotsrId0KhqwoibkzjUatPgCllf1JyEWuBgb2abztOZYgVAw/BrUV1fkKOGZuLlvAkt0HllavU47dfOqU4lTH63xlNFjCqjoRUALn7BtU7m1aXcYQp7RbrpGbnPzge3CA17srei2Mx4dSxauWUYM4Auhh3jiE8dJ8DZmR8FE6Ed8r0/FeUoeKTvQlUz7EJEoECYlsat3bF+Oz2iUdcz0OFvLo4YCyjoPqxC00XcUUEQR7dJtqdklZP5YXVPlyDjtY2CwkrI9oZ8m2LeJcGrdQO05iR6S6JQTXcm8zRaX4MfEZku/Vxvbtlja/GIHxHYvngOxsgx0DFE/1kEPAtfM2nZ8Ty9x0kdqpKA+UjXH9qRcmJ5KRM6eG9nG8k3z19QEK6bxeojKIGo4IhJmFAlOytpQ==
      procedure_id : 1438107401790463785
      type_code : 27
      code : |1+
@@ -87,6 +87,8 @@ class :
       
       SI nId_P > 0 ALORS
       	:ZF_Charge()
+      sinon
+      	:Init_ObjBD()
       FIN
       
       //Mémorisation de l'adresse de l'objet

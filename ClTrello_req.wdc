@@ -194,6 +194,8 @@ class :
       			sCommentaire	+= [RC] + stSuivi.buContent
       			
       			sCommentaire = HTMLVersTexte(sCommentaire)
+      			
+      			sCommentaire = ChaîneVersUTF8(sCommentaire)
       
       			
       			// créé formulaire

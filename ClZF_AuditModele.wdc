@@ -79,16 +79,22 @@ class :
       
       
       POUR TOUT ÉLÉMENT stRelTmp, sRub DE :m_oClasseGen.m_aPK_de_FK
+      
+      	//Récupération de la définition de la rubrique associé à la contrainte FK
+      	stInfoRub  = :m_oClasseGen.m_aRub[sRub]
+      	
+      	
       	SELON stRelTmp.nTypeRel
       		CAS ClZF_GenCodeFic.cstRelNonDef
       			traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).")
       		CAS ClZF_GenCodeFic.cstRelIncl
       			nNbFkIncl++
       			sListeFkCompo += [RC] + stRelTmp.sNomRel
+      			
+      			si stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ALORS
+      				traceInfo("Liaison ""[%stRelTmp.sNomRel%]"", de type ""Inclusion"", pointe vers une rubrique non unique : [%sRub%].")
+      			FIN
       	FIN
-      	
-      	//Récupération de la définition de la rubrique associé à la contrainte FK
-      	stInfoRub  = :m_oClasseGen.m_aRub[sRub]
       	
       	SI stInfoRub.bNullable ET stRelTmp.bRubFKOblig ALORS
       		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%sRub%] nullable et relation de type ""1,1"").")
@@ -102,6 +108,35 @@ class :
       
       SI nNbFkIncl > 1 ALORS
       	traceInfo("[%nNbFkIncl%] liaisons sont de type ""Inclusion"", dans cette table (1 seule maxi): " + RC + sListeFkCompo)
+      FIN
+      
+      
+      :m_sRapport = sRapport
+      
+      
+      PROCÉDURE INTERNE traceInfo(sMessage):vide
+      	sRapport += [RC] + sMessage
+      FIN
+      
+     type : 458752
+   -
+     name : AnaLibRubs
+     procedure_id : 1479647406539584332
+     type_code : 12
+     code : |1+
+      PROCÉDURE AnaLibRubs()<métier>:Vide
+      
+      
+      sRapport		est une chaîne
+      stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
+      sRub			est une chaîne
+      
+      
+      POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.m_aRub
+      	//SI le libellé et le nom de la rubrique sont identiques, c'est que le libellé n'a pas été redéfinit
+      	si sRub = stRubTmp.sLibelleRubrique ALORS
+      		traceInfo("Le libellé de la rubrique ""[%sRub%]"" n'a pas été redéfinit.")
+      	FIN
       FIN
       
       
@@ -146,7 +181,7 @@ class :
       	
       	oTmp = ClZF_ObjDbLs.ZF_GetObj(:m_oClasseGen.sNomClasseGen(), ClZF_ObjDbLs.cstModeSansChargement)
       	SI PAS oTmp est ClZF_ObjDbLs ALORS
-      		Erreur("Type incompatible")
+      		ExceptionDéclenche(1,"Type incompatible")
       		RETOUR
       	FIN
       	
@@ -171,7 +206,7 @@ class :
       	POUR TOUT ÉLÉMENT stRubAnaTmp, sRub DE :m_oClasseGen.m_aRub
       		VariableRAZ(stDiffRub)
       		stDiffRub.bPresAnalyse		= Vrai
-      		stDiffRub.bMembreObj		= (stRubAnaTmp.nTypeRub = ClZF_GenCodeFic.cstDefRubObj)
+      		stDiffRub.bMembreObj		= (stRubAnaTmp.oObj_Parent <> null)
       		stDiffRub.sNomMembre		= stRubAnaTmp.sNomMembre
       		stInfosDiffRub[sRub]		= stDiffRub
       	FIN
@@ -494,6 +529,7 @@ class :
       //
       procédure bMsgInfo() <métier>:booleen
       renvoyer :m_sRapport <> ""
+      
      type : 458752
   properties :
    -

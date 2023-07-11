@@ -66,7 +66,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenProcIdent(nNum <utile> = 0, bIdentifier_p est un booléen = faux):chaine
+      procédure protege GenProcIdent(nNum <utile> = 0, bIdentifier_p est un booléen = faux):chaine
       
       sRetour est une chaîne = ...
       	NumériqueVersChaîne(DateVersEntier(DateSys())) + ...
@@ -98,7 +98,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure sIndentSpace(sTxt_p est une chaîne, nIndente_p est un entier = 6):chaine
+      procédure protege sIndentSpace(sTxt_p est une chaîne, nIndente_p est un entier = 6):chaine
       sRetour est une chaîne
       sLigne est une chaîne
       
@@ -113,17 +113,80 @@ class :
      procedure_id : 1455887488688740718
      type_code : 12
      code : |1+
-      PROCÉDURE ABSTRAITE Genere():Vide
+      PROCÉDURE ABSTRAITE Genere()<métier>:Vide
      type : 458752
    -
-     name : chargeConfTable_old
-     procedure_id : 1472107415169454796
+     name : sReCheckLignesCode
+     procedure_id : 1487453152932941735
+     type_code : 12
+     code : |1+
+      procedure protegé sReCheckLignesCode(sCode_p est une chaîne)<metier>:chaine
+      
+      sLigne	est une chaîne
+      sRetour	est une chaîne
+      
+      
+      pour toute chaine sLigne de sCode_p separee par RC
+      	si taille(sLigne) < 999 ALORS
+      		sLigne += rc
+      	FIN
+      	sRetour += sLigne
+      FIN
+      
+      
+      RENVOYER gauche(sRetour, taille(sRetour) - taille(rc))
+      
+     type : 458752
+   -
+     name : sNomRubAsso
+     procedure_id : 1487454067777638350
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉ sNomRubAsso(ValElt est une Description de variable)<métier>:chaîne
+      
+      sRub est une chaine
+      SI ValElt.AttributMapping <> "" ALORS
+      	sRub = ValElt.AttributMapping
+      FIN
+      SI ValElt.AttributNote <> "" ALORS
+      	aNotes est un tableau associatif de chaînes = col_zf_surcharge.chaineverstableauasso(ValElt.AttributNote)
+      	sRub = aNotes["mapping"]
+      FIN
+      
+      renvoyer sRub
+      
+     type : 458752
+   -
+     name : GenBloc_ProcedureLoc
+     procedure_id : 1487454712024259115
      type_code : 12
      code : |1-
-      PROCÉDURE chargeConfTable_old()<métier>:Vide
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenBloc_ProcedureLoc (<sCode_p> est chaîne, <sNom_p> est chaîne)
+      //
+      // Paramètres :
+      //	sCode_p (chaîne ANSI) : <indiquez ici le rôle de sCode_p>
+      //	sNom_p (chaîne ANSI) : <indiquez ici le rôle de sNom_p>
       
-      
-      //:m_oClasseGen
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nType_p (entier) : <indiquez ici le rôle de nType_p>
+      procédure protege GenBloc_ProcedureLoc(sCode_p est un chaine, sNom_p est un chaine):chaine
+      sRetour est une chaîne = [
+         -
+           name : [%sNom_p%]
+           procedure_id : [%GenProcIdent()%]
+           type_code : 14
+           code : |1+
+      [%sIndentSpace(sCode_p)%]
+           type : 458752
+      ]
+      RENVOYER sRetour
      type : 458752
   properties :
    -

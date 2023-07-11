@@ -15,6 +15,16 @@ class :
   p_codes :
    -
      code : |1-
+      STR_Rel est une Structure
+      	sNomRel			est une chaîne
+      	sTablePK		est une chaîne
+      	sRubriquePK		est une chaîne
+      	sTableFK		est une chaîne
+      	sRubriqueFK		est une chaîne
+      	bRubFKOblig		est un booléen
+      	nTypeRel		est un entier
+      FIN
+      
       STR_DefRub est une structure
       	nTypeRub				est un entier
       	nTypeRubHF				est un entier
@@ -32,25 +42,15 @@ class :
       	nTaille					est un entier
       	sValDef					est une chaine
       	nTypeCle				est un entier
-      	//sMeta					est une chaîne
       	
       	oObj_Parent				est un ClZF_GenCodeFic dynamique
+      	stRelFkAsso				est un STR_Rel
       fin
       
       STR_InfoCol est une Structure
       	sDeclaration		est une chaîne
       	sTableDesti			est une chaîne
       	sCleDesti			est une chaîne
-      FIN
-      
-      STR_Rel est une Structure
-      	sNomRel			est une chaine
-      	sTablePK		est une chaîne
-      	sRubriquePK		est une chaîne
-      	sTableFK		est une chaîne
-      	sRubriqueFK		est une chaîne
-      	bRubFKOblig		est un booléen
-      	nTypeRel		est un entier
       FIN
       
       
@@ -96,6 +96,7 @@ class :
       	cstDefRubNum		= 1
       	cstDefRubChaine		= 2
       	cstDefRubObj		= 3
+      	cstDefRubInclusion	= 4
       	
       	cstRelNonDef		= 0
       	cstRelAsso			= 1
@@ -329,6 +330,8 @@ class :
       FIN
       
       
+      ///////////////////////////////////////////////////
+      //Recherche PK
       nIndRech est un entier
       bOk est un booléen
       
@@ -372,6 +375,8 @@ class :
       
       
       
+      ////////////////////////////////////////////////////////////////////
+      //Analyse des FK
       
       POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
       	
@@ -498,12 +503,20 @@ class :
       			stCol.sDeclaration		= "[%oGenTmp.sNomClasseColGen(Vrai)%]_[%sRub%] est un [%oGenTmp.sNomClasseColGen()%]"
       			
       			stRubTmp.oObj_Parent	= oGenTmp
-      			stRubTmp.nTypeRub		= ::cstDefRubObj
+      			
+      			//La relation associée à cette rubrique est elle de type 'inclusion' ?
+      			SI stRelTmp.nTypeRel = ::cstRelIncl ALORS
+      				stRubTmp.nTypeRub	= ::cstDefRubInclusion
+      			sinon
+      				stRubTmp.nTypeRub	= ::cstDefRubObj
+      			fin
+      			
+      			stRubTmp.stRelFkAsso	= stRelTmp
       		FIN
       		
       
       		SELON stRubTmp.nTypeRub
-      			CAS ::cstDefRubObj
+      			CAS ::cstDefRubObj, ::cstDefRubInclusion
       				stRubTmp.sPrefixe				= "o"
       				stRubTmp.sNomDeclarationComplet	= "est un [%stRubTmp.oObj_Parent.sNomClasseGen()%] dynamique"
       				stRubTmp.sNomDeclarationCourt	= stRubTmp.oObj_Parent.sNomClasseGen()
@@ -681,9 +694,11 @@ class :
       		FIN
       		
       		
-      		si pas :M_aPK_de_FK[sRub]..vide ALORS
+      		si :m_aRub[sRub].stRelFkAsso.sNomRel <> "" ALORS
       			stRel = :m_aPK_de_FK[sRub]
-      			selon stRel.nTypeRel
+      //		si pas :M_aPK_de_FK[sRub]..vide ALORS
+      //			stRel = :m_aPK_de_FK[sRub]
+      			selon :m_aRub[sRub].stRelFkAsso.nTypeRel
       				CAS cstRelAsso
       					AddPx(nCleRubFKAsso)
       				CAS cstRelAgr
@@ -756,7 +771,7 @@ class :
      name : aTableDependances
      procedure_id : 1474825930687461673
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] aTableDependances ()
@@ -815,6 +830,69 @@ class :
       
       
       renvoyer aRetour
+      
+     type : 458752
+   -
+     name : bRubriqueRelationInclusion
+     procedure_id : 1478898643233443542
+     type_code : 12
+     code : |1+
+      // Résumé : Retourne vrai si la rubrique passée en paramètres est associée à une relation de type inclusion
+      // Syntaxe :
+      //[ <Résultat> = ] bRubriqueRelationInclusion (<sRub_p> est chaîne)
+      //
+      // Paramètres :
+      //	sRub_p (chaîne ANSI) : <indiquez ici le rôle de sRub_p>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procedure publique bRubriqueRelationInclusion(sRub_p est une chaîne)<metier>:booleen
+      
+      bRetour est un booléen
+      
+      SI PAS :m_aPK_de_FK[sRub_p]..Vide ALORS
+      	//Récupération des infos de la clé étrangère associés à le rubrique en cours
+      	stRel_tmp est un ClZF_GenCodeFic.STR_Rel
+      	stRel_tmp = :m_aPK_de_FK[sRub_p]
+      	
+      	//Pour les relation de type "inclusion", la classe parente sera définie par cette relation
+      	SI stRel_tmp.nTypeRel = ::cstRelIncl ALORS
+      		bRetour = vrai
+      	FIN
+      FIN
+      
+      
+      renvoyer bRetour
+      
+     type : 458752
+   -
+     name : sNomRelationDeType
+     procedure_id : 1479654248423490036
+     type_code : 12
+     code : |1-
+      procedure globale sNomRelationDeType(nType_P est un entier)<métier>:chaine
+      
+      sRetour est une chaîne
+      
+      selon nType_P
+      	CAS cstRelAgr
+      		sRetour = "Agrégation"
+      	CAS cstRelAsso
+      		sRetour = "Association"
+      	CAS cstRelCompo
+      		sRetour = "Composition"
+      	CAS cstRelIncl
+      		sRetour = "Inclusion"
+      		
+      	AUTRE CAS
+      		ExceptionDéclenche(1, "Type de relation non prévu")
+      FIN
+      
+      renvoyer sRetour
      type : 458752
   properties :
    -

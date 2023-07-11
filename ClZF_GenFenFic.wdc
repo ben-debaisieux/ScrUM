@@ -20,14 +20,18 @@ class :
       
       PRIVE
       	m_nPosYActu			est un entier
+      	
+      	m_nNumChamps		est un entier
+      	m_sCodeChamps		est une chaîne 
+      	m_sCodeChargeBco	est une chaîne 
       fin
       
       
       constante
-      	cstHauteurDefaut	= 24
-      	cstLargeurBtnDefaut	= 100
+      	cstHauteurDefaut		= 24
+      	cstLargeurBtnDefaut		= 100
       	cstLargeurChampDefaut	= 350
-      	cstMargeDefaut		= 5
+      	cstMargeDefaut			= 5
       fin
      type : 131072
   procedures :
@@ -60,94 +64,114 @@ class :
       :m_nPosYActu = cstMargeDefaut
       
       
-      sRub			est une chaîne
+      //sRub			est une chaîne
       nHauteurTot		est un entier
       
       //-------------------------------------------------
       //Récupération des membres déclarées dans la classe
-      Vars			est une Description de variable
-      Def				est une Définition	= RécupèreDéfinitionType(:m_oClasseGen.sNomClasseGen())
-      bEstObj			est un booléen
-      sChamps			est une chaîne
-      sProcedures		est une chaîne
-      nNumChamp		est un entier
+      //bEstObj			est un booléen
+      //sChamps			est une chaîne
+      //sProcedures		est une chaîne
+      //nNumChamp		est un entier
       
       
-      POUR TOUT Vars DE Def.Variable
-      	
-      	sRub = :sNomRubAsso(Vars)
-      	
-      	SI sRub <> "" ALORS
-      		
-      		//A faire : identifier plus proprement qu'il s'agit d'un objet
-      		SI Vars.AttributNote <> "" ALORS
-      			bEstObj = Vrai
-      		sinon
-      		 	bEstObj = Faux
-      		FIN
-      		
-      		stProto_tmp	est un ClZF_GenFen.STR_ProtoChamps
-      		InfoRub		est un ClZF_GenCodeFic.str_DefRub
-      		
-      		
-      		
-      		InfoRub					= :m_oClasseGen.m_aRub[sRub]
-      		si InfoRub.bVisibleInterface alors
-      			
-      			stProto_tmp.sNom		= sRub
-      			stProto_tmp.sSource		= sNomObjGlobal() + "." + InfoRub.sNomPropriete
-      			stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
-      			stProto_tmp.sBulle		= InfoRub.sLibelleRubrique
-      			
-      			nNumChamp++
-      			stProto_tmp.nTab		= nNumChamp
-      			
-      			selon InfoRub.nTypeRubHF
-      				CAS hRubBooléen : 
-      					sChamps += [RC] + :GenChampsCheckBox(stProto_tmp)
-      				CAS hRubDate6 , hRubDate8
-      					sChamps += [RC] + :GenChampsDate(stProto_tmp)
-      				CAS hRubDateHeure : 
-      					sChamps += [RC] + :GenChampsDateheure(stProto_tmp)
-      				CAS hRubEntier1, hRubEntierNonSigné1 :
-      					sChamps = [rc] + :GenChampsRadio(stProto_tmp)
-      				CAS hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
-      					SI bEstObj ALORS
-      						
-      						//On pilote l'objet source via sa propriété 'ID'
-      						stProto_tmp.sSource += "_ID"
-      						
-      						
-      						sChamps += [RC] + :GenChampsCombo(stProto_tmp)
-      						
-      						//Génération de la procédure de chargement de la combo
-      						stTemp				est un ClZF_GenCodeFic.STR_Rel
-      						stTemp				= :m_oClasseGen.m_aPK_de_FK[sRub]
-      						pclOClasseGen		est un ClZF_GenCodeFic(stTemp.sTablePK)
-      						pclOClasseGen.Analyse()
-      						sProcedures += [rc] + :sGenProcChargeCombo(stProto_tmp.sNom, pclOClasseGen, InfoRub.bNullable)
-      						
-      					SINON
-      						sChamps += [RC] + :GenChampsSaisieEntier(stProto_tmp)
-      					FIN
-      				CAS hRubMémoTexte, hRubMémoUnicode :
-      					sChamps += [RC] + :GenChampsTexteMultiLigne(stProto_tmp)
-      				CAS hRubMonétaire :
-      					sChamps += [RC] + :GenChampsSaisieMonetaire(stProto_tmp)
-      	//			CAS hRubRéel4, hRubRéel8 :
-      				CAS hRubTexte, hRubTexteUnicode :
-      					sChamps += [RC] + :GenChampsSaisieTexte(stProto_tmp)
-      	//			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
-      				AUTRE CAS
-      					trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
-      			FIN
-      		FIN
-      	FIN
+      :m_nNumChamps	 	= 0
+      :m_sCodeChamps		= ""
+      :m_sCodeChargeBco	= ""
+      
+      GenToutChamps(sNomObjGlobal(), :m_oClasseGen)
+      
+      
+      
+      //Vars			est une Description de variable
+      //Def				est une Définition	= RécupèreDéfinitionType(:m_oClasseGen.sNomClasseGen())
+      //POUR TOUT Vars DE Def.Variable
+      //	
+      //	sRub = :sNomRubAsso(Vars)
+      //	
+      //	SI sRub <> "" ALORS
+      //		
+      ////		//A faire : identifier plus proprement qu'il s'agit d'un objet
+      ////		SI Vars.AttributNote <> "" ALORS
+      ////			bEstObj = Vrai
+      ////		sinon
+      ////		 	bEstObj = Faux
+      ////		FIN
+      //		
+      //		stProto_tmp	est un ClZF_GenFen.STR_ProtoChamps
+      //		InfoRub		est un ClZF_GenCodeFic.str_DefRub
+      //		
+      //		
+      //		
+      //		InfoRub	= :m_oClasseGen.m_aRub[sRub]
+      //		bEstObj	= (InfoRub.oObj_Parent <> null)
+      //		
+      //		si InfoRub.bVisibleInterface alors
+      //			
+      //			stProto_tmp.sNom		= sRub
+      //			stProto_tmp.sSource		= sNomObjGlobal() + "." + InfoRub.sNomPropriete
+      //			stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
+      //			stProto_tmp.sBulle		= InfoRub.sLibelleRubrique
+      //			
+      //			nNumChamp++
+      //			stProto_tmp.nTab		= nNumChamp
+      //			
+      //			selon InfoRub.nTypeRubHF
+      //				CAS hRubBooléen : 
+      //					sChamps += [RC] + :GenChampsCheckBox(stProto_tmp)
+      //				CAS hRubDate6 , hRubDate8
+      //					sChamps += [RC] + :GenChampsDate(stProto_tmp)
+      //				CAS hRubDateHeure : 
+      //					sChamps += [RC] + :GenChampsDateheure(stProto_tmp)
+      //				CAS hRubEntier1, hRubEntierNonSigné1 :
+      //					sChamps = [rc] + :GenChampsRadio(stProto_tmp)
+      //				CAS hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
+      //					SI bEstObj ALORS
+      //						
+      //						//On pilote l'objet source via sa propriété 'ID'
+      //						stProto_tmp.sSource += "_ID"
+      //						
+      //						
+      //						sChamps += [RC] + :GenChampsCombo(stProto_tmp)
+      //						
+      //						//Génération de la procédure de chargement de la combo
+      //						stTemp				est un ClZF_GenCodeFic.STR_Rel
+      //						stTemp				= :m_oClasseGen.m_aPK_de_FK[sRub]
+      //						pclOClasseGen		est un ClZF_GenCodeFic(stTemp.sTablePK)
+      //						pclOClasseGen.Analyse()
+      //						sProcedures += [rc] + :sGenProcChargeCombo(stProto_tmp.sNom, pclOClasseGen, InfoRub.bNullable)
+      //						
+      //					SINON
+      //						sChamps += [RC] + :GenChampsSaisieEntier(stProto_tmp)
+      //					FIN
+      //				CAS hRubMémoTexte, hRubMémoUnicode :
+      //					sChamps += [RC] + :GenChampsTexteMultiLigne(stProto_tmp)
+      //				CAS hRubMonétaire :
+      //					sChamps += [RC] + :GenChampsSaisieMonetaire(stProto_tmp)
+      //	//			CAS hRubRéel4, hRubRéel8 :
+      //				CAS hRubTexte, hRubTexteUnicode :
+      //					sChamps += [RC] + :GenChampsSaisieTexte(stProto_tmp)
+      //	//			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+      //				AUTRE CAS
+      //					trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
+      //			FIN
+      //		FIN
+      //	FIN
+      //FIN
+      
+      
+      sProcedures est une chaîne
+      sRapport est une chaîne
+      
+      
+      sProcedures = :m_sCodeChargeBco
+      si sProcedures = "" ALORS
+      	sProcedures = "[]"
+      sinon
+      	sProcedures = rc + :sIndentSpace(sProcedures, 3)
       FIN
       
       
-      
-      sRapport est une chaîne
       
       
       //Calcul de la hauteur de la fenetre
@@ -174,7 +198,7 @@ class :
         widthClient : 484
         heightClient : [%nHauteurTot%]
        controls :
-      [%sChamps%]
+      [%:m_sCodeChamps%]
         -
           name : BTN_Valider
           identifier : [%GenProcIdent(2)%]
@@ -268,8 +292,7 @@ class :
            code : |1-
             
            type : 2
-        procedures :
-      [%:sIndentSpace(sProcedures, 3)%]
+        procedures : [%sProcedures%]
         procedure_templates : []
         property_templates : []
        code_parameters :
@@ -317,7 +340,7 @@ class :
      name : GenBtnValide
      procedure_id : 1462456202798127574
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] GenBtnValide ()
@@ -332,24 +355,11 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       //	oClasseGen_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oClasseGen_p>
-      procédure GenBtnValide():chaine
+      procédure prive GenBtnValide():chaine
       
-      
-      Def		est une Définition	= RécupèreDéfinitionType(:m_oClasseGen.sNomClasseGen())
-      Vars	est une Description de variable
       sCode	est une chaîne
       
-      
-      // Liste des variables de l'objet Def
-      POUR TOUT Vars DE Def.Variable
-      	SI Vars.Définition = ClZF_Exception ALORS
-      		sCode += [
-      [%TAB%][%TAB%]CAS [%Vars.Déclaration%].[%Vars.Nom%].ZF_Code
-      [%TAB%][%TAB%][%TAB%]EcranPremier(MaFenêtre)
-      			
-      		]
-      	FIN
-      FIN
+      sCode = sListeExceptionsEnfant(:m_oClasseGen)
       
       sCode = [
       
@@ -375,6 +385,43 @@ class :
       
                
       renvoyer sCode
+      
+     type : 458752
+   -
+     name : sListeExceptionsEnfant
+     procedure_id : 1479641084346318578
+     type_code : 12
+     code : |1-
+      procedure sListeExceptionsEnfant(oClAnalyse_p est un ClZF_GenCodeFic)<métier>:chaine
+      
+      sRetour est une chaîne
+      Def		est une Définition	= RécupèreDéfinitionType(oClAnalyse_p.sNomClasseGen())
+      Vars	est une Description de variable
+      
+      
+      // Liste des variables de l'objet Def
+      POUR TOUT Vars DE Def.Variable
+      	SI Vars.Définition = ClZF_Exception ALORS
+      		sRetour += [
+      [%TAB%][%TAB%]CAS [%Vars.Déclaration%].[%Vars.Nom%].ZF_Code
+      [%TAB%][%TAB%][%TAB%]EcranPremier(MaFenêtre)
+      			
+      		]
+      	FIN
+      FIN
+      
+      stRub est un ClZF_GenCodeFic.STR_Rel
+      sRub est une chaîne
+      
+      pour tout stRub, sRub de oClAnalyse_p.m_aPK_de_FK
+      	si stRub.nTypeRel = ClZF_GenCodeFic.cstRelIncl ALORS
+      		oAnalyseTmp est un ClZF_GenCodeFic(stRub.sTablePK)
+      		sRetour += sListeExceptionsEnfant(oAnalyseTmp)
+      	FIN
+      FIN
+      
+      
+      renvoyer sRetour
      type : 458752
    -
      name : GenBlocDeclaration
@@ -429,7 +476,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenChampsCombo(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      procédure PRIVÉ GenChampsCombo(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut
@@ -491,7 +538,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenChampsSaisieTexte(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      procédure PRIVÉ GenChampsSaisieTexte(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut
@@ -563,7 +610,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenChampsSaisieEntier(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      procédure PRIVÉ GenChampsSaisieEntier(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut
@@ -632,7 +679,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenChampsSaisieMonetaire(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      procédure PRIVÉ GenChampsSaisieMonetaire(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut
@@ -700,7 +747,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenChampsCheckBox(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      procédure PRIVÉ GenChampsCheckBox(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut
@@ -751,7 +798,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenChampsRadio(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      procédure PRIVÉ GenChampsRadio(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut * 2
@@ -803,7 +850,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenChampsTexteMultiLigne(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      procédure prive GenChampsTexteMultiLigne(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut * 3
@@ -871,7 +918,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenChampsDate(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      procédure PRIVÉ GenChampsDate(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut
@@ -943,7 +990,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GenChampsHeure(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      procédure PRIVÉ GenChampsHeure(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut
@@ -999,7 +1046,7 @@ class :
      procedure_id : 1466213792365233096
      type_code : 12
      code : |1-
-      PROCÉDURE GenChampsDateheure(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
+      PROCÉDURE PRIVÉ GenChampsDateheure(stProto est un ClZF_GenFen.STR_ProtoChamps)<métier>:chaine
       
       sRetour est une chaîne
       nHauteur est un entier = cstHauteurDefaut
@@ -1121,6 +1168,94 @@ class :
       	]
       
       RENVOYER sCode
+     type : 458752
+   -
+     name : GenToutChamps
+     procedure_id : 1479282694957169817
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GenToutChamps (<sRacineLiaison_p> est chaîne, <oClEntite_p> est ClZF_GenCodeFic)
+      //
+      // Paramètres :
+      //	sRacineLiaison_p (chaîne ANSI) : <indiquez ici le rôle de sRacineLiaison_p>
+      //	oClEntite_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oClEntite>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GenToutChamps(sRacineLiaison_p est une chaîne, oClEntite_p est un ClZF_GenCodeFic)<métier>:vide
+      
+      sRub			est une chaîne
+      bEstObj			est un booléen
+      stProto_tmp		est un ClZF_GenFen.STR_ProtoChamps
+      InfoRub			est un ClZF_GenCodeFic.str_DefRub
+      
+      
+      
+      POUR TOUT InfoRub, sRub de oClEntite_p.m_aRub
+       	
+       	bEstObj	= (InfoRub.oObj_Parent <> Null)
+       	
+       	SI InfoRub.bVisibleInterface ALORS
+       		
+       		stProto_tmp.sNom		= sRub
+       		stProto_tmp.sSource		= sRacineLiaison_p + "." + InfoRub.sNomPropriete
+       		stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
+       		stProto_tmp.sBulle		= InfoRub.sLibelleRubrique
+       		
+       		:m_nNumChamps++
+       		stProto_tmp.nTab		= :m_nNumChamps
+       		
+       		SELON InfoRub.nTypeRubHF
+       			CAS hRubBooléen : 
+       				:m_sCodeChamps += [RC] + :GenChampsCheckBox(stProto_tmp)
+       			CAS hRubDate6 , hRubDate8
+       				:m_sCodeChamps += [RC] + :GenChampsDate(stProto_tmp)
+       			CAS hRubDateHeure : 
+       				:m_sCodeChamps += [RC] + :GenChampsDateheure(stProto_tmp)
+       			CAS hRubEntier1, hRubEntierNonSigné1 :
+       				:m_sCodeChamps = [RC] + :GenChampsRadio(stProto_tmp)
+       			CAS hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
+       				SI bEstObj ALORS
+       					
+       					stTemp				est un ClZF_GenCodeFic.STR_Rel
+       					stTemp				= oClEntite_p.m_aPK_de_FK[sRub]
+       					oClasseGen			est un ClZF_GenCodeFic(stTemp.sTablePK)
+       					oClasseGen.Analyse()
+       					
+       					si stTemp.nTypeRel = ClZF_GenCodeFic::cstRelIncl ALORS
+      						:m_nNumChamps--
+      						:GenToutChamps(stProto_tmp.sSource, oClasseGen)
+       					sinon
+       						//On pilote l'objet source via sa propriété 'ID'
+       						stProto_tmp.sSource += "_ID"
+       						
+       						:m_sCodeChamps += [RC] + :GenChampsCombo(stProto_tmp)
+       						
+       						//Génération de la procédure de chargement de la combo
+       						:m_sCodeChargeBco += [RC] + :sGenProcChargeCombo(stProto_tmp.sNom, oClasseGen, InfoRub.bNullable)
+       					FIN
+       				SINON
+       					:m_sCodeChamps += [RC] + :GenChampsSaisieEntier(stProto_tmp)
+       				FIN
+       			CAS hRubMémoTexte, hRubMémoUnicode :
+       				:m_sCodeChamps += [RC] + :GenChampsTexteMultiLigne(stProto_tmp)
+       			CAS hRubMonétaire :
+       				:m_sCodeChamps += [RC] + :GenChampsSaisieMonetaire(stProto_tmp)
+       			//			CAS hRubRéel4, hRubRéel8 :
+       			CAS hRubTexte, hRubTexteUnicode :
+       				:m_sCodeChamps += [RC] + :GenChampsSaisieTexte(stProto_tmp)
+       			//			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+       			AUTRE CAS
+      				Trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%oClEntite_p.p_sNomTable%].[%sRub%]""")
+      		FIN
+       	FIN
+      FIN
+      
      type : 458752
   procedure_templates : []
   property_templates : []
