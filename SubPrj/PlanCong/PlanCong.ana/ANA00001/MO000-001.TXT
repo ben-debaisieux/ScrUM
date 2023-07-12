@@ -1,0 +1,16 @@
+//MO000-001.TXT ANA00000 TO ANA00001
+Conges		NFI		nouveau fichier
+Conges_Type		NFI		nouveau fichier
+CongAcquis		NFI		nouveau fichier
+Conso_Conges		NFI		nouveau fichier
+CongePaye		NFI		nouveau fichier
+RTT		NFI		nouveau fichier
+CongeExceptionnel		NFI		nouveau fichier
+Contrainte_Conges_Type_Conges_Agr		NWL	Conges_Type (IDConges_Type) et Conges (IDConges_Type)	Nouvelle liaison entre les fichiers Conges_Type (IDConges_Type) et Conges (IDConges_Type)
+Contrainte_Periode_Conso_Conges_Compo		NWL	CongAcquis (IDCongAcquis) et Conso_Conges (IDCongAcquis)	Nouvelle liaison entre les fichiers CongAcquis (IDCongAcquis) et Conso_Conges (IDCongAcquis)
+Contrainte_Conges_Conso_Conges_Asso		NWL	Conges (IDConges) et Conso_Conges (IDConges)	Nouvelle liaison entre les fichiers Conges (IDConges) et Conso_Conges (IDConges)
+Contrainte_Conges_Type_CongeExceptionnel_Agr		NWL	Conges_Type (IDConges_Type) et CongeExceptionnel (IDConges_Type)	Nouvelle liaison entre les fichiers Conges_Type (IDConges_Type) et CongeExceptionnel (IDConges_Type)
+Contrainte_CongAcquis_RTT_Inc		NWL	CongAcquis (IDCongAcquis) et RTT (IDCongAcquis)	Nouvelle liaison entre les fichiers CongAcquis (IDCongAcquis) et RTT (IDCongAcquis)
+Contrainte_CongAcquis_CongePaye_Inc		NWL	CongAcquis (IDCongAcquis) et CongePaye (IDCongAcquis)	Nouvelle liaison entre les fichiers CongAcquis (IDCongAcquis) et CongePaye (IDCongAcquis)
+Contrainte_CongAcquis_CongeExceptionnel_Inc		NWL	CongAcquis (IDCongAcquis) et CongeExceptionnel (IDCongAcquis)	Nouvelle liaison entre les fichiers CongAcquis (IDCongAcquis) et CongeExceptionnel (IDCongAcquis)
+CongAcquis		FRN		

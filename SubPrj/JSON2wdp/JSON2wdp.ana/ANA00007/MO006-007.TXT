@@ -1,0 +1,18 @@
+//MO006-007.TXT ANA00006 TO ANA00007
+article		FIC-	article	Fichier supprimé article
+client		FIC-	client	Fichier supprimé client
+commande		FIC-	commande	Fichier supprimé commande
+devis		FIC-	devis	Fichier supprimé devis
+document		FIC-	document	Fichier supprimé document
+ligneCommande		FIC-	ligneCommande	Fichier supprimé ligneCommande
+ligneDevis		FIC-	ligneDevis	Fichier supprimé ligneDevis
+prestation		FIC-	prestation	Fichier supprimé prestation
+ligneDevis_idligneDevis_article_idligneDevis_aggregation		DEL	ligneDevis (idligneDevis) et article (idligneDevis)	Liaison supprimée entre les fichiers ligneDevis (idligneDevis) et article (idligneDevis)
+ligneCommande_idligneCommande_article_idligneCommande_aggregation		DEL	ligneCommande (idligneCommande) et article (idligneCommande)	Liaison supprimée entre les fichiers ligneCommande (idligneCommande) et article (idligneCommande)
+document_iddocument_commande_iddocument_Inc		DEL	document (iddocument) et commande (iddocument)	Liaison supprimée entre les fichiers document (iddocument) et commande (iddocument)
+document_iddocument_devis_iddocument_Inc		DEL	document (iddocument) et devis (iddocument)	Liaison supprimée entre les fichiers document (iddocument) et devis (iddocument)
+client_idclient_document_idclient_association		DEL	client (idclient) et document (idclient)	Liaison supprimée entre les fichiers client (idclient) et document (idclient)
+commande_idcommande_ligneCommande_idcommande_composition		DEL	commande (idcommande) et ligneCommande (idcommande)	Liaison supprimée entre les fichiers commande (idcommande) et ligneCommande (idcommande)
+devis_iddevis_ligneDevis_iddevis_composition		DEL	devis (iddevis) et ligneDevis (iddevis)	Liaison supprimée entre les fichiers devis (iddevis) et ligneDevis (iddevis)
+ligneDevis_idligneDevis_prestation_idligneDevis_aggregation		DEL	ligneDevis (idligneDevis) et prestation (idligneDevis)	Liaison supprimée entre les fichiers ligneDevis (idligneDevis) et prestation (idligneDevis)
+ligneCommande_idligneCommande_prestation_idligneCommande_aggregation		DEL	ligneCommande (idligneCommande) et prestation (idligneCommande)	Liaison supprimée entre les fichiers ligneCommande (idligneCommande) et prestation (idligneCommande)
