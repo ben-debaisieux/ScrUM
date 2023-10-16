@@ -30,6 +30,17 @@ class :
       	
       GLOBAL
       PUBLIC
+      	gnCoul01	est un entier	= RVB(173, 35, 64)
+      	gnCoul02	est un entier	= RVB(64, 173, 35)
+      	gnCoul03	est un entier	= RVB(35, 64, 173)
+      	gnCoul04	est un entier	= RVB(173, 145, 35)
+      	gnCoul05	est un entier	= RVB(35, 173, 145)
+      	gnCoul06	est un entier	= RVB(145, 35, 173)
+      	gnCoul07	est un entier	= RVB(64, 173, 145)
+      	gnCoul08	est un entier	= RVB(173, 64, 145)
+      	gnCoul09	est un entier	= RVB(145, 173, 35)
+      	gnCoul10	est un entier	= RVB(35, 145, 173)
+      	
       	mg_oExPbCnx				est un ClZF_Exception dynamique
       FIN
       
@@ -92,15 +103,27 @@ class :
       //		:m_sMsgCnx					= "Connexion : SQlServer"
       //		// Paramètres de la connexion
       //		:m_ZF_cnxBDD..Provider			= hAccèsNatifSQLServer
-      //		:m_ZF_cnxBDD..Accès			= hOLectureEcriture
+      //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
       //		:m_ZF_cnxBDD..Utilisateur		= "sa"
       //		:m_ZF_cnxBDD..MotDePasse		= "sa@sql2016"
       //		:m_ZF_cnxBDD..Serveur			= "10.20.30.140"
       //		
       //		:m_ZF_cnxBDD..BaseDeDonnées	= "SCRUM"
-      ////		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
       //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
-      ////		:m_ZF_cnxBDD..InfosEtendues	= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
+      //		:m_ZF_cnxBDD..InfosEtendues	= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
+      
+      //		:m_sMsgCnx						= "Connexion : MySQL"
+      //		// Paramètres de la connexion
+      //		:m_ZF_cnxBDD..Provider			= hAccèsNatifMySQL
+      //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      //		:m_ZF_cnxBDD..Utilisateur		= "2777-2"
+      //		:m_ZF_cnxBDD..MotDePasse		= "Bur0123+"
+      //		:m_ZF_cnxBDD..Serveur			= "127.0.0.1"
+      //		
+      //		:m_ZF_cnxBDD..BaseDeDonnées		= "mydb"
+      //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
       
       		:m_sMsgCnx						= "Connexion : HF/CS"
       		// Paramètres de la connexion
@@ -175,10 +198,12 @@ class :
       					oUsr.p_bTop_Equip_Informatique	= vrai
       					oUsr.ZF_Enregistre()
       				SINON
+      					<COMPILE SI Configuration="ScrUM">
       					//Sinon on bloque l'acces à l'application en fermant le programme
       					Info("vous n'avez pas accès à cette application. (" + sLoginAD + " / " + :m_ZF_cnxBDD..Serveur + ")")
       					STOP
       					FinProgramme()
+      					<fin>
       				FIN		
       			AUTRE CAS
       				ExceptionPropage(ExceptionInfo(errMessage))
@@ -193,6 +218,7 @@ class :
       FIN
       //*****************************************************************************************************************//
       
+      <COMPILE SI Configuration="ScrUM">
       
       :m_nNumeroDuSprintActuel = ClDbSprint.Sprint_Num_Actuel() 
       ClDbSprint.Calcul_Velocite_Moyenne()
@@ -205,6 +231,8 @@ class :
       :m_bUsrDev = :m_oUsrCnx.p_bTop_Equip_Informatique
       
       :m_sMsgCnx += [" - "] + :m_oUsrCnx.p_sNom
+      <FIN>
+      
       	
      type : 458752
    -
@@ -272,6 +300,10 @@ class :
       		oCol = allouer un ClColMessage
       	cas ClColTache.cstTachesDeUS
       		oCol = allouer un ClColTache
+      //	CAS ClDbProjet.cstGetCol_Usr_Projet
+      //		oCol = allouer un ClColProjet
+      	CAS ClDbEpic.cstGetCol_Epic_Usr
+      		oCol = allouer un ClColEpic
       		
       	AUTRE CAS
       		::mg_oExTypeColNonDefinit.ZF_Declenche([sCle_p])

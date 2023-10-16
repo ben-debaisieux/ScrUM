@@ -198,17 +198,19 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Combo_Charge_Projet ()
+      //Combo_Charge_Projet (<sNomFenetre_P> est chaîne, <sNomCombo_P> est chaîne [, <oProjets_p> est ClColProjet])
       //
       // Paramètres :
-      //	Aucun
+      //	sNomFenetre_P (chaîne ANSI) : <indiquez ici le rôle de sNomFenetre_P>
+      //	sNomCombo_P (chaîne ANSI) : <indiquez ici le rôle de sNomCombo_P>
+      // 	oProjets_p (ClColProjet - valeur par défaut=0) : <indiquez ici le rôle de oProjets_p>
       // Valeur de retour :
       // 	Aucune
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE GLOBAL Combo_Charge_Projet(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne , LOCAL oProjets_p est un ClColProjet):Vide
+      PROCEDURE GLOBAL Combo_Charge_Projet(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne , LOCAL oProjets_p est un ClColProjet = null):Vide
       
       oPrj est un ClDbProjet dynamique
       oProjets est un ClColProjet

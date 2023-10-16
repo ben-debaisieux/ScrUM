@@ -158,6 +158,11 @@ class :
       
       restReponse						= RESTEnvoie(restRequete)
       
+      SI restReponse.CodeEtat = 0 ALORS
+      	Temporisation(100)
+      	restReponse						= RESTEnvoie(restRequete)
+      FIN
+      
       SI PAS restReponse.CodeEtat DANS (200, 201, 206) ALORS
       	Erreur("Impossible d’exécuter la requête", restReponse.Contenu)
       	RENVOYER Faux
@@ -197,12 +202,15 @@ class :
       procédure GetTicketsOpenedWinmat(nStatut est un entier, sCategorie est une chaine, sDate_p est une chaine="")
       sID		est une chaine
       oTicket	est un ClGLPI_ticket dynamique
-      vData 	est un variant
-      vRetour est un Variant
+      vData	est un variant
+      vRetour	est un Variant
       sParam	est une chaine
       
       sParam			= "?&criteria[0][link]=AND&criteria[0][field]=12&criteria[0][searchtype]=equals&criteria[0][value]=" + nStatut
-      sParam			+= "&criteria[1][link]=AND&criteria[1][field]=7&criteria[1][searchtype]=contains&criteria[1][value]=" + sCategorie
+      
+      SI sCategorie <> "" ALORS
+      	sParam			+= "&criteria[1][link]=AND&criteria[1][field]=7&criteria[1][searchtype]=contains&criteria[1][value]=" + sCategorie
+      FIN
       
       SI sDate_p <> "" ALORS
       	sParam			+= "&criteria[2][link]=AND&criteria[2][field]=15&criteria[2][searchtype]=morethan&criteria[2][value]=" + sDate_p
@@ -222,7 +230,7 @@ class :
       	POUR TOUT vTicket de vData
       		oTicket	= allouer un ClGLPI_Ticket
       		sID		= vTicket."2"
-      		GetTicket(sID, oTicket)
+      		GetTicket(sID, oTicket, vTicket."7")
       		TableauAjoute(m_aopclEntite, oTicket)
       	FIN
       FIN
@@ -237,11 +245,12 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GetTicket (<sID> est chaîne, <oTicket> est ClGLPI_Ticket)
+      //[ <Résultat> = ] GetTicket (<sID> est chaîne, <oTicket> est ClGLPI_Ticket [, <sCategorie_p> est chaîne])
       //
       // Paramètres :
       //	sID (chaîne ANSI) : <indiquez ici le rôle de sID>
       //	oTicket (ClGLPI_Ticket) : <indiquez ici le rôle de oTicket>
+      // 	sCategorie_p (chaîne ANSI - valeur par défaut="Winmat") : <indiquez ici le rôle de sCategorie_p>
       
       // Valeur de retour :
       // 	booléen : <indiquez ici le rôle de la valeur de retour>
@@ -249,7 +258,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GetTicket(sID est une chaine, oTicket est un ClGLPI_Ticket)
+      procédure GetTicket(sID est une chaine, oTicket est un ClGLPI_Ticket, LOCAL sCategorie_p est une chaine = "Winmat")
       avLinks	est un tableau de variant
       vRetour est un variant
       nIndice	est un entier
@@ -271,7 +280,7 @@ class :
       oTicket.m_bufDescription	= HTMLVersTexte(vRetour.content)
       oTicket.m_sType				= oTicket.GetTypeName(val(vRetour.type))
       //TODO a récupérer quand on aura les droits
-      oTicket.m_sCategorie		= "Winmat"
+      oTicket.m_sCategorie		= sCategorie_p
       oTicket.m_sStatut			= oTicket.GetStatusName(val(vRetour.status))
       
       pour tout vLinks de avLinks

@@ -103,7 +103,7 @@ procedure_set :
      procedure_id : 1288012627202703584
      type_code : 15
      code : |1+
-      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClDbProjet, oEpic_P est un ClDbEpic dynamique = Null)
+      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClDbProjet, oEpic_P est un ClDbEpic dynamique = Null)<ui>
       
       sTitre			est une chaîne
       bAPrendre		est un booléen
@@ -119,57 +119,48 @@ procedure_set :
       nAnnulee		est un entier
       nEnCours		est un entier
       nAFaire			est un entier
+      oUS				est un ClDbUserStory dynamique
       
-      //si oEpic_P = null alors
-      //	//Récupération des valeurs :
-      //	nFinies		= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Terminee)
-      //	nATester	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.En_test_fonctionnel)
-      //	nAnnulee	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.Annulée)
-      //	nEnCours	= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.EnCours)
-      //	nAFaire		= oProjet_P.Get_StatUS(ClUserStory.ECompteNbUS.A_faire)
-      //sinon
-      	oUS est un ClDbUserStory dynamique
+      pour tout element oUS de ClColUserStory.oFromProjet(oProjet_P).aitems()
+      	bAPrendre = vrai
       	
-      	pour tout element oUS de ClColUserStory.oFromProjet(oProjet_P).aitems()	//oProjet_P.aoListeUS().aItems()
-      		bAPrendre = vrai
-      		
-      		si oEpic_P <> null alors
-      			si oUS.p_oEpic = null ALORS
-      				bAPrendre = faux
-      			sinon
-      				
-      				SI oUS.p_oEpic.ZF_Get_IdUnique() <> oEpic_P.ZF_Get_IdUnique() ALORS
-      					bAPrendre = Faux
-      				FIN
-      			FIN
+      	si oEpic_P <> null alors
+      		si oUS.p_oEpic = null ALORS
+      			bAPrendre = faux
       		sinon
-      			si oUS.p_oEpic <> null alors
-      				SI oUS.p_oEpic.p_sNom DANS ("Statistiques (post lancement)", "Poseurs (post lancement)", "Signature électronique (post lancement)", "Base Lunel fournisseur (post lancement)", "") ALORS
-      					bAPrendre = Faux
-      					Trace("Groupement ignoré : " + oUS.p_oEpic.p_sNom)
-      				FIN
-      			FIN
-      		fin
-      		
-      		si bAPrendre ALORS
-      			oUS.User_Story_Etat()
-      			selon oUS.Get_EtatUS()
-      				cas ClDbUserStory.ECompteNbUS.Terminee
-      					nFinies++
-      				cas ClDbUserStory.ECompteNbUS.En_test_fonctionnel
-      					nATester++
-      				cas ClDbUserStory.ECompteNbUS.Annulée
-      					nAnnulee++
-      				cas ClDbUserStory.ECompteNbUS.EnCours
-      					nEnCours++
-      				cas ClDbUserStory.ECompteNbUS.A_faire
-      					nAFaire++
-      				AUTRE CAS
-      					
+      			
+      			SI oUS.p_oEpic.ZF_Get_IdUnique() <> oEpic_P.ZF_Get_IdUnique() ALORS
+      				bAPrendre = Faux
       			FIN
       		FIN
+      	sinon
+      		si oUS.p_oEpic <> null alors
+      			SI oUS.p_oEpic.p_sNom DANS ("Statistiques (post lancement)", "Poseurs (post lancement)", "Signature électronique (post lancement)", "Base Lunel fournisseur (post lancement)", "") ALORS
+      				bAPrendre = Faux
+      				Trace("Groupement ignoré : " + oUS.p_oEpic.p_sNom)
+      			FIN
+      		FIN
+      	fin
+      	
+      	si bAPrendre ALORS
+      		oUS.User_Story_Etat()
+      		selon oUS.Get_EtatUS()
+      			cas ClDbUserStory.ECompteNbUS.Terminee
+      				nFinies++
+      			cas ClDbUserStory.ECompteNbUS.En_test_fonctionnel
+      				nATester++
+      			cas ClDbUserStory.ECompteNbUS.Annulée
+      				nAnnulee++
+      			cas ClDbUserStory.ECompteNbUS.EnCours
+      				nEnCours++
+      			cas ClDbUserStory.ECompteNbUS.A_faire
+      				nAFaire++
+      			AUTRE CAS
+      				
+      		FIN
       	FIN
-      //fin
+      FIN
+      
       
       //Affichage des infos dans le graphe :
       graphe est un champ <- {sChamp_P, indChamp}

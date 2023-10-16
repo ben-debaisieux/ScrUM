@@ -174,7 +174,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE VIRTUELLE pre_enregistre():Vide
+      PROCEDURE VIRTUELLE pre_enregistre()<metier>:Vide
       
       m_EnrActu est un Enregistrement de Scr_Tache
       m_EnrOrigine est un Enregistrement de Scr_Tache
@@ -197,7 +197,7 @@ class :
       	sinon
       		//En mode ajout :
       		
-      		// Si on a pas de staut, on le calcule, en fonction des infos de la tache.
+      		// Si on a pas de statu, on le calcule, en fonction des infos de la tache.
       		si :m_nStatut = 0 ALORS
       			:m_nStatut = :get_statut_tache()
       			SI :m_nStatut = 0 ALORS
@@ -206,42 +206,42 @@ class :
       		FIN
       	FIN
       	
-      	
-      	//Enregistrement du sprint de démarrage.
-      	si :m_nNum_Sprint_Demarrage = 0 ALORS
-      		Scr_Tache.Num_Sprint_Demarrage..Null	= vrai
-      	fin
-      	
-      	//Si on a pas de sprint prévisionnel, on s'aligne sur le sprint de démarrage.
-      	SI :m_nNum_Sprint_Previsionnel = 0 ALORS
-      		:m_nNum_Sprint_Previsionnel				= :m_nNum_Sprint_Realisation
-      	FIN
-      	
-      	SI :m_nNum_Sprint_Previsionnel = 0 ALORS
-      		Scr_Tache.Num_Sprint_Previsionnel..Null	= Vrai
-      	FIN
-      	
-      	//Enregistrement du sprint de réalisation
-      	SI :m_nNum_Sprint_Realisation = 0 ALORS
-      		Scr_Tache.Num_Sprint_Realisation..Null	= Vrai
-      	FIN
-      	
-      	
-      	si m_oUserStoryParent = Null ALORS
-      		m_oExEnregUsParentAbsente.ZF_Declenche()
-      	FIN
-      	
-      	//Enregistrement du sprint de fin
-      	SI :m_nNum_Sprint_Fin = 0 ALORS
-      		Scr_Tache.Num_Sprint_Fin..Null			= Vrai
-      	sinon
-      		si pas :m_bAnnule alors
-      			//Si on a un sprint de fin, les taches doivent êtres réalisées
-      			si pas :m_bEstRealise ALORS
-      				m_oExEnregSpFinSiPasRealise.ZF_Declenche()
-      			FIN
-      		FIN
-      	FIN
+      //	
+      //	//Enregistrement du sprint de démarrage.
+      //	si :m_nNum_Sprint_Demarrage = 0 ALORS
+      //		Scr_Tache.Num_Sprint_Demarrage..Null	= vrai
+      //	fin
+      //	
+      //	//Si on a pas de sprint prévisionnel, on s'aligne sur le sprint de démarrage.
+      //	SI :m_nNum_Sprint_Previsionnel = 0 ALORS
+      //		:m_nNum_Sprint_Previsionnel				= :m_nNum_Sprint_Realisation
+      //	FIN
+      //	
+      //	SI :m_nNum_Sprint_Previsionnel = 0 ALORS
+      //		Scr_Tache.Num_Sprint_Previsionnel..Null	= Vrai
+      //	FIN
+      //	
+      //	//Enregistrement du sprint de réalisation
+      //	SI :m_nNum_Sprint_Realisation = 0 ALORS
+      //		Scr_Tache.Num_Sprint_Realisation..Null	= Vrai
+      //	FIN
+      //	
+      //	
+      //	si m_oUserStoryParent = Null ALORS
+      //		m_oExEnregUsParentAbsente.ZF_Declenche()
+      //	FIN
+      //	
+      //	//Enregistrement du sprint de fin
+      //	SI :m_nNum_Sprint_Fin = 0 ALORS
+      //		Scr_Tache.Num_Sprint_Fin..Null			= Vrai
+      //	sinon
+      //		si pas :m_bAnnule alors
+      //			//Si on a un sprint de fin, les taches doivent êtres réalisées
+      //			si pas :m_bEstRealise ALORS
+      //				m_oExEnregSpFinSiPasRealise.ZF_Declenche()
+      //			FIN
+      //		FIN
+      //	FIN
       	
       	
       		
@@ -406,7 +406,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION GLOBAL Controle_Poids(LOCAL nPoids_p est un entier):booléen
+      FONCTION GLOBAL Controle_Poids(LOCAL nPoids_p est un entier)<metier>:booléen
       
       bPoidsValide est un booléen
       
@@ -442,7 +442,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION GLOBAL Charge_Totale():entier
+      FONCTION GLOBAL Charge_Totale()<metier>:entier
       
       nTotal est un entier
       
@@ -485,7 +485,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale Taches_a_faire(eFiltre est un ETypeEtatTacheAFaire):ClColTache
+      PROCEDURE globale Taches_a_faire(eFiltre est un ETypeEtatTacheAFaire)<metier>:ClColTache
       
       //sdTachesAFaire est une Source de Données
       sReq est une chaîne
@@ -539,7 +539,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE sBulleTache():chaine
+      PROCEDURE sBulleTache()<metier>:chaine
       
       sComBlocage est une chaîne = :m_sCMTR
       
@@ -584,7 +584,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE bEstDemarree():booléen
+      PROCEDURE bEstDemarree()<metier>:booléen
       renvoyer pas (:m_oUsr_Dev = null)
      type : 458752
    -
@@ -604,7 +604,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClDbTache
+      PROCEDURE globale GetObj(local nIdUnique_P est un entier)<metier>:ClDbTache
       sClasse est une chaine = ClDbTache
       RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
      type : 458752
@@ -614,7 +614,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClObjDB.post_enregistre
-      PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre():Vide
+      PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre()<metier>:Vide
       
       //Enregistrement de l'historique des modifications
       :EnregHisto()
@@ -625,7 +625,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClObjDB.Get_IdUnique
-      FONCTION Get_IdUnique():entier
+      FONCTION Get_IdUnique()<metier>:entier
       
       //redéfinition obligatoire à cause de la déclaration 'abstraite' de la méthode, dans la classe d'historique
       RENVOYER ClZF_ObjDB.ZF_Get_IdUnique()
@@ -635,7 +635,7 @@ class :
      procedure_id : 1444819982169623124
      type_code : 12
      code : |1-
-      procédure bCotationAFaire():booléen
+      procédure bCotationAFaire()<metier>:booléen
       
       bRetour est un booléen
       
@@ -650,7 +650,7 @@ class :
      procedure_id : 1444819982169688660
      type_code : 12
      code : |1-
-      procédure get_statut_tache():entier
+      procédure get_statut_tache()<metier>:entier
       
       nRetour est un entier
       bUsTermine est un booléen
@@ -705,15 +705,29 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale GetObj_de_code(local sCode_P est une chaîne):ClDbTache
+      PROCEDURE globale GetObj_de_code(local sCode_P est une chaîne)<metier>:ClDbTache
       
-      HLitRecherche(Scr_Tache,CodeTache,sCode_P,hIdentique+hLimiteParcours)
-      si HTrouve(Scr_Tache) ALORS
-      	sClasse est une chaine = ClDbTache
-      	RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, Scr_Tache.IDScr_Tache)
+      oColTache est un ClColTache
+      sReq est une chaine = [
+      SELECT
+      	Scr_Tache.*
+      FROM Scr_Tache
+      WHERE Scr_Tache.CodeTache = '[%sCode_P%]'
+      ]
+      oColTache.ZF_LoadSQL(sReq)
+      si oColTache.zf_ntaille() = 1 ALORS
+      	renvoyer oColTache.ZF_oItem(1)
       sinon
-      	RENVOYER null
+      	renvoyer null
       FIN
+      
+      //HLitRecherche(Scr_Tache,CodeTache,sCode_P,hIdentique+hLimiteParcours)
+      //si HTrouve(Scr_Tache) ALORS
+      //	sClasse est une chaine = ClDbTache
+      //	RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, Scr_Tache.IDScr_Tache)
+      //sinon
+      //	RENVOYER null
+      //FIN
      type : 458752
    -
      name : oTachesSelonStatut
@@ -745,7 +759,7 @@ class :
      procedure_id : 1444819982169885268
      type_code : 12
      code : |1+
-      procédure sExport():JSON
+      procédure sExport()<metier>:JSON
       
       sRetour est un JSON
       nInd est un entier
@@ -802,7 +816,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE bEstValidee():booléen
+      PROCEDURE bEstValidee()<metier>:booléen
       renvoyer (:m_nNum_Sprint_Fin <> 0 et :m_bEstRealise)
       
      type : 458752
@@ -811,7 +825,7 @@ class :
      procedure_id : 1444819982170016340
      type_code : 12
      code : |1-
-      procédure sLibDeStatut():chaine
+      procédure sLibDeStatut()<metier>:chaine
       
       sRetour est une chaîne 
       
@@ -844,7 +858,7 @@ class :
      procedure_id : 1444819982170081876
      type_code : 12
      code : |1-
-      procédure privée bCodeTacheDispo(sCodeTache_P est une chaîne):booléen
+      procédure privée bCodeTacheDispo(sCodeTache_P est une chaîne)<metier>:booléen
       
       
       sdRechCodeTache est une Source de Données
@@ -895,7 +909,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure changeOrdre(nChangePos_P est un entier):Vide
+      procédure changeOrdre(nChangePos_P est un entier)<metier>:Vide
       
       nPosInit		est un entier
       nNouvPos		est un entier
@@ -950,7 +964,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
-      PROCÉDURE Init_ObjBD()
+      PROCÉDURE Init_ObjBD()<metier>:vide
       
       si pas :ZF_bModeAjout() alors
       //	SI PAS Scr_Tache.IDScr_Usr_createur..Null ALORS
@@ -977,6 +991,63 @@ class :
       RENVOYER ClZF_ObjDB.ZF_Get_IdUnique()
       
      type : 458752
+   -
+     name : TraiteHisto
+     procedure_id : 1500636142835431234
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClHistorique.TraiteHisto
+      PROCÉDURE  TraiteHisto()
+      
+      //a faire
+     type : 458752
+   -
+     name : pre_enregistre_data
+     procedure_id : 1500636172905387010
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ObjDB.pre_enregistre_data
+      PROCÉDURE PROTÉGÉE pre_enregistre_data()<metier>:vide
+      
+      
+      
+      
+      //Enregistrement du sprint de démarrage.
+      SI :m_nNum_Sprint_Demarrage = 0 ALORS
+      	Scr_Tache.Num_Sprint_Demarrage..Null	= Vrai
+      FIN
+      
+      //Si on a pas de sprint prévisionnel, on s'aligne sur le sprint de démarrage.
+      SI :m_nNum_Sprint_Previsionnel = 0 ALORS
+      	:m_nNum_Sprint_Previsionnel				= :m_nNum_Sprint_Realisation
+      FIN
+      
+      SI :m_nNum_Sprint_Previsionnel = 0 ALORS
+      	Scr_Tache.Num_Sprint_Previsionnel..Null	= Vrai
+      FIN
+      
+      //Enregistrement du sprint de réalisation
+      SI :m_nNum_Sprint_Realisation = 0 ALORS
+      	Scr_Tache.Num_Sprint_Realisation..Null	= Vrai
+      FIN
+      
+      
+      SI m_oUserStoryParent = Null ALORS
+      	m_oExEnregUsParentAbsente.ZF_Declenche()
+      FIN
+      
+      //Enregistrement du sprint de fin
+      SI :m_nNum_Sprint_Fin = 0 ALORS
+      	Scr_Tache.Num_Sprint_Fin..Null			= Vrai
+      SINON
+      	SI PAS :m_bAnnule ALORS
+      		//Si on a un sprint de fin, les taches doivent êtres réalisées
+      		SI PAS :m_bEstRealise ALORS
+      			m_oExEnregSpFinSiPasRealise.ZF_Declenche()
+      		FIN
+      	FIN
+      FIN
+     type : 458752
   properties :
    -
      name : p_oUsr_Dev
@@ -985,13 +1056,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_oUsr_Dev() : ClDbUsr
+         procédure publique p_oUsr_Dev()<metier> : ClDbUsr
          
          renvoyer :m_oUsr_Dev
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUsr_Dev(oValeur est ClDbUsr):Vide
+         procédure publique p_oUsr_Dev(oValeur est ClDbUsr)<metier>:Vide
          
          si PAS ZF_bObjEgal(:m_oUsr_Dev, oValeur) alors
          	:ZF_EstModif()
@@ -1006,13 +1077,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_oUserStoryParent() : ClDbUserStory
+         procédure publique p_oUserStoryParent()<metier> : ClDbUserStory
          
          renvoyer :m_oUserStoryParent
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUserStoryParent(oValeur est ClDbUserStory):Vide
+         procédure publique p_oUserStoryParent(oValeur est ClDbUserStory)<metier>:Vide
          
          si PAS ZF_bObjEgal(:m_oUserStoryParent, oValeur) alors
          	:ZF_EstModif()
@@ -1027,13 +1098,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_oUsr_createur() : ClDbUsr
+         procédure publique p_oUsr_createur()<metier> : ClDbUsr
          
          renvoyer :m_oUsr_createur
         type : 1966080
       -
         code : |1+
-         procédure publique p_oUsr_createur(oValeur est ClDbUsr):Vide
+         procédure publique p_oUsr_createur(oValeur est ClDbUsr)<metier>:Vide
          
          si PAS ZF_bObjEgal(:m_oUsr_createur, oValeur) ALORS
          	:ZF_EstModif()
@@ -1048,13 +1119,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_bAnnule() : booléen
+         procédure publique p_bAnnule() <metier>: booléen
          
          renvoyer :m_bAnnule
         type : 1966080
       -
         code : |1-
-         procédure publique p_bAnnule(bValeur est un booléen):Vide
+         procédure publique p_bAnnule(bValeur est un booléen)<metier>:Vide
          
          si :m_bAnnule <> bValeur alors
          	:ZF_EstModif()
@@ -1071,13 +1142,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_bBrouillon() : booléen
+         procédure publique p_bBrouillon()<metier> : booléen
          
          renvoyer :m_bBrouillon
         type : 1966080
       -
         code : |1-
-         procédure publique p_bBrouillon(bValeur est un booléen):Vide
+         procédure publique p_bBrouillon(bValeur est un booléen)<metier>:Vide
          
          si :m_bBrouillon <> bValeur alors
          	:ZF_EstModif()
@@ -1093,13 +1164,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_bEstRealise() : booléen
+         procédure publique p_bEstRealise()<metier> : booléen
          
          renvoyer :m_bEstRealise
         type : 1966080
       -
         code : |1-
-         procédure publique p_bEstRealise(bValeur est un booléen):Vide
+         procédure publique p_bEstRealise(bValeur est un booléen)<metier>:Vide
          
          si :m_bEstRealise <> bValeur alors
          	:ZF_EstModif()
@@ -1115,13 +1186,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_bTache_tech() : booléen
+         procédure publique p_bTache_tech()<metier> : booléen
          
          renvoyer :m_bTache_tech
         type : 1966080
       -
         code : |1-
-         procédure publique p_bTache_tech(bValeur est un booléen):Vide
+         procédure publique p_bTache_tech(bValeur est un booléen)<metier>:Vide
          
          si :m_bTache_tech <> bValeur alors
          	:ZF_EstModif()
@@ -1137,13 +1208,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Creation() : entier
+         procédure publique p_nNum_Sprint_Creation() <metier>: entier
          
          renvoyer :m_nNum_Sprint_Creation
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Creation(nValeur est un entier):Vide
+         procédure publique p_nNum_Sprint_Creation(nValeur est un entier)<metier>:Vide
          
          si :m_nNum_Sprint_Creation <> nValeur alors
          	:ZF_EstModif()
@@ -1159,13 +1230,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Demarrage() : entier
+         procédure publique p_nNum_Sprint_Demarrage()<metier> : entier
          
          renvoyer :m_nNum_Sprint_Demarrage
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Demarrage(nValeur est un entier):Vide
+         procédure publique p_nNum_Sprint_Demarrage(nValeur est un entier)<metier>:Vide
          
          si :m_nNum_Sprint_Demarrage <> nValeur alors
          	:ZF_EstModif()
@@ -1181,13 +1252,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Fin() : entier
+         procédure publique p_nNum_Sprint_Fin()<metier> : entier
          
          renvoyer :m_nNum_Sprint_Fin
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Fin(nValeur est un entier):Vide
+         procédure publique p_nNum_Sprint_Fin(nValeur est un entier)<metier>:Vide
          
          si :m_nNum_Sprint_Fin <> nValeur alors
          	:ZF_EstModif()
@@ -1203,13 +1274,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Previsionnel() : entier
+         procédure publique p_nNum_Sprint_Previsionnel()<metier> : entier
          
          renvoyer :m_nNum_Sprint_Previsionnel
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Previsionnel(nValeur est un entier):Vide
+         procédure publique p_nNum_Sprint_Previsionnel(nValeur est un entier)<metier>:Vide
          
          si :m_nNum_Sprint_Previsionnel <> nValeur alors
          	:ZF_EstModif()
@@ -1224,13 +1295,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Realisation() : entier
+         procédure publique p_nNum_Sprint_Realisation()<metier> : entier
          
          renvoyer :m_nNum_Sprint_Realisation
         type : 1966080
       -
         code : |1-
-         procédure publique p_nNum_Sprint_Realisation(nValeur est un entier):Vide
+         procédure publique p_nNum_Sprint_Realisation(nValeur est un entier)<metier>:Vide
          
          si :m_nNum_Sprint_Realisation <> nValeur alors
          	:ZF_EstModif()
@@ -1245,13 +1316,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nNumTicketIncident() : entier
+         procédure publique p_nNumTicketIncident()<metier> : entier
          
          renvoyer :m_nNumTicketIncident
         type : 1966080
       -
         code : |1+
-         procédure publique p_nNumTicketIncident(nValeur est un entier):Vide
+         procédure publique p_nNumTicketIncident(nValeur est un entier)<metier>:Vide
          
          si :m_nNumTicketIncident <> nValeur ALORS
          	:ZF_EstModif()
@@ -1266,13 +1337,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nOrdre() : entier
+         procédure publique p_nOrdre()<metier> : entier
          
          renvoyer :m_nOrdre
         type : 1966080
       -
         code : |1-
-         procédure publique p_nOrdre(nValeur est un entier):Vide
+         procédure publique p_nOrdre(nValeur est un entier)<metier>:Vide
          
          si :m_nOrdre <> nValeur alors
          	:ZF_EstModif()
@@ -1288,13 +1359,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nPoids() : entier
+         procédure publique p_nPoids()<metier> : entier
          
          renvoyer :m_nPoids
         type : 1966080
       -
         code : |1-
-         procédure publique p_nPoids(nValeur est un entier):Vide
+         procédure publique p_nPoids(nValeur est un entier)<metier>:Vide
          
          SI ::Controle_Poids(nValeur) ALORS
          	si :m_nPoids <> nValeur alors
@@ -1313,7 +1384,7 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nPoids_Previsionnel() : entier
+         procédure publique p_nPoids_Previsionnel()<metier> : entier
          
          renvoyer :m_nPoids_Previsionnel
         type : 1966080
@@ -1340,13 +1411,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_nStatut() : entier
+         procédure publique p_nStatut()<metier> : entier
          
          renvoyer :m_nStatut
         type : 1966080
       -
         code : |1-
-         procédure publique p_nStatut(nValeur est un entier):Vide
+         procédure publique p_nStatut(nValeur est un entier)<metier>:Vide
          
          si :m_nStatut <> nValeur alors
          	:ZF_EstModif()
@@ -1362,13 +1433,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_sCMTR() : chaîne
+         procédure publique p_sCMTR()<metier> : chaîne
          
          renvoyer :m_sCMTR
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR(sValeur est une chaîne):Vide
+         procédure publique p_sCMTR(sValeur est une chaîne)<metier>:Vide
          
          si :m_sCMTR <> sValeur alors
          	:ZF_EstModif()
@@ -1384,13 +1455,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_sCMTR_Blocage() : chaîne
+         procédure publique p_sCMTR_Blocage()<metier> : chaîne
          
          renvoyer :m_sCMTR_Blocage
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR_Blocage(sValeur est une chaîne):Vide
+         procédure publique p_sCMTR_Blocage(sValeur est une chaîne)<metier>:Vide
          
          si :m_sCMTR_Blocage <> sValeur alors
          	:ZF_EstModif()
@@ -1406,13 +1477,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_sCodeTache() : chaîne
+         procédure publique p_sCodeTache()<metier> : chaîne
          
          renvoyer :m_sCodeTache
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCodeTache(sValeur est une chaîne):Vide
+         procédure publique p_sCodeTache(sValeur est une chaîne)<metier>:Vide
          
          si :m_sCodeTache <> sValeur alors
          	:ZF_EstModif()
@@ -1434,7 +1505,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sDescription(sValeur est une chaîne):Vide
+         procédure publique p_sDescription(sValeur est une chaîne)<metier>:Vide
          
          si :m_sDescription <> sValeur alors
          	:ZF_EstModif()
@@ -1486,7 +1557,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUsr_Dev_ID(nValeur_P est un entier):vide
+         procédure publique p_oUsr_Dev_ID(nValeur_P est un entier)<metier>:vide
          
          SI nValeur_P = 0 ALORS
          	:m_oUsr_Dev = Null
@@ -1502,7 +1573,7 @@ class :
      p_codes :
       -
         code : |1+
-         procédure publique p_oUserStoryParent_ID():entier
+         procédure publique p_oUserStoryParent_ID()<metier>:entier
          //Propriétés de l'objet m_oIDScr_UserStory, accessible via son ID
          SI :p_oUserStoryParent = Null ALORS
          	RENVOYER 0
@@ -1513,7 +1584,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUserStoryParent_ID(nValeur_p est un entier):Vide
+         procédure publique p_oUserStoryParent_ID(nValeur_p est un entier)<metier>:Vide
          
          SI nValeur_p = 0 ALORS
          	:p_oUserStoryParent = Null

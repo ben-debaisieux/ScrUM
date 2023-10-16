@@ -451,6 +451,62 @@ class :
       
       renvoyer oTachesEnDev
      type : 458752
+   -
+     name : GetNextNumTache
+     procedure_id : 1508431993749410651
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetNextNumTache (<oPrj_p> est ClDbProjet)
+      //
+      // Paramètres :
+      //	oPrj_p (ClDbProjet) : <indiquez ici le rôle de oPrj_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetNextNumTache(oPrj_p est un ClDbProjet)<métier>:chaine
+      
+      sRetour est une chaîne
+      sPrefixe est une chaîne = oPrj_p.p_sCode
+      sdCodesTaches	est une Source de Données
+      sReq			est une chaîne
+      
+      sReq = [
+      select
+      	Scr_Tache.CodeTache
+      
+      
+      from Scr_Tache
+      	INNER JOIN Scr_UserStory on (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
+      
+      
+      where Scr_Tache.CodeTache like '[%sPrefixe%]]%'
+      	and SUBSTRING(Scr_Tache.CodeTache, [%(taille(sPrefixe) + 1) %], 1) between '0' and '9'
+      
+      order by Scr_Tache.CodeTache desc
+      ]
+      goapp.RSQL(sdCodesTaches,sReq)
+      POUR TOUT sdCodesTaches
+      	
+      	
+      	
+      FIN
+      
+      HAnnuleDéclaration(sdCodesTaches)
+      
+      
+      
+      
+      
+      
+      
+      renvoyer sRetour
+      
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

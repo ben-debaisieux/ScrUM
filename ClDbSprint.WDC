@@ -268,10 +268,9 @@ class :
       //	nSprint_p (entier) : Numero du sprint
       PROCEDURE Sprint_Points_Realise_Maj():Vide
       
-      //nPoint est un entier
       
-      sdRechercheNbPointRealise est une source de données
-      sReq est une chaîne
+      sdRechercheNbPointRealise	est une source de données
+      sReq						est une chaîne
       
       //Recherche du nombre de points
       sReq = [
@@ -280,20 +279,12 @@ class :
       	WHERE Scr_Tache.Num_Sprint_Fin = [%:ZF_Get_IdUnique()%]
       ]
       
-      ::mg_oApp.Rsql(sdRechercheNbPointRealise,sReq)
+      mg_oApp.Rsql(sdRechercheNbPointRealise,sReq)
       HLitPremier(sdRechercheNbPointRealise)
       si htrouve(sdRechercheNbPointRealise) ALORS
       	:m_nNbPointsRealise = sdRechercheNbPointRealise.Total
+      	:ZF_EstModif()
       FIN
-      
-      ////Modification dans la base de données
-      //HLitRecherche(Scr_Sprint,Num_Sprint,nSprint_p,hIdentique+hLimiteParcours)
-      //SI HTROUVE(Scr_Sprint) ALORS
-      //	Scr_Sprint.NbPointsRealise = nPoint
-      //	Si pas HModifie(Scr_Sprint) alors
-      //		INFO("le poids réalisé du sprint n'a pas pu etre modifié", ErreurInfo())
-      //	FIN
-      //FIN
       
       HAnnuleDéclaration(sdRechercheNbPointRealise)
      type : 458752

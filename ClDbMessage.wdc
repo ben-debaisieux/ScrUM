@@ -120,7 +120,7 @@ class :
       // Redéfinition de la méthode ClObjDB.pre_enregistre
       PROCÉDURE PROTÉGÉE VIRTUELLE pre_enregistre():Vide
       
-      nNbreCle est un entier
+      //nNbreCle est un entier
       
       
       :m_bGererParent = Faux
@@ -132,39 +132,39 @@ class :
       	si :m_oUsr = Null ALORS
       		:m_oUsr <- goApp.m_oUsrCnx
       	FIN
-      	Scr_Message.IDScr_Usr						= :m_oUsr.ZF_Get_IdUnique()
-      	
-      	//Enregistrement de la user story (si une, est associée)
-      	si :m_oUserStory = Null ALORS
-      		Scr_Message.IDScr_UserStory..Null		= vrai
-      	sinon
-      		Scr_Message.IDScr_UserStory				= :m_oUserStory.ZF_Get_IdUnique()
-      		nNbreCle++
-      	fin
-      	
-      	//Enregistrement du critère d'acceptation (si un, est associée)
-      	si :m_oCritereAccept = Null ALORS
-      		Scr_Message.IDScr_CritereAccept..Null	= vrai
-      	sinon
-      		Scr_Message.IDScr_CritereAccept			= :m_oCritereAccept.ZF_Get_IdUnique()
-      		nNbreCle++
-      	fin
-      	
-      	//Enregistrement de la tache (si une, est associé)
-      	si :M_oTache = Null ALORS
-      		Scr_Message.IDScr_Tache..Null			= vrai
-      	sinon
-      		Scr_Message.IDScr_Tache					= :m_oTache.Get_IdUnique()
-      		nNbreCle++
-      	FIN
+      //	Scr_Message.IDScr_Usr						= :m_oUsr.ZF_Get_IdUnique()
+      //	
+      //	//Enregistrement de la user story (si une, est associée)
+      //	si :m_oUserStory = Null ALORS
+      //		Scr_Message.IDScr_UserStory..Null		= vrai
+      //	sinon
+      //		Scr_Message.IDScr_UserStory				= :m_oUserStory.ZF_Get_IdUnique()
+      //		nNbreCle++
+      //	fin
+      //	
+      //	//Enregistrement du critère d'acceptation (si un, est associée)
+      //	si :m_oCritereAccept = Null ALORS
+      //		Scr_Message.IDScr_CritereAccept..Null	= vrai
+      //	sinon
+      //		Scr_Message.IDScr_CritereAccept			= :m_oCritereAccept.ZF_Get_IdUnique()
+      //		nNbreCle++
+      //	fin
+      //	
+      //	//Enregistrement de la tache (si une, est associé)
+      //	si :M_oTache = Null ALORS
+      //		Scr_Message.IDScr_Tache..Null			= vrai
+      //	sinon
+      //		Scr_Message.IDScr_Tache					= :m_oTache.Get_IdUnique()
+      //		nNbreCle++
+      //	FIN
       	
       	//Enregistrement d'un message parent (si un, est associé)
       	si :m_oMsgparent = Null ALORS
-      		Scr_Message.IDScr_Message_Parent..Null	= Vrai
+      //		Scr_Message.IDScr_Message_Parent..Null	= Vrai
       	sinon
-      		Scr_Message.IDScr_Message_Parent		= :m_oMsgparent.ZF_Get_IdUnique()
-      		nNbreCle++
-      		
+      //		Scr_Message.IDScr_Message_Parent		= :m_oMsgparent.ZF_Get_IdUnique()
+      //		nNbreCle++
+      //		
       		
       		//En cas d'ajout, on mémorise qu'il faut gérer le messages, du parent.
       		SI :ZF_bModeAjout() ALORS
@@ -172,15 +172,14 @@ class :
       		FIN
       	FIN
       	
-      	//On s'assure que le message est associé à une et une seule entité.
-      	si nNbreCle <> 1 ALORS
-      		ExceptionDéclenche(1, ChaîneConstruit("État du message incohérent : %1 ID affectés", nNbreCle))
-      	FIN
+      //	//On s'assure que le message est associé à une et une seule entité.
+      //	si nNbreCle <> 1 ALORS
+      //		ExceptionDéclenche(1, ChaîneConstruit("État du message incohérent : %1 ID affectés", nNbreCle))
+      //	FIN
       	
       	
       	si pas datevalide(:m_dhDteCreation) ALORS
       		:m_dhDteCreation						= DateHeureSys()
-      		Scr_Message.DteCreation					= :m_dhDteCreation
       	FIN
       sinon
       	
@@ -339,6 +338,66 @@ class :
       		
       	]
       	:m_oMsgEnfant.ZF_LoadSQL(sReq)
+      FIN
+      
+     type : 458752
+   -
+     name : pre_enregistre_data
+     procedure_id : 1500639089210748940
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDB.pre_enregistre_data
+      PROCÉDURE PROTÉGÉE pre_enregistre_data()
+      
+      nNbreCle est un entier
+      
+      
+      SI PAS :ZF_bEstsupprime() ALORS
+      
+      	Scr_Message.IDScr_Usr						= :m_oUsr.ZF_Get_IdUnique()
+      	
+      	//Enregistrement de la user story (si une, est associée)
+      	SI :m_oUserStory = Null ALORS
+      		Scr_Message.IDScr_UserStory..Null		= Vrai
+      	SINON
+      		Scr_Message.IDScr_UserStory				= :m_oUserStory.ZF_Get_IdUnique()
+      		nNbreCle++
+      	FIN
+      	
+      	//Enregistrement du critère d'acceptation (si un, est associée)
+      	SI :m_oCritereAccept = Null ALORS
+      		Scr_Message.IDScr_CritereAccept..Null	= Vrai
+      	SINON
+      		Scr_Message.IDScr_CritereAccept			= :m_oCritereAccept.ZF_Get_IdUnique()
+      		nNbreCle++
+      	FIN
+      	
+      	//Enregistrement de la tache (si une, est associé)
+      	SI :m_oTache = Null ALORS
+      		Scr_Message.IDScr_Tache..Null			= Vrai
+      	SINON
+      		Scr_Message.IDScr_Tache					= :m_oTache.Get_IdUnique()
+      		nNbreCle++
+      	FIN
+      	
+      	//Enregistrement d'un message parent (si un, est associé)
+      	SI :m_oMsgparent = Null ALORS
+      		Scr_Message.IDScr_Message_Parent..Null	= Vrai
+      	SINON
+      		Scr_Message.IDScr_Message_Parent		= :m_oMsgparent.ZF_Get_IdUnique()
+      		nNbreCle++
+      		
+      		
+      		//En cas d'ajout, on mémorise qu'il faut gérer le messages, du parent.
+      		SI :ZF_bModeAjout() ALORS
+      			:m_bGererParent = Vrai
+      		FIN
+      	FIN
+      	
+      	//On s'assure que le message est associé à une et une seule entité.
+      	SI nNbreCle <> 1 ALORS
+      		ExceptionDéclenche(1, ChaîneConstruit("État du message incohérent : %1 ID affectés", nNbreCle))
+      	FIN
       FIN
       
      type : 458752

@@ -801,6 +801,104 @@ class :
       
       
      type : 458752
+   -
+     name : GenCodeDiff
+     procedure_id : 1524488917916055523
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode CLZF_GenData.GenCodeDiff
+      PROCÉDURE  GenCodeDiff():Vide
+      
+      
+      sRub			est une chaîne
+      
+      sCode			est une chaîne
+      stRubSql		est un CLZF_GenData.STR_RubSQL
+      aStRubSQL		est un tableau associatif de CLZF_GenData.STR_RubSQL
+      aRubs			est un tableau associatif de CLZF_GenData.STR_RubSQL
+      bCreationTbl	est un booléen
+      sIndicateurPK	est une chaîne
+      
+      
+      aRubs = :GetDefRubSQL()
+      
+      
+      SI aRubs..Occurrence = 0 ALORS
+      	bCreationTbl = Vrai
+      SINON
+      	bCreationTbl = Faux
+      FIN
+      
+      
+      
+      POUR TOUT sRub DE :m_oColGen.aLstRubs()
+      	SI aRubs[sRub]..Vide ALORS
+      		VariableRAZ(stRubSql)
+      	SINON
+      		stRubSql = aRubs[sRub]
+      	FIN
+      	aStRubSQL[sRub]	= :stGenSQLRub(sRub, bCreationTbl, stRubSql)
+      FIN
+      
+      
+      
+      SI bCreationTbl ALORS
+      	//Table en création :
+      	sTypeId est une chaîne
+      	
+      	//Récupération du type de la rubrique
+      	sTypeId = CLZF_GenDataMSSQL.sRubSqlDeTypeHF(:m_oColGen.p_nTypeHfRubId)
+      	
+      	//Ajout de l'auto incrément si le type est définit comme tel
+      	SI :m_oColGen.p_nTypeHfRubId DANS (hRubIDAuto4, hRubIDAuto) ALORS
+      		sIndicateurPK = "identity(1, 1)"
+      	FIN
+      	
+      	//Définition de la rubrique de la colonne ID.
+      	sCode += TAB + "[%:m_oColGen.p_sNomRubId%] [%sTypeId%] not null [%sIndicateurPK%]," + RC
+      	
+      	//Rénération de la définition de toutes les rubriques.
+      	POUR TOUT stRubSql, sRub de aStRubSQL
+      		sCode += TAB + stRubSql.sCodeSQL + "," + RC
+      	FIN
+      	
+      	sCode += TAB + "CONSTRAINT PK_[%:m_oColGen.p_sNomTable%]_[%:m_oColGen.p_sNomRubId%] PRIMARY KEY NONCLUSTERED ([%:m_oColGen.p_sNomRubId%])"
+      	
+      	POUR TOUT stRubSql, sRub de aStRubSQL
+      		SI stRubSql.sCodeKey <> "" ALORS
+      			sCode += "," + RC + TAB + stRubSql.sCodeKey
+      		FIN
+      	FIN
+      	
+      	
+      	sCode = [
+      	CREATE TABLE [%:m_oColGen.p_sNomTable%] (
+      	[%sCode%]
+      	)
+      	
+      	]
+      SINON
+      	
+      	POUR TOUT stRubSql, sRub de aStRubSQL
+      		SI sRub <> :m_oColGen.p_sNomRubId _ET_ stRubSql.nTypeAlterRub <> CLZF_GenData.cstTypeAlterFK_RAS ALORS
+      			sCode += [RC + RC] + "--" + sRub
+      			sCode += RC + stRubSql.sCodeDropDef
+      			sCode += RC + stRubSql.sCodeSQL
+      			sCode += RC + stRubSql.sCodeAddDef
+      		FIN
+      	FIN
+      	
+      	POUR TOUT stRubSql, sRub de aStRubSQL
+      		SI sRub <> :m_oColGen.p_sNomRubId ALORS
+      			sCode += [RC + RC] + stRubSql.sCodeKey
+      		FIN
+      	FIN
+      	
+      FIN
+      
+      
+      :m_sCode = sCode
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

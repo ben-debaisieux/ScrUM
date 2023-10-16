@@ -1,0 +1,327 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbEpic_Usr
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e7566465246f
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbEpic_Usr est une Classe
+      	hérite de ClZF_ObjDB
+      
+      PRIVÉ
+      	m_oIDScr_Usr	est un ClDbUsr dynamique	<note="mapping=IDScr_Usr">
+      	m_oIDScr_Epic	est un ClDbEpic dynamique	<note="mapping=IDScr_Epic">
+      	m_oIDScr_Epic_Usr_Role	est un ClDbEpic_Usr_Role dynamique	<note="mapping=IDScr_Epic_Usr_Role">
+      	m_nOrdre	est un Entier sur 2 octets	<MAPPING=Ordre>
+      
+      GLOBAL
+      PUBLIC
+      mg_oEx_CompoNonInst_IDScr_Usr	est un ClZF_Exception dynamique
+      mg_oEx_CompoNonInst_IDScr_Epic	est un ClZF_Exception dynamique
+      mg_oEx_CompoNonInst_IDScr_Epic_Usr_Role	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception1	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception2	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception3	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception4	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception5	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception6	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception7	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception8	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception9	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception10	est un ClZF_Exception dynamique
+      FIN
+      
+      mg_oEx_CompoNonInst_IDScr_Usr	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Usr est requis.")			// A faire : Reprendre le message
+      mg_oEx_CompoNonInst_IDScr_Epic	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Epic est requis.")			// A faire : Reprendre le message
+      mg_oEx_CompoNonInst_IDScr_Epic_Usr_Role	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Epic_Usr_Role est requis.")			// A faire : Reprendre le message
+      // mg_oEx_Exception1	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception2	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception3	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception4	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception5	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception6	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception7	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception8	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception9	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
+      
+      
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 817308190975081
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      Ancêtre.Constructeur(Scr_Epic_Usr..Nom, Scr_Epic_Usr.IDScr_Epic_Usr..Nom,nID_P)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 817308190975082
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 817308190975083
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbEpic_Usr
+      
+      sClasse est une chaîne = ClDbEpic_Usr
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 817308190975084
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉ init_ObjBD()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      
+     type : 458752
+   -
+     name : Pre_Enregistre
+     procedure_id : 817308190975085
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ Pre_Enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.Pre_Enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      //. . .
+      SINON
+      
+      	//
+      	SI :m_oIDScr_Usr = Null ALORS
+      		mg_oEx_CompoNonInst_IDScr_Usr.ZF_Declenche()
+      	FIN
+      	//
+      	SI :m_oIDScr_Epic = Null ALORS
+      		mg_oEx_CompoNonInst_IDScr_Epic.ZF_Declenche()
+      	FIN
+      	//
+      	SI :m_oIDScr_Epic_Usr_Role = Null ALORS
+      		mg_oEx_CompoNonInst_IDScr_Epic_Usr_Role.ZF_Declenche()
+      	FIN
+      
+      
+      FIN
+     type : 458752
+   -
+     name : post_enregistre
+     procedure_id : 817308190975086
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ post_enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.post_enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      // . . .
+      
+      
+      
+      FIN
+     type : 458752
+  properties :
+   -
+     name : p_oIDScr_Usr
+     identifier : 0x2e75664652462
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Usr() : ClDbUsr
+         //Propriétés de m_oIDScr_Usr
+         
+         RENVOYER :m_oIDScr_Usr
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Usr(oValeur_p est un ClDbUsr dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_Usr, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_Usr = oValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Usr_ID
+     identifier : 0x2e75664652463
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Usr_ID():entier
+         //Propriétés de l'objet m_oIDScr_Usr, accessible via son ID
+         SI :p_oIDScr_Usr = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_Usr.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Usr_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oIDScr_Usr = Null
+         SINON
+         	:p_oIDScr_Usr = ClDbUsr.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Epic
+     identifier : 0x2e75664652464
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Epic() : ClDbEpic
+         //Propriétés de m_oIDScr_Epic
+         
+         RENVOYER :m_oIDScr_Epic
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Epic(oValeur_p est un ClDbEpic dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_Epic, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_Epic = oValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Epic_ID
+     identifier : 0x2e75664652465
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Epic_ID():entier
+         //Propriétés de l'objet m_oIDScr_Epic, accessible via son ID
+         SI :p_oIDScr_Epic = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_Epic.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Epic_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oIDScr_Epic = Null
+         SINON
+         	:p_oIDScr_Epic = ClDbEpic.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Epic_Usr_Role
+     identifier : 0x2e75664652466
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Epic_Usr_Role() : ClDbEpic_Usr_Role
+         //Propriétés de m_oIDScr_Epic_Usr_Role
+         
+         RENVOYER :m_oIDScr_Epic_Usr_Role
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Epic_Usr_Role(oValeur_p est un ClDbEpic_Usr_Role dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_Epic_Usr_Role, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_Epic_Usr_Role = oValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Epic_Usr_Role_ID
+     identifier : 0x2e75664652467
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Epic_Usr_Role_ID():entier
+         //Propriétés de l'objet m_oIDScr_Epic_Usr_Role, accessible via son ID
+         SI :p_oIDScr_Epic_Usr_Role = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_Epic_Usr_Role.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Epic_Usr_Role_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oIDScr_Epic_Usr_Role = Null
+         SINON
+         	:p_oIDScr_Epic_Usr_Role = ClDbEpic_Usr_Role.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_nOrdre
+     identifier : 0x2e75664652468
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_nOrdre() : Entier
+         //Propriétés de m_nOrdre
+         
+         RENVOYER :m_nOrdre
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_nOrdre(nValeur_p est un Entier sur 2 octets):Vide
+         
+         SI :m_nOrdre <> nValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_nOrdre = nValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e75664652470
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

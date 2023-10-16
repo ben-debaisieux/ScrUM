@@ -108,6 +108,18 @@ class :
       //. . .
       SINON
       
+      
+      FIN
+     type : 458752
+   -
+     name : pre_enregistre_data
+     procedure_id : 1500640300397903728
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDB.pre_enregistre_data
+      PROCÉDURE PROTÉGÉE pre_enregistre_data()
+      
+      
       //
       SI :m_oNum_Sprint = Null _OU_ :m_oNum_Sprint.ZF_Get_IdUnique() = 0 ALORS
       	Scr_Retro_Commentaire.Num_Sprint..Null	= Vrai
@@ -121,8 +133,6 @@ class :
       	Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type	= :m_oIDScr_Retro_Commentaire_Type.ZF_Get_IdUnique()
       FIN
       
-      
-      FIN
      type : 458752
   properties :
    -

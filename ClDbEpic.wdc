@@ -22,6 +22,7 @@ class :
       	m_oProjet			est un ClDbProjet dynamique	<note="mapping=IDScr_projet">
       	m_sNom				est une chaîne ANSI			<mapping=Nom>
       	m_nOrdre			est un entier sur 2 octets	<MAPPING=Ordre>
+      	m_nEstimation		est un Entier sur 2 octets	<MAPPING=Estimation>
       	
       GLOBAL
       public
@@ -33,6 +34,8 @@ class :
       	cst_posPrec	= -1
       	cst_posSuiv	= 1
       	cst_posFin	= 2
+      	
+      	cstGetCol_Epic_Usr = "Col_Epic_Usr"
       fin
       
       
@@ -136,29 +139,35 @@ class :
       procédure globale Get_EpicDeNom(oPrj_P est un ClDbProjet, sNom_P est une chaîne):ClDbEpic
       
       oRetour est un ClDbEpic dynamique
-      sdRechEpic est une Source de Données
+      oColEpics est un ClColEpic
+      //sdRechEpic est une Source de Données
       sReq est une chaîne
       
-      sReq = ChaîneConstruit([
-      	
+      sReq = [
       SELECT
-      	Scr_Epic.IDScr_Epic
+      	Scr_Epic.*
       	
       FROM Scr_Epic
       
-      where Scr_Epic.IDScr_Projet = %1
-      	AND Scr_Epic.Nom = '%2'
+      where Scr_Epic.IDScr_Projet = [%oPrj_P.ZF_Get_IdUnique()%]
+      	AND Scr_Epic.Nom = '[%ClZF_App.sFormateTexteSQL(gauche(sNom_P, Scr_Epic.Nom..taille))%]'
       	
-      ], oPrj_P.ZF_Get_IdUnique(), ClZF_App.sFormateTexteSQL(sNom_P))
+      ]
+      oColEpics.ZF_LoadSQL(sReq)
       
-      ::mg_oApp.RSQL(sdRechEpic,sReq)
-      
-      HLitPremier(sdRechEpic)
-      si pas HEnDehors(sdRechEpic) ALORS
-      	oRetour <- ClDbEpic.GetObj(sdRechEpic.IDScr_Epic)
+      si oColEpics.ZF_nTaille() = 1 ALORS
+      	oRetour <- oColEpics.ZF_oItem(1)
       FIN
       
-      HAnnuleDéclaration(sdRechEpic)
+      
+      //::mg_oApp.RSQL(sdRechEpic,sReq)
+      //
+      //HLitPremier(sdRechEpic)
+      //si pas HEnDehors(sdRechEpic) ALORS
+      //	oRetour <- ClDbEpic.GetObj(sdRechEpic.IDScr_Epic)
+      //FIN
+      //
+      //HAnnuleDéclaration(sdRechEpic)
       
       renvoyer oRetour
      type : 458752
@@ -325,6 +334,27 @@ class :
          	:p_oProjet = Null
          SINON
          	:p_oProjet = ClDbProjet.GetObj(nValeur_p)
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_nEstimation
+     identifier : 0x151c166e134c52a7
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_nEstimation() <métier> : entier
+         
+         renvoyer m_nEstimation
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_nEstimation(local nValeur_p est un Entier sur 2 octets):Vide
+         
+         SI :m_nEstimation <> nValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_nEstimation = nValeur_p
          FIN
         type : 2031616
      template_refs : []

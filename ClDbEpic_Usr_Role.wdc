@@ -1,0 +1,138 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbEpic_Usr_Role
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x02E7566444713F
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClDbEpic_Usr_Role est une Classe
+      	hérite de ClZF_ObjDbLs
+      
+      PRIVÉ
+      	m_sRole	est un chaîne	<MAPPING=Role>
+      
+      GLOBAL
+      PUBLIC
+      	// mg_oEx_Exception1	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception2	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception3	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception4	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception5	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception6	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception7	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception8	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception9	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception10	est un ClZF_Exception dynamique
+      FIN
+      
+      // mg_oEx_Exception1	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception2	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception3	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception4	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception5	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception6	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception7	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception8	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception9	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
+      
+      
+      
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 817308188832058
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      Ancêtre.Constructeur(Scr_Epic_Usr_Role..Nom, Scr_Epic_Usr_Role.IDScr_Epic_Usr_Role..Nom,nID_P)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 817308188832059
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 817308188832060
+     type_code : 12
+     code : |1-
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbEpic_Usr_Role
+      
+      sClasse est une chaîne = ClDbEpic_Usr_Role
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+      
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 817308188832061
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ init_ObjBD()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      
+      
+     type : 458752
+   -
+     name : Init_data
+     procedure_id : 817308188832062
+     type_code : 12
+     code : |1-
+      PROCÉDURE GLOBALE Init_data()<métier>:Vide
+      
+      /*
+      SI PAS HRecherche(Scr_Epic_Usr_Role, IDScr_Epic_Usr_Role, cst) ALORS
+      HRAZ(Scr_Epic_Usr_Role)
+      	Scr_Epic_Usr_Role.IDScr_Epic_Usr_Role	= cst
+      	Scr_Epic_Usr_Role.Role	= 
+      HAjoute(Scr_Epic_Usr_Role,hFixeIDAuto)
+      FIN
+      */
+     type : 458752
+  properties :
+   -
+     name : p_sRole
+     identifier : 817308188832057
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_sRole() : chaîne
+         //Propriétés de m_sRole
+         
+         RENVOYER :m_sRole
+         
+        type : 1966080
+      -
+        code : |1-
+
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 817308188832064
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

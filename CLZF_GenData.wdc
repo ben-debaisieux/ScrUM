@@ -51,15 +51,16 @@ class :
       
       CLZF_GenData est une Classe
       protege
-      	m_oCOlGen est un ClZF_GenCodeFic dynamique
-      	m_aExport		est un tableau de STR_Export
+      	m_oColGen 			est un ClZF_GenCodeFic dynamique
+      	m_aExport			est un tableau de STR_Export
+      	m_sCode				est une chaîne 
       	
-      	m_taRubsSQLReel est un tableau associatif de STR_RubSQL
-      	m_taRubsSQLAttendu est un tableau associatif de STR_RubSQL
+      	m_taRubsSQLReel 	est un tableau associatif de STR_RubSQL
+      	m_taRubsSQLAttendu	est un tableau associatif de STR_RubSQL
       
       GLOBAL
       public
-      	gm_oExRecupValsTest est un ClZF_Exception dynamique
+      	gm_oExRecupValsTest	est un ClZF_Exception dynamique
       fin
       
       
@@ -417,6 +418,77 @@ class :
       
       renvoyer bRetour
      type : 458752
+   -
+     name : GetDefRubSQL
+     procedure_id : 1524442154309637174
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // GetDefRubSQL ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure abstraite GetDefRubSQL():tableau associatif de CLZF_GenData.STR_RubSQL
+     type : 458752
+   -
+     name : sRubSqlDeTypeHF
+     procedure_id : 1524442850095025336
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // sRubSqlDeTypeHF ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure abstraite sRubSqlDeTypeHF(nType_p est un entier, nTaille_p est un entier = 0)<métier>:chaîne
+     type : 458752
+   -
+     name : GenCodeDiff
+     procedure_id : 1524443472865820862
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GenCodeDiff ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure abstraite GenCodeDiff():vide
+      
+     type : 458752
+  properties :
+   -
+     name : p_sCode
+     identifier : 0x152813b6013e5300
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sCode() : chaîne
+         
+         renvoyer m_sCode
+        type : 1966080
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

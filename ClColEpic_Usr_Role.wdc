@@ -1,30 +1,30 @@
 #To edit and compare internal_properties, use WINDEV integrated tools.
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
- name : ClColUsr_Trello
+ name : ClColEpic_Usr_Role
  major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
- identifier : 0x2e6454b7ca8b4
+ identifier : 0x02E75664449081
  internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
   p_codes :
    -
      code : |1-
-      ClColUsr_Trello est une Classe
+      ClColEpic_Usr_Role est une Classe
       	hérite de ClZF_ColObjDB
       PRIVÉ
-      	m_aoUsr_Trello est un tableau ClDbUsr_Trello dynamique
+      	m_aoEpic_Usr_Role est un tableau ClDbEpic_Usr_Role dynamique
       FIN
      type : 131072
   procedures :
    -
      name : Constructeur
-     procedure_id : 816135247014069
+     procedure_id : 817308188840066
      type_code : 27
      code : |1+
       PROCÉDURE Constructeur()
@@ -32,7 +32,7 @@ class :
      type : 589824
    -
      name : Destructeur
-     procedure_id : 816135247014070
+     procedure_id : 817308188840067
      type_code : 28
      code : |1+
       Procédure Destructeur()
@@ -40,48 +40,52 @@ class :
      type : 655360
    -
      name : addItemById
-     procedure_id : 816135247014071
+     procedure_id : 817308188840068
      type_code : 12
-     code : |1+
+     code : |1-
       PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbUsr_Trello.GetObj(nId_P))
+      :ZF_addItem(ClDbEpic_Usr_Role.GetObj(nId_P))
+      
      type : 458752
    -
      name : aItems
-     procedure_id : 816135247014072
+     procedure_id : 817308188840069
      type_code : 12
-     code : |1+
-      PROCÉDURE aItems()<métier>:tableau de ClDbUsr_Trello dynamique
+     code : |1-
+      PROCÉDURE aItems()<métier>:tableau de ClDbEpic_Usr_Role dynamique
       // Redéfinition de la méthode ClColObjDB.aItems
-      RENVOYER :m_aoUsr_Trello
+      RENVOYER :m_aoEpic_Usr_Role
+      
      type : 458752
    -
      name : Init
-     procedure_id : 816135247014073
+     procedure_id : 817308188840070
      type_code : 12
-     code : |1+
+     code : |1-
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
-      ZF_InitCol(:m_aoUsr_Trello)
+      ZF_InitCol(:m_aoEpic_Usr_Role)
+      
      type : 458752
    -
      name : addItemBySource
-     procedure_id : 816135247014074
+     procedure_id : 817308188840071
      type_code : 12
-     code : |1+
+     code : |1-
       PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbUsr_Trello(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Usr_Trello)
+      oObj est un ClDbEpic_Usr_Role(ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Epic_Usr_Role)
+      
      type : 458752
    -
      name : GetAll
-     procedure_id : 816135247014075
+     procedure_id : 817308188840072
      type_code : 12
      code : |1-
       PROCÉDURE GetAll()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Usr_Trello..nom)
+      ZF_ChargeTblComplete(Scr_Epic_Usr_Role..nom)
      type : 458752
   procedure_templates : []
   property_templates : []
@@ -90,7 +94,7 @@ class :
   original_name : Classe1
 resources :
  string_res :
-  identifier : 0x2e6454b7ca8bc
+  identifier : 817308188840073
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

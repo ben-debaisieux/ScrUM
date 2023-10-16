@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_ZF_GenClasse
  identifier : 0x23e8d36f504b8b92
- internal_properties : BwAAAAcAAABci92k9WeuSpaM3a+iolfB/iyG2nIYFNVFBIVr2Rtbcgu9aSbTugZPm+lQBkcbIw9h6JERZzZ6+H/+atPdJ2aPFE/hg1Iwj3bTBdsvdME5Vg1l10cbVBUfrFDQguhGem2ZI6fRCvU+KwCRr79c1Kjew/RmIwPtvA/wrz2TqLtsXiR1ZcffRW3ouLn2Pn4+hEflDNcYD0Pg3l8Hwb2sFpHN3i1XZnHIh75JweyVQQ/rW01OXE19ZvTjgPZDbnZmulCnzAEODA4MbbJBwYhuJhzHRSrojeqgtKXCuTBqFqar00luxGUagP5Rzwf3LIGW1MF+iy+m4Bu4+j3XLOZZglM2B6xMZugzYCCBbt2DUN/FRb/JqJi2dUjLpIp7++Cq/ZyzgMZck+YNc2GTeBzy+yTLwEtgWYknniRlXeeOQPHk1SikITMOHD1nxQbs2ELhnkg5c2B+LkTmiF4VCXXMZjKdOCYa/sn2K6x4rK41m1uthwI3vIHhmZ9Ca2bnNyX1vLRC0v0KTgPkJT4hWlVDMSh5OfybEdCWZa1ZSD/o8/rZiKaUnixftFPVqczJea9YeCcJhjgIh04xwDCQwXrHiWX5Gqy8A6l30KLJQDG/fm8d1Kf6LQsx96RUeQkryU8CCJsc1PADLpzienkjjcHlieV5xB21UQpzlxRWNqoGoePgxVwuyM7QO7bzb7aPhX7gc7A=
+ internal_properties : BwAAAAcAAADYd1kgcdsi/ioAoWNWPvv1MlBaLqYkcPHhoGFXhU9nrpepdcI/noqzz72ESotn90MlrMXVq3K2BCsKJp+ZW9JLUIu9zx4kszrHCc8zCF3d+sGpu1vPMCHbWGw8nvS6RtnlX/PthgmCz6Q1A5Nw4FzyK62fCZlRyNHAp3Vj2HP81iwFZS8vJYXI0KnmRrZOrGeltB9I94swZo9f+c08bjEFpp1nPjGoHz5RYVyNSS8z+22mpA3VHrT7QA6bzqbu2uhPLMEWvO6U/UpxQbAGdgRnxaLAHQKYFJ0CsVgqJt6rO2EelE26ICbx9zc3lGnWTGG+U5dmOCO4wg2fxEYpetMurwwMrrhjqFClWjlv/Ct56WP1bBxy6ZyHqPb3p8wWIVAn7LqgH3rxv9XfNFgux5iPRGcELfVr8oD5aVNq7D0ICVxAVbdaMFFzaTLoJJ6tUux9P7TSypiK1LKhFQHYQhaBHJL+QgVaD4i8eFqhF2fhe9ZzcBUNbRMuDwLz0zER0DgmvsEO2ieoQcLtFoE/nYztTQivtXx6mVnJMDcgK3J1JMKoqhB7UPd5DWBd7dsMzPt9ciwEm3Jd7GxcHSartbFFxtBY57VjxJb9NCWDOqNhmOtG4cd1q1CAVVXnFZPOxNfYCLw3+sgWLi2XcSUBbfkNeElpLS4XM7AyUrYylR8skYjSZKIMxzp34zoDCfpk9zQ=
  properties :
   width : 1024
   height : 768
@@ -47,7 +47,7 @@ window :
          
          ExécuteTraitement(BTN_Charge,trtClic)
          
-         ExécuteTraitement(COMBO_ProprieteTDB,trtInit)
+         ExécuteTraitement(CBO_ProprieteTDB,trtInit)
         type : 33
       -
         type : 17
@@ -55,7 +55,7 @@ window :
   -
     name : ONG_SansNom1
     identifier : 0x2414d2a6ceb25bcb
-    internal_properties : BwAAAAcAAADezNKUUI7sGNcvmX3pkbg/CvtbuxqDdBy1fKVoL8LeKjSls4Eb1Hg5BsRY81FcbsVtFnMCtSawH+DLOj7Def/8k5g1ZAnWwnFHxlsT22AsCEl1KEzvh9+n2QjeGu17qw17pyu1jpDLG2MjWNgut34bEqdfao/vzPdTeS+SO8PNI1Re7xLEK26TIFQy7Gs5K2Yxm7cuagbqpep2lG54Zlq4J1UgcywMQn5SoRr5ZxskhpcA67wfxB3PcBgW1sw6hxHE/ZFSTkGfRi1pErRCkzOSM7IE1Ur9ovdcEK7TYgmOMB4xLZNzCahGH+yPhdnvofcAZbsFoBjFLLARrrzqn4mfqcDYJhjOh12KytEJeJ/QErtkYMMfMNyfdLzORalf9HaKJor+7THikd4QPUvZPW6IxPprA3JVtGTNp/PPMkgV9s9S3AJj2Gjo2Muscq32ahaJcapfNg/Q+WXH+q6rbqg0slPRYJtMxzBasqaIFgPdv1TrOSn+sn5OuSIanGF6yG3t81Ws9w3yPgQ+z2J1UbHIlSqKd5h4sU0uWXwYsaF40aju8w9YnzKeB5EkNgU2RHWNSJAZBoUTtzEI9mcNOAXABIx38dFPsaRPhOE2OegD6LKCJEdATe3HbzG9FIQIp76AG8xFylkKeXBACgLgxzYGB+f6PwoP8bOA/qLbasecVmE7DJ+8uW6CgSPthMuhySk4yVLZQMt2miK2mbfwyPaw0CwbqPN7gYm3sAu3ro8UJTFW+Ul5necb1la9bA+o48E2Nt26lGFPicpGjB8Ne5hPNYSvsQxI7cuz8EC/af0QZpHmpD34VoR5n1Ef3yXwSS94A/QYyJRJeG/K+2uqJIkqBovCVUhKKk+DJN+SVIQ8RapfA2W/UOpnifBa5dJhboEHoazySchE9H+B13gO0swJdm0Elrljh+cpAkWZXtqqwAl0oXnIYOkgOHEB24Rw6vMv7E0xFQtugkciDizDGOGxiggoeyJu6EarwFubNhwMNhUKTYwB5DuruvrmfP5TjilxQuO5eM0D5AYuWiC1Y1hZ5rnay9J768un93LBObsRaAJ2to6F/mRR9ywES6I5bKfd29mUmRIe6+gxwyr5pL9VyNdrkdxhMWWSVcBWB96lNd+0FIQzBXmXBGBe9LAVepL2t57X5laRwREihNL8yDfHqRGAIRfd+U9IayfL0OqBjnNdWWviNNmDHc9X
+    internal_properties : BwAAAAcAAABLQV3FzySUni4yrCk+lJZ1pI82FPgN5Vz/s9HPs1n4OJDndPohVOVAH9LgqN2wABR1z/GRKi6ryenIY1bbqnZXOtyvxA1tURENE8R++hIFIa4QcdkES8YIyagg9fqtcVfkW0Xcn8xOgojnwW1tEGo3hUmErbG7tavoasKvuuwYGKrTqL1ARw5/+YlUqho3glQjQv9/hjJIUAw3kOvC8OJAX7lMcM4r4y1Ic6RbcQTdtQ3fApx2jKg4Xkz5ig2WViD4xr+W4NxYu24EcBgr1JV9knEzv/K1madqdqVl6EnbeEZF57vasYXkWmA2VoDK+mSFTL+CZpS/v2lhA+1uvSlQRWGqIyjO16H8cQXdUXnqXWf1BtymapKUnQxUcW1nn80tWKCmPH2qOeiDNxxCtgOA5dX/kC2302HWOzzbcW8B0AfbdgDxKQ5P+gTIbH87DrKETXlC46C1/2JV5fdObAz+uyQUd0eVfaSpUTMSwzkF2qz6l96sYKKj3EdysTcr2QZlI041uLWF/oVzFcSMVaWTJ0JCoakjmRXAG9HQwYWePLMgZIzDJ4flvNXBEN3fQUyoFgX+wHL5t2XCT1ZkAIhWscdNdg3UZ4djhZmsaljimwkWBd9dNYQIN3V8bcqEdZ1VgtI42iZOGoEua9C0JADYPUV2vYAsr4jul1BmNqbd11CScKv7o0ZTIScuUxbGe8oxTXiYQ+Yr22iFdYQhZXx+7/dS2JnrbOHmUuhePMTNnrn+b/bSkDctCiRYU4gVPtpfNvw9K5Dk6gkpZisXMPW+p+zd+w17fD+86/LeZXAY4p1fklv1cc7c2UZxqf5JTOYET652JYQY2ek20miZEmrbPHHXueOl/1foFtnKmychlCWNjujr7EGBPiwdeKXUyOtE6wUunDfUTwZx6v7aCtBZa32GDpwleUMwjfDMcjRvvzinj3TbYAmGhiTlhyPmdl7O+4rUXQnbWVRSudEd+IC4zbT6U+GCG5PB9MSp3mb8gQ3SOPJycKsOXnl/ezyipZZuFKypMy8O1CcMajqiaT6toNrOafAT+JZGVHwH+CbGu21PVn0N68kJuR5D01wHmxVh+qdvlHR0OpQXa1lPkSu9oo1wYs1tykPhGyLNBkRRgJzQa2zxkYSQfRUK03BubvM2F+8xjDKRC1JecXDWbtJ3Yq1LUt7vnv2wQXrrT6xyDnn+vnHaCUrNlJK37A==
     properties :
      x : 3
      y : 49
@@ -502,7 +502,7 @@ window :
           properties :
            x : 535
            y : 92
-           width : 141
+           width : 219
            height : 184
           options :
            -
@@ -554,7 +554,7 @@ window :
        internal_properties : BwAAAAcAAAB9fd5nxjs2VB1P9RQ48+pYquWmlOSGk6bfYFqazXHGW1ywZ2+eZ+bd23DwFh3R6Vg4nKFTT/wv8HTa2o33HRJCdn98rbAuA2zYqf+FHKsPlHqZXiin5xo/LDWmL+CZz7nwJDNs56DtwYeDcFh1kj1Ex499Vumh5g==
        controls :
         -
-          name : TABLE_Configs
+          name : TBL_Configs
           identifier : 0x246cd3c10bc025cf
           internal_properties : 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
           properties :
@@ -781,7 +781,7 @@ window :
            p_codes :
             -
               code : |1+
-               ClZF_GenFenMeta.Charge_Cbo_Meta(TABLE_Configs.COL_Metatype..NomComplet)
+               ClZF_GenFenMeta.Charge_Cbo_Meta(TBL_Configs.COL_Metatype..NomComplet)
               type : 14
             -
               type : 35
@@ -886,15 +886,15 @@ window :
                stSauve.bTopLs		= INT_SansNom4
                stSauve.nNbLigneGen	= SAI_Nb_lignes_pour_test
                
-               pour nLigne = 1 _a_ TABLE_Configs..Occurrence
-               	sRub = TABLE_Configs[nLigne].COL_Rubrique
+               pour nLigne = 1 _a_ TBL_Configs..Occurrence
+               	sRub = TBL_Configs[nLigne].COL_Rubrique
                	
                	VariableRAZ(stSauveLigne)
-               	stSauveLigne.sValMin	= TABLE_Configs[nLigne].COL_Min
-               	stSauveLigne.sValMax	= TABLE_Configs[nLigne].COL_Max
-               	stSauveLigne.nPctNull	= TABLE_Configs[nLigne].COL_PctNull
-               	stSauveLigne.sMeta		= TABLE_Configs[nLigne].COL_Metatype
-               	stSauveLigne.sGrpExclu	= TABLE_Configs[nLigne].COL_Exclusif
+               	stSauveLigne.sValMin	= TBL_Configs[nLigne].COL_Min
+               	stSauveLigne.sValMax	= TBL_Configs[nLigne].COL_Max
+               	stSauveLigne.nPctNull	= TBL_Configs[nLigne].COL_PctNull
+               	stSauveLigne.sMeta		= TBL_Configs[nLigne].COL_Metatype
+               	stSauveLigne.sGrpExclu	= TBL_Configs[nLigne].COL_Exclusif
                	stSauve.taRubs[sRub]	= stSauveLigne
                FIN
                
@@ -932,7 +932,7 @@ window :
                oClasseGen.Analyse()
                oClasseGen.chargeConfTable()
                
-               TableSupprimeTout(TABLE_Configs)
+               TableSupprimeTout(TBL_Configs)
                
                INT_SansNom3				= oClasseGen.m_stConfigTbl.bTopHisto
                INT_SansNom4				= oClasseGen.m_stConfigTbl.bTopLs
@@ -941,7 +941,7 @@ window :
                POUR tout element stSauveLigne, sRub de oClasseGen.m_stConfigTbl.taRubs
                	
                	nNbEnr			= 0
-               	nLigne			= TableAjouteLigne(TABLE_Configs)
+               	nLigne			= TableAjouteLigne(TBL_Configs)
                	sRelation		= ""
                	
                	
@@ -963,19 +963,19 @@ window :
                		fin
                	fin
                	
-               	TABLE_Configs[nLigne].COL_Rubrique		= sRub
+               	TBL_Configs[nLigne].COL_Rubrique		= sRub
                	SI PAS oClasseGen.m_aRub[sRub]..Vide ALORS
-               		TABLE_Configs[nLigne].COL_Type			= ClZF_GenCodeFic.GetInfoRubType(stDesfRub.nTypeRubHF)
-               		TABLE_Configs[nLigne].COL_bNullable		= stDesfRub.bNullable
-               		TABLE_Configs[nLigne].COL_TypeRelation	= sRelation
-               		TABLE_Configs[nLigne].COL_Nbre_enr_FK	= nNbEnr
-               		TABLE_Configs[nLigne].COL_Min			= stSauveLigne.sValMin
-               		TABLE_Configs[nLigne].COL_Max			= stSauveLigne.sValMax
-               		TABLE_Configs[nLigne].COL_PctNull		= stSauveLigne.nPctNull
-               		TABLE_Configs[nLigne].COL_Metatype		= stSauveLigne.sMeta
-               		TABLE_Configs[nLigne].COL_Exclusif		= stSauveLigne.sGrpExclu
+               		TBL_Configs[nLigne].COL_Type			= ClZF_GenCodeFic.GetInfoRubType(stDesfRub.nTypeRubHF)
+               		TBL_Configs[nLigne].COL_bNullable		= stDesfRub.bNullable
+               		TBL_Configs[nLigne].COL_TypeRelation	= sRelation
+               		TBL_Configs[nLigne].COL_Nbre_enr_FK	= nNbEnr
+               		TBL_Configs[nLigne].COL_Min			= stSauveLigne.sValMin
+               		TBL_Configs[nLigne].COL_Max			= stSauveLigne.sValMax
+               		TBL_Configs[nLigne].COL_PctNull		= stSauveLigne.nPctNull
+               		TBL_Configs[nLigne].COL_Metatype		= stSauveLigne.sMeta
+               		TBL_Configs[nLigne].COL_Exclusif		= stSauveLigne.sGrpExclu
                	sinon
-               		TABLE_Configs[nLigne]..CouleurFond		= iRougeClair
+               		TBL_Configs[nLigne]..CouleurFond		= iRougeClair
                	FIN
                FIN
                
@@ -1427,7 +1427,7 @@ window :
                
                si oClasseGen.p_bClasseExiste alors
                	
-               	oData est un CLZF_GenData(oClasseGen)
+               	oData est un CLZF_GenDataMSSQL(oClasseGen)
                	
                	quand exception dans
                		oData.GenereData()
@@ -1672,96 +1672,98 @@ window :
                oClasseGen.Analyse()
                oClasseGen.chargeConfTable()
                
-               oData est un CLZF_GenDataMSSQL(oClasseGen)
+               oData			est un CLZF_GenDataMSSQL(oClasseGen)
+               oData.GenCodeDiff()
+               SAI_SQL += oData.p_sCode
                
-               sRub		est une chaîne
-               
-               sCode		est une chaîne
-               stRubSql	est un CLZF_GenData.STR_RubSQL
-               aStRubSQL	est un tableau associatif de CLZF_GenData.STR_RubSQL
-               aRubs		est un tableau associatif de CLZF_GenData.STR_RubSQL
-               bCreationTbl est un booléen
-               sIndicateurPK est une chaîne
-               
-               
-               aRubs = oData.GetDefRubSQL()
-               
-               
-               si aRubs..Occurrence = 0 alors
-               	bCreationTbl = Vrai
-               sinon
-               	bCreationTbl = faux
-               FIN
-               
-               
-               
-               POUR TOUT sRub DE oClasseGen.aLstRubs()
-               	si aRubs[sRub]..Vide ALORS
-               		VariableRAZ(stRubSql)
-               	sinon
-               		stRubSql = aRubs[sRub]
-               	FIN
-               	aStRubSQL[sRub]	= oData.stGenSQLRub(sRub, bCreationTbl, stRubSql)
-               FIN
-               
-               
-               
-               si bCreationTbl alors
-               	//Table en création :
-               	sTypeId est une chaîne
-               	
-               	//Récupération du type de la rubrique
-               	sTypeId = CLZF_GenDataMSSQL.sRubSqlDeTypeHF(oClasseGen.p_nTypeHfRubId)
-               	
-               	//Ajout de l'auto incrément si le type est définit comme tel
-               	si oClasseGen.p_nTypeHfRubId dans (hRubIDAuto4, hRubIDAuto) ALORS
-               		sIndicateurPK = "identity(1, 1)"
-               	FIN
-               	
-               	//Définition de la rubrique de la colonne ID.
-               	sCode += TAB + "[%oClasseGen.p_sNomRubId%] [%sTypeId%] not null [%sIndicateurPK%]," + RC
-               	
-               	//Rénération de la définition de toutes les rubriques.
-               	POUR TOUT stRubSql, sRub de aStRubSQL
-               		sCode += tab + stRubSql.sCodeSQL + "," + RC
-               	FIN
-               	
-               	sCode += TAB + "CONSTRAINT PK_[%oClasseGen.p_sNomTable%]_[%oClasseGen.p_sNomRubId%] PRIMARY KEY NONCLUSTERED ([%oClasseGen.p_sNomRubId%])"
-               	
-               	POUR TOUT stRubSql, sRub de aStRubSQL
-               		si stRubSql.sCodeKey <> "" alors
-               			sCode += "," + rc + TAB + stRubSql.sCodeKey
-               		FIN
-               	FIN
-               	
-               	
-               	sCode = [
-               	CREATE TABLE [%oClasseGen.p_sNomTable%] (
-               	[%sCode%]
-               	)
-               	
-               	]
-               sinon
-               	
-               	POUR TOUT stRubSql, sRub de aStRubSQL
-               		si sRub <> oClasseGen.p_sNomRubId _et_ stRubSql.nTypeAlterRub <> CLZF_GenData.cstTypeAlterFK_RAS alors
-               			sCode += [RC + RC] + "--" + sRub
-               			sCode += RC + stRubSql.sCodeDropDef
-               			sCode += RC + stRubSql.sCodeSQL
-               			sCode += RC + stRubSql.sCodeAddDef
-               		FIN
-               	FIN
-               
-               	POUR TOUT stRubSql, sRub de aStRubSQL
-               		SI sRub <> oClasseGen.p_sNomRubId ALORS
-               			sCode += [rc + rc] + stRubSql.sCodeKey
-               		FIN
-               	FIN
-               	
-               FIN
-               
-               
-               SAI_SQL += sCode
+               //sRub			est une chaîne
+               //
+               //sCode			est une chaîne
+               //stRubSql		est un CLZF_GenData.STR_RubSQL
+               //aStRubSQL		est un tableau associatif de CLZF_GenData.STR_RubSQL
+               //aRubs			est un tableau associatif de CLZF_GenData.STR_RubSQL
+               //bCreationTbl	est un booléen
+               //sIndicateurPK	est une chaîne
+               //
+               //
+               //aRubs = oData.GetDefRubSQL()
+               //
+               //
+               //si aRubs..Occurrence = 0 alors
+               //	bCreationTbl = Vrai
+               //sinon
+               //	bCreationTbl = faux
+               //FIN
+               //
+               //
+               //
+               //POUR TOUT sRub DE oClasseGen.aLstRubs()
+               //	si aRubs[sRub]..Vide ALORS
+               //		VariableRAZ(stRubSql)
+               //	sinon
+               //		stRubSql = aRubs[sRub]
+               //	FIN
+               //	aStRubSQL[sRub]	= oData.stGenSQLRub(sRub, bCreationTbl, stRubSql)
+               //FIN
+               //
+               //
+               //
+               //si bCreationTbl alors
+               //	//Table en création :
+               //	sTypeId est une chaîne
+               //	
+               //	//Récupération du type de la rubrique
+               //	sTypeId = CLZF_GenDataMSSQL.sRubSqlDeTypeHF(oClasseGen.p_nTypeHfRubId)
+               //	
+               //	//Ajout de l'auto incrément si le type est définit comme tel
+               //	si oClasseGen.p_nTypeHfRubId dans (hRubIDAuto4, hRubIDAuto) ALORS
+               //		sIndicateurPK = "identity(1, 1)"
+               //	FIN
+               //	
+               //	//Définition de la rubrique de la colonne ID.
+               //	sCode += TAB + "[%oClasseGen.p_sNomRubId%] [%sTypeId%] not null [%sIndicateurPK%]," + RC
+               //	
+               //	//Rénération de la définition de toutes les rubriques.
+               //	POUR TOUT stRubSql, sRub de aStRubSQL
+               //		sCode += tab + stRubSql.sCodeSQL + "," + RC
+               //	FIN
+               //	
+               //	sCode += TAB + "CONSTRAINT PK_[%oClasseGen.p_sNomTable%]_[%oClasseGen.p_sNomRubId%] PRIMARY KEY NONCLUSTERED ([%oClasseGen.p_sNomRubId%])"
+               //	
+               //	POUR TOUT stRubSql, sRub de aStRubSQL
+               //		si stRubSql.sCodeKey <> "" alors
+               //			sCode += "," + rc + TAB + stRubSql.sCodeKey
+               //		FIN
+               //	FIN
+               //	
+               //	
+               //	sCode = [
+               //	CREATE TABLE [%oClasseGen.p_sNomTable%] (
+               //	[%sCode%]
+               //	)
+               //	
+               //	]
+               //sinon
+               //	
+               //	POUR TOUT stRubSql, sRub de aStRubSQL
+               //		si sRub <> oClasseGen.p_sNomRubId _et_ stRubSql.nTypeAlterRub <> CLZF_GenData.cstTypeAlterFK_RAS alors
+               //			sCode += [RC + RC] + "--" + sRub
+               //			sCode += RC + stRubSql.sCodeDropDef
+               //			sCode += RC + stRubSql.sCodeSQL
+               //			sCode += RC + stRubSql.sCodeAddDef
+               //		FIN
+               //	FIN
+               //
+               //	POUR TOUT stRubSql, sRub de aStRubSQL
+               //		SI sRub <> oClasseGen.p_sNomRubId ALORS
+               //			sCode += [rc + rc] + stRubSql.sCodeKey
+               //		FIN
+               //	FIN
+               //	
+               //FIN
+               //
+               //
+               //SAI_SQL += sCode
               type : 18
             -
               type : 161
@@ -2728,9 +2730,9 @@ window :
               type : 278
               enabled : false
         -
-          name : COMBO_ProprieteTDB
+          name : CBO_ProprieteTDB
           identifier : 0x248b68b30a891d40
-          internal_properties : BwAAAAcAAADrjNF+8p3WJd7bWiWQ8KNkMJ191DlSIqRWzBYNlYbSZWe7d4YMD0TxgWBh8LIg9ClPFZ543OUv4KORxr519l4n+K9lesPlsn7ONrIR3KZt3fUP1odr8R9Wn7zJ87dc16DK1Ft7j5zVq1Zrf2n+tVmAUfo+url0PNeadxJfdQf2qIO5VScuf75Vny0QKDnHkyHorAieVj7dXOGzZknS4w9ssOgNnyzYYoomqtbuZtig2PNr8ZTq4Ynhmlc6h2mCgOz3dvIXdNOtXFy3HsUwkjftH7AVzmzbBRNw6vHaj96wAQwV9ArjPltPMr0D0Ujm6+SM6jc33d+fXltYznTAVb21DUT1YmSt0dKf1/+PZD8WXu+uLde3AH8SdJrJ5plfZ13jC2uFLrsMeocO+9OFxKtGj1R4cgXnvq7Egmfzo9RbYDZw6yAH0mILGlCnc9FzMpHcjEikvhrLJILUVgmgvseFT+/T56AVHDaMNplEexaWdULZY7hhKCvhgDhUe7v/LybbMKTjI1pXJDEqwQn4dapyeql7erfJErvdVSu4WZ/ZNxAExy+MypPcdgh3be3HpKi/BCaGyZ0CfWlE8Y2E/6k9v5WapN1aho1HT+xATBC9ls2QBB2UWffCJOnnQaCJ6jz1gZK4i4R7z+RPU6dio55GcfBF34WTeywXnaWQnCGYjcl09vtOBC8Dq39ZKvKbq8qtFuvY+D0id2U1LqDRCNPDUuk8Ayq5YiSph1aNFWwJ2DEHfLwNMA2eXEkDNoCKMlKtqSVz+Wv4ahK40+QX5mPhEE5PUHa3t8Xigy2N3R69bYsgepKSvcZBDIMOPNO/TtCj/J3DJkWiUjJcevcqY4m4bnv/HPxlWHUu4S37jdW8EDu4KkcxbIHSYt1ktoJFdqzXVEqTXGcl4jrhq65aOTshnl3WIWRvix6m5UlM7v74HTKqHzEtKd4hyUpP1oGh7mg0wH173yxnKqUOyuANpWrBlPi9YkZnIgVP0fEV9MMGAzm6XlCeyevhJJsLwnCwB4HsfRJ1dKC5iWemc5Fk2kRHtHcNTCTutNrmfYxRe+mtOVT00kVr8kB/omXGNKkdtAPY7jCpuLZhf33OKE8ZFDj9D0aj2qhYOXAU+WGLwX9LqB9KfNwI+eEbA4FnhdBz5gOkIkU/jKCzaPsa6tIA6HDLKjUldtUiJb4aG0cUkWpDwA4P5Kfx2BvqNOATPnAJbHibycEVIrG5hgEYYXzCcrb7dRCiJrOvDc1ARhbLhI6Sfv55wl+y4j2NWDAFMZfddkdROGTGTHY1rAVEXosKOwV9+Fnll7aCMHoFvkgkvkjcqnVlfIM6xo77LNjgtejPqLRd1tNca/G/Z5K5axRgBbuTIywUgXqy7MbKoyz1WzqOUnZlu4TAjX74cvgGOCcHhl8/c7jCr5MkJt04jD3Yw9a8Y9BjvhpYNcbLsuOVcjosccJtgtNzUL/+FaWS1FGJol4GTJekgrcvkeZiCeYVO5ovVQdKvoZNEdLMWqVmv6riuFSC7X+jR1MaRdNiwPoEU7G/oXTw6/pb93g1X5o5Zm6piIynIOUZcuyUpsK94xtqz6BQbwIvDF+J0Qv5dovKPSfrhNg5OK2hs5t/w97Xo1l0tjjTbpUaWTUAxZakgqPMTsIAkXX1mCShAhHg76NedajvHRwAvrdM96TxTF4g6W3sgsCSNs9eorgXuqnyUKgXTJBzi5XilzbTWBfjHIdjRfkOP2/amyWcpj3t8+7Q3Bo=
+          internal_properties : BwAAAAcAAACdPnBbFRUVuKohQ9FHRugxLy7iDd2JxtQkkA6pMmSgMPKhlwADix5zVjVvqbwVtr+D4RatftfE1/6J17yngktU/4BQOvO6bEJFIQO4MGQiiEGLhWhnZL+Otw+JVG7ghr1x/sOUw3F5dr0MKpPR/DrOYrIAyc10wAJR/YjTG4Vo3JU4wh5EuvpJafoKtY1z9uw3J90AwoKP8wEroYFuG7UePRARf0C1zxLtfxqpL+TLcfYN1vVF8z5mK9jel0OQ1yIDROHbGhWUuKv9rSWQFmKVKzNvxKTpnlU7dCzvE/NF/aIlVK8rYwrGgvZw1xgPA5vn7S/t749XP4+RDDrGMGZISHT/t5fq0MqaQUVSrH/geB51iEOC1SplIsPUa51khM99RMAFe9jCwJJuguDI4LuZun4XqpWgcOTbdM8SNNqTFgivyQbSChntLJ903kMGz8VAtXKg6siKdnfsu6PRucn2+iMNtu7tBXZtv26dTKry4hKSoHUiKncAzPWY1cReczIBBaZuY+FfprFs8MFK0KBWSnueRzLI6c5UeROl+0k6GAA48L3bkj48eZTNbBxWd5d11yfcCAEMWcs7rUaaxEJ0ysU+ZkVa968cKvfZGOWCNc4EcN8wJZMU+sNH3UpktHSIwYodvEULoIB0PuWmEIN4/g3wTnqkoxq5qhbK1NXzrjYBPWNJljvCkuIFTvkoatkvUjomALiNVn6BosHGJsYtMsK7VsrkYcY/VEkgNgJvjsB6gUE0Xl4hx28c0S8+EHomuFYdK5PKqqdnMW+cOPMOMZboZqyBxNndaTO40j8wkxONPu3/8UWYppzTy95ZU3WVDzO9drBs6NSC1Ho7eZyfTNXxJ4gBASa2CM8A1x4zkzsP7y+S6VSHY4QQ+ttbguFGUvQXmIEVLDiAlXy0F1Z4O/uSdLZutlVYHSqtMVPgZGRf4riZgDIBfoh1FvVDlH6rQmtzKQh0+2YJQdrfMJM2CJVrnEdD9mdGJ9hsA5WTImzQUgUo54f0cXwl/rzP7NIsne1WM5cjDRFdY3/0FV7tYboXSP8FZpdh+vH6Ubs1GM5U2nAZ9SNonWN6o4ycmQmw+UvGmYmLzAq8XvHD82HQ5yeBWJ1KVUDyy1cqEE4cAxu3/EYo3/vtNJwEB8e0IEvdh9ztKwHrma9aw8Iq17OyBAqT4huHM67Pq+DilAVq+Atzhq1iKfG0Q4wmHJTDmev7CYPTAK9YfY0/arFT54FXHJaSCnbxLQgnflrnB8tAZncdJOcJUcDV2bHYqLLnp+zNv5sjdpRVQEZ+ynd82C8OeHg+iqIutolsSPBzzp873u1kNv7E/qaqFRRhBOyCtEOari9nWfkLVyME60JQCWQIZi6RDtgWEyV83p7c1PC6UTUE/hPS92ITYXDJ1Rm4fMvO7b9Ga6OhZRYTixmyMErEWq2kVj2/dH4elvqv4BXVKdjubWbRDUv4NdrPlmqtwPZ69dxrRww9wlnDnCpzmZ+ZqykrwyeFKhVxUBCi1d2mJuJ1WyWF3hEyKtWx/FAHDID3y/vbp0ejNIpGfnpAL8VP6pEwK83PFqQhLH8/sxgFP+PYU8AsP/KGK5JvtptURpJ5D5mfUJNFtXwzq32spWRKxqSPC+7rLhnGKP4juiq5q/g40dGx052BSDPp1yulFMbabY/7UBv8P9fs2hHFXdBve/jbmjvSJqRj0q8yiRPq+9QbFMv94sOHEQCA5Wdk0o0wiSvJAGmUE6chdQ0OqQ==
           properties :
            x : 6
            y : 6
@@ -2777,7 +2779,7 @@ window :
                
                oClasseGen.Analyse()
                
-               oGenFen		est un ClZF_GenFenTDB_Tbl(oClasseGen, COMBO_ProprieteTDB)
+               oGenFen		est un ClZF_GenFenTDB_Tbl(oClasseGen, CBO_ProprieteTDB)
                oGenFen.Genere()
                
                SAI_CodeFenInt1	= oGenFen.p_sCode

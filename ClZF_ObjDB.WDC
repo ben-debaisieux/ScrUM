@@ -137,29 +137,31 @@ class :
       	
       	bMemoModeAjout = :ZF_bModeAjout()
       	
-      	MémoireVersFichier(objet,:p_sNomTable)
-      	
-      	//Traitements précédent l'enregistrement
+      	//Traitements précédent l'enregistrement, avant le transfert des membres, dans les rubriques de la base
       	:pre_enregistre()
       	
+      	MémoireVersFichier(objet,:p_sNomTable)
       	
+      	//Retraitement des valeurs des ids des objets
       	:ZF_GetObjectsIds()
       	
-      	
+      	//Corrections de valeurs en BDD qui auraient des spécificités particulières, au plus proche de l'enregistrement physique de la donnée
+      	:pre_enregistre_data()
       	
       	
       	SI bMemoModeAjout ALORS
       
+      		sKey est une chaîne
+      		//On était en création : on retire l'adresse de l'objet en cours de la liste des objets déclarés
+      		sKey = :ZF_sGetNomInstance()
+      		TableauSupprime(ClZF_App.mg_aoInstances,sKey)
+      		
       		SI :m_ZF_bEstSupprime ALORS
       			//Rien a faire : l'élément n'était pas enregistré
       		SINON
       			SI PAS HAjoute(:p_sNomTable) ALORS
       				mg_oExEchecEnregistrement.ZF_Declenche()
       			sinon
-      				sKey est une chaîne
-      				//On était en création : on retire l'adresse de l'objet en cours de la liste des objets déclarés
-      				sKey = :ZF_sGetNomInstance()
-      				TableauSupprime(ClZF_App.mg_aoInstances,sKey)
       				
       				//Récupération de l'ID généré
       				:p_ZF_nIdUnique = {:p_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique}
@@ -185,9 +187,10 @@ class :
       			FIN
       			
       		SINON
-      			
-      			SI PAS HModifie(:p_sNomTable) ALORS
-      				mg_oExEchecEnregistrement.ZF_Declenche()
+      			si :m_ZF_bModif alors
+      				SI PAS HModifie(:p_sNomTable) ALORS
+      					mg_oExEchecEnregistrement.ZF_Declenche()
+      				FIN
       			FIN
       		FIN
       		
@@ -480,7 +483,7 @@ class :
       		aNotes est un tableau associatif de chaînes = col_zf_surcharge.chaineverstableauasso(Vars.AttributNote)
       		sRub = aNotes["mapping"]
       		sPropId = Vars.Nom + "_ID"
-      		sPropId[1] = "p"
+      		sPropId[[1]] = "p"
       		
       //		sLstRub += [","] + sRub
       		nVal = {sPropId,indVariable}
@@ -523,6 +526,26 @@ class :
       //
       procédure privée Init_Data()
       //Déclaré en privé ici, pour couper l'héritage imposé par la déclaration abstraite du parent : cette méthode n'est utile que pour les données en lecture seule
+     type : 458752
+   -
+     name : pre_enregistre_data
+     procedure_id : 1500636005392251802
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_enregistre_data ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure protégée pre_enregistre_data()
+      
      type : 458752
   properties :
    -

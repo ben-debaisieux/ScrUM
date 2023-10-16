@@ -199,27 +199,27 @@ class :
       	SI :m_oUsrResponsable = Null ALORS
       		:m_oUsrResponsable						<- goApp.m_oUsrCnx
       	FIN
-      	Scr_UserStory.IDScr_Usr_Valideur			= :m_oUsrResponsable.ZF_Get_IdUnique()
-      
-      	//Enregistrement de l'utilisateur testeur
-      	SI :m_oUsr_Test_Dev = Null ALORS
-      		Scr_UserStory.IDScr_Usr_TestDev..Null	= Vrai
-      	SINON
-      		Scr_UserStory.IDScr_Usr_TestDev			= :m_oUsr_Test_Dev.ZF_Get_IdUnique()
-      	FIN
-      
-      	//Enregistrement de l'épic
-      	SI :m_oEpic = Null ALORS
-      		Scr_UserStory.IDScr_Epic..Null			= Vrai
-      	SINON
-      		Scr_UserStory.IDScr_Epic				= :m_oEpic.ZF_Get_IdUnique()
-      	FIN
-      	
-      	SI :m_oEnvironnement_Test = Null ALORS
-      		Scr_UserStory.IDSrc_Environnement_Test..Null = Vrai
-      	SINON
-      		Scr_UserStory.IDSrc_Environnement_Test	= :m_oEnvironnement_Test.ZF_Get_IdUnique()
-      	FIN
+      //	Scr_UserStory.IDScr_Usr_Valideur			= :m_oUsrResponsable.ZF_Get_IdUnique()
+      //
+      //	//Enregistrement de l'utilisateur testeur
+      //	SI :m_oUsr_Test_Dev = Null ALORS
+      //		Scr_UserStory.IDScr_Usr_TestDev..Null	= Vrai
+      //	SINON
+      //		Scr_UserStory.IDScr_Usr_TestDev			= :m_oUsr_Test_Dev.ZF_Get_IdUnique()
+      //	FIN
+      //
+      //	//Enregistrement de l'épic
+      //	SI :m_oEpic = Null ALORS
+      //		Scr_UserStory.IDScr_Epic..Null			= Vrai
+      //	SINON
+      //		Scr_UserStory.IDScr_Epic				= :m_oEpic.ZF_Get_IdUnique()
+      //	FIN
+      //	
+      //	SI :m_oEnvironnement_Test = Null ALORS
+      //		Scr_UserStory.IDSrc_Environnement_Test..Null = Vrai
+      //	SINON
+      //		Scr_UserStory.IDSrc_Environnement_Test	= :m_oEnvironnement_Test.ZF_Get_IdUnique()
+      //	FIN
       	
       	
       	si :m_bEstTestéParEquipeDev alors
@@ -1213,6 +1213,48 @@ class :
       ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
       pour TOUT Scr_Environnement 
       	ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, Scr_Environnement.Libelle + glien(Scr_Environnement.IDSrc_Environnement))
+      FIN
+     type : 458752
+   -
+     name : TraiteHisto
+     procedure_id : 1500637495759226595
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClHistorique.TraiteHisto
+      PROCÉDURE  TraiteHisto()
+      
+      //a faire
+     type : 458752
+   -
+     name : pre_enregistre_data
+     procedure_id : 1500638505094339569
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDB.pre_enregistre_data
+      PROCÉDURE PROTÉGÉE pre_enregistre_data()
+      
+      
+      
+      Scr_UserStory.IDScr_Usr_Valideur			= :m_oUsrResponsable.ZF_Get_IdUnique()
+      
+      //Enregistrement de l'utilisateur testeur
+      SI :m_oUsr_Test_Dev = Null ALORS
+      	Scr_UserStory.IDScr_Usr_TestDev..Null	= Vrai
+      SINON
+      	Scr_UserStory.IDScr_Usr_TestDev			= :m_oUsr_Test_Dev.ZF_Get_IdUnique()
+      FIN
+      
+      //Enregistrement de l'épic
+      SI :m_oEpic = Null ALORS
+      	Scr_UserStory.IDScr_Epic..Null			= Vrai
+      SINON
+      	Scr_UserStory.IDScr_Epic				= :m_oEpic.ZF_Get_IdUnique()
+      FIN
+      
+      SI :m_oEnvironnement_Test = Null ALORS
+      	Scr_UserStory.IDSrc_Environnement_Test..Null = Vrai
+      SINON
+      	Scr_UserStory.IDSrc_Environnement_Test	= :m_oEnvironnement_Test.ZF_Get_IdUnique()
       FIN
      type : 458752
   properties :

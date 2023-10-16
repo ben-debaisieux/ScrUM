@@ -1,0 +1,189 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : CLZF_GenDataMySQL
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1527022300500d57
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      CLZF_GenDataMySQL est une Classe
+      	hérite de CLZF_GenData
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1524189348240624983
+     type_code : 27
+     code : |1-
+      PROCÉDURE Constructeur(OlGen_p est un ClZF_GenCodeFic)
+      Ancêtre.Constructeur(OlGen_p)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1524189348240690519
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetDefRubSQL
+     procedure_id : 1524716246256163338
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode CLZF_GenData.GetDefRubSQL
+      PROCÉDURE  GetDefRubSQL():tableau associatif de CLZF_GenData.STR_RubSQL
+      
+      aRetour		est un tableau associatif de CLZF_GenData.STR_RubSQL
+      
+      
+      /*
+      sReq		est une chaîne<§cs:10§>
+      sdDefTbl	est une Source de Données<§cs:10§>
+      stRub		est un CLZF_GenData.STR_RubSQL<§cs:10§>
+      <§cs:10§>
+      <§cs:10§>
+      sReq = [<§cs:10§>
+      <§cs:10§>
+      SELECT<§cs:10§>
+      --	sys.columns.column_id AS ObjectID_RubriqueDansTable,<§cs:10§>
+      --	columns.object_id AS ID_Table,<§cs:10§>
+      --	tables.name AS NomTable,<§cs:10§>
+      	columns.NAME AS Rubrique,<§cs:10§>
+      --	columns.system_type_id AS CodeType,<§cs:10§>
+      	types.NAME AS Type,<§cs:10§>
+      	columns.max_length AS Taille,<§cs:10§>
+      	columns.is_nullable AS EstNullable,<§cs:10§>
+      <§cs:10§>
+      	default_constraints.name as NomContainteDef,<§cs:10§>
+      	NULLIF(default_constraints.definition, '(NULL)') As ValeurDefaut,	--Si on a déja une contrainte, qui met 'NULL' par défaut, on considère qu'il n'y a pas de contrainte (on généralise le traitement)<§cs:10§>
+      			<§cs:10§>
+      	CASE WHEN TmpInfoIndex.object_id IS NULL<§cs:10§>
+      		THEN 0<§cs:10§>
+      		ELSE 1<§cs:10§>
+      	END AS EstIndex,<§cs:10§>
+      	isnull(TmpInfoIndex.is_unique, 0) AS EstIndexUnique,<§cs:10§>
+      			<§cs:10§>
+      	CASE WHEN tmpColFullText.object_id IS NULL<§cs:10§>
+      		THEN 0<§cs:10§>
+      		ELSE 1<§cs:10§>
+      	END AS EstFullText,<§cs:10§>
+      			<§cs:10§>
+      	CASE WHEN tmpColCleEtrangere.ID_CleEtrangere IS NULL<§cs:10§>
+      		THEN 0<§cs:10§>
+      		ELSE 1<§cs:10§>
+      	END AS EstCleEtrangere,<§cs:10§>
+      	tmpColCleEtrangere.Nom_Table_CleReferencee,<§cs:10§>
+      	tmpColCleEtrangere.Nom_CleReference<§cs:10§>
+      		<§cs:10§>
+      		<§cs:10§>
+      FROM sys.columns<§cs:10§>
+      	INNER JOIN sys.tables ON (tables.object_id = columns.object_id)<§cs:10§>
+      	LEFT OUTER JOIN sys.types ON (types.system_type_id = columns.system_type_id)<§cs:10§>
+      	LEFT OUTER JOIN sys.default_constraints ON (default_constraints.parent_object_id = columns.object_id<§cs:10§>
+      		AND default_constraints.parent_column_id = columns.column_id)<§cs:10§>
+      		<§cs:10§>
+      -- Rubrique index ?<§cs:10§>
+      LEFT OUTER JOIN (<§cs:10§>
+      		<§cs:10§>
+      	SELECT <§cs:10§>
+      		indexes.object_id,<§cs:10§>
+      		index_columns.index_id,<§cs:10§>
+      		MAX(index_columns.column_id) AS column_id,<§cs:10§>
+      		max(cast(indexes.is_unique as tinyint)) AS is_unique<§cs:10§>
+      			<§cs:10§>
+      	FROM sys.index_columns<§cs:10§>
+      		INNER JOIN sys.indexes ON (indexes.index_id = index_columns.index_id<§cs:10§>
+      			AND indexes.object_id = index_columns.object_id)<§cs:10§>
+      			<§cs:10§>
+      	WHERE index_columns.is_included_column = 0<§cs:10§>
+      		<§cs:10§>
+      GROUP BY indexes.object_id,<§cs:10§>
+      	index_columns.index_id<§cs:10§>
+      	HAVING count(*) = 1<§cs:10§>
+      		<§cs:10§>
+      ) AS TmpInfoIndex<§cs:10§>
+      	ON (TmpInfoIndex.object_id = columns.object_id AND TmpInfoIndex.column_id = columns.column_id)<§cs:10§>
+      		<§cs:10§>
+      -- Rubrique full text ?<§cs:10§>
+      LEFT OUTER JOIN (<§cs:10§>
+      		<§cs:10§>
+      	SELECT<§cs:10§>
+      		fulltext_index_columns.object_id,<§cs:10§>
+      		fulltext_index_columns.column_id<§cs:10§>
+      	FROM sys.fulltext_index_columns<§cs:10§>
+      		<§cs:10§>
+      ) AS tmpColFullText <§cs:10§>
+      	ON (tmpColFullText.object_id = columns.object_id AND tmpColFullText.column_id = columns.column_id)<§cs:10§>
+      		<§cs:10§>
+      -- Rubrique clé étrangère ?<§cs:10§>
+      LEFT OUTER JOIN (<§cs:10§>
+      		<§cs:10§>
+      	SELECT<§cs:10§>
+      		foreign_key_columns.parent_column_id AS ID_CleEtrangere,<§cs:10§>
+      		foreign_key_columns.parent_object_id AS ID_TableEtrangere,<§cs:10§>
+      		object_name(foreign_key_columns.parent_object_id) AS Nom_Table_CleEtrangere,<§cs:10§>
+      		ColPrim.name AS Nom_CleEtrangere,<§cs:10§>
+      				<§cs:10§>
+      		foreign_key_columns.referenced_column_id AS ID_CleReference,<§cs:10§>
+      		foreign_key_columns.referenced_object_id AS ID_TableReferencee,<§cs:10§>
+      		object_name(foreign_key_columns.referenced_object_id) AS Nom_Table_CleReferencee,<§cs:10§>
+      		colEtrangere.name AS Nom_CleReference<§cs:10§>
+      			<§cs:10§>
+      	FROM sys.foreign_key_columns<§cs:10§>
+      			<§cs:10§>
+      	INNER JOIN sys.columns AS colEtrangere <§cs:10§>
+      		ON (colEtrangere.object_id = foreign_key_columns.parent_object_id and colEtrangere.column_id = foreign_key_columns.parent_column_id)<§cs:10§>
+      			<§cs:10§>
+      	INNER JOIN sys.columns AS ColPrim <§cs:10§>
+      		ON (ColPrim.object_id = foreign_key_columns.referenced_object_id and ColPrim.column_id = foreign_key_columns.referenced_column_id) <§cs:10§>
+      		<§cs:10§>
+      ) AS tmpColCleEtrangere<§cs:10§>
+      	ON (tmpColCleEtrangere.ID_CleEtrangere = sys.columns.column_id <§cs:10§>
+      		AND tmpColCleEtrangere.ID_TableEtrangere = columns.object_id)<§cs:10§>
+      		<§cs:10§>
+      where sys.tables.name = '[%:m_oColGen.p_sNomTable%]'<§cs:10§>
+      ]<§cs:10§>
+      goApp.Rsql(sdDefTbl, sReq)<§cs:10§>
+      <§cs:10§>
+      <§cs:10§>
+      POUR TOUT sdDefTbl<§cs:10§>
+      	VariableRAZ(stRub)<§cs:10§>
+      	// ???				EstIndex		EstFullText	EstCleEtrangere		<§cs:10§>
+      	//nCodeType		est un entier<§cs:10§>
+      	stRub.sType					= sdDefTbl.Type<§cs:10§>
+      	stRub.nTaille				= sdDefTbl.Taille<§cs:10§>
+      	stRub.bEstNullable			= sdDefTbl.EstNullable<§cs:10§>
+      	stRub.sValeurDefaut			= sdDefTbl.ValeurDefaut<§cs:10§>
+      	stRub.bEstIndexUnique		= sdDefTbl.EstIndexUnique<§cs:10§>
+      	stRub.sRefTablePK			= sdDefTbl.Nom_Table_CleReferencee<§cs:10§>
+      	stRub.sRefRubIdPK			= sdDefTbl.Nom_CleReference<§cs:10§>
+      	stRub.sNomContrainteDef		= sdDefTbl.NomContainteDef<§cs:10§>
+      	<§cs:10§>
+      	aRetour[sdDefTbl.Rubrique]	= stRub<§cs:10§>
+      FIN<§cs:10§>
+      */
+      
+      RENVOYER aRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1527021b004aed5b
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
