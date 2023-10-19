@@ -30,7 +30,6 @@ class :
       FIN
       
       STR_RubSQL est une structure
-      	//nCodeType		est un entier
       	sType			est une chaîne
       	nTaille			est un entier
       	bEstNullable	est un booléen
@@ -42,6 +41,7 @@ class :
       	
       	nTypeAlterRub	est un entier
       	nTypeAlterFK	est un entier
+      	nTypeAlterDef	est un entier
       	sCodeSQL		est une chaîne
       	sCodeKey		est une chaîne
       	sCodeDropDef	est une chaîne
@@ -53,7 +53,8 @@ class :
       protege
       	m_oColGen 			est un ClZF_GenCodeFic dynamique
       	m_aExport			est un tableau de STR_Export
-      	m_sCode				est une chaîne 
+      	m_sCode				est une chaîne
+      	m_bCreeTable		est un booléen
       	
       	m_taRubsSQLReel 	est un tableau associatif de STR_RubSQL
       	m_taRubsSQLAttendu	est un tableau associatif de STR_RubSQL
@@ -74,7 +75,12 @@ class :
       	
       	cstTypeAlterFK_RAS			= 0
       	cstTypeAlterFK_Cree			= 1
-      	cstTypeAlterFK_Supp			= 2
+      	//cstTypeAlterFK_Supp			= 2
+      	
+      	cstTypeAlterDef_RAS			= 0
+      	cstTypeAlterDef_Cree		= 1
+      	cstTypeAlterDef_Mod			= 2
+      	cstTypeAlterDef_Supp		= 3
       fin
       
       gm_oExRecupValsTest = allouer un ClZF_Exception("Impossible de récupérer les valeurs de clé étrangère de la table : %1")
@@ -441,7 +447,7 @@ class :
      name : sRubSqlDeTypeHF
      procedure_id : 1524442850095025336
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       // sRubSqlDeTypeHF ()
@@ -455,12 +461,81 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       procédure abstraite sRubSqlDeTypeHF(nType_p est un entier, nTaille_p est un entier = 0)<métier>:chaîne
+      
+      /*
+      sRetour est une chaîne<§cs:10§>
+      <§cs:10§>
+      SELON nType_p<§cs:10§>
+      	CAS hRubBinaire<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubBooléen<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubCaractère<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubDate8<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubDateHeure<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubDurée<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubEntier1<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubEntier2<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubEntier4<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubEntier8<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubEntierNonSigné1<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubEntierNonSigné2<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubEntierNonSigné4<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubEntierNonSigné8<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubHeure<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubIDAuto<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubIDAuto4<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubImage<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubMémoBinaire<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubMémoBinaire4<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubMémoTexte<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubMémoUnicode<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubMonétaire<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubNumérique<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubRéel4<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubRéel8<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubRéelTurbo<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubTexte<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	CAS hRubTexteUnicode<§cs:10§>
+      		sRetour = ""<§cs:10§>
+      	AUTRE CAS<§cs:10§>
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([nType_p])<§cs:10§>
+      FIN<§cs:10§>
+      <§cs:10§>
+      RENVOYER sRetour<§cs:10§>
+      */
      type : 458752
    -
      name : GenCodeDiff
      procedure_id : 1524443472865820862
      type_code : 12
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //GenCodeDiff ()
@@ -474,6 +549,185 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       procédure abstraite GenCodeDiff():vide
+     type : 458752
+   -
+     name : bRubCompatible
+     procedure_id : 1526042781332094889
+     type_code : 12
+     code : |1+
+      procédure abstraite bRubCompatible(nTypeHF_p est un entier, sTypeSGBD_p est une chaîne):booleen
+      
+     type : 458752
+   -
+     name : stGenSQLRub
+     procedure_id : 1526048596719364265
+     type_code : 12
+     code : |1+
+      procedure abstraite stGenSQLRub(sRub_p est une chaine, stRubSql_p est un CLZF_GenData.STR_RubSQL)<metier>:CLZF_GenData.STR_RubSQL
+      
+     type : 458752
+   -
+     name : identifieEtatElements
+     procedure_id : 1526042094137167451
+     type_code : 12
+     code : |1+
+      procédure protegee identifieEtatElements(sRub_p est une chaîne, stRubSql_p est un CLZF_GenData.STR_RubSQL)<metier>:CLZF_GenData.STR_RubSQL
+      
+      
+      stRetour	est un CLZF_GenData.STR_RubSQL
+      stInfoRub	est un ClZF_GenCodeFic.STR_DefRub
+      
+      
+      SI :m_oColGen.m_aRub[sRub_p]..Vide ET stRubSql_p.sType <> "" ET PAS sRub_p = :m_oColGen.p_sNomRubId ALORS
+      	stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_SuppRub
+      SINON
+      	stInfoRub				= :m_oColGen.m_aRub[sRub_p]
+      	
+      	stRetour				= stRubSql_p
+      	stRetour.nTypeAlterRub	= cstTypeAlterRub_RAS
+      	
+      	//Récupération du type et de la définition
+      	stRetour.sType	= :sRubSqlDeTypeHF(stInfoRub.nTypeRubHF, stInfoRub.nTaille)
+      	stRetour.bEstNullable	= stInfoRub.bNullable
+      	stRetour.nTaille		= stInfoRub.nTaille
+      FIN
+      
+      //Est on en création de table ?
+      SI :m_bCreeTable ALORS
+      	stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable
+      SINON
+      	//Non :
+      	//La rubrique existe t elle ?
+      	SI PAS :m_oColGen.m_aRub[sRub_p]..Vide ET stRubSql_p.sType = "" ALORS
+      		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeRub
+      	FIN
+      FIN
+      
+      SI stRetour.nTypeAlterRub = cstTypeAlterRub_RAS ALORS
+      	SI PAS bRubCompatible(stInfoRub.nTypeRubHF, stRubSql_p.sType) OU ...		//Type différent
+      			(stInfoRub.nTypeRubHF dans (hRubTexte, hRubTexteUnicode, hRubCaractère) et stInfoRub.nTaille <> stRubSql_p.nTaille) OU ...	//Taille défférent où cela a une incidence
+      			stInfoRub.bNullable <> stRubSql_p.bEstNullable ALORS				//Nullabilité différente
+      		
+      		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_ModRub
+      	FIN
+      FIN
+      
+      
+      
+      //Identification de ce qu'il faut générer comme code, pour les contraintes "défaut"
+      stRetour.nTypeAlterDef = cstTypeAlterDef_RAS
+      
+      SI stRetour.nTypeAlterRub DANS (CLZF_GenData.cstTypeAlterRub_SuppRub, CLZF_GenData.cstTypeAlterRub_ModRub) OU ...	//Modification rubrique
+      		stInfoRub.bNullable ET stRubSql_p.sNomContrainteDef <> "" ALORS												//Contrainte défaut à supprimer
+      	
+      	SELON stRetour.nTypeAlterRub
+      		CAS CLZF_GenData.cstTypeAlterRub_SuppRub
+      			stRetour.nTypeAlterDef = cstTypeAlterDef_Supp
+      		CAS CLZF_GenData.cstTypeAlterRub_ModRub
+      			stRetour.nTypeAlterDef = cstTypeAlterDef_Mod
+      			
+      		AUTRE CAS
+      			
+      	FIN
+      FIN
+      
+      SI PAS stInfoRub.bNullable ET (stRubSql_p.sNomContrainteDef = "" OU ...	//Contrainte défaut manquante
+      		stRetour.nTypeAlterRub DANS (CLZF_GenData.cstTypeAlterRub_CreeTable, CLZF_GenData.cstTypeAlterRub_CreeRub, CLZF_GenData.cstTypeAlterRub_ModRub)) ALORS
+      	
+      	SELON stRetour.nTypeAlterRub
+      		CAS CLZF_GenData.cstTypeAlterRub_CreeTable, CLZF_GenData.cstTypeAlterRub_CreeRub
+      			
+      			//La contrainte défaut est à créer
+      			stRetour.nTypeAlterDef = cstTypeAlterDef_Cree
+      			
+      			//Récupération de la valeur par défaut a appliquer à la rubrique
+      			stRetour.sValeurDefaut	= stInfoRub.sValDef
+      			SI ::bProteger(stInfoRub.nTypeRubHF) ALORS
+      				stRetour.sValeurDefaut = "'" + stRetour.sValeurDefaut + "'"
+      			FIN
+      			
+      		CAS CLZF_GenData.cstTypeAlterRub_ModRub
+      			stRetour.nTypeAlterDef = cstTypeAlterDef_Mod
+      			
+      		AUTRE CAS
+      			
+      	FIN
+      FIN
+      
+      
+      //Identification de ce qu'il faut générer comme code, pour les contraintes "clé étrangères"
+      stRel_tmp est un ClZF_GenCodeFic.STR_Rel
+      SI :m_oColGen.m_aPK_de_FK[sRub_p]..Occurrence > 0 ALORS
+      	stRel_tmp				= :m_oColGen.m_aPK_de_FK[sRub_p]
+      	
+      	stRetour.sRefTablePK	= stRel_tmp.sTablePK
+      	stRetour.sRefRubIdPK	= stRel_tmp.sRubriquePK
+      FIN
+      
+      //Faut il créer une clé étrangère ?
+      SI stRetour.sRefTablePK = "" ALORS
+      	stRetour.nTypeAlterFK = cstTypeAlterFK_RAS
+      SINON
+      	stRetour.nTypeAlterFK = cstTypeAlterFK_Cree
+      FIN
+      
+      
+      renvoyer stRetour
+      
+      
+     type : 458752
+   -
+     name : GenCodeDiffInit
+     procedure_id : 1526047733430212544
+     type_code : 12
+     code : |1-
+      procedure protege GenCodeDiffInit()<metier>:tableau associatif de CLZF_GenData.STR_RubSQL
+      
+      aStRubSQL		est un tableau associatif de CLZF_GenData.STR_RubSQL
+      aRubs			est un tableau associatif de CLZF_GenData.STR_RubSQL
+      stRubSql		est un CLZF_GenData.STR_RubSQL
+      
+      aRubs = :GetDefRubSQL()
+      
+      
+      SI aRubs..Occurrence = 0 ALORS
+      	:m_bCreeTable	= Vrai
+      SINON
+      	:m_bCreeTable	= Faux
+      FIN
+      
+      
+      
+      POUR TOUT sRub DE :m_oColGen.aLstRubs()
+      	SI aRubs[sRub]..Vide ALORS
+      		VariableRAZ(stRubSql)
+      	SINON
+      		stRubSql = aRubs[sRub]
+      	FIN
+      	
+      	aStRubSQL[sRub]	= :stGenSQLRub(sRub, stRubSql)
+      FIN
+      
+      
+      renvoyer aStRubSQL
+     type : 458752
+   -
+     name : sNomRelDF
+     procedure_id : 1526415945504390885
+     type_code : 12
+     code : |1+
+      procedure protegee sNomRelDF(sTable_p, sRubrique_p)<metier>:chaine
+      
+      renvoyer "DF_[%sTable_p%]_[%sRubrique_p%]"
+     type : 458752
+   -
+     name : sNomRelFK
+     procedure_id : 1526416821677988133
+     type_code : 12
+     code : |1+
+      procedure PROTÉGÉE sNomRelFK(sTableFK_p, sRubriqueFK_p, sTablePK_p, sRubriquePK_p)<metier>:chaine
+      
+      renvoyer gauche("FK_[%sTableFK_p%]_[%sRubriqueFK_p%]_[%sTablePK_p%]_[%sRubriquePK_p%]", 128)
       
      type : 458752
   properties :

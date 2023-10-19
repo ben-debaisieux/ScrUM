@@ -25,9 +25,10 @@ class :
       fin
       
       constante
-      	cstInfoLogSimple = 1
-      	cstInfoLogHF = 2
-      	cstInfoDebug = 3
+      	cstInfoLogSimple	= 1
+      	cstInfoLogHF		= 2
+      	cstInfoDebug		= 3
+      	cstInfoLogAssert	= 4
       fin
      type : 131072
   procedures :
@@ -96,6 +97,8 @@ class :
       selon :m_nLog
       	CAS cstInfoDebug
       		SI EnModeTest() ALORS trace(sMsg)
+      	CAS cstInfoLogAssert
+      		dbgAssertion(faux, sMsg)
       	AUTRE CAS
       		ExceptionDéclenche(:m_nCode, sMsg)
       FIN

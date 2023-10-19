@@ -40,11 +40,11 @@ class :
       GLOBAL
       PUBLIC
       	mg_aoInstances						est un tableau associatif de ClZF_ObjDBls dynamique
+      	
+      	mg_oExSelonCasNonTraite				est un ClZF_Exception dynamique
       	mg_oExTypeColNonDefinit				est un ClZF_Exception dynamique
-      	mg_oExClasseNonParametree			est un ClZF_Exception dynamique
-      	
-      	
       prive
+      	mg_oExClasseNonParametree			est un ClZF_Exception dynamique
       	mg_oExPlusieursInstancesClAapp		est un ClZF_Exception dynamique
       	mg_oExErreurSQL						est un ClZF_Exception dynamique
       	mg_oExErreurTRS						est un ClZF_Exception dynamique
@@ -52,6 +52,8 @@ class :
       	mg_aZF_aGetId						est un tableau associatif de chaine
       FIN
       
+      mg_oExSelonCasNonTraite = allouer un ClZF_Exception("Valeur non évaluée sans un ""SELON"" : ""%1"".", ...
+      	ClZF_Exception.cstInfoLogAssert)
       
       mg_oExPlusieursInstancesClAapp = allouer un ClZF_Exception("Une seule instance de la classe ""%1"" est permise.", ...
       	ClZF_Exception.cstInfoLogSimple)

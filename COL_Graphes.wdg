@@ -103,7 +103,7 @@ procedure_set :
      procedure_id : 1288012627202703584
      type_code : 15
      code : |1+
-      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClDbProjet, oEpic_P est un ClDbEpic dynamique = Null)<ui>
+      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClDbProjet, oEpic_P est un ClDbEpic dynamique = Null) <ui>
       
       sTitre			est une chaîne
       bAPrendre		est un booléen
@@ -134,7 +134,7 @@ procedure_set :
       			FIN
       		FIN
       	sinon
-      		si oUS.p_oEpic <> null alors
+      		si oUS.p_oEpic <> null alors		//Epuration de vieux stocks historique.
       			SI oUS.p_oEpic.p_sNom DANS ("Statistiques (post lancement)", "Poseurs (post lancement)", "Signature électronique (post lancement)", "Base Lunel fournisseur (post lancement)", "") ALORS
       				bAPrendre = Faux
       				Trace("Groupement ignoré : " + oUS.p_oEpic.p_sNom)
@@ -163,11 +163,12 @@ procedure_set :
       
       
       //Affichage des infos dans le graphe :
+      
       graphe est un champ <- {sChamp_P, indChamp}
       
       sTitre = "Avancement du projet " + oProjet_P.p_sNom
-      si oEpic_P <> Null ALORS
-      	sTitre += rc + oEpic_P.p_sNom
+      SI oEpic_P <> Null ALORS
+      	sTitre += RC + oEpic_P.p_sNom
       FIN
       
       grSupprimeTout(graphe)
@@ -175,7 +176,7 @@ procedure_set :
       
       grTitre(graphe, sTitre)
       
-      grMAJAutomatiqueEtiquetteCatégorie(graphe, vrai)
+      grMAJAutomatiqueEtiquetteCatégorie(graphe, Vrai)
       
       grSMNAjouteDonnée(graphe, zcst_Developpe + TAB + zcst_Teste, nFinies)
       grSMNCouleurPortion(graphe,zcst_Developpe, COL_Scrum.gnCouleur_VertVif)
@@ -194,6 +195,9 @@ procedure_set :
       grSMNCouleurPortion(graphe,zcst_Annule, COL_Scrum.gnCouleur_Gris)
       
       grDessine(graphe)
+      
+      
+      
      type : 458752
    -
      name : EvolCharge

@@ -166,6 +166,44 @@ class :
       PROCÉDURE prive GetAll()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Epic..nom)
      type : 458752
+   -
+     name : aliste_charge_From_Projet
+     procedure_id : 1526231978851943433
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aliste_charge_From_Projet (<oProjet_p> est ClDbProjet [, <aCompl_P> est tableau associatif (chaîne)])
+      //
+      // Paramètres :
+      //	oProjet_p (ClDbProjet) : <indiquez ici le rôle de oProjet_p>
+      //	aCompl_P (tableau associatif (chaîne ANSI)) : <indiquez ici le rôle de aCompl_P>
+      
+      // Valeur de retour :
+      // 	tableau (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	sValDef_P (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de sValDef_P>
+      procédure GLOBALE aliste_charge_From_Projet(LOCAL oProjet_p est un ClDbProjet, aCompl_P est un tableau associatif de chaîne = []):tableau de chaine
+      
+      oEpic		est un ClDbEpic dynamique
+      sCle		est une chaîne
+      sComp		est une chaîne
+      aGroupement est un tableau de chaine
+      
+      
+      POUR TOUT sComp, sCle de aCompl_P
+      	tableauajoute(aGroupement,sCle + "=" + sComp)
+      FIN
+      
+      POUR TOUT ÉLÉMENT oEpic DE ::from_projet(oProjet_p).aItems()
+      	TableauAjoute(aGroupement,oEpic.ZF_Get_IdUnique() + "=" + oEpic.p_sNom)
+      FIN
+      
+      RENVOYER aGroupement
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :
