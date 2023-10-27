@@ -105,6 +105,12 @@ class :
       		]
       	::mg_oApp.RSQL(sdSuppRefEpic,sReq)
       	HAnnuleDéclaration(sdSuppRefEpic)
+      	
+      	
+      	//Retrait des utilisateurs positionnés sur l'epic
+      	oLstUsr est un ClColEpic_Usr <- ClColEpic_Usr.aoFromEpic(objet)
+      	oLstUsr.ZF_SupprimeItems()
+      	
       fin
       
       
@@ -251,6 +257,15 @@ class :
       //FIN
       
       
+     type : 458752
+   -
+     name : sRepresentation
+     procedure_id : 1530114702354568061
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.sRepresentation
+      PROCÉDURE sRepresentation() <métier>:chaîne
+      renvoyer :p_sNom
      type : 458752
   properties :
    -

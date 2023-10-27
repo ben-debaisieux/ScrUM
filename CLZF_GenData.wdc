@@ -716,7 +716,7 @@ class :
      procedure_id : 1526415945504390885
      type_code : 12
      code : |1+
-      procedure protegee sNomRelDF(sTable_p, sRubrique_p)<metier>:chaine
+      procedure protegee sNomRelDF(sTable_p est une chaîne, sRubrique_p est une chaîne)<metier>:chaine
       
       renvoyer "DF_[%sTable_p%]_[%sRubrique_p%]"
      type : 458752
@@ -725,9 +725,9 @@ class :
      procedure_id : 1526416821677988133
      type_code : 12
      code : |1+
-      procedure PROTÉGÉE sNomRelFK(sTableFK_p, sRubriqueFK_p, sTablePK_p, sRubriquePK_p)<metier>:chaine
+      procedure PROTÉGÉE sNomRelFK(sTableFK_p est une chaîne, sRubriqueFK_p est une chaîne, sTablePK_p est une chaîne, sRubriquePK_p est une chaîne)<metier>:chaine
       
-      renvoyer gauche("FK_[%sTableFK_p%]_[%sRubriqueFK_p%]_[%sTablePK_p%]_[%sRubriquePK_p%]", 128)
+      renvoyer "FK_[%sTableFK_p%]_[%sRubriqueFK_p%]_[%sTablePK_p%]_[%sRubriquePK_p%]"
       
      type : 458752
   properties :

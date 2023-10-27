@@ -8,13 +8,13 @@ info :
  description : ""
  subtype : 0
 class :
- identifier : 0x02E7566444713F
+ identifier : 0x2e7566444713f
  internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
   p_codes :
    -
-     code : |1-
+     code : |1+
       ClDbEpic_Usr_Role est une Classe
       	hérite de ClZF_ObjDbLs
       
@@ -47,8 +47,12 @@ class :
       // mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
       
       
-      
-      
+      constante
+      	cstRoleResponsable	= 1
+      	cstRoleActeur		= 2
+      	cstRoleConsulte		= 3
+      	cstRoleInforme		= 4
+      fin
      type : 131072
   procedures :
    -
@@ -72,21 +76,19 @@ class :
      name : GetObj
      procedure_id : 817308188832060
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbEpic_Usr_Role
       
       sClasse est une chaîne = ClDbEpic_Usr_Role
       RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
-      
      type : 458752
    -
      name : init_ObjBD
      procedure_id : 817308188832061
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE PROTÉGÉ init_ObjBD()<métier>:vide
       // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
-      
       
       
      type : 458752
@@ -94,35 +96,63 @@ class :
      name : Init_data
      procedure_id : 817308188832062
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE GLOBALE Init_data()<métier>:Vide
       
-      /*
-      SI PAS HRecherche(Scr_Epic_Usr_Role, IDScr_Epic_Usr_Role, cst) ALORS
-      HRAZ(Scr_Epic_Usr_Role)
-      	Scr_Epic_Usr_Role.IDScr_Epic_Usr_Role	= cst
-      	Scr_Epic_Usr_Role.Role	= 
-      HAjoute(Scr_Epic_Usr_Role,hFixeIDAuto)
+      
+      SI PAS HRecherche(Scr_Epic_Usr_Role, IDScr_Epic_Usr_Role, cstRoleResponsable) ALORS
+      	HRAZ(Scr_Epic_Usr_Role)
+      		Scr_Epic_Usr_Role.IDScr_Epic_Usr_Role	= cstRoleResponsable
+      		Scr_Epic_Usr_Role.Role	= "Responsable"
+      	HAjoute(Scr_Epic_Usr_Role,hFixeIDAuto)
       FIN
-      */
+      
+      SI PAS HRecherche(Scr_Epic_Usr_Role, IDScr_Epic_Usr_Role, cstRoleActeur) ALORS
+      	HRAZ(Scr_Epic_Usr_Role)
+      		Scr_Epic_Usr_Role.IDScr_Epic_Usr_Role	= cstRoleActeur
+      		Scr_Epic_Usr_Role.Role	= "Acteur"
+      	HAjoute(Scr_Epic_Usr_Role,hFixeIDAuto)
+      FIN
+      
+      SI PAS HRecherche(Scr_Epic_Usr_Role, IDScr_Epic_Usr_Role, cstRoleConsulte) ALORS
+      	HRAZ(Scr_Epic_Usr_Role)
+      	Scr_Epic_Usr_Role.IDScr_Epic_Usr_Role	= cstRoleConsulte
+      	Scr_Epic_Usr_Role.Role					= "Consulté"
+      	HAjoute(Scr_Epic_Usr_Role,hFixeIDAuto)
+      FIN
+      
+      SI PAS HRecherche(Scr_Epic_Usr_Role, IDScr_Epic_Usr_Role, cstRoleInforme) ALORS
+      	HRAZ(Scr_Epic_Usr_Role)
+      	Scr_Epic_Usr_Role.IDScr_Epic_Usr_Role	= cstRoleInforme
+      	Scr_Epic_Usr_Role.Role					= "Informé"
+      	HAjoute(Scr_Epic_Usr_Role,hFixeIDAuto)
+      FIN
+     type : 458752
+   -
+     name : sRepresentation
+     procedure_id : 1529752933070871995
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.sRepresentation
+      PROCÉDURE sRepresentation() <métier>:chaîne
+      renvoyer :p_sRole
      type : 458752
   properties :
    -
      name : p_sRole
-     identifier : 817308188832057
+     identifier : 0x2e75664447139
      type_code : 103
      p_codes :
       -
-        code : |1-
+        code : |1+
          PROCEDURE p_sRole() : chaîne
          //Propriétés de m_sRole
          
          RENVOYER :m_sRole
-         
         type : 1966080
       -
         code : |1-
-
+         
         type : 2031616
      template_refs : []
   procedure_templates : []
@@ -132,7 +162,7 @@ class :
   original_name : Classe1
 resources :
  string_res :
-  identifier : 817308188832064
+  identifier : 0x2e75664447140
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

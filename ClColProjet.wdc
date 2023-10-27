@@ -124,7 +124,6 @@ class :
       sReq_Liste_Projet = [
       	SELECT distinct
       		Scr_Projet.*
-      		--Scr_Projet.IDScr_Projet
       	FROM Scr_Projet
       	
       	[%sComplement%]
@@ -332,7 +331,6 @@ class :
       sReq_Liste_Projet = [
       	SELECT
       		Scr_Projet.*
-      		--Scr_Projet.IDScr_Projet
       		
       	FROM Scr_Projet
       		INNER JOIN Scr_Usr_Projet ON (Scr_Usr_Projet.IDScr_Projet = Scr_Projet.IDScr_Projet)

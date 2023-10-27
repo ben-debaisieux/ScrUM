@@ -171,6 +171,7 @@ procedure_set :
       	sTitre += RC + oEpic_P.p_sNom
       FIN
       
+      MultitâcheRepeint()
       grSupprimeTout(graphe)
       grType(graphe,grSecteurMultiniveau)
       
@@ -193,6 +194,7 @@ procedure_set :
       
       grSMNAjouteDonnée(graphe, zcst_Annule, nAnnulee)
       grSMNCouleurPortion(graphe,zcst_Annule, COL_Scrum.gnCouleur_Gris)
+      MultitâcheRepeint()
       
       grDessine(graphe)
       
@@ -567,6 +569,87 @@ procedure_set :
       
       
       renvoyer stRetour
+     type : 458752
+   -
+     name : ProjectionEpic
+     procedure_id : 1528257091093553642
+     type_code : 15
+     code : |1+
+      procédure ProjectionEpic(sChamp_P est une chaîne, oProjet_P est un ClDbProjet) <ui>
+      
+      STR_Groupement est une structure
+      	sTitre			est une chaîne
+      	nPointsMacro	est un entier
+      	nPointsCotation	est un entier
+      	nPointsReal		est un entier
+      fin
+      aStEpics		est un tableau de STR_Groupement
+      stEpic			est un STR_Groupement
+      oEpic			est un ClDbEpic dynamique
+      bAfficher		est un booléen
+      
+      pour tout element oEpic de ClColEpic.from_projet(oProjet_P).aitems()
+      	VariableRAZ(stEpic)
+      	
+      	
+      	stEpic.sTitre		= oEpic.p_sNom
+      	stEpic.nPointsMacro	= oEpic.p_nEstimation
+      	
+      	
+      	oUS	est un ClDbUserStory dynamique
+      	pour tout oUS de ClColUserStory.from_Epic(oEpic).aItems()
+      		oTache est un ClDbTache dynamique
+      		pour tout oTache de ClColTache.aoFromUS(oUS).aItems()
+      			
+      			stEpic.nPointsCotation += oTache.p_nPoids
+      			
+      			si oTache.p_bEstRealise ALORS
+      				stEpic.nPointsReal += oTache.p_nPoids
+      			FIN
+      		FIN
+      	FIN
+      	
+      	//Est il nécessaire d'afficher ce groupement ?
+      	bAfficher = Faux
+      	SI oEpic.p_nEstimation <> 0 ALORS
+      		bAfficher = Vrai
+      	sinon
+      		si stEpic.nPointsCotation <> stEpic.nPointsReal ALORS
+      			bAfficher = Vrai
+      		FIN
+      	FIN
+      	
+      	si bAfficher alors
+      		//On ordonne le tableau en sens inverse pour que ce soit cohérent en affichage.
+      		TableauInsère(aStEpics, 1, stEpic)
+      	FIN
+      FIN
+      
+      
+      
+      //Affichage des infos dans le graphe :
+      
+      graphe est un champ <- {sChamp_P, indChamp}
+      
+      
+      grSupprimeTout(graphe)
+      grType(graphe,grHistoHorizontal)
+      
+      grTitre(graphe, "Projections du projet """ + oProjet_P.p_sNom + """")
+      
+      grEtiquetteSérie(graphe,1,"Estimation macro")
+      grEtiquetteSérie(graphe,2,"Cotation")
+      grEtiquetteSérie(graphe,3,"Réalisé")
+      
+      nInd est un entier
+      pour tout stEpic, nInd de aStEpics
+      	grAjouteDonnée(graphe, 1,nInd,stEpic.nPointsMacro)
+      	grAjouteDonnée(graphe, 2,nInd,stEpic.nPointsCotation)
+      	grAjouteDonnée(graphe, 3,nInd,stEpic.nPointsReal)
+      	grEtiquetteCatégorie(graphe,nInd,stEpic.sTitre)
+      FIN
+      
+      grDessine(graphe)
      type : 458752
   procedure_templates : []
   property_templates : []

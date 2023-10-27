@@ -46,7 +46,7 @@ procedure_set :
       
       //Métrique : On compte les recherches faites
       goapp.m_aMetriques[1].nNbRecherches++
-      
+      //trace(nomtable + "-" + cleRech)
       si options = 0 ALORS
       	renvoyer WL.HLitRecherche(nomtable, cleRech,valeur,hIdentique+hLimiteParcours)
       sinon

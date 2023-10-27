@@ -146,7 +146,6 @@ class :
       sReq = [
       	SELECT
       		Scr_Tache.*
-      		--Scr_Tache.IDScr_Tache
       	FROM Scr_Tache
       	WHERE Scr_Tache.Top_Brouillon = 1
       		AND Scr_Tache.IDScr_Usr_createur = [%oUser_p.ZF_Get_IdUnique()%]	
@@ -186,7 +185,6 @@ class :
       sReq = [
       	SELECT
       		Scr_Tache.*
-      		--Scr_Tache.IDScr_Tache
       	FROM Scr_Tache
       	WHERE Scr_Tache.Top_Brouillon = 0
       		AND Scr_Tache.Top_Annule = 0
@@ -436,7 +434,6 @@ class :
       sReq = [
       	SELECT<§cs:3§>
       		Scr_Tache.*<§cs:3§>
-      		--Scr_Tache.IDScr_Tache<§cs:3§>
       	FROM Scr_Tache<§cs:3§>
       	WHERE Scr_Tache.Top_Brouillon = 0<§cs:3§>
       		AND Scr_Tache.Top_Annule = 0<§cs:3§>

@@ -16,14 +16,15 @@ class :
    -
      code : |1+
       ClDbEpic_Usr est une Classe
-      	hérite de ClZF_ObjDB
+      	hérite de ClZF_ObjRel
+      //	hérite de ClZF_ObjDB
       
       PRIVÉ
-      	m_oIDScr_Usr	est un ClDbUsr dynamique	<note="mapping=IDScr_Usr">
-      	m_oIDScr_Epic	est un ClDbEpic dynamique	<note="mapping=IDScr_Epic">
+      	m_oIDScr_Usr			est un ClDbUsr dynamique			<note="mapping=IDScr_Usr">
+      	m_oIDScr_Epic			est un ClDbEpic dynamique			<note="mapping=IDScr_Epic">
       	m_oIDScr_Epic_Usr_Role	est un ClDbEpic_Usr_Role dynamique	<note="mapping=IDScr_Epic_Usr_Role">
-      	m_nOrdre	est un Entier sur 2 octets	<MAPPING=Ordre>
-      
+      	m_nOrdre				est un Entier sur 2 octets			<MAPPING=Ordre>
+      	
       GLOBAL
       PUBLIC
       mg_oEx_CompoNonInst_IDScr_Usr	est un ClZF_Exception dynamique
@@ -63,10 +64,12 @@ class :
      name : Constructeur
      procedure_id : 817308190975081
      type_code : 27
-     code : |1+
+     code : |1-
       PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
       Ancêtre.Constructeur(Scr_Epic_Usr..Nom, Scr_Epic_Usr.IDScr_Epic_Usr..Nom,nID_P)
       
+      :AddMembreCle(Scr_Epic_Usr.IDScr_Epic..Nom)
+      :AddMembreCle(Scr_Epic_Usr.IDScr_Usr..Nom)
      type : 589824
    -
      name : Destructeur
@@ -161,6 +164,7 @@ class :
          SI PAS ZF_bObjEgal(:m_oIDScr_Usr, oValeur_p) ALORS
          	:ZF_EstModif()
          	:m_oIDScr_Usr = oValeur_p
+         	setCle(Scr_Epic_Usr.IDScr_Usr..Nom, oValeur_p)
          FIN
         type : 2031616
      template_refs : []
@@ -211,6 +215,7 @@ class :
          SI PAS ZF_bObjEgal(:m_oIDScr_Epic, oValeur_p) ALORS
          	:ZF_EstModif()
          	:m_oIDScr_Epic = oValeur_p
+         	:setCle(Scr_Epic_Usr.IDScr_Epic..Nom, oValeur_p)
          FIN
         type : 2031616
      template_refs : []

@@ -560,8 +560,8 @@ class :
       		bRetour = nTypeHF_p DANS (hRubMonétaire)
       		
       /*	CAS hRubNumérique
-      		sRetour = "Float(" + nTaille_p + ")"		// !!!!
-      		bRetour = nTypeHF_p DANS ()
+      		sRetour = "Float(" + nTaille_p + ")"		// !!!!<§cs:10§>
+      		bRetour = nTypeHF_p DANS ()<§cs:10§>
       		*/
       	CAS "REAL"
       		bRetour = nTypeHF_p DANS (hRubRéel4, hRubRéelTurbo)
@@ -678,6 +678,15 @@ class :
       
       
       :m_sCode = sCode
+     type : 458752
+   -
+     name : sNomRelFK
+     procedure_id : 1527176511318483966
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode CLZF_GenData.sNomRelFK
+      PROCÉDURE PROTÉGÉE sNomRelFK(sTableFK_p est une chaîne, sRubriqueFK_p est une chaîne, sTablePK_p est une chaîne, sRubriquePK_p est une chaîne)<métier>:chaîne
+      renvoyer Gauche(Ancêtre.sNomRelFK(sTableFK_p, sRubriqueFK_p, sTablePK_p, sRubriquePK_p), 128)
      type : 458752
   procedure_templates : []
   property_templates : []

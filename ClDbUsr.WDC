@@ -232,7 +232,6 @@ class :
       sReq = [
       	SELECT 
       		Scr_UserStory.*
-      		--Scr_UserStory.IDScr_UserStory
       	
       	FROM Scr_UserStory
       	where Scr_UserStory.IDScr_UserStory IN (
@@ -249,8 +248,8 @@ class :
       		
       		WHERE Scr_UserStory.EstTesteParFonctionnel = 0
       			AND Scr_UserStory.Top_Termine = 0
-      			AND tmpTachesSignificatives.IDScr_UserStory IS NULL		--On ne prend les US qui n'ont pas de taches non finies.
-      			AND tmpTachesExiste.IDScr_UserStory IS NOT NULL			--On ne prend que les US qui ont au moins une tache
+      			AND tmpTachesSignificatives.IDScr_UserStory IS NULL		[% tab/*On ne prend les US qui n'ont pas de taches non finies*/%]
+      			AND tmpTachesExiste.IDScr_UserStory IS NOT NULL			[% tab/*On ne prend que les US qui ont au moins une tache*/%]
       			[%sWhere%]
       		)
       ]
@@ -376,6 +375,15 @@ class :
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
       PROCÉDURE  Init_ObjBD()
       
+     type : 458752
+   -
+     name : sRepresentation
+     procedure_id : 1529752731206837420
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.sRepresentation
+      PROCÉDURE sRepresentation() <métier>:chaîne
+      renvoyer :p_sNom
      type : 458752
   properties :
    -

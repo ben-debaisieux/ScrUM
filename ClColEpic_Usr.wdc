@@ -8,7 +8,7 @@ info :
  description : ""
  subtype : 0
 class :
- identifier : 0x02E756646537F9
+ identifier : 0x2e756646537f9
  internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
@@ -42,42 +42,38 @@ class :
      name : addItemById
      procedure_id : 817308190980092
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
       :ZF_addItem(ClDbEpic_Usr.GetObj(nId_P))
-      
      type : 458752
    -
      name : aItems
      procedure_id : 817308190980093
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE aItems()<métier>:tableau de ClDbEpic_Usr dynamique
       // Redéfinition de la méthode ClColObjDB.aItems
       RENVOYER :m_aoEpic_Usr
-      
      type : 458752
    -
      name : Init
      procedure_id : 817308190980094
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoEpic_Usr)
-      
      type : 458752
    -
      name : addItemBySource
      procedure_id : 817308190980095
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       oObj est un ClDbEpic_Usr(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Epic_Usr)
-      
      type : 458752
    -
      name : GetAll
@@ -91,7 +87,7 @@ class :
      name : aoFromUsr
      procedure_id : 817308190980097
      type_code : 12
-     code : |1-
+     code : |1+
       FONCTION GLOBALE aoFromUsr(oParent_p est un ClDbUsr)<métier>:ClColEpic_Usr
       
       sReq		est une chaîne
@@ -108,21 +104,16 @@ class :
       
       
       RENVOYER oColRetour
-      
      type : 458752
    -
      name : aoFromEpic
      procedure_id : 817308190981098
      type_code : 12
-     code : |1-
+     code : |1+
       FONCTION GLOBALE aoFromEpic(oParent_p est un ClDbEpic, LOCAL bForceCharge_p est un booléen = Faux)<métier>:ClColEpic_Usr
       
       sReq		est une chaîne
-      oColRetour	est un ClColEpic_Usr
-      
-      
-      // A faire : ClDbEpic.cstGetCol_Epic_Usr à déclarer dans ClZF_App.CreeCol : "CAS ClDbEpic.cstGetCol_Epic_Usr : oCol = allouer un ClColEpic"
-      oColRetour <- oParent_p.ZF_GetCol(ClDbEpic.cstGetCol_Epic_Usr)
+      oColRetour	est un ClColEpic_Usr <- oParent_p.ZF_GetCol(ClDbEpic.cstGetCol_Epic_Usr)
       
       SI PAS oColRetour.p_bEstCharge OU bForceCharge_p ALORS
       
@@ -141,7 +132,6 @@ class :
       
       
       RENVOYER oColRetour
-      
      type : 458752
   procedure_templates : []
   property_templates : []
@@ -150,7 +140,7 @@ class :
   original_name : Classe1
 resources :
  string_res :
-  identifier : 817308190981099
+  identifier : 0x2e75664653beb
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

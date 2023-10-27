@@ -18,7 +18,7 @@ class :
       ClZF_ObjRel est une Classe, abstraite
       	herite de ClZF_ObjDB
       PRIVE
-      	m_aCompoClePrim est un tableau de descriptions de variable
+      	m_aCompoClePrim est un tableau associatif de ClZF_ObjDbLs dynamique
       fin
      type : 131072
   procedures :
@@ -42,18 +42,28 @@ class :
      procedure_id : 1523060571322439408
      type_code : 12
      code : |1+
-      procédure AddMembreCle(Membre_p)<metier>:vide
+      procédure protege AddMembreCle(local sCle_p est une chaîne)<metier>:vide
       
-      TableauAjoute(:m_aCompoClePrim,RécupèreDéfinition(Membre_p))
+      si :m_aCompoClePrim[sCle_p]..vide ALORS
+      	:m_aCompoClePrim[sCle_p] = null
+      FIN
      type : 458752
    -
-     name : oRechEnrDeCles
+     name : setCle
+     procedure_id : 1529759220910027727
+     type_code : 12
+     code : |1-
+      procedure protege setCle(LOCAL sCle_p est une chaîne, oObjDB est un ClZF_ObjDbLs)<metier>:vide
+      :m_aCompoClePrim[sCle_p] = oObjDB
+     type : 458752
+   -
+     name : RechEnrDeCles
      procedure_id : 1523060571322504944
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] oRechEnrDeCles ()
+      //[ <Résultat> = ] RechEnrDeCles ()
       //
       // Paramètres :
       //	Aucun
@@ -63,46 +73,46 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure privée oRechEnrDeCles() <métier>:clzf_objDBls
+      procédure RechEnrDeCles() <métier>:ClZF_ObjDbLs
       
       sRubs		est une chaîne
-      Rubcle		est une description de variable
       sRubMap		est une chaîne
-      sVal		est une chaîne
       sReq		est une chaîne
-      oRetour		est un ClZF_ObjDbLs dynamique
       sdGetEnr	est une source de données
+      oObj		est un ClZF_ObjDbLs dynamique
+      oObjRetour	est un ClZF_ObjDbLs dynamique
+      bErreurInit	est un booléen
+      
+      pour toute oObj, sRubMap de :m_aCompoClePrim
+      	si oObj = Null ALORS
+      		bErreurInit = vrai
+      	sinon
+      		sRubs += [RC + "AND "] + sRubMap + " = " + oObj.ZF_Get_IdUnique()
+      	FIN
+      FIN
       
       
-      pour toute Rubcle de :m_aCompoClePrim
+      si pas bErreurInit alors
       	
-      	sRubMap = Rubcle..AttributMapping
-      	si sRubMap = "" alors
-      		aNotes est un tableau associatif de chaînes = COL_ZF_Surcharge.ChaineVersTableauAsso(Rubcle.AttributNote)
-      		sRubMap = aNotes["mapping"]
+      	sReq = [
+      	SELECT
+      		[%:p_sNom_Col_Id_Auto%] AS id
+      	FROM [%:p_sNomTable%]
+      	WHERE [%sRubs%]
+      		AND [%:p_sNom_Col_Id_Auto%] <> [%:ZF_Get_IdUnique()%]
+      	]
+      	
+      	mg_oApp.Rsql(sdGetEnr,sReq)
+      	HLitPremier(sdGetEnr)
+      	si pas HEnDehors(sdGetEnr) ALORS
+      		oObjRetour <- ZF_GetObj(objet..classe,sdGetEnr.id)
+      	sinon
+      		oObjRetour <- objet
       	FIN
       	
-      	sVal = {Rubcle..Nom,indVariable}
-      	
-      	sRubs += [RC + "AND "] + sRubMap + " = " + sVal
-      	
-      FIN
+      fin
       
-      
-      sReq = [
-      SELECT [%:p_sNom_Col_Id_Auto%] AS id
-      FROM [%:p_sNomTable%]
-      WHERE [%sRubs%]
-      	AND [%:p_sNom_Col_Id_Auto%] <> [%:ZF_Get_IdUnique()%]
-      ]
-      
-      mg_oApp.Rsql(sdGetEnr,sReq)
-      HLitPremier(sdGetEnr)
-      si pas HEnDehors(sdGetEnr) ALORS
-      	oRetour <- ZF_GetObj(objet..classe,sdGetEnr.id)
-      FIN
-      
-      renvoyer oRetour
+      renvoyer oObjRetour
      type : 458752
   procedure_templates : []
   property_templates : []

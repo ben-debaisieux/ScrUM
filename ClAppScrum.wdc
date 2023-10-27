@@ -155,18 +155,9 @@ class :
       
       // Ouverture de la nouvelle connexion
       SI HOuvreConnexion(:m_ZF_cnxBDD) ALORS
-      	
       	HChangeConnexion("*",:m_ZF_cnxBDD)
-      	
-      //	SI PAS HCréationSiInexistant("*") ALORS
-      //		mg_oExPbCnx.ZF_Declenche([sMsgErrCnx])
-      ////		Info(sMsgErrCnx)
-      //		STOP
-      //		FinProgramme()
-      //	FIN		
       SINON
       	mg_oExPbCnx.ZF_Declenche([sMsgErrCnx])
-      //	Info(sMsgErrCnx)
       	STOP
       	FinProgramme()
       FIN
@@ -303,7 +294,7 @@ class :
       //	CAS ClDbProjet.cstGetCol_Usr_Projet
       //		oCol = allouer un ClColProjet
       	CAS ClDbEpic.cstGetCol_Epic_Usr
-      		oCol = allouer un ClColEpic
+      		oCol = allouer un ClColEpic_Usr
       		
       	AUTRE CAS
       		::mg_oExTypeColNonDefinit.ZF_Declenche([sCle_p])

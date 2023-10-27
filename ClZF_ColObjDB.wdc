@@ -577,6 +577,31 @@ class :
       	ExceptionPropage()
       FIN
      type : 458752
+   -
+     name : ZF_SupprimeItems
+     procedure_id : 1530128862881489556
+     type_code : 12
+     code : |1-
+      procedure ZF_SupprimeItems()<métier>:vide
+      
+      
+      oItem_tmp est un objet dynamique
+      
+      QUAND EXCEPTION DANS
+      	goapp.TranDebut()
+      	
+      	POUR TOUT ÉLÉMENT oItem_tmp DE :aItems()
+      		oItem_tmp.ZF_Supprimer()
+      		oItem_tmp.ZF_Enregistre()
+      	FIN
+      	
+      	goapp.TranFin()
+      	
+      FAIRE
+      	goapp.TranAnnule()
+      	ExceptionPropage()
+      FIN
+     type : 458752
   properties :
    -
      name : p_bEstCharge

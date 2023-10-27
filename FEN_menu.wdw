@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_menu
  identifier : 0x2cb46a8100b2f628
- internal_properties : BwAAAAcAAADG6GnAV7HxJGffsvSPr0gZL2PNh/gJylDxcS7KSUvTag1VrvnyyLz5jNK8hj/34MHDw4G8PXEfNjAAqiBwL3b8ndoZ98Vw6zAANYuFSakRtfIejuAxl7VNrYp8Iyqo8wwrxtuNqBvwYQFSiijnEPn+G7Ok5nqNq27XWcWeCe3nBnVJaqfEAL5hVG1pQTtDTA01ACY9mi4omwELp+m4PeZ8GULmkfv4oPi9uMGtq3e3xjKjei5NA1VYteawbNUTQCdBS9UczWpjBZh7umb5NJBeUYhpIE0AQyc9W5y8U6NiRW/KtERRQXJFTUviyzxN4m5wZ+UVQxq7t1lZEQ2jKgmf04mz3htZj/7Xchxa/fWum25KFwWQavXzcAw/cUw2HAXeJtmHdVPnXecRHd491Qjz2hLevvv8KsFmItOUbSX4u3q+L4TN3WmGLtTygX0+T/PBuKPOh8cdrkDo1kI5fEyyqmkZ4jwGg3eASo1II5DfJ80JhuYjCky0eCw7KNwU8Wn3QdxgvfjIkKvjgMW25WgBueGv8efLmY96Vl3FX+n4C2ewXqtbL9B6wrJ+M/NtDFTkeLtKVNLsKCjPrPl29iCBsrI2ujshM61b0y4RmKhppDgFdO1U8X9VskikMsYnGMGBvulUAPpNn7QqYbwwR9I1y4pgqotGYI8WJb/aN2vE6EuvZnxdPvsZWTFghSDQTomPTDkF0oCafGY=
+ internal_properties : BwAAAAcAAADJlPTb5WgJaxbgDcAGn5npiw1/StUwZJQ/hKvIQ/DymmyUkFmBbX8W/GbxiLpSZyW3nxilxoACJ1Bgu6ixUgiB+j8Ik5/kibIdKAFpyzunhj7MyumG3zbWGXxdhlwWtAbz0qGjlrNNbgoTY7pxDpnQuX5S/l20nPr8ypjnJpKPcC5St4vKELI067Zx+7k+6OPXftumXtxBFx/cBL5f+P1GO/7qW0tDQOBkVQ2waZbIFYUYAq7VoH3RPN5pwVSILnU2qoytECBunCHEDOhGDPbCYEuWIbom5Rq4r3HObeL7ViN9xPAv0WvYIPtz4Tw5KOJ4X8D5IBfNBm4YW0uqPOpkAmJLpTFIW4k2BvdeXMyAI5Lj+fLwS/qByMk55q3nxtfyBaMuhyJS3cvakwG8xFD/sB+as8MzMYUgMSMlMia6OYKR6/knsk4cFrMe6jovZR+tyUHdo4LsPsglxC8asaK+toq15ZqxBjVUCQ193LnHUV18kj2nb+X+TNcHsbG3J8BKzoVOhwwYz3L5+pliNFZhOQheM78B5cGWl9M2p4CGXTny9gKgsvJZr97pZH9Rh7kQnlRc511xPq2gk0/Liqh6S26jDd33tQzTmaxwe7Cji4AjD96SN2pR3Dem5DAyvisXB6gp1SeJ6808lqQiwJgFR1jChupcejPcHlBSaRuPT4eWwBIdpIyXtTDZRpeIU2GhRJpXEeI6Pw==
  properties :
   width : 1032
   height : 600
@@ -834,6 +834,11 @@ window :
       		nInd = TDB_General.AjouteWidget(FI_Taches_suspendues, "FI_Taches_suspendues")
       		TDB_General[nInd]..Visible = Vrai
       		TDB_General.DéplaceWidget(nInd, 1, 3)
+      		
+      		nInd = TDB_General.AjouteWidget(FI_ProjEpics, "FI_ProjEpics")
+      		TDB_General[nInd]..Visible = Vrai
+      		TDB_General.ChangeTailleWidget(nInd, 3, 1)
+      		TDB_General.DéplaceWidget(nInd, 2, 3)
       
       FIN
       

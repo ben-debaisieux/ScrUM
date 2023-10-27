@@ -249,6 +249,7 @@ class :
       //A t on déja instancié cet objet ?
       si ClZF_App.mg_aoInstances[sCle]..Vide ALORS
       	//Non
+      	//trace(sClasse_P)
       	ClZF_App.mg_aoInstances[sCle] <- ::mg_oApp.creeObj(sClasse_P,nIdUnique_P)
       sinon
       	bObjEnCache = vrai
@@ -456,7 +457,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       procédure ZF_GetCol(sCle_p est une chaîne)<métier>:ClZF_ColObjDB
-      renvoyer mg_oApp.GetCol(Objet, sCle_p)
+      renvoyer mg_oApp.GetCol(objet, sCle_p)
      type : 458752
    -
      name : Init_Data

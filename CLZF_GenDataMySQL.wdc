@@ -436,6 +436,15 @@ class :
       
       RENVOYER stRetour
      type : 458752
+   -
+     name : sNomRelFK
+     procedure_id : 1527177108319339598
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode CLZF_GenData.sNomRelFK
+      PROCÉDURE PROTÉGÉE sNomRelFK(sTableFK_p est une chaîne, sRubriqueFK_p est une chaîne, sTablePK_p est une chaîne, sRubriquePK_p est une chaîne)<métier>:chaîne
+      renvoyer Gauche(Ancêtre.sNomRelFK(sTableFK_p, sRubriqueFK_p, sTablePK_p, sRubriquePK_p), 64)
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :
