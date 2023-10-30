@@ -1570,12 +1570,12 @@ window :
      code : |1+
       procédure ListeGroupements()
       
-      oEpic est un ClDbEpic dynamique
-      nLigne est un entier
+      oColEpics	est un ClColEpic							<- ClColEpic.from_projet(zoPrj)
+      aColEpicUsr	est un tableau associatif de ClColEpic_Usr	<- ClColEpic_Usr.aoFromEpics(oColEpics)
+      oEpic		est un ClDbEpic dynamique
+      nLigne		est un entier
       
-      TableSupprimeTout(TBL_Groupements)
       
-      TBL_Groupements..AffichageActif = Faux
       
       
       aCharge est un tableau associatif d'Entier
@@ -1588,14 +1588,20 @@ window :
       
       
       
-      POUR TOUT ELEMENT oEpic DE ClColEpic.from_projet(zoPrj).aItems()
+      
+      TBL_Groupements..AffichageActif = Faux
+      
+      TableSupprimeTout(TBL_Groupements)
+      
+      POUR TOUT ELEMENT oEpic DE oColEpics.aItems()
       	
       	nId est un entier = oEpic.ZF_Get_IdUnique()
       	si aCharge[nId]..vide ALORS
       		aCharge[nId] = 0
       	FIN
       	
-      	oColEpicUsr est un ClColEpic_Usr <- ClColEpic_Usr.aoFromEpic(oEpic)
+      	
+      	oColEpicUsr est un ClColEpic_Usr <- aColEpicUsr[oEpic.ZF_Get_IdUnique()]
       	
       	nLigne = TableAjouteLigne(TBL_Groupements)
       	TBL_Groupements[nLigne].COL_IDEpic		= oEpic.ZF_Get_IdUnique()
@@ -1709,4 +1715,4 @@ embedded_elements :
  elements :
   -
     name : FEN_Projet_Saisie_V2_1$Requête
-    internal_properties : BwAAAAcAAACIk83znllGLOvrX7oH9lR9vW23pV0ksEFYMHxXnCx9qGZywSfvzuD02f+TPLc1RP8ib9ODknOW1SRlOU6PRPvGNZ8fCcO/TCvEVMOoHCwVWYyV1hhlqV73vqDrb0zG4eeN+h76R6Tn84ZBB75W4rSQbG9eCphfZTLRk8uIifxuk4D9USfMxwcDA6oyKx3hyZsJkmByNF8F/WKYod6BIzbiY2WGuUZnGyx6SzTMJKxFaVt+gOAy9V/SIk23OQqH2t8B34RwNfsynkqDwvyhPnw079Uc5OJHTENAI7bTIT485WjU0sEIpt3JacqZaR1x1EGw2mMddB09ymnG8ygp11Gm94ZtI4Xhyq5LDUyKSsq9ITQUpO3cX063aj0vsfyOIke/SOU4w159fdgcr8b0W3mU3CQei8Yghwr0u3G4ft6+VccyKEO5RHAtdS3gBlX57Rbz9QWZvUHA7/XXNT34UlF9Bu3DzQlcEr4+8cq9D7B6rjMyflQAPpGupYWk4OFaxaoSsq81O0OyiKc2fkk/7O8OQcO6yjGPeM+Y3JNApELXEfjsJngRkb6xfDHMWuk1qdr3GxPyJ2aZa5lr17gjiOeZaQBTbiNK3+kse+ORA4wo5EWPpg3e+AP5d+KLertBHehvwQdwoHHTb8/GVclgeVkbQGnBWWJqAQzs3bznEfGvvEIRv77vrUSD8+lIcfMS6TxxKdd26aoGoY/ptY1dHJH2L1ofCqMUp1XAHcXOe26URwqO8/4wodr2y8QOt/Bb9Mq9i8g1AMnukGPugWzMci9TlyzaXlAgOSX2o6yuN1oVH44Zk7YEljDSymluhi4gfxrRGKZroufR298s1RDDv653CkWYb/AdjUVYoE5n9/s0G9ch94za0bYMds0GAkEYWMJ8LjO6nqzoScuh5o3zZ69tHbBvWNmYbiUeg3RPpEb2aw3Nnhg36hrBOSEm9HDzBMSBsV+Zdb1BvYgalZWiGAstsLI+N8hHMasV8qjtsWCQItn2DXG8y5AXC44maxtKwJhKC9XfSGVYPG8hEpJUmrby1h9gaIQ5k+jEaGU+Qyxe6CUqr8F6p8bdWcYXmznTW4mtFZ4cKq+ePsBC/zCQDHlkEyKhjHe/sPjB9kwVmZJ5VvGbouDdVQYvJH5rsPTwovcSAN2RUApze6KAeUxkyoYHeGrYeO03kYsLvucX7/Fu86ZVjVUsuSh8dMEDX3eYhlz2tSWddrngIHOF8uhCA2F+w2xjxiazTDBRy94nMqqwCLb7Unq99N/ESrk8w5BcuCBDmWn2ygBSnWq/Mwjt1JJCoOkQwHRrdJwpaZlLAI2rsPnueTbtpDp8MuuXGNsmPA36y2qUj95lLXDoum7DfWxR6EBbiGX7ww71nmGdV/uLVtY5qg83QAb34zysBbGlBJhZtIoiPH8oRKBXcJ5sxjZJYgX10xAJrAPswa0EPghqjoBh/i4UAFHe2qLJxDEqywNI0YfXvE4N3XJkAKDLvKdT2gdEd6ipNADByZzbzbRsWJlUPEDnaSr4/mUImN5O0toz3ikaHO3Sud6NKygdgygqvSa1nyfEIt56jWwoII2eVzJtXU80bJVZeH6bBjX1g9rB8F/CkTWbn1nca2/tVmldfeRU8sOsj1r0xrU95ceQzoMUReKADZwD6NQXk0vMrr5tIJqKW8hU2uSvjijQuR1o37K49OGsPTURQ67KaEfZVw3GtbJzbA==
+    internal_properties : BwAAAAcAAACPijJcb0gXxTJCBtN+Hev0BBwkllITuVpHb0MMV/Mw7yU5poDMpUktLFK+2ZJAq6Z5lihky9L3dg9ofIvKjxKZGOqgllwyMaBPP2ZN88/I/HdYi1Um9Bu0+ROG0GPJ0Pa8AVezjGM8OFVQNs8hcYdHs9aPKzl+hhNkNn6lZJfdYjeMJnC9FnAU/pXdTPC0YL5sxZ03eRpCOiHfYKeoGh1Vhgh7xsPilJXx0qOd52sYrG4htR33KAAT4Yx29vVGnR7AJn3ZinIfywGaqVXYhV+PEuhhQUeqpey7hlmc7PmT+AP3N55tgbrWyKk4hnyQ8+AXQdD+1fwCbzwZXr3pGhfoq/pFy3slSGQnGcp4/Dbvm0A4nIVe7/D1FjkVH74a9LXLtBVQtS7rizSYNSTG5zNKMIBGyxCAcRwsk4OqFB7wD6eqhH+XWOp7ZQ2edJc1K1Az9eWZn0kCrW1Pm0dm6pen9vXjTQ943Ax6fWAD4QTYOKeWkuCyhlswsYGWZkveE/TiIncNhaukmoe2IGfpkH2sqQsScgNn6h0EWH3KCtpFb8j0NgDTWfgv0MUKlG/FV3B/+7vSRQL7Nek7FcqhOI2Dxfwbto3SzX+sO3Uz8Xx+/qlLYnmERPVbW9a5wEV9uw7XySuU7gXVJbfOox9ShYcl+Ln5uVQiQ86UtYZBD8Glvlp562KhVRaxW3HW721GPxKRScsKHxaQl6dBK7+jRMM4A34D9vGYTcPYFZt0TWKq9VaCx2rqWYhUb3iQEW6zsoD51wz5ZnVgQj/aLzYSQo0BK9jqtloQx9sSf54IpepPKVLNX4pi2j5oLh3czGiUtaT9dLZDLA9PZRe0h8adS2y9ThFwLHGO+rDxMU8KVKijjJRWIpkLSgvjGzqzjX6t17tVBwJ7x3V1VMBuk+CE8F7WaiXatbrpk9jPNOUKmXPN/Kqy4V38L2P4ahIH+33IE92uFr7afg6+qLEL1gw3Xe4SDccx1B3cYlrWCyFgIhFjfxK/3DrR6LGmhDffqtC/Tymz/EB0ydatk7C6WykNs0F/0yzzjbkeXDMNOebloMntOXqnmj4T2BMolkNE5jaoZt7WPrWtUzhjdQ3XRNP1gcw5dLMwDeQUCdP2sxkkFh88UypcZVWi+q9meQtop01xTdRv5TDGFV8ECg89Zocl4xlcrTeT/ZK0KhKMfxjqJIbdXA8+5I61Yt1DAV6QRnxlvd2HxjCCk6bRA3iapxNPCFRztK22U+OY9Uu+MFNul1/fOS9swavORcwz5wZ53un1Q2U0qnhPb1XLlG906FuaAYm7CVIPWdHAjTe2JuZmDXJu9RqvoHeC6Vufaxx4R6xvd8J/UG2heC+q4CFZK+WklneedcVS4dJghGEYMfQC/CbmMzWYCaCg36cWwltLphJE5/08l+VHGVoNq9sSu0vRYZ0yTWhQCO10EeaDKATtJz+9Y/fYZbedvxIhGWEIhfJpCjwDFEKs6RnSILEjTxFEMy7UXYLP/BUEidfooOOcjvOvHdwXf42UhE+fUQirPbthwcsCLfjLbVxDKEk4RtXC7kfL3MXU8NATc7EJHPtZEbzpHHk0lJj9W4ZIa2H+m4K4Rh+EMxqH3uBAwrx/jgxC4eTa+F/fZ1jXtAGvAXB62vLvr+LrrAtpZPXas+8yuLB3BRfE//krpIcVHTt2xfGZwBRh1qmnhVIzxrzoakVz0e6wqPw1JMNsaw==

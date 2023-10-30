@@ -118,20 +118,74 @@ class :
       SI PAS oColRetour.p_bEstCharge OU bForceCharge_p ALORS
       
       	oColRetour.ZF_vider()
-      
-      
-      sReq = [
-      	SELECT 
-      		Scr_Epic_Usr.*
-      	FROM Scr_Epic_Usr
-      	WHERE Scr_Epic_Usr.IDScr_Epic = [%oParent_p.ZF_Get_IdUnique()%]
-      	]
-      oColRetour.ZF_LoadSQL(sReq)
+      	
+      	sReq = [
+      		SELECT 
+      			Scr_Epic_Usr.*
+      		FROM Scr_Epic_Usr
+      		WHERE Scr_Epic_Usr.IDScr_Epic = [%oParent_p.ZF_Get_IdUnique()%]
+      		]
+      	oColRetour.ZF_LoadSQL(sReq)
       
       FIN
       
       
       RENVOYER oColRetour
+     type : 458752
+   -
+     name : aoFromEpics
+     procedure_id : 1531051112658640508
+     type_code : 12
+     code : |1-
+      fonction GLOBALE aoFromEpics(oColParent_p est un ClcolEpic, LOCAL bForceCharge_p est un booléen = Faux)<métier>:tableau associatif de ClColEpic_Usr
+      
+      aRetour		est un tableau associatif de ClColEpic_Usr
+      sReq		est une chaîne
+      anListeIds	est un tableau d'entiers = oColParent_p.ZF_Get_Liste_IdUnique()
+      sListeIds	est une chaîne	= TableauVersChaîne(anListeIds,", ")
+      
+      sReq = [
+      	SELECT 
+      		Scr_Epic_Usr.*,
+      		IDScr_Epic AS RubVentilation
+      	FROM Scr_Epic_Usr
+      	WHERE Scr_Epic_Usr.IDScr_Epic IN ([%sListeIds%])
+      ]
+      aRetour <= ::LoadSQLMulti(sReq, anListeIds)
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : LoadSQLMulti
+     procedure_id : 1531077509600044714
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] LoadSQLMulti (<sSQL_p> est chaîne, <aNListeIds_p> est tableau (entier) [, <sRubVentilation_p> est chaîne])
+      //
+      // Paramètres :
+      //	sSQL_p (chaîne ANSI) : <indiquez ici le rôle de sSQL_p>
+      //	aNListeIds_p (tableau (entier)) : <indiquez ici le rôle de aNListeIds_p>
+      //	sRubVentilation_p (chaîne ANSI - valeur par défaut="RubVentilation") : <indiquez ici le rôle de sRubVentilation_p>
+      
+      // Valeur de retour :
+      // 	tableau associatif (ClColEpic_Usr) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure prive globale LoadSQLMulti(sSQL_p est une chaîne, aNListeIds_p est un tableau d'entiers, sRubVentilation_p est une chaine = "RubVentilation")<metier>:tableau associatif de ClColEpic_Usr
+      
+      aColRetour	est un tableau associatif de ClColEpic_Usr()
+      nId			est un entier
+      
+      pour tout nId de aNListeIds_p
+      	aColRetour[nId] = allouer un ClColEpic_Usr()
+      FIN
+      
+      aColRetour <- ClZF_ColObjDB.ZF_LoadSQLMulti_Priv(sSQL_p, aColRetour, sRubVentilation_p)
+      renvoyer aColRetour
      type : 458752
   procedure_templates : []
   property_templates : []

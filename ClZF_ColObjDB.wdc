@@ -215,7 +215,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure protégée ZF_InitCol(oListeEnfant_p)<métier>:vide
+      procédure ZF_InitCol(oListeEnfant_p)<métier>:vide
       :m_aoObj <- oListeEnfant_p
      type : 458752
    -
@@ -601,6 +601,86 @@ class :
       	goapp.TranAnnule()
       	ExceptionPropage()
       FIN
+     type : 458752
+   -
+     name : ZF_LoadSQLMulti_Priv
+     procedure_id : 1531039911359763086
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_LoadSQLMulti_Priv (<sSQL_p> est chaîne, <aRetour_p>, <sRubVentilation_p> est chaîne)
+      //
+      // Paramètres :
+      //	sSQL_p (chaîne ANSI) : <indiquez ici le rôle de sSQL_p>
+      //	aRetour_p : <indiquez ici le rôle de aRetour_p>
+      //	sRubVentilation_p (chaîne ANSI) : <indiquez ici le rôle de sRubVentilation_p>
+      // Valeur de retour :
+      // 	Type indéterminé : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	oColModele_p (ClZF_ColObjDB) : <indiquez ici le rôle de oColModele_p>
+      procédure publique globale ZF_LoadSQLMulti_Priv(sSQL_p est une chaîne, aRetour_p, sRubVentilation_p est une chaine)<metier>	//:tableau associatif d'objets dynamique
+      
+      oColTemp		est un ClZF_ColObjDB dynamique
+      sCle			est une chaîne
+      sdLoadColSQL	est une Source de Données
+      
+      
+      ClZF_ObjDbLs.mg_oApp.Rsql(sdLoadColSQL,sSQL_p)
+      
+      HLitPremier(sdLoadColSQL, hSansRafraîchir)
+      
+      TANTQUE PAS HEnDehors(sdLoadColSQL)
+      	sCle = {sdLoadColSQL..nom + "." + sRubVentilation_p,indRubrique}
+      //	si aRetour_p[sCle]..Vide ALORS
+      //		
+      //		//Affectation de la collection modèle.
+      //		aRetour_p[sCle] <- clone(oColModele_p)
+      //		
+      //	FIN
+      	oColTemp = aRetour_p[sCle]
+      	
+      	oColTemp.addItemBySource(sdLoadColSQL)
+      	
+      	//On considère que la collection sera chargée.
+      	oColTemp.m_bEstCharge = Vrai
+      	
+      	HLitSuivant(sdLoadColSQL)
+      FIN
+      
+      HAnnuleDéclaration(sdLoadColSQL)
+      
+      renvoyer aRetour_p
+     type : 458752
+   -
+     name : ZF_Get_Liste_IdUnique
+     procedure_id : 1531051928702485582
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_Get_Liste_IdUnique ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau (entier) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_Get_Liste_IdUnique()<metier>:tableau d'EntierS
+      
+      aRetour est un tableau d'entiers
+      oObjTmp est un objet dynamique	//ClZF_ObjDbLs dynamique
+      pour tout oObjTmp de :m_aoObj
+      	tableauajoute(aRetour,oObjTmp.ZF_Get_IdUnique())
+      FIN
+      
+      renvoyer aRetour
      type : 458752
   properties :
    -

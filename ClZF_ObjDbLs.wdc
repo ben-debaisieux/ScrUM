@@ -246,7 +246,10 @@ class :
       
       sCle = ::ZF_sCleOdb(sClasse_P, nIdUnique_P)
       
-      //A t on déja instancié cet objet ?
+      //goApp.m_aMetriques[1].nNbDeclarationObjBd_NonCache++
+      //renvoyer ::mg_oApp.CreeObj(sClasse_P,nIdUnique_P)
+      
+      //A t on déjà instancié cet objet ?
       si ClZF_App.mg_aoInstances[sCle]..Vide ALORS
       	//Non
       	//trace(sClasse_P)
