@@ -16,8 +16,9 @@ class :
    -
      code : |1+
       ClZF_ColObjDB est une Classe, abstraite
+      	herite de ClZF_ObjCache
       prive
-      	m_bEstCharge est un booléen
+      	//m_bEstCharge est un booléen
       	m_aoObj est un tableau de ClZF_ObjDBls dynamique
       	
       public
@@ -30,12 +31,14 @@ class :
   procedures :
    -
      name : Constructeur
-     internal_properties : BwAAAAcAAABPVzr0hBjj+cPjOeRhkjsKfhRbRm6Vm5sOFq0e/ChT2AIbIH7WFUjW5X9+ohvY7O6oW25Jv9xwmIZ5+EFBYSm9evfFbuI6aetzxgXcRiCDDYHkYhcZBpS9i8ZAgY7zz73JNgcUW9K3yh+j9P1D9dXP3KxSma+3+hBgDcYJKmfMe/CTw3dAZ2RSdGqMkPy8mwd22F9C1Bq0eS4Cyn2zrN0yUqPRmIufRJP89IQsulAtnyXphf9ARUcXw1nCcOXxrbqgwxHUbYzHtiwMMpSWnjjkY1NxqXnq8UodRiOEUi07KmeG603Lau7Cm5Ul8Do38eQcGY9RNohd6QaZpe0exa+y3LIqEiUbl/i+C6B4vNs=
      procedure_id : 1424025269601921880
      type_code : 27
-     code : |1-
+     code : |1+
       procédure Constructeur()
       :init()
+      
+      //Par défaut, les objets expirent au bout de 24h
+      :ZF_DefTimeOut(86400)
      type : 589824
    -
      name : Destructeur
@@ -336,7 +339,9 @@ class :
       	fin
       	HLitSuivant(sdLoadColSQL)
       FIN
-      :m_bEstCharge = vrai
+      
+      :ZF_setDhExpire()
+      //:m_bEstCharge = vrai
       
       
       HAnnuleDéclaration(sdLoadColSQL)
@@ -459,7 +464,9 @@ class :
       pour tout nId de aIDs_P
       	:addItemById(nId)
       FIN
-      :m_bEstCharge = vrai
+      
+      :ZF_setDhExpire()
+      //:m_bEstCharge = vrai
      type : 458752
    -
      name : oItem
@@ -609,11 +616,13 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] ZF_LoadSQLMulti_Priv (<sSQL_p> est chaîne, <aRetour_p>, <sRubVentilation_p> est chaîne)
+      //[ <Résultat> = ] ZF_LoadSQLMulti_Priv (<sSQL_p> est chaîne, <aRetour_p>, <oModele_p> est ClZF_ColObjDB dynamique, <aNListeIds_p> est tableau (entier), <sRubVentilation_p> est chaîne)
       //
       // Paramètres :
       //	sSQL_p (chaîne ANSI) : <indiquez ici le rôle de sSQL_p>
       //	aRetour_p : <indiquez ici le rôle de aRetour_p>
+      //	oModele_p (ClZF_ColObjDB dynamique) : <indiquez ici le rôle de oModele_p>
+      //	aNListeIds_p (tableau (entier)) : <indiquez ici le rôle de aNListeIds_p>
       //	sRubVentilation_p (chaîne ANSI) : <indiquez ici le rôle de sRubVentilation_p>
       // Valeur de retour :
       // 	Type indéterminé : <indiquez ici le rôle de la valeur de retour>
@@ -622,36 +631,38 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       //	oColModele_p (ClZF_ColObjDB) : <indiquez ici le rôle de oColModele_p>
-      procédure publique globale ZF_LoadSQLMulti_Priv(sSQL_p est une chaîne, aRetour_p, sRubVentilation_p est une chaine)<metier>	//:tableau associatif d'objets dynamique
+      procédure publique globale ZF_LoadSQLMulti_Priv(sSQL_p est une chaîne, aRetour_p, oModele_p est un ClZF_ColObjDB dynamique, aNListeIds_p est un tableau d'entiers, sRubVentilation_p est une chaine)<metier>	//:tableau associatif d'objets dynamique
       
       oColTemp		est un ClZF_ColObjDB dynamique
-      sCle			est une chaîne
       sdLoadColSQL	est une Source de Données
+      nId				est un entier
       
-      
-      ClZF_ObjDbLs.mg_oApp.Rsql(sdLoadColSQL,sSQL_p)
-      
-      HLitPremier(sdLoadColSQL, hSansRafraîchir)
-      
-      TANTQUE PAS HEnDehors(sdLoadColSQL)
-      	sCle = {sdLoadColSQL..nom + "." + sRubVentilation_p,indRubrique}
-      //	si aRetour_p[sCle]..Vide ALORS
-      //		
-      //		//Affectation de la collection modèle.
-      //		aRetour_p[sCle] <- clone(oColModele_p)
-      //		
-      //	FIN
-      	oColTemp = aRetour_p[sCle]
+      si aNListeIds_p.Occurrence() > 0 alors
+      	//Création de toutes les collections attendues, dans la variable de retour
+      	POUR TOUT nId DE aNListeIds_p
+      		aRetour_p[nId] <- clone(oModele_p)
+      	FIN
       	
-      	oColTemp.addItemBySource(sdLoadColSQL)
       	
-      	//On considère que la collection sera chargée.
-      	oColTemp.m_bEstCharge = Vrai
+      	ClZF_ObjDbLs.mg_oApp.Rsql(sdLoadColSQL,sSQL_p)
       	
-      	HLitSuivant(sdLoadColSQL)
+      	HLitPremier(sdLoadColSQL, hSansRafraîchir)
+      	
+      	TANTQUE PAS HEnDehors(sdLoadColSQL)
+      		
+      		oColTemp = aRetour_p[{sdLoadColSQL..Nom + "." + sRubVentilation_p,indRubrique}]
+      		
+      		oColTemp.addItemBySource(sdLoadColSQL)
+      		
+      		//On considère que la collection sera chargée.
+      		oColTemp.ZF_setDhExpire()
+      		//oColTemp.m_bEstCharge = Vrai
+      		
+      		HLitSuivant(sdLoadColSQL)
+      	FIN
+      	
+      	HAnnuleDéclaration(sdLoadColSQL)
       FIN
-      
-      HAnnuleDéclaration(sdLoadColSQL)
       
       renvoyer aRetour_p
      type : 458752
@@ -684,21 +695,22 @@ class :
      type : 458752
   properties :
    -
-     name : p_bEstCharge
+     name : p_bEstCharge_old
      identifier : 0x13f7cc5803214fce
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure publique p_bEstCharge() : booléen
+         procédure publique p_bEstCharge_old() : booléen
          
-         renvoyer m_bEstCharge
+         renvoyer faux	//m_bEstCharge
         type : 1966080
       -
         code : |1-
-         procédure publique p_bEstCharge(bValeur est un booléen)
+         procédure publique p_bEstCharge_old(bValeur est un booléen)
          
-         m_bEstCharge=bValeur
+         :ZF_setDhExpire()
+         //m_bEstCharge=bValeur
         type : 2031616
      template_refs : []
   procedure_templates : []

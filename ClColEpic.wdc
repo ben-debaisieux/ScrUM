@@ -84,7 +84,7 @@ class :
       oRetour est un ClColEpic
       sReq est une chaîne
       
-      si pas oRetour.p_bEstCharge alors
+      si oRetour.ZF_bEstExpire() alors
       	sReq = [
       		SELECT 
       			Scr_Epic.*

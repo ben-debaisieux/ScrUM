@@ -650,10 +650,10 @@ window :
       nPos		est un entier
       rPctDev		est un réel
       rPctTest	est un réel
-      oProjets	est un ClColProjet
+      oProjets	est un ClColProjet()
       sBulle		est une chaîne
       sType		est une chaîne
-      bAffiche est un booléen
+      bAffiche	est un booléen
       
       
       //AnalyseurDébut()
@@ -678,7 +678,7 @@ window :
       
       
       POUR TOUT ELEMENT oPrjTmp DE oProjets.aItems()
-      	
+      //	multitache(-100)
       	bAffiche = Vrai
       	
       	//Calcul de l'avancement du développement des taches.

@@ -234,7 +234,7 @@ class :
       sReq est une chaîne
       oRetour est un ClColUsr <- oPrj_p.ZF_GetCol(ClAppScrum.cstColUsrInvite)
       
-      si bForce_p ou pas oRetour.p_bEstCharge ALORS
+      si bForce_p ou oRetour.ZF_bEstExpire() ALORS
       	oRetour.ZF_vider()
       	sReq = [
       		SELECT

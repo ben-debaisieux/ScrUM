@@ -104,7 +104,7 @@ class :
      name : Constructeur
      procedure_id : 1445047014238707083
      type_code : 27
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //Constructeur ( [<nID_P> est entier])
@@ -122,6 +122,7 @@ class :
       //Déclaration du constructeur de la classe d'accès aux données.
       ClZF_ObjDB.Constructeur(Scr_UserStory..Nom, Scr_UserStory.IDScr_UserStory..Nom, nID_P)
       
+      :ZF_DefTimeOut(10, vrai)
      type : 589824
    -
      name : Destructeur
@@ -149,7 +150,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE virtuelle pre_enregistre():vide
+      PROCEDURE virtuelle pre_enregistre()<métier>:vide
       
       //stop si :m_sCodeUserStory = "T0114"
       
@@ -385,7 +386,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	stUS_p (STR_UserStorie) : <indiquez ici le rôle de nIDUserStory>
-      FONCTION User_Story_Poids():chaîne 
+      FONCTION User_Story_Poids()<métier>:chaîne 
       
       nPoids est un entier
       sdPoidsUS est une source de données
@@ -461,7 +462,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	nIDUserStory_p (entier) : <indiquez ici le rôle de nIDUserStory>
-      PROCEDURE User_Story_Valider():vide
+      PROCEDURE User_Story_Valider()<métier>:vide
       
       
       oTache est un ClDbTache dynamique
@@ -479,8 +480,8 @@ class :
       	FIN
       FIN
       
-      :m_bEstTestéParLeDemandeur		= Faux
-      :m_bTermine						= Vrai
+      :p_bEstTestéParLeDemandeur		= Faux
+      :p_bTermine						= Vrai
       :ZF_Enregistre()
       
       
@@ -503,11 +504,11 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	stUserStorie_p (STR_UserStorie) : L'user Story à analyser
-      PROCEDURE User_Story_Etat():vide
+      PROCEDURE User_Story_Etat()<métier>:vide
       
       
       :m_eEtatUserStorie = ECompteNbUS.A_faire	//De base l'US est non commencée
-      :m_bTermine = faux
+      :p_bTermine = faux
       
       oTache est un ClDbTache dynamique
       
@@ -552,7 +553,7 @@ class :
       FIN
       
       
-      :m_bTermine = Faux
+      :p_bTermine = Faux
       
       si :m_bAnnule alors
       	:m_eEtatUserStorie = ECompteNbUS.Annulée
@@ -574,12 +575,12 @@ class :
       			//Mais Si le nbr de tache annule = le nbr de tache de l'US alors US -> annulée
       			SI :m_nNbreTacheAnnulee > 0 ET :m_nNbreTacheAnnulee = oColTaches.ZF_nTaille() ALORS
       				:m_eEtatUserStorie = ECompteNbUS.Annulée
-      				:m_bTermine = Vrai
+      				:p_bTermine = Vrai
       			SINON
       				//Si elle a été testé, alors elle est finie
       				SI :m_bEstTestéParLeDemandeur ALORS
       					:m_eEtatUserStorie = ECompteNbUS.Terminee
-      					:m_bTermine = Vrai
+      					:p_bTermine = Vrai
       				SINON
       					SI pas :m_bEstTestéParEquipeDev ALORS
       						//Il n'y a pas encore eu les tests unitaires
@@ -657,12 +658,12 @@ class :
       // Paramètres :
       //	Aucun
       // Valeur de retour :
-      // 	ClUserStory.ECompteNbUS : // 	Aucune
+      // 	ClDbUserStory.ECompteNbUS : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION Get_EtatUS()
+      FONCTION Get_EtatUS()<métier>
       
       :User_Story_Etat()
       
@@ -685,7 +686,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION Get_NbSprintRetard_Old()
+      FONCTION Get_NbSprintRetard_Old()<zombie>
       
       //SI PAS :m_bEtatInitialise ALORS
       //	:User_Story_Etat()
@@ -712,7 +713,7 @@ class :
       //
       //	Type_p (ClUserStory.ECompteNubTache) : <indiquez ici le rôle de nType>
       // 	Type_p : <indiquez ici le rôle de Type_p>
-      FONCTION Get_NbreTache(Type_p est ECompteNbTache):entier
+      FONCTION Get_NbreTache(Type_p est ECompteNbTache)<métier>:entier
       
       nRetour est un entier
       
@@ -753,7 +754,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       
-      PROCEDURE PROTÉGÉE VIRTUELLE post_enregistre():vide
+      PROCEDURE PROTÉGÉE VIRTUELLE post_enregistre()<métier>:vide
       
       oTacheTmp est un ClDbTache dynamique
       
@@ -789,7 +790,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale sNomDeEtat(eType est un ECompteNbUS):chaîne
+      PROCEDURE globale sNomDeEtat(eType est un ECompteNbUS)<métier>:chaîne
       sRetour est une chaîne
       
       selon eType
@@ -829,7 +830,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE sNommination_US():chaîne 
+      PROCEDURE sNommination_US()<métier>:chaîne 
       
       renvoyer "En tant que : " + :m_sEntantQue + rc + ...
       	"J'ai besoin de : " + :m_sJaiBesoinDe + rc + ...
@@ -852,7 +853,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClDbUserStory
+      PROCEDURE globale GetObj(local nIdUnique_P est un entier)<métier>:ClDbUserStory
       sClasse est une chaine = ClDbUserStory
       RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
      type : 458752
@@ -861,7 +862,7 @@ class :
      procedure_id : 1445047014239886731
      type_code : 12
      code : |1-
-      procédure Get_DemarrageTache():entier
+      procédure Get_DemarrageTache()<métier>:entier
       
       oTacheTmp est un ClDbTache dynamique
       nPremSprint est un entier
@@ -883,7 +884,7 @@ class :
      procedure_id : 1445047014239952267
      type_code : 12
      code : |1+
-      procédure bToutesTachesValidees():booléen
+      procédure bToutesTachesValidees()<métier>:booléen
       
       :User_Story_Etat()
       
@@ -895,7 +896,7 @@ class :
      procedure_id : 1445047014240017803
      type_code : 12
      code : |1+
-      procédure sNomEnvironnementTest():chaîne 
+      procédure sNomEnvironnementTest()<métier>:chaîne 
       
       //HLitRecherche(Scr_Environnement,IDSrc_Environnement,:m_nIDSrc_Environnement_Test,hIdentique+hLimiteParcours)
       //si HTrouve(Scr_Environnement) ALORS
@@ -915,7 +916,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.Get_IdUnique
-      FONCTION ZF_Get_IdUnique():entier
+      FONCTION ZF_Get_IdUnique()<métier>:entier
       
       //redéfinition obligatoire à cause de la déclaration 'abstraite' de la méthode, dans la classe d'historique
       renvoyer ClZF_ObjDB.ZF_Get_IdUnique()
@@ -925,13 +926,13 @@ class :
      procedure_id : 1445047014240148875
      type_code : 12
      code : |1+
-      procédure RecalcEtatUS():vide
+      procédure RecalcEtatUS()<métier>:vide
       
       nNbreTacheRestantes est un entier
       nNbreUsFinies est un entier
       
       
-      //stop si m_sCodeUserStory = "CLD011"
+      stop si m_sCodeUserStory = "CLD043"
       
       :User_Story_Etat()
       
@@ -949,30 +950,32 @@ class :
       	//Il n'y a plus de taches à réaliser : 
       	
       	SI :bToutesTachesValidees() ALORS
-      		:m_bEstTestéParLeDemandeur	= Vrai
+      		:p_bEstTestéParLeDemandeur	= Vrai
       //		:m_dDateMiseEnProd			= DateSys()
-      		:m_bTermine					= Vrai
+      		:p_bTermine					= Vrai
       		nNbreUsFinies++
       	SINON
-      		:m_bEstTestéParLeDemandeur	= Faux
-      		:m_bTermine					= Faux
+      		:p_bEstTestéParLeDemandeur	= Faux
+      		:p_bTermine					= Faux
       	FIN
       	
-      	:m_bEstTestéParEquipeDev		= Vrai
+      	:p_bEstTestéParEquipeDev		= Vrai
       //	:m_nIDSrc_Environnement_Test	= 1
-      //	:m_dDateMiseADispo_EnTest		= DateSys()
+      	si :p_dDateMiseADispo_EnTest = "" alors
+      		:p_dDateMiseADispo_EnTest		= DateSys()
+      	fin
       	:p_oUsr_Test_Dev				= goApp.m_oUsrCnx
       SINON
       	
       	SI :Get_NbreTache(ClDbUserStory.ECompteNbTache.Toutes) =:Get_NbreTache(ClDbUserStory.ECompteNbTache.Annulée) ET :Get_NbreTache(ClDbUserStory.ECompteNbTache.Toutes) >= 1 ALORS
-      		:m_bAnnule					= Vrai
-      		:m_bTermine					= Vrai
+      		:p_bAnnule					= Vrai
+      		:p_bTermine					= Vrai
       	SINON
-      		:m_bEstTestéParLeDemandeur	= Faux
-      		:m_bEstTestéParEquipeDev	= Faux
-      		:m_bTermine					= Faux
+      		:p_bEstTestéParLeDemandeur	= Faux
+      		:p_bEstTestéParEquipeDev	= Faux
+      		:p_bTermine					= Faux
       	FIN
-      	:m_dDateMiseADispo_EnTest		= ""
+      	:p_dDateMiseADispo_EnTest		= ""
       FIN
       
       
@@ -984,7 +987,7 @@ class :
      procedure_id : 1445047014240279947
      type_code : 12
      code : |1+
-      procédure sExport():JSON
+      procédure sExport()<métier>:JSON
       
       sRetour est un JSON
       nInd est un entier
@@ -1051,7 +1054,7 @@ class :
      procedure_id : 1445047014240345483
      type_code : 12
      code : |1+
-      procédure publique globale Combo_Charge_Etats(LOCAL sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne):vide
+      procédure publique globale Combo_Charge_Etats(LOCAL sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne)<métier>:vide
       
       
       ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
@@ -1067,7 +1070,7 @@ class :
      procedure_id : 1445047014240411019
      type_code : 12
      code : |1+
-      procédure bPresenceTacheBloquee():booléen
+      procédure bPresenceTacheBloquee()<metier>:booléen
       
       :User_Story_Etat()
       
@@ -1091,7 +1094,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure sLibelleDeEtat():chaine
+      procédure sLibelleDeEtat()<metier>:chaine
       
       sRetour est une chaîne
       
@@ -1121,7 +1124,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
-      PROCÉDURE Init_ObjBD()
+      PROCÉDURE Init_ObjBD()<métier>:Vide
       
       
       
@@ -1171,7 +1174,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure bCodeDejaPris(sCode_P est une chaîne = :m_sCodeUserStory):booléen
+      procédure bCodeDejaPris(sCode_P est une chaîne = :m_sCodeUserStory)<metier>:booléen
       bRetour est un booléen
       sdVerifCode est une Source de Données
       sReq est une chaîne
@@ -1208,7 +1211,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE GLOBAL Combo_Charge_EnvironnementsTest(sNomFenetre_P est une chaîne , sNomCombo_P est une chaîne):vide
+      PROCEDURE GLOBAL Combo_Charge_EnvironnementsTest(sNomFenetre_P est une chaîne , sNomCombo_P est une chaîne)<ui>:vide
       
       ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
       pour TOUT Scr_Environnement 
@@ -1221,7 +1224,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClHistorique.TraiteHisto
-      PROCÉDURE  TraiteHisto()
+      PROCÉDURE  TraiteHisto()<métier>:Vide
       
       //a faire
      type : 458752
@@ -1231,7 +1234,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ObjDB.pre_enregistre_data
-      PROCÉDURE PROTÉGÉE pre_enregistre_data()
+      PROCÉDURE PROTÉGÉE pre_enregistre_data()<metier>:vide
       
       
       
@@ -1378,6 +1381,8 @@ class :
         code : |1+
          procédure publique p_sCodeUserStory(sValeur est une chaîne):Vide
          
+         
+         
          si :m_sCodeUserStory <> sValeur ALORS
          	:ZF_EstModif()
          	:m_sCodeUserStory=sValeur
@@ -1391,13 +1396,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_sEntantQue() : chaîne
+         procédure publique p_sEntantQue()<métier> : chaîne
          
          renvoyer :m_sEntantQue
         type : 1966080
       -
         code : |1-
-         procédure publique p_sEntantQue(sValeur est une chaîne):Vide
+         procédure publique p_sEntantQue(sValeur est une chaîne)<métier>:Vide
          
          si :m_sEntantQue <> sValeur alors
          	:ZF_EstModif()
@@ -1412,13 +1417,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_sJaiBesoinDe() : chaîne
+         procédure publique p_sJaiBesoinDe()<métier> : chaîne
          
          renvoyer :m_sJaiBesoinDe
         type : 1966080
       -
         code : |1+
-         procédure publique p_sJaiBesoinDe(sValeur est une chaîne):Vide
+         procédure publique p_sJaiBesoinDe(sValeur est une chaîne)<métier>:Vide
          
          si :m_sJaiBesoinDe <> sValeur ALORS
          	:ZF_EstModif()
@@ -1433,13 +1438,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_sCMTR_Global() : chaîne
+         procédure publique p_sCMTR_Global()<métier> : chaîne
          
          renvoyer :m_sCMTR_Global
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR_Global(sValeur est une chaîne):Vide
+         procédure publique p_sCMTR_Global(sValeur est une chaîne)<métier>:Vide
          
          si :m_sCMTR_Global <> sValeur ALORS
          	:ZF_EstModif()
@@ -1454,13 +1459,18 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_bEstTestéParEquipeDev() : booléen
+         procédure publique p_bEstTestéParEquipeDev()<métier> : booléen
          
          renvoyer :m_bEstTestéParEquipeDev
         type : 1966080
       -
         code : |1-
-         procédure publique p_bEstTestéParEquipeDev(bValeur est un booléen):Vide
+         procédure publique p_bEstTestéParEquipeDev(bValeur est un booléen)<métier>:Vide
+         
+         SI :m_sCodeUserStory = "CLD043" /*et sValeur = ""*/ ALORS
+         	STOP
+         FIN
+         
          
          si :m_bEstTestéParEquipeDev <> bValeur alors
          	:ZF_EstModif()
@@ -1475,13 +1485,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_bEstTestéParLeDemandeur() : booléen
+         procédure publique p_bEstTestéParLeDemandeur()<métier> : booléen
          
          renvoyer :m_bEstTestéParLeDemandeur
         type : 1966080
       -
         code : |1-
-         procédure publique p_bEstTestéParLeDemandeur(bValeur est un booléen):Vide
+         procédure publique p_bEstTestéParLeDemandeur(bValeur est un booléen)<métier>:Vide
          
          si :m_bEstTestéParLeDemandeur <> bValeur alors
          	:ZF_EstModif()
@@ -1496,13 +1506,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_dDateMiseADispo_EnTest() : date
+         procédure publique p_dDateMiseADispo_EnTest()<métier> : date
          
          renvoyer :m_dDateMiseADispo_EnTest
         type : 1966080
       -
         code : |1-
-         procédure publique p_dDateMiseADispo_EnTest(dValeur est une date):Vide
+         procédure publique p_dDateMiseADispo_EnTest(dValeur est une date)<métier>:Vide
          
          si :m_dDateMiseADispo_EnTest <> dValeur alors
          	:ZF_EstModif()
@@ -1517,13 +1527,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_bTermine() : booléen
+         procédure publique p_bTermine()<métier> : booléen
          
          renvoyer :m_bTermine
         type : 1966080
       -
         code : |1-
-         procédure publique p_bTermine(bValeur est un booléen):Vide
+         procédure publique p_bTermine(bValeur est un booléen)<métier>:Vide
          
          si :m_bTermine <> bValeur ALORS
          	:ZF_EstModif()
@@ -1538,13 +1548,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_bAnnule() : booléen
+         procédure publique p_bAnnule()<métier> : booléen
          
          renvoyer :m_bAnnule
         type : 1966080
       -
         code : |1-
-         procédure publique p_bAnnule(bValeur est un booléen):Vide
+         procédure publique p_bAnnule(bValeur est un booléen)<métier>:Vide
          
          si :m_bAnnule <> bValeur alors
          	:ZF_EstModif()
@@ -1559,13 +1569,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_dDateMiseEnProd() : date
+         procédure publique p_dDateMiseEnProd()<métier> : date
          
          renvoyer :m_dDateMiseEnProd
         type : 1966080
       -
         code : |1-
-         procédure publique p_dDateMiseEnProd(dValeur est une date):Vide
+         procédure publique p_dDateMiseEnProd(dValeur est une date)<métier>:Vide
          
          si :m_dDateMiseEnProd <> dValeur ALORS
          	:ZF_EstModif()
@@ -1580,13 +1590,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_sCMTR_Mise_En_Prod() : chaîne
+         procédure publique p_sCMTR_Mise_En_Prod()<métier> : chaîne
          
          renvoyer :m_sCMTR_Mise_En_Prod
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR_Mise_En_Prod(sValeur est une chaîne):Vide
+         procédure publique p_sCMTR_Mise_En_Prod(sValeur est une chaîne)<métier>:Vide
          
          si :m_sCMTR_Mise_En_Prod <> sValeur ALORS
          	:ZF_EstModif()
@@ -1601,13 +1611,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_sCMTR_RetourDeTest() : chaîne
+         procédure publique p_sCMTR_RetourDeTest()<métier> : chaîne
          
          renvoyer :m_sCMTR_RetourDeTest
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR_RetourDeTest(sValeur est une chaîne):Vide
+         procédure publique p_sCMTR_RetourDeTest(sValeur est une chaîne)<métier>:Vide
          
          si :m_sCMTR_RetourDeTest <> sValeur alors
          	:ZF_EstModif()
@@ -1622,12 +1632,12 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_oEnvironnement_Test() : ClDbEnvironnement
+         procédure publique p_oEnvironnement_Test()<métier> : ClDbEnvironnement
          renvoyer m_oEnvironnement_Test
         type : 1966080
       -
         code : |1-
-         procédure publique p_oEnvironnement_Test(oValeur est ClDbEnvironnement)
+         procédure publique p_oEnvironnement_Test(oValeur est ClDbEnvironnement)<métier>:vide
          SI PAS ZF_bObjEgal(:m_oEnvironnement_Test, oValeur) ALORS
          	:ZF_EstModif()
          	:m_oEnvironnement_Test <- oValeur
@@ -1641,7 +1651,7 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_oEnvironnement_Test_ID():entier
+         procédure publique p_oEnvironnement_Test_ID()<métier>:entier
          
          si :m_oEnvironnement_Test = Null ALORS
          	renvoyer 0
@@ -1651,7 +1661,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_oEnvironnement_Test_ID(nValeur_P est un entier):vide
+         procédure publique p_oEnvironnement_Test_ID(nValeur_P est un entier)<métier>:vide
          
          si nValeur_P = 0 ALORS
          	:p_oEnvironnement_Test = null
@@ -1677,7 +1687,7 @@ class :
         type : 1966080
       -
         code : |1+
-         procédure publique p_oUsr_Test_Dev_ID(nValeur_P est un entier):vide
+         procédure publique p_oUsr_Test_Dev_ID(nValeur_P est un entier)<métier>:vide
          
          si nValeur_P = 0 ALORS
          	:p_oUsr_Test_Dev = null
@@ -1704,7 +1714,7 @@ class :
         type : 1966080
       -
         code : |1+
-         procédure publique p_oUsrResponsable_ID(nValeur_P est un entier):vide
+         procédure publique p_oUsrResponsable_ID(nValeur_P est un entier)<métier>:vide
          
          SI nValeur_P = 0 ALORS
          	:p_oUsrResponsable = Null
@@ -1730,7 +1740,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_oEpic_ID(nValeur_P est un entier):vide
+         procédure publique p_oEpic_ID(nValeur_P est un entier)<métier>:vide
          
          SI nValeur_P = 0 ALORS
          	:p_oEpic = Null
@@ -1746,7 +1756,7 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_bTop_RepriseHisto() : booléen
+         procédure publique p_bTop_RepriseHisto()<métier> : booléen
          
          renvoyer m_bTop_RepriseHisto
         type : 1966080

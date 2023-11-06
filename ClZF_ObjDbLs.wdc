@@ -16,20 +16,21 @@ class :
    -
      code : |1+
       ClZF_ObjDbLs est une Classe, abstraite
+      	herite de ClZF_ObjCache
       PRIVÉ
       	m_ZF_nIdUnique					est un entier
-      	m_ZF_nPointeur					est un entier sur 8 octet	<Copie=Faux>
-      	m_ZF_sNom_Col_Id_Auto			est une chaîne
-      	m_ZF_sNomTable					est une chaîne
+      	m_ZF_nPointeur					est un entier sur 8 octet	<Copie=Faux,Sérialise=faux>
+      	m_ZF_sNom_Col_Id_Auto			est une chaîne				<Sérialise=faux>
+      	m_ZF_sNomTable					est une chaîne				<Sérialise=faux>
       public
       	m_ZF_aListCol					est un tableau associatif de ClZF_ColObjDB dynamique
       GLOBAL
       public
       	mg_oApp							est un ClZF_App dynamique
       	
-      	mg_oExPositionnementImpossible		est un ClZF_Exception dynamique
-      	mg_oExRecipObjetImpossible			est un ClZF_Exception dynamique
-      	mg_oExReprNonRedefinie				est un ClZF_Exception dynamique
+      	mg_oExPositionnementImpossible	est un ClZF_Exception dynamique
+      	mg_oExRecipObjetImpossible		est un ClZF_Exception dynamique
+      	mg_oExReprNonRedefinie			est un ClZF_Exception dynamique
       fin
       
       constante
@@ -44,7 +45,7 @@ class :
   procedures :
    -
      name : Constructeur
-     internal_properties : BwAAAAcAAACkG74KMBMUU+rk5PsRR4CxGRvZSFrsg3Azn7U3z1wk8SidCqAAHXfQSHq5H4vNCqBGwFAee0zUUywA3JXccUXscXh3c89bPNcKjkVfKXZFbqhUStWsQIAnJXJotsrId0KhqwoibkzjUatPgCllf1JyEWuBgb2abztOZYgVAw/BrUV1fkKOGZuLlvAkt0HllavU47dfOqU4lTH63xlNFjCqjoRUALn7BtU7m1aXcYQp7RbrpGbnPzge3CA17srei2Mx4dSxauWUYM4Auhh3jiE8dJ8DZmR8FE6Ed8r0/FeUoeKTvQlUz7EJEoECYlsat3bF+Oz2iUdcz0OFvLo4YCyjoPqxC00XcUUEQR7dJtqdklZP5YXVPlyDjtY2CwkrI9oZ8m2LeJcGrdQO05iR6S6JQTXcm8zRaX4MfEZku/Vxvbtlja/GIHxHYvngOxsgx0DFE/1kEPAtfM2nZ8Ty9x0kdqpKA+UjXH9qRcmJ5KRM6eG9nG8k3z19QEK6bxeojKIGo4IhJmFAlOytpQ==
+     internal_properties : BwAAAAcAAADJbtEp024PvN9xR9QyumvMQkb030H7agnErOTAMGf/ZAUIZa8HHHbRSXu4HIDADaNDz1sZQnujYD2xYwbt4MRj/vv29kIut7BvC8DUFnFwsdUDNaxnu9No4r+7Ywd3rgkWwnFFAbc2qvAgK71rO+aY6XjRQd0yT9vehUiNMw+5/cU9dnqG2YPz/igcR7mtxbO8Ewf/qj0IteEqjwFdZnjqzjy8GBF7bm3TE27niYxZxX571JaXxzgurGCFFhqu84PxiYy5cumQVPrU/jxTsn1YqMMHStjAcLIwS34YWBtQvaa3Ue14w519zgXWVkcOc4LpvCDandvoY+/5IL4EtFgP9C5F33ELTZlQ1fIhYm7JjsojKQmZQkh3KjttFhwOjodkRTiwRcIrUIt1SmFaMGG+FAAX0JkMrsVHJ/GxyPh0Qj7gcEw7qwHK4XhvtJyvtrFUogxVIecmd8iiYsH38hghdalJBOYiXX4VsKT2CY9b+pDss1hN9lYUK31lhGxDa4NpDnU+G3Rds8/ASA==
      procedure_id : 1438107401790463785
      type_code : 27
      code : |1+
@@ -54,8 +55,11 @@ class :
       bMemoRef est un booléen
       
       //Mémorisation des infos de l'entité de base de données
-      :m_ZF_sNomTable		= sNomTable_P
+      :m_ZF_sNomTable			= sNomTable_P
       :m_ZF_sNom_Col_Id_Auto	= sNomColIdAuto_P
+      
+      
+      :ZF_DefTimeOut(86400, vrai)	//Par défaut, l'enregistrement expire dans 24h
       
       
       Selon nId_P
@@ -246,8 +250,12 @@ class :
       
       sCle = ::ZF_sCleOdb(sClasse_P, nIdUnique_P)
       
-      //goApp.m_aMetriques[1].nNbDeclarationObjBd_NonCache++
-      //renvoyer ::mg_oApp.CreeObj(sClasse_P,nIdUnique_P)
+      
+      SI pas ClZF_App.mg_aoInstances[sCle]..Vide _et_ clZF_App.mg_aoInstances[sCle].ZF_bEstExpire() ALORS
+      	TableauSupprime(ClZF_App.mg_aoInstances, sCle)
+      	goApp.m_aMetriques[1].nNbObjBd_Expire++
+      FIN
+      	
       
       //A t on déjà instancié cet objet ?
       si ClZF_App.mg_aoInstances[sCle]..Vide ALORS

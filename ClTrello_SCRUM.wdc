@@ -371,7 +371,8 @@ class :
       anUSARecalculer			est un tableau d'entiers
       oUsrDev					est un ClDbUsr dynamique
       aSprintDeDate			est un tableau associatif de ClDbSprint dynamique
-      
+      i est un entier
+      k est un entier
       aLstTacheImportes est un tableau de chaînes
       
       // tableau avec toute les informations trello
@@ -413,6 +414,8 @@ class :
       		
       		nLigne																		= TableauAjouteLigne(aStInformation_Trello[sClé].aliste_Tache_Trello)
       		
+      		
+      		
       		//		SI ChaîneCommencePar(json_list_trello[j].name, "T1212") ALORS STOP
       		
       		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sNom_Tache_Trello	= json_list_trello[j].name
@@ -446,9 +449,11 @@ class :
       	
       	POUR nLigne_Liste_Carte = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello)
       		
-      		sCodeTache = SansEspace(ExtraitChaîne(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sNom_Tache_Trello,1,"-"))
+      		soit stInfoTacheTrello = aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte]
       		
-      		//SI sCodeTache DANS ("BLM031j") ALORS STOP
+      		sCodeTache = SansEspace(ExtraitChaîne(stInfoTacheTrello.sNom_Tache_Trello,1,"-"))
+      		
+      		//SI sCodeTache DANS ("T1595") ALORS STOP
       		
       		// recup info tache
       		oTache <- ClDbTache.GetObj_de_code(sCodeTache)
@@ -494,7 +499,8 @@ class :
       //			FIN
       			
       			//La tache est elle suspendue ?
-      			SI ::bLabelPresent(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel, [cst_Label_Suspend, cst_Label_Attente]) ALORS
+      			SI ::bLabelPresent(stInfoTacheTrello.aIDLabel, [cst_Label_Suspend, cst_Label_Attente]) ALORS
+      //			SI ::bLabelPresent(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel, [cst_Label_Suspend, cst_Label_Attente]) ALORS
       				//Oui : on s'assure qu'il y ait le motif.
       				SI oTache.p_sCMTR_Blocage = "" ALORS
       					oTache.p_nStatut = ClDbTache.cstStatut_Suspendu
@@ -516,7 +522,8 @@ class :
       			
       			
       			//La tache est elle annulée ?
-      			SI ::bLabelPresent(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel, [cst_Label_Annule]) ALORS
+      			SI ::bLabelPresent(stInfoTacheTrello.aIDLabel, [cst_Label_Annule]) ALORS
+      //			SI ::bLabelPresent(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel, [cst_Label_Annule]) ALORS
       				si oTache.p_nStatut <> ClDbTache.cstStatut_Annulee ALORS
       					Trace("La tache [%oTache.p_sCodeTache%] est annulée dans trello, mais n'est pas dans SCRUM ([%oTache.p_sDescription%]).")
       				FIN
@@ -528,8 +535,10 @@ class :
       				
       			
       			
-      			SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev <> "" ALORS
-      				HLitRecherche(Scr_Usr_Trello,IdTrello,aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev,hIdentique+hLimiteParcours)
+      			SI stInfoTacheTrello.sIDUsrDev <> "" ALORS
+      //			SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev <> "" ALORS
+      				HLitRecherche(Scr_Usr_Trello,IdTrello, stInfoTacheTrello.sIDUsrDev,hIdentique+hLimiteParcours)
+      //				HLitRecherche(Scr_Usr_Trello,IdTrello,aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev,hIdentique+hLimiteParcours)
       				SI HTrouve(Scr_Usr_Trello) ALORS
       					oUsrDev <- ClDbUsr.GetObj(Scr_Usr_Trello.IDScr_Usr)
       				SINON
@@ -568,8 +577,10 @@ class :
       				
       				bComptaDansScrum est un booléen = Faux
       				
-      				POUR nLigneLabel = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel)
-      					SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel[nLigneLabel] DANS(cst_Label_Comptabilise) ALORS
+      				POUR nLigneLabel = 1 _À_ TableauOccurrence(stInfoTacheTrello.aIDLabel)
+      //				POUR nLigneLabel = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel)
+      					SI stInfoTacheTrello.aIDLabel[nLigneLabel] DANS(cst_Label_Comptabilise) ALORS
+      //					SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel[nLigneLabel] DANS(cst_Label_Comptabilise) ALORS
       						bComptaDansScrum = Vrai
       					FIN
       				FIN
@@ -581,93 +592,107 @@ class :
       			
       			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
       			
-      			//			vEvts		est un Variant
       			oMessage	est un ClDbMessage dynamique
       			dhEvt		est une DateHeure
       			oSpr		est un ClDbSprint dynamique
       			
+      //			stop si oTache.p_oUserStoryParent.p_sCodeUserStory = "CLD043"
+      			
       			//récupération des actions de la carte
-      			
-      			
-      			POUR nLigne_Action_Trello = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action)
+      			POUR nLigne_Action_Trello = TableauOccurrence(stInfoTacheTrello.aListe_Action) a 1 pas -1
+      //			POUR nLigne_Action_Trello = TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action) a 1 pas -1
       				
+      				soit stListeActionTrello = aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello]
       				
-      				dhEvt = dh_FormatRFC3339_Vers_DateHeure(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sDate_Action)
+      				dhEvt = dh_FormatRFC3339_Vers_DateHeure(stListeActionTrello.sDate_Action)
+      //				dhEvt = dh_FormatRFC3339_Vers_DateHeure(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sDate_Action)
       				
-      				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre <> Null ALORS
+      				SI stListeActionTrello.sTitre <> Null ALORS
+      //				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre <> Null ALORS
       					oMessage						= allouer un ClDbMessage()
       					oMessage.p_oTache				= oTache
       					oMessage.p_oUsr					= oUsrDev
-      					oMessage.p_sCMTR				= aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre
+      					oMessage.p_sCMTR				= stListeActionTrello.sTitre
+      //					oMessage.p_sCMTR				= aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre
       					oMessage.p_dhDteCreation		= dhEvt
       					oMessage.ZF_Enregistre()
       				FIN
       				
       				
-      				SI aSprintDeDate[dhEvt..PartieDate]..Vide ALORS
-      					aSprintDeDate[dhEvt..PartieDate] <- ClDbSprint.oGet_SprintDeDate(dhEvt..PartieDate)
-      				FIN
-      				oSpr <- aSprintDeDate[dhEvt..PartieDate]
       				
-      				//				SI vEvts.data.listAfter <> Null ALORS
-      				//TBL_Actions[nLigne].COL_IdList	= vEvts.data.listAfter.id
-      				
-      				SELON aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sListAfter
-      					CAS cst_List_ID_Dev_en_cours
-      						//TBL_Actions[nLigne].COL_IdList = "En cours"
-      						
-      					CAS cst_List_ID_A_faire_tester_par_DEV2
-      						//TBL_Actions[nLigne].COL_IdList = "Dev 2"
-      						
-      					CAS cst_List_ID_Test_unitaire
-      						//TBL_Actions[nLigne].COL_IdList = "TU"
-      						
-      					CAS cst_List_ID_A_livrer_en_pré_prod
-      						//TBL_Actions[nLigne].COL_IdList = "Liv pré prod"
-      						
-      					CAS cst_List_ID_Test_fonctionnel
-      						//TBL_Actions[nLigne].COL_IdList = "TF"
-      						
-      						SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest < dhEvt..PartieDate ALORS
-      							oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = dhEvt..PartieDate
-      						FIN
-      						
-      					CAS cst_List_ID_A_livrer_en_prod
-      						//TBL_Actions[nLigne].COL_IdList = "Liv Prod"
-      						
-      						SI oTache.p_bEstRealise ALORS
-      							oTache.p_nNum_Sprint_Fin	= oSpr.ZF_Get_IdUnique()
-      						FIN
-      						
-      						SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest < dhEvt..PartieDate ALORS
-      							oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = dhEvt..PartieDate
-      						FIN
-      						
-      						SI oTache.p_oUserStoryParent.p_dDateMiseEnProd < dhEvt..PartieDate ALORS
-      							oTache.p_oUserStoryParent.p_dDateMiseEnProd = dhEvt..PartieDate
-      						FIN
-      						
-      					CAS cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents
-      						//TBL_Actions[nLigne].COL_IdList = "Fin"
-      						
-      						SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = "" ALORS
-      							oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = DateSys()
-      						FIN
-      						
-      						SI oTache.p_oUserStoryParent.p_dDateMiseEnProd < dhEvt..PartieDate ALORS
-      							oTache.p_oUserStoryParent.p_dDateMiseEnProd = dhEvt..PartieDate
-      						FIN
-      						
-      						SI oTache.p_bEstRealise ALORS
-      							oTache.p_nNum_Sprint_Fin	= oSpr.ZF_Get_IdUnique()
-      						FIN
-      						
-      						
-      					AUTRE CAS
-      						
+      				si stListeActionTrello.sListAfter <> "" alors
+      //				si aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sListAfter <> "" alors
+      	//				oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = ""
+      	//				oTache.p_oUserStoryParent.p_dDateMiseEnProd = ""
+      					//oTache.p_bEstRealise = Faux
+      					//oTache.p_nNum_Sprint_Fin = null
+      					
+      					
+      					SI aSprintDeDate[dhEvt..PartieDate]..Vide ALORS
+      						aSprintDeDate[dhEvt..PartieDate] <- ClDbSprint.oGet_SprintDeDate(dhEvt..PartieDate)
+      					FIN
+      					oSpr <- aSprintDeDate[dhEvt..PartieDate]
+      					
+      					
+      					SELON stListeActionTrello.sListAfter
+      //					SELON aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sListAfter
+      						CAS cst_List_ID_Dev_en_cours
+      							//TBL_Actions[nLigne].COL_IdList = "En cours"
+      							
+      						CAS cst_List_ID_A_faire_tester_par_DEV2
+      							//TBL_Actions[nLigne].COL_IdList = "Dev 2"
+      							
+      						CAS cst_List_ID_Test_unitaire
+      							//TBL_Actions[nLigne].COL_IdList = "TU"
+      							
+      						CAS cst_List_ID_A_livrer_en_pré_prod
+      							//TBL_Actions[nLigne].COL_IdList = "Liv pré prod"
+      							
+      						CAS cst_List_ID_Test_fonctionnel
+      							//TBL_Actions[nLigne].COL_IdList = "TF"
+      							
+      							SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest < dhEvt..PartieDate ALORS
+      								oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = dhEvt..PartieDate
+      							FIN
+      							
+      							
+      	//					CAS cst_List_ID_A_livrer_en_prod
+      	//						//TBL_Actions[nLigne].COL_IdList = "Liv Prod"
+      	//						
+      	//						SI oTache.p_bEstRealise ALORS
+      	//							oTache.p_nNum_Sprint_Fin	= oSpr.ZF_Get_IdUnique()
+      	//						FIN
+      	//						
+      	//						SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest < dhEvt..PartieDate ALORS
+      	//							oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = dhEvt..PartieDate
+      	//						FIN
+      	//						
+      	//						SI oTache.p_oUserStoryParent.p_dDateMiseEnProd < dhEvt..PartieDate ALORS
+      	//							oTache.p_oUserStoryParent.p_dDateMiseEnProd = dhEvt..PartieDate
+      	//						FIN
+      							
+      						CAS cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents, cst_List_ID_A_livrer_en_prod
+      							//TBL_Actions[nLigne].COL_IdList = "Fin"
+      							
+      							SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = "" ALORS
+      								oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = DateSys()
+      							FIN
+      							
+      							SI oTache.p_oUserStoryParent.p_dDateMiseEnProd < dhEvt..PartieDate ALORS
+      								oTache.p_oUserStoryParent.p_dDateMiseEnProd = dhEvt..PartieDate
+      							FIN
+      							
+      							SI oTache.p_bEstRealise ALORS
+      								oTache.p_nNum_Sprint_Fin	= oSpr.ZF_Get_IdUnique()
+      							FIN
+      							
+      							
+      						AUTRE CAS
+      							
+      					FIN
       				FIN
-      				//				FIN		
       			FIN
+      			
       			//Correction du N° de print de réalisation, si fini avant
       			SI oTache.p_nNum_Sprint_Realisation > oTache.p_nNum_Sprint_Fin ET oTache.p_nNum_Sprint_Fin <> 0 ET PAS oTache.p_bAnnule ALORS
       				oTache.p_nNum_Sprint_Realisation	= oTache.p_nNum_Sprint_Fin
@@ -702,10 +727,12 @@ class :
       POUR TOUT nIdUs DE anUSARecalculer
       	oUs <- ClDbUserStory.GetObj(nIdUs)
       	
+      	//stop si oUs.p_sCodeUserStory = "T1595"
+      	
       	SI oUs.p_bTermine ET oUs.p_dDateMiseEnProd = "" ALORS
       		oUs.p_dDateMiseEnProd = DateSys()
-      		
       	FIN
+      	
       	SI PAS oUs.p_bEstTestéParLeDemandeur ET oUs.p_oEnvironnement_Test = Null ALORS
       		oUs.p_oEnvironnement_Test = ClDbEnvironnement.GetObj(1)
       	FIN

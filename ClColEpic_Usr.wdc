@@ -115,7 +115,7 @@ class :
       sReq		est une chaîne
       oColRetour	est un ClColEpic_Usr <- oParent_p.ZF_GetCol(ClDbEpic.cstGetCol_Epic_Usr)
       
-      SI PAS oColRetour.p_bEstCharge OU bForceCharge_p ALORS
+      SI oColRetour.ZF_bEstExpire() OU bForceCharge_p ALORS
       
       	oColRetour.ZF_vider()
       	
@@ -178,13 +178,9 @@ class :
       procédure prive globale LoadSQLMulti(sSQL_p est une chaîne, aNListeIds_p est un tableau d'entiers, sRubVentilation_p est une chaine = "RubVentilation")<metier>:tableau associatif de ClColEpic_Usr
       
       aColRetour	est un tableau associatif de ClColEpic_Usr()
-      nId			est un entier
+      oModele		est un ClColEpic_Usr()
       
-      pour tout nId de aNListeIds_p
-      	aColRetour[nId] = allouer un ClColEpic_Usr()
-      FIN
-      
-      aColRetour <- ClZF_ColObjDB.ZF_LoadSQLMulti_Priv(sSQL_p, aColRetour, sRubVentilation_p)
+      aColRetour <- ClZF_ColObjDB.ZF_LoadSQLMulti_Priv(sSQL_p, aColRetour, oModele, aNListeIds_p, sRubVentilation_p)
       renvoyer aColRetour
      type : 458752
   procedure_templates : []

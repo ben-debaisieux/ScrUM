@@ -302,7 +302,7 @@ class :
       
       oColTachesRetour est un ClColTache dynamique <- oUS_p.ZF_GetCol(cstTachesDeUS)
       
-      si pas oColTachesRetour.p_bEstCharge ou bForceCharge_p alors
+      si oColTachesRetour.ZF_bEstExpire() ou bForceCharge_p alors
       
       	oColTachesRetour.ZF_vider()
       	//trace("US : " + :Get_IdUnique())

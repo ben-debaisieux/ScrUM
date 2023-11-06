@@ -113,29 +113,30 @@ class :
       //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
       //		:m_ZF_cnxBDD..InfosEtendues	= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
       
-      		:m_sMsgCnx						= "Connexion : MySQL"
-      		// Paramètres de la connexion
-      		:m_ZF_cnxBDD..Provider			= hAccèsNatifMySQL
-      		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
-      		:m_ZF_cnxBDD..Utilisateur		= "2777-2"
-      		:m_ZF_cnxBDD..MotDePasse		= "Bur0123+"
-      		:m_ZF_cnxBDD..Serveur			= "127.0.0.1"
-      		
-      		:m_ZF_cnxBDD..BaseDeDonnées		= "mydb"
-      		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
-      		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
-      
-      //		:m_sMsgCnx						= "Connexion : HF/CS"
+      //		:m_sMsgCnx						= "Connexion : MySQL"
       //		// Paramètres de la connexion
-      //		:m_ZF_cnxBDD..Provider			= hAccèsHFClientServeur
+      //		:m_ZF_cnxBDD..Provider			= hAccèsNatifMySQL
       //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
-      //		:m_ZF_cnxBDD..Utilisateur		= "cnx_scrum"
-      //		:m_ZF_cnxBDD..MotDePasse		= "cnx_scrum"
-      //		:m_ZF_cnxBDD..Serveur			= "prod-vm-ast02"
+      //		:m_ZF_cnxBDD..Utilisateur		= "2777-2"
+      //		:m_ZF_cnxBDD..MotDePasse		= "Bur0123+"
+      //		:m_ZF_cnxBDD..Serveur			= "127.0.0.1"
       //		
-      //		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM-BDD"
+      //		:m_ZF_cnxBDD..BaseDeDonnées		= "mydb"
       //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
       //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
+      
+      		:m_sMsgCnx						= "Connexion : HF/CS"
+      		// Paramètres de la connexion
+      		:m_ZF_cnxBDD..Provider			= hAccèsHFClientServeur
+      		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      		:m_ZF_cnxBDD..Utilisateur		= "cnx_scrum"
+      		:m_ZF_cnxBDD..MotDePasse		= "cnx_scrum"
+      		:m_ZF_cnxBDD..Serveur			= "prod-vm-ast02"
+      		
+      		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM-BDD"
+      		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
+      		
       //		
       		sMsgErrCnx						= "Impossible d'ouvrir les tables de la base de donnés sur le serveur : [%:m_ZF_cnxBDD..Serveur%]."
       	SINON
@@ -276,25 +277,25 @@ class :
       
       selon sCle_p
       	CAS ClDbProjetMap.cstKeyCol_MapDeProjet, ClDbProjetMap.cstGetCol_ProjetMap
-      		oCol = allouer un ClColProjetMap
+      		oCol = allouer un ClColProjetMap()
       	cas ClDbUserStory.cstUSDeProjet
-      		oCol = allouer un ClColUserStory
+      		oCol = allouer un ClColUserStory()
       	cas cstCriteresDeUS
-      		oCol = allouer un ClColCritereAccept
+      		oCol = allouer un ClColCritereAccept()
       	cas cstColUsrInvite
-      		oCol = allouer un ClColUsr
+      		oCol = allouer un ClColUsr()
       	cas cstDoscDeUS
-      		oCol = allouer un ClColUserStory_Doc
+      		oCol = allouer un ClColUserStory_Doc()
       	cas ClDbCritereAccept.cst_Col_CriteresCompo
-      		oCol = allouer un ClColCritereAccept_Composant
+      		oCol = allouer un ClColCritereAccept_Composant()
       	cas ClDbMessage.cst_col_messages
-      		oCol = allouer un ClColMessage
+      		oCol = allouer un ClColMessage()
       	cas ClColTache.cstTachesDeUS
-      		oCol = allouer un ClColTache
+      		oCol = allouer un ClColTache()
       //	CAS ClDbProjet.cstGetCol_Usr_Projet
       //		oCol = allouer un ClColProjet
       	CAS ClDbEpic.cstGetCol_Epic_Usr
-      		oCol = allouer un ClColEpic_Usr
+      		oCol = allouer un ClColEpic_Usr()
       		
       	AUTRE CAS
       		::mg_oExTypeColNonDefinit.ZF_Declenche([sCle_p])

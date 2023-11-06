@@ -402,7 +402,7 @@ class :
       sReq est une chaîne
       oColCompo est un ClColCritereAccept_Composant <- :ZF_GetCol(cst_Col_CriteresCompo)
       
-      si pas oColCompo.p_bEstCharge ou bForce_P alors
+      si oColCompo.ZF_bEstExpire() ou bForce_P alors
       	
       	sReq = [
       		SELECT

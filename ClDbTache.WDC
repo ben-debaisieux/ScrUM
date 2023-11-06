@@ -130,7 +130,7 @@ class :
      name : Constructeur
      procedure_id : 1444819982168902228
      type_code : 27
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //Constructeur ( [<nId_P> est entier])
@@ -147,6 +147,8 @@ class :
       PROCEDURE Constructeur(LOCAL nId_P est un entier = 0)
       
       ClZF_ObjDB.constructeur(Scr_Tache..nom, Scr_Tache.IDScr_Tache..Nom, nId_P)
+      
+      :ZF_DefTimeOut(10, vrai)
      type : 589824
    -
      name : Destructeur

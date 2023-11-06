@@ -1,0 +1,120 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClAppTest
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x15450dd707e605ce
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClAppTest est une Classe
+      herite de ClZF_App
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1532646465391232462
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1532646465391297998
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : cnxBdd
+     procedure_id : 1532646972197884325
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_App.cnxBdd
+      PROCÉDURE  cnxBdd()
+      
+      
+      
+      sMsgErrCnx est une chaîne
+      
+      // ************************************** Connexion à la base de données ******************************************//
+      HGèreIntégrité(Vrai)
+      
+      // Paramètres de la connexion
+      //:m_ZF_cnxBDD..Provider			= hAccèsHFClientServeur
+      //:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      //:m_ZF_cnxBDD..Utilisateur		= "cnx_scrum"
+      //:m_ZF_cnxBDD..MotDePasse		= "cnx_scrum"
+      //:m_ZF_cnxBDD..Serveur			= "prod-vm-ast02"
+      //
+      //:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM-BDD"
+      //:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      //:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
+      
+      //		// Paramètres de la connexion
+      //		:m_ZF_cnxBDD..Provider			= hAccèsNatifMySQL
+      //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      //		:m_ZF_cnxBDD..Utilisateur		= "2777-2"
+      //		:m_ZF_cnxBDD..MotDePasse		= "Bur0123+"
+      //		:m_ZF_cnxBDD..Serveur			= "127.0.0.1"
+      //		
+      //		:m_ZF_cnxBDD..BaseDeDonnées		= "mydb"
+      //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
+      
+      
+      		:m_ZF_cnxBDD..Provider			= hAccèsNatifSQLServer
+      		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      		:m_ZF_cnxBDD..Utilisateur		= "sa"
+      		:m_ZF_cnxBDD..MotDePasse		= "sa@sql2016"
+      		:m_ZF_cnxBDD..Serveur			= "10.20.30.140"
+      		
+      		:m_ZF_cnxBDD..BaseDeDonnées	= "SCRUM"
+      		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
+      		:m_ZF_cnxBDD..InfosEtendues	= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
+      		
+      sMsgErrCnx						= "Impossible d'ouvrir les tables de la base de donnés sur le serveur : [%:m_ZF_cnxBDD..Serveur%]."
+      
+      // Ouverture de la nouvelle connexion
+      SI HOuvreConnexion(:m_ZF_cnxBDD) ALORS
+      	HChangeConnexion("*",:m_ZF_cnxBDD)
+      SINON
+      	STOP
+      	FinProgramme()
+      FIN
+      
+      
+      
+     type : 458752
+   -
+     name : ExceptGenerale
+     procedure_id : 1532646972197949986
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_App.ExceptGenerale
+      PROCÉDURE  ExceptGenerale()
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x15450dcb07e0d75b
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

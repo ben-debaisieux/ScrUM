@@ -785,15 +785,16 @@ class :
       	pour tout element oTache de ClColTache.oFromProjet(objet).aItems()
       		sCle = oTache.p_oUserStoryParent.ZF_Get_IdUnique()
       		si aColTachesParUs[sCle]..Vide ALORS
-      			aColTachesParUs[sCle]				= allouer un ClColTache
-      			aColTachesParUs[sCle].p_bEstCharge	= Vrai
+      			aColTachesParUs[sCle]				= allouer un ClColTache()
+      			aColTachesParUs[sCle].ZF_setDhExpire()
+      			//aColTachesParUs[sCle].ZF_setDhExpire()
       		FIN
       		aColTachesParUs[sCle].ZF_addItem(oTache)
       	FIN
       	
       	
       	//Rechargement de toutes les US.
-      	pour tout element oUsTmp de ClColUserStory.oFromProjet(objet).aitems()	//:aoListeUS(bForceRecharge_P).aItems()
+      	pour tout element oUsTmp de ClColUserStory.oFromProjet(objet).aitems()
       		
       		//Envoi de la collection de tache, à l'US
       		sCle = oUsTmp.ZF_Get_IdUnique()
@@ -805,7 +806,7 @@ class :
       		nEtat = oUsTmp.Get_EtatUS()
       		:m_anStatsUS[nEtat]++
       	fin
-      	
+      	//trace(:p_sNom)
       	:m_bInitStatsUS = vrai
       fin
      type : 458752

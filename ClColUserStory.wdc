@@ -171,7 +171,7 @@ class :
       sReq est une chaîne
       oRetour est un ClColUserStory <- oPrj_p.ZF_GetCol(ClDbUserStory.cstUSDeProjet)
       
-      si pas oRetour.p_bEstCharge ou bForceRecharge_P alors
+      si oRetour.ZF_bEstExpire() ou bForceRecharge_P alors
       	
       	oRetour.ZF_vider()
       	

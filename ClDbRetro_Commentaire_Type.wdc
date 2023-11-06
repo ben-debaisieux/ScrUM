@@ -116,7 +116,7 @@ class :
       oRetour est un ClColRetro_Commentaire
       sReq est une chaîne
       
-      SI PAS oRetour.p_bEstCharge ALORS
+      SI oRetour.ZF_bEstExpire() ALORS
       	sReq = [
       		SELECT 
       			Scr_Retro_Commentaire.*

@@ -100,7 +100,7 @@ class :
       sReq est une chaine
       oRetour est un ClColCritereAccept <- oUs_p.ZF_GetCol(ClAppScrum.cstCriteresDeUS)
       
-      si pas oRetour.p_bEstCharge ou bForceCharge_p alors
+      si oRetour.ZF_bEstExpire() ou bForceCharge_p alors
       	
       	sReq = [
       		SELECT 

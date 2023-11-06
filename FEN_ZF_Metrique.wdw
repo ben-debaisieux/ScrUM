@@ -131,6 +131,7 @@ window :
       	grAjouteDonnée(GRF_Metriques, 4, nInd, stTmpMetrique.nNbDeclarationObjBd_Cache)
       	grAjouteDonnée(GRF_Metriques, 5, nInd, stTmpMetrique.nNbDeclarationObjBd_NonCache)
       	grAjouteDonnée(GRF_Metriques, 6, nInd, stTmpMetrique.nNbRecherches)
+      	grAjouteDonnée(GRF_Metriques, 7, nInd, stTmpMetrique.nNbObjBd_Expire)
       FIN
       
       //grTitre(GRF_Projection,stRetour.sTitre)
@@ -142,6 +143,7 @@ window :
       grEtiquetteSérie(GRF_Metriques,4,"Nombre d'objets déclarés - en cache")
       grEtiquetteSérie(GRF_Metriques,5,"Nombre d'objets déclarés - hors cache")
       grEtiquetteSérie(GRF_Metriques,6,"Nombre de recherches")
+      grEtiquetteSérie(GRF_Metriques,7,"Nombre d'objets expirés")
       
       //grEtiquetteSérie(GRF_Projection,1,"Points Restants")
       //grCouleurSérie(GRF_Projection,1,BleuClair)

@@ -101,7 +101,7 @@ class :
       oRetour est un ClColProjetMap <- oPrj.ZF_GetCol(ClDbProjetMap.cstKeyCol_MapDeProjet)
       
       
-      si pas oRetour.p_bEstCharge alors
+      si oRetour.ZF_bEstExpire() alors
       	sReq est une chaîne = [
       		SELECT
       			SCR_ProjetMap.*
@@ -122,7 +122,7 @@ class :
       
       sReq est une chaîne
       
-      SI PAS oProjMapParent.p_oColProjetMap_Enfant.p_bEstCharge ALORS
+      SI oProjMapParent.p_oColProjetMap_Enfant.ZF_bEstExpire() ALORS
       	sReq = [
       		SELECT 
       			SCR_ProjetMap.*
@@ -211,7 +211,7 @@ class :
       
       oColRetour <- oParent_p.ZF_GetCol(ClDbProjetMap.cstGetCol_ProjetMap)
       
-      SI PAS oColRetour.p_bEstCharge OU bForceCharge_p ALORS
+      SI oColRetour.ZF_bEstExpire() OU bForceCharge_p ALORS
       	
       	oColRetour.ZF_vider()
       	

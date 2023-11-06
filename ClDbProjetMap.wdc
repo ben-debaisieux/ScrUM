@@ -266,7 +266,7 @@ class :
          	oColMapDeProjet <- :m_oProjet.ZF_GetCol(ClDbProjetMap.cstKeyCol_MapDeProjet)
          	//Déréférencement de l'objet dans l'ancienne collection (si chargée)
          	si :m_oProjet <> Null ALORS
-         		si oColMapDeProjet.p_bEstCharge ALORS
+         		si oColMapDeProjet.ZF_bEstExpire() ALORS
          			oColMapDeProjet.ZF_Supp(objet)
          		FIN
          	FIN
@@ -277,7 +277,7 @@ class :
          	//Référencement de l'objet dans la nouvelle collection (si non chargée, on la charge)
          	SI :m_oProjet <> Null ALORS
          		oColMapDeProjet <- :m_oProjet.ZF_GetCol(ClDbProjetMap.cstKeyCol_MapDeProjet)
-         		SI oColMapDeProjet.p_bEstCharge ALORS
+         		SI oColMapDeProjet.ZF_bEstExpire() ALORS
          			ClColProjetMap.oColMapsDeProjet(:m_oProjet)
          		FIN
          		oColMapDeProjet.ZF_addItem(objet)

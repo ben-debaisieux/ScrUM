@@ -85,7 +85,7 @@ class :
       oRetour est un ClColProcess_Metier_Axe
       sReq est une chaîne
       
-      SI PAS oRetour.p_bEstCharge ALORS
+      SI oRetour.ZF_bEstExpire() ALORS
       	sReq = [
       		SELECT 
       			Scr_Process_Metier_Axe.*

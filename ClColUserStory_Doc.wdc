@@ -96,7 +96,7 @@ class :
       sReq est une chaîne
       oRetour est un ClColUserStory_Doc <- oUs_p.ZF_GetCol(ClAppScrum.cstDoscDeUS)
       
-      si pas oRetour.p_bEstCharge alors
+      si oRetour.ZF_bEstExpire() alors
       	sReq = [
       		SELECT
       			Scr_UserStory_Doc.*

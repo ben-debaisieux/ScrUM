@@ -87,7 +87,7 @@ class :
       sRubFiltre	est une chaîne
       
       
-      si pas oRetour.p_bEstCharge alors
+      si oRetour.ZF_bEstExpire() alors
       	selon oEntite_P..classe
       		cas ClDbTache
       			sRubFiltre = Scr_Message.IDScr_Tache..nom
