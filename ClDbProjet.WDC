@@ -78,10 +78,10 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Constructeur ()
+      //Constructeur (<nID_P> est entier)
       //
       // Paramètres :
-      //	Aucun
+      //	nID_P (entier) : <indiquez ici le rôle de nID_P>
       // Valeur de retour :
       // 	Aucune
       //
@@ -89,7 +89,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       
-      PROCEDURE Constructeur(LOCAL nID_P est un entier = 0)
+      PROCEDURE Constructeur(LOCAL nID_P est un entier)
       
       //Déclaration du constructeur de la classe d'accès aux données.
       Ancêtre.Constructeur(Scr_Projet..Nom, Scr_Projet.IDScr_Projet..Nom, nID_P)

@@ -609,7 +609,7 @@ class :
       				
       				SI stListeActionTrello.sTitre <> Null ALORS
       //				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre <> Null ALORS
-      					oMessage						= allouer un ClDbMessage()
+      					oMessage						= allouer un ClDbMessage(ClZF_ObjDbLs.cstModeCreation)
       					oMessage.p_oTache				= oTache
       					oMessage.p_oUsr					= oUsrDev
       					oMessage.p_sCMTR				= stListeActionTrello.sTitre

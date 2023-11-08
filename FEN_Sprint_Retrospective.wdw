@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_Sprint_Retrospective
  identifier : 0x2ce2784704e1799a
- internal_properties : BwAAAAcAAADEzcA+xnuAVv41L32Dcw4jDsYPk2NORE0BkcNRZpy0o0nJIkKkaljurcCoQlv+380qDBBEGXA+DhVEMbRR6bw8kkO9ChJRTz/0QCqag+xegQ31pCcKZFtFRR1BfsBuFXp3g/4+PoD1wRW1NR5xj7TWsQa1Z748U4q2OJSzr6BnmEGeFQskarCUAgQv6HmZEzB4H7yKfV8Cq4j2+4P/+2JJBDCiqv/G0W3efflG+UMjBHmx0KfcqJ3kd+ELTl0t9YUBke91yB9BlXjzBj+nmF39KOdkcMAdEcUGvYWmIgPbmGy8EswweK4CDvfcYR5e555hLJEJambcCyD9gNzBaFUYbFhs1Xo59B2y9vFf925qhkecN3GxFrDiJnGfLfs7Tha911wWUwI7OAUiBQi06a3DahlXpwS6+XDuHCT0GtB0xgExfR5k4FvKWxbkU8vGmO/KeF3oFSv7yg3eNAGGnpm7bH735r6vQzdeCNK+AHZlTFW8Gr5dR6cxDd5o7w4npkvCB5jOhPChNXy3fTKmhfGDEnOkJuC0xd/pLCBqlphWfuxXyokV0smq9LV0uykV2CBJjZSKQvVX+BEYPqB/RcACc1onJxr3vhi2pq1K/6+fyTAMyZTkTv5MiG/GNpe6YyMNnfoMVsZatIw5q4agqJdNTbGg/DRTFqPAQThokruPjUSZp39MOg8BZIZpnsA328sYH5qXi0KfEe13hVAWavGTD6Spng==
+ internal_properties : BwAAAAcAAADkoEZKTfOy6vjgDPXowFTFSR+R9sygsrahz7GyM1mX26IrSDqfKIZsEfN5856IrbD9SsVJrCPpsG8YpgsKpSl4/afFH423qLveFUYGt7v623Be2ZEc1myV4Qx4hnX/rngBxBzfqH1K2rTdOiY4KqSiARKra++v2LsWAZd98jjBDBv/IEv5Cw0m28X7yzRupl5YGSJdupZoQd24AnEYx3NsRckB56D8i+PmC0pGdhqq1LWJ581/GgGE0FQX59m/+8B3w3V/77zKmvWFxzKdJphq9w3wIjkUvrqdLiCHjj2YJnfyIVtTWukQOeLTo6Kws5u9eWEzCnf3SZqoYn+Mlto/0aNU+cJp+xiAnUDxXRi1jAWOpSqQEvr6hp1KXy3Ss75yUipv1mocEmxr+fxTkEAMlJUke4iZk7NC/Crm9hJC0XjyUDXGrGKYn9bGOEzXDtQIc22kHH5wFJo7MQoW2xovFhZjLiGo2JZG2EX8oe5szTJplU6gVzez5rcUg/Ybz472qXLVDY3xZgrPc+Xl62bJCFA0Ir92yLJ/K1W/cIuMZXRDOA9iTq7czf+tkPHsYgnJ4DKfUNCBnEc3H7kwJyefW9RIIqghW6uTVU2izRJM/23mEIMNjTrQiBiXbg5uweStn0TLTEMbXBv3CX8y3czxs43owoHdvOY/oRzmGbTDzL5RIobFerYScT7uvcjvrnoSwcuYQeaqcMLVU0Onq0aM8MNf
  properties :
   width : 800
   height : 798
@@ -32,7 +32,7 @@ window :
      p_codes :
       -
         code : |1+
-         oCmtr est un ClDbRetro_Commentaire
+         oCmtr est un ClDbRetro_Commentaire(ClZF_ObjDbLs.cstModeCreation)
          //nLigneTypeCom est un entier
          bRetrospectiveValide est un booléen = vrai
          
@@ -799,10 +799,10 @@ window :
       
       nLigne est un entier 
       
-      sdRechercheCommentaire est une source de Données
-      oCmtrRetro est un ClDbRetro_Commentaire
-      oCmtrRetro_Type est un ClDbRetro_Commentaire_Type
-      sReq est une chaîne
+      sdRechercheCommentaire	est une source de Données
+      oCmtrRetro				est un ClDbRetro_Commentaire dynamique
+      oCmtrRetro_Type			est un ClDbRetro_Commentaire_Type dynamique
+      sReq					est une chaîne
       
       
       TBL_Retrospective..AffichageActif = Faux
@@ -836,7 +836,7 @@ window :
       	si pas sdRechercheCommentaire.IDScr_Retro_Commentaire..null alors
       		oCmtrRetro <- ClDbRetro_Commentaire.GetObj(sdRechercheCommentaire.IDScr_Retro_Commentaire)
       	sinon
-      		oCmtrRetro = allouer un  ClDbRetro_Commentaire()
+      		oCmtrRetro = allouer un  ClDbRetro_Commentaire(ClZF_ObjDbLs.cstModeCreation)
       	fin
       	
       	oCmtrRetro_Type <- ClDbRetro_Commentaire_Type.GetObj(sdRechercheCommentaire.IDScr_Retro_Commentaire_Type)

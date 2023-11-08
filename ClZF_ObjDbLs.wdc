@@ -34,7 +34,8 @@ class :
       fin
       
       constante
-      	cstModeSansChargement = -1
+      	cstModeSansChargement	= -1
+      	cstModeCreation			= 0
       fin
       
       
@@ -45,11 +46,10 @@ class :
   procedures :
    -
      name : Constructeur
-     internal_properties : BwAAAAcAAADJbtEp024PvN9xR9QyumvMQkb030H7agnErOTAMGf/ZAUIZa8HHHbRSXu4HIDADaNDz1sZQnujYD2xYwbt4MRj/vv29kIut7BvC8DUFnFwsdUDNaxnu9No4r+7Ywd3rgkWwnFFAbc2qvAgK71rO+aY6XjRQd0yT9vehUiNMw+5/cU9dnqG2YPz/igcR7mtxbO8Ewf/qj0IteEqjwFdZnjqzjy8GBF7bm3TE27niYxZxX571JaXxzgurGCFFhqu84PxiYy5cumQVPrU/jxTsn1YqMMHStjAcLIwS34YWBtQvaa3Ue14w519zgXWVkcOc4LpvCDandvoY+/5IL4EtFgP9C5F33ELTZlQ1fIhYm7JjsojKQmZQkh3KjttFhwOjodkRTiwRcIrUIt1SmFaMGG+FAAX0JkMrsVHJ/GxyPh0Qj7gcEw7qwHK4XhvtJyvtrFUogxVIecmd8iiYsH38hghdalJBOYiXX4VsKT2CY9b+pDss1hN9lYUK31lhGxDa4NpDnU+G3Rds8/ASA==
      procedure_id : 1438107401790463785
      type_code : 27
      code : |1+
-      procédure Constructeur(sNomTable_P est une chaîne , sNomColIdAuto_P est une chaîne , nId_P est un entier = 0)
+      procédure Constructeur(sNomTable_P est une chaîne , sNomColIdAuto_P est une chaîne , nId_P est un entier)
       
       sRefObj est une chaîne
       bMemoRef est un booléen
@@ -107,6 +107,7 @@ class :
       procédure Destructeur()
       
       
+      
       oCol_Tmp est un ClZF_ColObjDB dynamique
       pour tout element oCol_Tmp de :m_ZF_aListCol
       	liberer oCol_Tmp
@@ -114,7 +115,15 @@ class :
       
       si :m_ZF_nIdUnique <> 0 ALORS
       	sCle est une chaîne = ::ZF_sCleOdb(Objet..Classe, :m_ZF_nIdUnique)
-      	TableauSupprime(ClZF_App.mg_aoInstances, sCle)
+      	si ClZF_App.mg_aoInstances[sCle]..vide ALORS
+      		trace("Objet libéré, non référencé : " + sCle)
+      	sinon
+      		TableauSupprime(ClZF_App.mg_aoInstances, sCle)
+      		
+      		si pas :ZF_bVerifPointeur() ALORS
+      			Trace("Problème de référence d'objet : " + sCle)
+      		FIN
+      	FIN
       FIN
      type : 655360
    -
@@ -166,7 +175,7 @@ class :
      name : ZF_Charge_source
      procedure_id : 1438109536438924292
      type_code : 12
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //ZF_Charge_source (<sdSource_p> est source de données)
@@ -190,11 +199,11 @@ class :
       
       FichierVersMémoire(objet, :m_ZF_sNomTable)
       
-      
       //Chargement des objets enfants
       ZF_GetObjectsFromIds()
-      Init_ObjBD()
       
+      //Init de l'objet
+      Init_ObjBD()
      type : 458752
    -
      name : ZF_Get_IdUnique
@@ -231,6 +240,7 @@ class :
       // Paramètres :
       //	sClasse_P (chaîne ANSI) : <indiquez ici le rôle de sClasse_P>
       //	nIdUnique_P (entier) : <indiquez ici le rôle de nIdUnique_P>
+      
       // Valeur de retour :
       // 	ClZF_ObjDbLs : <indiquez ici le rôle de la valeur de retour>
       //
@@ -238,7 +248,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       // 	sdSource_P (source de données - valeur par défaut=0) : <indiquez ici le rôle de sdSource_P>
-      PROCEDURE globale ZF_GetObj(sClasse_P est une chaîne, nIdUnique_P est un entier)<métier>:ClZF_ObjDBls
+      PROCEDURE globale ZF_GetObj(sClasse_P est une chaîne, local nIdUnique_P est un entier)<métier>:ClZF_ObjDBls
       
       bObjEnCache est un booléen
       sCle est une chaîne
@@ -353,11 +363,8 @@ class :
       //
       procédure ZR_Clone()<métier>:objet ClZF_ObjDbLs
       
-      //nMemoID est un entier = :m_ZF_nIdUnique
-      //:m_ZF_nIdUnique = 0
-      oMoiMeme est un ClZF_ObjDbLs dynamique = objet
-      //oMoiMeme est un ClZF_ObjDbLs <- clone(objet)
-      //:m_ZF_nIdUnique = nMemoID
+      oMoiMeme est un ClZF_ObjDbLs dynamique <- goApp.CreeObj(objet..classe,ClZF_ObjDbLs.cstModeSansChargement)
+      oMoiMeme <= objet
       
       //Resynchronisation du pointeur (on effectue une copie maitrisée)
       :ZF_SyncPointeur()

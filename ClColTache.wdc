@@ -305,7 +305,7 @@ class :
       si oColTachesRetour.ZF_bEstExpire() ou bForceCharge_p alors
       
       	oColTachesRetour.ZF_vider()
-      	//trace("US : " + :Get_IdUnique())
+      
       	sReq = [
       		SELECT 
       			Scr_Tache.*

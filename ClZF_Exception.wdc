@@ -107,8 +107,8 @@ class :
       FIN
       
       selon :m_nLog
-      	CAS cstInfoLogSans
-      		//Rien a faire
+      //	CAS cstInfoLogSans
+      //		//Rien a faire
       	CAS cstInfoDebug
       		SI EnModeTest() ALORS trace(sMsg)
       	CAS cstInfoLogAssert

@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_User_Story_Liste_v2
  identifier : 0x2eab24de8b86e2ef
- internal_properties : BwAAAAcAAABp5U9oeNNWqVIgactgllfna0qsMuB6bpUBmQppxtC1yE0f1A+NfdPk0bCOOIFuTOhRlTF4Zuy9rBUj2bHFRntCa5HgYPi7NYC1ba32mBRFU6GoiXqsZy9hI31C+fTmP9RKLJexwJ2jX55e4Bil/unXXgSBtXHYWT03XjKN54whjxtm4y8bbtqXrulG8+Vb8sCb/xzzuiSkMs6o6JuEqebfHAkA8i7E/LXAWldzR6gD7kLteQVLJVHpGlU8JbDSkTIOmyR8KpQhMAzVZz8+JvXg+tV0xSfkPcG5gXeMBCu7xOyzjWZ/wmV2wh1LZSaXm6AgS4jr5ID9pXoZotPBBuMa+lxmMRkix1DSPBkhG5VM/Aw83OBg6YQ08NuLlEzWR0Enuoz1mp+fYr62VUsvQkjEwKrVuP+TTRaNgO5bX3+1QbEOo9W/cf26jIpshCSpvWagmSHRbLhdIia4HOZnaVB4HlMrsck4S0n7suwru4fKcwc3RFXOOiGJIMBQCL2kmTyCBuBVN1l7QQ3Fy3/rVC3Lc2jFAIpZL9LtH488Qv620jlz5hBEZuhBO0rGtjMfwRv4EvJGGuuYGOzTS5FdUww5xOZa6WUmFgFpQYOnOrnBqi5UrODCdAzgxNrqmGj5PcHXgb5Q06phmB3XTuHf1v66fXseEuxmhvK0bjmebFT+7CjIBIRd6KR+uqHuXtD6nNxEfWik9PAKmhOyZk5GLQxGOjY+5JDMFE5Dwm9E78d04mTw
+ internal_properties : BwAAAAcAAAAWZ5Ebnied2KLVJdpqKJpv/kjnE8bdC6XUZq1KbAJ7cR5Zj4gApxrONTNJ8hD99/KzXvAzkHMFLfZITlYwhG4Ja1YlKZ8rTbMQStDcVekDyYp/T2Z2wiFUoBdH+pQ7jd8C4Il9BP2LbIPn6OkVRZv4lu99OhdFolYTHNO7zRpSMRGBd2qY4Rk8OmGSErLoxgukzqpB+XDcRtoYpQjwn4RbYyso3tFVVEzFl5w3aWXvBtqn+qitBFXxSEjetEU5kfG5KbeH+zXEF6J792duo+BsCEL6IzZFP294nodLfnhO33dlRr1jr6iZR+dU3zmqh+0NhDDj9NfbgnK2aKKBr1+I4QANTaYuqIJUi8CJVjnG2jKU7hdRk0QJ1suXMpTncOAVSLPcn3xMzyYzZAFMA4tCUdHpcCHje/yipi9RDfkJh8Oih2yhPm7R/zYVeYkw00atVYy/E7YaFfy7Dv3djkV1FwrKU+LKWHtgZlxNNktVRYvrhKd9UXd0gjFlruWw9Nxt16HOuvvt8eynwB76f74anaRmv6aIgIZyXEchIMhxkeNnUZuQX+r/5wLQg17lTyn4c0bfQ+VLdZeAFNFwU6d4wSkEEueHuwraQ9yfxsdo8pNl5QXZzxcb8dLfHmWUykVr+aVQKD6T+Ud9ba03ubpo3xx/+lUxYaDGCGDVtdkiPwwHFJfFFmZht2bg3D+B6HwrNoZVuaWXRxhEMnUEXSLCHg1UH59PIOSmLJ9krl0v/RA=
  properties :
   width : 1124
   height : 580
@@ -507,7 +507,7 @@ window :
         type : 14
       -
         code : |1-
-         oNewUS est un ClDbUserStory
+         oNewUS est un ClDbUserStory(ClZF_ObjDbLs.cstModeCreation)
          oNewUS.p_oProjetParent = zoProjet_p
          si Ouvre(FEN_User_Story_Detail_v2,oNewUS) alors
          	ListeUserStories()

@@ -58,7 +58,7 @@ class :
      procedure_id : 816128144559058
      type_code : 27
      code : |1+
-      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier)
       Ancêtre.Constructeur(Scr_Usr_Trello..Nom, Scr_Usr_Trello.IDScr_Usr_Trello..Nom,nID_P)
       
      type : 589824
@@ -93,7 +93,7 @@ class :
       
       
       sinon
-      	:m_oIDScr_Usr = allouer un ClDbUsr()
+      	:m_oIDScr_Usr = allouer un ClDbUsr(ClZF_ObjDbLs.cstModeCreation)
       FIN
       
      type : 458752

@@ -190,6 +190,9 @@ class :
       			si :m_ZF_bModif alors
       				SI PAS HModifie(:p_sNomTable) ALORS
       					mg_oExEchecEnregistrement.ZF_Declenche()
+      				sinon
+      					oObjDb est un ClZF_ObjDB dynamique <- ClZF_App.mg_aoInstances[:ZF_sGetNomInstance()]
+      					oObjDb.ZF_Transfere(objet)
       				FIN
       			FIN
       		FIN
@@ -337,6 +340,7 @@ class :
      type_code : 12
      code : |1-
       procédure protegé ZF_EstModif()<métier>:Vide
+      //trace(dbgInfo(dbgPile))
       :m_ZF_bModif = vrai
      type : 458752
    -
@@ -546,6 +550,99 @@ class :
       //
       procédure protégée pre_enregistre_data()
       
+     type : 458752
+   -
+     name : ZF_Deserialise
+     procedure_id : 1534569369657787512
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Deserialise (<sJson> est chaîne)
+      //
+      // Paramètres :
+      //	sJson (chaîne ANSI) : <indiquez ici le rôle de sJson>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_Deserialise(sJson est une chaîne) <métier>:vide
+      
+      DefObj est une Définition = RécupèreDéfinition(objet)
+      Var est une Description de Variable  
+      
+      soit InfoObj = JSONVersVariant(sJson)
+      
+      // Liste des variables de l'objet Def
+      POUR TOUT Var DE DefObj.Variable  
+      	quand exception dans
+      		si pas Var.Global alors
+      			si Var.Définition.Type <> wlInstance alors
+      				{":" + Var.Nom, indVariable} = InfoObj[Var.Nom]
+      			sinon
+      				soit objEnf = InfoObj[Var.Nom]
+      				{":" + Var.Nom, indVariable} <- ClZF_ObjDbLs.ZF_GetObj(Var.Définition.Nom, objEnf.m_ZF_nIdUnique)
+      			fin
+      		fin
+      	faire
+      		trace("Lecture impossible de : " + Var.Nom)
+      		Trace (Var.Nom, Var.Définition.Type, Var.Définition.Nom)
+      	fin
+      FIN
+      
+     type : 458752
+   -
+     name : ZF_Transfere
+     procedure_id : 1534582057087195032
+     type_code : 12
+     code : |1-
+      PROCÉDURE ZF_Transfere(oObjRef est un ClZF_ObjDb) <métier>:vide
+      
+      
+      si oObjRef..classe <> objet..classe alors
+      	ExceptionDéclenche(1,"Transfert impossible : les objets ne sont pas du même type")
+      FIN
+      
+      SI &oObjRef = &objet ALORS
+      	ExceptionDéclenche(1,"Transfert impossible : les objets ont la même référence")
+      FIN
+      
+      sJSON est une chaîne
+      
+      //// Sérialisation de l'élément
+      //Sérialise(oObjRef, sJSON, psdJSON)
+      
+      
+      
+      //DefObj	est une Définition	= RécupèreDéfinition(objet)
+      //Var		est une Description de Variable  
+      //
+      //soit InfoObj = JSONVersVariant(sJSON)
+      //
+      //// Liste des variables de l'objet Def
+      //POUR TOUT Var DE DefObj.Variable  
+      //	QUAND EXCEPTION DANS
+      //		SI PAS Var.Global ALORS
+      //			SI Var.Définition.Type <> wlInstance ALORS
+      //				{":" + Var.Nom, indVariable} = InfoObj[Var.Nom]
+      //			SINON
+      //				soit objEnf = InfoObj[Var.Nom]
+      //				{":" + Var.Nom, indVariable} <- ClZF_ObjDbLs.ZF_GetObj(Var.Définition.Nom, objEnf.m_ZF_nIdUnique)
+      //			FIN
+      //		FIN
+      //	FAIRE
+      //		Trace("Lecture impossible de : " + Var.Nom)
+      //		Trace (Var.Nom, Var.Définition.Type, Var.Définition.Nom)
+      //	FIN
+      //FIN
+      //
+      //
+      //
+      //
+      //
+      //objet.ZF_Deserialise(sJSON)
      type : 458752
   properties :
    -

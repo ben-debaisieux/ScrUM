@@ -43,14 +43,10 @@ class :
       	m_oEpic									est un ClDbEpic dynamique
       	m_oEnvironnement_Test					est un ClDbEnvironnement dynamique
       	
-      //	m_oTaches								est un ClColTaches
-      //	m_oaoCriteres							est un ClColCritereAccept
-      //	m_oColDocs								est un ClColUserStory_Doc
-      	
       	m_bMemoEstFini							est un booléen			//Permet de mémoriser si lors du chargement en base, l'US était déjà finie.
       	
-      	m_bEtatInitialise						est un booléen
-      	m_eEtatUserStorie						est un ECompteNbUS
+      	m_bEtatInitialise						est un booléen		<Sérialise=faux>
+      	m_eEtatUserStorie						est un ECompteNbUS	<Sérialise=faux>
       	m_nNbreTacheAfaire						est un entier	= 0
       	m_nNbreTacheEnCours						est un entier	= 0
       	m_nNbreTacheAnnulee						est un entier	= 0
@@ -107,22 +103,22 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Constructeur ( [<nID_P> est entier])
+      //Constructeur (<nID_P> est entier)
       //
       // Paramètres :
-      //	nID_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nID_P>
+      //	nID_P (entier) : <indiquez ici le rôle de nID_P>
       // Valeur de retour :
       // 	Aucune
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE Constructeur(LOCAL nID_P est un entier = 0)
+      PROCEDURE Constructeur(LOCAL nID_P est un entier)
       
       //Déclaration du constructeur de la classe d'accès aux données.
       ClZF_ObjDB.Constructeur(Scr_UserStory..Nom, Scr_UserStory.IDScr_UserStory..Nom, nID_P)
       
-      :ZF_DefTimeOut(10, vrai)
+      //:ZF_DefTimeOut(10, vrai)
      type : 589824
    -
      name : Destructeur
@@ -491,7 +487,7 @@ class :
      procedure_id : 1445047014239100299
      type_code : 12
      code : |1+
-      // Résumé : Met à jout l'etat d'avancement d'une User Story
+      // Résumé : Met à jour l’état d'avancement d'une User Story
       // Syntaxe :
       //User_Story_Etat ()
       //
@@ -507,11 +503,11 @@ class :
       PROCEDURE User_Story_Etat()<métier>:vide
       
       
-      :m_eEtatUserStorie = ECompteNbUS.A_faire	//De base l'US est non commencée
-      :p_bTermine = faux
-      
       oTache est un ClDbTache dynamique
+      bEstTermine est un booléen
       
+      
+      :m_eEtatUserStorie = ECompteNbUS.A_faire	//De base l'US est non commencée
       
       :m_nNbreTacheAfaire					= 0
       :m_nNbreTacheEnCours				= 0
@@ -519,6 +515,7 @@ class :
       :m_nNbreTacheTerminee				= 0
       :m_bPresenceTacheFiniesNonVaidées	= faux
       :m_bPresenceTacheBloquee			= faux
+      
       
       //Définition de l'etat de l'us (finie, commencée, pas commencée, annulée)
       pour tout element oTache de ClColTache.aoFromUS(objet).aItems()	//:aoListeTaches().aItems()
@@ -553,7 +550,6 @@ class :
       FIN
       
       
-      :p_bTermine = Faux
       
       si :m_bAnnule alors
       	:m_eEtatUserStorie = ECompteNbUS.Annulée
@@ -575,12 +571,12 @@ class :
       			//Mais Si le nbr de tache annule = le nbr de tache de l'US alors US -> annulée
       			SI :m_nNbreTacheAnnulee > 0 ET :m_nNbreTacheAnnulee = oColTaches.ZF_nTaille() ALORS
       				:m_eEtatUserStorie = ECompteNbUS.Annulée
-      				:p_bTermine = Vrai
+      				bEstTermine = Vrai
       			SINON
       				//Si elle a été testé, alors elle est finie
       				SI :m_bEstTestéParLeDemandeur ALORS
       					:m_eEtatUserStorie = ECompteNbUS.Terminee
-      					:p_bTermine = Vrai
+      					bEstTermine = Vrai
       				SINON
       					SI pas :m_bEstTestéParEquipeDev ALORS
       						//Il n'y a pas encore eu les tests unitaires
@@ -600,48 +596,7 @@ class :
       fin
       
       
-      
-      
-      ////Calul du retard pour l'US ayant de la charge.
-      //SI :m_nNbreTacheAfaire > 0 et :m_eEtatUserStorie DANS (ECompteNbUS.A_faire, ECompteNbUS.EnCours) ALORS
-      //	
-      //	pour tout element oTache de :aoListeTaches().aItems()
-      //		
-      //
-      //		SI oTache.p_nNum_Sprint_Demarrage <> 0 ALORS
-      //			//Si le sprint de réalisation de la tache est inferieur au sprint de démarage alors US -> en retard
-      //			SI oTache.p_nNum_Sprint_Demarrage > oTache.p_nNum_Sprint_Realisation ALORS
-      //				:m_nRetard = ::cstUsRetard
-      //				//calcul du nombre de sprint de retard
-      //				:m_nNbrSprintRetard = oTache.p_nNum_Sprint_Demarrage - oTache.p_nNum_Sprint_Realisation
-      //			SINON //Sinon si la tache sprintDemarage = sprintReal on ne fait rien
-      //				// Sinon on compte la tache comme en avance
-      //				SI oTache.p_nNum_Sprint_Demarrage < oTache.p_nNum_Sprint_Realisation ET oTache.p_nNum_Sprint_Realisation <> 0  ALORS
-      //					nNbrAvance ++
-      //					:m_nNbrSprintRetard = oTache.p_nNum_Sprint_Realisation - oTache.p_nNum_Sprint_Demarrage
-      //				FIN
-      //			FIN
-      //		SINON
-      //			si pas oTache.p_bAnnule alors
-      //				SI oTache.p_nNum_Sprint_Realisation < oTache.p_nNum_Sprint_Demarrage ALORS
-      //					:m_nRetard = ::cstUsRetard
-      //				fin
-      //				SI oTache.p_nNum_Sprint_Realisation > oTache.p_nNum_Sprint_Demarrage ALORS
-      //					:m_nRetard = ::cstUsEnAvance
-      //				FIN
-      //				//calcul du nb de sprint de retard / avance
-      //				:m_nNbrSprintRetard = goApp.m_nNumeroDuSprintActuel - oTache.p_nNum_Sprint_Realisation
-      //			FIN
-      //		FIN
-      //	FIN
-      //FIN
-      
-      
-      
-      ////Si toute les taches sont en avance alors US->En avance
-      //SI nCompteur = TableauOccurrence(:aoListeTaches()) et nNbrAvance = TableauOccurrence(:aoListeTaches()) alors
-      //	:m_nRetard = cstUsEnAvance
-      //FIN
+      :p_bTermine = bEstTermine
       
       :m_bEtatInitialise = vrai
       
@@ -932,7 +887,7 @@ class :
       nNbreUsFinies est un entier
       
       
-      stop si m_sCodeUserStory = "CLD043"
+      //stop si m_sCodeUserStory = "CLD043"
       
       :User_Story_Etat()
       
@@ -1467,9 +1422,9 @@ class :
         code : |1-
          procédure publique p_bEstTestéParEquipeDev(bValeur est un booléen)<métier>:Vide
          
-         SI :m_sCodeUserStory = "CLD043" /*et sValeur = ""*/ ALORS
-         	STOP
-         FIN
+         //SI :m_sCodeUserStory = "CLD043" /*et sValeur = ""*/ ALORS
+         //	STOP
+         //FIN
          
          
          si :m_bEstTestéParEquipeDev <> bValeur alors

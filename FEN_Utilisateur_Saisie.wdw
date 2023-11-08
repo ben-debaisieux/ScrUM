@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_Utilisateur_Saisie
  identifier : 0x2ca49588011b1b73
- internal_properties : BwAAAAcAAACOYcpF6i4kEJPxMfAG8EZ2+FiFvKYYT4q5DTBss9p8gIdGGvfUpnmZCSkF5YMf1DfvQLe+XeKgwXjmfYElaWTwemJJrfwbflGblJW1wGLNZG/nkInX5nld7qrDeuwGeYYoGQuOBIw+fonrUBAC5d/FZCguUnMp/qPkRHx115+97394MBlFTuVkhq4Bgnl9JqIsJ8mWhbdLEsWhYJicnZ0Fo5Mx2kbxmUI1Z+DaQTOYY313qjYtGfN+XvUOXNmXhq2O9kH+A+8Mi3mOSn8qtIR4uG1KrUw2oT1R4o70hL9dbWgBuVLN66zMNd+mYC3efk48W94OEVxZx1ESTpreMVtg3O/ulTWce0y4iQ7rG8JA26wLKbok8Z1qbVpuD4m4STtpMcUCqqLWW5yzJF3w9Vk4pekhRl/NocQAhHV/U42lX81QpbyRBjKPWdxzZetWBTC5kyIt6XjUL8K1wIKUx9pEWvXPSL+Micyf5dvctcSS3Bp+L2a0Wpqx/eSK5yax/Z+eJmksz8N3VJ2PMpwITAH1trgnnUYoSS4rp4bDGEEdkfX/QFu61XuWVrkHyovUbk67W4uW02WmqLjhdmnkd9Mw8PLlDdD3Ib6uVWvFvM3ZHROoQ7eTXfW+JXXuYKzNkeWMQz5WzQftFfLp+Nblkr8vZ+gw/Sw76xoyFE+y+9IKAUON0jHWGoNA4pXNGTyytwWT2QJz/R3g7jsbuckvYAObig==
+ internal_properties : BwAAAAcAAACwgXH7Je3rVa2c7BvDDcImkdLJSZe8QU65DPmAZxDwOq10kZISJ2LBHQ3OXHbKQlE/UxGgMUXKCL7oWO+O06xO8eV54ZknrU//hjKHGKafQ7sOFssO6eaGLqX82G5ecYTw9i7Ne/poItXLosCKTsXheYsqel9srmlHbcqep4hCPDGi1be5nBwOANO2ipkje2Qg4gs6CoiJ9oIfBiLKVrZkrAFIhTTNnHLJKlijhunGz3nRbbJpWuqDJbJx2M2A3OePhFfjvrEEzzQMxAtSV7pQr26PH4ICEPdYaQqmCZ4rka7V6W1gq8MobNrcVcbUJ6WywpI4c85T8FcLKtQigSwxkfvth19a3PbHhCC1krQF2f0XeI5rYk7IG1L4J7cL0FC2v5q5ZoQ1qCjT4q+Oh5WOOsRxnJFQmYFmPD/tMkyCAW+kM4tKKdTfWkmdj/FLf3uWoPcDvfwvsMWpHP3AENZ9ruKrhWe0UtPmRXH6sAVpPQgAJTuihVW/If6g8DzvSuG8TFlqkPiub9BEL0nwc2BD1jk4+747hY0PdPtpvQb8ffAoXGANhcPsL55mR9hIFhzZX4Som8AW4f5ZEcAj58BGCvD/ZIPsoCqHBI4cLksqrJYEAtpbX4KKUnb5S7MwWZDKaELOx3YTHaLbhp6z1k/yt+ujnc6movioUKfqyQQNp214p5NNkko/PQMRVYxkIoj2eq+izJgLUqOSA0XRHac=
  properties :
   width : 390
   height : 192
@@ -206,7 +206,7 @@ window :
       
       zoUsr est un ClDbUsr dynamique
       si zoUsr_p = null ALORS
-      	zoUsr = allouer un ClDbUsr()
+      	zoUsr = allouer un ClDbUsr(ClZF_ObjDbLs.cstModeCreation)
       sinon
       	zoUsr <-zoUsr_p
       FIN

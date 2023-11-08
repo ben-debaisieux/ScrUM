@@ -71,10 +71,10 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Constructeur ( [<nID_P> est entier])
+      //Constructeur (<nID_P> est entier)
       //
       // Paramètres :
-      //	nID_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nID_P>
+      //	nID_P (entier) : <indiquez ici le rôle de nID_P>
       // Valeur de retour :
       // 	Aucune
       //
@@ -82,7 +82,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	oUserStory (ClUserStory) : <indiquez ici le rôle de oUserStory>
-      PROCEDURE Constructeur(local nID_P est un entier = 0)
+      PROCEDURE Constructeur(local nID_P est un entier)
       
       ancetre.constructeur(Scr_CritereAccept..nom,Scr_CritereAccept.IDScr_CritereAccept..nom,nID_P)
      type : 589824
@@ -139,7 +139,7 @@ class :
       
       sRésultat est une chaîne
       aoCritCompo est un ClColCritereAccept_Composant
-      aCompo est un tableau de ClDbCritereAccept_Composant
+      aCompo est un tableau de ClDbCritereAccept_Composant dynamique
       
       aoCritCompo <- :aoChargeComposants(ClDbCritereAccept_Composant.cst_AuMomentDe)
       si aoCritCompo.ZF_nTaille() > 0 ALORS
@@ -310,7 +310,7 @@ class :
       PROCEDURE AjouteComposant(nType_p est un entier , sDescription_P est une chaîne):Vide
       
       
-      oComposant est un ClDbCritereAccept_Composant()
+      oComposant est un ClDbCritereAccept_Composant(ClZF_ObjDbLs.cstModeCreation)
       oComposant.p_oIDScr_CritereAccept					= objet
       oComposant.p_sDescription							= sDescription_P
       oComposant.p_oIDScr_CritereAccept_Composant_Type	= ClDbCritereAccept_Composant_Type.GetObj(nType_p)

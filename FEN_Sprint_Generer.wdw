@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_Sprint_Generer
  identifier : 0x2ce277d903fdcc86
- internal_properties : BwAAAAcAAAABB7Wuul+upEbDDXNxX3ssihzBFEwr4rqxKT2i5hLngn3tXVirBoYDIP0DXrjTtuVUwJOIV/aximj35ELUCS6vVHtYySQUsvQWAvHy1+T1vxvTo58yY9P2WSvT3K9+jx7Ql9oqEFLT5eBEqxa1god9knhpX3gohiHyylB2KctIjySa64Egt0KKO30uPeuu6zAx/9WSK1Px6NYUMLXQ8KVtPWHIUY107BzAiams0m3px2RTTElRhssxoKv2apysEFuX4598XQxRdr9gZOkiYBfc4oaxq3XLIvUjFcb+5/F7JRB7amscyxthy7lZ5+bcjZhVvX5pWjSBCdvjQNGVulmPrk5S2Ul0Qgu3Y7Y8O0cgC/Y4BTl8QOcRkqjrmfwWDNUKlgkJ56HJi8318RKp6UwX6iIuQofmIDvuxHU81S3QEdj+lwxF3aG22g48ezdEvd0vOjW4eUuhakquLCQb2layTM/34jwIeZ308LNszxQHt2NLgN5rTMLuekrJpJBAMamzux4UCbSsuKnhjsN8L0JduY7ENYyYNTc33+Z879pFKEhr5iP6iHJqTnZyapnlXVwQykOmue01v9H+DKnfc6+ikTPosI2NxcUO0JmIT/NRtvUVCdL9XgK8Dy7PSORIZwA3JRJJDs2D2zFflLk0t6Kxq5DuO4sGaBhyjCOzm/dFLwftbuHR5alJJw==
+ internal_properties : BwAAAAcAAAAMJZPqqtAJ6Y5dsItJu8boNyQ3CEYAcXZWaQTJ0ZOiil4tshXHmjRGyqxPkdPOIiadOIh0KMvKrdNbv+T42KisDlvFFsy4tIc8tvmsnK4JHJZKcn+5miYWiWGHkQeFVQD+59V1Ooj22MypxS8yCLBkJS8f3fsljwNH+W5OY0bwndZNy5fBiExhFO0ozQ1CjZ0aQ/OypxC9zG1NAozSk54koPKY5wlnqAFvL6CdqarpTdGGWdzceIbY+ZhEQOEAxi8ydCi9QqK3i9Jedf3AI7JhKr3naZ8HD+wyZYua0zFn4byD1w8jWuXAYLAr6ZUq1snEeqCC/k1fCGDzXc2EelhP5TmCefOD37VDhqxXMu6I18jR9eZ2NeR7NGVpvmXvvssKHUmYKWig99NSG3nUHHD7LFNKA+UhD/F6W8tF8s642171x73jVu4IRGFAiEitZ8nzl5sD9z5wfFYz4tHEuxYw7IDN/WTfgG2y11khWOGfqxOiVtmZdf9GmuUlU7ORo74QFH9EmwgYIUAHjA8oRkZ7IXhKx73TW+nO33/kKXLbuK7s/IffxL5Le7p5OY23/RyeyCf9ZPNWrCDfaBSt/TVvOi8apd8enPR1ExWxzMe9aqPeM7m7auyv2eExN4++ja/Eue8GaeQ+hoZj5/x5ZWtvPO/OapjwIG5scWOi0XhdGD9b2jIv4QUE
  properties :
   width : 529
   height : 317
@@ -147,7 +147,7 @@ window :
          nInd	est un entier
          
          Pour nInd = 1 _a_ TableOccurrence(TBL_Visualisation_Sprint)
-         	oSprint <- allouer un ClDbSprint()
+         	oSprint <- allouer un ClDbSprint(ClZF_ObjDbLs.cstModeCreation)
          	oSprint.SetNumSprint(TBL_Visualisation_Sprint[nInd].COL_Num)
          	oSprint.p_dDateDebut	= TBL_Visualisation_Sprint[nInd].COL_Date_de_début
          	oSprint.p_dDateFin		= TBL_Visualisation_Sprint[nInd].COL_Date_de_fin

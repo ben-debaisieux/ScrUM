@@ -69,10 +69,10 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Constructeur ( [<nID_P> est entier])
+      //Constructeur (<nID_P> est entier)
       //
       // Paramètres :
-      //	nID_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nId_P>
+      //	nID_P (entier) : <indiquez ici le rôle de nId_P>
       // Valeur de retour :
       // 	Aucune
       //
@@ -83,7 +83,7 @@ class :
       
       
       // 	sdSource_P (source de données - valeur par défaut=0) : <indiquez ici le rôle de sdSource_P>
-      PROCEDURE Constructeur(LOCAL nID_P est un entier = 0)
+      PROCEDURE Constructeur(LOCAL nID_P est un entier)
       
       Ancêtre.Constructeur(Scr_Usr..Nom, Scr_Usr.IDScr_Usr..Nom, nID_P)
       

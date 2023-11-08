@@ -137,12 +137,12 @@ class :
      procedure_id : 1531051112658640508
      type_code : 12
      code : |1-
-      fonction GLOBALE aoFromEpics(oColParent_p est un ClcolEpic, LOCAL bForceCharge_p est un booléen = Faux)<métier>:tableau associatif de ClColEpic_Usr
+      fonction GLOBALE aoFromEpics(oColParent_p est un ClcolEpic)<métier>:tableau associatif de ClColEpic_Usr
       
       aRetour		est un tableau associatif de ClColEpic_Usr
       sReq		est une chaîne
-      anListeIds	est un tableau d'entiers = oColParent_p.ZF_Get_Liste_IdUnique()
-      sListeIds	est une chaîne	= TableauVersChaîne(anListeIds,", ")
+      anListeIds	est un tableau d'entiers	= oColParent_p.ZF_Get_Liste_IdUnique()
+      sListeIds	est une chaîne				= TableauVersChaîne(anListeIds,", ")
       
       sReq = [
       	SELECT 

@@ -73,7 +73,7 @@ window :
         p_codes :
          -
            code : |1-
-            oItem_enf est un ClDbProjetMap()
+            oItem_enf est un ClDbProjetMap(ClZF_ObjDbLs.cstModeCreation)
             
             si zoProjet <> null ALORS
             	oItem_enf.p_oProjet = zoProjet

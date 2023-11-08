@@ -133,10 +133,10 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Constructeur ( [<nId_P> est entier])
+      //Constructeur (<nId_P> est entier)
       //
       // Paramètres :
-      //	nId_P (entier - valeur par défaut=0) : <indiquez ici le rôle de nId_P>
+      //	nId_P (entier) : <indiquez ici le rôle de nId_P>
       // Valeur de retour :
       // 	Aucune
       //
@@ -144,7 +144,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       
-      PROCEDURE Constructeur(LOCAL nId_P est un entier = 0)
+      PROCEDURE Constructeur(LOCAL nId_P est un entier)
       
       ClZF_ObjDB.constructeur(Scr_Tache..nom, Scr_Tache.IDScr_Tache..Nom, nId_P)
       

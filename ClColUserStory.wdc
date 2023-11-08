@@ -85,21 +85,17 @@ class :
       // Redéfinition de la méthode ClZF_ColObjDB.pre_load
       PROCÉDURE PROTÉGÉE pre_load(sdSource_P est une Source de Données)
       
-      //aLstUS est un tableau d'entiers
       sListePrj est une chaîne
       sCle est une chaîne
       
       HLitPremier(sdSource_P,hForwardOnly+hSansRafraîchir)
       TANTQUE PAS HEnDehors(sdSource_P)
-      //	si TableauCherche(aLstUS,tcLinéaire,sdSource_P.IDScr_Projet) = -1 ALORS
-      //		TableauAjoute(aLstUS,sdSource_P.IDScr_Projet)
-      		
-      		sCle = ClZF_ObjDB.ZF_sCleOdb("ClDbProjet", sdSource_P.IDScr_Projet)
-      		
-      		SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
-      			sListePrj += [", "] + sdSource_P.IDScr_Projet
-      		FIN
-      //	FIN
+      	sCle = ClZF_ObjDB.ZF_sCleOdb("ClDbProjet", sdSource_P.IDScr_Projet)
+      	
+      	SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
+      		sListePrj += [", "] + sdSource_P.IDScr_Projet
+      	FIN
+      	
       	HLitSuivant(sdSource_P)
       FIN
       

@@ -32,11 +32,10 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //Constructeur (<oAxeParent_P> est ClProcess_Metier_Axe [, <ID> est entier])
+      //Constructeur (<nID_P> est entier)
       //
       // Paramètres :
-      //	oAxeParent_P (ClProcess_Metier_Axe) : <indiquez ici le rôle de oAxeParent_P>
-      //	ID (entier - valeur par défaut=0) : <indiquez ici le rôle de ID>
+      //	nID_P (entier) : <indiquez ici le rôle de oAxeParent_P>
       // Valeur de retour :
       // 	Aucune
       //
@@ -46,7 +45,8 @@ class :
       
       
       
-      PROCEDURE Constructeur(LOCAL nID_P est un entier = 0)
+      //	ID (entier - valeur par défaut=0) : <indiquez ici le rôle de ID>
+      PROCEDURE Constructeur(LOCAL nID_P est un entier)
       
       Ancêtre.Constructeur(nID_P)
       

@@ -10,7 +10,7 @@ info :
 window :
  name : FI_Discussion_V2
  identifier : 0x202656d023e166f3
- internal_properties : BwAAAAcAAAAtBIEoDSRdTQHWUPLU/QMbA/5otwR/Y2nw2pWCgCw+gzKIUSpMWPtXESGgCfOtXOW6cpa5v+PYYc9Sm2zH6nrMv9T/d8EtLxidf5k1t/8m3hykaTiOuV/RkQUE+Xu1w7SKt5DpZnGwr8b6Z4/ESdOAM1AUAcyWKmPgXU8LlaD03w7dLeyYnfNK3w/BYdoFXPX4zwGVk4Rbz9qsrDpbfNKiYhUw3yfdNHgnXIf7QGwtXHWTkXePLK1ZFUmgxn4OiqlhqvcmzSReYRnUFVEv+bCBa141yk2wPBhSniOKwqmLTjBasD7l7EdknRh0gw4A1BJPfhprPASz+V4a0JNF2azsaEc0YhZKTXHlMfOx4qLLZ10dRzQuIEcH1W6fGUftQaLfDq1ny/Cg3cJJs46evuKI5xwya1zmMIIRbxEx0V1Pe1NK1O8GgDNhYKHB/yX2UH8IdQbXp7ewwnsQ1wxmQNh2euVEGfBEh8d48TN0cS1qOq0f9v+Q8GRi0OfbRzJgYRES1TZ6kkPWD30tQ+SsL3ExYi9RQf5gkapG3HrtpEkwZD2EncFRnV0tv7ydnsHMPHxONzzzzI8PYtcss+QZ7cA6mAGfw/roaTlsUmDb/d7tOruP5YBeMHdRldo0oaxmYh6RjaBiepIeLNKhvZ/maBjkQ9MyLQAONf/RyRknG68c6zx2W3/RsxjTUv3s7iVyk28UzSjP
+ internal_properties : BwAAAAcAAABKmbSYH3Bq9jVL92ETkzeIyRtLVrIDpLBKsgolb0IORtGjiCQL32ZRGlQBAben1/iYyYHL7br9GuAC8M+N+DUP7Ebo/hDhDzpxtqa5dPsygccno6GbT0YY8NT5O7IybyMtbQA3fKhQTLKrktkNG5D/x+YY/e0/NMZ/2nj7sDx5ln/2VrbfRO59MlZuDvUi4FII8309QwgULaJtc9qyZ3fINYEuSF8HNVbSN4k0voBNPVMIZ/w7AZ8tOlIP8KQu7Q+nhplkoU/H6l9brBdYNQ9+npJNVyhXz0xek0E3pvV7qkkQnrwbIBpTaHhP7ngUkLyG+HpqkNzVIw4dWeqOxSb45kdeUyIJvaeiHi6uG7ye19EHiG72Wf9eicv8IDSSizAHLbZRbdiLlt8qmIw02B/73r4TeRNRZrCoypZgF4WRaC8qW+o9I62pWRbSUS9ez0m+OMTSHbt9/2dyK1H5m25dehU3VulEEB1ZethkgsXRRCdFk/Cf+SlAjoc7WyCuZvxgp8uIpdNi2mlaERWL0e4d+LPOeTvroBJ6V9kL29jLVgEp2me+Au17gon7CW1nkdzuMs5SQoKvAH86YpkEOtaSitMfXLzTs70qR0vfK4f0b4CIYMTCkJ2CV5C2NkkJTkNi8iVvbPLEbCjpm/Tbg0oP/biu+Q/c+5b2cXWEfITpeOdYPiLr4QAxuOamjIH2ZaY=
  properties :
   width : 859
   height : 569
@@ -100,7 +100,7 @@ window :
            p_codes :
             -
               code : |1+
-               oNewMes est un ClDbMessage
+               oNewMes est un ClDbMessage(ClZF_ObjDbLs.cstModeCreation)
                oNewMes.m_oMsgparent <- ClDbMessage.GetObj(ZR_Messages_UserStory.ATT_Id_Parent)
                si Ouvre(FEN_Message_Saisie,oNewMes) ALORS
                	ZoneRepete_Message()
@@ -457,7 +457,7 @@ window :
         p_codes :
          -
            code : |1+
-            oNewMes est un ClDbMessage
+            oNewMes est un ClDbMessage(ClZF_ObjDbLs.cstModeCreation)
             
             SELON zoEntite..Classe
             	CAS "ClTache"

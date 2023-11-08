@@ -639,7 +639,7 @@ class :
       procédure prive GenConstructeur():chaîne
       
       sRetour			est une chaîne = [
-      PROCÉDURE Constructeur(LOCAL nID_P est un entier = 0)
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier)
       Ancêtre.Constructeur([%:m_oClasseGen.p_sNomTable%]..Nom, [%:m_oClasseGen.p_sNomTable%].[%:m_oClasseGen.p_sNomRubId%]..Nom,nID_P)
       
       ]
