@@ -1,0 +1,316 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbProjet_Situation
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x4a60ec2a21ed
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbProjet_Situation est une Classe
+      	hérite de ClZF_ObjRel
+      
+      PRIVÉ
+      	m_oNum_Sprint	est un ClDbSprint dynamique	<note="mapping=Num_Sprint">
+      	m_oIDScr_Projet	est un ClDbProjet dynamique	<note="mapping=IDScr_Projet">
+      	m_bTop_Prioritaire	est un Booléen	<MAPPING=Top_Prioritaire>
+      	m_sCMTR	est un chaîne	<MAPPING=CMTR>
+      
+      GLOBAL
+      PUBLIC
+      mg_oEx_CompoNonInst_Num_Sprint	est un ClZF_Exception dynamique
+      mg_oEx_CompoNonInst_IDScr_Projet	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception1	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception2	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception3	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception4	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception5	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception6	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception7	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception8	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception9	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception10	est un ClZF_Exception dynamique
+      FIN
+      
+      mg_oEx_CompoNonInst_Num_Sprint	= Allouer un ClZF_Exception("Enregistrement impossible : m_oNum_Sprint est requis.")			// A faire : Reprendre le message
+      mg_oEx_CompoNonInst_IDScr_Projet	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Projet est requis.")			// A faire : Reprendre le message
+      // mg_oEx_Exception1	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception2	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception3	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception4	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception5	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception6	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception7	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception8	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception9	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
+      
+      
+      constante
+      	cstGetCol_Projet_Situation = "Projet_Situation"
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 81780139500007
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier)
+      Ancêtre.Constructeur(Scr_Projet_Situation..Nom, Scr_Projet_Situation.IdScr_Projet_Situation..Nom,nID_P)
+      
+      :AddMembreCle(Scr_Projet_Situation.IDScr_Projet..nom)
+      :AddMembreCle(Scr_Projet_Situation.Num_Sprint..nom)
+     type : 589824
+   -
+     name : Constructeur
+     procedure_id : 81780139500007
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nIDProjet_P est un entier, local nIDSprint_P est un entier)
+      Ancêtre.Constructeur(Scr_Projet_Situation..Nom, Scr_Projet_Situation.IdScr_Projet_Situation..Nom, ClZF_ObjDbLs.cstModeSansChargement)
+      
+      
+      :AddMembreCle(Scr_Projet_Situation.IDScr_Projet..Nom)
+      :AddMembreCle(Scr_Projet_Situation.Num_Sprint..Nom)
+      
+      :p_oIDScr_Projet_ID = nIDProjet_P
+      :p_oNum_Sprint_ID = nIDSprint_P
+      
+      objet = ClZF_ObjRel.ZF_sGetNomInstanceRel()
+     type : 589825
+   -
+     name : Destructeur
+     procedure_id : 81780139500008
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 81780139500009
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbProjet_Situation
+      
+      sClasse est une chaîne = ClDbProjet_Situation
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 81780139500010
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉ init_ObjBD()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      
+     type : 458752
+   -
+     name : Pre_Enregistre
+     procedure_id : 81780139500011
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ Pre_Enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.Pre_Enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      //. . .
+      SINON
+      
+      	//
+      	SI :m_oNum_Sprint = Null ALORS
+      		mg_oEx_CompoNonInst_Num_Sprint.ZF_Declenche()
+      	FIN
+      	//
+      	SI :m_oIDScr_Projet = Null ALORS
+      		mg_oEx_CompoNonInst_IDScr_Projet.ZF_Declenche()
+      	FIN
+      
+      
+      FIN
+     type : 458752
+   -
+     name : post_enregistre
+     procedure_id : 81780139500012
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ post_enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.post_enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      // . . .
+      
+      
+      
+      FIN
+     type : 458752
+  properties :
+   -
+     name : p_oNum_Sprint
+     identifier : 0x4a60ec2a21e1
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oNum_Sprint() : ClDbSprint
+         //Propriétés de m_oNum_Sprint
+         
+         RENVOYER :m_oNum_Sprint
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oNum_Sprint(oValeur_p est un ClDbSprint dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oNum_Sprint, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oNum_Sprint = oValeur_p
+         	:setCle(Scr_Projet_Situation.Num_Sprint..Nom,oValeur_p)
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oNum_Sprint_ID
+     identifier : 0x4a60ec2a21e2
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oNum_Sprint_ID():entier
+         //Propriétés de l'objet m_oNum_Sprint, accessible via son ID
+         SI :p_oNum_Sprint = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oNum_Sprint.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oNum_Sprint_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oNum_Sprint = Null
+         SINON
+         	:p_oNum_Sprint = ClDbSprint.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Projet
+     identifier : 0x4a60ec2a21e3
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet() : ClDbProjet
+         //Propriétés de m_oIDScr_Projet
+         
+         RENVOYER :m_oIDScr_Projet
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet(oValeur_p est un ClDbProjet dynamique):Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_Projet, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_Projet = oValeur_p
+         	:setCle(Scr_Projet_Situation.IDScr_Projet..Nom,oValeur_p)
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Projet_ID
+     identifier : 0x4a60ec2a21e4
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet_ID():entier
+         //Propriétés de l'objet m_oIDScr_Projet, accessible via son ID
+         SI :p_oIDScr_Projet = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_Projet.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet_ID(nValeur_p est un entier):Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oIDScr_Projet = Null
+         SINON
+         	:p_oIDScr_Projet = ClDbProjet.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_bTop_Prioritaire
+     identifier : 0x4a60ec2a21e5
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_bTop_Prioritaire() : Booléen
+         //Propriétés de m_bTop_Prioritaire
+         
+         RENVOYER :m_bTop_Prioritaire
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_bTop_Prioritaire(bValeur_p est un Booléen):Vide
+         
+         SI :m_bTop_Prioritaire <> bValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_bTop_Prioritaire = bValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sCMTR
+     identifier : 0x4a60ec2a21e6
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_sCMTR() : chaîne
+         //Propriétés de m_sCMTR
+         
+         RENVOYER :m_sCMTR
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_sCMTR(sValeur_p est un chaîne):Vide
+         
+         SI :m_sCMTR <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sCMTR = sValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x4a60ec2a21ee
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

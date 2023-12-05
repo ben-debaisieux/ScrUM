@@ -148,7 +148,7 @@ class :
       
       ClZF_ObjDB.constructeur(Scr_Tache..nom, Scr_Tache.IDScr_Tache..Nom, nId_P)
       
-      :ZF_DefTimeOut(10, vrai)
+      :ZF_DefTimeOut(ClAppScrum.cstTimeOutProd, vrai)
      type : 589824
    -
      name : Destructeur
@@ -196,55 +196,13 @@ class :
       		:ZF_Charge(Vrai)
       		m_EnrOrigine = Scr_Tache
       		Scr_Tache = m_EnrActu
-      	sinon
-      		//En mode ajout :
-      		
-      		// Si on a pas de statu, on le calcule, en fonction des infos de la tache.
-      		si :m_nStatut = 0 ALORS
-      			:m_nStatut = :get_statut_tache()
-      			SI :m_nStatut = 0 ALORS
-      				m_oExErreurStatutTacheImpossible.ZF_Declenche([:m_nStatut])
-      			FIN
-      		FIN
       	FIN
       	
-      //	
-      //	//Enregistrement du sprint de démarrage.
-      //	si :m_nNum_Sprint_Demarrage = 0 ALORS
-      //		Scr_Tache.Num_Sprint_Demarrage..Null	= vrai
-      //	fin
-      //	
-      //	//Si on a pas de sprint prévisionnel, on s'aligne sur le sprint de démarrage.
-      //	SI :m_nNum_Sprint_Previsionnel = 0 ALORS
-      //		:m_nNum_Sprint_Previsionnel				= :m_nNum_Sprint_Realisation
-      //	FIN
-      //	
-      //	SI :m_nNum_Sprint_Previsionnel = 0 ALORS
-      //		Scr_Tache.Num_Sprint_Previsionnel..Null	= Vrai
-      //	FIN
-      //	
-      //	//Enregistrement du sprint de réalisation
-      //	SI :m_nNum_Sprint_Realisation = 0 ALORS
-      //		Scr_Tache.Num_Sprint_Realisation..Null	= Vrai
-      //	FIN
-      //	
-      //	
-      //	si m_oUserStoryParent = Null ALORS
-      //		m_oExEnregUsParentAbsente.ZF_Declenche()
-      //	FIN
-      //	
-      //	//Enregistrement du sprint de fin
-      //	SI :m_nNum_Sprint_Fin = 0 ALORS
-      //		Scr_Tache.Num_Sprint_Fin..Null			= Vrai
-      //	sinon
-      //		si pas :m_bAnnule alors
-      //			//Si on a un sprint de fin, les taches doivent êtres réalisées
-      //			si pas :m_bEstRealise ALORS
-      //				m_oExEnregSpFinSiPasRealise.ZF_Declenche()
-      //			FIN
-      //		FIN
-      //	FIN
-      	
+      	//Maj du statut
+      	:m_nStatut = :get_statut_tache()
+      	SI :m_nStatut = 0 ALORS
+      		m_oExErreurStatutTacheImpossible.ZF_Declenche([:m_nStatut])
+      	FIN
       	
       		
       	//Si l'ordre n'est pas définit, on ajoute la tache en dernier.
@@ -281,10 +239,17 @@ class :
       		FIN
       	FIN
       	
-      	SI PAS :m_nStatut DANS (::cstStatut_Suspendu) ALORS
-      		:m_nStatut = :get_statut_tache()
+      //	SI PAS :m_nStatut DANS (::cstStatut_Suspendu) ALORS
+      //		:m_nStatut = :get_statut_tache()
+      //	FIN
+      	
+      	//Enregistrement du sprint de fin
+      	SI :m_nNum_Sprint_Fin <> 0 et PAS :m_bAnnule ALORS
+      		//Si on a un sprint de fin, les taches doivent êtres réalisées
+      		SI PAS :m_bEstRealise ALORS
+      			m_oExEnregSpFinSiPasRealise.ZF_Declenche()
+      		FIN
       	FIN
-      
       	
       	////////////////////////////////////////////////
       	//Historisation de modifications
@@ -489,11 +454,9 @@ class :
       //
       PROCEDURE globale Taches_a_faire(eFiltre est un ETypeEtatTacheAFaire)<metier>:ClColTache
       
-      //sdTachesAFaire est une Source de Données
-      sReq est une chaîne
-      oTaches est un ClColTache
-      
-      sFilre est une chaîne
+      sReq	est une chaîne
+      oTaches	est un ClColTache
+      sFilre	est une chaîne
       
       selon eFiltre
       	CAS PasseEtActuelle
@@ -717,7 +680,7 @@ class :
       ]
       oColTache.ZF_LoadSQL(sReq)
       si oColTache.zf_ntaille() = 1 ALORS
-      	renvoyer oColTache.ZF_oItem(1)
+      	renvoyer oColTache.oItem(1)
       sinon
       	renvoyer null
       FIN
@@ -1040,13 +1003,10 @@ class :
       //Enregistrement du sprint de fin
       SI :m_nNum_Sprint_Fin = 0 ALORS
       	Scr_Tache.Num_Sprint_Fin..Null			= Vrai
-      SINON
-      	SI PAS :m_bAnnule ALORS
-      		//Si on a un sprint de fin, les taches doivent êtres réalisées
-      		SI PAS :m_bEstRealise ALORS
-      			m_oExEnregSpFinSiPasRealise.ZF_Declenche()
-      		FIN
-      	FIN
+      FIN
+      
+      si Scr_Tache.Statut = 0 ALORS
+      	stop
       FIN
      type : 458752
   properties :

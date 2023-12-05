@@ -10,7 +10,7 @@ info :
 window :
  name : FI_Taches_suspendues
  identifier : 0x2fa1c62d092a4fc1
- internal_properties : BwAAAAcAAACOjfigDBbXODX9tZNNJ/U2oVX2vWyxo2Z0iq12Ppv85uRGAcCY2pcAq2Sk5pm76oXfW+QWCq7n/ARnQ9eJqxlm3fqINokjI01TJuI+pWh5dnVa6wbRZal2Vb+Jn2R9pGbyOqO6N52Paz5xUBo47td0MJn1xJQLvEhygHYUrau1FLSB3h7nM8bTt3K2O7c4gJIgQjAPzNtIW40YAQmydqj3OF92AgaUMkXQ2gcuCfl/lQabLVgXDFAiI9IwuWOYeTXEHITr61zL252PtambsCkYNCGnxJJc0gkXIADwnEPIS29s5Lj81WQBSEnwhY33CJkzQ8lP3MqYxqm/w/rI/rKyk8DwFbb6LKME+huS9MFwc7ZElUavxTPgv294lKlADPGJetKbg1DmxbbxCsT06txVT0dJU7SIc5qvePgcli5TzL9icLdI0LNC4DlS5fgaR47Lq98p2KMW8GLVK0mp/ySDsg6eCAgq4SwijdcWHUvyCGOsHOi7OQDOun1m5CpZnPVkDT/AjCvi6QAwmooZK4RtFgrIL6/DCk1XDIwqRl5xwv7tcwOG9pStjxD9t5WRHAvozDMzVwubW0uq2lKFo1pbIorYPOXARKNKfu4AFFp21hx9DTp4Qq86A/RUXBRwkqyhIrjyMcWuuaERU7K7ydF0X7e002R/CXCnhtwYfECypzd7kQAnCi0ODK/6eMu2cttxjtDhuRV4e0o2uwUIY418JeBuP1LmrftLV26+28/PHhdfgUzDJw7Q6munMIjyedSP1b1qGP3c3fsJs7TVZMUGNb4qfh9RSHMun9WE5XKhYg==
+ internal_properties : BwAAAAcAAABIa0KdeHe2T/3JnJX7dt2Y6WVXqE+oxJAbVIRm/poMcNHW7RGZRJDm5ut9IUspTRFcum4k2stWirbwcKk1pPWof0Bf7PaQqF6om845NmKeaAF/UjxQSth6H9sDGN23zoYBjYA4s09xzLJhB0gy5oBNNe4j+L5jomIUJLI92aXo5kwtOFgs/NE6F7RrRh4ucBc4rRt4LNQPB7Gb64fNEluz8WUe3sxSg5P9IPG5BQxYSwNpzHv4G1HnaeChoWB1vEKpYt9Gn1B8LkT6Sb/HJC5kL+0lTGpJPyd2dtsuBuRagTRPdNkDEoPb9M73Z+RwBOxDRZ2eb14htwC2HyXjnGMAKALpLkyyqzWgVDvYy4uN8R2UEQPXeOwfzAqL81mNKq84uuf6zeRwC/8U1XIFXo8KfDfcNGdcDTaYJlMsZ5vHBDCQR6xr8BcuY/fNp3OxN7SqO8RYDU0i2pUTiMkYcvS9KUY7R8Uck7Zn6WLQCC5AYPbuZTs4CZxEUe8VGg82VsuF09JhrxOQY912jVJognKzCcaVbgCTwosMXrummw/7IMXr1CYfxEYbboIQZ1a6cNG5ThRmZPNrrRS8rWJUAoBHFSqdU/YmaoHbjpGIfVsWLG2P8lGpyG1WQP6dRl35GoBMmlvD/EfmcZLjpg7lXujIRrQJ98O80K5+wp2ZqApK8lvUxseEEISKOQNfEqysYw3oXS+bP7o787cDVfZMD9JxS8fkSOcWYWuRQzIPs6U1QpiJcBuaMZ3bJmJx+H5wzLe8qFcMnIZB5XsInfvNS76jGyMR0QzQ3Ia/Vi7yOz23
  properties :
   width : 221
   height : 235
@@ -222,7 +222,7 @@ window :
             	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_Suspendues.COL_IdTache)
             	oUs est un ClDbUserStory <- oTache.p_oUserStoryParent
             	SI oTache.p_oUserStoryParent <> Null ALORS
-            		SI Ouvre(FEN_User_Story_Detail_v2, oUs, oTache.Get_IdUnique()) ALORS
+            		SI Ouvre(FEN_User_Story_Detail_v2, oUs, oTache) ALORS
             			Actualise()
             		FIN
             	FIN
@@ -239,7 +239,8 @@ window :
         code : |1+
          PROCEDURE MaFenêtre()
       -
-        code : |1-
+        code : |1+
+         
          Actualise()
         type : 14
  menu :

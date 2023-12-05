@@ -18,7 +18,7 @@ class :
       ClColProjet est une Classe
       	hérite de ClZF_colObjDB
       prive
-      	m_aoProjets est un tableau de ClDbProjet dynamique
+      	m_aoProjets est un tableau ClDbProjet dynamique
       fin
      type : 131072
   procedures :
@@ -37,12 +37,12 @@ class :
       procédure Destructeur()
      type : 655360
    -
-     name : addItemById
+     name : addItemById_old
      procedure_id : 1399526363785230622
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById(local nId_P est un entier):Vide
+      PROCÉDURE addItemById_old(local nId_P est un entier):Vide
       :ZF_addItem(ClDbProjet.GetObj(nId_P))
      type : 458752
    -
@@ -64,12 +64,12 @@ class :
       ZF_InitCol(:m_aoProjets)
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 1422511757147425270
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
+      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données):Vide
       
       oObj est un ClDbProjet(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Projet)
@@ -321,7 +321,7 @@ class :
       	CAS ClDbUsr.ETypeUsr.usr_tous
       		
       	CAS ClDbUsr.ETypeUsr.usr_invite
-      		sComplement = "AND Scr_Usr_Projet.Top_Invite = 1" + rc
+      		sComplement = "AND Scr_Usr_Projet.Top_Chef_Projet = 0" + rc
       	CAS ClDbUsr.ETypeUsr.usr_chef_de_projet
       		sComplement = "AND Scr_Usr_Projet.Top_Chef_Projet = 1" + rc
       		
@@ -345,14 +345,71 @@ class :
       renvoyer oColRetour
      type : 458752
    -
-     name : GetAll
+     name : GetAll_old
      procedure_id : 1468674885928471753
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE public GetAll()<métier>:Vide
+      PROCÉDURE public GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Projet..nom)
      type : 458752
+   -
+     name : FiltreDirection
+     procedure_id : 1542323825876377157
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] FiltreDirection (<bEstDir_p> est booléen)
+      //
+      // Paramètres :
+      //	bEstDir_p (booléen) : <indiquez ici le rôle de bEstDir_p>
+      // Valeur de retour :
+      // 	ClColProjet : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure FiltreDirection(bEstDir_p est un booléen) <métier>:clcolprojet
+      
+      oRetour est un clcolprojet()
+      oPrj est un cldbprojet dynamique
+      
+      pour tout oPrj de :m_aoProjets
+      	si oPrj.p_bTop_Direction = bEstDir_p ALORS
+      		oRetour.ZF_addItem(oPrj)
+      	FIN
+      FIN
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542748679452150903
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      sClasse est une chaîne = ClDbProjet
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fbff223f31847
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau de ClDbProjet dynamique
+         renvoyer :m_aoProjets
+        type : 1966080
+      -
+        code : |1-
+         procédure protégée p_aoObj(aValeur est un tableau de ClDbProjet dynamique)
+         :m_aoProjets<- aValeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

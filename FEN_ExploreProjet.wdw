@@ -233,7 +233,7 @@ window :
         code : |1-
          si TBLH_SelUS.COL_IdTache <> 0 alors
          	oTache est un ClDbTache <- ClDbTache.GetObj(TBLH_SelUS.COL_IdTache)
-         	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
+         	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache) ALORS
          		AffTache(TBLH_SelUS, oTache)
          //		Afficher()
          	FIN
@@ -1129,7 +1129,7 @@ window :
       nLigneTache est un entier
       sCommentaire est une chaîne
       
-      
+      bEstEnroule est un booléen = (TableEtatElément(TBLH_SelUS,nLigneUs_p) = taEnroulé)
       
       SI oUS_p.p_sCMTR_Global <> "" ALORS
       	sCommentaire += [RC] + [
@@ -1157,7 +1157,7 @@ window :
       TBLH_SelUS[nLigneUs_p].COL_Code			= oUS_p.p_sCodeUserStory
       TBLH_SelUS[nLigneUs_p].COL_Statut		= oUS_p.sLibelleDeEtat()
       
-      //bAlerte									= Faux
+      TableSupprimeFils(TBLH_SelUS,nLigneUs_p)
       
       //Parcours de toutes le taches de l'US
       POUR TOUT ÉLÉMENT oTache DE ClColTache.aoFromUS(oUS_p).aItems()	//oUS.aoListeTaches().aItems()
@@ -1178,8 +1178,9 @@ window :
       VisuRech(nLigneUs_p, SAI_Recherche)
       
       //Si on a une alerte et qu'on doit l'afficher ou si on doit tout afficher
-      SI (bAlerte ET SEL_Affichage = 1) OU 
-      	SEL_Affichage = 4 ALORS
+      SI (bAlerte ET SEL_Affichage = 1) OU ...
+      		SEL_Affichage = 4 oU ...
+      		bEstEnroule ALORS
       	//On laisse ouvert
       SINON
       	//On referme

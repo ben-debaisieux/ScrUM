@@ -18,27 +18,14 @@ procedure_set :
      code : |1+
       CONSTANTe
       	cstReponseWS_Ok					= 200//OK 
-      
-      	
-      //	//Action pour l'historique des User Storie
-      //	cst_Action_US_Passer_en_test	= 1
-      //	cst_Action_US_Valider_test		= 2
-      //	cst_Action_US_Message			= 3
-      //	cst_Action_US_Creation			= 4
-      //	cst_Action_US_Modification		= 5
-      	
-      	
-      	//Statuts des US
-      	cst_StatutUS_Annulée	= "Annulée"
-      	cst_StatutUS_Terminée	= "Terminée"
-      	cst_StatutUS_Commencée	= "Commencée"
-      	cst_StatutUS_En_Test	= "En Test"
-      	cst_StatutUS_A_faire	= "A faire"
-      	
       	
       	// action de clique sur le bouton
       	WM_LBUTTONDBLCLK = 515
       fin
+      
+      
+      
+      
       
       //Structure User Story
       STR_UserStorie est une structure

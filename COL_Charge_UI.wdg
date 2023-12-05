@@ -92,7 +92,7 @@ procedure_set :
       	SI oPrj = Null _OU_ oPrj.ZF_Get_IdUnique() <> sdUsEnTest.IDScr_Projet ALORS
       		oPrj <- ClDbProjet.GetObj(sdUsEnTest.IDScr_Projet)
       		
-      		sRetour += [RC + RC + RC] + oPrj.p_sNom + " - " + oPrj.p_oUsr_ChefProjet.p_sNom
+      		sRetour += [RC + RC + RC] + oPrj.p_sNom + " - " + ClColUsr_Projet.oUserCdpFromProjet(oPrj).p_sNom
       	FIN
       	
       	oUs <- ClDbUserStory.GetObj(sdUsEnTest.IDScr_UserStory)

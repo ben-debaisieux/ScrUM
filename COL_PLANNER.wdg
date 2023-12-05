@@ -1,0 +1,444 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : COL_PLANNER
+ major_version : 27
+ minor_version : 0
+ type : 7
+ description : ""
+ subtype : 0
+procedure_set :
+ identifier : 0x155db8b400319896
+ internal_properties : BwAAAAcAAABGLu41kG7fjQV3iS4F72qmnKaNh5694reolNKIW0iw
+ code_elements :
+  type_code : 31
+  p_codes :
+   -
+     code : |1+
+      STR_SHAREPOINT_DOC est une Structure
+      	sNom			est une chaîne
+      	sChemin_Complet	est une chaine
+      FIN
+      
+      STR_PLANNER_Task est une Structure
+      	sIDTask			est une chaine
+      	sNom_Task		est une chaine
+      	sIDBucket		est une chaine
+      	sIDPlan			est une chaine
+      	nPriorité		est un entier
+      	sDescription	est une chaine
+      	sEtag			est une chaine
+      	astDocument		est un tableau de STR_SHAREPOINT_DOC
+      FIN
+      
+      STR_PLANNER_Bucket est une structure
+      	sNom_Bucket	est une chaîne
+      	sIDBucket	est une chaine
+      	
+      	aStTask		est un tableau de STR_PLANNER_Task
+      FIN
+      
+      STR_PLANNER est une Structure
+      	sIDPlanner	est une chaine
+      	sNom_Planer	est une chaine
+      	sIDGroupe	est une chaine
+      	
+      	aStBucket	est un tableau associatif de STR_PLANNER_Bucket
+      FIN
+     type : 720896
+  procedures :
+   -
+     name : PLANNER_Construction_Execution_Requete
+     procedure_id : 1539589958500771586
+     type_code : 15
+     code : |1+
+      PROCÉDURE PLANNER_Construction_Execution_Requete(LOCAL sURL_p est une chaîne, LOCAL nMéthode_p est un entier, LOCAL sContenu_p est une chaîne = "",LOCAL sEtag_Entete_p est une chaine = ""):restRéponse
+      
+      // variables
+      rest_Requete	est un restRequête
+      rest_Reponse	est un restRéponse
+      stoken			est une chaîne
+      
+      
+      // récupération token
+      stoken = COL_PLANNER.PLANNER_Generation_Token()
+      
+      // entete
+      rest_Requete..Entête["Authorization"]	= "bearer " + stoken
+      
+      SI sEtag_Entete_p <> "" ALORS
+      	rest_Requete..Entête["If-Match"]	= sEtag_Entete_p
+      FIN
+      
+      // url de la requête
+      rest_Requete..URL						= Encode(sURL_p,encodeURLDepuisUnicode)
+      
+      rest_Requete..Méthode					= nMéthode_p
+      
+      rest_Requete..ContentType				= "application/json"
+      
+      
+      SI sContenu_p <> "" //_ET_ JSONValide(sContenu_p) ALORS
+      	// contenu de la requete au format JSON
+      	rest_Requete..Contenu					= ChaîneVersJSON(sContenu_p)
+      	
+      FIN
+      
+      // envoi de la requête
+      rest_Reponse							= RESTEnvoie(rest_Requete)
+      
+      
+      RENVOYER rest_Reponse
+      
+     type : 458752
+   -
+     name : PLANNER_Création_Tache
+     procedure_id : 1539589997155552161
+     type_code : 15
+     code : |1-
+      procédure PLANNER_Création_Tache(LOCAL stTask_p	est un STR_PLANNER_Task):booléen
+      
+      
+      // variables
+      rest_Reponse		est un restRéponse
+      sContenu			est une chaine
+      bRetour				est un booléen
+      sDocument_Temp		est une chaine
+      sDocument			est une chaine
+      sCrochetFermant		est une chaine	= "]"
+      vRetour				est un variant
+      sEtag est une chaine
+      
+      SI TableauOccurrence(stTask_p.astDocument) > 0 ALORS
+      	POUR nLigne =  1 _À_ TableauOccurrence(stTask_p.astDocument)
+      		sDocument_Temp += ["," + RC] + [
+      	{
+      	"[%stTask_p.astDocument[nLigne].sChemin_Complet%]":{
+            "@odata.type": "microsoft.graph.plannerExternalReference",
+            "alias": "[%stTask_p.astDocument[nLigne].sNom%]",
+            "previewPriority": " !",
+            "type": "Other"
+      	}
+      	}
+      		]
+      	FIN	
+      	sDocument = [
+      		,
+      		"references": [%sDocument_Temp%]
+      		
+      	]
+      FIN
+      // structure JSON création tache
+      sContenu = [
+      	{
+      	"planId": "[%stTask_p.sIDPlan%]",
+      	"bucketId": "[%stTask_p.sIDBucket%]",
+      	"title": "[%stTask_p.sNom_Task%]",
+      	"description": "[%stTask_p.sDescription%]"
+      }
+      ]
+      
+      // création task
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/tasks",httppost,sContenu)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// création task ok !
+      	bRetour = vrai
+      	
+      	vRetour = JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	sContenu = [
+       	{
+       		"description": "[%stTask_p.sDescription%]"[%sDocument%] 		
+      	} 	
+      	]
+      	
+      	stTask_p = COL_PLANNER.PLANNER_stTask(vRetour.id)
+      	
+      	sEtag = vRetour."@odata.etag"
+      	
+      	rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/tasks/[%vRetour.id%]/details",httpPatch,sContenu,stTask_p.sEtag)
+      	
+      	SI rest_Reponse..CodeEtat DANS (200,201,202,204) ALORS
+      		// modification task ok !
+      		bRetour = Vrai
+      		
+      	SINON
+      		bRetour = Faux
+      	FIN
+      	
+      SINON
+      	// requête hs
+      	bRetour = faux
+      FIN
+      
+      RENVOYER bRetour
+     type : 458752
+   -
+     name : PLANNER_Generation_Token
+     procedure_id : 1539590027220396144
+     type_code : 15
+     code : |1+
+      procédure PLANNER_Generation_Token():chaine
+      
+      // variables
+      http_Requete		est un httpRequête
+      http_Reponse		est un httpRéponse
+      vRetour				est un Variant
+      sToken				est une chaîne
+      sIDClient			est une chaîne
+      sIDClient_Secret	est une chaîne
+      sLocataire			est une chaîne
+      
+      sIDClient			= "93a85105-3544-4cdf-851b-389fe72f1701"
+      sIDClient_Secret	= "CEM8Q~omxlvaDcRmtJGxK1dQCa8HFnRmaQRKhc9_"
+      sLocataire			= "4cfca23f-1dd9-4197-91b5-5063ebc48413"
+      
+      
+      // formulaire http
+      HTTPCréeFormulaire("Token")
+      HTTPAjouteParamètre("Token","client_id",sIDClient)
+      HTTPAjouteParamètre("Token","scope",URLEncode("https://graph.microsoft.com/.default"))
+      HTTPAjouteParamètre("Token","client_secret",sIDClient_Secret)
+      HTTPAjouteParamètre("Token","grant_type","client_credentials")
+      
+      // url token
+      http_Requete..URL			= "https://login.microsoftonline.com/[%sLocataire%]/oauth2/v2.0/token"
+      
+      http_Requete..Méthode		= httpPost
+      
+      http_Requete..ContentType	= "application/x-www-form-urlencoded"
+      
+      
+      
+      http_Reponse				= HTTPEnvoieFormulaire("token",http_Requete)
+      
+      SI http_Reponse..CodeEtat PAS DANS (200,201,202) ALORS
+      	
+      SINON
+      	// variant contenant valeur de retour
+      	vRetour	= JSONVersVariant(http_Reponse..Contenu)
+      	
+      	// récupération du token
+      	sToken	= vRetour.access_token
+      FIN
+      
+      // renvoi le token
+      RENVOYER sToken
+     type : 458752
+   -
+     name : PLANNER_ID_GROUPES
+     procedure_id : 1539590061580207204
+     type_code : 15
+     code : |1+
+      PROCÉDURE PLANNER_ID_GROUPES(LOCAL sNomGroupes est une chaîne):chaîne
+      
+      sIDGroupes		est une chaîne
+      rest_Reponse	est une restRéponse
+      vRetour			est un Variant
+      
+      rest_Reponse = PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/groups?$filter=displayName eq '[%sNomGroupes%]'",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	//SI JSONValide(rest_Reponse..Contenu) ALORS
+      		vRetour = JSONVersVariant(rest_Reponse..Contenu)
+      		
+      		SI TableauOccurrence(vRetour.value) = 1 ALORS
+      			sIDGroupes = vRetour.value[1].id
+      		FIN
+      	//FIN
+      FIN
+      
+      RENVOYER sIDGroupes
+     type : 458752
+   -
+     name : PLANNER_Récupération_Liste_Bucket_Taches
+     procedure_id : 1539590095940019483
+     type_code : 15
+     code : |1-
+      procédure PLANNER_Récupération_Liste_Bucket_Taches(LOCAL sIDPlanner_p est une chaine):tableau associatif de STR_PLANNER_Bucket
+      
+      // variables
+      rest_Reponse		est un restRéponse
+      vRetour				est un variant
+      stPlanner_Task		est un STR_PLANNER_Task
+      stPlanner_Bucket	est un STR_PLANNER_Bucket
+      aStPlanner_Bucket	est un tableau associatif de STR_PLANNER_Bucket
+      sIDBucket			est une chaine
+      
+      // récupération des plans du groupe
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/plans/[%sIDPlanner_p%]/tasks",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour = JSONVersVariant(rest_Reponse..Contenu)
+      	POUR nLigne = 1 _À_ TableauOccurrence(vRetour.value)
+      		
+      		sIDBucket = vRetour.value[nLigne].bucketId
+      		
+      		SI aStPlanner_Bucket[sIDBucket]..Vide ALORS
+      			aStPlanner_Bucket[sIDBucket]				= allouer un STR_PLANNER_Bucket
+      			
+      			stPlanner_Bucket							= COL_PLANNER.PLANNER_stBucket(sIDBucket)
+      			
+      			aStPlanner_Bucket[sIDBucket].sNom_Bucket	= stPlanner_Bucket.sNom_Bucket
+      			aStPlanner_Bucket[sIDBucket].sIDBucket		= stPlanner_Bucket.sIDBucket
+      		FIN
+      		
+      		stPlanner_Task				= COL_PLANNER.PLANNER_stTask(vRetour.value[nLigne].id)
+      		
+      		stPlanner_Task.sIDPlan		= sIDPlanner_p
+      		stPlanner_Task.sIDBucket	= vRetour.value[nLigne].bucketId
+      		stPlanner_Task.sIDTask		= vRetour.value[nLigne].id
+      		stPlanner_Task.sNom_Task	= vRetour.value[nLigne].title
+      		stPlanner_Task.nPriorité	= vRetour.value[nLigne].priority		
+      		
+      		TableauAjoute(aStPlanner_Bucket[sIDBucket].aStTask,stPlanner_Task)
+      	FIN
+      SINON
+      	// requête hs
+      	
+      FIN
+      
+      RENVOYER aStPlanner_Bucket
+     type : 458752
+   -
+     name : PLANNER_Récupération_Liste_Planner_Par_Groupe
+     procedure_id : 1539590126004798071
+     type_code : 15
+     code : |1+
+      procédure PLANNER_Récupération_Liste_Planner_Par_Groupe(LOCAL sNomGroupe_p est une chaîne):tableau de STR_PLANNER
+      
+      // variables
+      rest_Reponse	est un restRéponse
+      sIDGroupe est une chaine
+      vRetour est un variant
+      aStPlanner est un tableau de STR_PLANNER
+      stPlanner est un STR_PLANNER
+      
+      // récupération ID Groupes
+      sIDGroupe = COL_PLANNER.PLANNER_ID_GROUPES(sNomGroupe_p)
+      
+      // récupération des plans du groupe
+      rest_Reponse = COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/groups/[%sIDGroupe%]/planner/plans",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour = JSONVersVariant(rest_Reponse..Contenu)
+      	POUR nLigne = 1 _À_ TableauOccurrence(vRetour.value)
+      		stPlanner.sNom_Planer = vRetour.value[nLigne].title
+      		stPlanner.sIDPlanner = vRetour.value[nLigne].id
+      		stPlanner.sIDGroupe = vRetour.value[nLigne].owner
+      		
+      		stPlanner.aStBucket = COL_PLANNER.PLANNER_Récupération_Liste_Bucket_Taches(stPlanner.sIDPlanner)
+      		
+      		TableauAjoute(aStPlanner,stPlanner)
+      	FIN
+      	
+      	
+      SINON
+      	// requête hs
+      	
+      FIN
+      
+      RENVOYER aStPlanner
+      
+     type : 458752
+   -
+     name : PLANNER_stBucket
+     procedure_id : 1539590156069641522
+     type_code : 15
+     code : |1+
+      procédure PLANNER_stBucket(LOCAL sIDBucket_p est une chaine):STR_PLANNER_Bucket
+      
+      // https://graph.microsoft.com/v1.0/planner/buckets/hsOf2dhOJkqyYYZEtdzDe2QAIUCR
+      
+      // variables
+      rest_Reponse		est un restRéponse
+      vRetour				est un variant
+      stPlanner_Bucket	est un STR_PLANNER_Bucket
+      
+      // récupération des plans du groupe
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/buckets/[%sIDBucket_p%]",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour = JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	stPlanner_Bucket.sIDBucket = vRetour.id
+      	stPlanner_Bucket.sNom_Bucket = vRetour.name
+      	
+      SINON
+      	// requête hs
+      	
+      FIN
+      
+      renvoyer stPlanner_Bucket
+     type : 458752
+   -
+     name : PLANNER_stTask
+     procedure_id : 1539590181839516350
+     type_code : 15
+     code : |1-
+      procédure PLANNER_stTask(LOCAL sIDTask_p est une chaine):STR_PLANNER_Task
+      
+      // variables
+      rest_Reponse	est un restRéponse
+      vRetour			est un variant
+      stTask est un STR_PLANNER_Task
+      stDocument est un STR_SHAREPOINT_DOC
+      
+      // récupération des plans du groupe
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/beta/planner/tasks/[%sIDTask_p%]/details",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour = JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	stTask.sDescription = vRetour.description
+      	stTask.sEtag = vRetour."@odata.etag"
+      	
+      	POUR TOUT stReference,sChemin_doc DE vRetour.references
+      		stDocument.sChemin_Complet = sChemin_doc
+      		TableauAjoute(stTask.astDocument,stDocument)
+      	FIN
+      SINON
+      	// requête hs
+      	
+      FIN
+      
+      RENVOYER stTask
+     type : 458752
+   -
+     name : TEAMS_Récupération_Document
+     procedure_id : 1539590207609391803
+     type_code : 15
+     code : |1+
+      procédure TEAMS_Récupération_Document(LOCAL sChemin_fichier_p est une chaine, LOCAL sGroupe_ID_p est une chaine = "dba2d53d-84c3-4334-bd15-a9159bbd5ce1")
+      
+      rest_Reponse	est un restRéponse
+      
+      // channels
+      rest_Reponse = COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/teams/[%sGroupe_ID_p%]/channels",httpGet)
+      
+      // sites
+      rest_Reponse = COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/groups/[%sGroupe_ID_p%]/sites",httpGet)
+      
+      COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/teams/[%sGroupe_ID_p%]/channels/{channel_id}/files/{file_name}/content",httpPut)
+      
+      RENVOYER sChemin_fichier_p
+      
+      
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : COL_SansNom1
+resources :
+ string_res :
+  identifier : 0x155db8ad002f7c44
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

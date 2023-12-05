@@ -276,7 +276,7 @@ procedure_set :
       pour tout element oSprint de ClColSprint.aoListeSprint().aItems()
       	
       	SI oSprint.p_bTop_Termine ALORS
-      		stSp_Tmp.nReal -= oSprint.nGetNbPointsRealises()
+      		stSp_Tmp.nReal -= oSprint.nGetNbPointsFini()
       		nNbPointsRestant = stSp_Tmp.nReal
       	SINON
       		stSp_Tmp.nReal -= nVelociteMoyenne
@@ -340,22 +340,24 @@ procedure_set :
      code : |1-
       procédure Graphe_Charge_Sprints(LOCAL nSprint_p est un entier, ...
       	LOCAL nNbSprint_p est un entier, ...
-      	LOCAL eSelecteur_p est un ClDbTache.ETypeCharge,...
-      	LOCAL nChargeReccurcive_p est un entier)<UI>:STR_Charge
+      	LOCAL eSelecteur_p est un ClDbTache.ETypeCharge)<metier>:STR_Charge
       		
       
-      
-      
-      oPrj			est un ClDbProjet dynamique
+      oColSprints		est un ClColSprint dynamique	<- ClColSprint.aoListeSprint(nSprint_p, nSprint_p + nNbSprint_p)
+      oColTaches		est un ClColTache()
+      oTache			est un ClDbTache dynamique
+      oListeProj		est un ClColProjet()
       oSprint			est un ClDbSprint dynamique
-      nCptSpr			est un entier
-      nNumPrj			est un entier
-      nNumSprint		est un entier
-      oTableauProjet	est un ClColProjet	= ClColProjet.aoProjets_sur_periode(nSprint_p, nNbSprint_p, eSelecteur_p)
-      nPoints			est un entier
+      nNumSprRetenu	est un entier
       stRetour		est un STR_Charge
+      nNumPrj			est un entier
+      nPoints			est un entier
       stProjet_Tmp	est un STR_Charge_InfoPrj
+      aUsrCdp			est un tableau associatif de ClDbUsr dynamique
+      oPrj			est un ClDbProjet dynamique
       
+      oColTaches.oFromSprints(oColSprints, eSelecteur_p)
+      		
       
       stRetour.sTitre = "Planification des taches"
       SELON eSelecteur_p
@@ -365,72 +367,128 @@ procedure_set :
       		stRetour.sTitre += " prévisionnel"	
       FIN
       
-      
-      nNumPrj = 0
-      //parcours les projets compris dans l'intervalle de sprints
-      POUR TOUT ELEMENT oPrj DE oTableauProjet.aItems()
-      	nNumPrj++
-      	VariableRAZ(stProjet_Tmp)
-      	//donne une couleur à la série
-      	stProjet_Tmp.nCouleur			= DonneCouleur(nNumPrj, coulSérieDéfaut)
-      	//nom du projet pour le nom de l'étiquette 
-      	stProjet_Tmp.sNom				= oPrj.p_oUsr_ChefProjet.p_sNom + RC + oPrj.p_sNom
-      	stRetour.aStProjets[nNumPrj]	= stProjet_Tmp
-      FIN
-      
-      si nChargeReccurcive_p > 0 alors
-      	nNumPrj++
-      	VariableRAZ(stProjet_Tmp)
-      	//nom du projet pour le nom de l'étiquette 
-      	stProjet_Tmp.sNom				= "Charge récursive" + RC + "(Impondérables)"
-      	//donne une couleur à la série
-      	stProjet_Tmp.nCouleur			= COL_Scrum.gnCouleur_Gris
-      	stRetour.aStProjets[nNumPrj]	= stProjet_Tmp
+      pour tout oTache de oColTaches.aItems()
+      	oListeProj.ZF_addItem(oTache.p_oUserStoryParent.p_oProjetParent)
       fin
+      aUsrCdp <- ClColUsr_Projet.aoUsersCDPFromColProjet(oListeProj)
       
-      
-      nNumSprint = nSprint_p
-      POUR nCptSpr = 1 _À_ nNbSprint_p //pour chaque sprint on effectue la boucle suivante
-      	
-      	//affichage des dates du sprint en graduation
-      	oSprint <- ClDbSprint.GetObj(nNumSprint)
-      	//Récupération des étiquettes des sprints
-      	stRetour.aStListeSprints[nNumSprint] = oSprint.ZF_Get_IdUnique() + rc + oSprint.sSprint_Date()
-      	
-      	nNumPrj = 0
-      	//parcours des projets compris dans l'intervalle de sprints
-      	POUR TOUT ELEMENT oPrj DE oTableauProjet.aItems()
-      		nNumPrj++
+      POUR TOUT oTache DE oColTaches.aItems()
       		
-      		//Récupération du nb de points du projet, sur le sprint
-      		nPoints = oPrj.Projet_Sprint_Points(nNumSprint,eSelecteur_p)
-      		
-      		//ajout des donnée dans le graphe
-      		si stRetour.aStProjets[nNumPrj].aSpr[nNumSprint]..Vide ALORS
-      			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint] = allouer un STR_Charge_Spr
-      		FIN
-      		stRetour.aStProjets[nNumPrj].aSpr[nNumSprint].nPts = nPoints
+      	SELON eSelecteur_p
+      		CAS ClDbTache.ETypeCharge.Charge_réelle
+      			nNumSprRetenu = oTache.p_nNum_Sprint_Realisation
+      			nPoints = oTache.p_nPoids
+      		CAS ClDbTache.ETypeCharge.Charge_prévisionelle
+      			nNumSprRetenu = oTache.p_nNum_Sprint_Previsionnel
+      			nPoints = oTache.p_nPoids_Previsionnel
+      		autres cas
+      			ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([eSelecteur_p])
       	FIN
       	
-      	//A t on un charge prévisionelle récursive ?
-      	SI nChargeReccurcive_p > 0 ALORS
-      		nNumPrj++
+      	oSprint <- ClDbSprint.GetObj(nNumSprRetenu)
+      	si stRetour.aStListeSprints[nNumSprRetenu]..vide alors
+      		//Récupération des étiquettes des sprints
+      		stRetour.aStListeSprints[nNumSprRetenu] = oSprint.ZF_Get_IdUnique() + RC + oSprint.sSprint_Date()
+      	fin
+      	
+      	//ajout des données dans le graphe
+      	oPrj <- oTache.p_oUserStoryParent.p_oProjetParent
+      	nNumPrj = oPrj.ZF_Get_IdUnique()
+      	SI stRetour.aStProjets[nNumPrj]..Vide ALORS
+      		stRetour.aStProjets[nNumPrj] = allouer un STR_Charge_InfoPrj
       		
-      		SI stRetour.aStProjets[nNumPrj].aSpr[nNumSprint]..Vide ALORS
-      			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint] = allouer un STR_Charge_Spr
-      		FIN
-      		
-      		si nNumSprint > goapp.m_nNumeroDuSprintActuel ALORS
-      			//ajout des donnée dans le graphe
-      			nPoints = nChargeReccurcive_p * (nNumSprint - goApp.m_nNumeroDuSprintActuel)
-      			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint].nPts = nPoints
-      		sinon
-      			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint].nPts = 0
-      		FIN
+      		VariableRAZ(stProjet_Tmp)
+      		//donne une couleur à la série
+      		stProjet_Tmp.nCouleur			= DonneCouleur(TableauOccurrence(stRetour.aStProjets), coulSérieDéfaut)
+      		//nom du projet pour le nom de l'étiquette 
+      		stProjet_Tmp.sNom				= aUsrCdp[oPrj.ZF_Get_IdUnique()].p_sNom + RC + oPrj.p_sNom
+      		stRetour.aStProjets[nNumPrj]	= stProjet_Tmp
       	FIN
-      		
-      	nNumSprint++
+      	SI stRetour.aStProjets[nNumPrj].aSpr[nNumSprRetenu]..Vide ALORS
+      		stRetour.aStProjets[nNumPrj].aSpr[nNumSprRetenu] = allouer un STR_Charge_Spr
+      	FIN
+      	stRetour.aStProjets[nNumPrj].aSpr[nNumSprRetenu].nPts += nPoints
       FIN
+      
+      
+      
+      
+      
+      //
+      //oPrj			est un ClDbProjet dynamique
+      //nCptSpr			est un entier
+      //nNumSprint		est un entier
+      //oTableauProjet	est un ClColProjet	= ClColProjet.aoProjets_sur_periode(nSprint_p, nNbSprint_p, eSelecteur_p)
+      //stProjet_Tmp	est un STR_Charge_InfoPrj
+      //
+      //aUsrCdp			est un tableau associatif de ClDbUsr dynamique <- ClColUsr_Projet.aoUsersCDPFromColProjet(oTableauProjet)
+      //
+      //
+      //nNumPrj = 0
+      ////parcours les projets compris dans l'intervalle de sprints
+      //POUR TOUT ELEMENT oPrj DE oTableauProjet.aItems()
+      //	nNumPrj++
+      //	VariableRAZ(stProjet_Tmp)
+      //	//donne une couleur à la série
+      //	stProjet_Tmp.nCouleur			= DonneCouleur(nNumPrj, coulSérieDéfaut)
+      //	//nom du projet pour le nom de l'étiquette 
+      //	stProjet_Tmp.sNom				= aUsrCdp[oPrj.ZF_Get_IdUnique()].p_sNom + RC + oPrj.p_sNom
+      //	stRetour.aStProjets[nNumPrj]	= stProjet_Tmp
+      //FIN
+      //
+      //si nChargeReccurcive_p > 0 alors
+      //	nNumPrj++
+      //	VariableRAZ(stProjet_Tmp)
+      //	//nom du projet pour le nom de l'étiquette 
+      //	stProjet_Tmp.sNom				= "Charge récursive" + RC + "(Impondérables)"
+      //	//donne une couleur à la série
+      //	stProjet_Tmp.nCouleur			= COL_Scrum.gnCouleur_Gris
+      //	stRetour.aStProjets[nNumPrj]	= stProjet_Tmp
+      //fin
+      //
+      //
+      //nNumSprint = nSprint_p
+      //POUR nCptSpr = 1 _À_ nNbSprint_p //pour chaque sprint on effectue la boucle suivante
+      //	
+      //	//affichage des dates du sprint en graduation
+      //	oSprint <- ClDbSprint.GetObj(nNumSprint)
+      //	//Récupération des étiquettes des sprints
+      //	stRetour.aStListeSprints[nNumSprint] = oSprint.ZF_Get_IdUnique() + rc + oSprint.sSprint_Date()
+      //	
+      //	nNumPrj = 0
+      //	//parcours des projets compris dans l'intervalle de sprints
+      //	POUR TOUT ELEMENT oPrj DE oTableauProjet.aItems()
+      //		nNumPrj++
+      //		
+      //		//Récupération du nb de points du projet, sur le sprint
+      //		nPoints = oPrj.Projet_Sprint_Points(nNumSprint,eSelecteur_p)
+      //		
+      //		//ajout des donnée dans le graphe
+      //		si stRetour.aStProjets[nNumPrj].aSpr[nNumSprint]..Vide ALORS
+      //			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint] = allouer un STR_Charge_Spr
+      //		FIN
+      //		stRetour.aStProjets[nNumPrj].aSpr[nNumSprint].nPts = nPoints
+      //	FIN
+      //	
+      //	//A t on un charge prévisionelle récursive ?
+      //	SI nChargeReccurcive_p > 0 ALORS
+      //		nNumPrj++
+      //		
+      //		SI stRetour.aStProjets[nNumPrj].aSpr[nNumSprint]..Vide ALORS
+      //			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint] = allouer un STR_Charge_Spr
+      //		FIN
+      //		
+      //		si nNumSprint > goapp.m_nNumeroDuSprintActuel ALORS
+      //			//ajout des donnée dans le graphe
+      //			nPoints = nChargeReccurcive_p * (nNumSprint - goApp.m_nNumeroDuSprintActuel)
+      //			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint].nPts = nPoints
+      //		sinon
+      //			stRetour.aStProjets[nNumPrj].aSpr[nNumSprint].nPts = 0
+      //		FIN
+      //	FIN
+      //		
+      //	nNumSprint++
+      //FIN
       
       stRetour.nVelocite = goApp.m_nVelociteMoyenne
       
@@ -531,10 +589,14 @@ procedure_set :
       
       SI nIdProjet_P = 0 ALORS
       	//Tous les projets
+      	aPtsDemarre	est un tableau associatif d'entiers	= ClColTache.anGetNbPointsSprints(oSprints, ClColTache.cstGetPointsDemarres)
+      	aPtsFini	est un tableau associatif d'entiers	= ClColTache.anGetNbPointsSprints(oSprints, ClColTache.cstGetPointsFini)
       	POUR TOUT ELEMENT oSprint DE oSprints.aItems()
       		sNumSprint									= oSprint.ZF_Get_IdUnique()
-      		stRetour.aStSeries[sNumSprint].nDemarre		= oSprint.nGetNbPointsDemarre()
-      		stRetour.aStSeries[sNumSprint].nFin			= oSprint.nGetNbPointsRealises()
+      		stRetour.aStSeries[sNumSprint].nDemarre		= aPtsDemarre[oSprint.ZF_Get_IdUnique()]
+      		stRetour.aStSeries[sNumSprint].nFin			= aPtsFini[oSprint.ZF_Get_IdUnique()]
+      //		stRetour.aStSeries[sNumSprint].nDemarre		= oSprint.nGetNbPointsDemarre()
+      //		stRetour.aStSeries[sNumSprint].nFin			= oSprint.nGetNbPointsFini()
       	FIN
       	
       	stRetour.sTitre += "Tout projets"

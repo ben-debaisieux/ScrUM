@@ -74,7 +74,7 @@ window :
       
       
       constante
-      	cst_Tempo_cs = 50
+      	cst_Tempo_cs = 100
       fin
       
       znNumTimer est un entier
@@ -82,7 +82,7 @@ window :
       
       
       
-      ThreadExécute("th1",threadNormal,Th_GetMetriques)
+      ThreadExécute("th1",threadSécurisé,Th_GetMetriques)
       //ThreadExécute("th1",threadSécurisé,Th_GetMetriques)
    -
      code : |1+
@@ -183,13 +183,26 @@ window :
       s est une SectionCritique
       
       tantque vrai
-      	
-      	UTILISER s DANS
-      		astMetrique = goApp.GetMetriques()
+      	quand Exception dans
+      		UTILISER s DANS
+      			astMetrique = ClZF_ObjDbLs.mg_oApp.GetMetriques()
+      			
+      			
+      			oObjDbTmp est un ClZF_ObjDbLs dynamique
+      			sCle est une chaîne
+      			pour tout oObjDbTmp, sCle de ClZF_App.mg_aoInstances
+      				si pas oObjDbTmp.ZF_bVerifPointeur() ALORS
+      					trace("Pb pointeur : [%sCle%] - [%oObjDbTmp.sRepresentation()%].")
+      				FIN
+      			FIN
+      			
+      		FIN
+      	faire
+      		//rien
       	FIN
       	
       	si ThreadArrêtDemandé() ALORS
-      		ThreadArrête("th1")
+      		ThreadDemandeArrêt("th1")
       	sinon
       		ThreadPause(cst_Tempo_cs)
       	FIN

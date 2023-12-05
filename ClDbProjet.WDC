@@ -28,16 +28,6 @@ class :
       	m_nOrdreGrp				est un entier sur 2 octets	<mapping=Ordre>
       	m_sCode					est une chaine 				<mapping=PrefixeUS>
       	
-      	m_bTop_Prioritaire		est un booléen
-      	m_sCmtrsituation		est une chaîne
-      	m_bInitSituation		est un booléen
-      	
-      	m_oUsr_ChefProjet		est un objet ClDbUsr dynamique
-      	
-      	//m_oListeInvites			est un ClColUsr dynamique
-      	m_aClassifInvite		est un tableau associatif de ClColUsr
-      	//m_oColUserStories		est un ClColUserStory
-      	
       	m_anStatsUS				est un tableau associatif de entier
       	m_bInitStatsUS			est un booléen
       GLOBAL
@@ -45,7 +35,7 @@ class :
       	mg_oEx_TypeInvite					est un ClZF_Exception dynamique
       	mg_oEx_SuppImpossible_PresUS		est un ClZF_Exception dynamique
       	mg_oEx_PbNom						est un ClZF_Exception dynamique
-      	mg_oEx_CdpAbsent					est un ClZF_Exception dynamique
+      //	mg_oEx_CdpAbsent					est un ClZF_Exception dynamique
       FIN
       
       STR_SimulationCharge est une structure
@@ -63,12 +53,13 @@ class :
       	
       	
       //	cstGetCol_Usr_Projet = "Usr_du_Projet"
+      	cstGetCol_Usr_Projet = "Usr_Projet"
       fin
       
       mg_oEx_TypeInvite				= allouer un ClZF_Exception("Erreur de type d'invité passé en paramètre : %1")
       mg_oEx_SuppImpossible_PresUS	= allouer un ClZF_Exception("Impossible de supprimer un projet, tant que des user stories sont affectées")
       mg_oEx_PbNom					= allouer un ClZF_Exception("Le nom du projet est obligatoire")
-      mg_oEx_CdpAbsent				= allouer un ClZF_Exception("Un chef de projet est obligatoire pour le projet")
+      //mg_oEx_CdpAbsent				= allouer un ClZF_Exception("Un chef de projet est obligatoire pour le projet")
      type : 131072
   procedures :
    -
@@ -94,9 +85,7 @@ class :
       //Déclaration du constructeur de la classe d'accès aux données.
       Ancêtre.Constructeur(Scr_Projet..Nom, Scr_Projet.IDScr_Projet..Nom, nID_P)
       
-      
-      //trace(dbgInfo(dbgPile))
-      //trace("inc" + nID_P)
+      //si nID_P > 0 alors stop
      type : 589824
    -
      name : Destructeur
@@ -284,13 +273,13 @@ class :
       //
       FONCTION Projet_Sprint_Points(LOCAL nNumSprint_p est un entier, LOCAL nSelecteur est un ClDbTache.ETypeCharge):entier
       
-      nPoints est un entier
-      sdRechechePointProjetSprint est une source de données
-      sReq est une chaîne
+      nPoints						est un entier
+      sdRechechePointProjetSprint	est une source de données
+      sReq						est une chaîne
       
-      //On choisi si on veut en prod ou previsionnel 
-      sChoixSprint est une chaîne
-      sChoixPoids est une chaine
+      //On choisi si on veut en prod ou prévisionnel 
+      sChoixSprint				est une chaîne
+      sChoixPoids					est une chaine
       
       Selon nSelecteur
       	CAS ClDbTache.ETypeCharge.Charge_réelle
@@ -500,45 +489,14 @@ class :
       	::mg_oApp.Rsql(sdRecupCdp,sReq)
       	HLitPremier(sdRecupCdp)
       	
-      	//A t on un chef de projet pour ce projet ?
-      	si pas HEnDehors(sdRecupCdp) alors
-      		//Oui :
-      		//Est ce celui en cours ?
-      		si sdRecupCdp.IDScr_Usr	<> :m_oUsr_ChefProjet.ZF_Get_IdUnique() alors
-      			//Non :
-      			
-      			//Mise à jour du chef de projet
-      			HLitRecherche(Scr_Usr_Projet,IDScr_Usr_Projet,sdRecupCdp.IDScr_Usr_Projet,hIdentique+hLimiteParcours)
-      			si HTrouve(Scr_Usr_Projet) ALORS
-      				Scr_Usr_Projet.IDScr_Usr	= :m_oUsr_ChefProjet.ZF_Get_IdUnique()
-      				si pas HModifie(Scr_Usr_Projet) ALORS
-      					ClZF_ObjDB.mg_oExEchecEnregistrement.ZF_Declenche()
-      					//ExceptionDéclenche(1,HErreurInfo(hErrComplet))
-      				FIN
-      			FIN
-      		FIN
-      	sinon
-      		//Non :
-      		
-      		//Création de l'association utilisateur / projet, avec l'attribut "chef de projet"
-      		hraz(Scr_Usr_Projet)
-      		Scr_Usr_Projet.IDScr_Projet		= :ZF_Get_IdUnique()
-      		Scr_Usr_Projet.IDScr_Usr		= :m_oUsr_ChefProjet.ZF_Get_IdUnique()
-      		Scr_Usr_Projet.Top_Chef_Projet	= vrai
-      		Scr_Usr_Projet.Top_Invite		= faux
-      		SI PAS HAjoute(Scr_Usr_Projet) ALORS
-      			ClZF_ObjDB.mg_oExEchecEnregistrement.ZF_Declenche()
-      			//ExceptionDéclenche(1,HErreurInfo(hErrComplet))
-      		FIN
-      	FIN
       	
       	HAnnuleDéclaration(sdRecupCdp)
       	
       	////////////////////////////////////////////////////////////
       	
       	anLstUsr est un tableau d'entiers
-      	nInd est un entier
-      	sdLstUsr est une source de données
+      //	nInd est un entier
+      //	sdLstUsr est une source de données
       	oInvite est un ClDbUsr dynamique
       	oLstInvite est un ClColUsr <- ZF_GetCol(ClAppScrum.cstColUsrInvite)
       	
@@ -549,45 +507,45 @@ class :
       	
       	
       	
-      	sReq = [
-      		SELECT
-      			Scr_Usr_Projet.IDScr_Usr
-      			
-      		FROM Scr_Usr_Projet
-      		
-      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
-      			AND Scr_Usr_Projet.Top_Invite = 1
-      		
-      	]
-      	
-      	::mg_oApp.Rsql(sdLstUsr,sReq)
-      	pour tout sdLstUsr
-      		nInd = TableauCherche(anLstUsr,tcLinéaire, sdLstUsr.IDScr_Usr)
-      		si nInd = -1 ALORS
-      			//L'utilisateur en base n'est pas dans la liste : il faut le supprimer de la base
-      			HLitRecherche(Scr_Usr_Projet,CC_IDScr_ProjetIDScr_Usr,[:ZF_Get_IdUnique(), sdLstUsr.IDScr_Usr],hIdentique+hLimiteParcours)
-      			si HTrouve(Scr_Usr_Projet) ALORS
-      				HSupprime(Scr_Usr_Projet)
-      			FIn
-      		sinon
-      			// L'id est présent dans les utiliateurs et dans la base : pas de modif en BDD
-      			TableauSupprime(anLstUsr,nInd)
-      		FIN
-      		HAnnuleDéclaration(sdLstUsr)
-      		
-      		//Une fois ce traitement de comparaison fini, il ne reste que les utilisateurs manquants.
-      		pour tout nInd de anLstUsr
-      			HRAZ(Scr_Usr_Projet)
-      			Scr_Usr_Projet.IDScr_Projet		= :ZF_Get_IdUnique()
-      			Scr_Usr_Projet.IDScr_Usr		= nInd
-      			Scr_Usr_Projet.Top_Chef_Projet	= Faux
-      			Scr_Usr_Projet.Top_Invite		= Vrai
-      			SI PAS HAjoute(Scr_Usr_Projet) ALORS
-      				ClZF_ObjDB.mg_oExEchecEnregistrement.ZF_Declenche()
-      				//ExceptionDéclenche(1,HErreurInfo(hErrComplet))
-      			FIN
-      		FIN
-      	FIN
+      //	sReq = [
+      //		SELECT
+      //			Scr_Usr_Projet.IDScr_Usr
+      //			
+      //		FROM Scr_Usr_Projet
+      //		
+      //		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
+      //			AND Scr_Usr_Projet.Top_Chef_Projet = 0
+      //		
+      //	]
+      //	
+      //	::mg_oApp.Rsql(sdLstUsr,sReq)
+      //	pour tout sdLstUsr
+      //		nInd = TableauCherche(anLstUsr,tcLinéaire, sdLstUsr.IDScr_Usr)
+      //		si nInd = -1 ALORS
+      //			//L'utilisateur en base n'est pas dans la liste : il faut le supprimer de la base
+      //			HLitRecherche(Scr_Usr_Projet,CC_IDScr_ProjetIDScr_Usr,[:ZF_Get_IdUnique(), sdLstUsr.IDScr_Usr],hIdentique+hLimiteParcours)
+      //			si HTrouve(Scr_Usr_Projet) ALORS
+      //				HSupprime(Scr_Usr_Projet)
+      //			FIn
+      //		sinon
+      //			// L'id est présent dans les utiliateurs et dans la base : pas de modif en BDD
+      //			TableauSupprime(anLstUsr,nInd)
+      //		FIN
+      //		HAnnuleDéclaration(sdLstUsr)
+      //		
+      //		//Une fois ce traitement de comparaison fini, il ne reste que les utilisateurs manquants.
+      //		pour tout nInd de anLstUsr
+      //			HRAZ(Scr_Usr_Projet)
+      //			Scr_Usr_Projet.IDScr_Projet		= :ZF_Get_IdUnique()
+      //			Scr_Usr_Projet.IDScr_Usr		= nInd
+      //			Scr_Usr_Projet.Top_Chef_Projet	= Faux
+      //			//Scr_Usr_Projet.Top_Invite		= Vrai
+      //			SI PAS HAjoute(Scr_Usr_Projet) ALORS
+      //				ClZF_ObjDB.mg_oExEchecEnregistrement.ZF_Declenche()
+      //				//ExceptionDéclenche(1,HErreurInfo(hErrComplet))
+      //			FIN
+      //		FIN
+      //	FIN
       fin
      type : 458752
    -
@@ -643,9 +601,9 @@ class :
       		mg_oEx_PbNom.ZF_Declenche()
        	fin
       	
-      	si m_oUsr_ChefProjet = Null ALORS
-      		mg_oEx_CdpAbsent.ZF_Declenche()
-      	FIN
+      //	si m_oUsr_ChefProjet = Null ALORS
+      //		mg_oEx_CdpAbsent.ZF_Declenche()
+      //	FIN
       FIN
       
      type : 458752
@@ -670,16 +628,6 @@ class :
       //	nIdUsr_P (entier) : <indiquez ici le rôle de nIdUsr_P>
       PROCEDURE Invite_Ajoute(oUsr_P est un ClDbUsr, nTypeInvite_P est un entier = 0):Vide
       
-      //bTrouve est un booléen
-      //oInvite est un ClUsr dynamique
-      //
-      ////On s'assure que l'utilisateur n'est pas déja présent.
-      //pour tout element oInvite de :m_oListeInvites.aItems()
-      //	si oInvite.ZF_Get_IdUnique() = oUsr_P.ZF_Get_IdUnique() ALORS
-      //		bTrouve = vrai
-      //		sortir
-      //	FIN
-      //FIN
       
       oListeInvites est un ClColUsr <- :ZF_GetCol(ClAppScrum.cstColUsrInvite)
       si pas oListeInvites.ZF_recherche(oUsr_P) ALORS
@@ -689,24 +637,10 @@ class :
       
       si nTypeInvite_P <> 0 alors
       	
-      	sCle est une chaîne 
-      	oColInvite est un ClColUsr dynamique
       	
       	//Est ce que le type d'invité est correct ?
       	si pas nTypeInvite_P dans(::cstInter_Informe, ::cstInter_Consulte, ::cstInter_Decideur, ::cstInter_Responsable) ALORS
       		mg_oEx_TypeInvite.ZF_Declenche([nTypeInvite_P])
-      	FIN
-      	
-      	//Parcourt de tous les groupes d'invités
-      	POUR TOUT ELEMENT oColInvite, sCle de :m_aClassifInvite
-      		//Est on sur le groupe où on veut ajouter l'utilisateur ?
-      		si val(sCle) = nTypeInvite_P ALORS
-      			//Ajout de l'utilisateur à la liste.
-      			oColInvite.ZF_addItem(oUsr_P)
-      		sinon
-      			//Si on trouve l'utilisateur dans cette liste, on le supprime.
-      			oColInvite.ZF_Supp(oUsr_P)
-      		FIN
       	FIN
       FIN
       
@@ -733,22 +667,6 @@ class :
       
       oListeInvites est un ClColUsr <- :ZF_GetCol(ClAppScrum.cstColUsrInvite)
       oListeInvites.ZF_Supp(oUsr_P)
-      
-      sCle est une chaîne 
-      oColInvite est un ClColUsr dynamique
-      pour tout oColInvite, sCle de :m_aClassifInvite
-      	oColInvite.ZF_Supp(oUsr_P)
-      FIN
-      
-      //nInd	est un entier
-      //oUsrTmp	est un ClUsr dynamique
-      //
-      //pour tout element oUsrTmp, nInd de :m_oListeInvites.aItems()
-      //	SI oUsrTmp.ZF_Get_IdUnique() = oUsr_P.ZF_Get_IdUnique() ALORS
-      //		:m_oListeInvites.ZF_Supp(nInd)
-      //		SORTIR
-      //	FIN
-      //FIN
      type : 458752
    -
      name : CalcStatsUS
@@ -772,9 +690,9 @@ class :
       
       oUsTmp			est un ClDbUserStory dynamique
       nEtat			est un ClDbUserStory.ECompteNbUS
-      aColTachesParUs	est un tableau associatif de ClColTache
-      sCle			est une chaîne
-      oTache			est un ClDbTache dynamique
+      //aColTachesParUs	est un tableau associatif de ClColTache
+      //sCle			est une chaîne
+      //oTache			est un ClDbTache dynamique
       
       //Si les stats ne sont pas initialisés ou si on force le rechargement...
       si pas :m_bInitStatsUS ou bForceRecharge_P alors
@@ -782,30 +700,31 @@ class :
       	
       	//Préchargement de toutes les taches, dans les collections pour les US	
       	
-      	pour tout element oTache de ClColTache.oFromProjet(objet).aItems()
-      		sCle = oTache.p_oUserStoryParent.ZF_Get_IdUnique()
-      		si aColTachesParUs[sCle]..Vide ALORS
-      			aColTachesParUs[sCle]				= allouer un ClColTache()
-      			aColTachesParUs[sCle].ZF_setDhExpire()
-      			//aColTachesParUs[sCle].ZF_setDhExpire()
-      		FIN
-      		aColTachesParUs[sCle].ZF_addItem(oTache)
-      	FIN
+      //	pour tout element oTache de ClColTache.oFromProjet(objet).aItems()
+      //		sCle = oTache.p_oUserStoryParent.ZF_Get_IdUnique()
+      //		si aColTachesParUs[sCle]..Vide ALORS
+      //			aColTachesParUs[sCle]				= allouer un ClColTache()
+      //			aColTachesParUs[sCle].ZF_setDhExpire()
+      //			//aColTachesParUs[sCle].ZF_setDhExpire()
+      //		FIN
+      //		aColTachesParUs[sCle].ZF_addItem(oTache)
+      //	FIN
       	
       	
       	//Rechargement de toutes les US.
       	pour tout element oUsTmp de ClColUserStory.oFromProjet(objet).aitems()
       		
       		//Envoi de la collection de tache, à l'US
-      		sCle = oUsTmp.ZF_Get_IdUnique()
-      		si pas aColTachesParUs[sCle]..Vide ALORS
-      			oUsTmp.m_ZF_aListCol[ClColTache.cstTachesDeUS] = aColTachesParUs[sCle]
-      		FIN
+      //		sCle = oUsTmp.ZF_Get_IdUnique()
+      //		si pas aColTachesParUs[sCle]..Vide ALORS
+      //			oUsTmp.m_ZF_aListCol[ClColTache.cstTachesDeUS] = aColTachesParUs[sCle]
+      //		FIN
       		
       		//Comptage de tous les US, classés par type.
       		nEtat = oUsTmp.Get_EtatUS()
       		:m_anStatsUS[nEtat]++
       	fin
+      	
       	//trace(:p_sNom)
       	:m_bInitStatsUS = vrai
       fin
@@ -850,13 +769,13 @@ class :
       renvoyer nRetour
      type : 458752
    -
-     name : ReaffecteToutesUsAuCDP
+     name : ReaffecteToutesUsAuCDP_old
      procedure_id : 1444815455092683928
      type_code : 12
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //ReaffecteToutesUsAuCDP ()
+      //ReaffecteToutesUsAuCDP_old ()
       //
       // Paramètres :
       //	Aucun
@@ -866,13 +785,13 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE ReaffecteToutesUsAuCDP():Vide
+      PROCEDURE ReaffecteToutesUsAuCDP_old():Vide
       
-      oUS est un ClDbUserStory dynamique
-      POUR TOUT ELEMENT oUS DE ClColUserStory.oFromProjet(objet).aitems()	// :aoListeUS().aItems())
-      	oUS.p_oUsrResponsable = :m_oUsr_ChefProjet
-      	oUS.ZF_Enregistre()
-      FIN
+      //oUS est un ClDbUserStory dynamique
+      //POUR TOUT ELEMENT oUS DE ClColUserStory.oFromProjet(objet).aitems()	// :aoListeUS().aItems())
+      //	oUS.p_oUsrResponsable = :m_oUsr_ChefProjet
+      //	oUS.ZF_Enregistre()
+      //FIN
      type : 458752
    -
      name : GetObj
@@ -894,48 +813,6 @@ class :
       PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClDbProjet
       sClasse est une chaine = ClDbProjet
       RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
-     type : 458752
-   -
-     name : ChargeSituation
-     procedure_id : 1444815455092815000
-     type_code : 12
-     code : |1+
-      procédure prive ChargeSituation():Vide
-      
-      
-      sdSituationPrj est une Source de Données
-      sReq est une chaîne
-      
-      sReq = [
-      	SELECT
-      		Scr_Projet_Situation.Top_Prioritaire,
-      		Scr_Projet_Situation.CMTR
-      		
-      	FROM Scr_Projet_Situation
-      	
-      	
-      	WHERE Scr_Projet_Situation.Num_Sprint = [%goApp.m_nNumeroDuSprintActuel%]
-      		AND Scr_Projet_Situation.IDScr_Projet = [%:ZF_Get_IdUnique()%]
-      ]
-      
-      ::mg_oApp.RSQL(sdSituationPrj,sReq)
-      	
-      :m_bInitSituation	=	vrai
-      
-      HLitPremier(sdSituationPrj)
-      si pas HEnDehors(sdSituationPrj)
-      	:m_bTop_Prioritaire	= sdSituationPrj.Top_Prioritaire
-      	:m_sCmtrsituation	= sdSituationPrj.CMTR
-      sinon
-      	:m_bTop_Prioritaire	= faux
-      	:m_sCmtrsituation	= ""
-      FIN
-      
-      HAnnuleDéclaration(sdSituationPrj)
-      
-      
-      
-      
      type : 458752
    -
      name : aoSimulationDistributionCharge
@@ -1016,14 +893,12 @@ class :
       sRetour.id					= :ZF_Get_IdUnique()
       sRetour.name				= :m_sNom
       sRetour.is_departement		= :m_btop_direction
-      sRetour.is_priority			= :m_btop_prioritaire
       sRetour.is_finish			= :m_btop_termine
       sRetour.forcastload			= :m_nchargeprovisionelle
-      sRetour.coment_situation	= :m_scmtrsituation
       sRetour.group				= :m_sGroupement
       sRetour.order_grooup		= :m_nOrdreGrp
       
-      sRetour.user_manager		= :m_ousr_chefprojet.sExport()
+      //sRetour.user_manager		= :m_ousr_chefprojet.sExport()
       
       //nInd = 0
       //pour tout element oUsr de :aoInvite_Liste().aItems()
@@ -1048,17 +923,17 @@ class :
       procédure bUsrAffecteAuProjet(oUsr_p est un ClDbUsr):booléen
       
       bRetour est un booléen
-      oUsr_tmp est un ClDbUsr dynamique
-      
-      si oUsr_p.ZF_Get_IdUnique() = :m_oUsr_ChefProjet.ZF_Get_IdUnique() ALORS
-      	bRetour = vrai
-      sinon
-      	POUR TOUT ELÉMENT oUsr_tmp DE ClColUsr.aoInvite_Liste(objet).aItems()
-      		SI oUsr_tmp.ZF_Get_IdUnique() = :m_oUsr_ChefProjet.ZF_Get_IdUnique() ALORS
-      			bRetour = Vrai
-      		FIN
-      	FIN
-      FIN
+      //oUsr_tmp est un ClDbUsr dynamique
+      //
+      //si oUsr_p.ZF_Get_IdUnique() = :m_oUsr_ChefProjet.ZF_Get_IdUnique() ALORS
+      //	bRetour = vrai
+      //sinon
+      //	POUR TOUT ELÉMENT oUsr_tmp DE ClColUsr.aoInvite_Liste(objet).aItems()
+      //		SI oUsr_tmp.ZF_Get_IdUnique() = :m_oUsr_ChefProjet.ZF_Get_IdUnique() ALORS
+      //			bRetour = Vrai
+      //		FIN
+      //	FIN
+      //FIN
       
       renvoyer bRetour
       
@@ -1125,32 +1000,32 @@ class :
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
       PROCÉDURE  Init_ObjBD()
       
-      nInd est un entier
-      aTypes est un tableau d'entiers = [::cstInter_Responsable, ::cstInter_Decideur, ::cstInter_Consulte, ::cstInter_Informe]
-      pour tout nInd de aTypes
-      	::m_aClassifInvite[nInd] = allouer un ClColUsr()
-      FIN
-      
-      SI :ZF_bModeAjout() ALORS
-      	:m_oUsr_ChefProjet <- goApp.m_oUsrCnx
-      SINON
-      	sdUsrDePrj est une Source de Données
-      	sReq est une chaîne
-      	
-      	sReq = [
-      		SELECT IDScr_Usr
-      		FROM Scr_Usr_Projet
-      		WHERE Top_Chef_Projet = 1
-      			AND IDScr_Projet = [%:ZF_Get_IdUnique()%]
-      	]
-      	
-      	::mg_oApp.Rsql(sdUsrDePrj,sReq)
-      	POUR TOUT sdUsrDePrj
-      		:m_oUsr_ChefProjet <- ClDbUsr::GetObj(sdUsrDePrj.IDScr_Usr)
-      	FIN
-      	
-      	HAnnuleDéclaration(sdUsrDePrj)
-      FIN
+      //nInd est un entier
+      //aTypes est un tableau d'entiers = [::cstInter_Responsable, ::cstInter_Decideur, ::cstInter_Consulte, ::cstInter_Informe]
+      //pour tout nInd de aTypes
+      //	::m_aClassifInvite[nInd] = allouer un ClColUsr()
+      //FIN
+      //
+      //SI :ZF_bModeAjout() ALORS
+      //	:m_oUsr_ChefProjet <- goApp.m_oUsrCnx
+      //SINON
+      //	sdUsrDePrj est une Source de Données
+      //	sReq est une chaîne
+      //	
+      //	sReq = [
+      //		SELECT IDScr_Usr
+      //		FROM Scr_Usr_Projet
+      //		WHERE Top_Chef_Projet = 1
+      //			AND IDScr_Projet = [%:ZF_Get_IdUnique()%]
+      //	]
+      //	
+      //	::mg_oApp.Rsql(sdUsrDePrj,sReq)
+      //	POUR TOUT sdUsrDePrj
+      //		:m_oUsr_ChefProjet <- ClDbUsr::GetObj(sdUsrDePrj.IDScr_Usr)
+      //	FIN
+      //	
+      //	HAnnuleDéclaration(sdUsrDePrj)
+      //FIN
      type : 458752
    -
      name : sLibelleDeTypeInvite
@@ -1188,52 +1063,52 @@ class :
       RENVOYER ""
      type : 458752
    -
-     name : aGrpInvite
+     name : aGrpInvite_old
      procedure_id : 1444815455093535896
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] aGrpInvite ()
+      //aGrpInvite_old ()
       //
       // Paramètres :
       //	Aucun
-      
       // Valeur de retour :
-      // 	tableau associatif (ClColUsr) : <indiquez ici le rôle de la valeur de retour>
+      // 	Aucune
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      FONCTION aGrpInvite()<métier>:tableau associatif de ClColUsr
-      
-      sReq est une chaîne
-      sCle est une chaîne
-      oColUsr est un ClColUsr dynamique
-      
-      pour tout elEMENT oColUsr, sCle de :m_aClassifInvite
-      	
-      	oColUsr.ZF_vider()
-      	
-      	sReq = [
-      		SELECT
-      			Scr_Usr.*
-      			
-      		FROM Scr_Usr_Projet
-      			INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)
-      		
-      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
-      			AND Scr_Usr_Projet.RoleSurLeProjet = [%sCle%]
-      	]
-      	
-      	oColUsr.ZF_LoadSQL(sReq)
-      	
-      	:m_aClassifInvite[sCle] <- oColUsr
-      FIN
-      
-      
-      renvoyer :m_aClassifInvite
-      
+      FONCTION aGrpInvite_old()<métier>/*:tableau associatif de ClColUsr
+      <§cs:10§>
+      sReq est une chaîne<§cs:10§>
+      sCle est une chaîne<§cs:10§>
+      oColUsr est un ClColUsr dynamique<§cs:10§>
+      <§cs:10§>
+      pour tout elEMENT oColUsr, sCle de :m_aClassifInvite<§cs:10§>
+      	<§cs:10§>
+      	oColUsr.ZF_vider()<§cs:10§>
+      	<§cs:10§>
+      	sReq = [<§cs:10§>
+      		SELECT<§cs:10§>
+      			Scr_Usr.*<§cs:10§>
+      			<§cs:10§>
+      		FROM Scr_Usr_Projet<§cs:10§>
+      			INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)<§cs:10§>
+      		<§cs:10§>
+      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]<§cs:10§>
+      			AND Scr_Usr_Projet.RoleSurLeProjet = [%sCle%]<§cs:10§>
+      	]<§cs:10§>
+      	<§cs:10§>
+      	oColUsr.ZF_LoadSQL(sReq)<§cs:10§>
+      	<§cs:10§>
+      	:m_aClassifInvite[sCle] <- oColUsr<§cs:10§>
+      FIN<§cs:10§>
+      <§cs:10§>
+      <§cs:10§>
+      renvoyer :m_aClassifInvite<§cs:10§>
+      <§cs:10§>
+      */
       
       //si bForce_p ou pas :m_oListeInvites.p_bEstCharge ALORS
       //	:m_oListeInvites.ZF_vider()
@@ -1256,6 +1131,15 @@ class :
       //
       //renvoyer :m_oListeInvites
      type : 458752
+   -
+     name : sRepresentation
+     procedure_id : 1542540652583370344
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.sRepresentation
+      PROCÉDURE sRepresentation() <métier>:chaîne
+      renvoyer :p_sNom
+     type : 458752
   properties :
    -
      name : p_bTop_Termine
@@ -1274,59 +1158,6 @@ class :
          :ZF_EstModif()
          :m_bTop_Termine = bTopTremine
         type : 2031616
-     template_refs : []
-   -
-     name : p_oUsr_ChefProjet
-     identifier : 0x140d04005eab3498
-     type_code : 103
-     p_codes :
-      -
-        code : |1-
-         procédure publique p_oUsr_ChefProjet() : ClDbUsr
-         
-         renvoyer :m_oUsr_ChefProjet
-        type : 1966080
-      -
-        code : |1-
-         procédure publique p_oUsr_ChefProjet(oValeur est ClDbUsr):Vide
-         
-         si PAS ZF_bObjEgal(:m_oUsr_ChefProjet, oValeur) alors
-         	:ZF_EstModif()
-         	:m_oUsr_ChefProjet <- oValeur
-         fin
-        type : 2031616
-     template_refs : []
-   -
-     name : p_bTop_Prioritaire
-     identifier : 0x140d04005eac3498
-     type_code : 103
-     p_codes :
-      -
-        code : |1-
-         procédure publique p_bTop_Prioritaire() : booléen
-         
-         SI PAS :m_bInitSituation ALORS
-         	:ChargeSituation()
-         FIN
-         
-         renvoyer :m_bTop_Prioritaire
-        type : 1966080
-     template_refs : []
-   -
-     name : p_sCmtrsituation
-     identifier : 0x140d04005ead3498
-     type_code : 103
-     p_codes :
-      -
-        code : |1-
-         procédure publique p_sCmtrsituation() : chaîne
-         
-         si pas :m_bInitSituation ALORS
-         	:ChargeSituation()
-         FIN
-         
-         renvoyer :m_sCmtrsituation
-        type : 1966080
      template_refs : []
    -
      name : p_bTop_Direction
@@ -1444,37 +1275,9 @@ class :
       -
         code : |1-
          procédure publique p_aClassifInvite() : tableau associatif de ClColUsr
-         
-         renvoyer m_aClassifInvite
+         aTmp est un tableau associatif de ClColUsr
+         renvoyer aTmp	//m_aClassifInvite
         type : 1966080
-     template_refs : []
-   -
-     name : p_oUsr_ChefProjet_ID
-     identifier : 0x141cba6b08dcc449
-     type_code : 103
-     p_codes :
-      -
-        code : |1+
-         procédure publique p_oUsr_ChefProjet_ID():entier
-         //Propriétés de l'objet m_oIDScr_UserStory, accessible via son ID
-         SI :p_oUsr_ChefProjet = Null ALORS
-         	RENVOYER 0
-         SINON
-         	RENVOYER :p_oUsr_ChefProjet.ZF_Get_IdUnique()
-         FIN
-         
-        type : 1966080
-      -
-        code : |1+
-         procédure publique p_oUsr_ChefProjet_ID(nValeur_p est un entier):Vide
-         
-         SI nValeur_p = 0 ALORS
-         	:p_oUsr_ChefProjet = Null
-         SINON
-         	:p_oUsr_ChefProjet = ClDbUsr.GetObj(nValeur_p)
-         FIN
-         
-        type : 2031616
      template_refs : []
   procedure_templates : []
   property_templates : []

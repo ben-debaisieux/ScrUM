@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_Projet_Liste
  identifier : 0x2ca4a8bc020b1d1c
- internal_properties : BwAAAAcAAACz40ENSKKll4kkqe2pJmCxW88VNEJVV2Uy237nawRyRkV6UdmYutxWKv60xGCDYml+b67dJtCLdqeKokGnmG+M7g1LK1Wtd9obS2v1DpPFdWhGUWhbr2VEzou7crkzQZ1q88PCAfBVIngkGNFDg3MaV2se2tH6n0gMWwvhhbwhcqJuPlaDStUzd1LCEkMEbEQe6YYapfu5VaqDEshNwE4QTJ34ssdy5oxo6CBIWwgPWgaXSJUddBDKD/YQg+XbM7IlaEUxXvQXnt9mcsDBVbiDq2mEmYWotpTOyLvZOq5vOD5/SEHiM3tXQrC+x6iQpxaQADrv5QEevPjSb07hICwfoR41PCw33UuxqqPLWMO6hb4pdmZ321wF1VOC03MkBNvLgT4+OW1VB2TCHsRgjIOA3unzL3QrCeGPXh/kcsF2tXf7j34cRxPzAGJpFY/JnnbSdLGmfZ7Lqdyka9VyFSNGzuy5wLyWkfQbpsGkONOD/wnsnv4/EA8UYHR/kyAatMqiK2xEUJWzrkX7st4QxD7fKYZLSe/eXjhA8rVIUnfeTxFwvRZWfFW7EkR0x3Pc1e8I9eYL1Q7Oce4V8rCej/8qfTJnuTVermUuWNLZomlU7Ypt9oCdiipVlK/idMStZohPL0SVl9B9FO01BxqWy/5iiGYRvmZJ8Kd29tYoloHWH2yDauHeJnoDypCrLTyiZ3KwiRKAKSBAk1KL5I6OIYzLA05p60pIf+O+V9S0IA==
+ internal_properties : BwAAAAcAAADhHWj3AOI3WxJ3WQGMz6iVdT9t7Hc2MzIk6jclSp0rE1sSAXU1/h6Hj8UjE2z4RdYdOMdnVf0YE7tfGONIatzO+BBAlOTyYR3OcYrW+Gek2iFjgJ0TzEIPS+GoBq9iza7axf7BOlxd04OIwXK0WXYz+CZ6ilJvQtYuBzu6q95YphVswU6I4W6rZbHgGD99yBy4KNcS7okn4sgqn6uzpQuqIOPwGx0m0DhBTK9a7fBfVezwjWqrPv/F8etxYxOHkVVn/3yB9MLJNHW0Fv+iEBsslnGxlWyOzDyhYq0N8nHsgKUROzDF6//DsQNtAM2m8Nn2+f+B0AuzR7i5WgOmATaQKKL5U9f/Y24tG9k9NJ7SklsMu6FPXNnbRKJsr8bYxDZ2EvAtFULxqRioW1QmLK3e2p/EETmfbMqg21KGwygbV8Kg+P+vHCtTKR/0JCefVbbOfT9w5wY/VfTUqVbNg2ONUNAFjggoo4MIy3fkZgbFC6yfpYRHA/ymqgr0NZeZ3kBMZ0S9XtMk69gGEQFOn5mV6BxmemLAQ3wuv2gyZI6+jBOqDw4+jSK+MhUh2NkgfKjVG1A9EnillIBYOXK0DHtTgntJD0MoKLSAQ688yvIYq6X0qIXThYKH4nZ29VOu0KddjkERPR+CjHhRXGKzYP7FSKz8bfPSB4euXaNEpEFzDqeWPF+C34GBAnvazXxHrZ5C1YBo/PGGAJz3AqRPDU8Y1Oy9tiwMt7x44Duk
  properties :
   width : 760
   height : 401
@@ -146,6 +146,9 @@ window :
          //	oColProjet <- goApp.m_oUsrCnx.aoMesProjets(ClUsr.usr_tous)
          FIN
          
+         aUsrCdp			est un tableau associatif de ClDbUsr dynamique <- ClColUsr_Projet.aoUsersCDPFromColProjet(oColProjet)
+         
+         
          TBL_Projet..AffichageActif = Faux
          TableSupprimeTout(TBL_Projet)
          
@@ -156,8 +159,8 @@ window :
          		TBL_Projet[nLigne].COL_ID				= oPrjTmp.ZF_Get_IdUnique()
          		TBL_Projet[nLigne].COL_Nom				= oPrjTmp.p_sNom
          		TBL_Projet[nLigne].COL_Top_Termine		= oPrjTmp.p_bTop_Termine
-         		TBL_Projet[nLigne].COL_Utilisateur		= oPrjTmp.p_oUsr_ChefProjet.p_sNom
-         		TBL_Projet[nLigne].COL_IdUtilisateur	= oPrjTmp.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+         		TBL_Projet[nLigne].COL_Utilisateur		= aUsrCdp[oPrjTmp.ZF_Get_IdUnique()].p_sNom
+         		TBL_Projet[nLigne].COL_IdUtilisateur	= aUsrCdp[oPrjTmp.ZF_Get_IdUnique()].ZF_Get_IdUnique()
          	FIN
          FIN
          

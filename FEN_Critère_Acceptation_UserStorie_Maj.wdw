@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_Critère_Acceptation_UserStorie_Maj
  identifier : 0x2e2173ac01515381
- internal_properties : BwAAAAcAAAAWKcLus6ZtZLQHXUL8orsP5bTj6Hd8Q7Z1SfpGJex06fvc4RnqGgGQr8tzeiLcCJYCPzbcW6wtv5MHgmvsH5S6JoEU/2KXlMFdXbAJ1vC9bIAdW/xC+xS/QJiVz5ez7jDAPyJet26/gEYdFtFpjVY8mRIfi6YhPTi8Hggq7xcDwczyPw4qMtOVMUh91JcNyKXsp1MpAaShMuNRPK8rvI6+grRhMA7dsFfkuU/P85Upx0geeW+QnU4xSF29Wnqw8x0ayMzr1/IbRzuv6GMu8rFtjoFBeigc46ew2hDtRD6A5J/UhNVWemD0VWyZ/hv2rdFBd7415vGPgwRDOiYm1uha4ZLpdNbbAV/vB4Ov6OaDyhzprL4/N3OmM0QfdE9CA8V1hfLqNcB73nXdr3G6BiKumDEBDTli25Z0WCWCvisMsg0LWzhdw5PwE6WlSo1zcuuke2sq/VN0PkpnUm3T2gNDy3HEg3tZN/qYEfDzHvjgZZibrLH4CgyKh9kPtPWOZnIzpShq7TuB5hswA0nhkUIsMdFcFG3/FRPpwz6YL1Bv24yrdP+CWFo1pcWVBvAVPv8OyFU+yrjggbC4AEmIzecDaX1ANrmtITRrRgTh8bmEUqEmx3ARu5tHh5BBODqP+mbhtDkrDu5X2pp3cBEV4ShyIdvM8aZQ6KU9GxOrRrUKj3bTfEejADHHR1m/Orl+G+2/k9k0YjYv/e7XttlLeRKsvX2MTTFRoZNRquxpuQ4LN+YFIYjQmEXGqnn8Fdc93Y7Dx5UME4ziGd1iHfjT8G3QCulEt5yMId5wx3ensy2iwlE6Gn/pWTKoIEoZryYYKwMS
+ internal_properties : BwAAAAcAAADM6E4iLrGVFhMKhh+I2NORbZ/Xza61CpjpK54DhFgnmnnIN4udOtwTxoyCfXhhCVZ3cuev0CpNI7PbEHAbD1KJDnFAVN0rBYfvFLt0NyCI4Ovl+c1aXWxQ36HZTxy96GyLfp1BDDHSqrHY1G3J2+neoXwSUXnrocu2fUc6lRoC1AwqS2+o2jPjJtBcerdO9gGsMdwIwsVFmGbN/GziarrgdmPqonFHdlH1CaHaSDpOfslVdveKrQmxq2owDLFaHxf7yQ20G5hSR4kFl1bx6p0l7009NvCU0938CCaSZBVGTF8qmn9uSOdlIRRJe0A77JlfezBNd24hQIkWbtzl+BgxxZ1CN/jBVfFrW/xRMOx/NUr2zRbpyCSiEqO5Me+hca3AQ0D1pVGCCN2T4MOYCPTfIYocl33AaeOSVEQDUr0qSaLlfPdIyhI2jmw15+PdzpXSO4Vedwt05JxNhtCGEvVFpASKgAmeOFRM+ODkk0R2yccC5tmp+iRR4qC0votPmYOC+RF3bPBHNXSqkCkkRlU+tzgA/APOYVHP2ZmlGCVoB+k1Fin0M3FpFppEdzPmP2wo8TOa+izKiA67Lm3TmjUmDqeZ0f6cygAkIjuyHntyU9W6yHxUm9GnZB9hvBqvrL3hPTU51sskHjFpDPWE7bWF9VORLqaiBrsWOu63T6KT/oyKAGmZTPZqYVK76Yyre8FSlStx//CfopnsspZLyTk4qGrTxav6nzVYE5USL39kAnCK6I4mCb7ukRKCKaR2jyj4iMstEO6Dwvl1ss5A8qTV1xTxm7/aVEjRiKq5GnwjUGSxPSjsAccPT6C95dIifsSou0c=
  properties :
   width : 1024
   height : 632
@@ -1053,7 +1053,8 @@ window :
       ClColUsr.Combo_Charge_Usr(MaFenêtre..nom, CBO_Desactiveur..nom,ClDbUsr.usr_tous)
       ListeInsère(CBO_Desactiveur,"<Aucun>" + gLien(0))
       
-      ClDbCritereAccept.Combo_Charge_Etats(MaFenêtre..Nom,CBO_Etat..nom)
+      
+      ClColCritereAccept_Etat.Combo_Charge_Etats(MaFenêtre..Nom,CBO_Etat..nom)
    -
      code : |1+
       // cache champs inutiles

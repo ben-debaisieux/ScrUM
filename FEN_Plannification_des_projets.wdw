@@ -253,7 +253,7 @@ window :
          	TBL_Gantt[nLigne]..Couleur		= Blanc
          	
          	tableautrie(stSuitePrj_tmp.aProjets,ttMembre,"nOrdre")
-         	nSprintDepart = goApp.Sprint_Num_Actuel()
+         	nSprintDepart = goApp.p_nNumeroDuSprintActuel
          	
          	pour tout element stPrj_tmp de stSuitePrj_tmp.aProjets
          		

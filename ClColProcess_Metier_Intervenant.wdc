@@ -39,11 +39,11 @@ class :
       
      type : 655360
    -
-     name : addItemById
+     name : addItemById_old
      procedure_id : 815566322696107
      type_code : 12
      code : |1+
-      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
       :ZF_addItem(ClDbProcess_Metier_Intervenant.GetObj(nId_P))
      type : 458752
@@ -66,11 +66,11 @@ class :
       ZF_InitCol(:m_aoProcess_Metier_Intervenant)
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 815566322696110
      type_code : 12
      code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       oObj est un ClDbProcess_Metier_Intervenant dynamique
       
@@ -169,9 +169,37 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll()<métier>:Vide
+      PROCÉDURE prive GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Process_Metier_Intervenant..Nom)
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542750414660368289
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbProcess_Metier_Intervenant
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fc21224be6670
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau ClDbProcess_Metier_Intervenant dynamique
+         renvoyer :m_aoProcess_Metier_Intervenant
+        type : 1966080
+      -
+        code : |1-
+         procédure protégée p_aoObj(aValeur est un tableau ClDbProcess_Metier_Intervenant dynamique)
+         :m_aoProcess_Metier_Intervenant <- aValeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

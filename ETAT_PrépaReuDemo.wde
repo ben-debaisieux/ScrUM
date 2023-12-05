@@ -92,7 +92,7 @@ report :
       -
         code : |1+
          LIB_NomProjet	= "Projet " + zoPrj_P.p_sNom
-         LIB_Responsable	= "Responsable : " + zoPrj_P.p_oUsr_ChefProjet.p_sNom
+         LIB_Responsable	= "Responsable : " + ClColUsr_Projet.oUserCdpFromProjet(zoPrj_P).p_sNom
          
          COL_Graphes.InfoProjet(GRF_Avancement..Nom, zoPrj_P)
          COL_Graphes.EvolCharge(GRF_EvolCharge..Nom, zoPrj_P, Vrai)

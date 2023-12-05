@@ -219,7 +219,7 @@ window :
         code : |1+
          SI TableOccurrence(TBL_taches) >= 1 ALORS
          	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_taches.COL_idTache)
-         	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
+         	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache) ALORS
          		AffTaches()
          	FIN
          FIN

@@ -702,22 +702,12 @@ window :
       
    -
      code : |1+
+      //AnalyseurDébut()
       
       
       SI goApp.m_oUsrCnx.p_bTop_Equip_Informatique = vrai alors
       	GR_Dev..etat = Actif
       	SEL_ModeAffichage = 1
-      	
-      //	oColTaches est un ClColTaches
-      //	sReq est une chaine = [
-      //	select
-      //		Scr_Tache.*
-      //	FROM Scr_Tache
-      //		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
-      //		INNER JOIN Scr_Projet ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)
-      //	where Scr_Projet.Top_Termine = 0
-      //	]
-      //	oColTaches.ZF_LoadSQL(sReq)
       sinon
       	GR_Dev..etat = Grisé
       	SEL_ModeAffichage = 2
@@ -727,7 +717,6 @@ window :
       
       //AnalyseurFin()
       
-      //goApp.ZF_LibereInstancesMemo()
      type : 34
    -
      code : |1+
@@ -761,7 +750,7 @@ window :
      name : ChangeModeAffichage
      procedure_id : 1205434832815812626
      type_code : 14
-     code : |1-
+     code : |1+
       procédure ChangeModeAffichage()
       
       nInd est un entier
@@ -770,6 +759,9 @@ window :
       MaFenêtre..Plan = 2
       
       TDB_General.SupprimeTout()
+      
+      //AnalyseurDébut()
+      
       
       nInd = TDB_General.AjouteWidget(FI_MesProjetsEnCours_v2, "Mes projets")
       TDB_General[nInd]..Visible = Vrai
@@ -847,6 +839,8 @@ window :
       
       MaFenêtre..Plan = 1
       Sablier(Faux)
+      
+      //AnalyseurFin()
      type : 458752
    -
      name : MajTitre
@@ -867,7 +861,7 @@ window :
       //
       procédure MajTitre()
       
-      MaFenêtre..Titre = "ScrUM v. " + ExeInfo(exeVersion) + " - " + goApp.m_sMsgCnx + " - sprint " + goApp.Sprint_Num_Actuel()
+      MaFenêtre..Titre = "ScrUM v. " + ExeInfo(exeVersion) + " - " + goApp.m_sMsgCnx + " - sprint " + goApp.p_nNumeroDuSprintActuel
      type : 458752
   procedure_templates : []
   property_templates : []

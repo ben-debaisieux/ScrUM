@@ -49,6 +49,10 @@ class :
      type_code : 12
      code : |1-
       procédure ZF_bEstExpire():booléen
+      
+      //nDuree est une durée = DateHeureDifférence(DateHeureSys(),:m_ZF_dhExpiration)
+      //si :m_ZF_dhExpiration < DateHeureSys() alors trace(" Exp : " + objet..classe + " - " + nDuree..EnSecondes)
+      
       renvoyer :m_ZF_dhExpiration < DateHeureSys()
      type : 458752
    -

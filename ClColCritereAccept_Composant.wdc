@@ -16,9 +16,9 @@ class :
    -
      code : |1+
       ClColCritereAccept_Composant est une Classe
-      hérite de ClZF_ColObjDB
+      	hérite de ClZF_ColObjDB
       PRIVÉ
-      m_aoCritereAccept_Composant est un tableau ClDbCritereAccept_Composant dynamique
+      	m_aoCritereAccept_Composant est un tableau ClDbCritereAccept_Composant dynamique
       FIN
      type : 131072
   procedures :
@@ -37,11 +37,11 @@ class :
       PROCÉDURE Destructeur()
      type : 655360
    -
-     name : addItemById
+     name : addItemById_old
      procedure_id : 1437760634949542864
      type_code : 12
      code : |1+
-      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
       :ZF_addItem(ClDbCritereAccept_Composant.GetObj(nId_P))
      type : 458752
@@ -64,24 +64,52 @@ class :
       ZF_InitCol(:m_aoCritereAccept_Composant)
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 1437760634949739487
      type_code : 12
      code : |1-
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données):Vide
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données):Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       oObj est un ClDbCritereAccept_Composant(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept_Composant)
      type : 458752
    -
-     name : GetAll
+     name : GetAll_old
      procedure_id : 1468676792952786910
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE public GetAll()<métier>:Vide
+      PROCÉDURE public GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_CritereAccept_Composant_Type..nom)
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542747914936915411
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbCritereAccept_Composant
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fbd7c21d77abb
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau ClDbCritereAccept_Composant dynamique
+         renvoyer :m_aoCritereAccept_Composant
+        type : 1966080
+      -
+        code : |1-
+         procédure protégée p_aoObj(aValeur est un tableau ClDbCritereAccept_Composant dynamique)
+         :m_aoCritereAccept_Composant <- aValeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

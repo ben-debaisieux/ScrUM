@@ -387,7 +387,7 @@ window :
          sinon
          	si pas TBLH_Projet.COL_EstUneUS alors //c'est une tache
          		oTache est un ClDbTache <- ClDbTache.GetObj(TBLH_Projet.COL_N)
-         		Ouvre(FEN_User_Story_Detail_v2,oTache.p_oUserStoryParent, oTache.Get_IdUnique())
+         		Ouvre(FEN_User_Story_Detail_v2,oTache.p_oUserStoryParent, oTache)
          //		Ouvre(FEN_Tache_Detail_V2,)
          	sinon
          		Ouvre(FEN_User_Story_Detail_v2,ClDbUserStory.GetObj(TBLH_Projet.COL_N))
@@ -680,23 +680,23 @@ window :
          		si CBO_Etat = "" ALORS
          			//ok
          		sinon
-         			si CBO_Etat = cst_StatutUS_A_faire et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.A_faire ALORS
+         			si CBO_Etat = ClDbUserStory.cst_StatutUS_A_faire et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.A_faire ALORS
          				bAffiche = Faux
          			FIN
          				
-         			SI CBO_Etat = cst_StatutUS_Commencée ET oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.EnCours ALORS
+         			SI CBO_Etat = ClDbUserStory.cst_StatutUS_Commencée ET oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.EnCours ALORS
          				bAffiche = Faux
          			FIN
          				
-         			si CBO_Etat = cst_StatutUS_En_Test et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.En_test_fonctionnel ALORS
+         			si CBO_Etat = ClDbUserStory.cst_StatutUS_En_Test et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.En_test_fonctionnel ALORS
          				bAffiche = Faux
          			FIN
          				
-         			si CBO_Etat = cst_StatutUS_Terminée et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.Terminee ALORS
+         			si CBO_Etat = ClDbUserStory.cst_StatutUS_Terminée et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.Terminee ALORS
          				bAffiche = Faux
          			FIN
          				
-         			si CBO_Etat = cst_StatutUS_Annulée et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.Annulée ALORS
+         			si CBO_Etat = ClDbUserStory.cst_StatutUS_Annulée et oUS.Get_EtatUS() <> ClDbUserStory.ECompteNbUS.Annulée ALORS
          				bAffiche = Faux
          			FIN
          		FIN
@@ -732,15 +732,15 @@ window :
          	
          			SELON oUS.Get_EtatUS()
          				CAS ClDbUserStory.ECompteNbUS.Annulée
-         					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_Annulée
+         					TBLH_Projet[nLigneUserStory].COL_Etat = ClDbUserStory.cst_StatutUS_Annulée
          				CAS ClDbUserStory.ECompteNbUS.Terminee
-         					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_Terminée
+         					TBLH_Projet[nLigneUserStory].COL_Etat = ClDbUserStory.cst_StatutUS_Terminée
          				CAS ClDbUserStory.ECompteNbUS.EnCours
-         					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_Commencée
+         					TBLH_Projet[nLigneUserStory].COL_Etat = ClDbUserStory.cst_StatutUS_Commencée
          				CAS ClDbUserStory.ECompteNbUS.En_test_fonctionnel
-         					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_En_Test
+         					TBLH_Projet[nLigneUserStory].COL_Etat = ClDbUserStory.cst_StatutUS_En_Test
          				CAS ClDbUserStory.ECompteNbUS.A_faire
-         					TBLH_Projet[nLigneUserStory].COL_Etat = cst_StatutUS_A_faire
+         					TBLH_Projet[nLigneUserStory].COL_Etat = ClDbUserStory.cst_StatutUS_A_faire
          				AUTRE CAS
          					
          			FIN

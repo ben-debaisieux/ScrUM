@@ -193,7 +193,7 @@ window :
          			OuvreSoeur(FEN_User_Story_Detail_v2,oUS)
          		CAS zcst_tache
          			oTache <- ClDbTache.GetObj(TBL_Resultat.COL_Id)
-         			OuvreSoeur(FEN_User_Story_Detail_v2,oTache.p_oUserStoryParent,oTache.Get_IdUnique())
+         			OuvreSoeur(FEN_User_Story_Detail_v2,oTache.p_oUserStoryParent,oTache)
          		AUTRE CAS
          			
          	FIN

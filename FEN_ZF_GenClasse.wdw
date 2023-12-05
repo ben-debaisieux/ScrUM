@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_ZF_GenClasse
  identifier : 0x23e8d36f504b8b92
- internal_properties : BwAAAAcAAADYd1kgcdsi/ioAoWNWPvv1MlBaLqYkcPHhoGFXhU9nrpepdcI/noqzz72ESotn90MlrMXVq3K2BCsKJp+ZW9JLUIu9zx4kszrHCc8zCF3d+sGpu1vPMCHbWGw8nvS6RtnlX/PthgmCz6Q1A5Nw4FzyK62fCZlRyNHAp3Vj2HP81iwFZS8vJYXI0KnmRrZOrGeltB9I94swZo9f+c08bjEFpp1nPjGoHz5RYVyNSS8z+22mpA3VHrT7QA6bzqbu2uhPLMEWvO6U/UpxQbAGdgRnxaLAHQKYFJ0CsVgqJt6rO2EelE26ICbx9zc3lGnWTGG+U5dmOCO4wg2fxEYpetMurwwMrrhjqFClWjlv/Ct56WP1bBxy6ZyHqPb3p8wWIVAn7LqgH3rxv9XfNFgux5iPRGcELfVr8oD5aVNq7D0ICVxAVbdaMFFzaTLoJJ6tUux9P7TSypiK1LKhFQHYQhaBHJL+QgVaD4i8eFqhF2fhe9ZzcBUNbRMuDwLz0zER0DgmvsEO2ieoQcLtFoE/nYztTQivtXx6mVnJMDcgK3J1JMKoqhB7UPd5DWBd7dsMzPt9ciwEm3Jd7GxcHSartbFFxtBY57VjxJb9NCWDOqNhmOtG4cd1q1CAVVXnFZPOxNfYCLw3+sgWLi2XcSUBbfkNeElpLS4XM7AyUrYylR8skYjSZKIMxzp34zoDCfpk9zQ=
+ internal_properties : BwAAAAcAAAB5CuH9DjzbgaW5FcPO1h8uxDnkINCftW2pcq5gHyFerv0v6b5UxUUzU0xc21umS+B1UJk7RNjV00bku9A600EHaZOesJJPzBSe1x/er8AoasYPXpPinxja80oRTDNd6FwoGc5jKrsAFTUUpor5tInEd9iX+HnamJGNB/G/BX1DrkTnB44NHmT/T4kgLLe0qHVxYIIHxNQkOdHAzqMbxYUWNOJxB2RSpi1RAYZGSka2wxBzTLXPfKCQT46RBwrSDlByN/oUZi9jmHxzJHOAv7Y8cpVdR4sEo1ky7UqieIM4TA/2v0G9N/ErqJlDLenDNWYDyWf+mEKGGRj0vseMBAzn/PHPA8rNrX9l2Vrds5lrFYmboKZX9sBQK5K44Qll6OAcEMCsQgdQrVr5rms6mg9rie9r/Uj5hK3uOlfzQwoVnstuJxmOxg8SQ9J1Xb2DRRFb9XAoPkaRbshpCMldZU3MMeTAyrN7XKcNE70oZS08iQpQxSNrSH/8tShXpgq9jhS0EAcuke67CIyPqgFMaaVaBjume24tPNUJGSijZDepqo89pf1etL1aBzeDoitdkDD5FljTfM1VR4xP0YVxQ30Brh26PaKBKAYYr3Uqec2WQHy5NVbsu/b9Jq9GQaXhF5jOJU+NCE+zVUQaL4adW6yGYH75QVJqy3wJI6XjgFxI792NALDUvCz0RhUeeyxshg==
  properties :
   width : 1024
   height : 768
@@ -37,6 +37,13 @@ window :
         code : |1+
          
          listeajoute(CBO_TableSource, ClZF_GenCodeFic.sListeFicAna())
+         
+         //pour toute chaine stbl de ClZF_GenCodeFic.sListeFicAna() separee par rc
+         //	si ClT3M.bTblGeree(stbl) ALORS
+         //		ListeAjoute(CBO_TableSource, stbl)
+         //	FIN
+         //FIN
+         
          ListeTrie(CBO_TableSource)
         type : 14
       -
@@ -55,7 +62,7 @@ window :
   -
     name : ONG_SansNom1
     identifier : 0x2414d2a6ceb25bcb
-    internal_properties : BwAAAAcAAABLQV3FzySUni4yrCk+lJZ1pI82FPgN5Vz/s9HPs1n4OJDndPohVOVAH9LgqN2wABR1z/GRKi6ryenIY1bbqnZXOtyvxA1tURENE8R++hIFIa4QcdkES8YIyagg9fqtcVfkW0Xcn8xOgojnwW1tEGo3hUmErbG7tavoasKvuuwYGKrTqL1ARw5/+YlUqho3glQjQv9/hjJIUAw3kOvC8OJAX7lMcM4r4y1Ic6RbcQTdtQ3fApx2jKg4Xkz5ig2WViD4xr+W4NxYu24EcBgr1JV9knEzv/K1madqdqVl6EnbeEZF57vasYXkWmA2VoDK+mSFTL+CZpS/v2lhA+1uvSlQRWGqIyjO16H8cQXdUXnqXWf1BtymapKUnQxUcW1nn80tWKCmPH2qOeiDNxxCtgOA5dX/kC2302HWOzzbcW8B0AfbdgDxKQ5P+gTIbH87DrKETXlC46C1/2JV5fdObAz+uyQUd0eVfaSpUTMSwzkF2qz6l96sYKKj3EdysTcr2QZlI041uLWF/oVzFcSMVaWTJ0JCoakjmRXAG9HQwYWePLMgZIzDJ4flvNXBEN3fQUyoFgX+wHL5t2XCT1ZkAIhWscdNdg3UZ4djhZmsaljimwkWBd9dNYQIN3V8bcqEdZ1VgtI42iZOGoEua9C0JADYPUV2vYAsr4jul1BmNqbd11CScKv7o0ZTIScuUxbGe8oxTXiYQ+Yr22iFdYQhZXx+7/dS2JnrbOHmUuhePMTNnrn+b/bSkDctCiRYU4gVPtpfNvw9K5Dk6gkpZisXMPW+p+zd+w17fD+86/LeZXAY4p1fklv1cc7c2UZxqf5JTOYET652JYQY2ek20miZEmrbPHHXueOl/1foFtnKmychlCWNjujr7EGBPiwdeKXUyOtE6wUunDfUTwZx6v7aCtBZa32GDpwleUMwjfDMcjRvvzinj3TbYAmGhiTlhyPmdl7O+4rUXQnbWVRSudEd+IC4zbT6U+GCG5PB9MSp3mb8gQ3SOPJycKsOXnl/ezyipZZuFKypMy8O1CcMajqiaT6toNrOafAT+JZGVHwH+CbGu21PVn0N68kJuR5D01wHmxVh+qdvlHR0OpQXa1lPkSu9oo1wYs1tykPhGyLNBkRRgJzQa2zxkYSQfRUK03BubvM2F+8xjDKRC1JecXDWbtJ3Yq1LUt7vnv2wQXrrT6xyDnn+vnHaCUrNlJK37A==
+    internal_properties : BwAAAAcAAACSifgRQuhfSPm9F1YynN1RHr5uqPFxjR8867aQ2UC+yG+p5aVfoKe6mpR7idDzEveXl3RRGJzgqz02UiO4mMBKrOa2ZCGJ2hla3y010smLTETpsIP/gImKmVtXsQUWOGwKX9Y4jmqu/++W1kCwl9kLOtvV9wMG/NKx+e5nPkGvovpze5OXxLZz7SU3UYNrjpifxx8QRIkws3SGjPqa0PVsZNhF4Awqs1KO7LFsaZBiS0dUH+ddfAY8NduRa6QuVVqmtlCPOHa1TV0amszDucU3aPp23hVP3QtakJ8qVNs/yxRK2CSgqxynPuiy5SaNUvTs/YLwUj7GLtgkWzs7NRGHCQusI1Tj1FwaP5tH+oJuF13qGT0CqU5XW7jy48LMjBxEAz+0IjveXLz0eZBMrsoNbhpWe3x9x6iBAeBtmF4ndRHxk76Ghpd6MRvjR0nzR19F84S3HK5MEBTs7buwO1pYXBxwohnxbcYuyAi6EtuNoU+YCnKKloNWABzeYWPNDSGM9D970/1hPJIrkrtSdM20Am2UkX5a2EJLSTLqVYwm+Ib6QD7OpWsSbcsiyZdAC2XbA65dfsounsw2OMP8x2a0PEy1smuluPr/hVxUFEqCslmdTxDs4lkwmgI8MmkxINx43TOgfAD/XzkLWiU72DcP8eo4ol0qs8+KA+iuSibBJMfPqedHv+iS5Mce6GOsxDq9tuuGCUmpLoCcu4xKH8Pj9rxTmWaP2EkIA+4rhbBYezK52B1ASQj7oIMAiNBUW3eRUSK0Cdfkn5qHS/BO3D2s/m6VPNQgJ9I4vrFFjuN+ly/KA8wfKJMPy03B9mMXpuKzqC4DsmOfHQ9ETYykUuduUto7XaV/ZVSXQNEpPxFLdLsqdcJzT7W8qKqZNbFdDrsox20cKBfmFf5zi80YApkKIZY1TWEN9eFB1fih7ncTcdscFiIcexhl5z204ga/Ut/sW5OeGbiZZPXkpEKfb0Zs2QUUksRjlJdktBcT10hA7a1j4uh63P1O/8dEI8ymmP1yWVnp4W1KZJz6nlG5RprG5jhu1OD/AzwEXHnJrgTWP6Ics9sb+VUJzsCKO4LVlvifQV71MvoU1hVHyoVYhMkxNSx12oG9kR7ZFrZF6L5oW2XE7/5vMvmWvRDKS75+p7MM3/56ewiSIWbUUlVMy67qxUsSV5Svek8jwNTjfSt65Dp04y9UGwaRWvY=
     properties :
      x : 3
      y : 49
@@ -82,7 +89,7 @@ window :
               code : |1-
                // Version 1
                // Description 
-               // Saisie de texte multiligne
+               // Saisie de texte multi-ligne
               type : 14
             -
               type : 276
@@ -1983,7 +1990,7 @@ window :
                
                sdExec est une source de donnees
                QUAND EXCEPTION DANS
-               	goApp.Rsql(sdExec, SAI_SQL)
+               	ClZF_ObjDbLs.mg_oApp.Rsql(sdExec, SAI_SQL)
                FAIRE
                	erreur(ExceptionInfo(errComplet))
                FIN
@@ -2030,7 +2037,7 @@ window :
                	si INT_Options.Injection et SAI_SQL <> "" ALORS
                		sdExec est une source de donnees
                		quand exception dans
-               			goapp.Rsql(sdExec, SAI_SQL)
+               			ClZF_ObjDbLs.mg_oApp.Rsql(sdExec, SAI_SQL)
                			SAI_SQL = ""
                		FAIRE
                			SAI_SQL += rc + rc + "Erreur SQL : " + rc + ExceptionInfo(errComplet)

@@ -486,7 +486,7 @@ window :
      p_codes :
       -
         code : |1+
-         LIB_Responsable += zoProjet_p.p_oUsr_ChefProjet.p_sNom
+         LIB_Responsable += ClColUsr_Projet.oUserCdpFromProjet(zoProjet_p).p_sNom
         type : 14
   -
     name : BTN_Nouveau
@@ -654,7 +654,7 @@ window :
   p_codes :
    -
      code : |1-
-      PROCEDURE mafenetre(LOCAL zoProjet_p est un ClDbProjet, zoEpic_p est un ClDbEpic dynamique = null)
+      PROCEDURE mafenetre(LOCAL zoProjet_p est un ClDbProjet dynamique, zoEpic_p est un ClDbEpic dynamique = null)
       
       SEL_FiltreAFaire = 2
    -

@@ -32,6 +32,7 @@ class :
       STR_RubSQL est une structure
       	sType			est une chaîne
       	nTaille			est un entier
+      	nScale			est un entier
       	bEstNullable	est un booléen
       	sValeurDefaut	est une chaîne
       	bEstIndexUnique	est un booléen
@@ -244,7 +245,7 @@ class :
       		FROM [%oClasseGen_p.p_sNomTable%]
       		]
       		quand exception dans
-      			goapp.Rsql(sdIds, sReq)
+      			ClZF_ObjDbLs.mg_oApp.Rsql(sdIds, sReq)
       			POUR TOUT sdIds
       				TableauAjoute(aRetour,sdIds.Id)
       			FIN
@@ -450,17 +451,17 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      // sRubSqlDeTypeHF ()
+      //[ <Résultat> = ] sRubSqlDeTypeHF (<stRub_p> est STR_RubSQL)
       //
       // Paramètres :
-      //	Aucun
+      //	stRub_p (STR_RubSQL) : <indiquez ici le rôle de stRub_p>
       // Valeur de retour :
-      // 	Aucune
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure abstraite sRubSqlDeTypeHF(nType_p est un entier, nTaille_p est un entier = 0)<métier>:chaîne
+      procédure abstraite sRubSqlDeTypeHF(stRub_p est un ClZF_GenCodeFic.STR_DefRub)<métier>:chaîne
       
       /*
       sRetour est une chaîne<§cs:10§>
@@ -587,7 +588,7 @@ class :
       	stRetour.nTypeAlterRub	= cstTypeAlterRub_RAS
       	
       	//Récupération du type et de la définition
-      	stRetour.sType	= :sRubSqlDeTypeHF(stInfoRub.nTypeRubHF, stInfoRub.nTaille)
+      	stRetour.sType			= :sRubSqlDeTypeHF(stInfoRub)
       	stRetour.bEstNullable	= stInfoRub.bNullable
       	stRetour.nTaille		= stInfoRub.nTaille
       FIN
@@ -605,7 +606,8 @@ class :
       
       SI stRetour.nTypeAlterRub = cstTypeAlterRub_RAS ALORS
       	SI PAS bRubCompatible(stInfoRub.nTypeRubHF, stRubSql_p.sType) OU ...		//Type différent
-      			(stInfoRub.nTypeRubHF dans (hRubTexte, hRubTexteUnicode, hRubCaractère) et stInfoRub.nTaille <> stRubSql_p.nTaille) OU ...	//Taille défférent où cela a une incidence
+      			(stInfoRub.nTypeRubHF dans (hRubTexte, hRubTexteUnicode, hRubCaractère) et stInfoRub.nTaille <> stRubSql_p.nTaille) OU ...	//Taille différent où cela a une incidence
+      			(stInfoRub.nTypeRubHF dans (hRubNumérique) et (stInfoRub.nTaille <> stRubSql_p.nTaille ou stInfoRub.nScale <> stRubSql_p.nScale)) OU ...	//Taille différent où cela a une incidence
       			stInfoRub.bNullable <> stRubSql_p.bEstNullable ALORS				//Nullabilité différente
       		
       		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_ModRub
@@ -685,10 +687,14 @@ class :
       
       aStRubSQL		est un tableau associatif de CLZF_GenData.STR_RubSQL
       aRubs			est un tableau associatif de CLZF_GenData.STR_RubSQL
+      aRubsASupp		est un tableau associatif de CLZF_GenData.STR_RubSQL
       stRubSql		est un CLZF_GenData.STR_RubSQL
       
       aRubs = :GetDefRubSQL()
       
+      //Copie des rubriques, pour déduire les colonnes a supprimer
+      aRubsASupp <= aRubs
+      TableauSupprime(aRubsASupp,:m_oColGen.p_sNomRubId)
       
       SI aRubs..Occurrence = 0 ALORS
       	:m_bCreeTable	= Vrai
@@ -697,14 +703,28 @@ class :
       FIN
       
       
-      
+      //Parcourt de toutes les rubriques définies dans l'analyse
       POUR TOUT sRub DE :m_oColGen.aLstRubs()
+      	
+      	//Est ce que la description de la rubrique fait parti des rubriques présentes dans la base ?
       	SI aRubs[sRub]..Vide ALORS
+      		//Non > ajout de l'item vide
       		VariableRAZ(stRubSql)
       	SINON
+      		//Récupération de la définition actuelle
       		stRubSql = aRubs[sRub]
       	FIN
       	
+      	//Génération du script pour traiter la rubrique
+      	aStRubSQL[sRub]	= :stGenSQLRub(sRub, stRubSql)
+      	
+      	//Suppression de la rubrique, de la liste des rubriques à supprimer
+      	TableauSupprime(aRubsASupp,sRub)
+      FIN
+      
+      //traitement des colonnes présentes en base, qui ne sont pas dans la description de l'analyse
+      pour tout stRubSql, sRub de aRubsASupp
+      	//Génération du script pour traiter la rubrique
       	aStRubSQL[sRub]	= :stGenSQLRub(sRub, stRubSql)
       FIN
       
@@ -716,7 +736,7 @@ class :
      procedure_id : 1526415945504390885
      type_code : 12
      code : |1+
-      procedure protegee sNomRelDF(sTable_p est une chaîne, sRubrique_p est une chaîne)<metier>:chaine
+      procedure protegee sNomRelDF(local sTable_p est une chaîne, LOCAL sRubrique_p est une chaîne)<metier>:chaine
       
       renvoyer "DF_[%sTable_p%]_[%sRubrique_p%]"
      type : 458752
@@ -725,7 +745,7 @@ class :
      procedure_id : 1526416821677988133
      type_code : 12
      code : |1+
-      procedure PROTÉGÉE sNomRelFK(sTableFK_p est une chaîne, sRubriqueFK_p est une chaîne, sTablePK_p est une chaîne, sRubriquePK_p est une chaîne)<metier>:chaine
+      procedure PROTÉGÉE sNomRelFK(LOCAL sTableFK_p est une chaîne, LOCAL sRubriqueFK_p est une chaîne, LOCAL sTablePK_p est une chaîne, LOCAL sRubriquePK_p est une chaîne)<metier>:chaine
       
       renvoyer "FK_[%sTableFK_p%]_[%sRubriqueFK_p%]_[%sTablePK_p%]_[%sRubriquePK_p%]"
       

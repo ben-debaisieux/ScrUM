@@ -793,8 +793,8 @@ window :
       PROCEDURE MaFenêtre()
    -
      code : |1-
-      CMOD_SansNom1 = ClDbSprint.GetObj(goApp.Sprint_Num_Actuel() - 24)
-      CMOD_SansNom2 = ClDbSprint.GetObj(goApp.Sprint_Num_Actuel())
+      CMOD_SansNom1 = ClDbSprint.GetObj(goApp.p_nNumeroDuSprintActuel - 24)
+      CMOD_SansNom2 = ClDbSprint.GetObj(goApp.p_nNumeroDuSprintActuel)
       SAI_Budget = 282000
      type : 34
    -

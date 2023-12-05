@@ -17,6 +17,7 @@ class :
      code : |1+
       ClDbEpic est une Classe
       	herite de ClZF_ObjDB
+      	hérite de ClZF_Histo
       	
       prive
       	m_oProjet			est un ClDbProjet dynamique	<note="mapping=IDScr_projet">
@@ -49,7 +50,7 @@ class :
      code : |1+
       procédure Constructeur(LOCAL nID_P est un entier)
       
-      Ancêtre.Constructeur(Scr_Epic..Nom, Scr_Epic.IDScr_Epic..Nom,nID_P)
+      ClZF_ObjDB.Constructeur(Scr_Epic..Nom, Scr_Epic.IDScr_Epic..Nom,nID_P)
      type : 589824
    -
      name : Destructeur
@@ -162,7 +163,7 @@ class :
       oColEpics.ZF_LoadSQL(sReq)
       
       si oColEpics.ZF_nTaille() = 1 ALORS
-      	oRetour <- oColEpics.ZF_oItem(1)
+      	oRetour <- oColEpics.oItem(1)
       FIN
       
       

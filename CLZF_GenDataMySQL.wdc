@@ -57,7 +57,8 @@ class :
       	SELECT 
       		COLUMNS.COLUMN_NAME AS Rubrique,
       		COLUMNS.COLUMN_TYPE AS Type,
-      		# COLUMNS.DATA_TYPE AS Type,
+      		COLUMNS.NUMERIC_PRECISION,
+      		COLUMNS.NUMERIC_SCALE,
       		COLUMNS.CHARACTER_MAXIMUM_LENGTH AS Taille,
       		COLUMNS.IS_NULLABLE AS EstNullable,
       		COLUMNS.COLUMN_DEFAULT AS ValeurDefaut,
@@ -72,16 +73,25 @@ class :
       	WHERE TABLES.TABLE_SCHEMA = DATABASE()
       		AND TABLES.TABLE_NAME = '[%:m_oColGen.p_sNomTable%]'
       ]
-      goApp.Rsql(sdDefTbl, sReq)
+      ClZF_ObjDbLs.mg_oApp.Rsql(sdDefTbl, sReq)
       
       POUR TOUT sdDefTbl
       	
       	
       	sTaille est une chaîne = remplace(SansEspace(ExtraitChaîne(sdDefTbl.Type, 2, "(")), ")", "")
       	VariableRAZ(stRub)
-      	// ???				EstIndex		EstFullText	EstCleEtrangere		
+      
       	stRub.sType					= SansEspace(extraitchaine(sdDefTbl.Type, 1, "("))
-      	stRub.nTaille				= val(sTaille)		//sdDefTbl.Taille
+      	SELON Majuscule(stRub.sType)
+      		CAS "DECIMAL"
+      			stRub.nTaille			= sdDefTbl.NUMERIC_PRECISION
+      			stRub.nScale			= sdDefTbl.NUMERIC_SCALE
+      			
+      		AUTRE CAS
+      			stRub.nTaille			= val(sTaille)
+      			
+      	FIN
+      //	stRub.nTaille				= val(sTaille)		//sdDefTbl.Taille
       	stRub.bEstNullable			= (sdDefTbl.EstNullable = "YES")
       	stRub.sValeurDefaut			= remplace(sdDefTbl.ValeurDefaut, "_utf8mb4\'\'", "''")	
       	stRub.bEstIndexUnique		= (sdDefTbl.ContrainteAsso = "PRIMARY")
@@ -101,17 +111,17 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode CLZF_GenData.sRubSqlDeTypeHF
-      PROCÉDURE  sRubSqlDeTypeHF(nType_p est un entier, nTaille_p est un entier = 0)<métier>:chaîne
+      PROCÉDURE  sRubSqlDeTypeHF(stRub_p est un ClZF_GenCodeFic.STR_DefRub)<métier>:chaîne
       
       sRetour est une chaîne
       
-      SELON nType_p
+      SELON stRub_p.nTypeRubHF
       	CAS hRubBinaire
       		sRetour = "BLOB"
       	CAS hRubBooléen
       		sRetour = "BOOL"
       	CAS hRubCaractère
-      		sRetour = "CHAR(" + nTaille_p + ")"
+      		sRetour = "CHAR(" + stRub_p.nTaille + ")"
       	CAS hRubDate8
       		sRetour = "DATE"
       	CAS hRubDateHeure
@@ -152,8 +162,8 @@ class :
       //		sRetour = ""
       	CAS hRubMonétaire
       		sRetour = ""
-      //	CAS hRubNumérique
-      //		sRetour = ""
+      	CAS hRubNumérique
+      		sRetour = "DECIMAL ([%stRub_p.nTaille%], [%stRub_p.nScale%])"
       	CAS hRubRéel4
       		sRetour = "FLOAT"
       	CAS hRubRéel8
@@ -161,11 +171,12 @@ class :
       //	CAS hRubRéelTurbo
       //		sRetour = ""
       	CAS hRubTexte
-      		sRetour = "VARCHAR(" + nTaille_p + ")"
+      		sRetour = "VARCHAR(" + stRub_p.nTaille + ")"
       //	CAS hRubTexteUnicode
       //		sRetour = ""
+      //	cas hRubHeure
       	AUTRE CAS
-      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([nType_p])
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([stRub_p.nTypeRubHF])
       FIN
       
       RENVOYER sRetour
@@ -214,10 +225,10 @@ class :
       	sTypeId est une chaîne
       	
       	//Récupération du type de la rubrique
-      	sTypeId = sRubSqlDeTypeHF(:m_oColGen.p_nTypeHfRubId)
+      	sTypeId = sRubSqlDeTypeHF(:m_oColGen.p_stDefId)
       	
       	//Ajout de l'auto incrément si le type est définit comme tel
-      	SI :m_oColGen.p_nTypeHfRubId DANS (hRubIDAuto4, hRubIDAuto) ALORS
+      	SI :m_oColGen.p_stDefId.nTypeRubHF DANS (hRubIDAuto4, hRubIDAuto) ALORS
       		sIndicateurPK = "AUTO_INCREMENT"
       	FIN
       	
@@ -322,7 +333,7 @@ class :
       	CAS "BLOB"
       		bRetour = nTypeHF_p DANS (hRubImage, hRubMémoBinaire)
       		
-      	CAS "TEXT"
+      	CAS "TEXT", "LONGTEXT", "MEDIUMTEXT", "TINYTEXT"
       		bRetour = nTypeHF_p DANS (hRubMémoTexte)
       		
       	/*CAS ""
@@ -336,6 +347,9 @@ class :
       		
       	CAS "VARCHAR"
       		bRetour = nTypeHF_p DANS (hRubTexte)
+      
+      	CAS "DECIMAL"
+      		bRetour = nTypeHF_p DANS (hRubNumérique)
       
       	AUTRE CAS
       		bRetour = Faux
@@ -359,7 +373,7 @@ class :
       
       SELON stRetour.nTypeAlterRub
       	CAS CLZF_GenData.cstTypeAlterRub_SuppRub
-      		stRetour.sCodeSQL += "ALTER TABLE [%:m_oColGen.p_sNomTable%] DROP COLUMN [%sRub_p%]"
+      		stRetour.sCodeSQL += "ALTER TABLE [%:m_oColGen.p_sNomTable%] DROP COLUMN [%sRub_p%];"
       	CAS CLZF_GenData.cstTypeAlterRub_CreeTable
       		stRetour.sCodeSQL += sRub_p
       	CAS CLZF_GenData.cstTypeAlterRub_CreeRub
@@ -442,7 +456,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode CLZF_GenData.sNomRelFK
-      PROCÉDURE PROTÉGÉE sNomRelFK(sTableFK_p est une chaîne, sRubriqueFK_p est une chaîne, sTablePK_p est une chaîne, sRubriquePK_p est une chaîne)<métier>:chaîne
+      PROCÉDURE PROTÉGÉE sNomRelFK(LOCAL sTableFK_p est une chaîne, LOCAL sRubriqueFK_p est une chaîne, LOCAL sTablePK_p est une chaîne, LOCAL sRubriquePK_p est une chaîne)<métier>:chaîne
       renvoyer Gauche(Ancêtre.sNomRelFK(sTableFK_p, sRubriqueFK_p, sTablePK_p, sRubriquePK_p), 64)
      type : 458752
   procedure_templates : []

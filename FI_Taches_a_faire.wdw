@@ -222,7 +222,7 @@ window :
             	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_A_faire.COL_IdTache)
             	oUs est un ClDbUserStory <- oTache.p_oUserStoryParent
             	
-            	SI Ouvre(FEN_User_Story_Detail_v2, oUs, oTache.Get_IdUnique()) ALORS
+            	SI Ouvre(FEN_User_Story_Detail_v2, oUs, oTache) ALORS
             		Actualise()
             	FIN
             FIN

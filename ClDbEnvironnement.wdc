@@ -61,9 +61,6 @@ class :
       PROCÉDURE init_ObjBD()
       // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
       
-      
-      
-      
      type : 458752
    -
      name : Init_Data
@@ -71,8 +68,6 @@ class :
      type_code : 12
      code : |1-
       procédure globale Init_Data()
-      
-      
       
       
       SI PAS HRecherche(Scr_Environnement, IDSrc_Environnement, cstEnvironnementProd) ALORS
@@ -86,6 +81,15 @@ class :
       	Scr_Environnement.Libelle									= "Pré prod"
       	HAjoute(Scr_Environnement,hFixeIDAuto)
       FIN
+     type : 458752
+   -
+     name : sRepresentation
+     procedure_id : 1542943392296964554
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.sRepresentation
+      PROCÉDURE sRepresentation() <métier>:chaîne
+      renvoyer :p_sLibelle
      type : 458752
   properties :
    -

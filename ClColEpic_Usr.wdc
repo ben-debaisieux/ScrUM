@@ -39,11 +39,11 @@ class :
       
      type : 655360
    -
-     name : addItemById
+     name : addItemById_old
      procedure_id : 817308190980092
      type_code : 12
      code : |1+
-      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
       :ZF_addItem(ClDbEpic_Usr.GetObj(nId_P))
      type : 458752
@@ -66,21 +66,21 @@ class :
       ZF_InitCol(:m_aoEpic_Usr)
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 817308190980095
      type_code : 12
      code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       oObj est un ClDbEpic_Usr(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Epic_Usr)
      type : 458752
    -
-     name : GetAll
+     name : GetAll_old
      procedure_id : 817308190980096
      type_code : 12
      code : |1-
-      PROCÉDURE GetAll()<métier>:Vide
+      PROCÉDURE GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Epic_Usr..nom)
      type : 458752
    -
@@ -181,8 +181,38 @@ class :
       oModele		est un ClColEpic_Usr()
       
       aColRetour <- ClZF_ColObjDB.ZF_LoadSQLMulti_Priv(sSQL_p, aColRetour, oModele, aNListeIds_p, sRubVentilation_p)
+      
+      
       renvoyer aColRetour
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542748430338813219
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbEpic_Usr
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fbf4e23df98ef
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau ClDbEpic_Usr dynamique
+         renvoyer :m_aoEpic_Usr
+        type : 1966080
+      -
+        code : |1-
+         procédure protégée p_aoObj(Valeur est un tableau ClDbEpic_Usr dynamique)
+         :m_aoEpic_Usr <- Valeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

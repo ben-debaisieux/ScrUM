@@ -14,13 +14,12 @@ class :
   type_code : 10
   p_codes :
    -
-     code : |1+
+     code : |1-
       ClColCritereAccept est une Classe
       	hérite de ClZF_ColObjDB
       PRIVÉ
       	m_aoCritereAccept est un tableau ClDbCritereAccept dynamique
       FIN
-      
      type : 131072
   procedures :
    -
@@ -42,7 +41,7 @@ class :
      procedure_id : 1438861168670857551
      type_code : 12
      code : |1+
-      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
       :ZF_addItem(ClDbCritereAccept.GetObj(nId_P))
      type : 458752
@@ -65,11 +64,11 @@ class :
       ZF_InitCol(:m_aoCritereAccept)
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 1438861168671054175
      type_code : 12
      code : |1-
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données):Vide
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données):Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       oObj est un ClDbCritereAccept(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept)
@@ -163,9 +162,37 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll()<métier>:Vide
+      PROCÉDURE prive GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_CritereAccept..nom)
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542747708777257461
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbCritereAccept
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fbc8e21c7d9f5
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_aoObj() : tableau ClDbCritereAccept dynamique
+         renvoyer :m_aoCritereAccept
+        type : 1966080
+      -
+        code : |1-
+         procédure protégée p_aoObj(Valeur est un tableau ClDbCritereAccept dynamique)
+         :m_aoCritereAccept <- Valeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

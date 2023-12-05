@@ -1,0 +1,130 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_Histo
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x156e4a170503c6e1
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      STR_MemoModifs est une structure
+      	dhModif		est un dateheure
+      	sModif		est une chaîne
+      	vValAvant	est un variant
+      	vValApres	est un variant
+      fin
+      
+      ClZF_Histo est une Classe
+      
+      PRIVE
+      	m_enrOrigine est un Enregistrement
+      PROTEGE
+      	m_aListeModifs est un tableau de STR_MemoModifs
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1544253184963561185
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1544253184963626721
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : ZF_Enregistre_old
+     procedure_id : 1544254572246447429
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Enregistre_old ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure  ZF_Enregistre_old() <métier>:vide
+      
+      trace("ZF_Enregistre de histo")
+     type : 458752
+   -
+     name : InitMemo
+     procedure_id : 1544260310335166016
+     type_code : 12
+     code : |1+
+      procedure protegee InitMemo()<metier>:vide
+      
+      :m_enrOrigine = {p_sNomTable,indFichier}
+      TableauSupprimeTout(m_aListeModifs)
+     type : 458752
+   -
+     name : FigeInfo
+     procedure_id : 1544263222326292144
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉE FigeInfo(sPattern_p est une chaine, sRubriqueRef_P est une chaine, vValeurComp_p est un variant, sValeurCompAff_p est une chaine = "")<métier>:Vide
+      
+      
+      stMemoMod est un STR_MemoModifs
+      
+      si {":m_enrOrigine." + sRubriqueRef_P, indRubrique} <> vValeurComp_p ALORS
+      	
+      	stMemoMod.dhModif = DateHeureSys()
+      	si sValeurCompAff_p <> "" alors
+      		stMemoMod.sModif = ChaîneConstruit(sPattern_p, sValeurCompAff_p)
+      	sinon
+      		stMemoMod.sModif = ChaîneConstruit(sPattern_p, vValeurComp_p)
+      	fin
+      	stMemoMod.vValAvant = {":m_enrOrigine." + sRubriqueRef_P, indRubrique} 
+      	stMemoMod.vValApres = vValeurComp_p
+      	
+      	tableauajoute(m_aListeModifs, stMemoMod)
+      FIN
+     type : 458752
+  properties :
+   -
+     name : p_sNomTable
+     identifier : 0x156e513d0644b219
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure privée  abstraite p_sNomTable() <métier>
+         
+        type : 1966080
+      -
+        code : |1-
+         
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x156e4a0a04fd91e7
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

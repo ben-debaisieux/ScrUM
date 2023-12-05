@@ -39,11 +39,11 @@ class :
       
      type : 655360
    -
-     name : addItemById
+     name : addItemById_old
      procedure_id : 815205491582051
      type_code : 12
      code : |1+
-      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
       :ZF_addItem(ClDbMessage.GetObj(nId_P))
      type : 458752
@@ -70,7 +70,7 @@ class :
      procedure_id : 815205491582054
      type_code : 12
      code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       oObj est un ClDbMessage(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Message)
@@ -126,9 +126,37 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll()<métier>:Vide
+      PROCÉDURE prive GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Message..nom)
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542748606434086047
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbMessage
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fbfce23eb8ba7
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau ClDbMessage dynamique
+         renvoyer :m_aoMessage
+        type : 1966080
+      -
+        code : |1+
+         procédure protégée p_aoObj(aValeur est un tableau ClDbMessage dynamique)
+         :m_aoMessage <- aValeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

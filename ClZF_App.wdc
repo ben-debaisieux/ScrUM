@@ -31,7 +31,7 @@ class :
       	m_ZF_cnxBDD						est une connexion
       	
       PRIVÉ
-      	m_ZF_nNbreTrsOuverte				est un entier
+      	m_ZF_nNbreTrsOuverte			est un entier
       	m_ZF_bAnnulationDemande			est un booléen
       	m_ZF_bSingleton					est un booléen
       
@@ -73,7 +73,9 @@ class :
       
       
       
-      
+      constante
+      	cstTimeOutDef = 86400
+      fin
      type : 131072
   procedures :
    -

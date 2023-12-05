@@ -68,6 +68,14 @@ class :
       
       constante
       	cstUSDeProjet			= "USDeProjet"
+      	
+      	//Statuts des US
+      	cst_StatutUS_Annulée	= "Annulée"
+      	cst_StatutUS_Terminée	= "Terminée"
+      	cst_StatutUS_Commencée	= "Commencée"
+      	cst_StatutUS_En_Test	= "En Test"
+      	cst_StatutUS_A_faire	= "A faire"
+      	
       fin
       
       ECompteNbUS est une énumération
@@ -89,9 +97,9 @@ class :
       
       
       mg_oEx_AucunProjet						= allouer un ClZF_Exception("Aucun projet n'est définit pour la user story ""%1"".")
-      mg_oEx_US_A_tester_sans_env				= allouer un ClZF_Exception("La user story ne peut pas partir en test fonctionnel, car l'environnement de test n'est pas défini.")
-      mg_oEx_DateMiseADispoManquantePourTests	= allouer un ClZF_Exception("Une date de mise à dispo en test, est obligatoire, si les tests unitaires sont validés.")
-      mg_oEx_DateMiseADispoManquantePourProd	= allouer un ClZF_Exception("Une date de mise en production est obligatoire, pour valider la user story.")
+      mg_oEx_US_A_tester_sans_env				= allouer un ClZF_Exception("La user story ""%1"" ne peut pas partir en test fonctionnel, car l'environnement de test n'est pas défini.")
+      mg_oEx_DateMiseADispoManquantePourTests	= allouer un ClZF_Exception("Une date de mise à dispo en test de ""%1"", est obligatoire, si les tests unitaires sont validés.")
+      mg_oEx_DateMiseADispoManquantePourProd	= allouer un ClZF_Exception("Une date de mise en production est obligatoire, pour valider la user story ""%1"".")
       mg_oEx_EtatUsNonDefinit					= allouer un ClZF_Exception("Etat de l'US ""ID : %1"" non prévu.")
       mg_oEx_CodeDejaPris						= allouer un ClZF_Exception("Le code ""%1"" est déjà utilisé.")
      type : 131072
@@ -118,7 +126,7 @@ class :
       //Déclaration du constructeur de la classe d'accès aux données.
       ClZF_ObjDB.Constructeur(Scr_UserStory..Nom, Scr_UserStory.IDScr_UserStory..Nom, nID_P)
       
-      //:ZF_DefTimeOut(10, vrai)
+      :ZF_DefTimeOut(ClAppScrum.cstTimeOutProd, vrai)
      type : 589824
    -
      name : Destructeur
@@ -222,20 +230,20 @@ class :
       	si :m_bEstTestéParEquipeDev alors
       		//Obligation d'avoir un environnement de test définit, si l'US part en test.
       		si pas :m_bEstTestéParLeDemandeur et :m_oEnvironnement_Test = Null ALORS
-      			mg_oEx_US_A_tester_sans_env.ZF_Declenche()
+      			mg_oEx_US_A_tester_sans_env.ZF_Declenche([:m_sCodeUserStory])
       			//ExceptionDéclenche(1,"La user story ne peut pas partir en test fonctionnel, car l'environnement de test n'est pas défini.")
       		FIN
       		
       		//Obligation d'avoir une date de mise à dispo en test, si l'US est testée en dev
       		SI :m_dDateMiseADispo_EnTest = "" ALORS
-      			mg_oEx_DateMiseADispoManquantePourTests.ZF_Declenche()
+      			mg_oEx_DateMiseADispoManquantePourTests.ZF_Declenche([:m_sCodeUserStory])
       			//ExceptionDéclenche(1,"Une date de mise à dispo en test, est obligatoire, si les tests unitaires sont validés.")
       		FIN
       	FIN
       	
       	//Obligation d'avoir une date de mise à dispo en prod, si l'US est testée
       	SI :m_bEstTestéParLeDemandeur ET :m_dDateMiseEnProd = "" ALORS
-      		mg_oEx_DateMiseADispoManquantePourProd.ZF_Declenche()
+      		mg_oEx_DateMiseADispoManquantePourProd.ZF_Declenche([:m_sCodeUserStory])
       		//ExceptionDéclenche(1,"Une date de mise en production est obligatoire, pour valider la user story.")
       	FIN
       	
@@ -718,7 +726,7 @@ class :
       	//Oui, on passe les taches en "fini".
       	POUR TOUT ELEMENT oTacheTmp DE ClColTache.aoFromUS(objet).aItems()	//:aoListeTaches().aItems()
       		si oTacheTmp.p_nNum_Sprint_Fin = 0 et oTacheTmp.p_btache_tech = faux alors
-      			oTacheTmp.p_nNum_Sprint_Fin		= goApp.Sprint_Num_Actuel()
+      			oTacheTmp.p_nNum_Sprint_Fin		= goApp.p_nNumeroDuSprintActuel
       			oTacheTmp.ZF_Enregistre()
       		FIN
       	FIN
@@ -1009,7 +1017,7 @@ class :
      procedure_id : 1445047014240345483
      type_code : 12
      code : |1+
-      procédure publique globale Combo_Charge_Etats(LOCAL sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne)<métier>:vide
+      procédure publique globale Combo_Charge_Etats(LOCAL sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne)<UI>:vide
       
       
       ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
@@ -1169,9 +1177,13 @@ class :
       PROCEDURE GLOBAL Combo_Charge_EnvironnementsTest(sNomFenetre_P est une chaîne , sNomCombo_P est une chaîne)<ui>:vide
       
       ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
-      pour TOUT Scr_Environnement 
-      	ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, Scr_Environnement.Libelle + glien(Scr_Environnement.IDSrc_Environnement))
-      FIN
+      //oEnvTmp est un ClDbEnvironnement dynamique
+      oCOlEnv est un ClColEnvironnement
+      oCOlEnv.zf_GetAll()
+      oCOlEnv.ZF_ChargeCbo(sNomFenetre_P + "." + sNomCombo_P)
+      //pour TOUT oEnvTmp de oCOlEnv.aItems()
+      //	ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, oEnvTmp.p_sLibelle + glien(oEnvTmp.ZF_Get_IdUnique()))
+      //FIN
      type : 458752
    -
      name : TraiteHisto

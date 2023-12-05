@@ -51,6 +51,9 @@ class :
       	cstCriteresDeUS			= "CriteresDeUS"
       	cstColUsrInvite			= "UsrInvite"
       	cstDoscDeUS				= "DoscDeUS"
+      	
+      	
+      	cstTimeOutProd = 60
       FIN
      type : 131072
   procedures :
@@ -70,15 +73,6 @@ class :
       PROCEDURE Destructeur()
       
      type : 655360
-   -
-     name : Sprint_Num_Actuel
-     procedure_id : 1409156818383582709
-     type_code : 12
-     code : |1-
-      FONCTION Sprint_Num_Actuel():entier
-      
-      renvoyer :m_nNumeroDuSprintActuel
-     type : 458752
    -
      name : cnxBdd
      procedure_id : 1409157677390349015
@@ -100,7 +94,7 @@ class :
       	
       	SI PAS EnModeTest() OU PAS Droite(SysEnvironnement("USERNAME"),4) DANS ("x2777") ALORS 
       		
-      //		:m_sMsgCnx					= "Connexion : SQlServer"
+      //		:m_sMsgCnx						= "Connexion : SQlServer"
       //		// Paramètres de la connexion
       //		:m_ZF_cnxBDD..Provider			= hAccèsNatifSQLServer
       //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
@@ -108,35 +102,35 @@ class :
       //		:m_ZF_cnxBDD..MotDePasse		= "sa@sql2016"
       //		:m_ZF_cnxBDD..Serveur			= "10.20.30.140"
       //		
-      //		:m_ZF_cnxBDD..BaseDeDonnées	= "SCRUM"
+      //		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM"
       //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
       //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
-      //		:m_ZF_cnxBDD..InfosEtendues	= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
+      //		:m_ZF_cnxBDD..InfosEtendues		= "WD RECORD LOCK = ;WD Command Timeout=10;WD Lock Timeout = 2"
       
-      		:m_sMsgCnx						= "Connexion : MySQL"
-      		// Paramètres de la connexion
-      		:m_ZF_cnxBDD..Provider			= hAccèsNatifMySQL
+      //		:m_sMsgCnx						= "Connexion : MySQL"
+      //		// Paramètres de la connexion
+      //		:m_ZF_cnxBDD..Provider			= hAccèsNatifMySQL
+      //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
+      //		:m_ZF_cnxBDD..Utilisateur		= "2777-2"
+      //		:m_ZF_cnxBDD..MotDePasse		= "Bur0123+"
+      //		:m_ZF_cnxBDD..Serveur			= "127.0.0.1"
+      //		
+      //		:m_ZF_cnxBDD..BaseDeDonnées		= "mydb"
+      //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
+      //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
+      
+      		:m_sMsgCnx						= "Connexion : HF/CS"
+      //		 Paramètres de la connexion
+      		:m_ZF_cnxBDD..Provider			= hAccèsHFClientServeur
       		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
-      		:m_ZF_cnxBDD..Utilisateur		= "2777-2"
-      		:m_ZF_cnxBDD..MotDePasse		= "Bur0123+"
-      		:m_ZF_cnxBDD..Serveur			= "127.0.0.1"
+      		:m_ZF_cnxBDD..Utilisateur		= "cnx_scrum"
+      		:m_ZF_cnxBDD..MotDePasse		= "cnx_scrum"
+      		:m_ZF_cnxBDD..Serveur			= "prod-vm-ast02"
       		
-      		:m_ZF_cnxBDD..BaseDeDonnées		= "mydb"
+      		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM-BDD"
       		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
       		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
-      
-      //		:m_sMsgCnx						= "Connexion : HF/CS"
-      //		// Paramètres de la connexion
-      //		:m_ZF_cnxBDD..Provider			= hAccèsHFClientServeur
-      //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
-      //		:m_ZF_cnxBDD..Utilisateur		= "cnx_scrum"
-      //		:m_ZF_cnxBDD..MotDePasse		= "cnx_scrum"
-      //		:m_ZF_cnxBDD..Serveur			= "prod-vm-ast02"
       //		
-      //		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM-BDD"
-      //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
-      //		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
-      		
       		
       		sMsgErrCnx						= "Impossible d'ouvrir les tables de la base de donnés sur le serveur : [%:m_ZF_cnxBDD..Serveur%]."
       	SINON
@@ -212,8 +206,8 @@ class :
       
       <COMPILE SI Configuration="ScrUM">
       
-      :m_nNumeroDuSprintActuel = ClDbSprint.Sprint_Num_Actuel() 
-      ClDbSprint.Calcul_Velocite_Moyenne()
+       ClDbSprint.Sprint_Num_Actuel() 
+      //ClDbSprint.Calcul_Velocite_Moyenne()
       
       
       //Enregistrement de l'utilisateur en cours, dans l'application.
@@ -290,18 +284,45 @@ class :
       		oCol = allouer un ClColCritereAccept_Composant()
       	cas ClDbMessage.cst_col_messages
       		oCol = allouer un ClColMessage()
-      	cas ClColTache.cstTachesDeUS
+      	cas ClColTache.cstTachesDeUS, ClColTache.cstTachesDeProjet
       		oCol = allouer un ClColTache()
-      //	CAS ClDbProjet.cstGetCol_Usr_Projet
-      //		oCol = allouer un ClColProjet
       	CAS ClDbEpic.cstGetCol_Epic_Usr
       		oCol = allouer un ClColEpic_Usr()
+      	cas ClDbProjet.cstGetCol_Usr_Projet
+      		oCol = allouer un ClColUsr_Projet()
+      	CAS ClDbProjet_Situation.cstGetCol_Projet_Situation
+      		oCol = allouer un ClcolProjet_Situation()
       		
       	AUTRE CAS
       		::mg_oExTypeColNonDefinit.ZF_Declenche([sCle_p])
       FIN
       
       renvoyer oCol
+     type : 458752
+   -
+     name : PreChargeData
+     procedure_id : 1544070038949862545
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // PreChargeData ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PreChargeData() <métier>:vide
+      
+      
+      //Chargement des données de paramétrage de l'appli
+      oEnv est un ClColEnvironnement()
+      oEnv.ZF_GetAll()
+      
      type : 458752
   properties :
    -
@@ -315,6 +336,24 @@ class :
          
          renvoyer :m_bUsrDev
         type : 1966080
+     template_refs : []
+   -
+     name : p_nNumeroDuSprintActuel
+     identifier : 0x155291b70095a2e8
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_nNumeroDuSprintActuel() <métier> : entier
+         
+         renvoyer m_nNumeroDuSprintActuel
+        type : 1966080
+      -
+        code : |1-
+         procédure publique p_nNumeroDuSprintActuel(nValeur est un entier)
+         
+         m_nNumeroDuSprintActuel=nValeur
+        type : 2031616
      template_refs : []
   procedure_templates : []
   property_templates : []

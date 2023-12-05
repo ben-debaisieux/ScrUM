@@ -40,16 +40,16 @@ class :
      procedure_id : 1474468380170634330
      type_code : 12
      code : |1+
-      procedure PROTÉGÉE sRubSqlDeTypeHF(nType_p est un entier, nTaille_p est un entier = 0)<metier>:chaine
+      procedure PROTÉGÉE sRubSqlDeTypeHF(stRub_p est un ClZF_GenCodeFic.STR_DefRub)<metier>:chaine
       
       sRetour est une chaîne
-      selon nType_p
+      selon stRub_p.nTypeRubHF
       	CAS hRubBinaire
       		sRetour = "BINARY"
       	CAS hRubBooléen
       		sRetour = "BIT"
       	CAS hRubCaractère
-      		sRetour = "CHAR(" + nTaille_p + ")"
+      		sRetour = "CHAR(" + stRub_p.nTaille + ")"
       	CAS hRubDate8
       		sRetour = "DATE"			//*
       	CAS hRubDateHeure
@@ -91,7 +91,7 @@ class :
       	CAS hRubMonétaire
       		sRetour = "Money"
       	CAS hRubNumérique
-      		sRetour = "Float(" + nTaille_p + ")"		// !!!!
+      		sRetour = "DECIMAL ([%stRub_p.nTaille%], [%stRub_p.nScale%])"
       	CAS hRubRéel4
       		sRetour = "Real"
       	CAS hRubRéel8
@@ -99,11 +99,11 @@ class :
       	CAS hRubRéelTurbo
       		sRetour = "Real"
       	CAS hRubTexte
-      		sRetour = "Varchar(" + nTaille_p + ")"
+      		sRetour = "Varchar(" + stRub_p.nTaille + ")"
       	CAS hRubTexteUnicode
-      		sRetour = "nVarchar(" + nTaille_p + ")"
+      		sRetour = "nVarchar(" + stRub_p.nTaille + ")"
       	AUTRE CAS
-      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([nType_p])
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([stRub_p.nTypeRubHF])
       FIN
       
       renvoyer sRetour
@@ -117,94 +117,6 @@ class :
       
       
       stRetour est un CLZF_GenData.STR_RubSQL = identifieEtatElements(sRub_p, stRubSql_p)
-      //stInfoRub est un ClZF_GenCodeFic.STR_DefRub
-      //
-      //stRetour.nTypeAlterRub = cstTypeAlterRub_RAS
-      //
-      //si :m_oCOlGen.m_aRub[sRub_p]..vide et stRubSql_p.stype <> "" et pas sRub_p = :m_oCOlGen.p_sNomRubId ALORS
-      //	stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_SuppRub
-      //sinon
-      //	stInfoRub = :m_oCOlGen.m_aRub[sRub_p]
-      //	
-      //	//Récupération du type
-      //	stRetour.sType = sRubSqlDeTypeHF(stInfoRub.nTypeRubHF, stInfoRub.nTaille)
-      //FIN
-      //
-      ////Est on en création de table ?
-      //si bCreeTable_p alors
-      //	stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable
-      //SINON
-      //	//Non :
-      //	//La rubrique existe t elle ?
-      //	SI PAS :m_oCOlGen.m_aRub[sRub_p]..Vide ET stRubSql_p.sType = "" ALORS
-      //		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeRub
-      //	FIN
-      //FIN
-      //
-      //si stRetour.nTypeAlterRub = cstTypeAlterRub_RAS ALORS
-      //	si pas bRubCompatible(stInfoRub.nTypeRubHF, stRubSql_p.sType) ou ...
-      //			stInfoRub.nTaille <> stRubSql_p.nTaille ou ...
-      //			stInfoRub.bNullable <> stRubSql_p.bEstNullable alors
-      //			
-      //		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_ModRub
-      //	FIN
-      //FIN
-      //
-      //
-      //
-      ////Identification de ce qu'il faut générer comme code, pour les contraintes "défaut"
-      //stRetour.nTypeAlterDef = cstTypeAlterDef_RAS
-      //
-      //SI stRetour.nTypeAlterRub DANS (CLZF_GenData.cstTypeAlterRub_SuppRub, CLZF_GenData.cstTypeAlterRub_ModRub) OU ...	//Modification rubrique
-      //	stInfoRub.bNullable ET stRubSql_p.sNomContrainteDef <> "" ALORS												//Contrainte défaut à supprimer
-      //	
-      //	SELON stRetour.nTypeAlterRub
-      //		CAS CLZF_GenData.cstTypeAlterRub_SuppRub
-      //			stRetour.nTypeAlterDef = cstTypeAlterDef_Supp
-      //		CAS CLZF_GenData.cstTypeAlterRub_ModRub
-      //			stRetour.nTypeAlterDef = cstTypeAlterDef_Mod
-      //			
-      //		AUTRE CAS
-      //			
-      //	FIN
-      //FIN
-      //
-      //SI PAS stInfoRub.bNullable ET stRubSql_p.sNomContrainteDef = "" OU ...	//Contrainte défaut manquante
-      //	stRetour.nTypeAlterRub DANS (CLZF_GenData.cstTypeAlterRub_CreeTable, CLZF_GenData.cstTypeAlterRub_CreeRub, CLZF_GenData.cstTypeAlterRub_ModRub) ALORS
-      //	
-      //	SELON stRetour.nTypeAlterRub
-      //		CAS CLZF_GenData.cstTypeAlterRub_CreeTable, CLZF_GenData.cstTypeAlterRub_CreeRub
-      //			stRetour.nTypeAlterDef = cstTypeAlterDef_Cree
-      //		CAS CLZF_GenData.cstTypeAlterRub_ModRub
-      //			stRetour.nTypeAlterDef = cstTypeAlterDef_Mod
-      //			
-      //		AUTRE CAS
-      //			
-      //	FIN
-      //FIN
-      //
-      //
-      ////Identification de ce qu'il faut générer comme code, pour les contraintes "clé étrangères"
-      //stRel_tmp est un ClZF_GenCodeFic.STR_Rel
-      //SI :m_oColGen.m_aPK_de_FK[sRub_p]..Occurrence > 0 ALORS
-      //	stRel_tmp				= :m_oColGen.m_aPK_de_FK[sRub_p]
-      //	
-      //	stRetour.sRefTablePK	= stRel_tmp.sTablePK
-      //	stRetour.sRefRubIdPK	= stRel_tmp.sRubriquePK
-      //FIN
-      //
-      ////Faut il créer une clé étrangère ?
-      //SI stRetour.sRefTablePK = "" ALORS
-      //	stRetour.nTypeAlterFK = cstTypeAlterFK_RAS
-      //SINON
-      //	stRetour.nTypeAlterFK = cstTypeAlterFK_Cree
-      //FIN
-      //
-      //
-      
-      
-      //---------------------------------------------------------------------------------------
-      
       
       
       selon stRetour.nTypeAlterRub
@@ -216,7 +128,8 @@ class :
       		stRetour.sCodeSQL += "ALTER TABLE [%:m_oColGen.p_sNomTable%] ADD [%sRub_p%]"
       	CAS CLZF_GenData.cstTypeAlterRub_ModRub
       		stRetour.sCodeSQL += "ALTER TABLE [%:m_oColGen.p_sNomTable%] ALTER COLUMN [%sRub_p%]"
-      		
+      	cas cstTypeAlterRub_RAS
+      		//pas de modif
       	AUTRE CAS
       		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([stRetour.nTypeAlterRub])
       FIN
@@ -248,77 +161,6 @@ class :
       		FIN
       	FIN
       		
-      	si stRetour.nTypeAlterDef dans(cstTypeAlterDef_Supp, cstTypeAlterDef_Mod) alors
-      		stRetour.sCodeDropDef = [
-      			ALTER TABLE [%:m_oColGen.p_sNomTable%]
-      				DROP CONSTRAINT [%stRubSql_p.sNomContrainteDef%]
-      		]
-      			
-      	FIN
-      //	//Génération du code de contrainte par défaut
-      //	sNomDF est une chaîne
-      //	sNomDF = sNomRelDF(:m_oCOlGen.p_sNomTable, sRub_p)
-      //	sValDef est une chaîne = stInfoRub.sValDef
-      //	
-      //	SI ::bProteger(stInfoRub.nTypeRubHF) ALORS
-      //		sValDef = "'" + sValDef + "'"
-      //	FIN
-      //	
-      //	SI stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable ALORS
-      //		
-      //		SI PAS stInfoRub.bNullable ALORS
-      //			stRetour.sCodeSQL += " CONSTRAINT [%sNomDF%] DEFAULT ([%sValDef%])"
-      //		FIN
-      //		
-      //	sinon
-      //		
-      //		si stRetour.nTypeAlterRub dans (CLZF_GenData.cstTypeAlterRub_SuppRub, CLZF_GenData.cstTypeAlterRub_ModRub) Ou ...	//Modification rubrique
-      //				stInfoRub.bNullable ET stRubSql_p.sNomContrainteDef <> "" ALORS												//Contrainte défaut à supprimer
-      //			
-      //			stRetour.sCodeDropDef = [
-      //				ALTER TABLE [%:m_oCOlGen.p_sNomTable%]
-      //					DROP CONSTRAINT [%stRubSql_p.sNomContrainteDef%]
-      //				]
-      //		FIN
-      //		
-      //		si pas stInfoRub.bNullable et stRubSql_p.sNomContrainteDef = "" ou ...	//Contrainte défaut manquante
-      //				stRetour.nTypeAlterRub DANS (CLZF_GenData.cstTypeAlterRub_CreeRub, CLZF_GenData.cstTypeAlterRub_ModRub) alors
-      //			
-      //			stRetour.sCodeAddDef = [
-      //				ALTER TABLE [%:m_oCOlGen.p_sNomTable%]
-      //					ADD CONSTRAINT [%sNomDF%] DEFAULT ([%sValDef%]) FOR [[%sRub_p%]]
-      //				]
-      //		FIN
-      //	FIN
-      	
-      	
-      	
-      	
-      //	si pas stInfoRub.bNullable et :m_oCOlGen.m_aRub[sRub_p]..vide alors
-      //		sValDef est une chaîne = stInfoRub.sValDef
-      //		si ::bProteger(stInfoRub.nTypeRubHF) ALORS
-      //			sValDef = "'" + sValDef + "'"
-      //		FIN
-      //		sNomDF est une chaîne
-      //		sNomDF = sNomRelDF(:m_oCOlGen.p_sNomTable, sRub_p)
-      //		
-      //		si stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable alors
-      //			stRetour.sCodeSQL += " CONSTRAINT [%sNomDF%] DEFAULT ([%sValDef%]) FOR [[%sRub_p%]]"
-      //		sinon
-      //			stRetour.sCodeDropDef = [
-      //			ALTER TABLE [%:m_oCOlGen.p_sNomTable%]
-      //				DROP CONSTAINT [%stRubSql_p.sNomContrainteDef%]
-      //			]
-      //			
-      //			stRetour.sCodeAddDef = [
-      //			ALTER TABLE [%:m_oCOlGen.p_sNomTable%]
-      //				CONSTRAINT [%sNomDF%] DEFAULT ([%sValDef%]) FOR [[%sRub_p%]]
-      //			]
-      //		FIN
-      //	FIN
-      	
-      	
-      	
       	
       	
       	//Génération du code de contrainte FK
@@ -336,21 +178,17 @@ class :
       				]
       		FIN
       	FIN
-      //	SI stRetour.sRefTablePK <> "" ALORS
-      //		
-      //		sNomFK est une chaîne
-      //		sNomFK = ::sNomRelFK(:m_oCOlGen.p_sNomTable, sRub_p, stRetour.sRefTablePK, stRetour.sRefRubIdPK)
-      //		
-      //		SI stRetour.nTypeAlterRub DANS(CLZF_GenData.cstTypeAlterRub_CreeTable) ALORS
-      //			stRetour.sCodeKey = "CONSTRAINT [%sNomFK%] FOREIGN KEY ([%sRub_p%]) REFERENCES [%stRetour.sRefTablePK%] ([%stRetour.sRefRubIdPK%]) ON DELETE NO ACTION ON UPDATE NO ACTION"
-      //		sinon
-      //			stRetour.sCodeKey = [
-      //				ALTER TABLE [[%:m_oCOlGen.p_sNomTable%]] WITH CHECK ADD CONSTRAINT [[%sNomFK%]] FOREIGN KEY([[%sRub_p%]])
-      //				REFERENCES [[%stRetour.sRefTablePK%]] ([[%stRetour.sRefRubIdPK%]]) ON DELETE NO ACTION ON UPDATE NO ACTION
-      //				]
-      //		FIN
-      //	FIN
       FIN
+      
+      
+      SI stRetour.nTypeAlterDef DANS(cstTypeAlterDef_Supp, cstTypeAlterDef_Mod) ALORS
+      	stRetour.sCodeDropDef = [
+      			ALTER TABLE [%:m_oColGen.p_sNomTable%]
+      				DROP CONSTRAINT [%stRubSql_p.sNomContrainteDef%]
+      	]
+      	
+      FIN
+      
       
       renvoyer stRetour
      type : 458752
@@ -391,6 +229,8 @@ class :
       --	columns.system_type_id AS CodeType,
       	types.NAME AS Type,
       	columns.max_length AS Taille,
+      	columns.precision,
+      	columns.scale,
       	columns.is_nullable AS EstNullable,
       
       	default_constraints.name as NomContainteDef,
@@ -482,15 +322,22 @@ class :
       		
       where sys.tables.name = '[%:m_oCOlGen.p_sNomTable%]'
       ]
-      goApp.Rsql(sdDefTbl, sReq)
+      ClZF_ObjDbLs.mg_oApp.Rsql(sdDefTbl, sReq)
       
       
       pour tout sdDefTbl
       	VariableRAZ(stRub)
-      	// ???				EstIndex		EstFullText	EstCleEtrangere		
-      	//nCodeType		est un entier
+      
       	stRub.sType				= sdDefTbl.Type
-      	stRub.nTaille			= sdDefTbl.Taille
+      	selon Majuscule(sdDefTbl.Type)
+      		CAS "DECIMAL"
+      			stRub.nTaille			= sdDefTbl.PRECISION
+      			stRub.nScale			= sdDefTbl.Scale
+      			
+      		AUTRE CAS
+      			stRub.nTaille			= sdDefTbl.Taille
+      			
+      	FIN
       	stRub.bEstNullable		= sdDefTbl.EstNullable
       	stRub.sValeurDefaut		= sdDefTbl.ValeurDefaut
       	stRub.bEstIndexUnique	= sdDefTbl.EstIndexUnique
@@ -575,6 +422,9 @@ class :
       	CAS "NVARCHAR"
       		bRetour = nTypeHF_p DANS (hRubTexteUnicode)
       		
+      	CAS "DECIMAL"
+      		bRetour = nTypeHF_p DANS (hRubNumérique)
+      		
       	AUTRE CAS
       		bRetour = faux
       FIN
@@ -627,10 +477,10 @@ class :
       	sTypeId est une chaîne
       	
       	//Récupération du type de la rubrique
-      	sTypeId = CLZF_GenDataMSSQL.sRubSqlDeTypeHF(:m_oColGen.p_nTypeHfRubId)
+      	sTypeId = CLZF_GenDataMSSQL.sRubSqlDeTypeHF(:m_oColGen.p_stDefId)
       	
       	//Ajout de l'auto incrément si le type est définit comme tel
-      	SI :m_oColGen.p_nTypeHfRubId DANS (hRubIDAuto4, hRubIDAuto) ALORS
+      	SI :m_oColGen.p_stDefId.nTypeRubHF DANS (hRubIDAuto4, hRubIDAuto) ALORS
       		sIndicateurPK = "identity(1, 1)"
       	FIN
       	
@@ -685,7 +535,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode CLZF_GenData.sNomRelFK
-      PROCÉDURE PROTÉGÉE sNomRelFK(sTableFK_p est une chaîne, sRubriqueFK_p est une chaîne, sTablePK_p est une chaîne, sRubriquePK_p est une chaîne)<métier>:chaîne
+      PROCÉDURE PROTÉGÉE sNomRelFK(LOCAL sTableFK_p est une chaîne, LOCAL sRubriqueFK_p est une chaîne, LOCAL sTablePK_p est une chaîne, LOCAL sRubriquePK_p est une chaîne)<métier>:chaîne
       renvoyer Gauche(Ancêtre.sNomRelFK(sTableFK_p, sRubriqueFK_p, sTablePK_p, sRubriquePK_p), 128)
      type : 458752
   procedure_templates : []

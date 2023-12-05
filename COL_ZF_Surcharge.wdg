@@ -45,7 +45,7 @@ procedure_set :
       procédure HLitRecherche(nomtable, cleRech, valeur, options = 0)
       
       //Métrique : On compte les recherches faites
-      goapp.m_aMetriques[1].nNbRecherches++
+      ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbRecherches++
       //trace(nomtable + "-" + cleRech)
       si options = 0 ALORS
       	renvoyer WL.HLitRecherche(nomtable, cleRech,valeur,hIdentique+hLimiteParcours)
@@ -124,6 +124,28 @@ procedure_set :
       	WL.HLitPremier(NomTable_P, nOption_P)
       FIN
       
+     type : 458752
+   -
+     name : Trace
+     internal_properties : BwAAAAcAAAAn7LcGLRFYnpDPfgAoZhXORPzmZwaA0coyULA12IiPo+98llQ/okclhO0WbZ7uJMpE22zIPg6ptZKxlumyKKjaMQCw5JBHAzNKzBaqcls7nrwjODuWfm9HO5cS04b6GyqZuOEnwmEPsGr/XR037U/VFZJBBmdK/hfoxJYEQNtfVbsZ8SG1GAT3KD1dojRwH7ujfzKbrDpZ1JGhauBwgW1gdZirUL2usOXXxjxZzQ4o7EFenidDjlSaEQYe
+     procedure_id : 1544076416991413765
+     type_code : 15
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Trace (<sMessage_p> est chaîne)
+      //
+      // Paramètres :
+      //	sMessage_p (chaîne ANSI) : <indiquez ici le rôle de sMessage_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure Trace(sMessage_p est une chaîne) <UI>:vide
+      
+      si EnModeTest() alors wl.trace(sMessage_p)
      type : 458752
   procedure_templates : []
   property_templates : []

@@ -248,7 +248,7 @@ window :
         code : |1+
          SI TableOccurrence(TBL_taches) >= 1 ALORS
          	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_taches.COL_idTache)
-         	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
+         	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache) ALORS
          		AffTaches()
          	FIN
          FIN
@@ -335,13 +335,13 @@ window :
      p_codes :
       -
         code : |1-
-         oPrj est un ClDbProjet dynamique
-         
-         
-         pour tout element oPrj de zoColProjets.aItems()
-         	ListeAjoute(CBO_Projet,oPrj.p_sNom + gLien(oPrj.ZF_Get_IdUnique()))
-         FIN
-         
+         //oPrj est un ClDbProjet dynamique
+         //
+         //
+         //pour tout element oPrj de zoColProjets.aItems()
+         //	ListeAjoute(CBO_Projet,oPrj.p_sNom + gLien(oPrj.ZF_Get_IdUnique()))
+         //FIN
+         zoColProjets.ZF_ChargeCbo(CBO_Projet..nom)
          ListeTrie(CBO_Projet)
          ListeInsère(CBO_Projet,"<Tous>" + gLien(0), 1)
          ListeSelectPlus(CBO_Projet, 1)
@@ -504,9 +504,11 @@ window :
       oUsr		est un ClDbUsr dynamique
       oTache_Tmp	est un ClDbTache dynamique
       nLigne		est un entier
+      oColProjets	est un ClColProjet <-ClColProjet.aoListeProjets()
+      aUsrCdp		est un tableau associatif de ClDbUsr dynamique <- ClColUsr_Projet.aoUsersCDPFromColProjet(oColProjets)
       
       
-      POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
+      POUR TOUT ELÉMENT oPrj DE oColProjets.aItems()
       	POUR TOUT ELÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
       		POUR TOUT ELÉMENT oTache_Tmp DE ClColTache.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
       			SI oTache_Tmp.p_nStatut = ClDbTache.cstStatut_Suspendu ALORS
@@ -525,7 +527,7 @@ window :
       				stTacheTmp.nNbDocs			= ClColUserStory_Doc.oFromUS(oUs).ZF_nTaille()
       				nLigne						= TableauAjouteLigne(zaLstTaches,stTacheTmp)
       				
-      				add_tache_usr(oPrj.p_oUsr_ChefProjet, nLigne)
+      				add_tache_usr(aUsrCdp[oPrj.ZF_Get_IdUnique()], nLigne)
       				
       				POUR TOUT ELÉMENT oUsr DE ClColUsr.aoInvite_Liste(oPrj).aItems()
       					add_tache_usr(oUsr, nLigne)

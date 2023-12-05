@@ -393,7 +393,7 @@ window :
         code : |1-
          oTache_tmp est un ClDbTache <- ClDbTache.GetObj(TBL_Taches.COL_IDTache)
          
-         SI Ouvre(FEN_User_Story_Detail_v2, oTache_tmp.p_oUserStoryParent, oTache_tmp.Get_IdUnique()) ALORS
+         SI Ouvre(FEN_User_Story_Detail_v2, oTache_tmp.p_oUserStoryParent, oTache_tmp) ALORS
          	ListeTaches()
          	AppFiltre()
          FIN
@@ -672,9 +672,12 @@ window :
       sGroupement	est une chaîne
       oSpReel		est un ClDbSprint dynamique
       oSpPrev		est un ClDbSprint dynamique
+      nIdSel		est un entier = TBL_Taches.COL_IDTache
+      nLigneSel	est un entier
       
       TableSupprimeTout(TBL_Taches)
       TBL_Taches..AffichageActif = faux
+      
       
       POUR TOUT element oTache_tmp de zOTaches.aItems()
       	
@@ -723,9 +726,18 @@ window :
       			
       	FIN
       	
+      	si nIdSel = oTache_tmp.Get_IdUnique() ALORS
+      		nLigneSel = nLigne
+      	FIN
+      	
       FIN
       
-      TBL_Taches..AffichageActif = vrai
+      SI TableOccurrence(TBL_Taches) > 0 ALORS
+      	TableSelectPlus(TBL_Taches, Max(1, nLigneSel))
+      FIN
+      
+      TBL_Taches..AffichageActif = Vrai
+      
       
       	
      type : 458752
@@ -904,7 +916,7 @@ window :
       selon CBO_Sprint..ValeurMémorisée
       	cas 0
       	cas zcst_sprint_futur
-      		TableActiveFiltre(sNomColSprintFiltre,filtreSupérieur,goApp.Sprint_Num_Actuel())
+      		TableActiveFiltre(sNomColSprintFiltre,filtreSupérieur,goApp.p_nNumeroDuSprintActuel)
       	cas zcst_sprint_sans
       		TableActiveFiltre(sNomColSprintFiltre,filtreEgal,"")
       	AUTRE CAS

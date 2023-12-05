@@ -1,30 +1,30 @@
 #To edit and compare internal_properties, use WINDEV integrated tools.
 #Internal properties refer to the properties of controls in windows, reports, etc.
 info :
- name : ClColUsr_Trello
+ name : ClColCritereAccept_Etat
  major_version : 27
  minor_version : 0
  type : 4
  description : ""
  subtype : 0
 class :
- identifier : 0x2e6454b7ca8b4
+ identifier : 0x2e7cf0c2f4bb9
  internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
   p_codes :
    -
      code : |1-
-      ClColUsr_Trello est une Classe
+      ClColCritereAccept_Etat est une Classe
       	hérite de ClZF_ColObjDB
       PRIVÉ
-      	m_aoUsr_Trello est un tableau de ClDbUsr_Trello dynamique
+      	m_aoCritereAccept_Etat est un tableau ClDbCritereAccept_Etat dynamique
       FIN
      type : 131072
   procedures :
    -
      name : Constructeur
-     procedure_id : 816135247014069
+     procedure_id : 817826402094010
      type_code : 27
      code : |1+
       PROCÉDURE Constructeur()
@@ -32,7 +32,7 @@ class :
      type : 589824
    -
      name : Destructeur
-     procedure_id : 816135247014070
+     procedure_id : 817826402094011
      type_code : 28
      code : |1+
       Procédure Destructeur()
@@ -40,75 +40,98 @@ class :
      type : 655360
    -
      name : addItemById_old
-     procedure_id : 816135247014071
+     procedure_id : 817826402094012
      type_code : 12
      code : |1+
       PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbUsr_Trello.GetObj(nId_P))
+      :ZF_addItem(ClDbCritereAccept_Etat.GetObj(nId_P))
      type : 458752
    -
      name : aItems
-     procedure_id : 816135247014072
+     procedure_id : 817826402094013
      type_code : 12
      code : |1+
-      PROCÉDURE aItems()<métier>:tableau de ClDbUsr_Trello dynamique
+      PROCÉDURE aItems()<métier>:tableau de ClDbCritereAccept_Etat dynamique
       // Redéfinition de la méthode ClColObjDB.aItems
-      RENVOYER :m_aoUsr_Trello
+      RENVOYER :m_aoCritereAccept_Etat
      type : 458752
    -
      name : Init
-     procedure_id : 816135247014073
+     procedure_id : 817826402094014
      type_code : 12
      code : |1+
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
-      ZF_InitCol(:m_aoUsr_Trello)
+      ZF_InitCol(:m_aoCritereAccept_Etat)
      type : 458752
    -
      name : addItemBySource_old
-     procedure_id : 816135247014074
+     procedure_id : 817826402094015
      type_code : 12
      code : |1+
       PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbUsr_Trello(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Usr_Trello)
+      oObj est un ClDbCritereAccept_Etat(ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept_Etat)
      type : 458752
    -
      name : GetAll_old
-     procedure_id : 816135247014075
+     procedure_id : 817826402094016
      type_code : 12
      code : |1-
       PROCÉDURE GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Usr_Trello..nom)
+      ZF_ChargeTblComplete(Scr_CritereAccept_Etat..nom)
+     type : 458752
+   -
+     name : Combo_Charge_Etats
+     procedure_id : 1542322060621141846
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // Combo_Charge_Etats ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale Combo_Charge_Etats(LOCAL sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne) <UI>:vide
+      
+      oColEtats est un ClColCritereAccept_Etat()
+      oColEtats.zf_GetAll()
+      oColEtats.ZF_ChargeCbo(sNomFenetre_P + "." + sNomCombo_P)
      type : 458752
    -
      name : sClasseObjDbAsso
-     procedure_id : 1542749856309640645
+     procedure_id : 1542748082442121138
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
       PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
       
-      sClasse est une chaîne = ClDbUsr_Trello
+      sClasse est une chaîne = ClDbCritereAccept_Etat
       RENVOYER sClasse
      type : 458752
   properties :
    -
      name : p_aoObj
-     identifier : 0x1568f2d20a9cfd38
+     identifier : 0x15676e201897d6a3
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure p_aoObj() : tableau de ClDbUsr_Trello dynamique
-         renvoyer :m_aoUsr_Trello
+         procédure p_aoObj() : tableau de ClDbCritereAccept_Etat dynamique
+         renvoyer :m_aoCritereAccept_Etat
         type : 1966080
       -
-        code : |1-
-         procédure p_aoObj(aValeur est un tableau de ClDbUsr_Trello dynamique)
-         :m_aoUsr_Trello <- aValeur
+        code : |1+
+         procédure protégée p_aoObj(aValeur est un tableau de ClDbCritereAccept_Etat dynamique)
+         :m_aoCritereAccept_Etat <- aValeur
         type : 2031616
      template_refs : []
   procedure_templates : []
@@ -118,7 +141,7 @@ class :
   original_name : Classe1
 resources :
  string_res :
-  identifier : 0x2e6454b7ca8bc
+  identifier : 0x2e7cf0c2f4bc1
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

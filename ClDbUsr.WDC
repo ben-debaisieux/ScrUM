@@ -86,7 +86,7 @@ class :
       PROCEDURE Constructeur(LOCAL nID_P est un entier)
       
       Ancêtre.Constructeur(Scr_Usr..Nom, Scr_Usr.IDScr_Usr..Nom, nID_P)
-      
+      //stop si nID_P > 1
       //Chargement des données dans l'instance.
       //:ZF_Charge()
       //stop si nID_P = 0

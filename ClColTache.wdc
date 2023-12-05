@@ -22,7 +22,15 @@ class :
       fin
       
       constante
-      	cstTachesDeUS	= "TachesDeUS"
+      	cstTachesDeUS			= "TachesDeUS"
+      	cstTachesDeProjet		= "TachesDeProjet"
+      	
+      	
+      	cstGetPointsDemarres	= 1
+      	cstGetPointsReal		= 2
+      	cstGetPointsPrev		= 3
+      	cstGetPointsFini		= 4
+      
       fin
      type : 131072
   procedures :
@@ -30,9 +38,11 @@ class :
      name : Constructeur
      procedure_id : 1474619292466027519
      type_code : 27
-     code : |1+
+     code : |1-
       procédure Constructeur()
       
+      
+      :ZF_DefTimeOut(ClAppScrum.cstTimeOutProd)
      type : 589824
    -
      name : Destructeur
@@ -48,7 +58,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
       :ZF_addItem(ClDbTache.GetObj(nId_P))
      type : 458752
    -
@@ -70,12 +80,12 @@ class :
       renvoyer :m_aoTaches
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 1474619292466355199
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
+      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données):Vide
       
       oTache est un ClDbTache(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oTache, sdSource_p.IDScr_Tache)
@@ -88,22 +98,18 @@ class :
       // Redéfinition de la méthode ClZF_ColObjDB.pre_load
       PROCÉDURE PROTÉGÉE pre_load(sdSource_P est une Source de Données)
       
-      //aLstUS est un tableau d'entiers
       sListeUS est une chaîne
       sCle est une chaîne
       
       HLitPremier(sdSource_P,hForwardOnly+hSansRafraîchir)
       TANTQUE PAS HEnDehors(sdSource_P)
-      //	si TableauCherche(aLstUS,tcLinéaire,sdSource_P.IDScr_UserStory) = -1 ALORS
-      //		TableauAjoute(aLstUS,sdSource_P.IDScr_UserStory)
-      		
-      		
-      		sCle = ClZF_ObjDB.ZF_sCleOdb("ClUserStory", sdSource_P.IDScr_UserStory)
-      		
-      		SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
-      			sListeUS += [", "] + sdSource_P.IDScr_UserStory
-      		FIN
-      //	FIN
+      	sClasse est une chaine = ClDbUserStory
+      	sCle = ClZF_ObjDB.ZF_sCleOdb(sClasse, sdSource_P.IDScr_UserStory)
+      	
+      	SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
+      		sListeUS += [", "] + sdSource_P.IDScr_UserStory
+      	FIN
+      
       	HLitSuivant(sdSource_P)
       FIN
       
@@ -330,31 +336,37 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] oFromProjet ()
+      //[ <Résultat> = ] oFromProjet (<oPrj_p> est ClDbProjet [, <bForceCharge_p> est booléen])
       //
       // Paramètres :
-      //	Aucun
+      //	oPrj_p (ClDbProjet) : <indiquez ici le rôle de oPrj_p>
+      //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
+      
       // Valeur de retour :
       // 	ClColTaches : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure publique globale oFromProjet(oPrj_p est un ClDbProjet):ClColTache
+      procédure publique globale oFromProjet(oPrj_p est un ClDbProjet, bForceCharge_p est un booléen = faux):ClColTache
       
-      oColTaches		est un ClColTache
-      sReq			est une chaîne
+      sReq				est une chaîne
+      oColTachesRetour	est un ClColTache dynamique	<- oPrj_p.ZF_GetCol(cstTachesDeProjet)
       
-      sReq = [
-      select
-      	Scr_Tache.*
-      FROM Scr_Tache
-      	INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
-      where Scr_UserStory.IDScr_Projet = [%oPrj_p.ZF_Get_IdUnique()%]
-      ]
-      oColTaches.ZF_LoadSQL(sReq)
+      SI oColTachesRetour.ZF_bEstExpire() OU bForceCharge_p ALORS
+      	
+      	oColTachesRetour.ZF_vider()
       
-      renvoyer oColTaches
+      	sReq = [
+      	select
+      		Scr_Tache.*
+      	FROM Scr_Tache
+      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
+      	where Scr_UserStory.IDScr_Projet = [%oPrj_p.ZF_Get_IdUnique()%]
+      	]
+      	oColTachesRetour.ZF_LoadSQL(sReq)
+      fin
+      renvoyer oColTachesRetour
      type : 458752
    -
      name : aoFromPeriodeSprints
@@ -397,12 +409,12 @@ class :
       RENVOYER oColTachesRetour
      type : 458752
    -
-     name : GetAll
+     name : GetAll_old
      procedure_id : 1474619292466879487
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll()<métier>:Vide
+      PROCÉDURE prive GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Tache..nom)
      type : 458752
    -
@@ -432,16 +444,16 @@ class :
       
       //Récupération des taches en cours, de l'utilisateur.
       sReq = [
-      	SELECT<§cs:3§>
-      		Scr_Tache.*<§cs:3§>
-      	FROM Scr_Tache<§cs:3§>
-      	WHERE Scr_Tache.Top_Brouillon = 0<§cs:3§>
-      		AND Scr_Tache.Top_Annule = 0<§cs:3§>
-      		AND Scr_Tache.Top_Realise = 0<§cs:3§>
-      		AND Scr_Tache.Num_Sprint_Demarrage is not Null<§cs:3§>
-      		AND Scr_Tache.Num_Sprint_Fin is Null<§cs:3§>
-      		AND Scr_Tache.IDScr_Usr_Dev = [%oUser_p.ZF_Get_IdUnique()%]<§cs:3§>
-      		AND Scr_Tache.Statut <> [%ClDbTache.cstStatut_Suspendu%]<§cs:3§>
+      	SELECT
+      		Scr_Tache.*
+      	FROM Scr_Tache
+      	WHERE Scr_Tache.Top_Brouillon = 0
+      		AND Scr_Tache.Top_Annule = 0
+      		AND Scr_Tache.Top_Realise = 0
+      		AND Scr_Tache.Num_Sprint_Demarrage is not Null
+      		AND Scr_Tache.Num_Sprint_Fin is Null
+      		AND Scr_Tache.IDScr_Usr_Dev = [%oUser_p.ZF_Get_IdUnique()%]
+      		AND Scr_Tache.Statut <> [%ClDbTache.cstStatut_Suspendu%]
       ]
       
       oTachesEnDev.ZF_LoadSQL(sReq)
@@ -504,6 +516,215 @@ class :
       renvoyer sRetour
       
      type : 458752
+   -
+     name : anGetNbPointsSprints
+     procedure_id : 1537180623594592261
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] anGetNbPointsSprints (<oColSpr> est ClColSprint, <nTypeFiltre_p> est entier)
+      //
+      // Paramètres :
+      //	oColSpr (ClColSprint) : <indiquez ici le rôle de oColSpr>
+      //	nTypeFiltre_p (entier) : <indiquez ici le rôle de nTypeFiltre_p>
+      
+      // Valeur de retour :
+      // 	tableau associatif (entier) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale anGetNbPointsSprints(oColSpr est un ClColSprint, nTypeFiltre_p est un entier) <métier>:tableau associatif d'entiers
+      
+      aNRetour		est un tableau associatif d'entiers
+      sdCountPoint	est une Source de Données
+      sReq			est une chaîne
+      sCondition		est une chaîne
+      sPoidsSel		est une chaîne
+      oSpr est un ClDbSprint dynamique
+      sListe est une chaîne
+      
+      
+      pour tout oSpr de oColSpr.aitems()
+      	aNRetour[oSpr.ZF_Get_IdUnique()] = 0
+      	sListe += [", "] + oSpr.ZF_Get_IdUnique()
+      FIN
+      
+      si sListe <> "" alors
+      	
+      	sPoidsSel	= Scr_Tache.Poids..Nom
+      	SELON nTypeFiltre_p
+      		CAS cstGetPointsDemarres
+      			sCondition = Scr_Tache.Num_Sprint_Demarrage..Nom
+      		CAS cstGetPointsFini
+      			sCondition	= Scr_Tache.Num_Sprint_Fin..Nom
+      		CAS cstGetPointsReal
+      			sCondition	= Scr_Tache.Num_Sprint_Realisation..Nom
+      		CAS cstGetPointsPrev
+      			sCondition	= Scr_Tache.Num_Sprint_Previsionnel..Nom
+      			sPoidsSel	= Scr_Tache.Poids_Previsionnel..Nom
+      		AUTRE CAS
+      			ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche()
+      	FIN
+      	
+      	sReq = [
+      		
+      		SELECT
+      			SUM(Scr_Tache.Poids) AS NbrPoints,
+      			Scr_Tache.[%sCondition%] AS Sprint
+      		
+      		FROM Scr_Tache
+      		
+      		WHERE 
+      			Scr_Tache.[%sCondition%] IN ([%sListe%])
+      			and Scr_Tache.Top_Annule = 0
+      		
+      		GROUP BY Scr_Tache.[%sCondition%]
+      	]
+      	
+      	
+      	goapp.Rsql(sdCountPoint,sReq)
+      	pour tout sdCountPoint
+      		aNRetour[sdCountPoint.Sprint] = sdCountPoint.NbrPoints
+      	FIN
+      	
+      	HAnnuleDéclaration(sdCountPoint)
+      fin
+      
+      RENVOYER aNRetour
+      
+     type : 458752
+   -
+     name : nGetNbPointsSprint
+     procedure_id : 1537183806192248243
+     type_code : 12
+     code : |1+
+      procedure globale nGetNbPointsSprint(oSpr est un ClDbSprint, nTypeFiltre_p est un entier) <métier>:entier
+      
+      oClSpr est un ClColSprint()
+      aNRetour		est un tableau associatif d'entiers
+      
+      oClSpr.ZF_addItem(oSpr)
+      
+      aNRetour = ::anGetNbPointsSprints(oClSpr,nTypeFiltre_p)
+      
+      renvoyer aNRetour[oSpr.ZF_Get_IdUnique()]
+     type : 458752
+   -
+     name : oColsFromUs
+     procedure_id : 1537339069220519396
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oColsFromUs (<oColUs_p> est ClColUserStory)
+      //
+      // Paramètres :
+      //	oColUs_p (ClColUserStory) : <indiquez ici le rôle de oPrj_p>
+      
+      // Valeur de retour :
+      // 	tableau associatif (ClColTache dynamique) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	bForceCharge_p (booléen - valeur par défaut=1) : <indiquez ici le rôle de bForceCharge_p>
+      procédure publique globale oColsFromUs(oColUs_p est un ClColUserStory)<metier>:tableau associatif de ClColTache dynamique
+      
+      sReq				est une chaîne
+      aColTaches			est un tableau associatif de ClColTache dynamique
+      
+      SI oColUs_p.ZF_nTaille() > 0 ALORS
+      	
+      	sListeIdsUs est une chaine = TableauVersChaîne(oColUs_p.ZF_Get_Liste_IdUnique(), ", ")
+      	
+      	oColUsr est un ClColUsr()
+      	oColUsr.ZF_LoadSQL([
+      		
+      		SELECT Scr_Usr.*
+      		FROM Scr_Usr
+      			INNER JOIN Scr_Tache ON (Scr_Tache.IDScr_Usr_createur = Scr_Usr.IDScr_Usr)
+      		WHERE Scr_Tache.IDScr_UserStory IN ([%sListeIdsUs%])
+      		
+      		UNION
+      		
+      		SELECT Scr_Usr.*
+      		FROM Scr_Usr
+      			INNER JOIN Scr_Tache ON (Scr_Tache.IDScr_Usr_Dev = Scr_Usr.IDScr_Usr)
+      		WHERE Scr_Tache.IDScr_UserStory IN ([%sListeIdsUs%])
+      
+      
+      	])
+      	
+      //	aColTaches <- ::ZF_aoInitCols(aColTaches, oColUs_p, cstTachesDeUS)
+      	
+      	sReq = [
+      		select
+      			Scr_Tache.*
+      		FROM Scr_Tache
+      		where Scr_Tache.IDScr_UserStory IN ([%sListeIdsUs%])
+      	]
+      //	aColTaches = ClZF_ColObjDB.ZF_LoadSQLMulti_Priv(sReq,aColTaches, null, oColUs_p.ZF_Get_Liste_IdUnique(), Scr_UserStory.IDScr_UserStory..nom)
+      	aColTaches <- ClZF_ColObjDB.ZF_LoadSQLMulti_2(aColTaches, sReq, cstTachesDeUS, oColUs_p, Scr_UserStory.IDScr_UserStory..Nom)
+      	
+      FIN
+      
+      renvoyer aColTaches
+     type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542749409608689447
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbTache
+      RENVOYER sClasse
+     type : 458752
+   -
+     name : oFromSprints
+     procedure_id : 1543136863604369684
+     type_code : 12
+     code : |1-
+      procédure oFromSprints(oColSpr_p est une ClColSprint dynamique, LOCAL nSelecteur est un ClDbTache.ETypeCharge) <métier>:vide
+      
+      
+      //On choisi si on veut en prod ou prévisionnel 
+      sChoixSprint				est une chaîne
+      SELON nSelecteur
+      	CAS ClDbTache.ETypeCharge.Charge_réelle
+      		sChoixSprint	= Scr_Tache.Num_Sprint_Realisation..Nom
+      	CAS ClDbTache.ETypeCharge.Charge_prévisionelle
+      		sChoixSprint	= Scr_Tache.Num_Sprint_Previsionnel..Nom
+      FIN
+      
+      sReq est une chaîne = [
+      	SELECT 
+      		Scr_Tache.*
+      	FROM Scr_Tache
+      	WHERE Scr_Tache.[%sChoixSprint%] IN([%TableauVersChaîne(oColSpr_p.ZF_Get_Liste_IdUnique(), ", ")%])
+      ]
+      :ZF_LoadSQL(sReq)
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fc0ae2421f4e2
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau de ClDbTache dynamique
+         renvoyer :m_aoTaches
+        type : 1966080
+      -
+        code : |1-
+         procédure protégée p_aoObj(aValeur est un tableau de ClDbTache dynamique)
+         :m_aoTaches <- aValeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

@@ -47,7 +47,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<metier>:Vide
       :ZF_addItem(ClDbSprint.GetObj(nId_P))
      type : 458752
    -
@@ -56,7 +56,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.aItems
-      PROCÉDURE aItems():tableau de ClDbSprint dynamique
+      PROCÉDURE aItems()<metier>:tableau de ClDbSprint dynamique
       renvoyer :m_aoSprint
      type : 458752
    -
@@ -65,16 +65,16 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClColObjDB.Init
-      PROCÉDURE  Init():Vide
+      PROCÉDURE  Init()<metier>:Vide
       ZF_InitCol(:m_aoSprint)
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 1422513183087778253
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
+      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données)<metier>:Vide
       
       oObj est un ClDbSprint(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.Num_Sprint)
@@ -84,19 +84,47 @@ class :
      procedure_id : 1456096739215100493
      type_code : 12
      code : |1-
-      procédure publique globale aoListeSprint():ClColSprint
+      procédure publique globale aoListeSprint(nBorneMin_p est un entier = 0, nBorneMax_p est un entier = 0)<metier>:ClColSprint
       
       
-      sReq est une chaîne
-      oSprints est un ClColSprint
+      sReq		est une chaîne
+      oSprints	est un ClColSprint()
+      sCondition	est une chaîne
+      sSens		est une chaîne
+      nBorneMin	est un entier
+      nBorneMax	est un entier
+      
+      
+      si nBorneMin_p <= nBorneMax_p ALORS
+      	nBorneMin = nBorneMin_p
+      	nBorneMax = nBorneMax_p
+      sinon
+      	nBorneMin	= nBorneMax_p
+      	nBorneMax	= nBorneMin_p
+      	
+      	sSens = "DESC"
+      FIN
+      
+      SI nBorneMin <> 0 ALORS
+      	sCondition += [RC + TAB + "AND "] + "Scr_Sprint.Num_Sprint >= " + nBorneMin
+      FIN
+      SI nBorneMax <> 0 ALORS
+      	sCondition += [RC + TAB + "AND "] + "Scr_Sprint.Num_Sprint <= " + nBorneMax
+      FIN
+      
+      SI sCondition <> "" ALORS
+      	sCondition = "WHERE " + sCondition
+      FIN
+      
       
       sReq = [
       	SELECT
       		Scr_Sprint.*
       	FROM
       		Scr_Sprint
+      	[%sCondition%]
       	ORDER BY
-      		Scr_Sprint.Num_Sprint
+      		Scr_Sprint.Num_Sprint [%sSens%]
       ]
       
       oSprints.ZF_LoadSQL(sReq)
@@ -108,7 +136,7 @@ class :
      procedure_id : 1456101236090684172
      type_code : 12
      code : |1+
-      procédure publique globale nGetNumSprintMax():entier
+      procédure publique globale nGetNumSprintMax()<metier>:entier
       
       sdSprintMax est une Source de Données
       sReq est une chaîne
@@ -140,9 +168,37 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE public GetAll()<métier>:Vide
+      PROCÉDURE public GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Sprint..nom)
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542749207741574883
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbSprint
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fc081241847f8
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau de ClDbSprint dynamique
+         renvoyer :m_aoSprint
+        type : 1966080
+      -
+        code : |1+
+         procédure protégée p_aoObj(aValeur est un tableau de ClDbSprint dynamique)
+         :m_aoSprint <- aValeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

@@ -347,8 +347,11 @@ window :
                				
                				//si la ligne n'est pas vide on enregistre les données
                				SI xlsDonnée(IdFichierXLS,i,nCol_Date_Debut) <> "" alors
-               					
-               					oSpr = allouer un ClDbSprint(ClZF_ObjDbLs.cstModeCreation)
+               					quand Exception dans
+               						oSpr <- ClDbSprint.GetObj(xlsDonnée(IdFichierXLS, i, nCol_numSprint))
+               					faire
+               						oSpr = allouer un ClDbSprint(ClZF_ObjDbLs.cstModeCreation)
+               					FIN
                					oSpr.SetNumSprint(xlsDonnée(IdFichierXLS, i, nCol_numSprint))
                					oSpr.p_dDateDebut	= ChaîneVersDate(xlsDonnée(IdFichierXLS,i,nCol_Date_Debut))
                					oSpr.p_dDateFin		= ChaîneVersDate(xlsDonnée(IdFichierXLS,i,nCol_Date_Fin))
@@ -670,7 +673,7 @@ window :
                //Purge de tous les éléments en mémoire
                LibererEtRecupUsrActu()
                
-               goApp.m_nNumeroDuSprintActuel = ClDbSprint.Sprint_Num_Actuel()
+               //goApp.m_nNumeroDuSprintActuel = ClDbSprint.Sprint_Num_Actuel()
                ClDbSprint.Calcul_Velocite_Moyenne()
                
                //
@@ -980,6 +983,12 @@ window :
                SI PAS HSupprimeTout(Scr_UserStory_Scr_Process_Metier_Intervenant) ALORS
                	Erreur(ErreurInfo(errComplet))
                FIN
+               
+               pour tout Scr_Process_Metier_Intervenant
+               	si Scr_Process_Metier_Intervenant.IDScr_Process_Metier_Intervenant_Controle_Renvoi <> 0 ALORS
+               		HSupprime(Scr_Process_Metier_Intervenant)
+               	FIN
+               FIN
                SI PAS HSupprimeTout(Scr_Process_Metier_Intervenant) ALORS
                	Erreur(ErreurInfo(errComplet))
                FIN
@@ -1014,6 +1023,9 @@ window :
                FIN
                
                
+               SI PAS HSupprimeTout(Scr_Epic_Usr) ALORS
+               	Erreur(ErreurInfo(errComplet))
+               FIN
                SI PAS HSupprimeTout(Scr_Epic) ALORS
                	Erreur(ErreurInfo(errComplet))
                FIN
@@ -1348,12 +1360,12 @@ window :
                				Si xlsDonnée(IdFichierXLS,i,nCol_codeTache) = "" alors
                					si xlsDonnée(IdFichierXLS,i,nCol_codeUS) <> "" alors
                						VariableRAZ(stUS)
-               						stUS.sCodeUserStorie = "CC" + xlsDonnée(IdFichierXLS,i,nCol_codeUS)
-               						stUS.sEnTantQue = "Historique"
-               						stUS.sBesoinUserStorie = xlsDonnée(IdFichierXLS,i,nCol_Besoin) + " - " + xlsDonnée(IdFichierXLS,i,nCol_Besoin2)
-               						stUS.sAfindeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_nom)
-               						stUS.nIDProjet = oPrj.ZF_Get_IdUnique()
-               						stUS.nIDResponsable = oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               						stUS.sCodeUserStorie	= "CC" + xlsDonnée(IdFichierXLS,i,nCol_codeUS)
+               						stUS.sEnTantQue			= "Historique"
+               						stUS.sBesoinUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_Besoin) + " - " + xlsDonnée(IdFichierXLS,i,nCol_Besoin2)
+               						stUS.sAfindeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_nom)
+               						stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
+               						stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                						
                						Si xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" alors
                							stUS.bAtester = vrai
@@ -1527,11 +1539,11 @@ window :
                					
                					//Si le champ code de la tache parente = 0001 => c'est une US
                					SI xlsDonnée(IdFichierXLS,i,nCol_TacheParente) = "0001" alors
-               						stUS.sCodeUserStorie = "N" + xlsDonnée(IdFichierXLS,i,nCol_codeTache)
-               						stUS.sEnTantQue = "Historique"
-               						stUS.sBesoinUserStorie = xlsDonnée(IdFichierXLS,i,nCol_nom)
-               						stUS.nIDProjet = oPrj.ZF_Get_IdUnique()
-               						stUS.nIDResponsable = oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               						stUS.sCodeUserStorie	= "N" + xlsDonnée(IdFichierXLS,i,nCol_codeTache)
+               						stUS.sEnTantQue			= "Historique"
+               						stUS.sBesoinUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_nom)
+               						stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
+               						stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                						
                						SI xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" ALORS
                							stUS.bAtester = Vrai
@@ -1691,7 +1703,7 @@ window :
                						stUS.sEnTantQue			= "Historique"
                						stUS.sBesoinUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_nom)
                						stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
-               						stUS.nIDResponsable		= oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               						stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                						
                						SI xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" ALORS
                							stUS.bAtester			= Vrai
@@ -1846,11 +1858,11 @@ window :
                
                					//Si la col 2 = "*" => c'est une US
                					SI xlsDonnée(IdFichierXLS,i,2) = sansespace("*") ALORS
-               						stUS.sCodeUserStorie = "V" + xlsDonnée(IdFichierXLS,i,nCol_codeTache)
-               						stUS.sEnTantQue = "Historique"
-               						stUS.sBesoinUserStorie = xlsDonnée(IdFichierXLS,i,nCol_nom)
-               						stUS.nIDProjet = oPrj.ZF_Get_IdUnique()
-               						stUS.nIDResponsable = oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               						stUS.sCodeUserStorie	= "V" + xlsDonnée(IdFichierXLS,i,nCol_codeTache)
+               						stUS.sEnTantQue			= "Historique"
+               						stUS.sBesoinUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_nom)
+               						stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
+               						stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                						
                						SI xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" ALORS
                							stUS.bAtester = Vrai
@@ -2069,11 +2081,11 @@ window :
                						si i < 97 alors
                							stUS.nIDProjet = oPrjPool1.ZF_Get_IdUnique()
                							sProjet = "Pool V1"
-               							stUS.nIDResponsable = oPrjPool1.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               							stUS.nIDResponsable = ClColUsr_Projet.oUserCdpFromProjet(oPrjPool1).ZF_Get_IdUnique()
                						sinon
                							stUS.nIDProjet = oPrjPool2.ZF_Get_IdUnique()
                							sProjet = "Pool V2"
-               							stUS.nIDResponsable = oPrjPool2.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               							stUS.nIDResponsable = ClColUsr_Projet.oUserCdpFromProjet(oPrjPool2).ZF_Get_IdUnique()
                						fin
                						
                						SI xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" ALORS
@@ -2296,12 +2308,12 @@ window :
                //				Si xlsDonnée(IdFichierXLS,i,nCol_codeTache) = "" alors
                					si xlsDonnée(IdFichierXLS,i,nCol_codeUS) <> "" ET xlsDonnée(IdFichierXLS,i,nCol_Besoin) <> "" alors
                						VariableRAZ(stUS)
-               						stUS.sCodeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_codeUS)
-               						stUS.sEnTantQue = "Historique"
-               						stUS.sBesoinUserStorie = xlsDonnée(IdFichierXLS,i,nCol_Besoin)
-               						stUS.sAfindeUserStorie = ""	//xlsDonnée(IdFichierXLS,i,nCol_AfinDe)
-               						stUS.nIDProjet = oPrj.ZF_Get_IdUnique()
-               						stUS.nIDResponsable = oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               						stUS.sCodeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_codeUS)
+               						stUS.sEnTantQue			= "Historique"
+               						stUS.sBesoinUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_Besoin)
+               						stUS.sAfindeUserStorie	= ""	//xlsDonnée(IdFichierXLS,i,nCol_AfinDe)
+               						stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
+               						stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                						
                						Si xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" alors
                							stUS.bAtester = vrai
@@ -2470,12 +2482,12 @@ window :
                //						//On saute les US annulées
                						SI pas xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "A" ALORS
                							VariableRAZ(stUS)
-               							stUS.sCodeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_codeUS)
-               							stUS.sEnTantQue = xlsDonnée(IdFichierXLS,i,nCol_Role)
-               							stUS.sBesoinUserStorie = xlsDonnée(IdFichierXLS,i,nCol_Besoin)
-               							stUS.sAfindeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_AfinDe)
-               							stUS.nIDProjet = oPrj.ZF_Get_IdUnique()
-               							stUS.nIDResponsable = oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               							stUS.sCodeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_codeUS)
+               							stUS.sEnTantQue			= xlsDonnée(IdFichierXLS,i,nCol_Role)
+               							stUS.sBesoinUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_Besoin)
+               							stUS.sAfindeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_AfinDe)
+               							stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
+               							stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                							
                							Si xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" alors
                								stUS.bAtester = vrai
@@ -2645,12 +2657,12 @@ window :
                					Si xlsDonnée(IdFichierXLS,i,nCol_Role) <> "" alors
                //						si xlsDonnée(IdFichierXLS,i,nCol_codeUS) <> "" ET xlsDonnée(IdFichierXLS,i,nCol_Besoin) <> "" alors
                							VariableRAZ(stUS)
-               							stUS.sCodeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_codeUS)
-               							stUS.sEnTantQue = xlsDonnée(IdFichierXLS,i,nCol_Role)
-               							stUS.sBesoinUserStorie = xlsDonnée(IdFichierXLS,i,nCol_Besoin)
-               							stUS.sAfindeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_Afinde)
-               							stUS.nIDProjet = oPrj.ZF_Get_IdUnique()
-               							stUS.nIDResponsable = oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               							stUS.sCodeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_codeUS)
+               							stUS.sEnTantQue			= xlsDonnée(IdFichierXLS,i,nCol_Role)
+               							stUS.sBesoinUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_Besoin)
+               							stUS.sAfindeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_Afinde)
+               							stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
+               							stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                							
                							Si xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" alors
                								stUS.bAtester = vrai
@@ -2826,7 +2838,7 @@ window :
                							stUS.sAfindeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_AfinDe)
                							stUS.sCmtrTest			= xlsDonnée(IdFichierXLS,i,nCol_commentaire)
                							stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
-               							stUS.nIDResponsable		= oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               							stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                							
                							Si xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" alors
                								stUS.bAtester = vrai
@@ -2998,12 +3010,12 @@ window :
                					Si xlsDonnée(IdFichierXLS,i,nCol_Role) <> "" alors
                //						si xlsDonnée(IdFichierXLS,i,nCol_codeUS) <> "" ET xlsDonnée(IdFichierXLS,i,nCol_Besoin) <> "" alors
                							VariableRAZ(stUS)
-               							stUS.sCodeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_codeUS)
-               							stUS.sEnTantQue = xlsDonnée(IdFichierXLS,i,nCol_Role)
-               							stUS.sBesoinUserStorie = xlsDonnée(IdFichierXLS,i,nCol_Besoin)
-               							stUS.sAfindeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_AfinDe)
-               							stUS.nIDProjet = oPrj.ZF_Get_IdUnique()
-               							stUS.nIDResponsable = oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               							stUS.sCodeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_codeUS)
+               							stUS.sEnTantQue			= xlsDonnée(IdFichierXLS,i,nCol_Role)
+               							stUS.sBesoinUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_Besoin)
+               							stUS.sAfindeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_AfinDe)
+               							stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
+               							stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                							
                							Si xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" alors
                								stUS.bAtester = vrai
@@ -3171,12 +3183,12 @@ window :
                					Si xlsDonnée(IdFichierXLS,i,nCol_Role) <> "" alors
                //						si xlsDonnée(IdFichierXLS,i,nCol_codeUS) <> "" ET xlsDonnée(IdFichierXLS,i,nCol_Besoin) <> "" alors
                							VariableRAZ(stUS)
-               							stUS.sCodeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_codeUS)
-               							stUS.sEnTantQue = xlsDonnée(IdFichierXLS,i,nCol_Role)
-               							stUS.sBesoinUserStorie = xlsDonnée(IdFichierXLS,i,nCol_Besoin)
-               							stUS.sAfindeUserStorie = xlsDonnée(IdFichierXLS,i,nCol_AfinDe)
-               							stUS.nIDProjet = oPrj.ZF_Get_IdUnique()
-               							stUS.nIDResponsable = oPrj.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+               							stUS.sCodeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_codeUS)
+               							stUS.sEnTantQue			= xlsDonnée(IdFichierXLS,i,nCol_Role)
+               							stUS.sBesoinUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_Besoin)
+               							stUS.sAfindeUserStorie	= xlsDonnée(IdFichierXLS,i,nCol_AfinDe)
+               							stUS.nIDProjet			= oPrj.ZF_Get_IdUnique()
+               							stUS.nIDResponsable		= ClColUsr_Projet.oUserCdpFromProjet(oPrj).ZF_Get_IdUnique()
                							
                							Si xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "T" alors
                								stUS.bAtester = vrai
@@ -3307,7 +3319,7 @@ window :
                
                oSprint est un ClDbSprint dynamique
                pour tout element oSprint de ClColSprint.aoListeSprint().aItems()
-               	trace(oSprint.ZF_Get_IdUnique() + " - " + oSprint.nGetNbPointsRealises() + " - " + oSprint.p_nVelociteMoyenneRes)
+               	trace(oSprint.ZF_Get_IdUnique() + " - " + oSprint.nGetNbPointsFini() + " - " + oSprint.p_nVelociteMoyenneRes)
                FIN
               type : 18
             -
@@ -4836,13 +4848,6 @@ window :
                				
                				SI xlsDonnée(IdFichierXLS,i,nCol_nom) <> "" ALORS
                					
-               //					//Recherche de l'ID de l'utilisateur
-               //					HLitRecherche(Scr_Usr,Nom,xlsDonnée(IdFichierXLS,i,nCol_nom),hIdentique+hLimiteParcours)
-               //					si Htrouve(Scr_Usr)
-               //						nIdUsr = Scr_Usr.IDScr_Usr
-               //					sinon
-               //						erreur(xlsDonnée(IdFichierXLS,i,nCol_nom) + " Introuvable")
-               //					fin
                					nIdUsr = ngetidusrdenom(xlsDonnée(IdFichierXLS,i,nCol_nom))
                					si nIdUsr = 0 ALORS
                						trace(xlsDonnée(IdFichierXLS,i,nCol_nom) + " Introuvable")
@@ -4866,9 +4871,16 @@ window :
                					FIN
                					
                					
-               					oPrj.p_oUsr_ChefProjet = ClDbUsr.GetObj(nIdUsr)
+               					//oPrj.p_oUsr_ChefProjet = ClDbUsr.GetObj(nIdUsr)
                					oPrj.ZF_Enregistre()
-               					oPrj.ReaffecteToutesUsAuCDP()
+               					//oPrj.ReaffecteToutesUsAuCDP()
+               					
+               					//Définition du CDP
+               					oUsrPrj	est un ClDbUsr_Projet(ClZF_ObjDbLs.cstModeCreation)
+               					oUsrPrj.p_oIDScr_Projet		= oPrj
+               					oUsrPrj.p_oIDScr_Usr_ID		= nIdUsr
+               					oUsrPrj.p_bTop_Chef_Projet	= vrai
+               					oUsrPrj.ZF_Enregistre()
                					
                					
                					
@@ -6400,22 +6412,19 @@ window :
            p_codes :
             -
               code : |1-
-               //sJSON est une chaîne ANSI
-               HLitDernier(Scr_Tache)
-               oTache est un ClDbTache(Scr_Tache.IDScr_Tache)
-               oTache2 est un ClDbTache(ClZF_ObjDbLs.cstModeSansChargement)
-               
-               ////oUS est un ClDbUserStory(ClZF_ObjDbLs.cstModeCreation)
-               ////oTache.p_oUserStoryParent = oUS
                //
-               //// Sérialisation de l'élément
-               //Sérialise(oTache, sJSON, psdJSON)
-               
-               //oTache2.ZF_Deserialise(sJSON)
-               oTache2.ZF_Transfere(oTache)
-               stop
-               //Désérialise(oTache2,sJSON,psdJSON)
-               //info(sJSON)
+              type : 14
+            -
+              code : |1-
+               //oColPrj est un ClColProjet()
+               //oColPrj.GetAll()
+               //aRes est un tableau associatif de ClColTache dynamique
+               //
+               //AnalyseurDébut()
+               //aRes = ClColTache.oColsFromProjets(oColPrj)
+               //AnalyseurFin()
+               //
+               //stop
               type : 18
             -
               type : 161
@@ -6440,7 +6449,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6462,7 +6470,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6599,7 +6606,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6621,7 +6627,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6643,7 +6648,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6716,7 +6720,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6738,7 +6741,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6843,7 +6845,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6865,7 +6866,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6887,7 +6887,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -6909,7 +6908,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -7013,7 +7011,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -7035,7 +7032,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -7108,7 +7104,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -7130,7 +7125,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -7653,15 +7647,16 @@ window :
                sParams += "&name=" + encode_param(oTache.p_sCodeTache + " - " + oPrj.p_sNom + " - " + oTache.p_sDescription)
                sParams += "&desc=" + encode_param(oTache.p_sCMTR)
                
-               si oPrj.p_bTop_Prioritaire ALORS
+               //Recherche de la situation
+               oSituation	est un ClDbProjet_Situation(ClZF_ObjDbLs.cstModeSansChargement)
+               oSituation.p_oNum_Sprint_ID = goapp.m_nNumeroDuSprintActuel
+               oSituation.p_oIDScr_Projet = oPrj
+               oSituation <- oSituation.RechEnrDeCles()
+               si oSituation <> null _et_ oSituation.p_bTop_Prioritaire ALORS
                	sParams += "&pos=0"
                sinon
                	sParams += "&pos=bottom"
                FIN
-               
-               //si oPrj.p_bTop_Prioritaire ALORS
-               //	sParams += "&idLabels=" + ClTrello_SCRUM.cst_Label_Prioritaire
-               //FIN
                
                sReq = ChaîneConstruit("https://api.trello.com/1/cards%1%2", ClTrello_req.sAuth, sParams)
                HTTPRequête(sReq,"","","POST")
@@ -8229,14 +8224,14 @@ window :
            p_codes :
             -
               code : |1+
-               oSpr est un ClDbSprint dynamique
-               nSpMin est un entier = goApp.Sprint_Num_Actuel() - 5
-               nSpMax est un entier = goApp.Sprint_Num_Actuel() + 1
+               oSpr	est un ClDbSprint dynamique
+               nSpMin	est un entier	= goApp.p_nNumeroDuSprintActuel - 5
+               nSpMax	est un entier	= goApp.p_nNumeroDuSprintActuel + 1
                
-               pour tout element oSpr de ClColSprint.aoListeSprint().aItems()
-               	si nSpMin <= oSpr.ZF_Get_IdUnique() <= nSpMax ALORS
+               pour tout element oSpr de ClColSprint.aoListeSprint(nSpMin, nSpMax).aItems()
+               //	si nSpMin <= oSpr.ZF_Get_IdUnique() <= nSpMax ALORS
                		ListeInsère(CBO_SprintTacheACrer,oSpr.ZF_Get_IdUnique() + glien(oSpr.ZF_Get_IdUnique()), 1)
-               	FIN
+               //	FIN
                FIN
                si ListeOccurrence(CBO_SprintTacheACrer) > 0 ALORS
                	ListeSelectPlus(CBO_SprintTacheACrer, 1)
@@ -8301,7 +8296,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -8323,7 +8317,6 @@ window :
              type : 2
              content :
               internal_properties : BwAAAAcAAAAuAQemJcwfwo07+wK/hEJWSZBEZF65bV1DTLlAKXFMgvJKUN5tJcm6927KDMvQjWUMTic5fbPfncS62wvjgBzTTjidwgrdjK/kX+5nTfYa7Aic51/CCFa9jZnZSXiejN4kIA6wVRHijYlr0u24GMUoIZhLfU6hfKRTeAzJupTKSBAo9qqHvoAQqTKSh86CegrNVbTePQNDKZEc6rPUzZCDemnnUIb8j6Myz5/0BltlVl5yGHPg8EiwwoR+MRv26zc/US5rgBKSaJU92pMGLnbB6qSfPQ8z7w4vWVg2dTO70T3F0/K3vO1b1SLa1egFMHO02gTRNc6QdsQl3yOgyRboyy6k+ZxAZOR+ID/Bebh7tN2fwpZCDgNOAKUxtPK8mV7DRaW7kr8zB8gSewLzeJAzTCz66jhfWw3XDHVnttuAp3qP8gXJ2w0Xv+bL5BOdwHE5fq7tcogCtwI4iOPUjS1zsaEoFr3l8vGeiveibkP54+YEswrTLipdF4ziKVVYnVfLM++Mw68xWFkqQbABzDHQhtkiMfkAY53IAkfynPJ3oJdPAFaG6yo31qUYdkOaXuwypOSmayPFl6SiDRgNIgmmzUzHue6aTRjrgboewNsW84Qdsqd4ntpq1jPn9qzo9KAN6CEFNT7ebynm55zFtspLTyuHrQnI6rPO6Hj++7JB+v9XFIWEyMYP0B/GilADYFU9vWmznW56QF1cSXrsrKPZ0ZXnhVP3O1SozjNgxuJ6sQqrjSYRxOLCSCfEWc5srZKUMrB0RrCuCCO4Rh4Er4hHIKkTIEIK3EYO9Pun6PdMiogiOWu2GZeJMACt5NNLUSy2dIxKKxUwLplu1bWYBdi3JdndvYk=
-              properties : {}
               type : 2
              code_elements :
               internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -8638,6 +8631,27 @@ window :
             -
               code : |1+
                ImportPlanTest("P:\Informatique\Developpement\Client diffus\Plan de test Client diffus - Compta.xlsx", 1, oProjetDeNom("Client diffus"))
+               
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : BTN_Plan_test_Bases
+          identifier : 0x25539f622abf09be
+          internal_properties : BwAAAAcAAABeqDfKBLZJofUCh4W6TGmMI6Yu+vC/0nrP7zVOokDA/5WyUvKfx8mp5kCdJ0giC2/lCF+zF1+ELV8kIeX6LfCoA3rlgSHTfyYJUq58VMjn4dnXtthI3AK9M4oBSrPr35X5ROn/nqn0WE5WHwouiK6myGPG2tICAQh3RdIj2ssc4Qh9mXZm+Y+4wjULHe5jljEchrXaCDtb1HW4cLQ9ttsCLvz8l591bZ0u3bBCxWFwuyFsbmzVp2Fs5bmbfOygSS+TOOBq0bBrK7GJY32KAI2xbEO1kcL37PaN337Lyek80kS8mj0X/SlxToHBK3xcgB6ijHvmHL2IjArTKMHj5r8pluf38kCJ7mktp39V5//n/H3nXQmdQ9Y4YhrMwEx56KlO23+K/ufHL7aBngB0qVAlXOgtV/gGH4cPJxlx1pyCzELC73kzZCnHSG0OKLlNR2hOxcp7bl6aO6WEiD2MddcNS6MtQlC78Vsix/ZCzEvxHkBRFvy1X8hmLfl8Zb3fmSUsK0eG6DD72p6IFtWgEfAOAd4n0thEkFwnbMavHCeBxE6SNdoF2aSGn5QDaDhWH6XDdLhR5Vad5kAdZMic+/Log3Bfka3BDAwfaSlsBRE5EB1ASbYtTbAFSr5ztgCc475Hs8ypFhGW+Urnc4h6S6l/n5sSOZW3jfqVtWZfCXOECCYOgoX3Mt4WkJFSfW5JLLoqixo8mwy4mA1bxCMZ6zNHFHPhsLJ2WZj75HojFAZTwN+05asOgizu7YA0U7eJ9bdg17MSjigekhMAwsTK/0ujxabmNRUkhIWqnHJgIERL+1JfBMz4I95o00XuBrNyPa/5DTME
+          properties :
+           x : 93
+           y : 299
+           width : 128
+           height : 24
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1+
+               ImportPlanTest("P:\Informatique\Developpement\Base Logistique\Projet Bases Logistiques 2023\Tests\Plan de test 2023.xlsx", 11, oProjetDeNom("Base Lunel"))
                
               type : 18
             -
@@ -9863,11 +9877,11 @@ window :
       						si SansEspace(sTesteur) <> "" ALORS
       							stUS.nIDResponsable = nGetIdUsrDeNom(sTesteur)
       						sinon
-      							stUS.nIDResponsable	= oPrj_P.p_oUsr_ChefProjet.ZF_Get_IdUnique()
+      							stUS.nIDResponsable	= ClColUsr_Projet.oUserCdpFromProjet(oPrj_P).ZF_Get_IdUnique()
       						FIN
       						
       						//On liste tous les testeurs du projet (sauf le cdp).
-      						si TableauCherche(aLstTesteurs,tcLinéaire,stUS.nIDResponsable) <= 0 et stUS.nIDResponsable <> oPrj_P.p_oUsr_ChefProjet.ZF_Get_IdUnique() ALORS
+      						si TableauCherche(aLstTesteurs,tcLinéaire,stUS.nIDResponsable) <= 0 et stUS.nIDResponsable <> ClColUsr_Projet.oUserCdpFromProjet(oPrj_P).ZF_Get_IdUnique() ALORS
       							TableauAjoute(aLstTesteurs,stUS.nIDResponsable)
       						FIN
       						

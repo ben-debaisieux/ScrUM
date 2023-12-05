@@ -42,7 +42,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
       :ZF_addItem(ClDbEpic.GetObj(nId_P))
      type : 458752
    -
@@ -64,12 +64,12 @@ class :
       ZF_InitCol(:m_aoEpic)
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 1422512577493054572
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
+      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données):Vide
       
       oObj est un ClDbEpic(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Epic)
@@ -119,7 +119,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale Combo_Charge_from_projet(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne, oProjet_p est un ClDbProjet, sValDef_P est une chaîne = "", aCompl_P est un tableau associatif de chaine =  []):Vide
+      PROCEDURE globale Combo_Charge_from_projet(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne, oProjet_p est un ClDbProjet, sValDef_P est une chaîne = "", aCompl_P est un tableau associatif de chaine =  [])<ui>:Vide
       
       oEpic est un ClDbEpic dynamique
       sNomComplet est une chaîne = sNomFenetre_P + "." + sNomCombo_P
@@ -158,12 +158,12 @@ class :
       FIN
      type : 458752
    -
-     name : GetAll
+     name : GetAll_old
      procedure_id : 1468673872307433592
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll()<métier>:Vide
+      PROCÉDURE prive GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Epic..nom)
      type : 458752
    -
@@ -186,7 +186,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       //	sValDef_P (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de sValDef_P>
-      procédure GLOBALE aliste_charge_From_Projet(LOCAL oProjet_p est un ClDbProjet, aCompl_P est un tableau associatif de chaîne = []):tableau de chaine
+      procédure GLOBALE aliste_charge_From_Projet(LOCAL oProjet_p est un ClDbProjet dynamique, aCompl_P est un tableau associatif de chaîne = []):tableau de chaine
       
       oEpic		est un ClDbEpic dynamique
       sCle		est une chaîne
@@ -204,6 +204,34 @@ class :
       
       RENVOYER aGroupement
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542748344435908246
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbEpic
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fbba521b04a27
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique p_aoObj() : tableau ClDbEpic dynamique
+         renvoyer :m_aoEpic
+        type : 1966080
+      -
+        code : |1+
+         procédure protégée p_aoObj(Valeur est un tableau ClDbEpic dynamique)
+         m_aoEpic <- Valeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

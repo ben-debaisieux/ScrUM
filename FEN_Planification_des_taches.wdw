@@ -36,22 +36,20 @@ window :
       -
         code : |1+
          
-         oSpr est un ClDbSprint dynamique
-         oLstSpr est un ClcolSprint
-         nInd est un entier
          nIndiceSprintActuel est un entier
          
+         //oSpr	est un ClDbSprint dynamique
+         //oLstSpr	est un ClcolSprint
+         //nInd	est un entier
+         //ListeSupprimeTout(CBO_Sprint)
+         //oLstSpr = ClColSprint.aoListeSprint(goapp.m_nNumeroDuSprintActuel)
+         //POUR nInd = oLstSpr.ZF_nTaille() a 1 pas -1
+         //	oSpr <- oLstSpr.oItem(nInd)
+         //	ListeAjoute(CBO_Sprint, "Sprint " + oSpr.ZF_Get_IdUnique() + gLien(oSpr.ZF_Get_IdUnique()))
+         //FIN
          
-         
-         ListeSupprimeTout(CBO_Sprint)
-         oLstSpr = ClColSprint.aoListeSprint()
-         POUR nInd = oLstSpr.ZF_nTaille() a 1 pas -1
-         	oSpr <- oLstSpr.oItem(nInd)
-         	ListeAjoute(CBO_Sprint, "Sprint " + oSpr.ZF_Get_IdUnique() + gLien(oSpr.ZF_Get_IdUnique()))
-         FIN
-         
+         ClColSprint.aoListeSprint(goApp.m_nNumeroDuSprintActuel, 1):ZF_ChargeCbo(CBO_Sprint..Nom)
          nIndiceSprintActuel = ListeCherche(CBO_Sprint,goApp.m_nNumeroDuSprintActuel)
-         
          ListeSelectPlus(CBO_Sprint,nIndiceSprintActuel)
          
         type : 14
@@ -127,7 +125,7 @@ window :
   -
     name : BTN_Actualiser_le_Graphique
     identifier : 0x2cb4379c026533f5
-    internal_properties : BwAAAAcAAAAKV6AqScWszVLuz6oJR6LgtU3P3GqBrE49mp2f7i/pEH8GBbmcWPIhK9ukESXpTDmol8gSSCPw+nudy7cvj+J850JVEnLHH4W0N6SmoMXJyrrEut3TLirWS5YnPdIuK+Gtfs0TIUDQ0ebdCqdkInBoAlgNGO8+Y4xLm/gRJljLnf9iDLmRIjazCAI64TsO7q0I0uYm74NG+VRu4fv2W3dIi+tWZ5LABmxrBPaFUTz2xSf1/S6MH36P1umuYerKhl0JBDr4+zVOCpInLklaJdF9EJFqYWw5E7SujdZJmDcRYH8qfk6ZZqB+npGhxkRbe5g0Cbmpdl8laJKNgrCw2sqLF3lQ+ulgIiJQmN6EzzfL887rBMG1Fb66U6YLf/QCRGqNcpU54DggRdxOxKf9l7Nlzg/SgHbt7rC90YSr4kmI9Ni1Y3zn1pFBH0htaeTaSO7tgWmeHXK/4kPOGovUAJiTXJplBlOSiQnGSKbyGbZGYcvz8RCiHrT1Juo8JY+imMKumTZxyCYMydZ4dpGYCupq9xO4Ub8d53SukYWWpn2tt2jqGAubxLWRwKCDPVymBHDMyLPV8YDVjnMx6cLlOku39vOMKM49JQw6NNCv0EXpkcBtrWRp97IEEbYSjagtJvihQYBJxDqtqbxcJH1ZxElVWU8SEeVGfeqTJy5ZN5u9Gfx3cD0iEigJUhpfw+eAnwW8KE1kUbTwlmuhtM+RSvfe7OEezLHjMkQZPFTDKp6kpG8jDIAS1gA+qBAIRnTe2Mw9MiO0WgT1piNA4Bp4THaoCBCY2+GF5U4zql9GyY/cBE6jCFBitGeLa+otEjYcn5x1Zxmcv/N4UCFEmU8B7TSU8cdVgbo/TAaHOPoyDj8sXZdiB/A=
+    internal_properties : BwAAAAcAAAA2C0xW5SFYab5SYw7dq0YEmbnDUI5lwGIRdolLSguFDHsKAUWYRA4tN9+I5cmdoJ08I3ymPDfk7o+J53PbW95447ah/m7jC+HA62gq1IkNDo6g/pEXYt56L3LTGU66Vz35YkmPrdxcjSIhfvu45rT8hsSBjKPiN+DvN8TtwkQn+RuGSHXd/nJ/VEZOdY9ysmE87mpFRlJgb4x2I/tWB/NkNxc+2WgOlD4rxCT50TyyAXM5PSgKnbBVNhlQDQZiTm1FyCaubb9A3HbjhIXiSUHtYMHuZ+ofsd62pax56GvlBOMmVtiLCK70/hG7ojQz4zCYZR2P5I0DjpZprKAEikqLNxnskLM6aGjIAIQgj2fbw7pfDGPDo6ioJ3qF6/QSiLbNyl3DTjYqf/R2gsP9l/N91ieiitT7iOKlKU6vXtn00JRR895tdHuf40S6Bh+XN8/yzurHoHfMsfLRv9CvbZ+UyTcyK5r74qD5a0dzOFfR3sTM2ml9exFYNQ0lNuZ7048fQkOW78/FAOl7l1LnYy0/qKQlhnbWgI+laOprEepI3IWPteCybV7Ao9+s9jP3NyWZdfwudLXy9TokWnM005oAP7zxhQ1+Xg9pu+m4P/YoAtUiiklweCP3tGXr5u/2uS3ysnWmG5MW0MdnPWZgjeCO7hyTuqi76hliVieCdqj/Qoj7jBFe3vxd5m4jByNEU7nw5PHA9cgMsne9UGt1dsMqWFWKUD0fdgjdcBgHdiIYGOOf8KzmOmyqxPxkIggqFIh59n/oFkApWpf0FC5UYFqMbPyM1+W5EXpvlktS3ZvIcNo3lMT+0Huff/4xFjIQo6B5Yx2Ys8dUrE0w9SslydAwbbtBlZYbIFornF6WqpNQATuOO8w=
     properties :
      x : 692
      y : 6
@@ -149,7 +147,7 @@ window :
          		eSelecteur = ClDbTache.ETypeCharge.Charge_prévisionelle
          FIN
          
-         actualise(CBO_Sprint, SAI_Nombre_de_sprints, eSelecteur, SAI_Impond)
+         actualise(CBO_Sprint, SAI_Nombre_de_sprints, eSelecteur)
         type : 18
       -
         type : 161
@@ -184,7 +182,7 @@ window :
   -
     name : BTN_Fermer
     identifier : 0x2f175606028957f3
-    internal_properties : BwAAAAcAAAAtQ9qMic2ZiUz/2RDqOm4EVHztZBhZiMQ+USeKWIwYG6hUcg03uGlLCuiYyDxej7S/HCj7V1tN96EQA54rTy+1FV5WSBw5wivOL+C7byctiRB7Jj50afTU7AYuKBDNuCyQSTW5r7FFywvTthOYouwtBPq8QX7rfvAng4J1DBD5ExXybuaXFQ0qtP4K57WmnEF589w6pgltYtNsGiCbVGSVfclr2BcAKHghrai+jTYUIpNaQO3RUleLi+nC1zQ9XKmXx8tP2BTC3YiuTHYME1lNzIOxmp2Ooc/vHHueWVMrMEEGjUETPdFMtCQLsrkVzFQ6LdGcQDx0pd2qFDXfj+QQEJlOetf1vrA49WGLvAmurV1oQOWWI0TEt8Q95cT1g5/+Un8fBCtIN2uzZ8oV25elAb2270a0rlAWV4cbwa0MOJRsz/r2Je0OlWAv0BdSkBevV/LW880HaKHuCHPlMUqSWzxUhMr/YW7WcUBjsFDABY04MUY4D0LAsgBOInFYr76tHLeZXVSbvCKJyV/lqeR8LWFPbBrtmC72UdPI++6opB2lGS8EcJ+5PTt85KWImh2z11I3bNy3O9PmWVzwj5TOMag4PtvXd/EiGnAoIU89lgxoU1Z97UPXUz5zqHp+MPyiEEJaGu92G/H8vlJc6NFdXH0o/gJ1jBc+Y2gEIrjAgdji4pD8i8OieSOXKdY9D13mgjpTCSA5yOlgS9rCr1ssiZDYo3iYRYyc+v23p2aC4Hl+1/dJeMMfYLuH69nSilpvw2o931qEdlMmNtZ4+NZZEJafKxTH0GCk4lh/eGWh3/EIgAGhyThwKAFN5KYR
+    internal_properties : BwAAAAcAAAArSdiKi7sDF/oNL2k5QE6UbOSJ0DzhRPAOAY9+/Lzwu2DMTonL0HX3AoCQVIgWdzRP7BR3c/Mpk/mQY5oPN0eNZS4SdAhZFidep4gX80cFmZjrAiJAmSCgVOaG9NydqDyAObk9u8EJX6vz1t/UGoSNHEqYxXrK6Pr04xIVjOhRSx1afqYXpUVqBJaiH332XHGZY7TS3mFt2tucqrC7bFzNdRGryGfgsKiRZRDGpRYEsqNKmNVJ6vfjw0ki15SVJMEfX2tvuIRqzYjG9N5U09lNvBPJUoW2cfdHjLtuiRvDGInuXcEDzUmcFPxzGhE1fKQK/QmE6ISkveWK1CUft4wIWLF+emdVdiCY3flDxMkuLe14aF0Oq2RcPwS99UTNayf2at9fdGvwR8uLr/L928d10R1eB/4MnoTai0OfBTkYRLC4Iz4awZlC2RRrxMvebOOLo8aah3nT7HUytOepbfa+ZzioGK7bXSLqVayn5CzMEbn0FRpc2x7ktuSq5jWUy9pZuFtt8cAH4Ca99XP5tdDoqe1TAF6pFGLala/Mv8qUEOnhHfNY/CvNMV8YCImERskvE2b7QNhzL2dKNbAEi/CqHZSM0h+DM/WmjuzcRTvpUkhkh9rxef/L54K/3O66fLj+rEaubqtiD3VQGkaQxF15eElcIkZWGfb8oZa+4Hamaw7QYL4qucnoV2HtU0RrHe8U8GhRj17vPp+mCVRgPTH2z15eSU7GK7rS0EvZfXSYav9EbT1/Bgklbqn1XVdIENyVIehLTThaTPF0HDB+pqwzTkwl8XKFxpby0LYxJmv/qY0tTjNzP7LqVv9L5qAX
     properties :
      x : 815
      y : 6
@@ -221,41 +219,6 @@ window :
          
          
         type : 14
-  -
-    name : SAI_Impond
-    identifier : 0x200ead1e922cb2ba
-    internal_properties : BwAAAAcAAAAPNE/SmGOzAfAIt64lpdYhnKpXHtRHHO2Qm2ZfdVoac749L6gYplyGAXALK5eQvdAvKuCXCMIa9SzEbVOjVOaVnTRBHGLAKadIx1U5HWURoBmFFsGHNPcEfDyUbkh4Z6XYTF5huicqGt7Xib5akVFlcN0BjuXFvznVwb2YfmqgLoU5D6IJV753SajuYnUJSFPedthkVZxi2EhAfWeOp4dUgocb5yONRi1tFRvrIcTXNwHu/9jCVxjWxGqdnP8lfAknSvDhrGGe9M1zdL/UOUzeWfRFH8CKtXHhXiLJj8YHVzXgWE0LmjZ2CO+ipWweh/AlxLlAER1MAtFHQfvR+Jo2RWrWm6xrNgYUhUjxw01J8E7wx2FdcfPhVdRrHh49deu+g9p8dQqr5Ye99nSEGrQvxMXNlvIUZXxvFK0urYBe2H9QKGBGhwN6TTNuCUB78FU7zVCUONQcTYMhbP0pK1s4G6DcYTem0Uul3koxjFdEzzOLs4FhIIFk3J7riuOAbrp8CupJoQ6+9jHjR/5p45/ryd8jTO9ZiZQMbRuzwkqVMi4lpcaDiZC+w+VrNLUjZKI9UhZaQBuUi5VZlMogCZjnVaY7WhKrI4UHS6VAhkQcGGU3QuSNlI/MWeponObwHbWeePrAxiivwSr4bAWsFsvekFU9M1KTRFQegjPwipzlHWU2LkqW49qOpZ4RnsjZTHVMOWJ8Cz4yKQJjiVRUfVn8tt21cj8UFercElrvhvcFMFz/wPWQ+fYQilVt1Bg/6TK57xnix4PkAIj9P+TKMLQGeksl402qUybxwvjAy2Ub/L+v/8Yw1C6MAaWSMj7pvqs4mH2usQfgNcAyy1Vc3CtsJSRhkYDRZYtlYk22L201OzNZ01V3Jj2MJxMr0X9N8nROcm4iLrINk3tH3ytc80u7Crl+pv0EvEPmf1SI/uOkIi0xat6cFO3aCESPF0y+NrNyj+KOEs1Ru7Oqp3EPR1KX3Jhv9Q3bQzhwhFjc3Sd/qT4KRKj0l4qSlzozm+Ys9kMIH1h9qFTlAUhJhZ8NG2ZAG9T19lEfNJ5oRRcAXW3dbn+ycVCzrDF8iBN4T8AFawYMlEmFdS8FFwNTbR7GtTMmrxBNa50enVbqEGgZ/sxt20/zjj7nxNVooCyhcfiiLEtd74pLxHm8cgqFIDZ/g2qUoMUGm8M44Ezed8CzFOD5gBNiLCQ9r/9bxk9vpgKDEPNKCsg0J2Z4kYydtLTbmdLZlWFxHqhDPEawyqN1GAMvYVxepC2s5KFJCDHTWe5V/tQ/OgkZJCRMFzJDPe8qB+ktmqq/MkbFRDeKcYGD1x0v8sU3cGyjL2dCEQmn9wAZ5nqVRFSa6nYrouFZ
-    properties :
-     x : 593
-     y : 6
-     width : 93
-     height : 24
-    type : 2
-    code_elements :
-     type_code : 3
-     p_codes :
-      -
-        code : |1+
-         //moimeme = 2
-        type : 14
-      -
-        code : |1+
-         //znNbSprint = SAI_Nombre_de_sprints
-        type : 16
-      -
-        type : 276
-        enabled : false
-      -
-        type : 277
-        enabled : false
-      -
-        type : 278
-        enabled : false
-      -
-        code : |1+
-         //znNbSprint = SAI_Nombre_de_sprints
-         
-        type : 17
  menu :
   name : _Menu
   identifier : 0x292573e513b5f221
@@ -307,8 +270,7 @@ window :
      code : |1-
       procédure Actualise(LOCAL znSprint est un entier, ...
       	LOCAL znNbSprint est un entier, ...
-      	LOCAL znSelecteur est un ClDbTache.ETypeCharge,...
-      	LOCAL nChargeReccurcive est un entier)
+      	LOCAL znSelecteur est un ClDbTache.ETypeCharge)
       		
       		
       stGraphe est un col_graphes.STR_Charge		
@@ -317,7 +279,7 @@ window :
       nInd est un entier
       nInd2 est un entier
       
-      stGraphe = col_graphes.Graphe_Charge_Sprints(znSprint, znNbSprint, znSelecteur, nChargeReccurcive)
+      stGraphe = col_graphes.Graphe_Charge_Sprints(znSprint, znNbSprint, znSelecteur)
       
       
       grSupprimeSérie(GRF_Planification)

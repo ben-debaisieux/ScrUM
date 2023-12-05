@@ -27,9 +27,11 @@ class :
      name : Constructeur
      procedure_id : 1399532561493556413
      type_code : 27
-     code : |1+
+     code : |1-
       procédure Constructeur()
       
+      
+      :ZF_DefTimeOut(ClAppScrum.cstTimeOutProd)
      type : 589824
    -
      name : Destructeur
@@ -45,7 +47,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
       :ZF_addItem(ClDbUserStory.GetObj(nId_P))
      type : 458752
    -
@@ -67,12 +69,12 @@ class :
       ZF_InitCol(:m_aoUserStories)
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 1421786904770870178
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
       
       oUS	est un ClDbUserStory(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oUS, sdSource_p.IDScr_UserStory)
@@ -85,15 +87,23 @@ class :
       // Redéfinition de la méthode ClZF_ColObjDB.pre_load
       PROCÉDURE PROTÉGÉE pre_load(sdSource_P est une Source de Données)
       
-      sListePrj est une chaîne
-      sCle est une chaîne
+      sListePrj	est une chaîne
+      sListeEpic	est une chaîne
+      sCle		est une chaîne
       
       HLitPremier(sdSource_P,hForwardOnly+hSansRafraîchir)
       TANTQUE PAS HEnDehors(sdSource_P)
-      	sCle = ClZF_ObjDB.ZF_sCleOdb("ClDbProjet", sdSource_P.IDScr_Projet)
-      	
+      	sClasse est une chaine = ClDbProjet
+      	sCle = ClZF_ObjDB.ZF_sCleOdb(sClasse, sdSource_P.IDScr_Projet)
       	SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
       		sListePrj += [", "] + sdSource_P.IDScr_Projet
+      	FIN
+      	
+      	
+      	sClasse = ClDbEpic
+      	sCle = ClZF_ObjDB.ZF_sCleOdb(sClasse, sdSource_P.IDScr_Epic)
+      	SI ClZF_App.mg_aoInstances[sCle]..Vide et pas sdSource_P.IDScr_Epic..null ALORS
+      		sListeEpic += [", "] + sdSource_P.IDScr_Epic
       	FIN
       	
       	HLitSuivant(sdSource_P)
@@ -106,6 +116,16 @@ class :
       		SELECT Scr_Projet.*
       		FROM Scr_Projet
       		WHERE Scr_Projet.IDScr_Projet IN ([%sListePrj%])
+      		])
+      FIN
+      
+      //Le traitement de préchargement n'est utile que si on a plusieurs éléments à précharger (sinon, on passe par le chargement std)
+      si Position(sListeEpic, ",") > 0 ALORS
+      	oColUs est un ClColProjet()
+      	oColUs.ZF_LoadSQL([
+      		SELECT Scr_Epic.*
+      		FROM Scr_Epic
+      		WHERE Scr_Epic.IDScr_Epic IN ([%sListeEpic%])
       		])
       FIN
      type : 458752
@@ -146,7 +166,7 @@ class :
      name : oFromProjet
      procedure_id : 1456890114952194886
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] oFromProjet (<oPrj_p> est ClDbProjet [, <bForceRecharge_P> est booléen])
@@ -182,16 +202,100 @@ class :
       fin
       
       RENVOYER oRetour
+      
      type : 458752
    -
-     name : GetAll
+     name : oColsFromProjets
+     procedure_id : 1537365384557001580
+     type_code : 12
+     code : |1-
+      PROCEDURE GLOBALE oColsFromProjets(oColPrj_p est un ClcolProjet)<metier>:tableau associatif de ClColUserStory dynamique
+      
+      sReq				est une chaîne
+      aColUs				est un tableau associatif de ClColUserStory dynamique
+      sListeIdsPrj		est une chaîne
+      
+      si oColPrj_p.zf_ntaille() > 0 alors
+      	
+      	sListeIdsPrj = TableauVersChaîne(oColPrj_p.ZF_Get_Liste_IdUnique(), ", ")
+      	
+      	oColEpic est un ClColEpic()
+      	oColEpic.ZF_LoadSQL([
+      		SELECT Scr_Epic.*
+      		FROM Scr_Epic
+      			INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_Epic = Scr_Epic.IDScr_Epic)
+      		where Scr_UserStory.IDScr_Projet IN ([%sListeIdsPrj%])
+      		])
+      	
+      	
+      	oColUsr est un ClColUsr()
+      	oColUsr.ZF_LoadSQL([
+      		SELECT Scr_Usr.*
+      		FROM Scr_Usr
+      			INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_Usr_TestDev = Scr_Usr.IDScr_Usr)
+      		where Scr_UserStory.IDScr_Projet IN ([%sListeIdsPrj%])
+      		
+      		UNION
+      		
+      		SELECT Scr_Usr.*
+      		FROM Scr_Usr
+      			INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_Usr_Valideur = Scr_Usr.IDScr_Usr)
+      		WHERE Scr_UserStory.IDScr_Projet IN ([%sListeIdsPrj%])
+      
+      		])
+      	
+      	
+      //	aColUs <- ::zf_aoInitCols(aColUs, oColPrj_p, ClDbUserStory.cstUSDeProjet)
+      	
+      	sReq = [
+      		select
+      			Scr_UserStory.*
+      		FROM Scr_UserStory
+      		where Scr_UserStory.IDScr_Projet IN ([%sListeIdsPrj%])
+      	]
+      //	aColUs <- ClZF_ColObjDB.ZF_LoadSQLMulti_Priv(sReq,aColUs, null, oColPrj_p.ZF_Get_Liste_IdUnique(), Scr_UserStory.IDScr_Projet..Nom)
+      	aColUs <- ClZF_ColObjDB.ZF_LoadSQLMulti_2(aColUs, sReq,ClDbUserStory.cstUSDeProjet, oColPrj_p, Scr_UserStory.IDScr_Projet..Nom)
+      FIN
+      
+      RENVOYER aColUs
+     type : 458752
+   -
+     name : GetAll_old
      procedure_id : 1468676019813930025
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll()<métier>:Vide
+      PROCÉDURE prive GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_UserStory..nom)
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542749478337554003
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbUserStory
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fc0da2446a0f1
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau de ClDbUserStory dynamique
+         renvoyer :m_aoUserStories
+        type : 1966080
+      -
+        code : |1+
+         procédure protégée p_aoObj(aValeur est un tableau de ClDbUserStory dynamique)
+         :m_aoUserStories <- aValeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

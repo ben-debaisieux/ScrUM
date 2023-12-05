@@ -515,7 +515,7 @@ window :
       	TBL_Sprints[i].COL_dateSprints = oSprint.sSprint_Date()
       	
       	//Partie Productivité attendue
-      	nChargeTotale = oSprint.Sprint_Charge_Totale(eSelecteur)
+      	nChargeTotale = oSprint.nGetNbPoints_charge(eSelecteur)
       	{ChaîneConstruit("TBL_Sprints[%1].COL_ChargeTotal",i),indChamp} = nChargeTotale
       	{ChaîneConstruit("TBL_Sprints[%1].COL_pctVelocite",i),indChamp} = (nChargeTotale / nVelocite)
       	

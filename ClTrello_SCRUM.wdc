@@ -482,7 +482,7 @@ class :
       			SI oTache.p_bAnnule ALORS
       				oTache = Null
       			SINON
-      				SI oTache.p_nNum_Sprint_Realisation > goApp.Sprint_Num_Actuel() ALORS
+      				SI oTache.p_nNum_Sprint_Realisation > goApp.p_nNumeroDuSprintActuel ALORS
       					Trace("La tache ""[%sCodeTache%]"" est prévue pour le sprint [%oTache.p_nNum_Sprint_Realisation%] mais est déjà dans trello ([%oTache.p_sDescription%]).")
       				FIN
       			FIN
@@ -732,7 +732,9 @@ class :
       	SI oUs.p_bTermine ET oUs.p_dDateMiseEnProd = "" ALORS
       		oUs.p_dDateMiseEnProd = DateSys()
       	FIN
-      	
+      	SI oUs.bToutesTachesValidees() ET oUs.p_dDateMiseEnProd = "" ALORS
+      		oUs.p_dDateMiseEnProd = DateSys()
+      	FIN
       	SI PAS oUs.p_bEstTestéParLeDemandeur ET oUs.p_oEnvironnement_Test = Null ALORS
       		oUs.p_oEnvironnement_Test = ClDbEnvironnement.GetObj(1)
       	FIN

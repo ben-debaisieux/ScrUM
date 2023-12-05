@@ -46,6 +46,7 @@ class :
   procedures :
    -
      name : Constructeur
+     internal_properties : BwAAAAcAAADzVMtH7VhRjq0jmT5UBNV21NSGpaudjGMi7qYCejkxJsfOJ21B3jCLl9UShhoy/zU9ZaX/JO11GgtrvfB/UqaNENnolGw4obplFSruGBvK039pX8qBZTWSiPH1zbFB+LswOJvzU2GANAbS5Y8FTagaq2ehU8OQ91FAYRojgz3vzfeVHgw0L3Pp4CQK/eFHD4eGc8MJGEtI50daxTMJKBIWOAxY9sNdmm99l3DhdYoP1cx/OHyRMQQg+sBfaKYYqcsbmdxLbGof50ljH/0cx26vLc4sa3mFG1X3+u/p6WCVgO/6PtZZ0MAYfWCTqxwnWMVOe2FHelRf2j7EHRtJfRHmAVECsOpgmOznPGOyc3s6/Vs+ztLCn5tK+V1PNHLYhLl2V8ou23TZ/mWfZA8IYrcQxrJBJjeuTGMhQZvPLmKCTCjKakIxvR/ow5oB2vpBJCMm/NYbb1GM3WIM3E9FhI6bzwMTyizkG7xXcua0z8mhvNKujX4r0CxqfQ/3KsrlyV1DYMds6aaLYbn6cg==
      procedure_id : 1438107401790463785
      type_code : 27
      code : |1+
@@ -59,8 +60,9 @@ class :
       :m_ZF_sNom_Col_Id_Auto	= sNomColIdAuto_P
       
       
-      :ZF_DefTimeOut(86400, vrai)	//Par défaut, l'enregistrement expire dans 24h
+      :ZF_DefTimeOut(ClZF_App.cstTimeOutDef, vrai)	//Par défaut, l'enregistrement expire dans 24h
       
+      //trace(sNomTable_P + "#",nId_P)
       
       Selon nId_P
       	cas > 0
@@ -103,7 +105,7 @@ class :
      name : Destructeur
      procedure_id : 1438107401790529321
      type_code : 28
-     code : |1-
+     code : |1+
       procédure Destructeur()
       
       
@@ -114,18 +116,37 @@ class :
       FIN
       
       si :m_ZF_nIdUnique <> 0 ALORS
-      	sCle est une chaîne = ::ZF_sCleOdb(Objet..Classe, :m_ZF_nIdUnique)
-      	si ClZF_App.mg_aoInstances[sCle]..vide ALORS
-      		trace("Objet libéré, non référencé : " + sCle)
-      	sinon
-      		TableauSupprime(ClZF_App.mg_aoInstances, sCle)
-      		
-      		si pas :ZF_bVerifPointeur() ALORS
-      			Trace("Problème de référence d'objet : " + sCle)
-      		FIN
+      	
+      	//Libération de l'instance en cours
+      	:ZF_LibereInstance()
+      	
+      FIN
+      
+     type : 655360
+   -
+     name : ZF_LibereInstance
+     procedure_id : 1542981862360693602
+     type_code : 12
+     code : |1-
+      procedure protege ZF_LibereInstance(sCleSpecifique_p est une chaine = "")<métier>:vide
+      
+      sCle est une chaîne
+      
+      si sCleSpecifique_p = "" alors
+      	sCle = ::ZF_sCleOdb(Objet..Classe, :m_ZF_nIdUnique)
+      sinon
+      	sCle = sCleSpecifique_p
+      FIN
+      
+      SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
+      	Trace("Objet libéré, non référencé : " + sCle)
+      SINON
+      	TableauSupprime(ClZF_App.mg_aoInstances, sCle)
+      	SI PAS :ZF_bVerifPointeur() ALORS
+      		Trace("Problème de référence d'objet : " + sCle)
       	FIN
       FIN
-     type : 655360
+     type : 458752
    -
      name : ZF_bVerifPointeur
      procedure_id : 1438109536437678968
@@ -204,6 +225,9 @@ class :
       
       //Init de l'objet
       Init_ObjBD()
+      
+      //Actualisation du timestamp d'expiration
+      :ZF_setDhExpire()
      type : 458752
    -
      name : ZF_Get_IdUnique
@@ -250,47 +274,52 @@ class :
       // 	sdSource_P (source de données - valeur par défaut=0) : <indiquez ici le rôle de sdSource_P>
       PROCEDURE globale ZF_GetObj(sClasse_P est une chaîne, local nIdUnique_P est un entier)<métier>:ClZF_ObjDBls
       
-      bObjEnCache est un booléen
-      sCle est une chaîne
       
       
-      si nIdUnique_P = 0 ALORS
-      	renvoyer null
-      FIN
-      
-      sCle = ::ZF_sCleOdb(sClasse_P, nIdUnique_P)
-      
-      
-      SI pas ClZF_App.mg_aoInstances[sCle]..Vide _et_ clZF_App.mg_aoInstances[sCle].ZF_bEstExpire() ALORS
-      	TableauSupprime(ClZF_App.mg_aoInstances, sCle)
-      	goApp.m_aMetriques[1].nNbObjBd_Expire++
-      FIN
+      si nIdUnique_P <= 0 ALORS
+      	renvoyer ::mg_oApp.CreeObj(sClasse_P,nIdUnique_P)
+      	//renvoyer null
+      sinon
+      	bObjEnCache	est un booléen
+      	sCle		est une chaîne
       	
-      
-      //A t on déjà instancié cet objet ?
-      si ClZF_App.mg_aoInstances[sCle]..Vide ALORS
-      	//Non
-      	//trace(sClasse_P)
-      	ClZF_App.mg_aoInstances[sCle] <- ::mg_oApp.creeObj(sClasse_P,nIdUnique_P)
-      sinon
-      	bObjEnCache = vrai
+      	sCle = ::ZF_sCleOdb(sClasse_P, nIdUnique_P)
+      	
+      	
+      	SI PAS ClZF_App.mg_aoInstances[sCle]..Vide _ET_ ClZF_App.mg_aoInstances[sCle].ZF_bEstExpire() ALORS
+      		TableauSupprime(ClZF_App.mg_aoInstances, sCle)
+      		ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbObjBd_Expire++
+      	FIN
+      	
+      	
+      	//A t on déjà instancié cet objet ?
+      	SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
+      		//Non
+      		//trace(sClasse_P)
+      		ClZF_App.mg_aoInstances[sCle] <- ::mg_oApp.CreeObj(sClasse_P,nIdUnique_P)
+      	SINON
+      		bObjEnCache = Vrai
+      	FIN
+      	
+      	SI ClZF_App.mg_aoInstances[sCle] = Null ALORS
+      		mg_oExRecipObjetImpossible.ZF_Declenche([sClasse_P, nIdUnique_P])
+      	FIN
+      	
+      	
+      	//Métriques : Récupération du nombre de déclarations (avec ou sans cache)
+      	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd++
+      	SI bObjEnCache ALORS
+      		ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_Cache++
+      	SINON
+      		//	trace(sClasse_P)
+      		ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_NonCache++
+      	FIN
+      	
+      	
+      	RENVOYER ClZF_App.mg_aoInstances[sCle]
+      	
       FIN
       
-      si ClZF_App.mg_aoInstances[sCle] = null ALORS
-      	mg_oExRecipObjetImpossible.ZF_Declenche([sClasse_P, nIdUnique_P])
-      FIN
-      
-      
-      //Métriques : Récupération du nombre de déclarations (avec ou sans cache)
-      goApp.m_aMetriques[1].nNbDeclarationObjBd++
-      si bObjEnCache ALORS
-      	goApp.m_aMetriques[1].nNbDeclarationObjBd_Cache++
-      sinon
-      	goApp.m_aMetriques[1].nNbDeclarationObjBd_NonCache++
-      FIN
-      
-      
-      RENVOYER ClZF_App.mg_aoInstances[sCle]
      type : 458752
    -
      name : ZF_sCleOdb
@@ -363,7 +392,7 @@ class :
       //
       procédure ZR_Clone()<métier>:objet ClZF_ObjDbLs
       
-      oMoiMeme est un ClZF_ObjDbLs dynamique <- goApp.CreeObj(objet..classe,ClZF_ObjDbLs.cstModeSansChargement)
+      oMoiMeme est un ClZF_ObjDbLs dynamique <- ClZF_ObjDbLs.mg_oApp.CreeObj(objet..classe,ClZF_ObjDbLs.cstModeSansChargement)
       oMoiMeme <= objet
       
       //Resynchronisation du pointeur (on effectue une copie maitrisée)
@@ -437,27 +466,6 @@ class :
       
      type : 458752
    -
-     name : ZF_VersEcran
-     procedure_id : 1447916707908125105
-     type_code : 12
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      // ZF_VersEcran ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // <Indiquez ici un exemple d'utilisation>
-      //
-      procédure ZF_VersEcran()
-      stop
-      //SourceVersEcran(MaFenêtre..nom,"objet")
-     type : 458752
-   -
      name : ZF_GetCol
      procedure_id : 1459474091395835826
      type_code : 12
@@ -514,7 +522,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure sRepresentation() <métier>:chaine
+      procédure virtuelle sRepresentation() <métier>:chaine
       
       mg_oExReprNonRedefinie.ZF_Declenche([objet..classe, dbgInfo(dbgPile)])
       renvoyer :ZF_sGetNomInstance()
@@ -539,7 +547,7 @@ class :
      p_codes :
       -
         code : |1-
-         procédure protégée  p_sNomTable() : chaîne
+         procédure PUBLIQUE  p_sNomTable() : chaîne
          
          renvoyer m_ZF_sNomTable
         type : 1966080
@@ -551,7 +559,7 @@ class :
      p_codes :
       -
         code : |1-
-         procédure protégée  p_sNom_Col_Id_Auto() : chaîne
+         procédure publique  p_sNom_Col_Id_Auto() : chaîne
          
          renvoyer m_ZF_sNom_Col_Id_Auto
         type : 1966080

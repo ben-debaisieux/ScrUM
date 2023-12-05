@@ -8,7 +8,7 @@ info :
  description : ""
  subtype : 0
 class :
- identifier : 0x02E75664449081
+ identifier : 0x2e75664449081
  internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
  code_elements :
   type_code : 10
@@ -39,54 +39,78 @@ class :
       
      type : 655360
    -
-     name : addItemById
+     name : addItemById_old
      procedure_id : 817308188840068
      type_code : 12
-     code : |1-
-      PROCÉDURE addItemById(LOCAL nId_P est un entier)<métier>:Vide
+     code : |1+
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
       :ZF_addItem(ClDbEpic_Usr_Role.GetObj(nId_P))
-      
      type : 458752
    -
      name : aItems
      procedure_id : 817308188840069
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE aItems()<métier>:tableau de ClDbEpic_Usr_Role dynamique
       // Redéfinition de la méthode ClColObjDB.aItems
       RENVOYER :m_aoEpic_Usr_Role
-      
      type : 458752
    -
      name : Init
      procedure_id : 817308188840070
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoEpic_Usr_Role)
-      
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 817308188840071
      type_code : 12
-     code : |1-
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource(sdSource_p est une Source de Données)<métier>:Vide
+     code : |1+
+      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
       oObj est un ClDbEpic_Usr_Role(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Epic_Usr_Role)
-      
      type : 458752
    -
      name : GetAll
      procedure_id : 817308188840072
      type_code : 12
      code : |1-
-      PROCÉDURE GetAll()<métier>:Vide
+      PROCÉDURE GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Epic_Usr_Role..nom)
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542748524829294457
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbEpic_Usr_Role
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fbfa623e8efd4
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau ClDbEpic_Usr_Role dynamique
+         renvoyer :m_aoEpic_Usr_Role
+        type : 1966080
+      -
+        code : |1+
+         procédure protégée p_aoObj(aValeur est un tableau ClDbEpic_Usr_Role dynamique)
+         :m_aoEpic_Usr_Role <- aValeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :
@@ -94,7 +118,7 @@ class :
   original_name : Classe1
 resources :
  string_res :
-  identifier : 817308188840073
+  identifier : 0x2e75664449089
   internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
 custom_note :
  internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

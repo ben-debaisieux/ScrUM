@@ -609,22 +609,23 @@ report :
       Procedure ETAT_Avancement_Projet_V2(oProjet_P est un ClDbProjet Dynamique)
       
       
-      zbEnteteImprimer est un booleen
-      znUSImp est un entier
-      zstProjet est un STR_Projet
+      zbEnteteImprimer	est un booleen
+      znUSImp				est un entier
+      zstProjet			est un STR_Projet
       
       
       local
-      nNbreTotal est un entier
-      oUs est un ClDbUserStory dynamique
-      stUserStorie est une STR_UserStorie 
+      	nNbreTotal		est un entier
+      	oUs				est un ClDbUserStory dynamique
+      	stUserStorie	est une STR_UserStorie
+      	oUsrCdp			est un ClDbUsr	<- ClColUsr_Projet.oUserCdpFromProjet(oProjet_P)
       
       
       zstProjet.nIdProjet            		= oProjet_P.ZF_Get_IdUnique()
       zstProjet.sNomProjet 		  		= oProjet_P.p_sNom
       zstProjet.bTermineProjet       		= oProjet_P.p_bTop_Termine
-      zstProjet.nIDUtilisateurProjet 		= oProjet_P.p_oUsr_ChefProjet.ZF_Get_IdUnique()
-      zstProjet.sResponsable         		= oProjet_P.p_oUsr_ChefProjet.p_sNom
+      zstProjet.nIDUtilisateurProjet 		= oUsrCdp.ZF_Get_IdUnique()
+      zstProjet.sResponsable         		= oUsrCdp.p_sNom
       
       
       POUR TOUT ELEMENT oUs DE ClColUserStory.oFromProjet(oProjet_P).aitems()	//oProjet_P.aoListeUS().aItems()

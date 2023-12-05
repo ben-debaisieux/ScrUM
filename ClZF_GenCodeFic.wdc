@@ -40,6 +40,7 @@ class :
       	sLibelleRubrique		est une chaîne
       	bVisibleUsr				est un booléen
       	nTaille					est un entier
+      	nScale					est un entier
       	sValDef					est une chaine
       	nTypeCle				est un entier
       	
@@ -83,7 +84,8 @@ class :
       	m_sNomUsage		est une chaîne
       	m_sLibelle		est une chaîne
       	m_sNomRubId		est une chaîne
-      	m_nTypeHfRubId	est un entier
+      	m_stDefId		est un STR_DefRub
+      //	m_nTypeHfRubId_old	est un entier
       	m_bClasseExiste	est un booléen
       	m_bClasseLS		est un booléen
       	m_bTableHyerarchisee est un booléen
@@ -232,8 +234,8 @@ class :
       //
       procédure globale GetInfoRubType(nTypeHF_p est un entier, bComplet_p est un booléen = faux):chaine
       
-      sRetour est une chaîne
-      sDeclare est une chaîne
+      sRetour		est une chaîne
+      sDeclare	est une chaîne
       
       SELON nTypeHF_p
       	CAS hRubBooléen : sRetour = "Booléen"
@@ -256,8 +258,11 @@ class :
       	CAS hRubTexte : sRetour = "chaîne"
       	CAS hRubTexteUnicode : sRetour = "chaîne UNICODE"
       	cas hRubImage, hRubMémoBinaire, hRubMémoBinaire4 : sRetour = "Buffer"
+      	cas hRubHeure: sRetour = "Heure"
+      	cas hRubNumérique: sRetour = "Numérique"
+      	cas hRubBinaire: sRetour = "Binaire"
       	autre cas
-      		ExceptionDéclenche(1,"")
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([nTypeHF_p])
       FIN
       
       
@@ -366,7 +371,7 @@ class :
       			
       			si bOk ALORS
       				sRubIdAuto		= sRub
-      				:m_nTypeHfRubId	= stRubTmp.nTypeRubHF
+      				:m_stDefId		= stRubTmp
       				sortir
       			FIN
       		fin
@@ -377,64 +382,64 @@ class :
       
       ////////////////////////////////////////////////////////////////////
       //Analyse des FK
-      
-      POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
+      si sRubIdAuto <> "" alors
+      	POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
+      		
+      		//Identification des relations associées à la clé primaire de la table en cours.
+      		si ExtraitChaîne(sLigneCle,2,tab) = :m_sNomTable et ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto ALORS
+      			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      			stRelTmp.sTablePK		= :m_sNomTable
+      			stRelTmp.sRubriquePK	= sRubIdAuto
+      			stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,5,TAB)
+      			stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,6,TAB)
+      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
+      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      			TableauAjoute(m_aFK_de_PK,stRelTmp)
+      		FIN
       	
-      	//Identification des relations associées à la clé primaire de la table en cours.
-      	si ExtraitChaîne(sLigneCle,2,tab) = :m_sNomTable et ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto ALORS
-      		stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
-      		stRelTmp.sTablePK		= :m_sNomTable
-      		stRelTmp.sRubriquePK	= sRubIdAuto
-      		stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,5,TAB)
-      		stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,6,TAB)
-      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
-      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
-      		TableauAjoute(m_aFK_de_PK,stRelTmp)
-      	FIN
-      
-      	SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,6,TAB) = sRubIdAuto ALORS
-      		stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
-      		stRelTmp.sTablePK		= :m_sNomTable
-      		stRelTmp.sRubriquePK	= sRubIdAuto
-      		stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,2,TAB)
-      		stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,3,TAB)
-      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
-      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
-      		TableauAjoute(m_aFK_de_PK,stRelTmp)
-      	FIN
-      
-      
-      	//Identification des clés étrangères présentes dans la table en cours.
-      	sRub = ExtraitChaîne(sLigneCle,3,TAB)
-      	SI ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
-      		stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
-      		stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,5,TAB)
-      		stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,6,TAB)
-      		stRelTmp.sTableFK		= :m_sNomTable
-      		stRelTmp.sRubriqueFK	= sRub
-      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
-      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
-      		m_aPK_de_FK[sRub]		= stRelTmp
-      	FIN
-      	
-      	sRub = ExtraitChaîne(sLigneCle,6,TAB)
-      	SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
-      		stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
-      		stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,2,TAB)
-      		stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,3,TAB)
-      		stRelTmp.sTableFK		= :m_sNomTable
-      		stRelTmp.sRubriqueFK	= sRub
-      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
-      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
-      		m_aPK_de_FK[sRub]		= stRelTmp
-      	FIN
+      		SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,6,TAB) = sRubIdAuto ALORS
+      			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      			stRelTmp.sTablePK		= :m_sNomTable
+      			stRelTmp.sRubriquePK	= sRubIdAuto
+      			stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,2,TAB)
+      			stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,3,TAB)
+      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
+      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      			TableauAjoute(m_aFK_de_PK,stRelTmp)
+      		FIN
       	
       	
-      	si ExtraitChaîne(sLigneCle, 2, TAB) = ExtraitChaîne(sLigneCle, 5, TAB) ALORS
-      		:m_bTableHyerarchisee = vrai
+      		//Identification des clés étrangères présentes dans la table en cours.
+      		sRub = ExtraitChaîne(sLigneCle,3,TAB)
+      		SI ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
+      			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      			stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,5,TAB)
+      			stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,6,TAB)
+      			stRelTmp.sTableFK		= :m_sNomTable
+      			stRelTmp.sRubriqueFK	= sRub
+      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
+      			m_aPK_de_FK[sRub]		= stRelTmp
+      		FIN
+      		
+      		sRub = ExtraitChaîne(sLigneCle,6,TAB)
+      		SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
+      			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      			stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,2,TAB)
+      			stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,3,TAB)
+      			stRelTmp.sTableFK		= :m_sNomTable
+      			stRelTmp.sRubriqueFK	= sRub
+      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
+      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      			m_aPK_de_FK[sRub]		= stRelTmp
+      		FIN
+      		
+      		
+      		si ExtraitChaîne(sLigneCle, 2, TAB) = ExtraitChaîne(sLigneCle, 5, TAB) ALORS
+      			:m_bTableHyerarchisee = vrai
+      		FIN
       	FIN
-      FIN
-      
+      fin
       
       
       
@@ -473,7 +478,16 @@ class :
       		stRubTmp.bNullable			= {:m_sNomTable + "." + sRub,indRubrique}..NullAutorisé et pas stRubTmp.nTypeRubHF dans(hRubMémoTexte, hRubMémoUnicode)
       		stRubTmp.sLibelleRubrique	= {:m_sNomTable + "." + sRub,indRubrique}..libelle
       		stRubTmp.bVisibleUsr		= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
-      		stRubTmp.nTaille			= {:m_sNomTable + "." + sRub,indRubrique}..Taille
+      		
+      		selon stRubTmp.nTypeRubHF
+      			CAS hRubNumérique
+      				stRubTmp.nScale		= {:m_sNomTable + "." + sRub,indRubrique}..PartieDécimale
+      				stRubTmp.nTaille	= {:m_sNomTable + "." + sRub,indRubrique}..PartieEntière + stRubTmp.nScale
+      				
+      			AUTRE CAS
+      				stRubTmp.nTaille	= {:m_sNomTable + "." + sRub,indRubrique}..Taille
+      		FIN
+      		
       		stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}..ValeurParDéfaut
       		stRubTmp.bVisibleInterface	= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
       		//stRubTmp.sMeta				= {:m_sNomTable + "." + sRub,indRubrique}..Métadonnées
@@ -973,15 +987,27 @@ class :
         type : 1966080
      template_refs : []
    -
-     name : p_nTypeHfRubId
+     name : p_nTypeHfRubId_old
      identifier : 0x147f910c04d6352f
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure publique p_nTypeHfRubId() : entier
+         procédure publique p_nTypeHfRubId_old()<zombie>: entier
          
-         renvoyer m_nTypeHfRubId
+         renvoyer 0
+        type : 1966080
+     template_refs : []
+   -
+     name : p_stDefId
+     identifier : 0x1563cd801c00fa0c
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_stDefId() <métier> : STR_DefRub
+         
+         renvoyer m_stDefId
         type : 1966080
      template_refs : []
   procedure_templates : []

@@ -53,41 +53,10 @@ window :
          		
          		si oCmtr.ZF_bModeAjout() ALORS
          			oCmtr.p_oIDScr_Retro_Commentaire_Type_ID = TBL_Retrospective[i].COL_Commentaire.CBO_Type_Cmtr..ValeurMémorisée
-         			oCmtr.p_oNum_Sprint = goApp.Sprint_Num_Actuel()
+         			oCmtr.p_oNum_Sprint = goApp.p_nNumeroDuSprintActuel
          		FIN
          		
          		oCmtr.ZF_Enregistre()
-         		
-         		
-         //		HLitRecherche(Scr_Retro_Commentaire,IDScr_Retro_Commentaire,TBL_Retrospective[i].COL_Commentaire.SAI_ID,hIdentique+hLimiteParcours)
-         //		
-         //		//Si le commentaire existe déja, on le modifie
-         //		si Htrouve(Scr_Retro_Commentaire) alors
-         //			Scr_Retro_Commentaire.CMTR = TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
-         //			
-         //			si pas HModifie(Scr_Retro_Commentaire) alors
-         //				Erreur(ErreurInfo(errComplet))
-         //			FIN
-         //			
-         //		sinon
-         //			//Si le champ Commentaire n'est pas rempli, il ne faux pas l'enregistrer
-         //			si TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire <> "" alors
-         //				
-         //				HRAZ(Scr_Retro_Commentaire)
-         //				Scr_Retro_Commentaire.Num_Sprint		= zoSprint.ZF_Get_IdUnique()
-         //				Scr_Retro_Commentaire.CMTR			= TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
-         //				
-         //				gLienActive(CBO_Type_Cmtr_Ref,faux)
-         //				nLigneTypeCom = ListeCherche(CBO_Type_Cmtr_Ref, TBL_Retrospective[i].COL_Commentaire.CBO_Type_Cmtr)
-         //				gLienActive(CBO_Type_Cmtr_Ref,vrai)
-         //				
-         //				Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type	= CBO_Type_Cmtr_Ref[nLigneTypeCom]
-         //				
-         //				SI PAS Hajoute(Scr_Retro_Commentaire) ALORS
-         //					Erreur(ErreurInfo(errComplet))
-         //				FIN
-         //			FIN
-         //		fin
          	FIN
          	
          	
@@ -132,7 +101,7 @@ window :
          
          LIB_Info_du_sprint = "Sprint " + NumériqueVersChaîne(zoSprint.ZF_Get_IdUnique()) + ...
          	", Du " + gauche(sDateSprint,5) + " au " + droite(sDateSprint, 5) + ...
-         	", Nombre de points réalisés : " + NumériqueVersChaîne(zoSprint.nGetNbPointsRealises())
+         	", Nombre de points réalisés : " + NumériqueVersChaîne(zoSprint.nGetNbPointsFini())
         type : 14
   -
     name : TBL_TachesRealise
@@ -619,13 +588,13 @@ window :
          				cas ClDbTache.cstStatut_a_coter
          					nNbACoter++
          					
-         					si 1 <= oTache.p_nNum_Sprint_Realisation < goApp.Sprint_Num_Actuel() ALORS
+         					si 1 <= oTache.p_nNum_Sprint_Realisation < goApp.p_nNumeroDuSprintActuel ALORS
          						nNbACoterEtDemarre++
          					FIN
          
          				CAS ClDbTache.cstStatut_a_faire
          				
-         					SI 1 <= oTache.p_nNum_Sprint_Realisation < goApp.Sprint_Num_Actuel() ALORS
+         					SI 1 <= oTache.p_nNum_Sprint_Realisation < goApp.p_nNumeroDuSprintActuel ALORS
          						nNbEnRetard++
          					FIN
          			AUTRE CAS

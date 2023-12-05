@@ -40,7 +40,7 @@ window :
             si TableOccurrence(TBL_MesTaches) >= 1 alors
             	oTache est un ClDbTache <- ClDbTache.GetObj(TBL_MesTaches.COL_IdTache)
             	
-            	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache.Get_IdUnique()) ALORS
+            	SI Ouvre(FEN_User_Story_Detail_v2, oTache.p_oUserStoryParent, oTache) ALORS
             		Actualise()
             	FIN
             FIN

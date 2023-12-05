@@ -323,7 +323,7 @@ window :
      code : |1+
       PROCÉDURE Actualise()
       
-      oPrjTmp		est un ClDbProjet dynamique
+      //oPrjTmp		est un ClDbProjet dynamique
       aoProjets	est un ClColProjet
       
       
@@ -337,11 +337,13 @@ window :
       ListeSupprimeTout(CBO_Projet)
       
       
-      POUR TOUT ELEMENT oPrjTmp DE aoProjets.aItems()
-      	si pas oPrjTmp.p_bTop_Direction alors
-      		ListeAjoute(CBO_Projet, oPrjTmp.p_sNom + gLien(oPrjTmp.ZF_Get_IdUnique()))	
-      	FIN
-      FIN
+      aoProjets.FiltreDirection(Faux).ZF_ChargeCbo(CBO_Projet..nom)
+      
+      //POUR TOUT ELEMENT oPrjTmp DE aoProjets.FiltreDirection(faux).aItems()
+      ////	si pas oPrjTmp.p_bTop_Direction alors
+      //		ListeAjoute(CBO_Projet, oPrjTmp.p_sNom + gLien(oPrjTmp.ZF_Get_IdUnique()))	
+      ////	FIN
+      //FIN
       
       
       ListeTrie(CBO_Projet)

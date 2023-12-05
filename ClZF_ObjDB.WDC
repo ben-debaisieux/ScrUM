@@ -153,8 +153,9 @@ class :
       
       		sKey est une chaîne
       		//On était en création : on retire l'adresse de l'objet en cours de la liste des objets déclarés
-      		sKey = :ZF_sGetNomInstance()
-      		TableauSupprime(ClZF_App.mg_aoInstances,sKey)
+      //		sKey = :ZF_sGetNomInstance()
+      //		TableauSupprime(ClZF_App.mg_aoInstances,sKey)
+      		:ZF_LibereInstance()
       		
       		SI :m_ZF_bEstSupprime ALORS
       			//Rien a faire : l'élément n'était pas enregistré
@@ -182,7 +183,8 @@ class :
       				sRef est une chaîne
       				sRef = :ZF_sGetNomInstance()
       				si pas ClZF_App.mg_aoInstances[sRef]..vide ALORS
-      					TableauSupprime(ClZF_App.mg_aoInstances,sRef)
+      					:ZF_LibereInstance()
+      					//TableauSupprime(ClZF_App.mg_aoInstances,sRef)
       				FIN
       			FIN
       			
@@ -473,7 +475,6 @@ class :
       
       sRub			est une chaîne
       nVal			est un entier
-      //sLstRub			est une chaîne
       sPropId			est une chaîne
       Vars			est une Description de variable
       Def				est une Définition	= RécupèreDéfinitionType(objet..classe)
@@ -485,12 +486,12 @@ class :
       	SI Vars.AttributNote <> "" ALORS
       		
       		aNotes est un tableau associatif de chaînes = col_zf_surcharge.chaineverstableauasso(Vars.AttributNote)
-      		sRub = aNotes["mapping"]
-      		sPropId = Vars.Nom + "_ID"
-      		sPropId[[1]] = "p"
+      		sRub			= aNotes["mapping"]
+      		sPropId			= Vars.Nom + "_ID"
+      		sPropId[[1]]	= "p"
       		
-      //		sLstRub += [","] + sRub
-      		nVal = {sPropId,indVariable}
+      		nVal			= {sPropId,indVariable}
+      		
       		si nVal = 0 ALORS
       			{:p_sNomTable + "." + sRub,indRubrique}..Null = vrai
       		sinon
@@ -577,8 +578,8 @@ class :
       
       // Liste des variables de l'objet Def
       POUR TOUT Var DE DefObj.Variable  
-      	quand exception dans
-      		si pas Var.Global alors
+      //	quand exception dans
+      		si pas Var.Global et InfoObj[Var.Nom] <> null alors
       			si Var.Définition.Type <> wlInstance alors
       				{":" + Var.Nom, indVariable} = InfoObj[Var.Nom]
       			sinon
@@ -586,18 +587,46 @@ class :
       				{":" + Var.Nom, indVariable} <- ClZF_ObjDbLs.ZF_GetObj(Var.Définition.Nom, objEnf.m_ZF_nIdUnique)
       			fin
       		fin
-      	faire
-      		trace("Lecture impossible de : " + Var.Nom)
-      		Trace (Var.Nom, Var.Définition.Type, Var.Définition.Nom)
-      	fin
+      //	faire
+      //		trace("Lecture impossible de : " + Var.Nom)
+      //		Trace (Var.Nom, Var.Définition.Type, Var.Définition.Nom)
+      //	fin
+      FIN
+     type : 458752
+   -
+     name : ZF_Serialise
+     procedure_id : 1534748259060288436
+     type_code : 12
+     code : |1+
+      PROCÉDURE ZF_Serialise() <métier>:chaine
+      
+      
+      DefObj		est une Définition	= RécupèreDéfinitionType(objet..classe)
+      Var			est une Description de Variable  
+      vInfoObj	est un variant
+      
+      // Liste des variables de l'objet Def
+      POUR TOUT Var DE DefObj.Variable
+      	//stop si Var.Nom = "m_ZF_nPointeur"
+      	SI PAS Var.Global et Var.AttributSérialise <> "" et pas Var.Nom dans("m_ZF_aListCol") ALORS
+      		SI Var.Définition.Type <> wlInstance ALORS
+      			vInfoObj[Var.Nom] = {":" + Var.Nom, indVariable}
+      		SINON
+      			si pas {":" + Var.Nom, indVariable} = null alors
+      				vInfoObj[Var.Nom].m_ZF_nIdUnique = {":" + Var.Nom + ".m_ZF_nIdUnique", indVariable}
+      			FIN
+      		FIN
+      	FIN
       FIN
       
+      
+      renvoyer VariantVersJSON(vInfoObj)
      type : 458752
    -
      name : ZF_Transfere
      procedure_id : 1534582057087195032
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE ZF_Transfere(oObjRef est un ClZF_ObjDb) <métier>:vide
       
       
@@ -606,43 +635,13 @@ class :
       FIN
       
       SI &oObjRef = &objet ALORS
-      	ExceptionDéclenche(1,"Transfert impossible : les objets ont la même référence")
+      	//ExceptionDéclenche(1,"Transfert impossible : les objets ont la même référence")
+      sinon
+      	sJSON est une chaîne
+      	sJSON = oObjRef.ZF_Serialise()
+      	objet.ZF_Deserialise(sJSON)
       FIN
       
-      sJSON est une chaîne
-      
-      //// Sérialisation de l'élément
-      //Sérialise(oObjRef, sJSON, psdJSON)
-      
-      
-      
-      //DefObj	est une Définition	= RécupèreDéfinition(objet)
-      //Var		est une Description de Variable  
-      //
-      //soit InfoObj = JSONVersVariant(sJSON)
-      //
-      //// Liste des variables de l'objet Def
-      //POUR TOUT Var DE DefObj.Variable  
-      //	QUAND EXCEPTION DANS
-      //		SI PAS Var.Global ALORS
-      //			SI Var.Définition.Type <> wlInstance ALORS
-      //				{":" + Var.Nom, indVariable} = InfoObj[Var.Nom]
-      //			SINON
-      //				soit objEnf = InfoObj[Var.Nom]
-      //				{":" + Var.Nom, indVariable} <- ClZF_ObjDbLs.ZF_GetObj(Var.Définition.Nom, objEnf.m_ZF_nIdUnique)
-      //			FIN
-      //		FIN
-      //	FAIRE
-      //		Trace("Lecture impossible de : " + Var.Nom)
-      //		Trace (Var.Nom, Var.Définition.Type, Var.Définition.Nom)
-      //	FIN
-      //FIN
-      //
-      //
-      //
-      //
-      //
-      //objet.ZF_Deserialise(sJSON)
      type : 458752
   properties :
    -

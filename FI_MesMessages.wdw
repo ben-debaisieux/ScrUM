@@ -190,7 +190,7 @@ window :
             	selon vrai
             		cas oMsg.p_oTache <> Null
             			
-            			SI Ouvre(FEN_User_Story_Detail_v2, oMsg.p_oTache.p_oUserStoryParent, oMsg.p_oTache.Get_IdUnique()) ALORS
+            			SI Ouvre(FEN_User_Story_Detail_v2, oMsg.p_oTache.p_oUserStoryParent, oMsg.p_oTache) ALORS
             				Actualise()
             			FIN
             			

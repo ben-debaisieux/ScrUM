@@ -40,12 +40,12 @@ class :
       
      type : 655360
    -
-     name : addItemById
+     name : addItemById_old
      procedure_id : 1400267864632645780
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById(LOCAL nId_P est un entier):Vide
+      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
       :ZF_addItem(ClDbUsr.GetObj(nId_P))
      type : 458752
    -
@@ -67,12 +67,12 @@ class :
       ZF_InitCol(:m_aoUsr)
      type : 458752
    -
-     name : addItemBySource
+     name : addItemBySource_old
      procedure_id : 1422512938272815940
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource(sdSource_p est une Source de Données):Vide
+      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données):Vide
       
       oObj est un ClDbUsr(ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Usr)
@@ -149,7 +149,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE GLOBAL Combo_Charge_Usr(sNomFen_p est une chaîne , sNomChamps_p est une chaîne , eFiltre_p est un ClDbUsr.ETypeInter = ClDbUsr.ETypeInter.usr_tous, oUsr_P est ClDbUsr dynamique = Null):vide
+      PROCEDURE GLOBAL Combo_Charge_Usr(sNomFen_p est une chaîne , sNomChamps_p est une chaîne , eFiltre_p est un ClDbUsr.ETypeInter = ClDbUsr.ETypeInter.usr_tous, oUsr_P est ClDbUsr dynamique = Null)<ui>:vide
       
       nNumLigneSel est un entier
       oUsr est un ClDbUsr dynamique
@@ -244,7 +244,7 @@ class :
       			INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)
       		
       		WHERE Scr_Usr_Projet.IDScr_Projet = [%oPrj_p.ZF_Get_IdUnique()%]
-      			AND Scr_Usr_Projet.Top_Invite = 1
+      			AND Scr_Usr_Projet.Top_Chef_Projet = 0
       	]
       	
       	oRetour.ZF_LoadSQL(sReq)
@@ -258,9 +258,37 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE public GetAll()<métier>:Vide
+      PROCÉDURE public GetAll_old()<métier>:Vide
       ZF_ChargeTblComplete(Scr_Usr..nom)
      type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542749637259572392
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbUsr
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fc1292491d877
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau de ClDbUsr dynamique
+         renvoyer :m_aoUsr
+        type : 1966080
+      -
+        code : |1+
+         procédure protégée p_aoObj(aValeur est un tableau de ClDbUsr dynamique)
+         :m_aoUsr <- aValeur
+        type : 2031616
+     template_refs : []
   procedure_templates : []
   property_templates : []
  code_parameters :

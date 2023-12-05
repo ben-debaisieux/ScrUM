@@ -34,8 +34,10 @@ class :
      name : Destructeur
      procedure_id : 1523060571322373872
      type_code : 28
-     code : |1+
+     code : |1-
       procédure Destructeur()
+      //sCle est une chaîne = ZF_sGetNomInstanceRel()
+      //:ZF_LibereInstance(sCle)
      type : 655360
    -
      name : AddMembreCle
@@ -60,7 +62,7 @@ class :
      name : RechEnrDeCles
      procedure_id : 1523060571322504944
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] RechEnrDeCles ()
@@ -83,36 +85,64 @@ class :
       oObjRetour	est un ClZF_ObjDbLs dynamique
       bErreurInit	est un booléen
       
-      pour toute oObj, sRubMap de :m_aCompoClePrim
-      	si oObj = Null ALORS
-      		bErreurInit = vrai
-      	sinon
-      		sRubs += [RC + "AND "] + sRubMap + " = " + oObj.ZF_Get_IdUnique()
-      	FIN
-      FIN
       
-      
-      si pas bErreurInit alors
-      	
-      	sReq = [
-      	SELECT
-      		[%:p_sNom_Col_Id_Auto%] AS id
-      	FROM [%:p_sNomTable%]
-      	WHERE [%sRubs%]
-      		AND [%:p_sNom_Col_Id_Auto%] <> [%:ZF_Get_IdUnique()%]
-      	]
-      	
-      	mg_oApp.Rsql(sdGetEnr,sReq)
-      	HLitPremier(sdGetEnr)
-      	si pas HEnDehors(sdGetEnr) ALORS
-      		oObjRetour <- ZF_GetObj(objet..classe,sdGetEnr.id)
-      	sinon
-      		oObjRetour <- objet
+      sCle est une chaîne = ZF_sGetNomInstanceRel()
+      //oInst est un ClZF_ColObjDB dynamique <- goApp.mg_aoInstances[sCle]
+      oObjRetour <- ClZF_App.mg_aoInstances[sCle]
+      si oObjRetour = null _ou_ oObjRetour.ZF_bEstExpire() alors
+      //	Trace(sCle + "!")
+      	//trace(dbgInfo(dbgPile))
+      	//Construction de la condition de sélection
+      	pour toute oObj, sRubMap de :m_aCompoClePrim
+      		si oObj = Null ou oObj.ZF_Get_IdUnique() <= 0 ALORS
+      			bErreurInit = vrai
+      			sortir
+      		sinon
+      			sRubs += [RC + "AND "] + sRubMap + " = " + oObj.ZF_Get_IdUnique()
+      		FIN
       	FIN
       	
+      	
+      	si pas bErreurInit alors
+      		
+      		sReq = [
+      		SELECT
+      			*
+      		FROM [%:p_sNomTable%]
+      		WHERE [%sRubs%]
+      			AND [%:p_sNom_Col_Id_Auto%] <> [%:ZF_Get_IdUnique()%]
+      		]
+      		
+      		mg_oApp.Rsql(sdGetEnr,sReq)
+      		HLitPremier(sdGetEnr)
+      		si pas HEnDehors(sdGetEnr) ALORS
+      			oObjRetour <- ClZF_ObjDB.ZF_GetObj(objet..classe, ClZF_ObjDbLs.cstModeSansChargement)
+      			oObjRetour.ZF_Charge_source(sdGetEnr)
+      		sinon
+      			oObjRetour <- objet
+      		FIN
+      		ClZF_App.mg_aoInstances[sCle] <- oObjRetour
+      	fin
+      sinon
+      //	Trace(sCle + "ok")
+      	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_Cache++
       fin
       
       renvoyer oObjRetour
+      
+     type : 458752
+   -
+     name : ZF_sGetNomInstanceRel
+     procedure_id : 1541627470235910688
+     type_code : 12
+     code : |1+
+      procedure ZF_sGetNomInstanceRel()<métier>:chaîne
+      
+      sRetour est une chaîne
+      POUR TOUTE oObj, sRubMap de :m_aCompoClePrim
+      	sRetour += ZF_sCleOdb(oObj..Classe, oObj.ZF_Get_IdUnique())
+      FIN
+      RENVOYER sRetour
      type : 458752
   procedure_templates : []
   property_templates : []
