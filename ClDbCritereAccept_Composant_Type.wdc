@@ -93,30 +93,6 @@ class :
       
       
       
-     type : 458752
-   -
-     name : oColCritereAccept_Composant_old
-     procedure_id : 1445050145475461169
-     type_code : 12
-     code : |1+
-      PROCÉDURE oColCritereAccept_Composant_old():ClColCritereAccept_Composant
-      
-      oRetour est un ClColCritereAccept_Composant
-      sReq est une chaîne
-      
-      SI oRetour.ZF_bEstExpire() ALORS
-      	sReq = [
-      		SELECT 
-      			Scr_CritereAccept_Composant.*
-      		FROM Scr_CritereAccept_Composant
-      		WHERE Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant_Type = [%:ZF_Get_IdUnique()%]
-      	]
-      
-      	oRetour.ZF_LoadSQL(sReq)
-      FIN
-      
-      
-      RENVOYER oRetour
       
      type : 458752
    -

@@ -491,16 +491,14 @@ class :
       		SI oTache <> Null ALORS
       			
       			
-      //			bSuspendue est un booléen = Faux
-      //			POUR nLigneLabel = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel)
-      //				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel[nLigneLabel] DANS(cst_Label_Suspend, cst_Label_Attente) ALORS
-      //					bSuspendue = Vrai
+      //			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
+      //				SI PAS oTache.p_bEstRealise et PAS oTache.p_bAnnule ALORS
+      //					Trace("La tache [%oTache.p_sCodeTache%] n'était pas marquée comme réalisée, avant la lecture des données de trello (Sp. : [%oTache.p_nNum_Sprint_Fin%]).")
       //				FIN
       //			FIN
-      			
+      				
       			//La tache est elle suspendue ?
       			SI ::bLabelPresent(stInfoTacheTrello.aIDLabel, [cst_Label_Suspend, cst_Label_Attente]) ALORS
-      //			SI ::bLabelPresent(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel, [cst_Label_Suspend, cst_Label_Attente]) ALORS
       				//Oui : on s'assure qu'il y ait le motif.
       				SI oTache.p_sCMTR_Blocage = "" ALORS
       					oTache.p_nStatut = ClDbTache.cstStatut_Suspendu
@@ -523,7 +521,6 @@ class :
       			
       			//La tache est elle annulée ?
       			SI ::bLabelPresent(stInfoTacheTrello.aIDLabel, [cst_Label_Annule]) ALORS
-      //			SI ::bLabelPresent(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel, [cst_Label_Annule]) ALORS
       				si oTache.p_nStatut <> ClDbTache.cstStatut_Annulee ALORS
       					Trace("La tache [%oTache.p_sCodeTache%] est annulée dans trello, mais n'est pas dans SCRUM ([%oTache.p_sDescription%]).")
       				FIN
@@ -536,9 +533,7 @@ class :
       			
       			
       			SI stInfoTacheTrello.sIDUsrDev <> "" ALORS
-      //			SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev <> "" ALORS
       				HLitRecherche(Scr_Usr_Trello,IdTrello, stInfoTacheTrello.sIDUsrDev,hIdentique+hLimiteParcours)
-      //				HLitRecherche(Scr_Usr_Trello,IdTrello,aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sIDUsrDev,hIdentique+hLimiteParcours)
       				SI HTrouve(Scr_Usr_Trello) ALORS
       					oUsrDev <- ClDbUsr.GetObj(Scr_Usr_Trello.IDScr_Usr)
       				SINON
@@ -563,7 +558,17 @@ class :
       				oTache.p_nNum_Sprint_Demarrage	= oTache.p_nNum_Sprint_Realisation
       			FIN
       			
-      			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_Test_fonctionnel, cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
+      			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
+      				
+      //				si pas oTache.p_bEstRealise alors
+      //					trace("La tache [%oTache.p_sCodeTache%] n'était pas marquée comme réalisée, avant la lecture des données de trello (Sp. : [%oTache.p_nNum_Sprint_Fin%]).")
+      //				fin
+      //				SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
+      					SI PAS oTache.p_bEstRealise ET PAS oTache.p_bAnnule ALORS
+      						Trace("La tache [%oTache.p_sCodeTache%] n'était pas marquée comme réalisée, avant la lecture des données de trello (Sp. démarrage : [%oTache.p_nNum_Sprint_Demarrage%]).")
+      					FIN
+      //				FIN
+      				
       				oTache.p_bEstRealise			= Vrai
       			SINON
       				oTache.p_bEstRealise			= Faux
@@ -671,7 +676,7 @@ class :
       	//							oTache.p_oUserStoryParent.p_dDateMiseEnProd = dhEvt..PartieDate
       	//						FIN
       							
-      						CAS cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents, cst_List_ID_A_livrer_en_prod
+      						CAS cst_List_ID_Fini, cst_List_ID_A_livrer_en_prod	//, cst_List_ID_Fini_sprint_précédents
       							//TBL_Actions[nLigne].COL_IdList = "Fin"
       							
       							SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = "" ALORS
@@ -740,6 +745,7 @@ class :
       	FIN
       	//Trace(oUs.p_sCodeUserStory + "#" + oUs.p_dDateMiseEnProd)
       	oUs.RecalcEtatUS()
+      	oUs.ZF_Enregistre()
       FIN
       
       

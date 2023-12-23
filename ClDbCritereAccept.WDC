@@ -461,59 +461,6 @@ class :
       renvoyer ClZF_ObjDB.ZF_GetObj(ClDbCritereAccept, nIdUnique_P)
      type : 458752
    -
-     name : Combo_Charge_Etats
-     procedure_id : 1444813827280039115
-     type_code : 12
-     code : |1+
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //Combo_Charge_Etats (<sNomFenetre_P> est chaîne, <sNomCombo_P> est chaîne)
-      //
-      // Paramètres :
-      //	sNomFenetre_P (chaîne ANSI) : <indiquez ici le rôle de sNomFenetre_P>
-      //	sNomCombo_P (chaîne ANSI) : <indiquez ici le rôle de sNomCombo_P>
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      PROCEDURE GLOBAL Combo_Charge_Etats_old(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne):Vide
-      
-      
-      
-      sdListeEtatsCrit est une Source de Données
-      sReq est une chaîne
-      
-      sReq = ChaîneConstruit([
-      	
-      	SELECT
-      		Scr_CritereAccept_Etat.IDScr_CritereAccept_Etat,
-      		Scr_CritereAccept_Etat.Libelle
-      	
-      	FROM
-      		Scr_CritereAccept_Etat
-      	
-      	ORDER BY
-      		Scr_CritereAccept_Etat.IDScr_CritereAccept_Etat
-      	
-      ])
-      ::mg_oApp.RSQL(sdListeEtatsCrit,sReq)
-      
-      ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
-      POUR TOUT sdListeEtatsCrit
-      	ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, sdListeEtatsCrit.Libelle + gLien(sdListeEtatsCrit.IDScr_CritereAccept_Etat))
-      FIN
-      
-      
-      HAnnuleDéclaration(sdListeEtatsCrit)
-      
-      
-      
-      
-      
-     type : 458752
-   -
      name : sExport
      procedure_id : 1444813827280170187
      type_code : 12

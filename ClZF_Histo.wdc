@@ -15,7 +15,10 @@ class :
   p_codes :
    -
      code : |1+
+      
       STR_MemoModifs est une structure
+      //	sClasseDB	est une chaîne
+      //	nIdUnique	est un entier
       	dhModif		est un dateheure
       	sModif		est une chaîne
       	vValAvant	est un variant
@@ -23,9 +26,8 @@ class :
       fin
       
       ClZF_Histo est une Classe
-      
       PRIVE
-      	m_enrOrigine est un Enregistrement
+      	m_enrOrigine est un Enregistrement	<copie=faux,Sérialise=faux>
       PROTEGE
       	m_aListeModifs est un tableau de STR_MemoModifs
       fin
@@ -33,10 +35,13 @@ class :
   procedures :
    -
      name : Constructeur
+     internal_properties : BwAAAAcAAADVLaAKbr5tR0lZZ56nWBEQbDoxrDB7lZEUFJsgkj4BrjgBfuxAgzokm30ElAHm6tQu2eSP4fJibjQXTpMXnzerCEU79BSw+5lR3CMWFNYxWzfaINXb1GbjqZwOy0wp1ZNXXNXCtQDhYMXJSnGPfZ13LDxGJaO/tlT4ZZ7NXm9M4+jTj5MEJwg4glj6AmoC8dmkVo1AMviqd+RIGCdhGmMkoKl/CuVF7j2qIrL+VLZHtdsnS7maIxlpERcAMqc/32jO8ceuh6rZSLKCuA4IDEr6GYk/W8tYYzwDfOn+1KtFMG2M4UfNaOA0CQOTQlQNmxIqL5VbOI5n8xxvi8cw05mYInhgbN+hEXIkoTbiJkE=
      procedure_id : 1544253184963561185
      type_code : 27
-     code : |1+
+     code : |1-
       procédure Constructeur()
+      
+      :setCallBackostEnreg()
      type : 589824
    -
      name : Destructeur
@@ -47,47 +52,52 @@ class :
       
      type : 655360
    -
-     name : ZF_Enregistre_old
-     procedure_id : 1544254572246447429
-     type_code : 12
-     code : |1+
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //ZF_Enregistre_old ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // <Indiquez ici un exemple d'utilisation>
-      //
-      procédure  ZF_Enregistre_old() <métier>:vide
-      
-      trace("ZF_Enregistre de histo")
-     type : 458752
-   -
-     name : InitMemo
+     name : ZF_InitMemo
      procedure_id : 1544260310335166016
      type_code : 12
      code : |1+
-      procedure protegee InitMemo()<metier>:vide
+      procedure protegee ZF_InitMemo()<metier>:vide
+      sTable est une chaîne = :ZF_sNomTable()
+      TableauSupprimeTout(:m_aListeModifs)
       
-      :m_enrOrigine = {p_sNomTable,indFichier}
-      TableauSupprimeTout(m_aListeModifs)
+      
+      m_EnrUsActu est un Enregistrement = {sTable,indFichier}
+      :ZF_Charge(Vrai)
+      :m_enrOrigine = {sTable,indFichier}
+      Scr_UserStory	= m_EnrUsActu
      type : 458752
    -
-     name : FigeInfo
-     procedure_id : 1544263222326292144
+     name : ZF_vValRubPrec
+     procedure_id : 1544623587369006771
      type_code : 12
      code : |1-
-      PROCÉDURE PROTÉGÉE FigeInfo(sPattern_p est une chaine, sRubriqueRef_P est une chaine, vValeurComp_p est un variant, sValeurCompAff_p est une chaine = "")<métier>:Vide
+      procedure prive ZF_vValRubPrec(sRubrique_p est une chaîne)<métier>
+      renvoyer {"m_enrOrigine." + sRubrique_p, indVariable}
+     type : 458752
+   -
+     name : ZF_bRubEstModifiee
+     procedure_id : 1544622891584207871
+     type_code : 12
+     code : |1-
+      procedure protege ZF_bRubEstModifiee(LOCAL sRubriqueRef_P est une chaine, LOCAL vValeurComp_p est un variant)
+      renvoyer vValeurComp_p <> :ZF_vValRubPrec(sRubriqueRef_P)
+     type : 458752
+   -
+     name : ZF_HistoriseInfo
+     procedure_id : 1544263222326292144
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉE ZF_HistoriseInfo(local sPattern_p est une chaine, ...
+      	LOCAL sRubriqueRef_P est une chaine, ...
+      	LOCAL vValeurComp_p est un variant, ...
+      	LOCAL sValeurCompAff_p est une chaine = "")<métier>:Vide
       
       
       stMemoMod est un STR_MemoModifs
-      
-      si {":m_enrOrigine." + sRubriqueRef_P, indRubrique} <> vValeurComp_p ALORS
+      si ZF_bRubEstModifiee(sRubriqueRef_P, vValeurComp_p) ALORS
+      	
+      //	stMemoMod.sClasseDB	= objet..classe
+      //	stMemoMod.nIdUnique	= :ZF_Get_IdUnique()
       	
       	stMemoMod.dhModif = DateHeureSys()
       	si sValeurCompAff_p <> "" alors
@@ -95,27 +105,97 @@ class :
       	sinon
       		stMemoMod.sModif = ChaîneConstruit(sPattern_p, vValeurComp_p)
       	fin
-      	stMemoMod.vValAvant = {":m_enrOrigine." + sRubriqueRef_P, indRubrique} 
+      	stMemoMod.vValAvant = :ZF_vValRubPrec(sRubriqueRef_P)
       	stMemoMod.vValApres = vValeurComp_p
       	
       	tableauajoute(m_aListeModifs, stMemoMod)
       FIN
      type : 458752
+   -
+     name : ZF_SetMsgHisto
+     procedure_id : 1544624446362665456
+     type_code : 12
+     code : |1-
+      procedure protegee ZF_SetMsgHisto(Local sMsg_p est une chaîne)<metier>:vide
+      
+      
+      stMemoMod est un STR_MemoModifs
+      	
+      //stMemoMod.sClasseDB	= objet..Classe
+      //stMemoMod.nIdUnique	= :ZF_Get_IdUnique()
+      stMemoMod.dhModif	= DateHeureSys()
+      stMemoMod.sModif	= sMsg_p
+      
+      //stMemoMod.vValAvant	= 
+      //stMemoMod.vValApres	= 
+      
+      TableauAjoute(m_aListeModifs, stMemoMod)
+     type : 458752
+   -
+     name : ZF_Get_IdUnique
+     procedure_id : 1544413666447518760
+     type_code : 12
+     code : |1+
+      procédure abstraite ZF_Get_IdUnique()<metier>:entier
+     type : 458752
+   -
+     name : setCallBackostEnreg
+     procedure_id : 1544468225435811910
+     type_code : 12
+     code : |1+
+      PROCÉDURE abstraite protege setCallBackostEnreg()<metier>:vide
+     type : 458752
+   -
+     name : AffHisto
+     procedure_id : 1544468706472195338
+     type_code : 12
+     code : |1+
+      PROCÉDURE AffHisto()<ui>:vide
+      
+      stHistoTmp est un STR_MemoModifs
+      pour tout stHistoTmp de :m_aListeModifs
+      	trace(stHistoTmp.sModif)
+      FIN
+     type : 458752
+   -
+     name : ZF_sNomTable
+     procedure_id : 1544477360991908757
+     type_code : 12
+     code : |1-
+      PROCÉDURE abstraite ZF_sNomTable()<metier>:chaine
+     type : 458752
+   -
+     name : ZF_Charge
+     procedure_id : 1544617355308273707
+     type_code : 12
+     code : |1+
+      procédure protégée abstraite ZF_Charge(bSansRechargement_p est un booléen = faux) <métier>:Vide
+     type : 458752
+   -
+     name : ZF_IdSiNonNull
+     procedure_id : 1544782621290843190
+     type_code : 12
+     code : |1-
+      procedure protegee ZF_IdSiNonNull(oObj est un ClZF_ObjDbLs dynamique)<metier>:Entier
+      
+      si oObj = Null ALORS
+      	renvoyer 0
+      SINON
+      	renvoyer oObj.ZF_Get_IdUnique()
+      FIN
+     type : 458752
   properties :
    -
-     name : p_sNomTable
-     identifier : 0x156e513d0644b219
+     name : p_aListeModifs
+     identifier : 0x156f35ac062c049b
      type_code : 103
      p_codes :
       -
-        code : |1+
-         procédure privée  abstraite p_sNomTable() <métier>
-         
-        type : 1966080
-      -
         code : |1-
+         procédure publique p_aListeModifs() <métier>
          
-        type : 2031616
+         renvoyer m_aListeModifs
+        type : 1966080
      template_refs : []
   procedure_templates : []
   property_templates : []

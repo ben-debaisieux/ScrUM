@@ -48,7 +48,7 @@ window :
          //	ListeAjoute(CBO_Sprint, "Sprint " + oSpr.ZF_Get_IdUnique() + gLien(oSpr.ZF_Get_IdUnique()))
          //FIN
          
-         ClColSprint.aoListeSprint(goApp.m_nNumeroDuSprintActuel, 1):ZF_ChargeCbo(CBO_Sprint..Nom)
+         ClColSprint.oListeSprint(goApp.m_nNumeroDuSprintActuel, 1):ZF_ChargeCbo(CBO_Sprint..Nom)
          nIndiceSprintActuel = ListeCherche(CBO_Sprint,goApp.m_nNumeroDuSprintActuel)
          ListeSelectPlus(CBO_Sprint,nIndiceSprintActuel)
          

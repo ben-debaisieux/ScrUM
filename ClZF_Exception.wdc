@@ -90,6 +90,9 @@ class :
       
       sMsg est une chaîne = ChaîneConstruit(:m_sMessage, asParams_p)
       
+      si EnModeTest() et ExceptionInfo(errCode) <> 0 ALORS
+      	sMsg += rc + rc + repete("-",70) + rc + ExceptionInfo(errMessage)
+      FIN
       
       si :m_nLog > 0 alors
       	si enmodetest() ALORS
@@ -122,7 +125,7 @@ class :
      procedure_id : 1532521443721654920
      type_code : 12
      code : |1-
-      procedure globale getAllExceptions()<metier>
+      procedure globale getAllExceptions()<ui>:vide
       
       oExcTmp est un ClZF_Exception dynamique
       sMsg est une chaîne
@@ -130,7 +133,13 @@ class :
       pour tout oExcTmp de mg_aListeExceptions
       	sMsg = ""
       	addMsg(oExcTmp.p_sDeclaration)
-      	addMsg(oExcTmp.ZF_Code)
+      	
+      	si oExcTmp.ZF_Code > 500 ALORS
+      		addMsg("<Variable>")
+      	sinon
+      		addMsg(oExcTmp.ZF_Code)
+      	FIN
+      	
       	addMsg(oExcTmp.p_sMessage)
       
       	

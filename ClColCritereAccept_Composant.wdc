@@ -37,15 +37,6 @@ class :
       PROCÉDURE Destructeur()
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 1437760634949542864
-     type_code : 12
-     code : |1+
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbCritereAccept_Composant.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 1437760634949608400
      type_code : 12
@@ -62,25 +53,6 @@ class :
       PROCÉDURE Init():Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoCritereAccept_Composant)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 1437760634949739487
-     type_code : 12
-     code : |1-
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données):Vide
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbCritereAccept_Composant(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept_Composant)
-     type : 458752
-   -
-     name : GetAll_old
-     procedure_id : 1468676792952786910
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE public GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_CritereAccept_Composant_Type..nom)
      type : 458752
    -
      name : sClasseObjDbAsso

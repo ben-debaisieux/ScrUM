@@ -30,30 +30,6 @@ procedure_set :
      type : 720896
   procedures :
    -
-     name : Recuperation_Fichier_Erreur_Local_old
-     procedure_id : 2121401351086746936
-     type_code : 15
-     code : |1-
-      PROCEDURE Recuperation_Fichier_Erreur_Local_old()
-      
-      //récupération d'une erreur sur un problème de connexion
-      sUn_fichier_err est une chaine = ""
-      liste_fichier_err est une chaine = flistefichier(fExtraitChemin(ExeInfo(exeNom),fDisque+fRépertoire+fFichier)+"_*.err",frNonRécursif)
-      
-      sMessage_erreur est une chaine
-      
-      POUR TOUTE CHAÎNE un_fichier DE liste_fichier_err SEPAREE PAR RC
-      	sMessage_erreur = fChargeTexte(un_fichier)
-      	
-      	Erreur_WebService(sMessage_erreur,cst_NiveauErreur_Erreur)
-      	
-      	si pas fSupprime(un_fichier) alors
-      		// si pas de suppression par manque de droit, on affiche pas l'erreur (il sera supprimé une autre fois)
-      		//Col_Erreur.MsgErreur("Erreur suppression fichier :"+sMessage_erreur)	
-      	FIN
-      FIN
-     type : 458752
-   -
      name : Erreur_WebService
      procedure_id : 2121401351086812472
      type_code : 15
@@ -119,39 +95,6 @@ procedure_set :
       //FIN
       
       RENVOYER stReponse_Webservice.CODE_REPONSE
-     type : 458752
-   -
-     name : Enregistrement_Fichier_Erreur_old
-     procedure_id : 2121401351086878008
-     type_code : 15
-     code : |1+
-      // Résumé :  Enregistrement de l'erreur dans un fichier texte en attente d'un enregistrement local de l'erreur (sauf si on essaie d'enregistrer un fichier local)	
-      // Syntaxe :
-      //[ <Résultat> = ] Enregistrement_Fichier_Erreur_old (<sMessage_Erreur_p> est chaîne [, <nSType_Erreur> est entier])
-      //
-      // Paramètres :
-      //	sMessage_Erreur_p (chaîne ANSI) : <indiquez ici le rôle de sMessage_Erreur_p>
-      //	nSType_Erreur (entier - valeur par défaut=3) : <indiquez ici le rôle de nSType_Erreur>
-      // Valeur de retour :
-      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
-      
-      PROCEDURE Enregistrement_Fichier_Erreur_old(LOCAL sMessage_Erreur_p est une chaine,nSType_Erreur est un entier = cst_NiveauErreur_Erreur)
-      
-      nSType_Erreur_Local est un entier = nSType_Erreur
-      
-      
-      sNom_Fic est une chaîne = fExtraitChemin(ExeInfo(exeNom),fDisque+fRépertoire+fFichier)+"_"+DateSys()+"_"+HeureSys()+".err"	
-      	
-      nf est un entier = fOuvre(sNom_Fic,foCréation)
-      SI nf<>-1 ALORS
-      	fEcritLigne(nf,"##"+ProjetInfo(piConfiguration)+"## "+sMessage_Erreur_p)
-      	fEcritLigne(nf,DateVersChaîne(DateSys())+" "+HeureVersChaîne(HeureSys))
-      	fEcritLigne(nf,"Serveur/Poste : "+NetAdresseIP+";"+goapp.m_oUsrCnx.p_sLogin_AD+";"+SysEnvironnement("USERNAME"))
-      	
-      	fFerme(nf)
-      FIN
-      	
-      RENVOYER sNom_Fic
      type : 458752
    -
      name : MsgErreur

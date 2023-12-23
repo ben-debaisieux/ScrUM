@@ -458,7 +458,7 @@ class :
       		sPropId = Vars.Nom + "_ID"
       		sPropId[1] = "p"
       		
-      		nVal = {:p_sNomTable + "." + sRub,indRubrique}
+      		nVal = {:p_ZF_sNomTable + "." + sRub,indRubrique}
       		
       		{sPropId, indVariable} = nVal
       	FIN
@@ -527,6 +527,15 @@ class :
       mg_oExReprNonRedefinie.ZF_Declenche([objet..classe, dbgInfo(dbgPile)])
       renvoyer :ZF_sGetNomInstance()
      type : 458752
+   -
+     name : ZF_sNomTable
+     procedure_id : 1544476248474206267
+     type_code : 12
+     code : |1+
+      
+      procédure VIRTUELLE ZF_sNomTable() <métier>:chaine
+      RENVOYER :m_ZF_sNomTable
+     type : 458752
   properties :
    -
      name : p_nPointeur
@@ -538,18 +547,6 @@ class :
          procédure publique p_nPointeur() : entier sur 8 octets
          
          renvoyer m_ZF_nPointeur
-        type : 1966080
-     template_refs : []
-   -
-     name : p_sNomTable
-     identifier : 0x13f5320107e91afb
-     type_code : 103
-     p_codes :
-      -
-        code : |1-
-         procédure PUBLIQUE  p_sNomTable() : chaîne
-         
-         renvoyer m_ZF_sNomTable
         type : 1966080
      template_refs : []
    -
@@ -610,6 +607,18 @@ class :
          procédure publique p_ZF_sNom_Col_Id_Auto() : chaîne
          
          renvoyer m_ZF_sNom_Col_Id_Auto
+        type : 1966080
+     template_refs : []
+   -
+     name : p_ZF_sNomTable
+     identifier : 0x156f15380ce53f3c
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_ZF_sNomTable() : chaîne
+         
+         renvoyer m_ZF_sNomTable
         type : 1966080
      template_refs : []
   procedure_templates : []

@@ -205,37 +205,6 @@ class :
       :m_oCritereAccept	= null
      type : 458752
    -
-     name : aoMessagesDeUsr_Old
-     procedure_id : 1444814763598069992
-     type_code : 12
-     code : |1+
-      procédure GLOBALE aoMessagesDeUsr_Old(oUsr_P est un ClDbUsr):tableau de ClDbMessage dynamique
-      
-      
-      aoRetour	est un tableau de ClDbMessage dynamique
-      sdMsgUsr	est une Source de Données
-      sReq		est une chaîne
-      
-      //Récupération des messages de l'utilisateur.
-      sReq = ChaîneConstruit([
-      	
-      	SELECT
-      		Scr_Message.IDScr_Message
-      	FROM Scr_Message
-      	where Scr_Message.IDScr_Usr = %1
-      		AND Scr_Message.Top_Visible = 1
-      	
-      ], oUsr_P.ZF_Get_IdUnique())
-      ::mg_oApp.RSQL(sdMsgUsr,sReq)
-      POUR TOUT sdMsgUsr
-      	TableauAjouteRéférence(aoRetour, ClDbMessage.GetObj(sdMsgUsr.IDScr_Message))
-      FIN
-      
-      HAnnuleDéclaration(sdMsgUsr)
-      
-      renvoyer aoRetour
-     type : 458752
-   -
      name : post_enregistre
      procedure_id : 1444814763598201064
      type_code : 12

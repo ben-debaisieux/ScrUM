@@ -39,15 +39,6 @@ class :
       
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 815205527339058
-     type_code : 12
-     code : |1+
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbRetro_Commentaire_Type.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 815205527339059
      type_code : 12
@@ -64,16 +55,6 @@ class :
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoRetro_Commentaire_Type)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 815205527339061
-     type_code : 12
-     code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbRetro_Commentaire_Type(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Retro_Commentaire_Type)
      type : 458752
    -
      name : ChargeCbo
@@ -102,15 +83,6 @@ class :
       pour tout element oCmtrType de :m_aoRetro_Commentaire_Type
       	ListeAjoute({sNomFen_p + "." + sCombo_p,indChamp}, oCmtrType.p_sType_Cmtr + gLien(oCmtrType.ZF_Get_IdUnique()))
       FIN
-     type : 458752
-   -
-     name : GetAll_old
-     procedure_id : 1468675547359225496
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE public GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Retro_Commentaire_Type..nom)
      type : 458752
    -
      name : sClasseObjDbAsso

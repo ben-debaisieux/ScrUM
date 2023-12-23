@@ -39,15 +39,6 @@ class :
       
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 81780139518018
-     type_code : 12
-     code : |1+
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbProjet_Situation.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 81780139518019
      type_code : 12
@@ -64,24 +55,6 @@ class :
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoProjet_Situation)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 81780139518021
-     type_code : 12
-     code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbProjet_Situation(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IdScr_Projet_Situation)
-     type : 458752
-   -
-     name : GetAll_old
-     procedure_id : 81780139518022
-     type_code : 12
-     code : |1-
-      PROCÉDURE GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Projet_Situation..nom)
      type : 458752
    -
      name : aoFromSprint

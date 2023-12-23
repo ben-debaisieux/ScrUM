@@ -22,6 +22,7 @@ class :
       	sTableFK		est une chaîne
       	sRubriqueFK		est une chaîne
       	bRubFKOblig		est un booléen
+      	bRubFKUnique	est un booléen
       	nTypeRel		est un entier
       FIN
       
@@ -41,6 +42,7 @@ class :
       	bVisibleUsr				est un booléen
       	nTaille					est un entier
       	nScale					est un entier
+      	bNullDefaut				est un booléen
       	sValDef					est une chaine
       	nTypeCle				est un entier
       	
@@ -127,7 +129,11 @@ class :
       procédure Constructeur(local sNomTable_P est une chaîne = "")
       
       :m_sNomTable = sNomTable_P
-      :m_sNomUsage = remplace(sNomTable_P, ::mg_sPrefixeTable , "", SansCasse)
+      si ChaîneCommencePar(:m_sNomTable, ::mg_sPrefixeTable) ALORS
+      	:m_sNomUsage[[ a taille(::mg_sPrefixeTable)]] = ""
+      FIN
+      //:m_sNomUsage = remplace(sNomTable_P, ::mg_sPrefixeTable , "", SansCasse)
+      
       si sNomTable_P <> "" ALORS
       	:m_sLibelle = {sNomTable_P,indFichier}..Libellé
       FIN
@@ -385,57 +391,104 @@ class :
       si sRubIdAuto <> "" alors
       	POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
       		
-      		//Identification des relations associées à la clé primaire de la table en cours.
-      		si ExtraitChaîne(sLigneCle,2,tab) = :m_sNomTable et ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto ALORS
-      			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
-      			stRelTmp.sTablePK		= :m_sNomTable
-      			stRelTmp.sRubriquePK	= sRubIdAuto
-      			stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,5,TAB)
-      			stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,6,TAB)
-      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
-      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
-      			TableauAjoute(m_aFK_de_PK,stRelTmp)
-      		FIN
-      	
-      		SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,6,TAB) = sRubIdAuto ALORS
-      			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
-      			stRelTmp.sTablePK		= :m_sNomTable
-      			stRelTmp.sRubriquePK	= sRubIdAuto
-      			stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,2,TAB)
-      			stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,3,TAB)
-      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
-      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
-      			TableauAjoute(m_aFK_de_PK,stRelTmp)
-      		FIN
-      	
-      	
-      		//Identification des clés étrangères présentes dans la table en cours.
-      		sRub = ExtraitChaîne(sLigneCle,3,TAB)
-      		SI ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
-      			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
-      			stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,5,TAB)
-      			stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,6,TAB)
-      			stRelTmp.sTableFK		= :m_sNomTable
-      			stRelTmp.sRubriqueFK	= sRub
-      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
-      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
-      			m_aPK_de_FK[sRub]		= stRelTmp
+      		bTablePrimaryAGauche est un booléen
+      		nColTableFK est un entier
+      		nColRubFK est un entier
+      		nColTablePK est un entier
+      		nColRubPK est un entier
+      		nSymbolePK est un entier
+      		nSymboleFK est un entier
+      		
+      		si ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto ET minuscule(ExtraitChaîne(sLigneCle,4,TAB)) DANS("0,1", "0,n") ALORS
+      			bTablePrimaryAGauche = vrai
       		FIN
       		
-      		sRub = ExtraitChaîne(sLigneCle,6,TAB)
-      		SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
-      			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
-      			stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,2,TAB)
-      			stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,3,TAB)
-      			stRelTmp.sTableFK		= :m_sNomTable
-      			stRelTmp.sRubriqueFK	= sRub
-      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
-      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
-      			m_aPK_de_FK[sRub]		= stRelTmp
+      		si bTablePrimaryAGauche ALORS
+      			nColTablePK	= 2
+      			nColRubPK	= 3
+      			nSymbolePK	= 4
+      			
+      			nColTableFK	= 5
+      			nColRubFK	= 6
+      			nSymboleFK	= 7
+      		sinon
+      			nColTablePK	= 5
+      			nColRubPK	= 6
+      			nSymbolePK	= 7
+      			
+      			nColTableFK	= 2
+      			nColRubFK	= 3
+      			nSymboleFK	= 4
       		FIN
+      		stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      		
+      		stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,nColTablePK,TAB)
+      		stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,nColRubPK,TAB)
+      		
+      		stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,nColTableFK,TAB)
+      		stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,nColRubFK,TAB)
+      		
+      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,nSymboleFK,TAB))
+      		stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,nSymbolePK,TAB))
+      		
+      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      		TableauAjoute(m_aFK_de_PK, stRelTmp)
+      		
+      //		//Identification des relations associées à la clé primaire de la table en cours.
+      //		si ExtraitChaîne(sLigneCle,2,tab) = :m_sNomTable et ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto et ExtraitChaîne(sLigneCle,7,TAB) dans("0,1", "1,1") ALORS
+      //			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      //			stRelTmp.sTablePK		= :m_sNomTable
+      //			stRelTmp.sRubriquePK	= sRubIdAuto
+      //			stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,5,TAB)
+      //			stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,6,TAB)
+      //			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
+      //			stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,4,TAB))
+      //			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      //			TableauAjoute(m_aFK_de_PK,stRelTmp)
+      //		FIN
+      //		
+      //		SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,6,TAB) = sRubIdAuto ALORS
+      //			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      //			stRelTmp.sTablePK		= :m_sNomTable
+      //			stRelTmp.sRubriquePK	= sRubIdAuto
+      //			stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,2,TAB)
+      //			stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,3,TAB)
+      //			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
+      //			stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,7,TAB))
+      //			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      //			TableauAjoute(m_aFK_de_PK,stRelTmp)
+      //		FIN
+      //		
+      //		
+      //		//Identification des clés étrangères présentes dans la table en cours.
+      //		sRub = ExtraitChaîne(sLigneCle,3,TAB)
+      //		SI ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
+      //			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      //			stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,5,TAB)
+      //			stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,6,TAB)
+      //			stRelTmp.sTableFK		= :m_sNomTable
+      //			stRelTmp.sRubriqueFK	= sRub
+      //			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      //			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,4,TAB))
+      //			stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,7,TAB))
+      //			m_aPK_de_FK[sRub]		= stRelTmp
+      //		FIN
+      //		
+      //		sRub = ExtraitChaîne(sLigneCle,6,TAB)
+      //		SI ExtraitChaîne(sLigneCle,5,TAB) = :m_sNomTable ET sRub <> sRubIdAuto ALORS
+      //			stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      //			stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,2,TAB)
+      //			stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,3,TAB)
+      //			stRelTmp.sTableFK		= :m_sNomTable
+      //			stRelTmp.sRubriqueFK	= sRub
+      //			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,7,TAB))
+      //			stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,4,TAB))
+      //			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      //			m_aPK_de_FK[sRub]		= stRelTmp
+      //		FIN
       		
       		
-      		si ExtraitChaîne(sLigneCle, 2, TAB) = ExtraitChaîne(sLigneCle, 5, TAB) ALORS
+      		si stRelTmp.sTablePK = stRelTmp.sTableFK ALORS
       			:m_bTableHyerarchisee = vrai
       		FIN
       	FIN
@@ -444,109 +497,113 @@ class :
       
       
       POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
+      	
       	VariableRAZ(stRubTmp)
-      	sRub = ExtraitChaîne(sLigne, 1)
+      	sRub				= ExtraitChaîne(sLigne, 1)
       	
-      	stRubTmp.nTypeRubHF = ExtraitChaîne(sLigne, 3)
+      	stRubTmp.nTypeRubHF	= ExtraitChaîne(sLigne, 3)
       	
-      	//Est on sur la clé primaire ?
-      	SI sRub = sRubIdAuto ALORS
+      	si pas ::bTypeHfExclu(stRubTmp.nTypeRubHF) alors
       		
-      		//Mémorisation du nom de la clé
-      		:m_sNomRubId = sRub
-      		
-      		//On liste les relations, pour identifier les clés étrangères, des autres tables
-      		pour tout stRelTmp de m_aFK_de_PK
-      			VariableRAZ(stCol)
-      			stCol.sTableDesti	= stRelTmp.sTableFK
-      			stCol.sCleDesti		= stRelTmp.sRubriqueFK
-      			oGenTmp				= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
-      			stCol.sDeclaration	= "[%oGenTmp.sNomClasseColGen(vrai)%]_[%stRelTmp.sRubriqueFK%] est un [%oGenTmp.sNomClasseColGen()%]"
-      			TableauAjoute(:m_aCol_Enfant, stCol)
-      		FIN
-      		
-      	SINON
-      		SELON ExtraitChaîne(sLigne, 2)
-      			CAS "T"
-      				stRubTmp.nTypeRub = ::cstDefRubChaine
-      			CAS "N"
-      				stRubTmp.nTypeRub = ::cstDefRubNum
-      			AUTRE CAS
+      		//Est on sur la clé primaire ?
+      		SI sRub = sRubIdAuto ALORS
+      			
+      			//Mémorisation du nom de la clé
+      			:m_sNomRubId = sRub
+      			
+      			//On liste les relations, pour identifier les clés étrangères, des autres tables
+      			pour tout stRelTmp de m_aFK_de_PK
+      				VariableRAZ(stCol)
+      				stCol.sTableDesti	= stRelTmp.sTableFK
+      				stCol.sCleDesti		= stRelTmp.sRubriqueFK
+      				oGenTmp				= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      				stCol.sDeclaration	= "[%oGenTmp.sNomClasseColGen(vrai)%]_[%stRelTmp.sRubriqueFK%] est un [%oGenTmp.sNomClasseColGen()%]"
+      				TableauAjoute(:m_aCol_Enfant, stCol)
+      			FIN
+      			
+      		SINON
+      			SELON ExtraitChaîne(sLigne, 2)
+      				CAS "T"
+      					stRubTmp.nTypeRub = ::cstDefRubChaine
+      				CAS "N"
+      					stRubTmp.nTypeRub = ::cstDefRubNum
+      				AUTRE CAS
+      					
+      			FIN
+      			
+      			stRubTmp.bNullable			= {:m_sNomTable + "." + sRub,indRubrique}..NullAutorisé et pas stRubTmp.nTypeRubHF dans(hRubMémoTexte, hRubMémoUnicode)
+      			stRubTmp.sLibelleRubrique	= {:m_sNomTable + "." + sRub,indRubrique}..libelle
+      			stRubTmp.bVisibleUsr		= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
+      			
+      			selon stRubTmp.nTypeRubHF
+      				CAS hRubNumérique
+      					stRubTmp.nScale		= {:m_sNomTable + "." + sRub,indRubrique}..PartieDécimale
+      					stRubTmp.nTaille	= {:m_sNomTable + "." + sRub,indRubrique}..PartieEntière + stRubTmp.nScale
+      					
+      				AUTRE CAS
+      					stRubTmp.nTaille	= {:m_sNomTable + "." + sRub,indRubrique}..Taille
+      			FIN
+      			
+      			stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}..ValeurParDéfaut
+      			stRubTmp.bNullDefaut		= {:m_sNomTable + "." + sRub,indRubrique}..null
+      			stRubTmp.bVisibleInterface	= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
+      			//stRubTmp.sMeta				= {:m_sNomTable + "." + sRub,indRubrique}..Métadonnées
+      			
+      			
+      			selon {:m_sNomTable + "." + sRub,indRubrique}..TypeClé
+      				CAS hNonClé
+      					stRubTmp.nTypeCle = cstTypeCleAucune
+      				CAS hCléUnique
+      					stRubTmp.nTypeCle = cstTypeCleUnique
+      				CAS hCléDoublon
+      					stRubTmp.nTypeCle = cstTypeCleDoublon
+      				AUTRE CAS
+      					ExceptionDéclenche(1, "Cas non traité")
+      			FIN
+      			
+      			
+      			
+      			//Parcourt de toutes les liaisons, de la table en cours
+      			si pas m_aPK_de_FK[sRub]..vide alors
+      				stRelTmp = m_aPK_de_FK[sRub]
+      							
+      				VariableRAZ(stCol)
+      				stCol.sTableDesti		= stRelTmp.sTablePK
+      				stCol.sCleDesti			= stRelTmp.sRubriquePK
+      				oGenTmp					= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      				stCol.sDeclaration		= "[%oGenTmp.sNomClasseColGen(Vrai)%]_[%sRub%] est un [%oGenTmp.sNomClasseColGen()%]"
       				
-      		FIN
-      		
-      		stRubTmp.bNullable			= {:m_sNomTable + "." + sRub,indRubrique}..NullAutorisé et pas stRubTmp.nTypeRubHF dans(hRubMémoTexte, hRubMémoUnicode)
-      		stRubTmp.sLibelleRubrique	= {:m_sNomTable + "." + sRub,indRubrique}..libelle
-      		stRubTmp.bVisibleUsr		= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
-      		
-      		selon stRubTmp.nTypeRubHF
-      			CAS hRubNumérique
-      				stRubTmp.nScale		= {:m_sNomTable + "." + sRub,indRubrique}..PartieDécimale
-      				stRubTmp.nTaille	= {:m_sNomTable + "." + sRub,indRubrique}..PartieEntière + stRubTmp.nScale
+      				stRubTmp.oObj_Parent	= oGenTmp
       				
-      			AUTRE CAS
-      				stRubTmp.nTaille	= {:m_sNomTable + "." + sRub,indRubrique}..Taille
-      		FIN
-      		
-      		stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}..ValeurParDéfaut
-      		stRubTmp.bVisibleInterface	= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
-      		//stRubTmp.sMeta				= {:m_sNomTable + "." + sRub,indRubrique}..Métadonnées
-      		
-      		
-      		selon {:m_sNomTable + "." + sRub,indRubrique}..TypeClé
-      			CAS hNonClé
-      				stRubTmp.nTypeCle = cstTypeCleAucune
-      			CAS hCléUnique
-      				stRubTmp.nTypeCle = cstTypeCleUnique
-      			CAS hCléDoublon
-      				stRubTmp.nTypeCle = cstTypeCleDoublon
-      			AUTRE CAS
-      				ExceptionDéclenche(1, "Cas non traité")
-      		FIN
-      		
-      		
-      		
-      		//Parcourt de toutes les liaisons, de la table en cours
-      		si pas m_aPK_de_FK[sRub]..vide alors
-      			stRelTmp = m_aPK_de_FK[sRub]
-      						
-      			VariableRAZ(stCol)
-      			stCol.sTableDesti		= stRelTmp.sTablePK
-      			stCol.sCleDesti			= stRelTmp.sRubriquePK
-      			oGenTmp					= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
-      			stCol.sDeclaration		= "[%oGenTmp.sNomClasseColGen(Vrai)%]_[%sRub%] est un [%oGenTmp.sNomClasseColGen()%]"
+      				//La relation associée à cette rubrique est elle de type 'inclusion' ?
+      				SI stRelTmp.nTypeRel = ::cstRelIncl ALORS
+      					stRubTmp.nTypeRub	= ::cstDefRubInclusion
+      				sinon
+      					stRubTmp.nTypeRub	= ::cstDefRubObj
+      				fin
+      				
+      				stRubTmp.stRelFkAsso	= stRelTmp
+      			FIN
       			
-      			stRubTmp.oObj_Parent	= oGenTmp
-      			
-      			//La relation associée à cette rubrique est elle de type 'inclusion' ?
-      			SI stRelTmp.nTypeRel = ::cstRelIncl ALORS
-      				stRubTmp.nTypeRub	= ::cstDefRubInclusion
-      			sinon
-      				stRubTmp.nTypeRub	= ::cstDefRubObj
-      			fin
-      			
-      			stRubTmp.stRelFkAsso	= stRelTmp
-      		FIN
-      		
-      
-      		SELON stRubTmp.nTypeRub
-      			CAS ::cstDefRubObj, ::cstDefRubInclusion
-      				stRubTmp.sPrefixe				= "o"
-      				stRubTmp.sNomDeclarationComplet	= "est un [%stRubTmp.oObj_Parent.sNomClasseGen()%] dynamique"
-      				stRubTmp.sNomDeclarationCourt	= stRubTmp.oObj_Parent.sNomClasseGen()
-      			AUTRE CAS
-      				stRubTmp.sPrefixe				= :GetInfoRubPrefix(stRubTmp.nTypeRubHF)
-      				stRubTmp.sNomDeclarationComplet	= ::GetInfoRubType(stRubTmp.nTypeRubHF, Vrai)
-      				stRubTmp.sNomDeclarationCourt	= ::GetInfoRubType(stRubTmp.nTypeRubHF)
-      			
-      		FIN
-      		
-      		stRubTmp.sNomMembre = "m_[%stRubTmp.sPrefixe%][%sRub%]"
-      		stRubTmp.sNomPropriete = "p_[%stRubTmp.sPrefixe%][%sRub%]"
-      		
-      		:m_aRub[sRub] = stRubTmp
-      	FIN
       	
+      			SELON stRubTmp.nTypeRub
+      				CAS ::cstDefRubObj, ::cstDefRubInclusion
+      					stRubTmp.sPrefixe				= "o"
+      					stRubTmp.sNomDeclarationComplet	= "est un [%stRubTmp.oObj_Parent.sNomClasseGen()%] dynamique"
+      					stRubTmp.sNomDeclarationCourt	= stRubTmp.oObj_Parent.sNomClasseGen()
+      				AUTRE CAS
+      					stRubTmp.sPrefixe				= :GetInfoRubPrefix(stRubTmp.nTypeRubHF)
+      					stRubTmp.sNomDeclarationComplet	= ::GetInfoRubType(stRubTmp.nTypeRubHF, Vrai)
+      					stRubTmp.sNomDeclarationCourt	= ::GetInfoRubType(stRubTmp.nTypeRubHF)
+      				
+      			FIN
+      			
+      			stRubTmp.sNomMembre = "m_[%stRubTmp.sPrefixe%][%sRub%]"
+      			stRubTmp.sNomPropriete = "p_[%stRubTmp.sPrefixe%][%sRub%]"
+      			
+      			:m_aRub[sRub] = stRubTmp
+      		FIN
+      	fin
       FIN
      type : 458752
    -
@@ -907,6 +964,31 @@ class :
       FIN
       
       renvoyer sRetour
+     type : 458752
+   -
+     name : bTypeHfExclu
+     procedure_id : 1550831176441799258
+     type_code : 12
+     code : |1+
+      procédure privée globale bTypeHfExclu(nTypeHF_p est un entier) <métier>:booleen
+      
+      renvoyer nTypeHF_p dans(hRubUUID128, hRubUUID128Auto, hRubUUID256, hRubUUID256Auto)
+     type : 458752
+   -
+     name : analyseFkUnique
+     procedure_id : 1551080520736243141
+     type_code : 12
+     code : |1-
+      procédure privée globale analyseFkUnique(sSymbole_p est une chaine) <métier>:booleen
+      
+      SI PAS Minuscule(Droite(sSymbole_p, 1)) DANS("1", "n") ALORS
+      	ExceptionDéclenche(1,"Erreur d'analyse du type de relation (""x,1"" ou ""x,n"" attendu)")
+      FIN
+      
+      //SI PAS sSymbole_p DANS("0,1", "1,1") ALORS
+      //	ExceptionDéclenche(1,"Erreur d'analyse du type de relation (""0,1"" ou ""0,n"" attendu)")
+      //FIN
+      RENVOYER Minuscule(Droite(sSymbole_p, 1)) = ""
      type : 458752
   properties :
    -

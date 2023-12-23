@@ -18,7 +18,8 @@ class :
      code : |1+
       ClDbTache est une Classe
       	Hérite de ClZF_ObjDB
-      	Hérite de ClHistorique
+      	Hérite de ClZF_Histo
+      //	Hérite de ClHistorique
       	
       prive
       	m_sCodeTache				est une chaîne							<MAPPING=CodeTache>
@@ -50,15 +51,16 @@ class :
       	m_oExPbPoidTachePrev				est un ClZF_Exception dynamique
       	m_oExPbSpDemarrageErreur			est un ClZF_Exception dynamique
       	m_oExPbSpRealErreur					est un ClZF_Exception dynamique
-      //	m_oExPbTacheDemrreeSansDev			est un ClZF_Exception dynamique
+      	//	m_oExPbTacheDemrreeSansDev			est un ClZF_Exception dynamique
       	m_oExEnregSpFinSiPasRealise			est un ClZF_Exception dynamique
       	m_oExPbSpRealErreurFin				est un ClZF_Exception dynamique
       	m_oExPbSpDemarreErreurFin			est un ClZF_Exception dynamique
       	m_oExPbSpDemarreErreurSansDev		est un ClZF_Exception dynamique
       	m_oExErreurStatutTacheImpossible	est un ClZF_Exception dynamique
-      	m_oExPbCodeDejaPris est un ClZF_Exception dynamique
-      	m_oExOrdreTachePbParam est un ClZF_Exception dynamique
-      	m_oExEnregUsParentAbsente est un ClZF_Exception dynamique
+      	m_oExPbCodeDejaPris					est un ClZF_Exception dynamique
+      	m_oExOrdreTachePbParam				est un ClZF_Exception dynamique
+      	m_oExEnregUsParentAbsente			est un ClZF_Exception dynamique
+      	mg_oExTacheFinieSansSprintDemarrage	est un ClZF_Exception dynamique
       
       FIN
       
@@ -83,6 +85,8 @@ class :
       ETypeCharge est une énumération
       	Charge_réelle
       	Charge_prévisionelle
+      	Charge_Fin
+      	Charge_Demarre
       fin
       
       ETypeEtatTacheAFaire est une énumération
@@ -124,6 +128,9 @@ class :
       m_oExOrdreTachePbParam = allouer un ClZF_Exception("Erreur de paramètre : %1")
       
       m_oExEnregUsParentAbsente = allouer un ClZF_Exception("Impossible d'enregistrer une taches sans user story associée.")
+      
+      mg_oExTacheFinieSansSprintDemarrage = allouer un ClZF_Exception("Impossible de finir la tache %1, sans sprint de démarrage.")
+      
      type : 131072
   procedures :
    -
@@ -148,7 +155,7 @@ class :
       
       ClZF_ObjDB.constructeur(Scr_Tache..nom, Scr_Tache.IDScr_Tache..Nom, nId_P)
       
-      :ZF_DefTimeOut(ClAppScrum.cstTimeOutProd, vrai)
+      //:ZF_DefTimeOut(ClAppScrum.cstTimeOutProd, vrai)
      type : 589824
    -
      name : Destructeur
@@ -178,25 +185,30 @@ class :
       //
       PROCEDURE VIRTUELLE pre_enregistre()<metier>:Vide
       
-      m_EnrActu est un Enregistrement de Scr_Tache
-      m_EnrOrigine est un Enregistrement de Scr_Tache
+      //m_EnrActu est un Enregistrement de Scr_Tache
+      //m_EnrOrigine est un Enregistrement de Scr_Tache
       
       SI :ZF_bEstsupprime() ALORS
       	//On supprime tous les historiques de la user story
-      	:CleanHisto()
+      	goApp.EnregHistoBDD(objet)
+      	//:CleanHisto()
       	
       	//Desenregistrement de la tache de l'US parente
       	ClColTache.aoFromUS(:p_oUserStoryParent).ZF_Supp(objet)
       SINON
-      	SI PAS :ZF_bModeAjout() ALORS
-      		//En modification :
-      		
-      		//On actualise les données en mémoire, pour générer l'historique.
-      		m_EnrActu = Scr_Tache
-      		:ZF_Charge(Vrai)
-      		m_EnrOrigine = Scr_Tache
-      		Scr_Tache = m_EnrActu
-      	FIN
+      //	SI PAS :ZF_bModeAjout() ALORS
+      //		//En modification :
+      //		
+      //		//On actualise les données en mémoire, pour générer l'historique.
+      //		m_EnrActu = Scr_Tache
+      //		:ZF_Charge(Vrai)
+      //		m_EnrOrigine = Scr_Tache
+      //		Scr_Tache = m_EnrActu
+      //	FIN
+      	
+      	//Initialisation de l'historisation.
+      	:ZF_InitMemo()
+      	
       	
       	//Maj du statut
       	:m_nStatut = :get_statut_tache()
@@ -231,9 +243,12 @@ class :
       		m_oExPbSpDemarreErreurSansDev.ZF_Declenche([:m_sCodeTache])
       	FIN
       	
+      	SI :m_nNum_Sprint_Demarrage = 0 ET :m_bEstRealise ALORS
+      		mg_oExTacheFinieSansSprintDemarrage.ZF_Declenche([:m_sCodeTache])
+      	FIN
       	
       	//En création ou en modification, son s'assure que le code article n'est pas pris.
-      	si :ZF_bModeAjout() _ou_ m_EnrOrigine.CodeTache <> :m_sCodeTache ALORS
+      	si :ZF_bModeAjout() _ou_ :ZF_bRubEstModifiee(Scr_Tache.CodeTache..nom, :m_sCodeTache) ALORS
       		si pas :bCodeTacheDispo(:m_sCodeTache) ALORS
       			m_oExPbCodeDejaPris.ZF_Declenche([:m_sCodeTache])
       		FIN
@@ -253,106 +268,139 @@ class :
       	
       	////////////////////////////////////////////////
       	//Historisation de modifications
+      	:ZF_InitMemo()
       	
       	SI :ZF_bModeAjout() ALORS
-      		:AjouteHistorique("Création de la tache")
+      		:ZF_SetMsgHisto("Création de la tache")
+      		//:AjouteHistorique("Création de la tache")
       	SINON
       		
       		//User story parente
-      		si m_EnrOrigine.IDScr_UserStory <> :m_oUserStoryParent.ZF_Get_IdUnique() ALORS
-      			:AjouteHistorique("Changement d'user story")
-      		FIN
+      		:ZF_HistoriseInfo("Changement d'user story",Scr_Tache.IDScr_Tache..nom,m_oUserStoryParent.ZF_Get_IdUnique())
+      //		si m_EnrOrigine.IDScr_UserStory <> :m_oUserStoryParent.ZF_Get_IdUnique() ALORS
+      //			:AjouteHistorique("Changement d'user story")
+      //		FIN
       		
       		//Ordre
-      		si m_EnrOrigine.Ordre <> :m_nOrdre ALORS
-      			:AjouteHistorique(ChaîneConstruit("Changement de l'ordre de la tache : nouvelle position : %1", :m_nOrdre))
-      		FIN
+      		:ZF_HistoriseInfo("Changement de l'ordre de la tache. Nouvelle position : %1", Scr_Tache.Ordre..Nom, :m_nOrdre)
+      //		si m_EnrOrigine.Ordre <> :m_nOrdre ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Changement de l'ordre de la tache : nouvelle position : %1", :m_nOrdre))
+      //		FIN
       		
       		//Description de la tache
-      		si m_EnrOrigine.Description <> :m_sDescription ALORS
-      			:AjouteHistorique(ChaîneConstruit([
+      		:ZF_HistoriseInfo([
       			Changement de la description de la tache :
       			%1
-      			], :m_sDescription))
-      		FIN
+      		], Scr_Tache.Description..Nom, :m_sDescription)
+      //		si m_EnrOrigine.Description <> :m_sDescription ALORS
+      //			:AjouteHistorique(ChaîneConstruit([
+      //			Changement de la description de la tache :
+      //			%1
+      //			], :m_sDescription))
+      //		FIN
       		
       		//Attribut brouillon
-      		si m_EnrOrigine.Top_Brouillon <> :m_bBrouillon ALORS
+      		si ZF_bRubEstModifiee(Scr_Tache.Top_Brouillon..Nom, :m_bBrouillon) ALORS
+      //		si m_EnrOrigine.Top_Brouillon <> :m_bBrouillon ALORS
       			si :m_bBrouillon ALORS
-      				:AjouteHistorique("La tache est devenue un brouillon")
+      				:ZF_SetMsgHisto("La tache est devenue un brouillon")
+      //				:AjouteHistorique("La tache est devenue un brouillon")
       			sinon
-      				:AjouteHistorique("La tache n'est plus un brouillon")
+      				:ZF_SetMsgHisto("La tache n'est plus un brouillon")
+      //				:AjouteHistorique("La tache n'est plus un brouillon")
       			FIN
       		FIN
       		
       		//Attribut tache technique
-      		si m_EnrOrigine.Top_tache_tech <> :m_btache_tech ALORS
+      		SI ZF_bRubEstModifiee(Scr_Tache.Top_tache_tech..Nom, :m_bBrouillon) ALORS
+      //		si m_EnrOrigine.Top_tache_tech <> :m_btache_tech ALORS
       			si :m_btache_tech ALORS
-      				:AjouteHistorique("La tache est devenue une tache technique")
+      				:ZF_SetMsgHisto("La tache est devenue une tache technique")
+      //				:AjouteHistorique("La tache est devenue une tache technique")
       			sinon
-      				:AjouteHistorique("La tache n'est plus une tache technique")
+      				:ZF_SetMsgHisto("La tache n'est plus une tache technique")
+      //				:AjouteHistorique("La tache n'est plus une tache technique")
       			FIN
       		FIN
       		
       		//Attribut annulé
-      		si m_EnrOrigine.Top_Annule <> :m_bAnnule ALORS
+      		SI ZF_bRubEstModifiee(Scr_Tache.Top_Annule..Nom, :m_bAnnule) ALORS
+      //		si m_EnrOrigine.Top_Annule <> :m_bAnnule ALORS
       			si :m_bAnnule ALORS
-      				:AjouteHistorique("La tache est annulée")
+      				:ZF_SetMsgHisto("La tache est annulée")
+      //				:AjouteHistorique("La tache est annulée")
       			sinon
-      				:AjouteHistorique("La tache n'est plus annulée")
+      				:ZF_SetMsgHisto("La tache n'est plus annulée")
+      //				:AjouteHistorique("La tache n'est plus annulée")
       			FIN
       		FIN
       		
       		//Sprint de réalisation
-      		si m_EnrOrigine.Num_Sprint_Realisation <> :m_nNum_Sprint_Realisation ALORS
-      			:AjouteHistorique(ChaîneConstruit("Modification du sprint de réalisation : %1", ...
-      				:m_nNum_Sprint_Realisation))
-      		FIN
+      		:ZF_HistoriseInfo("Modification du sprint de réalisation : %1",Scr_Tache.Num_Sprint_Realisation..Nom, :m_nNum_Sprint_Realisation)
+      //		si m_EnrOrigine.Num_Sprint_Realisation <> :m_nNum_Sprint_Realisation ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Modification du sprint de réalisation : %1", ...
+      //				:m_nNum_Sprint_Realisation))
+      //		FIN
       		
       		//Poids de la tache.
-      		si m_EnrOrigine.Poids <> :m_nPoids ALORS
-      			:AjouteHistorique(ChaîneConstruit("Modification du poids de la tache : %1", :m_nPoids))
-      		FIN
+      		:ZF_HistoriseInfo("Modification du poids de la tache : %1",Scr_Tache.Poids..Nom, :m_nPoids)
+      //		si m_EnrOrigine.Poids <> :m_nPoids ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Modification du poids de la tache : %1", :m_nPoids))
+      //		FIN
       		
       		//Sprint prévisionnel
-      		si m_EnrOrigine.Num_Sprint_Previsionnel <> :m_nNum_Sprint_Previsionnel ALORS
-      			:AjouteHistorique(ChaîneConstruit("Changement du sprint prévisionnel : %1", :m_nNum_Sprint_Previsionnel))
-      		FIN
+      		:ZF_HistoriseInfo("Changement du sprint prévisionnel : %1",Scr_Tache.Num_Sprint_Previsionnel..Nom, :m_nNum_Sprint_Previsionnel)
+      //		si m_EnrOrigine.Num_Sprint_Previsionnel <> :m_nNum_Sprint_Previsionnel ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Changement du sprint prévisionnel : %1", :m_nNum_Sprint_Previsionnel))
+      //		FIN
       		
       		//Poids prévisionnel de la tache.
-      		si m_EnrOrigine.Poids_Previsionnel <> :m_nPoids_Previsionnel ALORS
-      			:AjouteHistorique(ChaîneConstruit("Modification du poids prévisionnel de la tache : %1",...
-      				:m_nPoids_Previsionnel))
-      		FIN
+      		:ZF_HistoriseInfo("Modification du poids prévisionnel de la tache : %1",Scr_Tache.Poids_Previsionnel..Nom, :m_nPoids_Previsionnel)
+      //		si m_EnrOrigine.Poids_Previsionnel <> :m_nPoids_Previsionnel ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Modification du poids prévisionnel de la tache : %1",...
+      //				:m_nPoids_Previsionnel))
+      //		FIN
       		
       		//Sprint de démarrage
-      		SI m_EnrOrigine.Num_Sprint_Demarrage <> :m_nNum_Sprint_Demarrage ALORS
-      			:AjouteHistorique(ChaîneConstruit("Changement du sprint de démarrage : %1", :m_nNum_Sprint_Demarrage))
-      			
-      		FIN
+      		:ZF_HistoriseInfo("Changement du sprint de démarrage : %1",Scr_Tache.Num_Sprint_Demarrage..Nom, :m_nNum_Sprint_Demarrage)
+      //		SI m_EnrOrigine.Num_Sprint_Demarrage <> :m_nNum_Sprint_Demarrage ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Changement du sprint de démarrage : %1", :m_nNum_Sprint_Demarrage))
+      //		FIN
       		
-      		si m_EnrOrigine.CMTR <> :m_sCMTR ALORS
-      			:AjouteHistorique(ChaîneConstruit([
+      		:ZF_HistoriseInfo([
       			Modification du commentaire :
       			%1
-      			], :m_sCMTR))
-      		FIN
+      			], Scr_Tache.CMTR..Nom, :m_sCMTR)
+      //		si m_EnrOrigine.CMTR <> :m_sCMTR ALORS
+      //			:AjouteHistorique(ChaîneConstruit([
+      //			Modification du commentaire :
+      //			%1
+      //			], :m_sCMTR))
+      //		FIN
       		
       		//N° de ticket incident
-      		si m_EnrOrigine.NumTicketIncident <> :m_nNumTicketIncident ALORS
-      			:AjouteHistorique(ChaîneConstruit("Changement du N° de ticket d'incident : %1", :m_nNumTicketIncident))
-      		FIN
+      		:ZF_HistoriseInfo("Changement du N° de ticket d'incident : %1", Scr_Tache.NumTicketIncident..Nom, :m_nNumTicketIncident)
+      //		si m_EnrOrigine.NumTicketIncident <> :m_nNumTicketIncident ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Changement du N° de ticket d'incident : %1", :m_nNumTicketIncident))
+      //		FIN
       		
       		//Développeur associé à la tache.
-      		si :m_oUsr_Dev = null alors
-      			SI m_EnrOrigine.IDScr_Usr_Dev <> 0 ALORS
-      				:AjouteHistorique("Retrait du développeur, sur la tache.")
-      			FIN
-      		sinon
-      			si m_EnrOrigine.IDScr_Usr_Dev <> :m_oUsr_Dev.ZF_Get_IdUnique() ALORS
-      				:AjouteHistorique(ChaîneConstruit("Changement du développeur : %1", :m_oUsr_Dev.p_sNom))
+      		si :ZF_bRubEstModifiee(Scr_Tache.IDScr_Usr_Dev..nom, :ZF_IdSiNonNull(:m_oUsr_Dev)) ALORS
+      			SI :m_oUsr_Dev = Null ALORS
+      				:ZF_SetMsgHisto("Retrait du développeur, sur la tache.")
+      			SINON
+      				:ZF_SetMsgHisto(ChaîneConstruit("Changement du développeur : %1", :m_oUsr_Dev.p_sNom))
       			FIN
       		FIN
+      //		si :m_oUsr_Dev = null alors
+      //			SI m_EnrOrigine.IDScr_Usr_Dev <> 0 ALORS
+      //				:AjouteHistorique("Retrait du développeur, sur la tache.")
+      //			FIN
+      //		sinon
+      //			si m_EnrOrigine.IDScr_Usr_Dev <> :m_oUsr_Dev.ZF_Get_IdUnique() ALORS
+      //				:AjouteHistorique(ChaîneConstruit("Changement du développeur : %1", :m_oUsr_Dev.p_sNom))
+      //			FIN
+      //		FIN
       	fin
       fin
      type : 458752
@@ -581,7 +629,7 @@ class :
       PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre()<metier>:Vide
       
       //Enregistrement de l'historique des modifications
-      :EnregHisto()
+      //:EnregHisto()
      type : 458752
    -
      name : Get_IdUnique
@@ -694,31 +742,6 @@ class :
       //FIN
      type : 458752
    -
-     name : oTachesSelonStatut
-     procedure_id : 1444819982169819732
-     type_code : 12
-     code : |1+
-      procédure publique globale oTachesSelonStatut(nStatut_P est un entier):ClColTache
-      
-      
-      //sdMesBrouillons est une Source de Données
-      sReq est une chaîne
-      oTaches est un ClColTache
-      
-      	
-      //Récupération des taches en brouillon, de l'utilisateur.
-      sReq = [
-      	SELECT
-      		Scr_Tache.*
-      	FROM Scr_Tache
-      	WHERE Scr_Tache.Statut = [%nStatut_P%]
-      ]
-      
-      oTaches.ZF_LoadSQL(sReq)
-      
-      RENVOYER oTaches
-     type : 458752
-   -
      name : sExport
      procedure_id : 1444819982169885268
      type_code : 12
@@ -793,8 +816,14 @@ class :
       
       sRetour est une chaîne 
       
+      
+      si :m_nStatut = 0 ALORS
+      	:m_nStatut = get_statut_tache()
+      	trace("Etat à '0' : " + :m_sCodeTache)
+      FIN
+      
+      
       selon :m_nStatut
-      	
       	cas ::cstStatut_Brouillon
       		sRetour = "Brouillon"
       	CAS ::cstStatut_a_coter
@@ -863,9 +892,10 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //changeOrdre (<nChangePos_P> est entier)
+      //changeOrdre (<oTache_p> est ClDbTache, <nChangePos_P> est entier)
       //
       // Paramètres :
+      //	oTache_p (ClDbTache) : <indiquez ici le rôle de oTache_p>
       //	nChangePos_P (entier) : <indiquez ici le rôle de nChangePos_P>
       // Valeur de retour :
       // 	Aucune
@@ -873,17 +903,17 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure changeOrdre(nChangePos_P est un entier)<metier>:Vide
+      procédure globale changeOrdre(oTache_p est un ClDbTache, nChangePos_P est un entier)<metier>:Vide
       
       nPosInit		est un entier
       nNouvPos		est un entier
       nNbPos			est un entier
-      oLstTachesUS	est un ClColTache	= ClColTache.aoFromUS(:m_oUserStoryParent)	//:m_oUserStoryParent.aoListeTaches()
+      oLstTachesUS	est un ClColTache	= ClColTache.aoFromUS(oTache_p.p_oUserStoryParent)
       oTacheTmp		est un ClDbTache dynamique
       bModifTache		est un booléen
       nDecalage		est un entier
       
-      nPosInit	= :p_nOrdre
+      nPosInit	= oTache_p.p_nOrdre
       nNbPos		= oLstTachesUS.ZF_nTaille()
       
       selon nChangePos_P
@@ -900,7 +930,6 @@ class :
       		nNouvPos = nNbPos
       		nDecalage = -1
       	autres cas:
-      //		ExceptionDéclenche(1,"Erreur de paramètre : %1")
       		m_oExOrdreTachePbParam.ZF_Declenche([nChangePos_P])
       fin
       
@@ -909,7 +938,7 @@ class :
       	bModifTache = faux
       	
       	//Est on sur une autre tache que moimeme ?
-      	si oTacheTmp.Get_IdUnique() <> :Get_IdUnique() alors
+      	si oTacheTmp.Get_IdUnique() <> oTache_p.Get_IdUnique() alors
       		//Oui :
       		
       		si min(nPosInit, nNouvPos) <= oTacheTmp.p_nOrdre <= Max(nPosInit, nNouvPos) alors
@@ -919,8 +948,8 @@ class :
       	FIN
       FIN
       
-      :p_nOrdre = nNouvPos
-      :ZF_Enregistre()
+      oTache_p.p_nOrdre = nNouvPos
+      oTache_p.ZF_Enregistre()
      type : 458752
    -
      name : Init_ObjBD
@@ -1008,6 +1037,32 @@ class :
       si Scr_Tache.Statut = 0 ALORS
       	stop
       FIN
+     type : 458752
+   -
+     name : ZF_Charge
+     procedure_id : 1546100837482625184
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDB.ZF_Charge
+      PROCÉDURE PROTÉGÉE ZF_Charge(bSansRechargement_P est un booléen = Faux)<métier>:Vide
+      ClZF_ObjDB.ZF_Charge(bSansRechargement_P)
+     type : 458752
+   -
+     name : ZF_sNomTable
+     procedure_id : 1546100876140093047
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.ZF_sNomTable
+      PROCÉDURE VIRTUELLE ZF_sNomTable() <métier>:chaîne
+      renvoyer ClZF_ObjDB.ZF_sNomTable()
+     type : 458752
+   -
+     name : setCallBackostEnreg
+     procedure_id : 1546103362973200533
+     type_code : 12
+     code : |1-
+      PROCÉDURE PRIVÉ setCallBackostEnreg()<métier>:Vide
+      :m_procCallPostEnreg = goApp.EnregHistoBDD
      type : 458752
   properties :
    -

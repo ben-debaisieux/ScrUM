@@ -37,15 +37,6 @@ class :
       procédure Destructeur()
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 1399526363785230622
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById_old(local nId_P est un entier):Vide
-      :ZF_addItem(ClDbProjet.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 1399794257948065295
      type_code : 12
@@ -62,17 +53,6 @@ class :
       // Redéfinition de la méthode ClColObjDB.Init
       PROCÉDURE  Init():Vide
       ZF_InitCol(:m_aoProjets)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 1422511757147425270
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données):Vide
-      
-      oObj est un ClDbProjet(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Projet)
      type : 458752
    -
      name : aoListeProjets
@@ -345,15 +325,6 @@ class :
       renvoyer oColRetour
      type : 458752
    -
-     name : GetAll_old
-     procedure_id : 1468674885928471753
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE public GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Projet..nom)
-     type : 458752
-   -
      name : FiltreDirection
      procedure_id : 1542323825876377157
      type_code : 12
@@ -406,8 +377,8 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure protégée p_aoObj(aValeur est un tableau de ClDbProjet dynamique)
-         :m_aoProjets<- aValeur
+         procédure protégée p_aoObj(aValeur est un tableau de ClDbProjet dynamique):vide
+         :m_aoProjets <- aValeur
         type : 2031616
      template_refs : []
   procedure_templates : []

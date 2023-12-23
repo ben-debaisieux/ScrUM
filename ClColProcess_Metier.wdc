@@ -39,15 +39,6 @@ class :
       
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 815566320504061
-     type_code : 12
-     code : |1+
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbProcess_Metier.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 815566320504062
      type_code : 12
@@ -64,16 +55,6 @@ class :
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoProcess_Metier)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 815566320504064
-     type_code : 12
-     code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbProcess_Metier(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Process_Metier)
      type : 458752
    -
      name : oCol_De_IDScr_Projet
@@ -153,15 +134,6 @@ class :
       HAnnuleDéclaration(sdListeProcess)
       
       RENVOYER aOProcess
-     type : 458752
-   -
-     name : GetAll_old
-     procedure_id : 1468677226747730612
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Process_Metier..nom)
      type : 458752
    -
      name : sClasseObjDbAsso

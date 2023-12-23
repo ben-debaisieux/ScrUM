@@ -23,7 +23,8 @@ class :
       	m_ZF_bEstSupprime				est un booléen
       	m_ZF_bEnregistrementEnCours		est un booléen
       	m_ZF_bModif						est un booléen
-      	
+      protege
+      	m_procCallPostEnreg				est une procedure		<copie=faux,Sérialise=faux>
       public
       GLOBAL
       	mg_oExDupplicationObjet			est un ClZF_Exception dynamique
@@ -82,7 +83,7 @@ class :
       PROCEDURE Destructeur()
       
       SI :m_ZF_bModif ALORS
-      	Trace("Libération d'un objet non enregistré : [%:p_sNomTable%] ID : [%:p_ZF_nIdUnique%]")
+      	Trace("Libération d'un objet non enregistré : [%:p_ZF_sNomTable%] ID : [%:p_ZF_nIdUnique%]")
       	//STOP SI PAS EnModeTestAutomatique() //et p_ZF_nIdUnique > 0
       FIN
      type : 655360
@@ -129,7 +130,7 @@ class :
       	
       	
       	//Est ce que l'enregistrement courant correspond à l'enregistrement de la classe ?
-      	SI :ZF_Get_IdUnique() <> {:p_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique} ALORS
+      	SI :ZF_Get_IdUnique() <> {:p_ZF_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique} ALORS
       		//Non : Repositionnement, mais sans actualisation des membres de l'instance.
       		:ZF_Charge(Vrai)
       	FIN
@@ -140,7 +141,7 @@ class :
       	//Traitements précédent l'enregistrement, avant le transfert des membres, dans les rubriques de la base
       	:pre_enregistre()
       	
-      	MémoireVersFichier(objet,:p_sNomTable)
+      	MémoireVersFichier(objet,:p_ZF_sNomTable)
       	
       	//Retraitement des valeurs des ids des objets
       	:ZF_GetObjectsIds()
@@ -160,12 +161,12 @@ class :
       		SI :m_ZF_bEstSupprime ALORS
       			//Rien a faire : l'élément n'était pas enregistré
       		SINON
-      			SI PAS HAjoute(:p_sNomTable) ALORS
+      			SI PAS HAjoute(:p_ZF_sNomTable) ALORS
       				mg_oExEchecEnregistrement.ZF_Declenche()
       			sinon
       				
       				//Récupération de l'ID généré
-      				:p_ZF_nIdUnique = {:p_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique}
+      				:p_ZF_nIdUnique = {:p_ZF_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique}
       				
       				//Enregistrement de l'objet, avec sa nouvelle valeur d'adresse
       				sKey = :ZF_sGetNomInstance()
@@ -177,7 +178,7 @@ class :
       		
       		SI :m_ZF_bEstSupprime ALORS
       			:ZF_Charge(Vrai)	//Bug WD : si on ne se repositionne pas : il n'est plus positionné
-      			SI PAS HSupprime(:p_sNomTable) ALORS
+      			SI PAS HSupprime(:p_ZF_sNomTable) ALORS
       				mg_oExEchecEnregistrement.ZF_Declenche()
       			sinon
       				sRef est une chaîne
@@ -190,7 +191,7 @@ class :
       			
       		SINON
       			si :m_ZF_bModif alors
-      				SI PAS HModifie(:p_sNomTable) ALORS
+      				SI PAS HModifie(:p_zf_sNomTable) ALORS
       					mg_oExEchecEnregistrement.ZF_Declenche()
       				sinon
       					oObjDb est un ClZF_ObjDB dynamique <- ClZF_App.mg_aoInstances[:ZF_sGetNomInstance()]
@@ -203,16 +204,21 @@ class :
       	
       	//Traitements post enregistrement
       	:post_enregistre()
+      
+      	
+      	si m_procCallPostEnreg <> null ALORS
+      		//Procédure de callback, après enregistrement
+      		:m_procCallPostEnreg(objet)
+      	FIN
+      	
       	
       	::mg_oApp.TranFin()
       	
       	//On mémorise que l'enregistrement est effectué.
       	:m_ZF_bModif = faux
       faire
-      	sMsg est une chaîne 
-      	sMsg = ExceptionInfo(errMessage)
+      	Trace(ExceptionInfo(errMessage) + "-" + ExceptionInfo(errPile))
       	::mg_oApp.TranAnnule()
-      	ExceptionPropage()
       sinon
       	//A t on initialisé le top 'en cours d'enregistrement' dans la procédure ?
       	si bLeverTopEnreg ALORS
@@ -428,9 +434,9 @@ class :
       pROCEDURE PROTÉGÉE ZF_Charge(bSansRechargement_P est un booléen = faux)<métier>:Vide
       
       si :ZF_bModeAjout() alors
-      	hraz(:p_sNomTable)
+      	hraz(:p_ZF_sNomTable)
       	SI PAS bSansRechargement_P ALORS
-      		FichierVersMémoire(objet, :p_sNomTable)
+      		FichierVersMémoire(objet, :p_ZF_sNomTable)
       		//Chargement des objets enfants
       		ZF_GetObjectsFromIds()
       		Init_ObjBD()
@@ -493,9 +499,9 @@ class :
       		nVal			= {sPropId,indVariable}
       		
       		si nVal = 0 ALORS
-      			{:p_sNomTable + "." + sRub,indRubrique}..Null = vrai
+      			{:p_ZF_sNomTable + "." + sRub,indRubrique}..Null = vrai
       		sinon
-      			{:p_sNomTable + "." + sRub,indRubrique} = nVal
+      			{:p_ZF_sNomTable + "." + sRub,indRubrique} = nVal
       		FIN
       	FIN
       FIN
@@ -605,10 +611,12 @@ class :
       Var			est une Description de Variable  
       vInfoObj	est un variant
       
+      //QUAND EXCEPTION dans
+      	
       // Liste des variables de l'objet Def
       POUR TOUT Var DE DefObj.Variable
       	//stop si Var.Nom = "m_ZF_nPointeur"
-      	SI PAS Var.Global et Var.AttributSérialise <> "" et pas Var.Nom dans("m_ZF_aListCol") ALORS
+      	SI PAS Var.Global et Var.AttributSérialise <> "" et pas Var.Nom dans("m_ZF_aListCol", "m_procCallPostEnreg") ALORS
       		SI Var.Définition.Type <> wlInstance ALORS
       			vInfoObj[Var.Nom] = {":" + Var.Nom, indVariable}
       		SINON
@@ -618,7 +626,9 @@ class :
       		FIN
       	FIN
       FIN
-      
+      //FAIRE
+      //	stop
+      //FIN
       
       renvoyer VariantVersJSON(vInfoObj)
      type : 458752
@@ -650,8 +660,8 @@ class :
      type_code : 103
      p_codes :
       -
-        code : |1-
-         procédure publique p_bEnregistrementEnCours() : booléen
+        code : |1+
+         procédure publique p_bEnregistrementEnCours()<metier> : booléen
          renvoyer :m_ZF_bEnregistrementEnCours
         type : 1966080
      template_refs : []

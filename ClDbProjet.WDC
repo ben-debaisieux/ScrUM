@@ -630,7 +630,7 @@ class :
       
       
       oListeInvites est un ClColUsr <- :ZF_GetCol(ClAppScrum.cstColUsrInvite)
-      si pas oListeInvites.ZF_recherche(oUsr_P) ALORS
+      si pas oListeInvites.ZF_bTrouve(oUsr_P) ALORS
       	//Ajout de l'utilisateur à la liste.
       	oListeInvites.ZF_addItem(oUsr_P)
       FIN
@@ -769,31 +769,6 @@ class :
       renvoyer nRetour
      type : 458752
    -
-     name : ReaffecteToutesUsAuCDP_old
-     procedure_id : 1444815455092683928
-     type_code : 12
-     code : |1+
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //ReaffecteToutesUsAuCDP_old ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      PROCEDURE ReaffecteToutesUsAuCDP_old():Vide
-      
-      //oUS est un ClDbUserStory dynamique
-      //POUR TOUT ELEMENT oUS DE ClColUserStory.oFromProjet(objet).aitems()	// :aoListeUS().aItems())
-      //	oUS.p_oUsrResponsable = :m_oUsr_ChefProjet
-      //	oUS.ZF_Enregistre()
-      //FIN
-     type : 458752
-   -
      name : GetObj
      procedure_id : 1444815455092749464
      type_code : 12
@@ -920,7 +895,7 @@ class :
      procedure_id : 1444815455093208216
      type_code : 12
      code : |1+
-      procédure bUsrAffecteAuProjet(oUsr_p est un ClDbUsr):booléen
+      procédure bUsrAffecteAuProjet(oUsr_p est un ClDbUsr)<zombie>:booléen
       
       bRetour est un booléen
       //oUsr_tmp est un ClDbUsr dynamique
@@ -1061,75 +1036,6 @@ class :
       FIN
       
       RENVOYER ""
-     type : 458752
-   -
-     name : aGrpInvite_old
-     procedure_id : 1444815455093535896
-     type_code : 12
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //aGrpInvite_old ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      FONCTION aGrpInvite_old()<métier>/*:tableau associatif de ClColUsr
-      <§cs:10§>
-      sReq est une chaîne<§cs:10§>
-      sCle est une chaîne<§cs:10§>
-      oColUsr est un ClColUsr dynamique<§cs:10§>
-      <§cs:10§>
-      pour tout elEMENT oColUsr, sCle de :m_aClassifInvite<§cs:10§>
-      	<§cs:10§>
-      	oColUsr.ZF_vider()<§cs:10§>
-      	<§cs:10§>
-      	sReq = [<§cs:10§>
-      		SELECT<§cs:10§>
-      			Scr_Usr.*<§cs:10§>
-      			<§cs:10§>
-      		FROM Scr_Usr_Projet<§cs:10§>
-      			INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)<§cs:10§>
-      		<§cs:10§>
-      		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]<§cs:10§>
-      			AND Scr_Usr_Projet.RoleSurLeProjet = [%sCle%]<§cs:10§>
-      	]<§cs:10§>
-      	<§cs:10§>
-      	oColUsr.ZF_LoadSQL(sReq)<§cs:10§>
-      	<§cs:10§>
-      	:m_aClassifInvite[sCle] <- oColUsr<§cs:10§>
-      FIN<§cs:10§>
-      <§cs:10§>
-      <§cs:10§>
-      renvoyer :m_aClassifInvite<§cs:10§>
-      <§cs:10§>
-      */
-      
-      //si bForce_p ou pas :m_oListeInvites.p_bEstCharge ALORS
-      //	:m_oListeInvites.ZF_vider()
-      //	
-      //	
-      //	
-      //	sReq = [
-      //		SELECT
-      //			--Scr_Usr_Projet.*
-      //			Scr_Usr_Projet.IDScr_Usr
-      //			
-      //		FROM Scr_Usr_Projet
-      //		
-      //		WHERE Scr_Usr_Projet.IDScr_Projet = [%:ZF_Get_IdUnique()%]
-      //			AND Scr_Usr_Projet.Top_Invite = 1
-      //	]
-      //	
-      //	m_oListeInvites.ZF_LoadSQL(sReq)
-      //fin
-      //
-      //renvoyer :m_oListeInvites
      type : 458752
    -
      name : sRepresentation

@@ -131,54 +131,6 @@ class :
       renvoyer DateVersChaîne(:m_dDateDebut, "JJ/MM") + " - " + DateVersChaîne(:m_dDateFin, "JJ/MM/AA")
      type : 458752
    -
-     name : Sprint_Num_Actuel
-     procedure_id : 1444818852565370214
-     type_code : 12
-     code : |1+
-      // Résumé : Renvoie le numéro du sprint actuel / Renvoie le dernier sprint réalisé si aucun sprint trouvé
-      // Syntaxe :
-      //Sprint_Num_Actuel ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      FONCTION GLOBAL Sprint_Num_Actuel()<metier>:vide
-      
-      //nNumSprint est un entier
-      //dDateActuelle est une date = DateDuJour()
-      sdToutLesSprints est une source de Données
-      sReq est une chaîne
-      
-      sReq = [
-      	SELECT Scr_Sprint.Num_Sprint,
-      		   Scr_Sprint.VelociteMoyenneRes
-      	FROM Scr_Sprint
-      	WHERE Scr_Sprint.Top_Termine = 0
-      ]
-      
-      ::mg_oApp.Rsql(sdToutLesSprints,sReq)
-      HLitPremier(sdToutLesSprints)
-      Si pas HEnDehors(sdToutLesSprints) alors
-      	//On récupère le numéro du sprint
-      	goApp.p_nNumeroDuSprintActuel = sdToutLesSprints.Num_Sprint
-      	goApp.m_nVelociteMoyenne = sdToutLesSprints.VelociteMoyenneRes
-      Sinon
-      	goApp.p_nNumeroDuSprintActuel	= 0
-      	goApp.m_nVelociteMoyenne		= 0
-      	//info("aucun sprint trouvé", ErreurInfo())
-      FIN
-      
-      HAnnuleDéclaration(sdToutLesSprints)
-      
-      //RENVOYER nNumSprint
-      
-     type : 458752
-   -
      name : Sprint_Points_Realise_Maj
      procedure_id : 1444818852565435750
      type_code : 12
@@ -213,8 +165,7 @@ class :
       mg_oApp.Rsql(sdRechercheNbPointRealise,sReq)
       HLitPremier(sdRechercheNbPointRealise)
       si htrouve(sdRechercheNbPointRealise) ALORS
-      	:m_nNbPointsRealise = sdRechercheNbPointRealise.Total
-      	:ZF_EstModif()
+      	:p_nNbPointsRealise = sdRechercheNbPointRealise.Total
       FIN
       
       HAnnuleDéclaration(sdRechercheNbPointRealise)
@@ -369,25 +320,6 @@ class :
       FIN
      type : 458752
    -
-     name : sExport
-     procedure_id : 1444818852566156646
-     type_code : 12
-     code : |1+
-      procédure sExport()<métier>:JSON
-      sRetour est un JSON
-      
-      sRetour.id					= :ZF_Get_IdUnique()
-      sRetour.sprint_start_note	= :m_snotedebutdesprint
-      sRetour.is_finish			= :m_btop_termine
-      sRetour.date_start			= :m_ddatedebut
-      sRetour.date_end			= :m_ddatefin
-      sRetour.nb_point_realised	= :m_nnbpointsrealise
-      sRetour.nb_weeks			= :m_nnbresemaines
-      sRetour.avg_velocity		= :m_nvelocitemoyenneres
-      
-      RENVOYER sRetour
-     type : 458752
-   -
      name : Init_ObjBD
      procedure_id : 1444818852566353254
      type_code : 12
@@ -455,33 +387,6 @@ class :
       FIN
      type : 458752
    -
-     name : ZF_Get_IdUnique_old
-     procedure_id : 1453197155214143318
-     type_code : 12
-     code : |1+
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //[ <Résultat> = ] ZF_Get_IdUnique_old ()
-      //
-      // Paramètres :
-      //	Aucun
-      
-      // Valeur de retour :
-      // 	entier : <indiquez ici le rôle de la valeur de retour>
-      //
-      // Exemple :
-      // <Indiquez ici un exemple d'utilisation>
-      //
-      procédure ZF_Get_IdUnique_old()
-      
-      
-      si Ancêtre.ZF_Get_IdUnique() > 0 ALORS
-      	renvoyer ancetre.ZF_Get_IdUnique()
-      sinon
-      	renvoyer 0
-      FIN
-     type : 458752
-   -
      name : oGet_SprintDeDate
      procedure_id : 1454721306253146521
      type_code : 12
@@ -495,14 +400,14 @@ class :
       
       //a faire : TOP 1
       sReq = [
-      SELECT<§cs:3§>
-      	Scr_Sprint.Num_Sprint<§cs:3§>
-      <§cs:3§>
-      FROM Scr_Sprint<§cs:3§>
-      <§cs:3§>
-      where '[%dDte_P%]' BETWEEN Scr_Sprint.DateDebut AND Scr_Sprint.DateFin<§cs:3§>
-      	<§cs:3§>
-      ORDER BY Scr_Sprint.Num_Sprint desc	<§cs:3§>
+      SELECT
+      	Scr_Sprint.Num_Sprint
+      
+      FROM Scr_Sprint
+      
+      where '[%dDte_P%]' BETWEEN Scr_Sprint.DateDebut AND Scr_Sprint.DateFin
+      	
+      ORDER BY Scr_Sprint.Num_Sprint desc	
       ]
       
       ::mg_oApp.RSQL(sdNumSpr,sReq)
@@ -513,71 +418,6 @@ class :
       HAnnuleDéclaration(sdNumSpr)
       
       renvoyer oSpr
-     type : 458752
-   -
-     name : nGetNbPoints_old
-     procedure_id : 1536812278637490698
-     type_code : 12
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //[ <Résultat> = ] nGetNbPoints_old (<nTypeFiltre_p> est entier)
-      //
-      // Paramètres :
-      //	nTypeFiltre_p (entier) : <indiquez ici le rôle de nTypeFiltre_p>
-      
-      // Valeur de retour :
-      // 	entier : <indiquez ici le rôle de la valeur de retour>
-      //
-      // Exemple :
-      // <Indiquez ici un exemple d'utilisation>
-      //
-      procédure privée nGetNbPoints_old(nTypeFiltre_p est un entier) <métier>:entier
-      
-      nRetour			est un entier
-      sdCountPoint	est une Source de Données
-      sReq			est une chaîne
-      sCondition		est une chaîne
-      sPoidsSel		est une chaîne
-      
-      sPoidsSel	= Scr_Tache.Poids..Nom
-      selon nTypeFiltre_p
-      	CAS ClColTache.cstGetPointsDemarres
-      		sCondition = Scr_Tache.Num_Sprint_Demarrage..nom
-      	cas ClColTache.cstGetPointsFini
-      		sCondition	= Scr_Tache.Num_Sprint_Fin..Nom
-      	CAS ClColTache.cstGetPointsReal
-      		sCondition	= Scr_Tache.Num_Sprint_Realisation..Nom
-      	CAS ClColTache.cstGetPointsPrev
-      		sCondition	= Scr_Tache.Num_Sprint_Previsionnel..Nom
-      		sPoidsSel	= Scr_Tache.Poids_Previsionnel..Nom
-      	AUTRE CAS
-      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche()
-      FIN
-      
-      
-      sReq = [
-      	
-      	SELECT
-      		SUM(Scr_Tache.Poids) AS NbrPoints
-      	
-      	FROM Scr_Tache
-      	
-      	WHERE 
-      		Scr_Tache.[%sCondition%]] = [%:ZF_Get_IdUnique()%]
-      		and Scr_Tache.Top_Annule = 0
-      
-      ]
-      ::mg_oApp.Rsql(sdCountPoint,sReq)
-      HLitPremier(sdCountPoint,hSansRafraîchir)
-      SI PAS HEnDehors(sdCountPoint) ALORS
-      	nRetour = sdCountPoint.NbrPoints
-      FIN
-      
-      HAnnuleDéclaration(sdCountPoint)
-      
-      
-      RENVOYER nRetour
      type : 458752
    -
      name : sRepresentation
@@ -669,8 +509,11 @@ class :
       -
         code : |1-
          procédure publique p_bTop_Termine(bValeur est un booléen)<métier>:vide
-         :ZF_EstModif()
-         :m_bTop_Termine=bValeur
+         
+         si :m_bTop_Termine <> bValeur alors
+         	:m_bTop_Termine = bValeur
+         	:ZF_EstModif()
+         FIN
         type : 2031616
      template_refs : []
    -
@@ -684,6 +527,16 @@ class :
          
          renvoyer :m_nNbPointsRealise
         type : 1966080
+      -
+        code : |1+
+         procédure p_nNbPointsRealise(nValeur_p est un entier)<métier>:vide
+         
+         SI :m_nNbPointsRealise <> nValeur_p ALORS
+         	:m_nNbPointsRealise = nValeur_p
+         	:ZF_EstModif()
+         FIN
+         
+        type : 2031616
      template_refs : []
   procedure_templates : []
   property_templates : []

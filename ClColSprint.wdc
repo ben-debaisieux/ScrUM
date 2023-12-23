@@ -42,15 +42,6 @@ class :
       
      type : 655360
    -
-     name : addItemById
-     procedure_id : 1404708185929454291
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<metier>:Vide
-      :ZF_addItem(ClDbSprint.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 1404708203109392511
      type_code : 12
@@ -69,22 +60,11 @@ class :
       ZF_InitCol(:m_aoSprint)
      type : 458752
    -
-     name : addItemBySource_old
-     procedure_id : 1422513183087778253
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données)<metier>:Vide
-      
-      oObj est un ClDbSprint(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.Num_Sprint)
-     type : 458752
-   -
-     name : aoListeSprint
+     name : oListeSprint
      procedure_id : 1456096739215100493
      type_code : 12
      code : |1-
-      procédure publique globale aoListeSprint(nBorneMin_p est un entier = 0, nBorneMax_p est un entier = 0)<metier>:ClColSprint
+      procédure publique globale oListeSprint(nBorneMin_p est un entier = 0, nBorneMax_p est un entier = 0)<metier>:ClColSprint
       
       
       sReq		est une chaîne
@@ -161,15 +141,6 @@ class :
       
       
       renvoyer ::mg_nNumSprint_max
-     type : 458752
-   -
-     name : GetAll
-     procedure_id : 1468675684798997025
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE public GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Sprint..nom)
      type : 458752
    -
      name : sClasseObjDbAsso

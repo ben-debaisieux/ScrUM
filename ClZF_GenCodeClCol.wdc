@@ -60,7 +60,8 @@ class :
       sClasse = :GenDeclaration() + RC
       sClasse += :GenConstructeur() + RC
       sClasse += :GenDestructeur() + RC
-      sClasse += :GenProc_addItemById() + RC
+      sClasse += :GenPropriete() + RC
+      //sClasse += :GenProc_addItemById() + RC
       sClasse += :GenProc_aItems() + RC
       sClasse += :GenProc_Init() + RC
       sClasse += :GenProc_sClasseObjDbAsso() + RC
@@ -135,8 +136,8 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure privée GenProc_addItemById():chaine
-      a supprimer
+      procédure privée GenProc_addItemById()<zombie>:chaine
+      
       sNomProc est une chaîne = "addItemById"
       sRetour est une chaine = [
       PROCÉDURE [%sNomProc%](LOCAL nId_P est un entier)<métier>:Vide
@@ -617,6 +618,101 @@ class :
      code : |1-
       procedure globale sNomFct_ChargeFrom(clOClGen_p est un ClZF_GenCodeFic)<metier>:chaine
       renvoyer "aoFrom" + clOClGen_p.p_sNomUsage
+     type : 458752
+   -
+     name : GenProc_sClasseObjDbAsso
+     procedure_id : 1546463835400608446
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenProc_sClasseObjDbAsso ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée GenProc_sClasseObjDbAsso()<métier>:chaine
+      
+      sNomProc est une chaîne = "sClasseObjDbAsso"
+      sRetour est une chaine = [
+      	PROCÉDURE [%sNomProc%]()<métier>:chaîne
+      	sClasse est une chaîne = [%m_sNomClasseBD%]
+      	RENVOYER sClasse
+      	]
+      
+      SI :m_bNatif ALORS
+      	//Génération du code natif de l'objet pour WD
+      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      FIN
+      
+      
+      RENVOYER sRetour
+      
+     type : 458752
+   -
+     name : GenPropriete
+     procedure_id : 1550341069125015799
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GenPropriete ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	sRub_p (chaîne ANSI) : <indiquez ici le rôle de sRub_p>
+      procédure GenPropriete():chaine
+      
+      sRetour		est une chaîne
+      sPropR		est une chaîne
+      sPropw		est une chaîne
+      sPropDecl	est une chaîne
+      sPropriete	est une chaîne
+      
+      
+      
+      
+      si :m_bNatif ALORS
+      	sPropDecl = "PROCEDURE"
+      sinon
+      	sPropDecl = "PROPRIETE"
+      FIN
+      
+      
+      sPropR = [
+      	[%sPropDecl%] p_aoObj():tableau de [%:m_sNomClasseBD%]
+      	RENVOYER :[%:m_sNomListeObj%]
+      ]
+      
+      sPropw = [
+      	[%sPropDecl%] p_aoObj(aValeur est un tableau de [%:m_sNomClasseBD%] dynamique):vide
+      	:[%:m_sNomListeObj%] <- aValeur
+      ]
+      
+      
+      
+      SI :m_bNatif ALORS
+      	sRetour = GenBlocCL_Propriete(sPropR, sPropw, sPropriete)
+      sinon
+      	sRetour = sPropR + rc + rc + sPropw + RC 
+      FIN
+      
+      
+      
+      renvoyer sRetour
      type : 458752
   procedure_templates : []
   property_templates : []

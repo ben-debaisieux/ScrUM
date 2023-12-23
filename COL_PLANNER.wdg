@@ -29,6 +29,7 @@ procedure_set :
       	sDescription	est une chaine
       	sEtag			est une chaine
       	astDocument		est un tableau de STR_SHAREPOINT_DOC
+      	aStEtiquette est un tableau associatif de STR_PLANNER_ETIQUETTE
       FIN
       
       STR_PLANNER_Bucket est une structure
@@ -42,8 +43,14 @@ procedure_set :
       	sIDPlanner	est une chaine
       	sNom_Planer	est une chaine
       	sIDGroupe	est une chaine
+      	aStEtiquette est un tableau associatif de STR_PLANNER_ETIQUETTE
       	
       	aStBucket	est un tableau associatif de STR_PLANNER_Bucket
+      FIN
+      
+      STR_PLANNER_ETIQUETTE est une structure
+      	sIDCategory est une chaine
+      	sNom_Category est une chaine
       FIN
      type : 720896
   procedures :
@@ -52,7 +59,7 @@ procedure_set :
      procedure_id : 1539589958500771586
      type_code : 15
      code : |1+
-      PROCÉDURE PLANNER_Construction_Execution_Requete(LOCAL sURL_p est une chaîne, LOCAL nMéthode_p est un entier, LOCAL sContenu_p est une chaîne = "",LOCAL sEtag_Entete_p est une chaine = ""):restRéponse
+      PROCÉDURE prive PLANNER_Construction_Execution_Requete(LOCAL sURL_p est une chaîne, LOCAL nMéthode_p est un entier, LOCAL sContenu_p est une chaîne = "",LOCAL sEtag_Entete_p est une chaine = "")<métier>:restRéponse
       
       // variables
       rest_Requete	est un restRequête
@@ -231,7 +238,7 @@ procedure_set :
      procedure_id : 1539590061580207204
      type_code : 15
      code : |1+
-      PROCÉDURE PLANNER_ID_GROUPES(LOCAL sNomGroupes est une chaîne):chaîne
+      PROCÉDURE PLANNER_ID_GROUPES(LOCAL sNomGroupes est une chaîne)<métier>:chaîne
       
       sIDGroupes		est une chaîne
       rest_Reponse	est une restRéponse
@@ -256,7 +263,8 @@ procedure_set :
      procedure_id : 1539590095940019483
      type_code : 15
      code : |1-
-      procédure PLANNER_Récupération_Liste_Bucket_Taches(LOCAL sIDPlanner_p est une chaine):tableau associatif de STR_PLANNER_Bucket
+      
+      procédure PLANNER_Récupération_Liste_Bucket_Taches(LOCAL stPlanner_p est un STR_PLANNER):tableau associatif de STR_PLANNER_Bucket
       
       // variables
       rest_Reponse		est un restRéponse
@@ -265,14 +273,19 @@ procedure_set :
       stPlanner_Bucket	est un STR_PLANNER_Bucket
       aStPlanner_Bucket	est un tableau associatif de STR_PLANNER_Bucket
       sIDBucket			est une chaine
+      stEtiquette		est un STR_PLANNER_ETIQUETTE
+      sIDCategory est une chaine
       
       // récupération des plans du groupe
-      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/plans/[%sIDPlanner_p%]/tasks",httpGet)
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/plans/[%stPlanner_p.sIDPlanner%]/tasks",httpGet)
       
       SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
       	// requête ok
       	vRetour = JSONVersVariant(rest_Reponse..Contenu)
       	POUR nLigne = 1 _À_ TableauOccurrence(vRetour.value)
+      		
+      		// vide toute la structure
+      		VariableRAZ(stPlanner_Task)
       		
       		sIDBucket = vRetour.value[nLigne].bucketId
       		
@@ -287,12 +300,35 @@ procedure_set :
       		
       		stPlanner_Task				= COL_PLANNER.PLANNER_stTask(vRetour.value[nLigne].id)
       		
-      		stPlanner_Task.sIDPlan		= sIDPlanner_p
+      		stPlanner_Task.sIDPlan		= stPlanner_p.sIDPlanner
       		stPlanner_Task.sIDBucket	= vRetour.value[nLigne].bucketId
       		stPlanner_Task.sIDTask		= vRetour.value[nLigne].id
       		stPlanner_Task.sNom_Task	= vRetour.value[nLigne].title
-      		stPlanner_Task.nPriorité	= vRetour.value[nLigne].priority		
+      		stPlanner_Task.nPriorité	= vRetour.value[nLigne].priority	
       		
+      		// tableau des étiquette relié à la tache 
+      		POUR i = 1 _À_ vRetour.value[nLigne].appliedCategories..Membre..Occurrence
+      			// on vite la structure des étiquettes
+      			VariableRAZ(stEtiquette)
+      			
+      			sIDCategory = vRetour.value[nLigne].appliedCategories..Membre[i]..Nom
+      			
+      			SI stPlanner_p.aStEtiquette[sIDCategory]..Existe ALORS
+      				stEtiquette.sIDCategory		= stPlanner_p.aStEtiquette[sIDCategory].sIDCategory
+      				stEtiquette.sNom_Category	= stPlanner_p.aStEtiquette[sIDCategory].sNom_Category
+      			SINON
+      				stEtiquette.sIDCategory		= sIDCategory
+      			FIN
+      			
+      			
+      			SI PAS stPlanner_Task.aStEtiquette[sIDCategory]..Existe ALORS
+      				stPlanner_Task.aStEtiquette[sIDCategory]	= allouer un STR_PLANNER_ETIQUETTE
+      				stPlanner_Task.aStEtiquette[sIDCategory]	= stEtiquette 
+      			FIN
+      			
+      		FIN	
+      		
+      		// ajoute la tache dans le bucket planner
       		TableauAjoute(aStPlanner_Bucket[sIDBucket].aStTask,stPlanner_Task)
       	FIN
       SINON
@@ -307,30 +343,31 @@ procedure_set :
      procedure_id : 1539590126004798071
      type_code : 15
      code : |1+
-      procédure PLANNER_Récupération_Liste_Planner_Par_Groupe(LOCAL sNomGroupe_p est une chaîne):tableau de STR_PLANNER
+      procédure PLANNER_Récupération_Liste_Planner_Par_Groupe(LOCAL sNomGroupe_p est une chaîne)<metier>:tableau de STR_PLANNER
       
       // variables
       rest_Reponse	est un restRéponse
-      sIDGroupe est une chaine
-      vRetour est un variant
-      aStPlanner est un tableau de STR_PLANNER
-      stPlanner est un STR_PLANNER
+      sIDGroupe		est une chaine
+      vRetour			est un variant
+      aStPlanner		est un tableau de STR_PLANNER
+      stPlanner		est un STR_PLANNER
       
       // récupération ID Groupes
-      sIDGroupe = COL_PLANNER.PLANNER_ID_GROUPES(sNomGroupe_p)
+      sIDGroupe		= COL_PLANNER.PLANNER_ID_GROUPES(sNomGroupe_p)
       
       // récupération des plans du groupe
-      rest_Reponse = COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/groups/[%sIDGroupe%]/planner/plans",httpGet)
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/groups/[%sIDGroupe%]/planner/plans",httpGet)
       
       SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
       	// requête ok
       	vRetour = JSONVersVariant(rest_Reponse..Contenu)
       	POUR nLigne = 1 _À_ TableauOccurrence(vRetour.value)
-      		stPlanner.sNom_Planer = vRetour.value[nLigne].title
-      		stPlanner.sIDPlanner = vRetour.value[nLigne].id
-      		stPlanner.sIDGroupe = vRetour.value[nLigne].owner
+      		stPlanner.sNom_Planer	= vRetour.value[nLigne].title
+      		stPlanner.sIDPlanner	= vRetour.value[nLigne].id
+      		stPlanner.sIDGroupe		= vRetour.value[nLigne].owner
       		
-      		stPlanner.aStBucket = COL_PLANNER.PLANNER_Récupération_Liste_Bucket_Taches(stPlanner.sIDPlanner)
+      		stPlanner.aStEtiquette	= COL_PLANNER.PLANNER_stListe_Etiquettes_Plan(stPlanner.sIDPlanner)
+      		stPlanner.aStBucket		= COL_PLANNER.PLANNER_Récupération_Liste_Bucket_Taches(stPlanner)
       		
       		TableauAjoute(aStPlanner,stPlanner)
       	FIN
@@ -429,6 +466,58 @@ procedure_set :
       RENVOYER sChemin_fichier_p
       
       
+      
+     type : 458752
+   -
+     name : PLANNER_stListe_Etiquettes_Plan
+     procedure_id : 1550382369559312578
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] PLANNER_stListe_Etiquettes_Plan (<sIDPlan_p> est chaîne)
+      //
+      // Paramètres :
+      //	sIDPlan_p (chaîne ANSI) : <indiquez ici le rôle de sIDPlan_p>
+      // Valeur de retour :
+      // 	tableau associatif (STR_PLANNER_ETIQUETTE) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PLANNER_stListe_Etiquettes_Plan(LOCAL sIDPlan_p est une chaine):tableau associatif de STR_PLANNER_ETIQUETTE
+      
+      // variables
+      rest_Reponse	est un restRéponse
+      vRetour			est un Variant
+      aStEtiquette	est un tableau associatif de STR_PLANNER_ETIQUETTE
+      stEtiquette		est un STR_PLANNER_ETIQUETTE
+      
+      // récupération des plans du groupe
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/beta/planner/plans/[%sIDPlan_p%]/details",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour				= JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	POUR i = 1 _À_ vRetour.categoryDescriptions..Membre..Occurrence
+      		
+      		stEtiquette.sIDCategory		= vRetour.categoryDescriptions..Membre[i]..Nom
+      		stEtiquette.sNom_Category	= vRetour.categoryDescriptions..Membre[i]
+      		
+      		SI stEtiquette.sNom_Category <> "0" ALORS
+      			SI PAS aStEtiquette[stEtiquette.sIDCategory]..Existe ALORS
+      				aStEtiquette[stEtiquette.sIDCategory] = allouer un STR_PLANNER_ETIQUETTE
+      				aStEtiquette[stEtiquette.sIDCategory] = stEtiquette
+      			FIN
+      		FIN
+      	FIN
+      SINON
+      	// requête hs
+      	
+      FIN
+      
+      RENVOYER aStEtiquette
       
      type : 458752
   procedure_templates : []

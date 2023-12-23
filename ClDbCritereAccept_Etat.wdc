@@ -88,32 +88,6 @@ class :
       
      type : 458752
    -
-     name : oColCritereAccept_old
-     procedure_id : 1445049896335384094
-     type_code : 12
-     code : |1+
-      PROCÉDURE oColCritereAccept_old():ClColCritereAccept
-      
-      oRetour est un ClColCritereAccept
-      sReq est une chaîne
-      
-      SI oRetour.ZF_bEstExpire() ALORS
-      	sReq = [
-      		SELECT 
-      			Scr_CritereAccept.*
-      		FROM Scr_CritereAccept
-      		WHERE Scr_CritereAccept.IDScr_CritereAccept_Etat = [%:ZF_Get_IdUnique()%]
-      	]
-      
-      	oRetour.ZF_LoadSQL(sReq)
-      FIN
-      
-      
-      RENVOYER oRetour
-      
-      
-     type : 458752
-   -
      name : Init_Data
      procedure_id : 1461105036275126141
      type_code : 12

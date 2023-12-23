@@ -130,7 +130,7 @@ class :
       		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM-BDD"
       		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
       		:m_ZF_cnxBDD..OptionsCurseur	= hCurseurClient
-      //		
+      		
       		
       		sMsgErrCnx						= "Impossible d'ouvrir les tables de la base de donnés sur le serveur : [%:m_ZF_cnxBDD..Serveur%]."
       	SINON
@@ -206,9 +206,7 @@ class :
       
       <COMPILE SI Configuration="ScrUM">
       
-       ClDbSprint.Sprint_Num_Actuel() 
-      //ClDbSprint.Calcul_Velocite_Moyenne()
-      
+       ::Sprint_Num_Actuel()
       
       //Enregistrement de l'utilisateur en cours, dans l'application.
       :m_oUsrCnx <- ClDbUsr.oGetUsrDeNumAD(sLoginAD)
@@ -229,9 +227,9 @@ class :
       // Redéfinition de la méthode ClZF_App.ExceptGenerale
       PROCÉDURE GLOBALE  ExceptGenerale()
       
-      sErreur_Encours est une chaîne
-      sErreur_Transaction est une chaîne
-      slib_err est une chaîne
+      sErreur_Encours		est une chaîne
+      sErreur_Transaction	est une chaîne
+      slib_err			est une chaîne
       
       sErreur_Encours += " Erreur d'Exception : "+ExceptionInfo(errCode)+RC+ExceptionInfo(errComplet)+RC
       sErreur_Encours += " Erreur Erreurinfo : "+RC+ErreurInfo(errComplet)+RC
@@ -318,10 +316,204 @@ class :
       //
       procédure PreChargeData() <métier>:vide
       
-      
       //Chargement des données de paramétrage de l'appli
       oEnv est un ClColEnvironnement()
       oEnv.ZF_GetAll()
+      
+     type : 458752
+   -
+     name : EnregHistoBDD
+     procedure_id : 1544500721118032395
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //EnregHistoBDD (<oBdHisto_p>)
+      //
+      // Paramètres :
+      //	oBdHisto_p : <indiquez ici le rôle de oBdHisto_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	stHisto_p (STR_MemoModifs) : <indiquez ici le rôle de stHisto_p>
+      //	oClZF_Histo (objet dynamique) : <indiquez ici le rôle de oClZF_Histo>
+      procédure EnregHistoBDD(oBdHisto_p /*est un ClZF_ObjDB dynamique*/)
+      
+      si oBdHisto_p.ZF_bModeAjout() ou oBdHisto_p.ZF_bEstModifie() alors
+      	stHisto est un ClZF_Histo.STR_MemoModifs
+      	pour tout stHisto de oBdHisto_p.p_aListeModifs
+      		HRAZ(Scr_Historique)
+      		
+      		//Affectation de la clé étrangère, correspondant à l'objet en cours
+      		{Scr_Historique..nom + "." + sRubIdDeClasse(oBdHisto_p..classe),indRubrique} = oBdHisto_p.ZF_Get_IdUnique()
+      		
+      		Scr_Historique.Date_Evt				= DateHeureSys()
+      		Scr_Historique.IDScr_Usr			= goApp.m_oUsrCnx.ZF_Get_IdUnique()
+      		Scr_Historique.CMTR					= stHisto.sModif
+      		SI PAS HAjoute(Scr_Historique) ALORS
+      			ClZF_ObjDB.mg_oExEchecEnregistrement.ZF_Declenche()
+      		FIN
+      	FIN
+      FIN
+      
+      SI oBdHisto_p.ZF_bEstsupprime() ALORS
+      	sdSuppHisto est une source de données
+      	sReq est une chaîne = [
+      	DELETE FROM Scr_Historique
+      	WHERE [%sRubIdDeClasse(oBdHisto_p..Classe)%] = [%oBdHisto_p.ZF_Get_IdUnique()%]
+      	]
+      	:Rsql(sdSuppHisto,sReq)
+      FIN
+      
+      
+      	procedure interne sRubIdDeClasse(sClasse_p est une chaîne):chaine
+      		sRetour est une chaine
+      		SELON sClasse_p
+      			CAS ClDbUserStory
+      				sRetour = Scr_Historique.IDScr_UserStory..nom
+      			CAS ClDbTache
+      				sRetour = Scr_Historique.IDScr_Tache..nom
+      			CAS ClDbEpic
+      				sRetour = Scr_Historique.IDScr_Epic..Nom
+      			AUTRE CAS
+      				ExceptionDéclenche(1, ChaîneConstruit(...
+      				"La classe %1 n'est pas paramétrée pour l'enregistrement des historique.",...
+      				sClasse_p))
+      		FIN
+      		renvoyer sRetour
+      	FIN
+      
+     type : 458752
+   -
+     name : aoGetHisto
+     procedure_id : 1544816547254588428
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aoGetHisto (<oDB_P> est ClZF_ObjDbLs dynamique)
+      //
+      // Paramètres :
+      //	oDB_P (ClZF_ObjDbLs dynamique) : <indiquez ici le rôle de oDB_P>
+      
+      // Valeur de retour :
+      // 	tableau (STR_Histo) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE aoGetHisto(oDB_P est un ClZF_ObjDbLs dynamique):tableau de ClHistorique.STR_Histo
+      
+      sdHistoUS est une Source de Données
+      sReq est une chaîne
+      stEvt est un ClHistorique.STR_Histo
+      aStListeEvt est un tableau de ClHistorique.STR_Histo
+      oUsr est un ClDbUsr dynamique
+      sCle est une chaîne
+      selon oDB_P..classe
+      	CAS ClDbUserStory
+      		sCle = Scr_Historique.IDScr_UserStory..Nom
+      	CAS ClDbTache
+      		sCle = Scr_Historique.IDScr_Tache..Nom
+      	CAS ClDbEpic
+      		sCle = Scr_Historique.IDScr_Epic..nom
+      	AUTRE CAS
+      		ExceptionDéclenche(1, ChaîneConstruit(...
+      		"La classe %1 n'est pas paramétrée pour l'enregistrement des historique.",...
+      		oDB_P..Classe))
+      FIN
+      
+      sReq = ChaîneConstruit([
+      	
+      	SELECT
+      		Scr_Historique.Date_Evt,
+      		Scr_Historique.IDScr_Usr,
+      		Scr_Historique.CMTR
+      		
+      	FROM Scr_Historique
+      	
+      	WHERE
+      		Scr_Historique.%1 = %2
+      	
+      	ORDER BY
+      		Scr_Historique.Date_Evt desc
+      	
+      ], sCle,...
+      	oDB_P.ZF_Get_IdUnique())
+      
+      goapp.RSQL(sdHistoUS,sReq)
+      
+      POUR TOUT sdHistoUS
+      	VariableRAZ(stEvt)
+      	
+      	stEvt.dhEvt					= sdHistoUS.Date_Evt
+      	stEvt.nIdUsr				= sdHistoUS.IDScr_Usr
+      	stEvt.sDetail				= sdHistoUS.CMTR
+      	
+      	stEvt.sDateEct_en_chaine	= DateVersChaîne(stEvt.dhEvt..PartieDate) + " " + ...
+      									HeureVersChaîne(stEvt.dhEvt..PartieHeure,"HH:MM:SS")
+      	
+      	oUsr						<- ClDbUsr.GetObj(stEvt.nIdUsr)
+      	stEvt.sNomUsr				= oUsr.p_sNom
+      	
+      	TableauAjoute(aStListeEvt,stEvt)
+      FIN
+      
+      HAnnuleDéclaration(sdHistoUS)
+      
+      
+      renvoyer aStListeEvt
+     type : 458752
+   -
+     name : Sprint_Num_Actuel
+     procedure_id : 1547573302134541564
+     type_code : 12
+     code : |1+
+      // Résumé : Renvoie le numéro du sprint actuel / Renvoie le dernier sprint réalisé si aucun sprint trouvé
+      // Syntaxe :
+      //Sprint_Num_Actuel ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      FONCTION GLOBAL Sprint_Num_Actuel()<metier>:vide
+      
+      //nNumSprint est un entier
+      //dDateActuelle est une date = DateDuJour()
+      sdToutLesSprints est une source de Données
+      sReq est une chaîne
+      
+      sReq = [
+      	SELECT Scr_Sprint.Num_Sprint,
+      		   Scr_Sprint.VelociteMoyenneRes
+      	FROM Scr_Sprint
+      	WHERE Scr_Sprint.Top_Termine = 0
+      	ORDER BY Scr_Sprint.Num_Sprint
+      ]
+      
+      goapp.Rsql(sdToutLesSprints,sReq)
+      HLitPremier(sdToutLesSprints)
+      Si pas HEnDehors(sdToutLesSprints) alors
+      	//On récupère le numéro du sprint
+      	goApp.p_nNumeroDuSprintActuel = sdToutLesSprints.Num_Sprint
+      	goApp.m_nVelociteMoyenne = sdToutLesSprints.VelociteMoyenneRes
+      Sinon
+      	goApp.p_nNumeroDuSprintActuel	= 0
+      	goApp.m_nVelociteMoyenne		= 0
+      	//info("aucun sprint trouvé", ErreurInfo())
+      FIN
+      
+      HAnnuleDéclaration(sdToutLesSprints)
+      
+      //RENVOYER nNumSprint
       
      type : 458752
   properties :

@@ -1,0 +1,256 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : FEN_FEN_Diagramme_Test
+ major_version : 27
+ minor_version : 0
+ type : 2
+ description : ""
+ subtype : 0
+window :
+ name : FEN_FEN_Diagramme_Test
+ identifier : 0x25854916223d526b
+ internal_properties : BwAAAAcAAAAZ0uLfCTnTbFLH96LwaOeTG59SHA26TTQg2iiMh357aEgYBsXG/SGrpOJvlJ5TVpKWbjduakEwmw6KyYD/skRnd3dGV2FppTjuyA4fvptTxRE+ki12ZqdRxZLWU8ygpiNhuh6uCsQrf9lbje4DE9WA0LTYUv7YqR1GMIP0lgi2/JbEGHeX61i0jwFX+9pQmdR9aIYP9eHgradTRJMzJfq0T7drWMLVEKuIaSClA2U66ruVHVbJlU2LUpOWnwizPQbZ28KO81yMOqi7DZOHdZiAkM4UfopRnGMzusPVAqc1Z9+QNp1mhZmzxqcwvNw/15KhTau1+Pvqn0xww5zL4rpKZAHeEUJuygwbKq76DFR2xtPMegzKnC3/gLPFVt1J5gSpGUHipP3pzt3nBeMm/wcg64roRSfjUTWlTALR+uQH/FkpBZnXkw/SspRqI5mB/5uP/989sDBKUwO+D/3j2Xs5UKGZB0Yt7ivtz/r4OZEMH8U23JxunPonv6N4yKe3gJeLUBtd/5B44Lu9ZxrO/HBluMK0nydxK8vjePhD2siuRV1vTCAo46ne6FeG9DvLG0fhDbOVeQt3fRFNTq18osem+UY5wpL9mCQjJMEf31XvbL6QOtGRVrTKJFEgoEBK4ONE28t+xh7ABWCHeTEYBUVsgPSCNKGvwS6yT0e+ZQwIyhtkhX8s9hAR
+ properties :
+  width : 1024
+  height : 768
+  widthClient : 1022
+  heightClient : 736
+ controls :
+  -
+    name : EDIAG_TEST
+    identifier : 0x25854b7a228dac37
+    internal_properties : BwAAAAcAAAAVV7Rt3HvSAYlam0TOQ0m+k8Wk92NxDCldcpjoXACDJAIQu/G6Oo6YOM38vIkNU8FNkiRibo37ucAMfiLWsL+zuQkgeOWn274+9rAdeu/zvxw2fT8dN9kSMa0YakeWoDIhnKbLu/d2eL9R2y1VOdvYR7g+5/onwK+jrsS59WMVwvsIy2AmpPhLKifVIsa8PGV8CZWktggz9YZADUmEzE0q7mAI0W0be4FZDe5Tcl/J5mUOL2QKSNkTAB7S/VNZYtoJgQvHBWte86gUESioqpdvR2bavMW+1B3kruE2S6BlfDIPadmiMWE5McEVcRRpgO6ZQJu/guEQv60WFbvHNNpM8W9K5lJO6Gzx7JDonuCXU6fQmiaXWfr2nYOpYDs9qQEqaqEgcP3YylUIoJLt+dAhKfT80gmVOKVzAdcA8ozL3lpqfQqdPyW4gl+FjnZkgYz9cIGDDPeVHi5J5Ew3m46nzKu4lniDRMC4Sp92A+NunLNxS+lZ8AUeru2y/CanL8KYtwofZ6hRMFfLw1WibJUPuGrhEGhi1kAhW1cHJ47gv0gQPC8Gy1HeV8a778giQyGiP/1Zm5VDSmorASxG/mMRBgvre+P1aD9icEqGDFMMC+bE75PXm8SWWGtB/3pM2Dlg0PfnRDXFSqrDJfdKUsaBi8CwIxqnDYn/wEzYa1CKKb70E34mkL9O6zLc1NDAFNPUT4sdU98xE8UW1gOA5RhN9kDLru9TcD5UN/89eJ2Hbo+3Y/oRjZu6YrWMJ5jx+qN2M9pjVLm0kpk6/70qD6NPz2UMhE9DXaq0xmuZsNg6+Q==
+    properties :
+     x : 6
+     y : 50
+     width : 1010
+     height : 680
+    type : 130
+    code_elements :
+     type_code : 161
+     p_codes :
+      -
+        code : |1-
+         // récupération de l'indice de la forme survolé
+         nIndiceForme est un entier = DiagrammeInfoXY(EDIAG_TEST, SourisPosX, SourisPosY)
+         nXForme est un entier
+         nYForme est un entier
+         
+         SI nIndiceForme > 0 _ET_ nIndiceForme > 6 ALORS
+         	gDiag est un Diagramme <- EDIAG_TEST.Valeur
+         	
+         	nXForme = gDiag.Forme[nIndiceForme].X
+         	
+         	nYForme = gDiag.Forme[nIndiceForme].Y
+         
+         	
+         	SI 100 <= nYForme <= 250 ALORS
+         		gDiag.Forme[nIndiceForme].Fond.Couleur = VertPastel
+         	SINON SI nYForme <= 450
+         		gDiag.Forme[nIndiceForme].Fond.Couleur = OrangePastel
+         	SINON 
+         		gDiag.Forme[nIndiceForme].Fond.Couleur = VioletPastel
+         	FIN
+         	
+         	SI 0 <= nXForme <= 100 ALORS
+         		gDiag.Forme[nIndiceForme].Texte.Libellé = "Fait partie de l'épic 1"
+         	SINON SI 250 <= nXForme <= 350
+         		gDiag.Forme[nIndiceForme].Texte.Libellé = "Fait partie de l'épic 2"
+         	SINON SI 500 <= nXForme <= 600
+         		gDiag.Forme[nIndiceForme].Texte.Libellé = "Fait partie de l'épic 3"
+         	SINON
+         		gDiag.Forme[nIndiceForme].Texte.Libellé = "La forme ne fait partie d'aucune épic"
+         	FIN
+         FIN
+         
+         	
+        type : 301
+  -
+    name : BTN_Ajouter_Forme
+    identifier : 0x25854e9124cfbb7f
+    internal_properties : BwAAAAcAAACv7LlTrYfLY2R4De17+FOSOz689QFi9/zPnb0UJtBs1ZkuYTLCLeC9Svu+F+fHQt6Ub5HggoN5Xvnze7EmYsbASI/749oZJnVzVrjEcfcapU9eqXwUOgkk7HaqaodwBxWXj/lzZjXM9os4vbw1WI0cg5W2usJCb8TeNe/Q7Zt0MNh0q7r4nw3azlK0kFvSBmJFUrbx1wAt9DLaOm3fAg63XhxGBqqkarEOXNloHv9ckoOI3NBkUe3L/UI7IzV4xCfhBjmUCfVE8LaZjlNXMsDn4l4XHasWK7PNE+J3P0Im4o0cv2xdlk/6Xv8IOT2+k1c/ncYaoChZneR5cj8b5lhtw2RCvmD2wxrUHlol2mAZfzaY6wrpv57SlA1M9AFKzn+RRifX/LYxM9jYb17FT8vMYlZ7wNasLkoEghAvxDUhqFCF/SmW8rfqt3RySoRE2Ffh0SC1inrOpva8SMtumFLqLi9zGkiTm0cWYrJvDeElS73dOsD9kjGAdhMQvYQf2yzTolrtX7WgAdadW+adzOU9ttPqkDSAwc4Ev2Ppj00p3CgkFOEZwzEgIcMfmpS76RFZIt50xeEsDsFmbJXZU+9M13KbA7o1YErj8ojdAzyvd2jzqHD18hKjQ6YCnV0R9Z0lARdkfNtRuXu1FU0fqeW64RjGpcPiLVIIMZDYxmIushbddKuTcfTQz5x6BTAeRB3QPz4EpjLjW6eo25U9zSUbzjNID/xRTjC0RSTVUOd+FGU1dGYXitPnr4hSpa182FysZc8k+AVyXGfMNa3MAQmNWJi7/l/XKesYR1t9jf/JBM+YGeybG9L8O1cWPl7I6PL9RrXRnMgj3aytEA3eknvzZuryn/hwGhAu4bk1dQvo+J4FolU=
+    properties :
+     x : 6
+     y : 20
+     width : 117
+     height : 24
+    type : 4
+    code_elements :
+     type_code : 4
+     p_codes :
+      -
+        code : |1+
+         // Crée une forme rectangle
+         MaForme est un diagRectangle
+         
+         // Définit les dimensions, la position et la couleur de fond
+         MaForme.X						= 100
+         MaForme.Y						= 100
+         MaForme.Largeur					= 150
+         MaForme.Hauteur					= 75
+         //MaForme.Fond.Couleur			= BleuPastel
+         // Texte
+         //MaForme.Texte.Libellé			= "Modifier text"
+         //MaForme.Texte.CadrageHorizontal	= chCentre
+         //MaForme.Texte.CadrageVertical	= cvMilieu
+         //MaForme.Texte.Couleur			= Blanc
+         //MaForme.Texte.Police.Gras		= Vrai
+         MaForme.TEXTE.LibelléHTML = [
+         <span style="font-weight: bold;">1234 : test
+         </span><div><br></div>
+         <div><span style="white-space:pre">		</span><span style="font-style: italic;">23</span></div>
+         <div><span style="color: rgb(255, 0, 0);">tre</span></div>
+         ]
+         
+         // Obtient une référence sur le diagramme affiché
+         MonDiagramme est un Diagramme <- EDIAG_TEST
+         
+         // Ajoute la forme rectangle dans le diagramme
+         Ajoute(MonDiagramme.Forme, MaForme)
+        type : 18
+      -
+        type : 161
+        enabled : false
+ menu :
+  name : _Menu
+  identifier : 0x292573e513b5f221
+  internal_properties : BwAAAAcAAABHivBqFH8xYQq/QELUltmClIuqm9KM3lg0XSaBAQ41WqT06R9JfU0qGK5sHUl8/xHCuvP3y9tLeLLOVaAgM2FjnfwSCRBgXqneLsHogwTYpIXuB1zp2uXtmOXYyGd6i+ek6BBvtJ0ylgF/MxkRihdZ26pl/9Jf5c+sxo07G0ZzHfcLEu9WD07gTSld25EPGWjvi/e5TxaHOZSRE8C5Ig+YdJawYdK89l+x1ofEmw3pfCNLUe3tNoiwg4AbC1jLdufmJ97Xc0JHDAy7gJsHBzEWwcuroqy2By4PJ4c6Wg==
+  options : []
+ languages :
+  - fr-FR
+ popup_menus : []
+ message_bar :
+  internal_properties : BwAAAAcAAADG0006i3ptxMcUE+O5cGvDhb43eRlY9UEE1z/7izK93v/ToMiwACETQQw4eQhZuJRMFa6SBwwT+zSdDbdc5HEkXDob51ldPFNKsP+0MWY=
+ code_elements :
+  type_code : 1
+  p_codes :
+   -
+     code : |1+
+      PROCEDURE MaFenêtre()
+   -
+     code : |1+
+      // Crée une forme rectangle
+      MaForme est un diagRectangle
+      // Obtient une référence sur le diagramme affiché
+      MonDiagramme est un Diagramme <- EDIAG_TEST
+      
+      
+      ///////////////////////////////////////// EPIC //////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////////////////////
+      // Définit les dimensions, la position et la couleur de fond
+      MaForme.X						= 50
+      MaForme.Y						= 50
+      MaForme.Largeur					= 150
+      MaForme.Hauteur					= 75
+      MaForme.Fond.Couleur			= RougePastel
+      // Texte
+      MaForme.Texte.Libellé			= "Epic 1"
+      MaForme.Texte.CadrageHorizontal	= chCentre
+      MaForme.Texte.CadrageVertical	= cvMilieu
+      MaForme.Texte.Couleur			= Blanc
+      MaForme.Texte.Police.Gras		= Vrai
+      
+      // Ajoute la forme rectangle dans le diagramme
+      Ajoute(MonDiagramme.Forme, MaForme)
+      
+      // Définit les dimensions, la position et la couleur de fond
+      MaForme.X						= 300
+      MaForme.Y						= 50
+      MaForme.Largeur					= 150
+      MaForme.Hauteur					= 75
+      MaForme.Fond.Couleur			= RougePastel
+      // Texte
+      MaForme.Texte.Libellé			= "Epic 2"
+      MaForme.Texte.CadrageHorizontal	= chCentre
+      MaForme.Texte.CadrageVertical	= cvMilieu
+      MaForme.Texte.Couleur			= Blanc
+      MaForme.Texte.Police.Gras		= Vrai
+      
+      // Ajoute la forme rectangle dans le diagramme
+      Ajoute(MonDiagramme.Forme, MaForme)
+      
+      // Définit les dimensions, la position et la couleur de fond
+      MaForme.X						= 550
+      MaForme.Y						= 50
+      MaForme.Largeur					= 150
+      MaForme.Hauteur					= 75
+      MaForme.Fond.Couleur			= RougePastel
+      // Texte
+      MaForme.Texte.Libellé			= "Epic 3"
+      MaForme.Texte.CadrageHorizontal	= chCentre
+      MaForme.Texte.CadrageVertical	= cvMilieu
+      MaForme.Texte.Couleur			= Blanc
+      MaForme.Texte.Police.Gras		= Vrai
+      
+      // Ajoute la forme rectangle dans le diagramme
+      Ajoute(MonDiagramme.Forme, MaForme)
+      
+      ///////////////// niveau ///////////////////////////////
+      ////////////////////////////////////////////////////
+      // Définit les dimensions, la position et la couleur de fond
+      MaForme.X						= 750
+      MaForme.Y						= 150
+      MaForme.Largeur					= 150
+      MaForme.Hauteur					= 75
+      MaForme.Fond.Couleur			= JaunePastel
+      // Texte
+      MaForme.Texte.Libellé			= "niveau 1"
+      MaForme.Texte.CadrageHorizontal	= chCentre
+      MaForme.Texte.CadrageVertical	= cvMilieu
+      MaForme.Texte.Couleur			= noir
+      MaForme.Texte.Police.Gras		= Vrai
+      
+      // Ajoute la forme rectangle dans le diagramme
+      Ajoute(MonDiagramme.Forme, MaForme)
+      
+      // Définit les dimensions, la position et la couleur de fond
+      MaForme.X						= 750
+      MaForme.Y						= 350
+      MaForme.Largeur					= 150
+      MaForme.Hauteur					= 75
+      MaForme.Fond.Couleur			= JaunePastel
+      // Texte
+      MaForme.Texte.Libellé			= "Niveau 2"
+      MaForme.Texte.CadrageHorizontal	= chCentre
+      MaForme.Texte.CadrageVertical	= cvMilieu
+      MaForme.Texte.Couleur			= noir
+      MaForme.Texte.Police.Gras		= Vrai
+      
+      // Ajoute la forme rectangle dans le diagramme
+      Ajoute(MonDiagramme.Forme, MaForme)
+      
+      // Définit les dimensions, la position et la couleur de fond
+      MaForme.X						= 750
+      MaForme.Y						= 550
+      MaForme.Largeur					= 150
+      MaForme.Hauteur					= 75
+      MaForme.Fond.Couleur			= JaunePastel
+      // Texte
+      MaForme.Texte.Libellé			= "niveau 3"
+      MaForme.Texte.CadrageHorizontal	= chCentre
+      MaForme.Texte.CadrageVertical	= cvMilieu
+      MaForme.Texte.Couleur			= noir
+      MaForme.Texte.Police.Gras		= Vrai
+      
+      // Ajoute la forme rectangle dans le diagramme
+      Ajoute(MonDiagramme.Forme, MaForme)
+      
+     type : 34
+   -
+     type : 180
+     enabled : false
+   -
+     type : 230
+     enabled : false
+ code_parameters :
+  internal_properties : BwAAAAcAAAARaqIs1pWWTrjJkc2sbefp8NGAHSVvdRgpQIePRe9rhkbpERRVEF+Nx8mIqTxrVGdwHX99jtU=
+  original_name : Modele1
+resources :
+ string_res :
+  identifier : 0x158548fd03d7f372
+  internal_properties : BwAAAAcAAAAZ++HSz2luvwiNhadWl8v3mh2d0Pq0fCIps02kogrcwVHmCg==
+custom_note :
+ internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=
+rad :
+ internal_properties : BwAAAAcAAABoAN7PLpwJW3EiA7WVZdCA5EwrCA1rvutcDHooMWKe

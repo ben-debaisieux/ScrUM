@@ -505,25 +505,25 @@ class :
       
       
       sRetour = [
-      procédure [%sNomProc%]()<UI>:vide<§cs:5§>
-      <§cs:5§>
-      nRacine			est un entier<§cs:5§>
-      OrgaElement		est un OrgaElément<§cs:5§>
-      oEltAncetre		est un [%sTypeObj%] dynamique<§cs:5§>
-      <§cs:5§>
-      <§cs:5§>
-      ORGA_SansNom1..AffichageActif = Faux<§cs:5§>
-      OrgaSupprimeTout(ORGA_SansNom1)<§cs:5§>
-      <§cs:5§>
-      POUR TOUT ELEMENT oEltAncetre DE zoColTop.aItems()<§cs:5§>
-      [%TAB%]OrgaElement.ID			= oEltAncetre.ZF_Get_IdUnique()<§cs:5§>
-      [%TAB%]OrgaElement.Contenu		= oEltAncetre..Classe<§cs:5§>
-      [%TAB%]OrgaElement.FiDessin		= "[%:sNomFI()%]"<§cs:5§>
-      [%TAB%]nRacine					= OrgaAjoute(ORGA_SansNom1, OrgaElement)<§cs:5§>
-      [%TAB%]AffEnfants(nRacine, [%:m_oClasseGen.sNomClasseColGen()%].[%sNomProcCol%](oEltAncetre))<§cs:5§>
-      FIN<§cs:5§>
-      <§cs:5§>
-      ORGA_SansNom1..AffichageActif = vrai<§cs:5§>
+      procédure [%sNomProc%]()<UI>:vide
+      
+      nRacine			est un entier
+      OrgaElement		est un OrgaElément
+      oEltAncetre		est un [%sTypeObj%] dynamique
+      
+      
+      ORGA_SansNom1..AffichageActif = Faux
+      OrgaSupprimeTout(ORGA_SansNom1)
+      
+      POUR TOUT ELEMENT oEltAncetre DE zoColTop.aItems()
+      [%TAB%]OrgaElement.ID			= oEltAncetre.ZF_Get_IdUnique()
+      [%TAB%]OrgaElement.Contenu		= oEltAncetre..Classe
+      [%TAB%]OrgaElement.FiDessin		= "[%:sNomFI()%]"
+      [%TAB%]nRacine					= OrgaAjoute(ORGA_SansNom1, OrgaElement)
+      [%TAB%]AffEnfants(nRacine, [%:m_oClasseGen.sNomClasseColGen()%].[%sNomProcCol%](oEltAncetre))
+      FIN
+      
+      ORGA_SansNom1..AffichageActif = vrai
       ]
       
       
@@ -554,24 +554,24 @@ class :
       
       
       sRetour = [
-      procédure [%sNomProc%](nIdParent_p est un entier, oColAff_p est un [%:m_oClasseGen.sNomClasseColGen()%])<UI>:vide<§cs:5§>
-      <§cs:5§>
-      OrgaElement		est un OrgaElément<§cs:5§>
-      nFeuille		est un entier<§cs:5§>
-      oItemActu		est un [%:m_oClasseGen.sNomClasseGen()%] dynamique<§cs:5§>
-      <§cs:5§>
-      POUR TOUT ÉLÉMENT oItemActu DE oColAff_p.aItems()<§cs:5§>
-      [%tab%]si pas oItemActu.ZF_bEstsupprime() alors<§cs:5§>
-      [%TAB%][%TAB%]VariableRAZ(OrgaElement)<§cs:5§>
-      [%TAB%][%TAB%]OrgaElement.id			= oItemActu.ZF_Get_IdUnique()<§cs:5§>
-      [%TAB%][%TAB%]OrgaElement.Contenu	= oItemActu..classe<§cs:5§>
-      [%TAB%][%TAB%]OrgaElement.FiDessin	= "[%:sNomFI()%]"<§cs:5§>
-      [%TAB%][%TAB%]nFeuille				= OrgaAjouteFils(ORGA_SansNom1, nIdParent_p, OrgaElement)<§cs:5§>
-      		<§cs:5§>
-      [%TAB%][%TAB%][%sNomProc%](nFeuille, [%:m_oClasseGen.sNomClasseColGen()%].[%:m_sCleColParent%](oItemActu, Vrai))<§cs:5§>
-      [%TAB%]fin<§cs:5§>
-      FIN<§cs:5§>
-      <§cs:5§>
+      procédure [%sNomProc%](nIdParent_p est un entier, oColAff_p est un [%:m_oClasseGen.sNomClasseColGen()%])<UI>:vide
+      
+      OrgaElement		est un OrgaElément
+      nFeuille		est un entier
+      oItemActu		est un [%:m_oClasseGen.sNomClasseGen()%] dynamique
+      
+      POUR TOUT ÉLÉMENT oItemActu DE oColAff_p.aItems()
+      [%tab%]si pas oItemActu.ZF_bEstsupprime() alors
+      [%TAB%][%TAB%]VariableRAZ(OrgaElement)
+      [%TAB%][%TAB%]OrgaElement.id			= oItemActu.ZF_Get_IdUnique()
+      [%TAB%][%TAB%]OrgaElement.Contenu	= oItemActu..classe
+      [%TAB%][%TAB%]OrgaElement.FiDessin	= "[%:sNomFI()%]"
+      [%TAB%][%TAB%]nFeuille				= OrgaAjouteFils(ORGA_SansNom1, nIdParent_p, OrgaElement)
+      		
+      [%TAB%][%TAB%][%sNomProc%](nFeuille, [%:m_oClasseGen.sNomClasseColGen()%].[%:m_sCleColParent%](oItemActu, Vrai))
+      [%TAB%]fin
+      FIN
+      
       ]
       
       
@@ -588,17 +588,17 @@ class :
       sNomProc	est une chaîne	= "AjouteFils"
       
       sRetour = [
-      procédure [%sNomProc%]()<UI>:vide<§cs:5§>
-      <§cs:5§>
-      oItem_enf est un ClDbTheme()<§cs:5§>
-      <§cs:5§>
-      SI zoItem <> Null ALORS<§cs:5§>
-      	oItem_enf.[%:m_sNomProprieteObjParent%] = zoItem<§cs:5§>
-      FIN<§cs:5§>
-      <§cs:5§>
-      SI Ouvre([%:m_sNomFenFic%], oItem_enf) <> 0 ALORS<§cs:5§>
-      	ActuMap()<§cs:5§>
-      FIN<§cs:5§>
+      procédure [%sNomProc%]()<UI>:vide
+      
+      oItem_enf est un ClDbTheme()
+      
+      SI zoItem <> Null ALORS
+      	oItem_enf.[%:m_sNomProprieteObjParent%] = zoItem
+      FIN
+      
+      SI Ouvre([%:m_sNomFenFic%], oItem_enf) <> 0 ALORS
+      	ActuMap()
+      FIN
       ]
       
       

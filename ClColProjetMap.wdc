@@ -40,15 +40,6 @@ class :
       
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 1445894538360801942
-     type_code : 12
-     code : |1+
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbProjetMap.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 1445894538360867478
      type_code : 12
@@ -65,16 +56,6 @@ class :
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoSCR_ProjetMap)
-     type : 458752
-   -
-     name : addItemBySource
-     procedure_id : 1445894538360998550
-     type_code : 12
-     code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbProjetMap(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDSCR_ProjetMap)
      type : 458752
    -
      name : oColMapsDeProjet
@@ -165,16 +146,6 @@ class :
       FAIRE
       	erreur(ExceptionInfo(errMessage))
       fin
-     type : 458752
-   -
-     name : GetAll_old
-     procedure_id : 1468675100681277059
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(SCR_ProjetMap..nom)
-      
      type : 458752
    -
      name : aoFromProjet

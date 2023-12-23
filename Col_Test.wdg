@@ -15,29 +15,6 @@ procedure_set :
   p_codes : []
   procedures :
    -
-     name : Init_typesInter
-     procedure_id : 2200969387118385699
-     type_code : 15
-     code : |1+
-      PROCEDURE Init_typesInter_old()
-      
-      
-      sType est une chaine = [
-      Action manuelle
-      Action par intervenant
-      Action automatique
-      Attente
-      Sous process
-      Condition
-      ]
-      
-      POUR TOUTE CHAÎNE sLigne de sType separee par RC
-      	HRAZ(Scr_Process_Metier_Intervenant_Type)
-      	Scr_Process_Metier_Intervenant_Type.Libelle = sLigne
-      	HAjoute(Scr_Process_Metier_Intervenant_Type)
-      FIN
-     type : 458752
-   -
      name : Init_usrTest
      procedure_id : 2200969473017816702
      type_code : 15
@@ -162,44 +139,6 @@ procedure_set :
       FIN
      type : 458752
    -
-     name : Init_TypesComposantsCritereAccept
-     procedure_id : 2203192152126405242
-     type_code : 15
-     code : |1+
-      PROCEDURE Init_TypesComposantsCritereAccept_old()
-      
-      sType est une chaine = [
-      Etant donné que	1
-      Au moment de	2
-      J'attend que	3
-      ]
-      POUR TOUTE CHAÎNE sLigne de sType separee par RC
-      	HRAZ(Scr_CritereAccept_Composant_Type)
-      	Scr_CritereAccept_Composant_Type.Libelle	= ExtraitChaîne(sLigne,1,tab)
-      	Scr_CritereAccept_Composant_Type.Ordre		= ExtraitChaîne(sLigne,2,tab)
-      	HAjoute(Scr_CritereAccept_Composant_Type)
-      FIN
-     type : 458752
-   -
-     name : Init_EtatsComposantsCritereAccept
-     procedure_id : 2203531984919892013
-     type_code : 15
-     code : |1+
-      PROCEDURE Init_EtatsComposantsCritereAccept_old()
-      
-      sType est une chaine = [
-      En cours de rédaction
-      Validé
-      Abandonné
-      Doublon
-      ]
-      POUR TOUTE CHAÎNE sLigne de sType separee par RC
-      	HRAZ(Scr_CritereAccept_Etat)
-      	Scr_CritereAccept_Etat.Libelle	= sLigne
-      	HAjoute(Scr_CritereAccept_Etat)
-      FIN
-     type : 458752
-   -
      name : sRepFicTestAuto
      procedure_id : 2210854293609299532
      type_code : 15
@@ -258,24 +197,6 @@ procedure_set :
       POUR TOUT sdRechercheTache 
       	m_oTaches.addItemById(sdRechercheTache.IDscr_Tache)
       FIN
-     type : 458752
-   -
-     name : Init_Environnements_old
-     procedure_id : 1459177751506786705
-     type_code : 15
-     code : |1+
-      PROCEDURE Init_Environnements_old()
-      
-      HRAZ(Scr_Environnement)
-      Scr_Environnement.IDSrc_Environnement = 1
-      Scr_Environnement.Libelle = "prod"
-      HAjoute(Scr_Environnement, hFixeIdAuto)
-      
-      
-      HRAZ(Scr_Environnement)
-      Scr_Environnement.IDSrc_Environnement = 2
-      Scr_Environnement.Libelle = "pré prod"
-      HAjoute(Scr_Environnement, hFixeIdAuto)
      type : 458752
   procedure_templates : []
   property_templates : []

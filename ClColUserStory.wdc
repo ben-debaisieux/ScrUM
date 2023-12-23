@@ -21,6 +21,10 @@ class :
       	m_aoUserStories est un tableau de ClDbUserStory dynamique
       fin
       
+      constante
+      	cstTypeTesteur_Dev = 1
+      	cstTypeTesteur_Fonctionnel = 2
+      fin
      type : 131072
   procedures :
    -
@@ -31,7 +35,7 @@ class :
       procédure Constructeur()
       
       
-      :ZF_DefTimeOut(ClAppScrum.cstTimeOutProd)
+      //:ZF_DefTimeOut(ClAppScrum.cstTimeOutProd)
      type : 589824
    -
      name : Destructeur
@@ -41,15 +45,6 @@ class :
       procédure Destructeur()
       
      type : 655360
-   -
-     name : addItemById
-     procedure_id : 1399539446381146507
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
-      :ZF_addItem(ClDbUserStory.GetObj(nId_P))
-     type : 458752
    -
      name : aItems
      procedure_id : 1399794129095870452
@@ -69,17 +64,6 @@ class :
       ZF_InitCol(:m_aoUserStories)
      type : 458752
    -
-     name : addItemBySource_old
-     procedure_id : 1421786904770870178
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
-      
-      oUS	est un ClDbUserStory(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oUS, sdSource_p.IDScr_UserStory)
-     type : 458752
-   -
      name : pre_load
      procedure_id : 1429601434285872893
      type_code : 12
@@ -90,10 +74,11 @@ class :
       sListePrj	est une chaîne
       sListeEpic	est une chaîne
       sCle		est une chaîne
+      sClasse		est une chaine
       
       HLitPremier(sdSource_P,hForwardOnly+hSansRafraîchir)
       TANTQUE PAS HEnDehors(sdSource_P)
-      	sClasse est une chaine = ClDbProjet
+      	sClasse = ClDbProjet
       	sCle = ClZF_ObjDB.ZF_sCleOdb(sClasse, sdSource_P.IDScr_Projet)
       	SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
       		sListePrj += [", "] + sdSource_P.IDScr_Projet
@@ -111,8 +96,8 @@ class :
       
       //Le traitement de préchargement n'est utile que si on a plusieurs éléments à précharger (sinon, on passe par le chargement std)
       si Position(sListePrj, ",") > 0 ALORS
-      	oColUs est un ClColProjet()
-      	oColUs.ZF_LoadSQL([
+      	oColPrj est un ClColProjet()
+      	oColPrj.ZF_LoadSQL([
       		SELECT Scr_Projet.*
       		FROM Scr_Projet
       		WHERE Scr_Projet.IDScr_Projet IN ([%sListePrj%])
@@ -121,8 +106,8 @@ class :
       
       //Le traitement de préchargement n'est utile que si on a plusieurs éléments à précharger (sinon, on passe par le chargement std)
       si Position(sListeEpic, ",") > 0 ALORS
-      	oColUs est un ClColProjet()
-      	oColUs.ZF_LoadSQL([
+      	oColEpic est un ClColEpic()
+      	oColEpic.ZF_LoadSQL([
       		SELECT Scr_Epic.*
       		FROM Scr_Epic
       		WHERE Scr_Epic.IDScr_Epic IN ([%sListeEpic%])
@@ -260,24 +245,107 @@ class :
       RENVOYER aColUs
      type : 458752
    -
-     name : GetAll_old
-     procedure_id : 1468676019813930025
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_UserStory..nom)
-     type : 458752
-   -
      name : sClasseObjDbAsso
      procedure_id : 1542749478337554003
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
-      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso()<metier>:chaîne
       
       sClasse est une chaîne = ClDbUserStory
       RENVOYER sClasse
+     type : 458752
+   -
+     name : oFromUser_Testeur
+     procedure_id : 1549710323233422089
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oFromUser_Testeur (<oUser_p> est ClDbUsr dynamique, <nTypTesteur_p> est entier)
+      //
+      // Paramètres :
+      //	oUser_p (ClDbUsr dynamique) : <indiquez ici le rôle de eTypeTest_P>
+      //	nTypTesteur_p (entier) : <indiquez ici le rôle de nTypeTest_p>
+      
+      // Valeur de retour :
+      // 	ClColUserStory : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
+      FONCTION globale oFromUser_Testeur(oUser_p est un ClDbUsr dynamique, nTypTesteur_p est un entier)<métier>:ClColUserStory
+      
+      sdMestests	est une Source de Données
+      sReq		est une chaîne
+      oUsEnDev	est un ClColUserStory
+      sWhere		est une chaîne
+      oUsTmp		est un ClDbUserStory dynamique
+      
+      
+      selon nTypTesteur_p
+      	CAS cstTypeTesteur_Dev
+      		
+      		sWhere = ChaîneConstruit([
+      		AND (
+      			Scr_UserStory.IDScr_Usr_TestDev = %1
+      			OR
+      			Scr_UserStory.IDScr_Usr_TestDev IS NULL
+      			)
+      			AND Scr_UserStory.EstTesteParEquipeDev = 0
+      		], oUser_p.ZF_Get_IdUnique())
+      		
+      	CAS cstTypeTesteur_Fonctionnel
+      		
+      		sWhere = ChaîneConstruit([
+      		AND Scr_UserStory.IDScr_Usr_Valideur = %1
+      		AND Scr_UserStory.EstTesteParEquipeDev = 1
+      		AND Scr_UserStory.EstTesteParFonctionnel = 0
+      		], oUser_p.ZF_Get_IdUnique())
+      		
+      	AUTRES CAS
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([nTypTesteur_p])
+      FIN
+      
+      
+      sReq = [
+      	SELECT 
+      		Scr_UserStory.*
+      	
+      	FROM Scr_UserStory
+      	where Scr_UserStory.IDScr_UserStory IN (
+      		SELECT DISTINCT
+      			Scr_UserStory.IDScr_UserStory
+      		
+      		FROM Scr_UserStory
+      			LEFT OUTER JOIN Scr_Tache AS tmpTachesSignificatives ON (tmpTachesSignificatives.IDScr_UserStory = Scr_UserStory.IDScr_UserStory
+      				AND tmpTachesSignificatives.Top_Realise = 0
+      				AND tmpTachesSignificatives.Top_Annule = 0
+      				AND tmpTachesSignificatives.Top_tache_tech = 0)
+      				
+      			LEFT OUTER JOIN Scr_Tache AS tmpTachesExiste ON (tmpTachesExiste.IDScr_UserStory = Scr_UserStory.IDScr_UserStory)
+      		
+      		WHERE Scr_UserStory.EstTesteParFonctionnel = 0
+      			AND Scr_UserStory.Top_Termine = 0
+      			AND tmpTachesSignificatives.IDScr_UserStory IS NULL		[% tab/*On ne prend les US qui n'ont pas de taches non finies*/%]
+      			AND tmpTachesExiste.IDScr_UserStory IS NOT NULL			[% tab/*On ne prend que les US qui ont au moins une tache*/%]
+      			[%sWhere%]
+      		)
+      ]
+      
+      goapp.Rsql(sdMestests,sReq)
+      pour tout sdMestests
+      	oUsTmp <- ClDbUserStory.GetObj(sdMestests.IDScr_UserStory)
+      	si (oUsTmp.Get_NbreTache(ClDbUserStory.A_faire) + oUsTmp.Get_NbreTache(ClDbUserStory.EnCours)) = 0 ALORS
+      		oUsEnDev.ZF_addItem(oUsTmp)
+      	FIN
+      FIN
+      
+      HAnnuleDéclaration(sdMestests)
+      
+      
+      renvoyer oUsEnDev
      type : 458752
   properties :
    -

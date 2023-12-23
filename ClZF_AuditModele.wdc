@@ -19,7 +19,6 @@ class :
       
       PROTÉGÉ
       	m_oClasseGen	est un ClZF_GenCodeFic dynamique
-      //	m_bErreur		est un booléen
       	m_sRapport		est une chaîne
       fin
      type : 131072
@@ -75,7 +74,7 @@ class :
       nNbFkIncl		est un entier
       sListeFkCompo	est une chaîne
       stInfoRub		est un ClZF_GenCodeFic.STR_DefRub
-      
+      oClasseFk		est un ClZF_GenCodeFic dynamique
       
       
       POUR TOUT ÉLÉMENT stRelTmp, sRub DE :m_oClasseGen.m_aPK_de_FK
@@ -94,17 +93,29 @@ class :
       			si stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ALORS
       				traceInfo("Liaison ""[%stRelTmp.sNomRel%]"", de type ""Inclusion"", pointe vers une rubrique non unique : [%sRub%].")
       			FIN
+      		autres cas :
+      			//Pas d'autres analyses particulières.
       	FIN
       	
       	SI stInfoRub.bNullable ET stRelTmp.bRubFKOblig ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%sRub%] nullable et relation de type ""1,1"").")
+      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] nullable et relation de type ""1,1"".")
       	FIN
       	SI PAS stInfoRub.bNullable ET PAS stRelTmp.bRubFKOblig ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%sRub%] non nullable et relation de type ""0,1"").")
+      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] non nullable et relation de type ""0,1"".")
       	FIN
       	
       	
+      	
+      	SI stInfoRub.nTypeCle = ClZF_GenCodeFic.cstTypeCleUnique ET pas stRelTmp.bRubFKUnique ALORS
+      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] clé unique et relation de type ""0,n"" ou ""1,n"".")
+      	FIN
+      	SI stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ET stRelTmp.bRubFKUnique ALORS
+      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] non clé unique et relation de type ""0,1"" ou ""1,1"".")
+      	FIN
+      	
       FIN
+      
+      
       
       SI nNbFkIncl > 1 ALORS
       	traceInfo("[%nNbFkIncl%] liaisons sont de type ""Inclusion"", dans cette table (1 seule maxi): " + RC + sListeFkCompo)
@@ -146,6 +157,44 @@ class :
       PROCÉDURE INTERNE traceInfo(sMessage):vide
       	sRapport += [RC] + sMessage
       FIN
+      
+      
+     type : 458752
+   -
+     name : AnaRubsNull
+     procedure_id : 1549960337520702726
+     type_code : 12
+     code : |1+
+      PROCÉDURE AnaRubsNull()<métier>:Vide
+      
+      
+      sRapport		est une chaîne
+      stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
+      sRub			est une chaîne
+      
+      
+      POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.m_aRub
+      	//Si la rubique est nullable 
+      	SI stRubTmp.bNullable ALORS
+      		
+      		//et n'est pas une clé étrngère (cas normal)
+      		si :m_oClasseGen.m_aPK_de_FK[sRub]..Vide alors
+      			traceInfo("Vérifier s'il est pertinent que la rubrique ""[%sRub%]"" soit nullable.")
+      		FIN
+      		
+      		si pas stRubTmp.bNullDefaut ALORS
+      			traceInfo("La rubrique ""[%sRub%]"" est nullable, mais n'est pas a null par défaut.")
+      		FIN
+      	FIN
+      FIN
+      
+      
+      :m_sRapport = sRapport
+      
+      
+      	PROCÉDURE INTERNE traceInfo(sMessage):Vide
+      		sRapport += [RC] + sMessage
+      	FIN
       
      type : 458752
    -
@@ -466,11 +515,11 @@ class :
       			
       			QUAND EXCEPTION DANS
       				sCode est une chaîne = ChaîneConstruit([
-      					clOCol%1 est un [%:m_oClasseGen.sNomClasseColGen()%]<§cs:2§>
-      					clODb%1 est un [%:m_oClasseGen.sNomClasseGen()%]<§cs:2§>
-      					clOCol%1 <- clODb%1.ZF_GetCol([%sConstRef%])<§cs:2§>
-      					libérer clODb%1<§cs:2§>
-      					libérer clOCol%1<§cs:2§>
+      					clOCol%1 est un [%:m_oClasseGen.sNomClasseColGen()%]()
+      					clODb%1 est un [%:m_oClasseGen.sNomClasseGen()%](ClZF_ObjDbLs.cstModeCreation)
+      					clOCol%1 <- clODb%1.ZF_GetCol([%sConstRef%])
+      					libérer clODb%1
+      					libérer clOCol%1
       				], DonneIdentifiant())
       				ExécuteCode(sCode)
       			FAIRE
@@ -489,8 +538,8 @@ class :
       	SI TableauOccurrence(tabACleMqt) > 0 ALORS
       		
       		sCodeCrea = [
-      			CAS [%TableauVersChaîne(tabACleMqt, ", ")%] :<§cs:2§>
-      			[%TAB%]oCol = allouer un [%:m_oClasseGen.sNomClasseColGen()%]<§cs:2§>
+      			CAS [%TableauVersChaîne(tabACleMqt, ", ")%] :
+      			[%TAB%]oCol = allouer un [%:m_oClasseGen.sNomClasseColGen()%]
       		]
       		
       		sRapport += [RC + RC] + "Code de déclaration des collections manquant (procédure CreeCol)."

@@ -86,9 +86,6 @@ class :
       	//On s'assure qu'il y ait bien un projet associé à l'epic.
       	si :m_oProjet = Null ALORS
       		mg_oExErreurProjetAbsent.ZF_Declenche()
-      //		ExceptionDéclenche(1, "Enregistrement du groupe impossible : Aucun projet n'y est affecté")
-      //	sinon
-      //		Scr_Epic.IDScr_Projet = :m_oProjet.ZF_Get_IdUnique()
       	FIN
       	
       	si :m_nOrdre = 0 ALORS
@@ -96,6 +93,12 @@ class :
       		:m_nOrdre		= nNbEpicsDePrj() + 1
       		Scr_Epic.Ordre	= :m_nOrdre
       	FIN
+      	
+      	
+      	
+      	:ZF_InitMemo()
+      	:ZF_HistoriseInfo("Modification du nom ""%1""",Scr_Epic.Nom..Nom, :m_sNom)
+      	:ZF_HistoriseInfo("Changement de la charge estimée %1",Scr_Epic.Estimation..Nom, :m_nEstimation)
       	
       sinon
       	//Si on supprime l'epic, on retire la référence dans les US qui y sont rattachés.
@@ -267,6 +270,46 @@ class :
       // Redéfinition de la méthode ClZF_ObjDbLs.sRepresentation
       PROCÉDURE sRepresentation() <métier>:chaîne
       renvoyer :p_sNom
+     type : 458752
+   -
+     name : setCallBackostEnreg
+     procedure_id : 1544471197557870391
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDB.setCallBackostEnreg
+      PROCÉDURE prive setCallBackostEnreg()<métier>:Vide
+      
+      //stHisto_tmp est un ClZF_Histo.STR_MemoModifs
+      
+      :m_procCallPostEnreg = goapp.EnregHistoBDD
+      //:m_procCallPostEnreg = procCallBack
+     type : 458752
+   -
+     name : ZF_sNomTable
+     procedure_id : 1544492298662529061
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.ZF_sNomTable
+      PROCÉDURE VIRTUELLE ZF_sNomTable() <métier>:chaîne
+      renvoyer ClZF_ObjDbLs.ZF_sNomTable()	//A faire : reprendre cette redéfinition, 
+     type : 458752
+   -
+     name : ZF_Get_IdUnique
+     procedure_id : 1544495691702424641
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.ZF_Get_IdUnique
+      FONCTION ZF_Get_IdUnique()<métier>:entier
+      RENVOYER ClZF_ObjDbLs.ZF_Get_IdUnique()	//A faire : reprendre cette redéfinition.
+     type : 458752
+   -
+     name : ZF_Charge
+     procedure_id : 1544617651665936483
+     type_code : 12
+     code : |1+
+      procedure ZF_Charge(bSansRechargement_p est un booléen = faux)<metier>:vide
+      ClZF_ObjDb.ZF_Charge(bSansRechargement_p)//A faire : reprendre cette redéfinition.
+      
      type : 458752
   properties :
    -

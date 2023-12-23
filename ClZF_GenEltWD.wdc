@@ -160,7 +160,7 @@ class :
      name : GenBloc_ProcedureLoc
      procedure_id : 1487454712024259115
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] GenBloc_ProcedureLoc (<sCode_p> est chaîne, <sNom_p> est chaîne)
@@ -187,6 +187,39 @@ class :
            type : 458752
       ]
       RENVOYER sRetour
+      
+      
+      
+     type : 458752
+   -
+     name : sIdentPrefixe
+     procedure_id : 1550344436380028134
+     type_code : 12
+     code : |1-
+      procedure globale sIdentPrefixe(local sListeFic_p est une chaîne)<metier>:chaine
+      
+      
+      sRetour est une chaîne
+      sTmp est une chaîne
+      nInd est un entier
+      sFic est une chaîne
+      
+      sRetour = ExtraitChaîne(sListeFic_p,1,rc)
+      pour toute chaine sFic de sListeFic_p separee par RC
+      	
+      	sTmp = ""
+      	pour nInd = 1 _a_ taille(sRetour)
+      		si sFic[nInd] ~= sRetour[nInd] ALORS
+      			sTmp += sFic[nInd]
+      		sinon
+      			sortir
+      		FIN
+      	FIN
+      	sRetour = sTmp
+      FIN
+      
+      
+      renvoyer sRetour
      type : 458752
   properties :
    -

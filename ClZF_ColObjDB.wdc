@@ -65,22 +65,23 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
+      // 	bSansVerifDoublon_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bSansVerifDoublon_p>
       procédure ZF_addItem(oEntite_p est un ClZF_ObjDbLs)<métier>:vide
       
       //L'objet est il déjà présent dans la collection ?
-      si :ZF_recherche(oEntite_p) = 0 ALORS
+      si pas :ZF_bTrouve(oEntite_p) ALORS
       	//Non : on l'ajoute
       	:ZF_addRef_int(oEntite_p)
       FIN
      type : 458752
    -
-     name : ZF_recherche
+     name : ZF_Recherche
      procedure_id : 1424025269602118488
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] ZF_recherche (<oObj_p> est ClZF_ObjDbLs)
+      //[ <Résultat> = ] ZF_Recherche (<oObj_p> est ClZF_ObjDbLs)
       //
       // Paramètres :
       //	oObj_p (ClZF_ObjDbLs) : <indiquez ici le rôle de nIdUnique_p>
@@ -91,11 +92,10 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure ZF_recherche(oObj_p est un ClZF_ObjDbLs)<métier>:entier
+      procédure ZF_Recherche(oObj_p est un ClZF_ObjDbLs)<métier>:entier
       
       nInd est un entier
       nPointeurRech est un entier sur 8 octets = oObj_p.p_nPointeur
-      
       pour tout element oTmp, nInd de :aItems()
       	si oTmp.p_nPointeur = nPointeurRech ALORS
       		renvoyer nInd
@@ -103,6 +103,29 @@ class :
       FIN
       
       renvoyer 0
+      
+     type : 458752
+   -
+     name : ZF_bTrouve
+     procedure_id : 1547941642670238123
+     type_code : 12
+     code : |1+
+      PROCÉDURE ZF_bTrouve(oObj_p est un ClZF_ObjDbLs)<métier>:Booleen
+      
+      
+      //nPointeurRech	est un entier sur 8 octets					= oObj_p.p_nPointeur
+      //aListeObj		est un tableau de ClZF_ObjDbLs dynamique	<- :aItems()
+      //
+      //renvoyer VérifieUnVrai(aListeObj, oObjTmp => oObjTmp.p_nPointeur = nPointeurRech)
+      
+      nPointeurRech est un entier sur 8 octets = oObj_p.p_nPointeur
+      POUR TOUT element oTmp de :aItems()
+      	SI oTmp.p_nPointeur = nPointeurRech ALORS
+      		RENVOYER vrai
+      	FIN
+      FIN
+      
+      RENVOYER faux
      type : 458752
    -
      name : addItemById
@@ -617,7 +640,7 @@ class :
       oObj est un ClZF_ObjDbLs dynamique <- ClZF_ObjDbLs.ZF_GetObj(:sClasseObjDbAsso(),ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_LoadSQL([
       	SELECT *
-      	FROM [%oObj.p_sNomTable%]
+      	FROM [%oObj.p_zf_sNomTable%]
       ])
      type : 458752
    -
@@ -822,45 +845,6 @@ class :
       FIN
       
       renvoyer aRetour
-     type : 458752
-   -
-     name : ZF_aoInitCols_old
-     procedure_id : 1538669118263019885
-     type_code : 12
-     code : |1+
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //[ <Résultat> = ] ZF_aoInitCols_old (<aRetour_p>, <oColBase_p> est ClZF_ColObjDB, <sNomCol_p> est chaîne)
-      //
-      // Paramètres :
-      //	aRetour_p : <indiquez ici le rôle de aRetour_p>
-      //	oColBase_p (ClZF_ColObjDB) : <indiquez ici le rôle de oColBase_p>
-      //	sNomCol_p (chaîne ANSI) : <indiquez ici le rôle de sNomCol_p>
-      // Valeur de retour :
-      // 	Type indéterminé : <indiquez ici le rôle de la valeur de retour>
-      //
-      // Exemple :
-      // <Indiquez ici un exemple d'utilisation>
-      //
-      procédure protégée globale ZF_aoInitCols_old(aRetour_p, oColBase_p est un ClZF_ColObjDB, sNomCol_p est une chaîne) <métier>//:tableau associatif de ClZF_ColObjDB dynamique
-      
-      //aRetour est un tableau associatif de ClZF_ColObjDB dynamique
-      oItempTmp est un objet dynamique
-      oColTmp est un objet dynamique
-      nIdPrj est un entier
-      
-      POUR TOUT oItempTmp DE oColBase_p.aItems()
-      	
-      	oColTmp <- oItempTmp.ZF_GetCol(sNomCol_p)
-      	oColTmp.ZF_vider()
-      	oColTmp.ZF_setDhExpire()
-      	
-      	nIdPrj = oItempTmp.ZF_Get_IdUnique()
-      	aRetour_p[nIdPrj] <- oColTmp
-      FIN
-      
-      renvoyer aRetour_p
-      
      type : 458752
    -
      name : ZF_Join

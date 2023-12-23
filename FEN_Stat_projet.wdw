@@ -568,7 +568,7 @@ window :
          
          oSprDeb		est un ClDbSprint	<- CMOD_SansNom1.zoSpr
          oSprFin		est un ClDbSprint	<- CMOD_SansNom2.zoSpr
-         oTaches		est un ClColTache	<- ClColTache.aoFromPeriodeSprints(oSprDeb, oSprFin)
+         oTaches		est un ClColTache	<- ClColTache.oFromPeriodeSprints(oSprDeb, oSprFin)
          oPrjTmp		est un ClDbProjet dynamique
          oTacheTmp	est un ClDbTache dynamique
          aOLstPrj	est un tableau associatif de STR_InfoPrj

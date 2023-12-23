@@ -39,15 +39,6 @@ class :
       
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 815566322696107
-     type_code : 12
-     code : |1+
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbProcess_Metier_Intervenant.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 815566322696108
      type_code : 12
@@ -64,32 +55,6 @@ class :
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoProcess_Metier_Intervenant)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 815566322696110
-     type_code : 12
-     code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbProcess_Metier_Intervenant dynamique
-      
-      selon sdSource_p.IDScr_CritereAccept_Composant_Type
-      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Action_manuelle
-      		oObj = allouer un ClDbProcess_Metier_Intervenant_Manu(ClZF_ObjDbLs.cstModeSansChargement)
-      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Action_par_intervenant
-      		oObj = allouer un ClDbProcess_Metier_Intervenant_Operateur(ClZF_ObjDbLs.cstModeSansChargement)
-      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Action_automatique
-      		oObj = allouer un ClDbProcess_Metier_Intervenant_Auto(ClZF_ObjDbLs.cstModeSansChargement)
-      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Attente
-      		oObj = allouer un ClDbProcess_Metier_Intervenant_Attente(ClZF_ObjDbLs.cstModeSansChargement)
-      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Sous_process
-      		oObj = allouer un ClDbProcess_Metier_Intervenant_SousProcess(ClZF_ObjDbLs.cstModeSansChargement)
-      	CAS ClDbProcess_Metier_Intervenant_Type.cstTypeInter_Condition
-      		oObj = allouer un ClDbProcess_Metier_Intervenant_Condition(ClZF_ObjDbLs.cstModeSansChargement)
-      FIN
-      
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Process_Metier_Intervenant)
      type : 458752
    -
      name : oCol_De_IDScr_Process_Metier_Axe
@@ -162,15 +127,6 @@ class :
       
       RENVOYER oRetour
       
-     type : 458752
-   -
-     name : GetAll
-     procedure_id : 1468677497331978678
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Process_Metier_Intervenant..Nom)
      type : 458752
    -
      name : sClasseObjDbAsso

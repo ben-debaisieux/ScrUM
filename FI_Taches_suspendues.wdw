@@ -298,7 +298,7 @@ window :
      name : Actualise
      procedure_id : 2279320783046594497
      type_code : 14
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //Actualise ()
@@ -316,24 +316,29 @@ window :
       
       oTache est un ClDbTache dynamique
       nNumLigne est un entier
-      oLstTaches est un ClColTache
-      TableSupprimeTout(TBL_Suspendues)
+      oLstTaches est un ClColTache()
+      
+      
+      
+      TBL_Suspendues..AffichageActif = faux
       
       
       si goApp.m_oUsrCnx.p_bTop_Equip_Informatique alors
       	//Affichage de tous les blocages pour l'équipe info.
-      	oLstTaches <- ClDbTache.oTachesSelonStatut(ClDbTache.cstStatut_Suspendu)
+      	oLstTaches <- ClColTache.oFromStatut(ClDbTache.cstStatut_Suspendu)
       sinon
-      	//On filtre les blocages, poru les autres utilisateurs.
-      	pour tout element oTache de ClDbTache.oTachesSelonStatut(ClDbTache.cstStatut_Suspendu).aItems()
-      		//Est ce que l'utilisateur courant est affecté au projet de cette tache ?
-      		si oTache.p_oUserStoryParent.p_oProjetParent.bUsrAffecteAuProjet(goApp.m_oUsrCnx) ALORS
-      			oLstTaches.ZF_addItem(oTache)
-      		fin
-      	FIN
+      	oLstTaches <- ClColTache.oFromUsrPrj(goapp.m_oUsrCnx)
+      	oLstTaches <- oLstTaches.FiltreEtat(ClDbTache.cstStatut_Suspendu).aItems()
+      //	//On filtre les blocages, poru les autres utilisateurs.
+      //	pour tout element oTache de ClDbTache.oTachesSelonStatut(ClDbTache.cstStatut_Suspendu).aItems()
+      //		//Est ce que l'utilisateur courant est affecté au projet de cette tache ?
+      //		si oTache.p_oUserStoryParent.p_oProjetParent.bUsrAffecteAuProjet(goApp.m_oUsrCnx) ALORS
+      //			oLstTaches.ZF_addItem(oTache)
+      //		fin
+      //	FIN
       FIN
       
-      
+      TableSupprimeTout(TBL_Suspendues)
       pour tout element oTache de oLstTaches.aItems()
       	nNumLigne = TableAjouteLigne(TBL_Suspendues)
       	TBL_Suspendues[nNumLigne].COL_IdTache		= oTache.Get_IdUnique()
@@ -349,6 +354,9 @@ window :
       pour nInd = 1 _a_ TableOccurrence(TBL_Suspendues)
       	TBL_Suspendues[TableIndiceRupture(RUPT_HautRupture1,nInd)].LIB_NomProjet = TBL_Suspendues[nInd].COL_Projet
       FIN
+      
+      
+      TBL_Suspendues..AffichageActif = vrai
      type : 458752
   procedure_templates : []
   property_templates : []

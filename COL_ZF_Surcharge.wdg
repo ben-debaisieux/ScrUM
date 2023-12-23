@@ -14,11 +14,14 @@ procedure_set :
   type_code : 31
   p_codes :
    -
-     code : |1+
+     code : |1-
       //pat_ODb est une interface
       //	propriete p_FicBd : Enregistrement //<lecture>
       //fin
       
+      //pat_OdbHisto est une interface
+      //	propriete p_sNomTable <lecture>
+      //fin
      type : 720896
   procedures :
    -

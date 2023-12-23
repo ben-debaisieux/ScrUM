@@ -40,15 +40,6 @@ class :
       
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 1400267864632645780
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
-      :ZF_addItem(ClDbUsr.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 1400268027841440997
      type_code : 12
@@ -65,17 +56,6 @@ class :
       // Redéfinition de la méthode ClColObjDB.Init
       PROCÉDURE  Init():Vide
       ZF_InitCol(:m_aoUsr)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 1422512938272815940
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données):Vide
-      
-      oObj est un ClDbUsr(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Usr)
      type : 458752
    -
      name : aoListeUsr
@@ -251,15 +231,6 @@ class :
       fin
       
       renvoyer oRetour
-     type : 458752
-   -
-     name : GetAll
-     procedure_id : 1468676359118981094
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE public GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Usr..nom)
      type : 458752
    -
      name : sClasseObjDbAsso

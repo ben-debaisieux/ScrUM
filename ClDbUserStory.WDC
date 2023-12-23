@@ -18,7 +18,8 @@ class :
      code : |1+
       ClDbUserStory est une Classe
       	Hérite de ClZF_ObjDB
-      	Hérite de ClHistorique
+      	Hérite de ClZF_Histo
+      //	Hérite de ClHistorique
       	
       PRIVÉ
       	m_sCodeUserStory						est une chaîne		<MAPPING=CodeUserStory>
@@ -47,11 +48,11 @@ class :
       	
       	m_bEtatInitialise						est un booléen		<Sérialise=faux>
       	m_eEtatUserStorie						est un ECompteNbUS	<Sérialise=faux>
-      	m_nNbreTacheAfaire						est un entier	= 0
-      	m_nNbreTacheEnCours						est un entier	= 0
-      	m_nNbreTacheAnnulee						est un entier	= 0
-      	m_nNbreTacheTerminee					est un entier	= 0
-      	
+      	m_nNbreTacheAfaire						est un entier		<Sérialise=faux>
+      	m_nNbreTacheEnCours						est un entier		<Sérialise=faux>
+      	m_nNbreTacheAnnulee						est un entier		<Sérialise=faux>
+      	m_nNbreTacheTerminee					est un entier		<Sérialise=faux>
+      	m_nNbreTacheTechnique					est un entier		<Sérialise=faux>
       	
       	m_bPresenceTacheFiniesNonVaidées		est un booléen			//Utile pour la migration (il faut distinguer les taches en test et celles validées)
       	m_bPresenceTacheBloquee					est un booléen			//Permet d'identifier si on a une tache bloquer dans l'US.
@@ -126,7 +127,7 @@ class :
       //Déclaration du constructeur de la classe d'accès aux données.
       ClZF_ObjDB.Constructeur(Scr_UserStory..Nom, Scr_UserStory.IDScr_UserStory..Nom, nID_P)
       
-      :ZF_DefTimeOut(ClAppScrum.cstTimeOutProd, vrai)
+      //:ZF_DefTimeOut(ClAppScrum.cstTimeOutProd, vrai)
      type : 589824
    -
      name : Destructeur
@@ -160,8 +161,8 @@ class :
       
       sdDelUserStoresHisto est une Source de Données
       sReq est une chaîne
-      m_EnrUsOrigine est un Enregistrement de Scr_UserStory
-      m_EnrUsActu est un Enregistrement de Scr_UserStory
+      //m_EnrUsOrigine est un Enregistrement de Scr_UserStory
+      //m_EnrUsActu est un Enregistrement de Scr_UserStory
       oTache est un ClDbTache dynamique
       
       
@@ -182,13 +183,13 @@ class :
       	
       sinon
       	
-      	//Si on est en modif, on actualise les données en mémoire, pour générer l'historique.
-      	si pas :ZF_bModeAjout() ALORS
-      		m_EnrUsActu = Scr_UserStory
-      		:ZF_Charge(Vrai)
-      		m_EnrUsOrigine = Scr_UserStory
-      		Scr_UserStory = m_EnrUsActu
-      	fin
+      //	//Si on est en modif, on actualise les données en mémoire, pour générer l'historique.
+      //	si pas :ZF_bModeAjout() ALORS
+      //		m_EnrUsActu = Scr_UserStory
+      //		:ZF_Charge(Vrai)
+      //		m_EnrUsOrigine = Scr_UserStory
+      //		Scr_UserStory = m_EnrUsActu
+      //	fin
       	
       	si bCodeDejaPris() ALORS
       		mg_oEx_CodeDejaPris.ZF_Declenche([:m_sCodeUserStory])
@@ -251,124 +252,185 @@ class :
       	
       	////////////////////////////////////////////////
       	//Historisation de modifications
-      	
+      	:ZF_InitMemo()
       	si :ZF_bModeAjout() ALORS
-      		:AjouteHistorique("Création de la user story")
+      		:ZF_SetMsgHisto("Création de la user story")
+      		//:AjouteHistorique("Création de la user story")
       	sinon
       	
       		//Projet parent
-      		si m_EnrUsOrigine.IDScr_Projet <> :m_oProjetParent.ZF_Get_IdUnique() ALORS
-      			:AjouteHistorique(ChaîneConstruit("Association du projet à : %1", :m_oProjetParent.p_sNom))
-      		FIN
+      		:ZF_HistoriseInfo("Associé au projet : %1", Scr_UserStory.IDScr_Projet..nom, p_oProjetParent.ZF_Get_IdUnique(), p_oProjetParent.p_sNom)
+      //		si m_EnrUsOrigine.IDScr_Projet <> :m_oProjetParent.ZF_Get_IdUnique() ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Association du projet à : %1", :m_oProjetParent.p_sNom))
+      //		FIN
       		
       		//Code US
-      		si m_EnrUsOrigine.CodeUserStory <> :m_sCodeUserStory ALORS
-      			:AjouteHistorique(ChaîneConstruit("Changement du code de la user story : %1", :m_sCodeUserStory))
-      		FIN
+      		:ZF_HistoriseInfo("Changement du code de la user story : %1", Scr_UserStory.CodeUserStory..Nom, :m_sCodeUserStory)
+      //		si m_EnrUsOrigine.CodeUserStory <> :m_sCodeUserStory ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Changement du code de la user story : %1", :m_sCodeUserStory))
+      //		FIN
       		
       		//En tant que
-      		si m_EnrUsOrigine.EntantQue <> :m_sEntantQue ALORS
-      			:AjouteHistorique(ChaîneConstruit("Changement de la zone ""En tant que"" : %1", :m_sEntantQue))
-      		FIN
+      		:ZF_HistoriseInfo("Changement de la zone ""En tant que"" : %1", Scr_UserStory.EntantQue..Nom, :m_sEntantQue)
+      //		si m_EnrUsOrigine.EntantQue <> :m_sEntantQue ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Changement de la zone ""En tant que"" : %1", :m_sEntantQue))
+      //		FIN
       		
       		//J'ai besoin de 
-      		si m_EnrUsOrigine.JaiBesoinDe <> :m_sJaiBesoinDe ALORS
-      			:AjouteHistorique(ChaîneConstruit("Changement de la zone ""J'ai besoin de"" : %1", :m_sJaiBesoinDe))
-      		FIN
+      		:ZF_HistoriseInfo("Changement de la zone ""J'ai besoin de"" : %1", Scr_UserStory.JaiBesoinDe..Nom, :m_sJaiBesoinDe)
+      //		si m_EnrUsOrigine.JaiBesoinDe <> :m_sJaiBesoinDe ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Changement de la zone ""J'ai besoin de"" : %1", :m_sJaiBesoinDe))
+      //		FIN
       		
       		//Afin de
-      		si m_EnrUsOrigine.AfinDe <> :m_sAfinDe ALORS
-      			:AjouteHistorique(ChaîneConstruit("Changement de la zone ""Afin de"" : %1", :m_sAfinDe))
-      		FIN
+      		:ZF_HistoriseInfo("Changement de la zone ""Afin de"" : %1", Scr_UserStory.AfinDe..Nom, :m_sAfinDe)
+      //		si m_EnrUsOrigine.AfinDe <> :m_sAfinDe ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Changement de la zone ""Afin de"" : %1", :m_sAfinDe))
+      //		FIN
       		
       		//Cmtr général
-      		SI m_EnrUsOrigine.CMTR_Global <> :m_sCMTR_Global ALORS
-      			:AjouteHistorique("Changement du commentaire général :" + RC + :m_sCMTR_Global)
-      		FIN
+      		:ZF_HistoriseInfo("Changement du commentaire général :" + RC, Scr_UserStory.CMTR_Global..Nom, :m_sCMTR_Global)
+      //		SI m_EnrUsOrigine.CMTR_Global <> :m_sCMTR_Global ALORS
+      //			:AjouteHistorique("Changement du commentaire général :" + RC + :m_sCMTR_Global)
+      //		FIN
       		
       		//Est testé par équipe dev
-      		si m_EnrUsOrigine.EstTesteParEquipeDev <> :m_bEstTestéParEquipeDev ALORS
-      			si :m_bEstTestéParEquipeDev ALORS
-      				:AjouteHistorique("La user story est testée par l'équipe de dev.")
-      			sinon
-      				:AjouteHistorique("La user story n'est pas testée par l'équipe de dev.")
+      		si :ZF_bRubEstModifiee(Scr_UserStory.CMTR_Global..Nom,:m_bEstTestéParEquipeDev) ALORS
+      			SI :m_bEstTestéParEquipeDev ALORS
+      				:ZF_SetMsgHisto("La user story est testée par l'équipe de dev.")
+      			SINON
+      				:ZF_SetMsgHisto("La user story n'est pas testée par l'équipe de dev.")
       			FIN
       		FIN
+      		
+      //		si m_EnrUsOrigine.EstTesteParEquipeDev <> :m_bEstTestéParEquipeDev ALORS
+      //			si :m_bEstTestéParEquipeDev ALORS
+      //				:AjouteHistorique("La user story est testée par l'équipe de dev.")
+      //			sinon
+      //				:AjouteHistorique("La user story n'est pas testée par l'équipe de dev.")
+      //			FIN
+      //		FIN
       		
       		//Utilisateur de test dev
-      		si :m_oUsr_Test_Dev = Null ALORS
-      			si m_EnrUsOrigine.IDScr_Usr_TestDev..Null = Faux ALORS
-      				:AjouteHistorique("Retrait du testeur de l'équipe de dev.")
+      		SI :ZF_bRubEstModifiee(Scr_UserStory.IDScr_Usr_TestDev..Nom, :ZF_IdSiNonNull(:m_oUsr_Test_Dev)) ALORS
+      			SI :m_oUsr_Test_Dev = null ALORS
+      				:ZF_SetMsgHisto("Retrait du testeur de l'équipe de dev.")
+      			SINON
+      				:ZF_SetMsgHisto(ChaîneConstruit("Changement du testeur de l'équipe de dev : %1", :m_oUsr_Test_Dev.p_sNom))
       			FIN
-      		sinon
-      			si m_EnrUsOrigine.IDScr_Usr_TestDev <> :m_oUsr_Test_Dev.ZF_Get_IdUnique() ALORS
-      				:AjouteHistorique(ChaîneConstruit("Changement du testeur de l'équipe de dev : %1", :m_oUsr_Test_Dev.p_sNom))
-      			FIN
-      		FIN
+      		fin
+      		
+      //		si :m_oUsr_Test_Dev = Null ALORS
+      //			si m_EnrUsOrigine.IDScr_Usr_TestDev..Null = Faux ALORS
+      //				:AjouteHistorique("Retrait du testeur de l'équipe de dev.")
+      //			FIN
+      //		sinon
+      //			si m_EnrUsOrigine.IDScr_Usr_TestDev <> :m_oUsr_Test_Dev.ZF_Get_IdUnique() ALORS
+      //				:AjouteHistorique(ChaîneConstruit("Changement du testeur de l'équipe de dev : %1", :m_oUsr_Test_Dev.p_sNom))
+      //			FIN
+      //		FIN
       		
       		//Utilisateur valideur
-      		si m_EnrUsOrigine.IDScr_Usr_Valideur <> :m_oUsrResponsable.ZF_Get_IdUnique() ALORS
-      			:AjouteHistorique(ChaîneConstruit("Changement du responsable de la user story : %1", :m_oUsrResponsable.p_sNom))
-      		FIN
+      		:ZF_HistoriseInfo("Changement du responsable de la user story : %1", Scr_UserStory.IDScr_Usr_Valideur..Nom, :m_oUsrResponsable.ZF_Get_IdUnique(), :m_oUsrResponsable.p_sNom)
+      //		si m_EnrUsOrigine.IDScr_Usr_Valideur <> :m_oUsrResponsable.ZF_Get_IdUnique() ALORS
+      //			:AjouteHistorique(ChaîneConstruit("Changement du responsable de la user story : %1", :m_oUsrResponsable.p_sNom))
+      //		FIN
       		
       		//Est testé par le fonctionnel
-      		si m_EnrUsOrigine.EstTesteParFonctionnel <> :m_bEstTestéParLeDemandeur ALORS
+      		SI :ZF_bRubEstModifiee(Scr_UserStory.EstTesteParFonctionnel..Nom,:m_bEstTestéParLeDemandeur) ALORS
       			SI :m_bEstTestéParLeDemandeur ALORS
-      				:AjouteHistorique("La user story est testée par le demandeur")
+      				:ZF_SetMsgHisto("La user story est testée par le demandeur")
       			SINON
-      				:AjouteHistorique("La user story n'est pas testée par le demandeur")
+      				:ZF_SetMsgHisto("La user story n'est plus testée par le demandeur")
       			FIN
       		FIN
+      //		si m_EnrUsOrigine.EstTesteParFonctionnel <> :m_bEstTestéParLeDemandeur ALORS
+      //			SI :m_bEstTestéParLeDemandeur ALORS
+      //				:AjouteHistorique("La user story est testée par le demandeur")
+      //			SINON
+      //				:AjouteHistorique("La user story n'est pas testée par le demandeur")
+      //			FIN
+      //		FIN
       		
       		//Date de mise à disposition en test fonctionnel
-      		si m_EnrUsOrigine.DateMiseADispo_enTestFonctionnel <> :m_dDateMiseADispo_EnTest ALORS
-      			si :m_dDateMiseADispo_EnTest = "" ALORS
-      				:AjouteHistorique("Retrait de la date de mise à dispo en test")
-      			sinon
-      				:AjouteHistorique(ChaîneConstruit("Saisie de la date de mise à dispo en test : %1", DateVersChaîne(:m_dDateMiseADispo_EnTest)))
+      		SI :ZF_bRubEstModifiee(Scr_UserStory.DateMiseADispo_enTestFonctionnel..Nom,:m_dDateMiseADispo_EnTest) ALORS
+      			SI :m_dDateMiseADispo_EnTest = "" ALORS
+      				:ZF_SetMsgHisto("Retrait de la date de mise à dispo en test")
+      			SINON
+      				:ZF_HistoriseInfo("Saisie de la date de mise à dispo en test : %1", Scr_UserStory.DateMiseADispo_enTestFonctionnel..Nom,:m_dDateMiseADispo_EnTest, DateVersChaîne(:m_dDateMiseADispo_EnTest))
       			FIN
-      		FIN
+      		fin
+      //		si m_EnrUsOrigine.DateMiseADispo_enTestFonctionnel <> :m_dDateMiseADispo_EnTest ALORS
+      //			si :m_dDateMiseADispo_EnTest = "" ALORS
+      //				:AjouteHistorique("Retrait de la date de mise à dispo en test")
+      //			sinon
+      //				:AjouteHistorique(ChaîneConstruit("Saisie de la date de mise à dispo en test : %1", DateVersChaîne(:m_dDateMiseADispo_EnTest)))
+      //			FIN
+      //		FIN
       		
       		//m_EnrUsOrigine.IDSrc_Environnement_Test
       		
       		//US annulée
-      		si m_EnrUsOrigine.Top_Annule <> :m_bAnnule ALORS
-      			si :m_bAnnule ALORS
-      				:AjouteHistorique("La user story est annulée")
-      			sinon
-      				:AjouteHistorique("La user story n'est plus annulée")
+      		SI :ZF_bRubEstModifiee(Scr_UserStory.Top_Annule..Nom,:m_bAnnule) ALORS
+      			SI :m_bAnnule ALORS
+      				:ZF_SetMsgHisto("La user story est annulée")
+      			SINON
+      				:ZF_SetMsgHisto("La user story n'est plus annulée")
       			FIN
       		FIN
+      //		si m_EnrUsOrigine.Top_Annule <> :m_bAnnule ALORS
+      //			si :m_bAnnule ALORS
+      //				:AjouteHistorique("La user story est annulée")
+      //			sinon
+      //				:AjouteHistorique("La user story n'est plus annulée")
+      //			FIN
+      //		FIN
       		
       		//US terminée
-      		si m_EnrUsOrigine.Top_Termine <> :m_bTermine ALORS
+      		SI :ZF_bRubEstModifiee(Scr_UserStory.Top_Termine..Nom,:m_bTermine) ALORS
       			SI :m_bTermine ALORS
-      				:AjouteHistorique("La user story est terminée")
+      				:ZF_SetMsgHisto("La user story est terminée")
       			SINON
-      				:AjouteHistorique("La user story n'est plus terminée")
+      				:ZF_SetMsgHisto("La user story n'est plus terminée")
       			FIN
       		FIN
+      //		si m_EnrUsOrigine.Top_Termine <> :m_bTermine ALORS
+      //			SI :m_bTermine ALORS
+      //				:AjouteHistorique("La user story est terminée")
+      //			SINON
+      //				:AjouteHistorique("La user story n'est plus terminée")
+      //			FIN
+      //		FIN
       		
       		//Date de mise en production
-      		si m_EnrUsOrigine.DateMiseEnProd <> :m_dDateMiseEnProd ALORS
-      			si :m_dDateMiseEnProd = "" ALORS
-      				:AjouteHistorique("Retrait de la date de mise en production")
-      			sinon
-      				:AjouteHistorique(ChaîneConstruit("Changement de la date de mise en production : %1", DateVersChaîne(:m_dDateMiseEnProd)))
+      		SI :ZF_bRubEstModifiee(Scr_UserStory.DateMiseEnProd..Nom, :m_dDateMiseEnProd) ALORS
+      			SI :m_dDateMiseEnProd = "" ALORS
+      				:ZF_SetMsgHisto("Retrait de la date de mise en production")
+      			SINON
+      				:ZF_HistoriseInfo("Changement de la date de mise en production : %1", Scr_UserStory.DateMiseEnProd..Nom,:m_dDateMiseEnProd, DateVersChaîne(:m_dDateMiseEnProd))
       			FIN
       		FIN
+      //		si m_EnrUsOrigine.DateMiseEnProd <> :m_dDateMiseEnProd ALORS
+      //			si :m_dDateMiseEnProd = "" ALORS
+      //				:AjouteHistorique("Retrait de la date de mise en production")
+      //			sinon
+      //				:AjouteHistorique(ChaîneConstruit("Changement de la date de mise en production : %1", DateVersChaîne(:m_dDateMiseEnProd)))
+      //			FIN
+      //		FIN
       		
       		//Cmtr de mise en prod
-      		si m_EnrUsOrigine.CMTR_Mise_En_Prod <> :m_sCMTR_Mise_En_Prod ALORS
-      			:AjouteHistorique("Changement du commentaire de mise en production :" + rc + :m_sCMTR_Mise_En_Prod)
-      		FIN
+      		:ZF_HistoriseInfo("Changement du commentaire de mise en production :" + RC + "%1", Scr_UserStory.CMTR_Mise_En_Prod..Nom,:m_sCMTR_Mise_En_Prod)
+      //		SI :ZF_bRubEstModifiee(Scr_UserStory.DateMiseEnProd..Nom, :m_dDateMiseEnProd) ALORS
+      //			:AjouteHistorique("Changement du commentaire de mise en production :" + rc + :m_sCMTR_Mise_En_Prod)
+      //		FIN
       		
       		//m_EnrUsOrigine.Top_RepriseHisto
       		
       		//Cmtr de mise en prod
-      		SI m_EnrUsOrigine.CMTR_RetourDeTest <> :m_sCMTR_RetourDeTest ALORS
-      			:AjouteHistorique("Changement du commentaire de retour de test :" + RC + :m_sCMTR_RetourDeTest)
-      		FIN
+      		:ZF_HistoriseInfo("Changement du commentaire de retour de test :" + RC + "%1", Scr_UserStory.CMTR_RetourDeTest..Nom,:m_sCMTR_RetourDeTest)
+      //		SI m_EnrUsOrigine.CMTR_RetourDeTest <> :m_sCMTR_RetourDeTest ALORS
+      //			:AjouteHistorique("Changement du commentaire de retour de test :" + RC + :m_sCMTR_RetourDeTest)
+      //		FIN
       	fin
       FIN
      type : 458752
@@ -508,7 +570,7 @@ class :
       // Indiquez ici un exemple d'utilisation.
       //
       //	stUserStorie_p (STR_UserStorie) : L'user Story à analyser
-      PROCEDURE User_Story_Etat()<métier>:vide
+      PROCEDURE prive User_Story_Etat()<métier>:vide
       
       
       oTache est un ClDbTache dynamique
@@ -521,6 +583,7 @@ class :
       :m_nNbreTacheEnCours				= 0
       :m_nNbreTacheAnnulee				= 0
       :m_nNbreTacheTerminee				= 0
+      :m_nNbreTacheTechnique				= 0
       :m_bPresenceTacheFiniesNonVaidées	= faux
       :m_bPresenceTacheBloquee			= faux
       
@@ -541,12 +604,16 @@ class :
       			//Ok, la tache est considéré comme terminée
       			:m_nNbreTacheTerminee ++
       		SINON
-      			si pas oTache.bEstDemarree() ALORS
-      				//Si une tache est commencée mais pas terminée, US -> commencée et on sort de la boucle
-      				:m_nNbreTacheAfaire++
+      			si oTache.p_bTache_tech ALORS
+      				:m_nNbreTacheTechnique++
       			sinon
-      				:m_eEtatUserStorie = ECompteNbUS.EnCours
-      				:m_nNbreTacheEnCours++
+      				si pas oTache.bEstDemarree() ALORS
+      					//Si une tache est commencée mais pas terminée, US -> commencée et on sort de la boucle
+      					:m_nNbreTacheAfaire++
+      				sinon
+      					:m_eEtatUserStorie = ECompteNbUS.EnCours
+      					:m_nNbreTacheEnCours++
+      				FIN
       			FIN
       		FIN
       		
@@ -573,8 +640,8 @@ class :
       			:m_eEtatUserStorie = ECompteNbUS.A_faire
       		fin
       	sinon
-      		//Si le nbr de tache annulée + finie = le nbr de tache de l'US alors US -> plus de taches à faire
-      		SI (:m_nNbreTacheAnnulee + :m_nNbreTacheTerminee) = oColTaches.ZF_nTaille() ALORS
+      		//Si le nbr de tache annulées + finies + techniques = le nbr de tache de l'US alors US -> plus de taches à faire
+      		SI (:m_nNbreTacheAnnulee + :m_nNbreTacheTerminee + :m_nNbreTacheTechnique) = oColTaches.ZF_nTaille() ALORS
       			
       			//Mais Si le nbr de tache annule = le nbr de tache de l'US alors US -> annulée
       			SI :m_nNbreTacheAnnulee > 0 ET :m_nNbreTacheAnnulee = oColTaches.ZF_nTaille() ALORS
@@ -631,31 +698,6 @@ class :
       :User_Story_Etat()
       
       renvoyer :m_eEtatUserStorie
-     type : 458752
-   -
-     name : Get_NbSprintRetard_Old
-     procedure_id : 1445047014239362443
-     type_code : 12
-     code : |1+
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //Get_NbSprintRetard_Old ()
-      //
-      // Paramètres :
-      //	Aucun
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      FONCTION Get_NbSprintRetard_Old()<zombie>
-      
-      //SI PAS :m_bEtatInitialise ALORS
-      //	:User_Story_Etat()
-      //FIN
-      //RENVOYER :m_nNbrSprintRetard
-      
      type : 458752
    -
      name : Get_NbreTache
@@ -734,7 +776,7 @@ class :
       
       
       //Enregistrement de l'historique des modifications
-      :EnregHisto()
+      //:EnregHisto()
      type : 458752
    -
      name : sNomDeEtat
@@ -882,7 +924,7 @@ class :
       FONCTION ZF_Get_IdUnique()<métier>:entier
       
       //redéfinition obligatoire à cause de la déclaration 'abstraite' de la méthode, dans la classe d'historique
-      renvoyer ClZF_ObjDB.ZF_Get_IdUnique()
+      renvoyer ClZF_ObjDB.ZF_Get_IdUnique()	//a faire : éviter cette redondance
      type : 458752
    -
      name : RecalcEtatUS
@@ -927,7 +969,9 @@ class :
       	si :p_dDateMiseADispo_EnTest = "" alors
       		:p_dDateMiseADispo_EnTest		= DateSys()
       	fin
-      	:p_oUsr_Test_Dev				= goApp.m_oUsrCnx
+      	si :p_oUsr_Test_Dev = null alors
+      		:p_oUsr_Test_Dev				= goApp.m_oUsrCnx
+      	fin
       SINON
       	
       	SI :Get_NbreTache(ClDbUserStory.ECompteNbTache.Toutes) =:Get_NbreTache(ClDbUserStory.ECompteNbTache.Annulée) ET :Get_NbreTache(ClDbUserStory.ECompteNbTache.Toutes) >= 1 ALORS
@@ -943,7 +987,7 @@ class :
       
       
       
-      :ZF_Enregistre()
+      //:ZF_Enregistre()
      type : 458752
    -
      name : sExport
@@ -1226,6 +1270,35 @@ class :
       SINON
       	Scr_UserStory.IDSrc_Environnement_Test	= :m_oEnvironnement_Test.ZF_Get_IdUnique()
       FIN
+     type : 458752
+   -
+     name : setCallBackostEnreg
+     procedure_id : 1544769508692997055
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ObjDB.setCallBackostEnreg
+      PROCÉDURE prive setCallBackostEnreg()<métier>:Vide
+      
+      
+      :m_procCallPostEnreg = goApp.EnregHistoBDD
+     type : 458752
+   -
+     name : ZF_sNomTable
+     procedure_id : 1544777248262501040
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.ZF_sNomTable
+      PROCÉDURE VIRTUELLE ZF_sNomTable() <métier>:chaîne
+      renvoyer ClZF_ObjDB.ZF_sNomTable()	//a faire : éviter cette redondance
+     type : 458752
+   -
+     name : ZF_Charge
+     procedure_id : 1544777295512460665
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ObjDB.ZF_Charge
+      PROCÉDURE PROTÉGÉE ZF_Charge(bSansRechargement_P est un booléen = Faux)<métier>:Vide
+      ClZF_ObjDB.ZF_Charge(bSansRechargement_P)
      type : 458752
   properties :
    -

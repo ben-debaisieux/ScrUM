@@ -108,7 +108,7 @@ class :
       		sReq = [
       		SELECT
       			*
-      		FROM [%:p_sNomTable%]
+      		FROM [%:p_ZF_sNomTable%]
       		WHERE [%sRubs%]
       			AND [%:p_sNom_Col_Id_Auto%] <> [%:ZF_Get_IdUnique()%]
       		]

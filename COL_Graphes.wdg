@@ -143,7 +143,7 @@ procedure_set :
       	fin
       	
       	si bAPrendre ALORS
-      		oUS.User_Story_Etat()
+      		//oUS.User_Story_Etat()
       		selon oUS.Get_EtatUS()
       			cas ClDbUserStory.ECompteNbUS.Terminee
       				nFinies++
@@ -273,7 +273,7 @@ procedure_set :
       stSp_Tmp.nProj = nPointsTotal
       stSp_Tmp.nReal = nPointsTotal
       
-      pour tout element oSprint de ClColSprint.aoListeSprint().aItems()
+      pour tout element oSprint de ClColSprint.oListeSprint().aItems()
       	
       	SI oSprint.p_bTop_Termine ALORS
       		stSp_Tmp.nReal -= oSprint.nGetNbPointsFini()
@@ -343,8 +343,8 @@ procedure_set :
       	LOCAL eSelecteur_p est un ClDbTache.ETypeCharge)<metier>:STR_Charge
       		
       
-      oColSprints		est un ClColSprint dynamique	<- ClColSprint.aoListeSprint(nSprint_p, nSprint_p + nNbSprint_p)
-      oColTaches		est un ClColTache()
+      oColSprints		est un ClColSprint dynamique <- ClColSprint.oListeSprint(nSprint_p, nSprint_p + nNbSprint_p)
+      oColTaches		est un ClColTache dynamique <- ClColTache.oFromSprints(oColSprints, eSelecteur_p)
       oTache			est un ClDbTache dynamique
       oListeProj		est un ClColProjet()
       oSprint			est un ClDbSprint dynamique
@@ -356,8 +356,6 @@ procedure_set :
       aUsrCdp			est un tableau associatif de ClDbUsr dynamique
       oPrj			est un ClDbProjet dynamique
       
-      oColTaches.oFromSprints(oColSprints, eSelecteur_p)
-      		
       
       stRetour.sTitre = "Planification des taches"
       SELON eSelecteur_p
@@ -514,7 +512,7 @@ procedure_set :
       
       stRetour.sTitre	= "Analyse de l'évolution de la charge du projet" + rc
       
-      POUR TOUT ELEMENT oSprint DE ClColSprint.aoListeSprint().aItems()
+      POUR TOUT ELEMENT oSprint DE ClColSprint.oListeSprint().aItems()
       	sNumSprint										= oSprint.ZF_Get_IdUnique()
       	
       	stRetour.aStSeries[sNumSprint]					= allouer un STR_Evol_Charge_Projet_Spr
@@ -562,11 +560,10 @@ procedure_set :
       oTache			est un ClDbTache dynamique
       oPrj			est un ClDbProjet dynamique
       sNumSprint		est une chaîne
-      oSprints		est un ClColSprint
+      oSprints		est un ClColSprint dynamique <- ClColSprint.oListeSprint()
       
       stRetour.sTitre	= "Analyse des temps de mise en production des taches réalisées" + rc
       
-      oSprints <- ClcolSprint.aoListeSprint()
       POUR TOUT ELEMENT oSprint DE oSprints.aItems()
       	sNumSprint										= oSprint.ZF_Get_IdUnique()
       	

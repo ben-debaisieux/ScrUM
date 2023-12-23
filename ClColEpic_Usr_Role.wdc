@@ -39,15 +39,6 @@ class :
       
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 817308188840068
-     type_code : 12
-     code : |1+
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbEpic_Usr_Role.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 817308188840069
      type_code : 12
@@ -64,24 +55,6 @@ class :
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoEpic_Usr_Role)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 817308188840071
-     type_code : 12
-     code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbEpic_Usr_Role(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Epic_Usr_Role)
-     type : 458752
-   -
-     name : GetAll
-     procedure_id : 817308188840072
-     type_code : 12
-     code : |1-
-      PROCÉDURE GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Epic_Usr_Role..nom)
      type : 458752
    -
      name : sClasseObjDbAsso

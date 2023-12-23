@@ -37,15 +37,6 @@ class :
       procédure Destructeur()
      type : 655360
    -
-     name : addItemById
-     procedure_id : 1399529056780421078
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
-      :ZF_addItem(ClDbEpic.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 1399794275128397075
      type_code : 12
@@ -64,22 +55,11 @@ class :
       ZF_InitCol(:m_aoEpic)
      type : 458752
    -
-     name : addItemBySource_old
-     procedure_id : 1422512577493054572
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données):Vide
-      
-      oObj est un ClDbEpic(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Epic)
-     type : 458752
-   -
      name : from_projet
      procedure_id : 1449244419702655458
      type_code : 12
      code : |1-
-      procédure globale from_projet(oProjet_p est un ClDbProjet):ClColEpic
+      procédure globale from_projet(oProjet_p est un ClDbProjet)<metier>:ClColEpic
       
       oRetour est un ClColEpic
       sReq est une chaîne
@@ -156,15 +136,6 @@ class :
       si ListeOccurrence(sNomComplet) > 0 ALORS
       	ListeSelectPlus(sNomComplet, nInd)
       FIN
-     type : 458752
-   -
-     name : GetAll_old
-     procedure_id : 1468673872307433592
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Epic..nom)
      type : 458752
    -
      name : aliste_charge_From_Projet

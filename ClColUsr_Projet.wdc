@@ -39,15 +39,6 @@ class :
       
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 817708067585017
-     type_code : 12
-     code : |1+
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbUsr_Projet.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 817708067585018
      type_code : 12
@@ -64,24 +55,6 @@ class :
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoUsr_Projet)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 817708067585020
-     type_code : 12
-     code : |1+
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbUsr_Projet(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_Usr_Projet)
-     type : 458752
-   -
-     name : GetAll_old
-     procedure_id : 817708067585021
-     type_code : 12
-     code : |1-
-      PROCÉDURE GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Usr_Projet..nom)
      type : 458752
    -
      name : oFromProjet

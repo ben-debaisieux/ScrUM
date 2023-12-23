@@ -492,9 +492,9 @@ window :
      code : |1+
       PROCÉDURE MaFenêtre(zoEpic_p est un ClDbEpic dynamique = null)
       
-      si zoEpic_p = Null ALORS
-      	zoEpic_p = allouer un ClDbEpic(58)
-      FIN
+      //si zoEpic_p = Null ALORS
+      //	zoEpic_p = allouer un ClDbEpic(58)
+      //FIN
       
       zoColEpic_Usr	est un ClColEpic_Usr <- ClColEpic_Usr.aoFromEpic(zoEpic_p)
       zoEpicUsr		est un ClDbEpic_Usr dynamique
@@ -576,7 +576,7 @@ window :
       PROCEDURE Charge_Cbo_IDScr_Usr()<ui>:Vide
       
       oCol est un ClColUsr()
-      oCol.GetAll()
+      oCol.zf_GetAll()
       oCOl.ZF_ChargeCbo(CBO_IDScr_Usr..NomComplet)
       
       SI ListeOccurrence(CBO_IDScr_Usr) = 0 ALORS
@@ -592,7 +592,7 @@ window :
       PROCEDURE Charge_Cbo_IDScr_Epic_Usr_Role()<ui>:Vide
       
       oCol est un ClColEpic_Usr_Role()
-      oCol.GetAll()
+      oCol.ZF_GetAll()
       oCOl.ZF_ChargeCbo(CBO_IDScr_Epic_Usr_Role..NomComplet)
       
       SI ListeOccurrence(CBO_IDScr_Epic_Usr_Role) = 0 ALORS

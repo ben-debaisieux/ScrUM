@@ -38,15 +38,6 @@ class :
       PROCÉDURE Destructeur()
      type : 655360
    -
-     name : addItemById_old
-     procedure_id : 1443298682587934103
-     type_code : 12
-     code : |1+
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem(ClDbUserStory_Doc.GetObj(nId_P))
-     type : 458752
-   -
      name : aItems
      procedure_id : 1443298682587999639
      type_code : 12
@@ -63,28 +54,6 @@ class :
       PROCÉDURE Init()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
       ZF_InitCol(:m_aoUserStory_Doc)
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 1443298682588130711
-     type_code : 12
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //addItemBySource_old (<sdSource_p> est objet source de données)
-      //
-      // Paramètres :
-      //	sdSource_p (objet source de données) : <indiquez ici le rôle de sdSource_p>
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // <Indiquez ici un exemple d'utilisation>
-      //
-      PROCÉDURE PROTÉGÉE VIRTUELLE addItemBySource_old(sdSource_p est une Source de Données)<métier>:Vide
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un ClDbUserStory_Doc(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_UserStory_Doc)
      type : 458752
    -
      name : oFromUS
@@ -107,15 +76,6 @@ class :
       fin
       
       renvoyer oRetour
-     type : 458752
-   -
-     name : GetAll
-     procedure_id : 1468676144369844882
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_UserStory_Doc..nom)
      type : 458752
    -
      name : sClasseObjDbAsso

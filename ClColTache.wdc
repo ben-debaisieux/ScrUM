@@ -42,7 +42,7 @@ class :
       procédure Constructeur()
       
       
-      :ZF_DefTimeOut(ClAppScrum.cstTimeOutProd)
+      //:ZF_DefTimeOut(ClAppScrum.cstTimeOutProd)
      type : 589824
    -
      name : Destructeur
@@ -52,15 +52,6 @@ class :
       procédure Destructeur()
       
      type : 655360
-   -
-     name : addItemById
-     procedure_id : 1474619292466158591
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemById
-      PROCÉDURE addItemById_old(LOCAL nId_P est un entier):Vide
-      :ZF_addItem(ClDbTache.GetObj(nId_P))
-     type : 458752
    -
      name : Init
      procedure_id : 1474619292466224127
@@ -78,17 +69,6 @@ class :
       // Redéfinition de la méthode ClColObjDB.aItems
       PROCÉDURE aItems():tableau de ClDbTache dynamique
       renvoyer :m_aoTaches
-     type : 458752
-   -
-     name : addItemBySource_old
-     procedure_id : 1474619292466355199
-     type_code : 12
-     code : |1-
-      // Redéfinition de la méthode ClColObjDB.addItemBySource
-      PROCÉDURE protégée virtuelle addItemBySource_old(sdSource_p est une Source de Données):Vide
-      
-      oTache est un ClDbTache(ClZF_ObjDbLs.cstModeSansChargement)
-      :ZF_addItemBySource_prot(sdSource_p, oTache, sdSource_p.IDScr_Tache)
      type : 458752
    -
      name : pre_load
@@ -369,13 +349,13 @@ class :
       renvoyer oColTachesRetour
      type : 458752
    -
-     name : aoFromPeriodeSprints
+     name : oFromPeriodeSprints
      procedure_id : 1474619292466813951
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] aoFromPeriodeSprints (<oSpDeb_p> est ClDbSprint, <oSpFin_p> est ClDbSprint)
+      //[ <Résultat> = ] oFromPeriodeSprints (<oSpDeb_p> est ClDbSprint, <oSpFin_p> est ClDbSprint)
       //
       // Paramètres :
       //	oSpDeb_p (ClDbSprint) : <indiquez ici le rôle de oUS_p>
@@ -389,7 +369,7 @@ class :
       //
       
       //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
-      FONCTION globale aoFromPeriodeSprints(oSpDeb_p est un ClDbSprint, oSpFin_p est un ClDbSprint):ClColTache
+      FONCTION globale oFromPeriodeSprints(oSpDeb_p est un ClDbSprint, oSpFin_p est un ClDbSprint):ClColTache
       
       sReq est une chaine
       oColTachesRetour est un ClColTache
@@ -407,15 +387,6 @@ class :
       
       
       RENVOYER oColTachesRetour
-     type : 458752
-   -
-     name : GetAll_old
-     procedure_id : 1474619292466879487
-     type_code : 12
-     code : |1+
-      // Redéfinition de la méthode ClZF_ColObjDB.GetAll
-      PROCÉDURE prive GetAll_old()<métier>:Vide
-      ZF_ChargeTblComplete(Scr_Tache..nom)
      type : 458752
    -
      name : oTaches_MesTaches_NonFinies
@@ -688,9 +659,9 @@ class :
      procedure_id : 1543136863604369684
      type_code : 12
      code : |1-
-      procédure oFromSprints(oColSpr_p est une ClColSprint dynamique, LOCAL nSelecteur est un ClDbTache.ETypeCharge) <métier>:vide
+      procédure globale oFromSprints(oColSpr_p est une ClColSprint dynamique, LOCAL nSelecteur est un ClDbTache.ETypeCharge) <métier>:clcoltache
       
-      
+      oRetour est un clcoltache()
       //On choisi si on veut en prod ou prévisionnel 
       sChoixSprint				est une chaîne
       SELON nSelecteur
@@ -698,6 +669,12 @@ class :
       		sChoixSprint	= Scr_Tache.Num_Sprint_Realisation..Nom
       	CAS ClDbTache.ETypeCharge.Charge_prévisionelle
       		sChoixSprint	= Scr_Tache.Num_Sprint_Previsionnel..Nom
+      	CAS ClDbTache.ETypeCharge.Charge_Fin
+      		sChoixSprint	= Scr_Tache.Num_Sprint_Fin..Nom
+      	CAS ClDbTache.ETypeCharge.Charge_Demarre
+      		sChoixSprint	= Scr_Tache.Num_Sprint_Demarrage..Nom
+      	autres cas
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([nSelecteur])
       FIN
       
       sReq est une chaîne = [
@@ -706,7 +683,89 @@ class :
       	FROM Scr_Tache
       	WHERE Scr_Tache.[%sChoixSprint%] IN([%TableauVersChaîne(oColSpr_p.ZF_Get_Liste_IdUnique(), ", ")%])
       ]
-      :ZF_LoadSQL(sReq)
+      oRetour.ZF_LoadSQL(sReq)
+      
+      renvoyer oRetour
+     type : 458752
+   -
+     name : oFromUsrPrj
+     procedure_id : 1545635559157201439
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oFromUsrPrj (<oUsr_p> est ClDbUsr)
+      //
+      // Paramètres :
+      //	oUsr_p (ClDbUsr) : <indiquez ici le rôle de oProjet_p>
+      
+      // Valeur de retour :
+      // 	ClColTache : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale oFromUsrPrj(oUsr_p est un ClDbUsr):ClColTache
+      
+      
+      sReq	est une chaîne
+      oTaches	est un ClColTache
+      
+      
+      //Récupération des taches des projets, associées à un utilisateur.
+      sReq = [
+      	SELECT<§cs:3§>
+      		Scr_Tache.*<§cs:3§>
+      	FROM Scr_Tache<§cs:3§>
+      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)<§cs:3§>
+      		INNER JOIN Scr_Projet ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)<§cs:3§>
+      		INNER JOIN Scr_Usr_Projet ON (Scr_Usr_Projet.IDScr_Projet = Scr_Projet.IDScr_Projet)<§cs:3§>
+      	WHERE Scr_Tache.Statut = [%oUsr_p.ZF_Get_IdUnique()%]<§cs:3§>
+      ]
+      
+      oTaches.ZF_LoadSQL(sReq)
+      
+      RENVOYER oTaches
+     type : 458752
+   -
+     name : FiltreEtat
+     procedure_id : 1545637942938070778
+     type_code : 12
+     code : |1-
+      PROCÉDURE FiltreEtat(nStatut_p est un entier)<métier>:ClColTache
+      
+      oRetour	est un ClColTache()
+      oTache	est un ClDbTache dynamique
+      
+      POUR TOUT oTache DE :m_aoTaches
+      	SI oTache.p_nStatut = nStatut_p ALORS
+      		oRetour.ZF_addItem(oTache)
+      	FIN
+      FIN
+      
+      RENVOYER oRetour
+     type : 458752
+   -
+     name : oFromStatut
+     procedure_id : 1545642701783062688
+     type_code : 12
+     code : |1+
+      procédure publique globale oFromStatut(nStatut_P est un entier)<metier>:ClColTache
+      
+      
+      sReq est une chaîne
+      oTaches est un ClColTache
+      
+      sReq = [
+      	SELECT
+      		Scr_Tache.*
+      	FROM Scr_Tache
+      	WHERE Scr_Tache.Statut = [%nStatut_P%]
+      ]
+      
+      oTaches.ZF_LoadSQL(sReq)
+      
+      RENVOYER oTaches
      type : 458752
   properties :
    -

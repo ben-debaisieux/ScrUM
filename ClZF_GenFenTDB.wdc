@@ -91,14 +91,14 @@ class :
       
       
       sRetour = [
-      <§cs:5§>
-      str_Stat est une Structure<§cs:5§>
-      	sLib		est une chaîne<§cs:5§>
-      	sLibBulle	est une chaîne<§cs:5§>
-      	nVal		est un entier<§cs:5§>
-      	sValBulle	est une chaîne<§cs:5§>
-      FIN<§cs:5§>
-      <§cs:5§>
+      
+      str_Stat est une Structure
+      	sLib		est une chaîne
+      	sLibBulle	est une chaîne
+      	nVal		est un entier
+      	sValBulle	est une chaîne
+      FIN
+      
       ]
       
       renvoyer sRetour
@@ -114,44 +114,44 @@ class :
       sProc est une chaine = "aRecupData"
       
       sRetour = [
-      PROCEDURE [%sProc%]()<metier>:tableau associatif de str_stat<§cs:5§>
-      <§cs:5§>
-      aTblStat	est un tableau associatif de str_Stat<§cs:5§>
-      stStat		est un str_Stat<§cs:5§>
-      oColStat	est un ClColItemTest()<§cs:5§>
-      pclODbStat	est un ClDbItemTest dynamique<§cs:5§>
-      sReq		est une chaîne<§cs:5§>
-      sId			est une chaîne<§cs:5§>
-      <§cs:5§>
-      <§cs:5§>
-      sReq = "<§cs:5§>
-      SELECT *<§cs:5§>
-      FROM [%:m_oClasseGen.p_sNomTable%]<§cs:5§>
-      "<§cs:5§>
-      <§cs:5§>
-      oColStat.ZF_LoadSQL(sReq)<§cs:5§>
-      <§cs:5§>
-      POUR TOUT ÉLÉMENT pclODbStat DE oColStat.aItems()<§cs:5§>
-      	//Est on sur un nouveau regroupement ?<§cs:5§>
-      	SI aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID]..Vide ALORS<§cs:5§>
-      		//Oui : Création de l'entité<§cs:5§>
-      		aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID] = allouer un str_Stat<§cs:5§>
-      		VariableRAZ(stStat)<§cs:5§>
-      		stStat.sLib			= pclODbStat.[%:m_sProprieteDim%].sRepresentation()<§cs:5§>
-      		stStat.sLibBulle	= stStat.sLib		// a faire : à redéfinir<§cs:5§>
-      	SINON<§cs:5§>
-      		//Non :<§cs:5§>
-      		stStat = aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID]<§cs:5§>
-      	FIN<§cs:5§>
-      	<§cs:5§>
-      	//Opération de chaque entité<§cs:5§>
-      	stStat.nVal++<§cs:5§>
-      	stStat.sValBulle	= stStat.nVal		// a faire : à redéfinir<§cs:5§>
-      	<§cs:5§>
-      	aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID] = stStat<§cs:5§>
-      FIN<§cs:5§>
-      <§cs:5§>
-      RENVOYER aTblStat<§cs:5§>
+      PROCEDURE [%sProc%]()<metier>:tableau associatif de str_stat
+      
+      aTblStat	est un tableau associatif de str_Stat
+      stStat		est un str_Stat
+      oColStat	est un ClColItemTest()
+      pclODbStat	est un ClDbItemTest dynamique
+      sReq		est une chaîne
+      sId			est une chaîne
+      
+      
+      sReq = "
+      SELECT *
+      FROM [%:m_oClasseGen.p_sNomTable%]
+      "
+      
+      oColStat.ZF_LoadSQL(sReq)
+      
+      POUR TOUT ÉLÉMENT pclODbStat DE oColStat.aItems()
+      	//Est on sur un nouveau regroupement ?
+      	SI aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID]..Vide ALORS
+      		//Oui : Création de l'entité
+      		aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID] = allouer un str_Stat
+      		VariableRAZ(stStat)
+      		stStat.sLib			= pclODbStat.[%:m_sProprieteDim%].sRepresentation()
+      		stStat.sLibBulle	= stStat.sLib		// a faire : à redéfinir
+      	SINON
+      		//Non :
+      		stStat = aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID]
+      	FIN
+      	
+      	//Opération de chaque entité
+      	stStat.nVal++
+      	stStat.sValBulle	= stStat.nVal		// a faire : à redéfinir
+      	
+      	aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID] = stStat
+      FIN
+      
+      RENVOYER aTblStat
       ]
       
       renvoyer :GenBloc_ProcedureLoc(sRetour, sProc)

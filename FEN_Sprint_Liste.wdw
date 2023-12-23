@@ -472,7 +472,7 @@ window :
       TBL_sprint..AffichageActif = faux
       TableSupprimeTout(TBL_Sprint)
       
-      Pour TOUT element oSprintTmp de ClColSprint.aoListeSprint().aItems()
+      Pour TOUT element oSprintTmp de ClColSprint.oListeSprint().aItems()
       	nLigne = TableAjouteLigne(TBL_sprint)
       	TBL_sprint[nLigne].COL_Numéro			= oSprintTmp.ZF_Get_IdUnique()
       	TBL_sprint[nLigne].COL_Durée			= NumériqueVersChaîne(oSprintTmp.p_nNbreSemaines) + " Semaines"

@@ -318,7 +318,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       //	sdSource_P (source de données) : <indiquez ici le rôle de sdSource_P>
-      procédure CreeObj(sClasse_P est une chaîne, local nId_P est un entier):ClZF_ObjDBls
+      procédure CreeObj(sClasse_P est une chaîne, local nId_P est un entier)<metier>:ClZF_ObjDBls
       
       
       oRetour est un ClZF_ObjDbLs dynamique
@@ -347,17 +347,17 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] ExceptGenerale ()
+      //ExceptGenerale ()
       //
       // Paramètres :
       //	Aucun
       // Valeur de retour :
-      // 	Type indéterminé : // 	Aucune
+      // 	Aucune
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure abstraite ExceptGenerale()
+      procédure abstraite ExceptGenerale()<metier>:vide
       
      type : 458752
    -
@@ -406,7 +406,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure ZF_LibereInstancesMemo()
+      procédure ZF_LibereInstancesMemo()<métier>:Vide
       
       oInstance est un ClZF_ObjDbLs dynamique
       sKey est une chaîne
@@ -441,7 +441,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GetCol(oObjDB_p est un ClZF_ObjDbLs, sCle_p est une chaîne):ClZF_ColObjDB
+      procédure GetCol(oObjDB_p est un ClZF_ObjDbLs, sCle_p est une chaîne)<métier>:ClZF_ColObjDB
       
       SI oObjDB_p.m_ZF_aListCol[sCle_p]..Vide ALORS
       	oObjDB_p.m_ZF_aListCol[sCle_p] = CreeCol(sCle_p)
@@ -454,7 +454,7 @@ class :
      procedure_id : 1459479116591251892
      type_code : 12
      code : |1-
-      procedure prive abstraite CreeCol(sCle_p est une chaine):ClZF_ColObjDB
+      procedure prive abstraite CreeCol(sCle_p est une chaine)<metier>:ClZF_ColObjDB
       
       // Prototype : 
       //oCol est un ClZF_ColObjDB dynamique
@@ -487,7 +487,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure publique globale PrepareCreationSiBesoin(sClasse_P est une chaine) <métier>
+      procédure publique globale PrepareCreationSiBesoin(sClasse_P est une chaine) <métier>:vide
       
       SI mg_aZF_aGetId[sClasse_P]..Vide ALORS
       	sProc	est une chaîne	= "ZF_CreeObj_[%sClasse_P%]"
@@ -502,6 +502,27 @@ class :
       	FIN
       	::mg_aZF_aGetId[sClasse_P] = sProc
       FIN
+     type : 458752
+   -
+     name : nTypeCnx
+     procedure_id : 1546472570589914485
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] nTypeCnx ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	entier : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure nTypeCnx() <métier>:entier
+      renvoyer :m_ZF_cnxBDD..Provider
+      
      type : 458752
   procedure_templates : []
   property_templates : []
