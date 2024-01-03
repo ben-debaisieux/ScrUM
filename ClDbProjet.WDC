@@ -785,7 +785,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      PROCEDURE globale GetObj(local nIdUnique_P est un entier):ClDbProjet
+      PROCEDURE globale GetObj(local nIdUnique_P est un entier)<métier>:ClDbProjet
       sClasse est une chaine = ClDbProjet
       RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
      type : 458752
@@ -794,7 +794,7 @@ class :
      procedure_id : 1444815455092880536
      type_code : 12
      code : |1+
-      procédure aoSimulationDistributionCharge(local nNumSprintDepart_P est un entier, LOCAL nChargeMoy_P est un entier):tableau de STR_SimulationCharge
+      procédure aoSimulationDistributionCharge(local nNumSprintDepart_P est un entier, LOCAL nChargeMoy_P est un entier)<métier>:tableau de STR_SimulationCharge
       
       oTache_Tmp			est un ClDbTache dynamique
       oSpr_Tmp			est un ClDbSprint dynamique
@@ -930,7 +930,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure publique  NettoieDependances():Vide
+      procédure publique  NettoieDependances()<métier>:Vide
       
       oUs est un ClDbUserStory dynamique
       oTache est un ClDbTache dynamique

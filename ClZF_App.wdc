@@ -444,7 +444,7 @@ class :
       procédure GetCol(oObjDB_p est un ClZF_ObjDbLs, sCle_p est une chaîne)<métier>:ClZF_ColObjDB
       
       SI oObjDB_p.m_ZF_aListCol[sCle_p]..Vide ALORS
-      	oObjDB_p.m_ZF_aListCol[sCle_p] = CreeCol(sCle_p)
+      	oObjDB_p.m_ZF_aListCol[sCle_p] = :CreeCol(sCle_p)
       FIN
       
       RENVOYER oObjDB_p.m_ZF_aListCol[sCle_p]
@@ -454,7 +454,7 @@ class :
      procedure_id : 1459479116591251892
      type_code : 12
      code : |1-
-      procedure prive abstraite CreeCol(sCle_p est une chaine)<metier>:ClZF_ColObjDB
+      procedure protege abstraite CreeCol(sCle_p est une chaine)<metier>:ClZF_ColObjDB
       
       // Prototype : 
       //oCol est un ClZF_ColObjDB dynamique

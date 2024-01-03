@@ -680,7 +680,7 @@ class :
       sPropR		est une chaîne
       sPropw		est une chaîne
       sPropDecl	est une chaîne
-      sPropriete	est une chaîne
+      sPropriete	est une chaîne = "p_aoObj"
       
       
       
@@ -693,12 +693,12 @@ class :
       
       
       sPropR = [
-      	[%sPropDecl%] p_aoObj():tableau de [%:m_sNomClasseBD%]
+      	[%sPropDecl%] [%sPropriete%]():tableau de [%:m_sNomClasseBD%]
       	RENVOYER :[%:m_sNomListeObj%]
       ]
       
       sPropw = [
-      	[%sPropDecl%] p_aoObj(aValeur est un tableau de [%:m_sNomClasseBD%] dynamique):vide
+      	[%sPropDecl%] [%sPropriete%](aValeur est un tableau de [%:m_sNomClasseBD%] dynamique):vide
       	:[%:m_sNomListeObj%] <- aValeur
       ]
       

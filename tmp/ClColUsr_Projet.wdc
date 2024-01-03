@@ -1,0 +1,287 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClColUsr_Projet
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e7b37ee5fbf6
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      ClColUsr_Projet est une Classe
+      	hérite de ClZF_ColObjDB
+      PRIVÉ
+      	m_aoUsr_Projet est un tableau ClDbUsr_Projet dynamique
+      FIN
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 817708067585015
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur()
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 817708067585016
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : aItems
+     procedure_id : 817708067585018
+     type_code : 12
+     code : |1+
+      PROCÉDURE aItems()<métier>:tableau de ClDbUsr_Projet dynamique
+      // Redéfinition de la méthode ClColObjDB.aItems
+      RENVOYER :m_aoUsr_Projet
+     type : 458752
+   -
+     name : Init
+     procedure_id : 817708067585019
+     type_code : 12
+     code : |1+
+      PROCÉDURE Init()<métier>:Vide
+      // Redéfinition de la méthode ClColObjDB.Init
+      ZF_InitCol(:m_aoUsr_Projet)
+     type : 458752
+   -
+     name : oFromProjet
+     procedure_id : 817708067585022
+     type_code : 12
+     code : |1+
+      FONCTION GLOBALE oFromProjet(oParent_p est un ClDbProjet, LOCAL bForceCharge_p est un booléen = Faux)<métier>:ClColUsr_Projet
+      
+      sReq		est une chaîne
+      oColRetour	est un ClColUsr_Projet
+      
+      
+      // A faire : ClDbProjet.cstGetCol_Usr_Projet à déclarer dans ClZF_App.CreeCol : "CAS ClDbProjet.cstGetCol_Usr_Projet : oCol = allouer un ClColProjet"
+      oColRetour <- oParent_p.ZF_GetCol(ClDbProjet.cstGetCol_Usr_Projet)
+      
+      SI oColRetour.ZF_bEstExpire() OU bForceCharge_p ALORS
+      
+      	oColRetour.ZF_vider()
+      
+      
+      sReq = [
+      	SELECT 
+      		Scr_Usr_Projet.*
+      	FROM Scr_Usr_Projet
+      	WHERE Scr_Usr_Projet.IDScr_Projet = [%oParent_p.ZF_Get_IdUnique()%]
+      	]
+      oColRetour.ZF_LoadSQL(sReq)
+      
+      FIN
+      
+      
+      RENVOYER oColRetour
+      
+     type : 458752
+   -
+     name : oUsrCdp
+     procedure_id : 1537947134031579372
+     type_code : 12
+     code : |1+
+      procedure oUsrCdp()<métier>:cldbusr
+      
+      oRetour est un ClDbUsr dynamique
+      oUsrPrj est un ClDbUsr_Projet dynamique
+      
+      pour tout oUsrPrj de :m_aoUsr_Projet
+      	si oUsrPrj.p_bTop_Chef_Projet ALORS
+      		oRetour <- oUsrPrj.p_oIDScr_Usr
+      	FIN
+      FIN
+      
+      renvoyer oRetour
+      
+     type : 458752
+   -
+     name : SetUsrCdp
+     procedure_id : 1537950737513256048
+     type_code : 12
+     code : |1+
+      procedure SetUsrCdp(oUsr_p est un ClDbUsr dynamique)<metier>:vide
+      
+      oUsrPrj	est un ClDbUsr_Projet dynamique
+      bUsrTrouve est un booléen
+      
+      POUR TOUT oUsrPrj DE :m_aoUsr_Projet
+      	si oUsrPrj.p_oIDScr_Usr.ZF_Get_IdUnique() = oUsr_p.ZF_Get_IdUnique() ALORS
+      		si pas oUsrPrj.p_bTop_Chef_Projet ALORS
+      			oUsrPrj.p_bTop_Chef_Projet = vrai
+      			oUsrPrj.ZF_Enregistre()
+      			bUsrTrouve = vrai
+      		FIN
+      	sinon
+      		SI oUsrPrj.p_bTop_Chef_Projet ALORS
+      			oUsrPrj.p_bTop_Chef_Projet = faux
+      			oUsrPrj.ZF_Enregistre()
+      		FIN
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : oColsFromProjets
+     procedure_id : 1538309229845787753
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oColsFromProjets (<oColPrj_p> est ClColProjet)
+      //
+      // Paramètres :
+      //	oColPrj_p (ClColProjet) : <indiquez ici le rôle de oPrj_p>
+      // Valeur de retour :
+      // 	tableau associatif (ClColUsr_Projet dynamique) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	bForceCharge_p (booléen - valeur par défaut=1) : <indiquez ici le rôle de bForceCharge_p>
+      procédure publique globale oColsFromProjets(oColPrj_p est un ClcolProjet)<metier>:tableau associatif de ClColUsr_Projet dynamique
+      
+      sReq				est une chaîne
+      aColUsrProjet		est un tableau associatif de ClColUsr_Projet dynamique
+      
+      
+      si oColPrj_p.zf_ntaille() > 0 alors
+      	
+      	sListeIdsPrj est une chaîne = TableauVersChaîne(oColPrj_p.ZF_Get_Liste_IdUnique(), ", ")
+      	
+      	oColUsr est un ClColUsr()
+      	oColUsr.ZF_LoadSQL([
+      		
+      		SELECT Scr_Usr.*
+      		FROM Scr_Usr
+      			INNER JOIN Scr_Usr_Projet ON (Scr_Usr_Projet.IDScr_Usr = Scr_Usr.IDScr_Usr)
+      		WHERE Scr_Usr_Projet.IDScr_Projet IN ([%sListeIdsPrj%])
+      			AND Scr_Usr_Projet.Top_Chef_Projet = 1
+      
+      	])
+      	
+      	
+      //	aColUsrProjet <- ::ZF_aoInitCols(aColUsrProjet, oColPrj_p, ClDbProjet.cstGetCol_Usr_Projet)
+      	
+      	sReq = [
+      		select
+      			Scr_Usr_Projet.*
+      		FROM Scr_Usr_Projet
+      		where Scr_Usr_Projet.IDScr_Projet IN ([%sListeIdsPrj%])
+      	]
+      //	aColUsrProjet = ClZF_ColObjDB.ZF_LoadSQLMulti_Priv(sReq,aColUsrProjet, null, oColPrj_p.ZF_Get_Liste_IdUnique(), Scr_UserStory.IDScr_Projet..nom)
+      	aColUsrProjet <- ClZF_ColObjDB.ZF_LoadSQLMulti_2(aColUsrProjet, sReq, ClDbProjet.cstGetCol_Usr_Projet, oColPrj_p, Scr_UserStory.IDScr_Projet..Nom)
+      	
+      	
+      FIN
+      
+      renvoyer aColUsrProjet
+     type : 458752
+   -
+     name : aoUsersCDPFromColProjet
+     procedure_id : 1538316415453182755
+     type_code : 12
+     code : |1+
+      PROCÉDURE PUBLIQUE GLOBALE aoUsersCDPFromColProjet(oColPrj_p est un ClcolProjet)<metier>:tableau associatif de ClDbUsr dynamique
+      
+      
+      aUsrCdp				est un tableau associatif de ClDbUsr dynamique
+      
+      
+      SI oColPrj_p.ZF_nTaille() > 0 ALORS
+      	
+      	sIds				est une chaîne = TableauVersChaîne(oColPrj_p.ZF_Get_Liste_IdUnique(), ", ")
+      	sReq				est une chaîne
+      	sdUsrCdp			est une source de données
+      	oUsr				est un ClDbUsr dynamique
+      	
+      	sReq = [
+      		select
+      			Scr_Usr.*,
+      			Scr_Usr_Projet.IDScr_Projet
+      		FROM Scr_Usr_Projet
+      			INNER JOIN Scr_Usr ON (Scr_Usr.IDScr_Usr = Scr_Usr_Projet.IDScr_Usr)
+      		where Scr_Usr_Projet.IDScr_Projet IN ([%sIds%])
+      			AND Scr_Usr_Projet.Top_Chef_Projet = 1
+      	]
+      	
+      	goapp.Rsql(sdUsrCdp,sReq)
+      	pour tout sdUsrCdp
+      			
+      		oUsr = allouer un ClDbUsr(ClZF_ObjDbLs.cstModeSansChargement)
+      		oUsr.ZF_Charge_source(sdUsrCdp)
+      		aUsrCdp[sdUsrCdp.IDScr_Projet] <- oUsr
+      	FIN
+      FIN
+      
+      renvoyer aUsrCdp
+      
+     type : 458752
+   -
+     name : oUserCdpFromProjet
+     procedure_id : 1538325460744429448
+     type_code : 12
+     code : |1-
+      PROCÉDURE PUBLIQUE GLOBALE oUserCdpFromProjet(oPrj_p est un CldbProjet)<metier>:ClDbUsr
+      
+      oUsr		est un ClDbUsr dynamique
+      oColProjet	est un clcolprojet()
+      aOUsr		est un tableau associatif de ClDbUsr dynamique
+      
+      oColProjet.ZF_addItem(oPrj_p)
+      aOUsr <- aoUsersCDPFromColProjet(oColProjet)
+      oUsr <- aOUsr[oPrj_p.ZF_Get_IdUnique()]
+      
+      renvoyer oUsr
+     type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542749740342218978
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ColObjDB.sClasseObjDbAsso
+      PROCÉDURE PROTÉGÉE  sClasseObjDbAsso():chaîne
+      
+      sClasse est une chaîne = ClDbUsr_Projet
+      RENVOYER sClasse
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fc15824a38fe0
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure p_aoObj() : tableau ClDbUsr_Projet dynamique
+         renvoyer :m_aoUsr_Projet
+        type : 1966080
+      -
+        code : |1+
+         procédure protégée p_aoObj(aValeur est un tableau ClDbUsr_Projet dynamique)
+         :m_aoUsr_Projet <- aValeur
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e7b37ee5ffe7
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -129,6 +129,7 @@ class :
       procédure Constructeur(local sNomTable_P est une chaîne = "")
       
       :m_sNomTable = sNomTable_P
+      :m_sNomUsage = sNomTable_P
       si ChaîneCommencePar(:m_sNomTable, ::mg_sPrefixeTable) ALORS
       	:m_sNomUsage[[ a taille(::mg_sPrefixeTable)]] = ""
       FIN
@@ -300,7 +301,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure Analyse()
+      procédure Analyse()<metier>:vide
       
       
       sRubs		est une chaîne	= HListeRubrique(:m_sNomTable,hLstDétail)
@@ -391,15 +392,15 @@ class :
       si sRubIdAuto <> "" alors
       	POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
       		
-      		bTablePrimaryAGauche est un booléen
-      		nColTableFK est un entier
-      		nColRubFK est un entier
-      		nColTablePK est un entier
-      		nColRubPK est un entier
-      		nSymbolePK est un entier
-      		nSymboleFK est un entier
+      		bTablePrimaryAGauche	est un booléen
+      		nColTableFK				est un entier
+      		nColRubFK				est un entier
+      		nColTablePK				est un entier
+      		nColRubPK				est un entier
+      		nSymbolePK				est un entier
+      		nSymboleFK				est un entier
       		
-      		si ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto ET minuscule(ExtraitChaîne(sLigneCle,4,TAB)) DANS("0,1", "0,n") ALORS
+      		si ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto ET minuscule(ExtraitChaîne(sLigneCle,7,TAB)) DANS("0,1", "1,1") ALORS
       			bTablePrimaryAGauche = vrai
       		FIN
       		
@@ -432,7 +433,13 @@ class :
       		stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,nSymbolePK,TAB))
       		
       		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
-      		TableauAjoute(m_aFK_de_PK, stRelTmp)
+      		si stRelTmp.sTablePK = :m_sNomTable ALORS
+      			TableauAjoute(:m_aFK_de_PK, stRelTmp)
+      		sinon
+      			sRub = stRelTmp.sRubriqueFK
+      			:m_aPK_de_FK[sRub]		= stRelTmp
+      		FIN
+      		
       		
       //		//Identification des relations associées à la clé primaire de la table en cours.
       //		si ExtraitChaîne(sLigneCle,2,tab) = :m_sNomTable et ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto et ExtraitChaîne(sLigneCle,7,TAB) dans("0,1", "1,1") ALORS

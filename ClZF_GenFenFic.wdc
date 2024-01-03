@@ -69,95 +69,12 @@ class :
       
       //-------------------------------------------------
       //Récupération des membres déclarées dans la classe
-      //bEstObj			est un booléen
-      //sChamps			est une chaîne
-      //sProcedures		est une chaîne
-      //nNumChamp		est un entier
-      
       
       :m_nNumChamps	 	= 0
       :m_sCodeChamps		= ""
       :m_sCodeChargeBco	= ""
       
-      GenToutChamps(sNomObjGlobal(), :m_oClasseGen)
-      
-      
-      
-      //Vars			est une Description de variable
-      //Def				est une Définition	= RécupèreDéfinitionType(:m_oClasseGen.sNomClasseGen())
-      //POUR TOUT Vars DE Def.Variable
-      //	
-      //	sRub = :sNomRubAsso(Vars)
-      //	
-      //	SI sRub <> "" ALORS
-      //		
-      ////		//A faire : identifier plus proprement qu'il s'agit d'un objet
-      ////		SI Vars.AttributNote <> "" ALORS
-      ////			bEstObj = Vrai
-      ////		sinon
-      ////		 	bEstObj = Faux
-      ////		FIN
-      //		
-      //		stProto_tmp	est un ClZF_GenFen.STR_ProtoChamps
-      //		InfoRub		est un ClZF_GenCodeFic.str_DefRub
-      //		
-      //		
-      //		
-      //		InfoRub	= :m_oClasseGen.m_aRub[sRub]
-      //		bEstObj	= (InfoRub.oObj_Parent <> null)
-      //		
-      //		si InfoRub.bVisibleInterface alors
-      //			
-      //			stProto_tmp.sNom		= sRub
-      //			stProto_tmp.sSource		= sNomObjGlobal() + "." + InfoRub.sNomPropriete
-      //			stProto_tmp.sLibelle	= InfoRub.sLibelleRubrique
-      //			stProto_tmp.sBulle		= InfoRub.sLibelleRubrique
-      //			
-      //			nNumChamp++
-      //			stProto_tmp.nTab		= nNumChamp
-      //			
-      //			selon InfoRub.nTypeRubHF
-      //				CAS hRubBooléen : 
-      //					sChamps += [RC] + :GenChampsCheckBox(stProto_tmp)
-      //				CAS hRubDate6 , hRubDate8
-      //					sChamps += [RC] + :GenChampsDate(stProto_tmp)
-      //				CAS hRubDateHeure : 
-      //					sChamps += [RC] + :GenChampsDateheure(stProto_tmp)
-      //				CAS hRubEntier1, hRubEntierNonSigné1 :
-      //					sChamps = [rc] + :GenChampsRadio(stProto_tmp)
-      //				CAS hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
-      //					SI bEstObj ALORS
-      //						
-      //						//On pilote l'objet source via sa propriété 'ID'
-      //						stProto_tmp.sSource += "_ID"
-      //						
-      //						
-      //						sChamps += [RC] + :GenChampsCombo(stProto_tmp)
-      //						
-      //						//Génération de la procédure de chargement de la combo
-      //						stTemp				est un ClZF_GenCodeFic.STR_Rel
-      //						stTemp				= :m_oClasseGen.m_aPK_de_FK[sRub]
-      //						pclOClasseGen		est un ClZF_GenCodeFic(stTemp.sTablePK)
-      //						pclOClasseGen.Analyse()
-      //						sProcedures += [rc] + :sGenProcChargeCombo(stProto_tmp.sNom, pclOClasseGen, InfoRub.bNullable)
-      //						
-      //					SINON
-      //						sChamps += [RC] + :GenChampsSaisieEntier(stProto_tmp)
-      //					FIN
-      //				CAS hRubMémoTexte, hRubMémoUnicode :
-      //					sChamps += [RC] + :GenChampsTexteMultiLigne(stProto_tmp)
-      //				CAS hRubMonétaire :
-      //					sChamps += [RC] + :GenChampsSaisieMonetaire(stProto_tmp)
-      //	//			CAS hRubRéel4, hRubRéel8 :
-      //				CAS hRubTexte, hRubTexteUnicode :
-      //					sChamps += [RC] + :GenChampsSaisieTexte(stProto_tmp)
-      //	//			CAS hRubImage, hRubMémoBinaire, hRubMémoBinaire4
-      //				AUTRE CAS
-      //					trace("Type de rubrique ""[%InfoRub.nTypeRubHF%]"" non pris en compte, pour la rubrique ""[%sRub%]""")
-      //			FIN
-      //		FIN
-      //	FIN
-      //FIN
+      :GenToutChamps(sNomObjGlobal(), :m_oClasseGen)
       
       
       sProcedures est une chaîne
@@ -1117,7 +1034,7 @@ class :
       PROCEDURE [%:sNomProcChargeCbo(sNom_p)%]()<ui>:Vide
       
       oCol est un [%clOEntiteLiee_p.sNomClasseColGen()%]()
-      oCol.GetAll()
+      oCol.ZF_GetAll()
       
       "
       
@@ -1218,7 +1135,7 @@ class :
        			CAS hRubDateHeure : 
        				:m_sCodeChamps += [RC] + :GenChampsDateheure(stProto_tmp)
        			CAS hRubEntier1, hRubEntierNonSigné1 :
-       				:m_sCodeChamps = [RC] + :GenChampsRadio(stProto_tmp)
+       				:m_sCodeChamps += [RC] + :GenChampsRadio(stProto_tmp)
        			CAS hRubEntier2, hRubEntierNonSigné2, hRubEntier4, hRubEntierNonSigné4, hRubEntier8, hRubEntierNonSigné8 :
        				SI bEstObj ALORS
        					

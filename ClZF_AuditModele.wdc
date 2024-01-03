@@ -58,7 +58,6 @@ class :
       SI :m_oClasseGen.p_sNomRubId = "" ALORS
       	:m_sRapport	= "Aucune rubrique 'PK' n'est identifiée."
       FIN
-      
      type : 458752
    -
      name : AnaFk
@@ -74,14 +73,17 @@ class :
       nNbFkIncl		est un entier
       sListeFkCompo	est une chaîne
       stInfoRub		est un ClZF_GenCodeFic.STR_DefRub
-      oClasseFk		est un ClZF_GenCodeFic dynamique
+      
       
       
       POUR TOUT ÉLÉMENT stRelTmp, sRub DE :m_oClasseGen.m_aPK_de_FK
       
       	//Récupération de la définition de la rubrique associé à la contrainte FK
-      	stInfoRub  = :m_oClasseGen.m_aRub[sRub]
-      	
+      	si sRub <> :m_oClasseGen.p_sNomRubId alors
+      		stInfoRub  = :m_oClasseGen.m_aRub[sRub]
+      	sinon
+      		stInfoRub  = :m_oClasseGen.p_stDefId
+      	fin
       	
       	SELON stRelTmp.nTypeRel
       		CAS ClZF_GenCodeFic.cstRelNonDef

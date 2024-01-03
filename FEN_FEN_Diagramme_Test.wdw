@@ -20,7 +20,7 @@ window :
   -
     name : EDIAG_TEST
     identifier : 0x25854b7a228dac37
-    internal_properties : BwAAAAcAAAAVV7Rt3HvSAYlam0TOQ0m+k8Wk92NxDCldcpjoXACDJAIQu/G6Oo6YOM38vIkNU8FNkiRibo37ucAMfiLWsL+zuQkgeOWn274+9rAdeu/zvxw2fT8dN9kSMa0YakeWoDIhnKbLu/d2eL9R2y1VOdvYR7g+5/onwK+jrsS59WMVwvsIy2AmpPhLKifVIsa8PGV8CZWktggz9YZADUmEzE0q7mAI0W0be4FZDe5Tcl/J5mUOL2QKSNkTAB7S/VNZYtoJgQvHBWte86gUESioqpdvR2bavMW+1B3kruE2S6BlfDIPadmiMWE5McEVcRRpgO6ZQJu/guEQv60WFbvHNNpM8W9K5lJO6Gzx7JDonuCXU6fQmiaXWfr2nYOpYDs9qQEqaqEgcP3YylUIoJLt+dAhKfT80gmVOKVzAdcA8ozL3lpqfQqdPyW4gl+FjnZkgYz9cIGDDPeVHi5J5Ew3m46nzKu4lniDRMC4Sp92A+NunLNxS+lZ8AUeru2y/CanL8KYtwofZ6hRMFfLw1WibJUPuGrhEGhi1kAhW1cHJ47gv0gQPC8Gy1HeV8a778giQyGiP/1Zm5VDSmorASxG/mMRBgvre+P1aD9icEqGDFMMC+bE75PXm8SWWGtB/3pM2Dlg0PfnRDXFSqrDJfdKUsaBi8CwIxqnDYn/wEzYa1CKKb70E34mkL9O6zLc1NDAFNPUT4sdU98xE8UW1gOA5RhN9kDLru9TcD5UN/89eJ2Hbo+3Y/oRjZu6YrWMJ5jx+qN2M9pjVLm0kpk6/70qD6NPz2UMhE9DXaq0xmuZsNg6+Q==
+    internal_properties : BwAAAAcAAACR0c1KPh7QtOJNSbMJKHRtcTgwfbnXyR7OpuPliY1ZAgAkg2wQOzLlhY/ydEKFlZYXjJi5APMwisdznwu6PVr33mGL14iw85BzKJLFw+2onDRFuUhgH68K7mPbtzE6YvaECIAGGKT1A5UO/XulNmFeK/iM5f/ZBeCcOeO0Bgs2XZawjADFdVMbdkFRZ95J+QISANhn0fgi7/zahM1Cqvu/Trw1TLnW2/iBs8RsODDgHSJ8LNNEoL/JweuCj2LT91qLVLBvDPwQMjsU16f02vUrdgplg170j+STOGFhm/joaZjudNRzfDQ0rJ7sDpxn2QfWtVa/PUqwq0K8d/8aaQTWmah6vutCTt9TJKx2DYhryPqXsJeidbtKGrEyKpX6Ls1TDxEVBbhK0iiUbzYxtcj/brYQ5sWxLXD8v1GsvAuCe4ZK1HKbrn4Jt8i4pL9zJFHrG9JFuHD/T2PDhdeiPUw2EaY0Q92Emee9x+87JDrBhrYC+jrKx1WAJu1azIBGraJm/8pSbnZjxsO+h3mRsTPxtP64AGqY1uLq69f3Py4Owe4ky5yE37pduDeV6OlNp7gu9cVQbux9BOKzlbPVxyxp39b4TpomJ8p44DeFi0RNlQQlAfssKGWvYWIcaGVS/aDlz4fEr9t++l/aGO96wk9qdJmaPcwN9W28YumZM26ozdyaN0VcBxyrswQiNO0Ub+J1jr8vIuzF1VGF6fZCvnuSgeJsAZLAy9eTGxMp4KDg5VGBs9ViPKpoTfS0I6NKA349fGpkTNBfEhxk2fvgxyI8eaocY8dRDNhllQXTk06+fQ==
     properties :
      x : 6
      y : 50
@@ -150,6 +150,9 @@ window :
       MaForme.Texte.CadrageVertical	= cvMilieu
       MaForme.Texte.Couleur			= Blanc
       MaForme.Texte.Police.Gras		= Vrai
+      //MaForme.ActionAutorisée.Déplacer = faux
+      //MaForme.ActionAutorisée.Sélectionner = faux
+      MaForme.ActionAutorisée = faux
       
       // Ajoute la forme rectangle dans le diagramme
       Ajoute(MonDiagramme.Forme, MaForme)
