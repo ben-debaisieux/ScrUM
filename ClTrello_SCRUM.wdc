@@ -740,8 +740,8 @@ class :
       	SI oUs.bToutesTachesValidees() ET oUs.p_dDateMiseEnProd = "" ALORS
       		oUs.p_dDateMiseEnProd = DateSys()
       	FIN
-      	SI PAS oUs.p_bEstTestéParLeDemandeur ET oUs.p_oEnvironnement_Test = Null ALORS
-      		oUs.p_oEnvironnement_Test = ClDbEnvironnement.GetObj(1)
+      	SI PAS oUs.p_bEstTestéParLeDemandeur ET oUs.p_oIDSrc_Environnement_Test = Null ALORS
+      		oUs.p_oIDSrc_Environnement_Test = ClDbEnvironnement.GetObj(1)
       	FIN
       	//Trace(oUs.p_sCodeUserStory + "#" + oUs.p_dDateMiseEnProd)
       	oUs.RecalcEtatUS()

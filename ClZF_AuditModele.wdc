@@ -229,12 +229,18 @@ class :
       	
       	oTmp est un objet dynamique
       	
-      	
-      	oTmp = ClZF_ObjDbLs.ZF_GetObj(:m_oClasseGen.sNomClasseGen(), ClZF_ObjDbLs.cstModeSansChargement)
-      	SI PAS oTmp est ClZF_ObjDbLs ALORS
-      		ExceptionDéclenche(1,"Type incompatible")
-      		RETOUR
-      	FIN
+      	quand exception dans
+      		oTmp = ClZF_ObjDbLs.ZF_GetObj(:m_oClasseGen.sNomClasseGen(), ClZF_ObjDbLs.cstModeSansChargement)
+      	faire
+      		sRapport = [
+      			Analyse impossible des propriétés de la classe : [%:m_oClasseGen.sNomClasseGen()%] :
+      			[%ExceptionInfo(errMessage)%]
+      			]
+      	fin
+      //	SI PAS oTmp est ClZF_ObjDbLs ALORS
+      //		ExceptionDéclenche(1,"Type incompatible")
+      //		RETOUR
+      //	FIN
       	
       	
       	oObjBD est un ClZF_GenCodeClBd(:m_oClasseGen)
@@ -330,6 +336,8 @@ class :
       		
       		SI PAS stDiffRub.bMembreMap ALORS
       			sRapport += [RC + RC] + "Rubrique ""[%sRub%]"" non mappée dans la classe [%:m_oClasseGen.sNomClasseGen()%]."
+      			
+      			blocMapping(m_oClasseGen.m_aRub[sRub], sRub)
       		FIN
       		
       		SI PAS stDiffRub.bPresAnalyse ALORS
@@ -354,16 +362,19 @@ class :
       			FIN
       			
       			SI stDiffRub.bMembreObj ALORS
-      				SI PAS stDiffRub.bPropIdLect ET PAS stDiffRub.bPropIdEcr ALORS
+      				SI PAS stDiffRub.bPropIdLect ET PAS stDiffRub.bPropIdEcr ...		//s'il manque les propriétés des ids
+      						et (stDiffRub.bPropLect ou stDiffRub.bPropEcr) ALORS		//mais qu'il y a les propriétés sur l'objet	(sinon, déja traitée plus haut)
       					sRapport += [RC + RC] + "Accesseur en lecture / écriture manquant pour le membre objet ""[%stDiffRub.sNomMembre%]"" via son ID."
       					blocProprieteId(oObjBD, sRub)
       				SINON
-      					SI PAS stDiffRub.bPropIdLect ALORS
+      					SI PAS stDiffRub.bPropIdLect ...								//S'il manque la propriété de l'ID en lecture
+      							ET stDiffRub.bPropLect ALORS							//mais qu'il y a la propriété sur l'objet
       						sRapport += [RC + RC] + "Accesseur en lecture manquant pour le membre objet ""[%stDiffRub.sNomMembre%]"" via son ID."
       						blocProprieteId(oObjBD, sRub)
       					FIN
       					
-      					SI PAS stDiffRub.bPropIdEcr ALORS
+      					SI PAS stDiffRub.bPropIdEcr ...									//S'il manque la propriété de l'ID en écriture
+      							ET stDiffRub.bPropEcr ALORS								//mais qu'il y a la propriété sur l'objet
       						sRapport += [RC + RC] + "Accesseur en écriture manquant pour le membre objet ""[%stDiffRub.sNomMembre%]"" via son ID."
       						blocProprieteId(oObjBD, sRub)
       					FIN
@@ -377,18 +388,33 @@ class :
       
       
       
-      	PROCÉDURE INTERNE blocPropriete(oObjBD_p, sRub_p)
-      		sRapport += RC + "---------------------------------"
+      
+      	PROCÉDURE INTERNE blocPropriete(oObjBD_p est un ClZF_GenCodeClBd, sRub_p est une chaine):vide
+      		sRapport += RC + :sSepCode()
       		sRapport += RC + oObjBD_p.GenPropriete(sRub_p)
-      		sRapport += RC + "---------------------------------"
+      		sRapport += RC + :sSepCode()
       	FIN
       
-      	PROCÉDURE INTERNE blocProprieteId(oObjBD_p, sRub_p)
-      		sRapport += RC + "---------------------------------"
+      	PROCÉDURE INTERNE blocProprieteId(oObjBD_p est un ClZF_GenCodeClBd, sRub_p est une chaine):vide
+      		sRapport += RC + :sSepCode()
       		sRapport += RC + oObjBD_p.GenProprieteId(sRub_p)
-      		sRapport += RC + "---------------------------------"
+      		sRapport += RC + :sSepCode()
       	FIN
-      	
+      
+      	PROCÉDURE INTERNE blocMapping(stDefRub_p est un ClZF_GenCodeFic.STR_DefRub, sRub_p est une chaîne):vide
+      		sRapport += RC + :sSepCode()
+      		sRapport += RC + ClZF_GenCodeClBd::sDeclareMembre(stDefRub_p, sRub_p)
+      		sRapport += RC + :sSepCode()
+      	FIN
+      
+     type : 458752
+   -
+     name : sSepCode
+     procedure_id : 1556374308591352724
+     type_code : 12
+     code : |1+
+      PROCÉDURE prive sSepCode()<metier>:chaîne
+      RENVOYER Répète("-",150)
      type : 458752
    -
      name : AnaMeta
@@ -480,9 +506,9 @@ class :
       
       
       PROCÉDURE INTERNE blocCode(sMsg)
-      	sRapport += RC + "---------------------------------"
+      	sRapport += RC + :sSepCode()
       	sRapport += RC + sMsg
-      	sRapport += RC + "---------------------------------"
+      	sRapport += RC + :sSepCode()
       FIN
       
      type : 458752
@@ -556,9 +582,9 @@ class :
       
       
       	PROCÉDURE INTERNE blocCode(sMsg)
-      		sRapport += RC + "---------------------------------"
+      		sRapport += RC + :sSepCode()
       		sRapport += RC + sMsg
-      		sRapport += RC + "---------------------------------"
+      		sRapport += RC + :sSepCode()
       	FIN
      type : 458752
    -

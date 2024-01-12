@@ -34,7 +34,6 @@ window :
        type : 2
        content :
         internal_properties : BwAAAAcAAAB4n3I7R27C/VNz8CU85GaXRH5JZj6KlCmtn1zTr52oLueFiAvyeD/ApfdR6TTRDTd0J2YOJRra/7dKR7jypCgttkRJXACT0zT788TnGQfGP0TuDAbCH0SDFaAb/nmybXxkxib6ZWLqePcgnpW7Dq2hyBzzX17tLSQWWEnNv/d1uJV8alN2Qc3EX5e4kWJNc1kWR1wMt71x+GPYngfIUxF+94NEWI6AMi/8uHbRDqgf9D1GwpP+j3OUHzhn4N0N00ZqDG/RLjt75j29aI7U6AIBa9EtretYZPk/GkdqWsip3ch5wCWqB0wQ42F88rA/Pxcvj85dvHKJIBZHXcEn/Nl0iIDLkfIR9uyHVeZQ8RqCrWsluPMNhgAvKYjPp1xt1wNqtmiiAkwa0PRuRiilrfcVqxwLtSX7iIhEFB83LHJc/7auf+0C6lcQCbT3S/hACpixkwyh1yWQcKZweoJDRjGuv1paYm42msQwgFuv1wIRZNqzG7wiSxTyGUIaOgjRl8J3kkUs1EgzGbHOd+c+qWfr3hYGmzTji3RK4Dsptw2Pyc9kTHglQC78PG8kabgRtNMqWfKWOjaXNqTmrwdAX4dhR+GlWVEz6XVRw3r/ofqYDB4EIOcBrfC1iFHTn/XzTsXvJ2+pUoPurPGiIT1ILXoAYWJXW45NkJhObAoRlhuHtc1KxqHJhyCk1L9sbdlg0AoDRtHpVp+wNSUoR/ktUam6EfJtASScYS/adB/VWUXw3mRSvQQWgdx/4m2cFKthK0dMTZI4lSU0vUcgwFEjYojAzCpVJE3z/huMFqcKsxh4O8rabuF5V1Oc7vQTrrJ5iBcZqqnqcz/x09EcgKUp1N3jnp8fYn0a
-        properties : {}
         type : 2
        code_elements :
         internal_properties : BwAAAAcAAAD2Rkbx+OjeaV6cz3eLdX7jB0Jgs6WDDXWz15HdSBZm9oeZQ2BKnjRAOa1wH4EQ9d5x
@@ -56,7 +55,6 @@ window :
        type : 2
        content :
         internal_properties : BwAAAAcAAABGmYkuT+Ln7sfHu9dKVVwUdiqXNv0nRMXmVDCZl5XEbQyffRMccOJRPu05ieJwb9dWHCEUmXkRwxXc8kLYV9qKxz2yjD8tWisntjWVRnVrabDIu+Ld18wLzwCud0n37Ir3hruZ4E/uX3W7dGHOATL1MfgbdA+Dph73aqlO5ElsUUa5+QHrbdd1iFPO6+5T4hXempAw+oQxg5J9EKuODD0AJcBbf8/jd6hk3XuhkSNJqOHeYq+CO4jwpolFU6LGb3h4geVPq6PkV0jOlLYFJZNLSG3510YAOaZfTUT/jFfXugImCfU1RISfYaWOA5IJhY02MhSE7FVtQpRVkL4hWJOMsf/e5rff7X9btLMBO8R5pUX9GLv0creGpoyPEUC/3uN7YNT2Nus418N+eDnyCcNEG7RsUjfxCMKtX7WEPkGSjD43kfVja3lepWIUNakMkpGZJLRFS90UdQSp41hQMNN7eSM6TkrKPl1KtQDBekR/XaBu/XZ83abXnY8ncrk7X/9TdRlE7D4Jmof7NIuZi5NAttmik3SDF9l0bfg7+P3JEtnTFBx9tLivHqDVqckfrBb8GNBsbAJ/L8xHMIur8280izhTL4NBEXDznCNtaDT+wdIleiHbF6Za3rqsP7Y1knZTfNWfyIPqCffFdDfjpXTvQ9P/L2ppuvsGU7GdQY89AjdNosFBMdIhJjJPFzzEZBEp72vjIOEwjJGxkCF25XVTCwcZiWheSbLyi7aVKrWQkdpNj2aga+4o+hiXGJhNBSxePCo8VW+mBi1vPwMeWICrRAMdUC15eDAkza5OgAxaEqK72pyohlxPkfLrgWyG9Ux0+taJrLF8yD+OgQh9+Sm8WurMRUpXZsQ6qSaEdGlQvoz2gk9aMwh0nXP4cUtRrw==
-        properties : {}
         type : 2
        code_elements :
         internal_properties : BwAAAAcAAAC205nBtB7O8PDJ8JNI6giwbWpb56dEQJkDn3LlosiZoTeciNYqlkPXwvUhMHyXqhywur193VZeF0aNhI/Qmm+lVC8vIQU=
@@ -266,10 +264,10 @@ window :
       
       //Parcourt de toutes les US
       POUR TOUT ELEMENT oUS DE zoInter_P.aoUS_Associees().aItems()
-      	nIdPrj = oUS.p_oProjetParent.ZF_Get_IdUnique()
+      	nIdPrj = oUS.p_oIDScr_Projet.ZF_Get_IdUnique()
       	SI aOProjet[nIdPrj]..Vide ALORS
       		aOProjet[nIdPrj] = allouer un STR_Prj
-      		aOProjet[nIdPrj].sProjet = oUS.p_oProjetParent.p_sNom
+      		aOProjet[nIdPrj].sProjet = oUS.p_oIDScr_Projet.p_sNom
       	FIN
       	TableauAjouteRéférence(aOProjet[nIdPrj].aous, oUS)
       FIN

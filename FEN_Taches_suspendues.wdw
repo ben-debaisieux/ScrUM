@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_Taches_suspendues
  identifier : 0x21371d8d05cb4ba3
- internal_properties : BwAAAAcAAABwkR4X1DiT+dbM1KyTJzZZ/+X5S32p3+gPZHLFzUGby2nL27oPbsKqZIylwpDDQj56vCafAwIpBJldOQVPvFFYUg7L8To+MbBSFrzj2P0eDEBD1wP+QVxZ76wm91PKSuI36t6YpBEq/cmm28GgoEPubyI6bZd3KpNufecOFX15k8GMkVL153w78W5pbeqzpIn3tY5BT8q5BDJfjV44q61afsKjirF6crf0vfTNLx09l2kemGUkrk2zLz6sJSBe6dijdyGCNpNDSAxh2kPSsxURdA6/zdo5WgMM18rvs4hJM+/1+AJnJu5SjGZ+QE0I77HSXWCz1Ljh+9SE88UqiG+Bl4H+fN4dPqi4lVObUJTlxFIkTaPLafqqWT/faZ5dg7ckIZfjAL77nI5AWLZcrpYGU6bxEK6Rug9KemeQesjwjmklfjZ70jMO/IXIUtxiwrHqfLd33Xxey1/ekRe+vXayd6VDXea0IXlh3Sw1/dxnDjMgU1rsg6+lRoGBV9IuDW+A2Yea1RC5KcHeqc/bz/z8G5BacWSF1kA8fSjQyhCKntL51hIbzOCe4Ii4noUOIGwvpMFlV0TSrPhqbLo4frNz8Xgb0u3GOcTwq5fvT0wJy47RD4iZieDVYUWkLltbQ1YLPPLMhu7vtTkCd8r7NlzvKhlccGsahVICwxGxAQLQRJI1SFav9A==
+ internal_properties : BwAAAAcAAADEHV2a2gGbPlV0J0Bu1nORNdUesM8aseo6JHHwq2IXWHB8ggX7ccnJFkDzRMlY5+5aNm1BlOB94/VRGE6ZupfqMmzUjFFv5QgqLKiA1q3EzWXTh9CkxWwYNP2lhSuCrwVj55QWTjTIP3FVT4LGe5G/XRO969ID5nnh1Wqa//wAMeIFO2dR2FzZv3eM0vMtARIUMygixg7+GLzzSoWiSriyoRSXvxTJwbll9gg90Q7C3say9eKxSNdsjt1XFmCF2uCgK3bUF0O8Leh2HDp89+lmz+MRsMNX/kz4NH9DmOTlkzHHtgX570BxU+qmDVDrTH7R6GbG1blBJm8JYPzazqVpt2ZwGlue0E1l7gtxY7ah/RsJrr4BOO4hDgglDV95YT7dRtKsPll57+UDGEgzpNx1aF/e7/IYMqIBXS1kYxiibSCw5+FXyS+NVTK20j8uxAg124SeQ3kalDzHZ9PFgyivxlj0WN7rkdrCkiTzrjYVL1DZmk+alssw5XS1FYCINNQCftUupS5Ok4pBWLssMlIFQ3o26pLWyFPEKzGnMqpKWdmqYXN31I8SDorJdn8im8ARqL0nQvsm0KYF8A/R+zxZ1leWuTi5w4bABCNpOTyB/e1KAfr5cuB20KXzlR1xvSD9HFbk6ES+1wrx19NaCNah8W2dOaxEnOlfDIJDoom684DBWCxxqc1M
  properties :
   width : 1024
   height : 768
@@ -515,15 +515,15 @@ window :
       				
       				VariableRAZ(stTacheTmp)
       				stTacheTmp.nIdTache			= oTache_Tmp.Get_IdUnique()
-      				stTacheTmp.nIdProjet		= oUs.p_oProjetParent.ZF_Get_IdUnique()
-      				stTacheTmp.sNomProjet		= oUs.p_oProjetParent.p_sNom
+      				stTacheTmp.nIdProjet		= oUs.p_oIDScr_Projet.ZF_Get_IdUnique()
+      				stTacheTmp.sNomProjet		= oUs.p_oIDScr_Projet.p_sNom
       				stTacheTmp.sUS				= oUs.p_sCodeUserStory +  " - " + oUs.sNommination_US()
       				stTacheTmp.sInfoUS			= oUs.p_sCMTR_Global
       				stTacheTmp.sTache			= oTache_Tmp.p_sCodeTache + " - " + oTache_Tmp.p_sDescription
       				stTacheTmp.sCmtrSusp		= oTache_Tmp.p_sCMTR_Blocage
       				stTacheTmp.nSprintReal		= oTache_Tmp.p_nNum_Sprint_Realisation
       				stTacheTmp.nPoids			= oTache_Tmp.p_nPoids
-      				stTacheTmp.nIdTesteurTache	= oUs.p_oUsrResponsable.ZF_Get_IdUnique()
+      				stTacheTmp.nIdTesteurTache	= oUs.p_oIDScr_Usr_Valideur.ZF_Get_IdUnique()
       				stTacheTmp.nNbDocs			= ClColUserStory_Doc.oFromUS(oUs).ZF_nTaille()
       				nLigne						= TableauAjouteLigne(zaLstTaches,stTacheTmp)
       				
@@ -534,7 +534,7 @@ window :
       				FIN
       				
       				//Ajout du projet à la liste (si non présent)
-      				zoColProjets.ZF_addItem(oUs.p_oProjetParent)
+      				zoColProjets.ZF_addItem(oUs.p_oIDScr_Projet)
       			FIN
       		FIN
       	FIN

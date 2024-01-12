@@ -22,37 +22,38 @@ class :
       //	Hérite de ClHistorique
       	
       PRIVÉ
-      	m_sCodeUserStory						est une chaîne		<MAPPING=CodeUserStory>
-      	m_sEntantQue							est une chaîne		<MAPPING=EntantQue>
-      	m_sJaiBesoinDe							est une chaîne		<MAPPING=JaiBesoinDe>
-      	m_sAfinDe								est une chaîne		<MAPPING=AfinDe>
+      	m_sCodeUserStory						est une chaîne						<MAPPING=CodeUserStory>
+      	m_sEntantQue							est une chaîne						<MAPPING=EntantQue>
+      	m_sJaiBesoinDe							est une chaîne						<MAPPING=JaiBesoinDe>
+      	m_sAfinDe								est une chaîne						<MAPPING=AfinDe>
       	
-      	m_sCMTR_Global							est une chaîne		<mapping=CMTR_Global>
-      	m_bEstTestéParEquipeDev					est un booléen		<MAPPING=EstTesteParEquipeDev>
-      	m_bEstTestéParLeDemandeur				est un booléen		<MAPPING=EstTesteParFonctionnel>
-      	m_dDateMiseADispo_EnTest				est une date		<MAPPING=DateMiseADispo_enTestFonctionnel>
-      	m_bAnnule								est un booléen		<MAPPING=Top_Annule>
-      	m_bTermine								est un booléen		<MAPPING=Top_Termine>
-      	m_dDateMiseEnProd						est une date		<MAPPING=DateMiseEnProd>
-      	m_sCMTR_Mise_En_Prod					est une chaîne		<MAPPING=CMTR_Mise_En_Prod>
-      	m_bTop_RepriseHisto						est un booléen		<MAPPING=Top_RepriseHisto>
-      	m_sCMTR_RetourDeTest					est une chaîne		<MAPPING=CMTR_RetourDeTest>
+      	m_sCMTR_Global							est une chaîne						<mapping=CMTR_Global>
+      	m_bEstTestéParEquipeDev					est un booléen						<MAPPING=EstTesteParEquipeDev>
+      	m_bEstTestéParLeDemandeur				est un booléen						<MAPPING=EstTesteParFonctionnel>
+      	m_dDateMiseADispo_EnTest				est une date						<MAPPING=DateMiseADispo_enTestFonctionnel>
+      	m_bAnnule								est un booléen						<MAPPING=Top_Annule>
+      	m_bTermine								est un booléen						<MAPPING=Top_Termine>
+      	m_dDateMiseEnProd						est une date						<MAPPING=DateMiseEnProd>
+      	m_sCMTR_Mise_En_Prod					est une chaîne						<MAPPING=CMTR_Mise_En_Prod>
+      	m_bTop_RepriseHisto						est un booléen						<MAPPING=Top_RepriseHisto>
+      	m_sCMTR_RetourDeTest					est une chaîne						<MAPPING=CMTR_RetourDeTest>
       	
-      	m_oProjetParent							est un ClDbProjet dynamique
-      	m_oUsrResponsable						est un ClDbUsr dynamique
-      	m_oUsr_Test_Dev							est un ClDbUsr dynamique
-      	m_oEpic									est un ClDbEpic dynamique
-      	m_oEnvironnement_Test					est un ClDbEnvironnement dynamique
+      	m_oIDScr_Projet							est un ClDbProjet dynamique			<note="mapping=IDScr_Projet">
+      	m_oIDScr_Usr_Valideur					est un ClDbUsr dynamique			<note="mapping=IDScr_Usr_Valideur">
+      	m_oIDScr_Usr_TestDev					est un ClDbUsr dynamique			<note="mapping=IDScr_Usr_TestDev">
+      	m_oIDScr_Epic							est un ClDbEpic dynamique			<note="mapping=IDScr_Epic">
+      	m_oIDSrc_Environnement_Test				est un ClDbEnvironnement dynamique	<note="mapping=IDSrc_Environnement_Test">
+      	
       	
       	m_bMemoEstFini							est un booléen			//Permet de mémoriser si lors du chargement en base, l'US était déjà finie.
       	
-      	m_bEtatInitialise						est un booléen		<Sérialise=faux>
-      	m_eEtatUserStorie						est un ECompteNbUS	<Sérialise=faux>
-      	m_nNbreTacheAfaire						est un entier		<Sérialise=faux>
-      	m_nNbreTacheEnCours						est un entier		<Sérialise=faux>
-      	m_nNbreTacheAnnulee						est un entier		<Sérialise=faux>
-      	m_nNbreTacheTerminee					est un entier		<Sérialise=faux>
-      	m_nNbreTacheTechnique					est un entier		<Sérialise=faux>
+      	m_bEtatInitialise						est un booléen						<Sérialise=faux>
+      	m_eEtatUserStorie						est un ECompteNbUS					<Sérialise=faux>
+      	m_nNbreTacheAfaire						est un entier						<Sérialise=faux>
+      	m_nNbreTacheEnCours						est un entier						<Sérialise=faux>
+      	m_nNbreTacheAnnulee						est un entier						<Sérialise=faux>
+      	m_nNbreTacheTerminee					est un entier						<Sérialise=faux>
+      	m_nNbreTacheTechnique					est un entier						<Sérialise=faux>
       	
       	m_bPresenceTacheFiniesNonVaidées		est un booléen			//Utile pour la migration (il faut distinguer les taches en test et celles validées)
       	m_bPresenceTacheBloquee					est un booléen			//Permet d'identifier si on a une tache bloquer dans l'US.
@@ -134,8 +135,6 @@ class :
      procedure_id : 1445047014238772619
      type_code : 28
      code : |1-
-      
-      
       PROCEDURE Destructeur()
      type : 655360
    -
@@ -195,42 +194,20 @@ class :
       		mg_oEx_CodeDejaPris.ZF_Declenche([:m_sCodeUserStory])
       	FIN
       	
-      	SI :m_oProjetParent = Null ALORS
+      	SI :m_oIDScr_Projet = Null ALORS
       		mg_oEx_AucunProjet.ZF_Declenche([:m_sCodeUserStory])
       		//ExceptionDéclenche(1,ChaîneConstruit("Aucun projet n'est définit pour la user story ""%1"".", ))
       	FIN
-      	Scr_UserStory.IDScr_Projet					= :m_oProjetParent.ZF_Get_IdUnique()
+      	Scr_UserStory.IDScr_Projet					= :m_oIDScr_Projet.ZF_Get_IdUnique()
       	
       	
-      	SI :m_oUsrResponsable = Null ALORS
-      		:m_oUsrResponsable						<- goApp.m_oUsrCnx
-      	FIN
-      //	Scr_UserStory.IDScr_Usr_Valideur			= :m_oUsrResponsable.ZF_Get_IdUnique()
-      //
-      //	//Enregistrement de l'utilisateur testeur
-      //	SI :m_oUsr_Test_Dev = Null ALORS
-      //		Scr_UserStory.IDScr_Usr_TestDev..Null	= Vrai
-      //	SINON
-      //		Scr_UserStory.IDScr_Usr_TestDev			= :m_oUsr_Test_Dev.ZF_Get_IdUnique()
-      //	FIN
-      //
-      //	//Enregistrement de l'épic
-      //	SI :m_oEpic = Null ALORS
-      //		Scr_UserStory.IDScr_Epic..Null			= Vrai
-      //	SINON
-      //		Scr_UserStory.IDScr_Epic				= :m_oEpic.ZF_Get_IdUnique()
-      //	FIN
-      //	
-      //	SI :m_oEnvironnement_Test = Null ALORS
-      //		Scr_UserStory.IDSrc_Environnement_Test..Null = Vrai
-      //	SINON
-      //		Scr_UserStory.IDSrc_Environnement_Test	= :m_oEnvironnement_Test.ZF_Get_IdUnique()
-      //	FIN
-      	
+      	SI :m_oIDScr_Usr_Valideur = Null ALORS
+      		:m_oIDScr_Usr_Valideur						<- goApp.m_oUsrCnx
+      	FIN	
       	
       	si :m_bEstTestéParEquipeDev alors
       		//Obligation d'avoir un environnement de test définit, si l'US part en test.
-      		si pas :m_bEstTestéParLeDemandeur et :m_oEnvironnement_Test = Null ALORS
+      		si pas :m_bEstTestéParLeDemandeur et :m_oIDSrc_Environnement_Test = Null ALORS
       			mg_oEx_US_A_tester_sans_env.ZF_Declenche([:m_sCodeUserStory])
       			//ExceptionDéclenche(1,"La user story ne peut pas partir en test fonctionnel, car l'environnement de test n'est pas défini.")
       		FIN
@@ -259,7 +236,7 @@ class :
       	sinon
       	
       		//Projet parent
-      		:ZF_HistoriseInfo("Associé au projet : %1", Scr_UserStory.IDScr_Projet..nom, p_oProjetParent.ZF_Get_IdUnique(), p_oProjetParent.p_sNom)
+      		:ZF_HistoriseInfo("Associé au projet : %1", Scr_UserStory.IDScr_Projet..nom, p_oIDScr_Projet.ZF_Get_IdUnique(), p_oIDScr_Projet.p_sNom)
       //		si m_EnrUsOrigine.IDScr_Projet <> :m_oProjetParent.ZF_Get_IdUnique() ALORS
       //			:AjouteHistorique(ChaîneConstruit("Association du projet à : %1", :m_oProjetParent.p_sNom))
       //		FIN
@@ -289,7 +266,7 @@ class :
       //		FIN
       		
       		//Cmtr général
-      		:ZF_HistoriseInfo("Changement du commentaire général :" + RC, Scr_UserStory.CMTR_Global..Nom, :m_sCMTR_Global)
+      		:ZF_HistoriseInfo("Changement du commentaire général :" + RC, Scr_UserStory.CMTR_Global..Nom, :m_sCMTR_Global)<§aad:0§>
       //		SI m_EnrUsOrigine.CMTR_Global <> :m_sCMTR_Global ALORS
       //			:AjouteHistorique("Changement du commentaire général :" + RC + :m_sCMTR_Global)
       //		FIN
@@ -312,11 +289,11 @@ class :
       //		FIN
       		
       		//Utilisateur de test dev
-      		SI :ZF_bRubEstModifiee(Scr_UserStory.IDScr_Usr_TestDev..Nom, :ZF_IdSiNonNull(:m_oUsr_Test_Dev)) ALORS
-      			SI :m_oUsr_Test_Dev = null ALORS
+      		SI :ZF_bRubEstModifiee(Scr_UserStory.IDScr_Usr_TestDev..Nom, :ZF_IdSiNonNull(:m_oIDScr_Usr_TestDev)) ALORS
+      			SI :m_oIDScr_Usr_TestDev = null ALORS
       				:ZF_SetMsgHisto("Retrait du testeur de l'équipe de dev.")
       			SINON
-      				:ZF_SetMsgHisto(ChaîneConstruit("Changement du testeur de l'équipe de dev : %1", :m_oUsr_Test_Dev.p_sNom))
+      				:ZF_SetMsgHisto(ChaîneConstruit("Changement du testeur de l'équipe de dev : %1", :m_oIDScr_Usr_TestDev.p_sNom))
       			FIN
       		fin
       		
@@ -331,7 +308,7 @@ class :
       //		FIN
       		
       		//Utilisateur valideur
-      		:ZF_HistoriseInfo("Changement du responsable de la user story : %1", Scr_UserStory.IDScr_Usr_Valideur..Nom, :m_oUsrResponsable.ZF_Get_IdUnique(), :m_oUsrResponsable.p_sNom)
+      		:ZF_HistoriseInfo("Changement du responsable de la user story : %1", Scr_UserStory.IDScr_Usr_Valideur..Nom, :m_oIDScr_Usr_Valideur.ZF_Get_IdUnique(), :m_oIDScr_Usr_Valideur.p_sNom)
       //		si m_EnrUsOrigine.IDScr_Usr_Valideur <> :m_oUsrResponsable.ZF_Get_IdUnique() ALORS
       //			:AjouteHistorique(ChaîneConstruit("Changement du responsable de la user story : %1", :m_oUsrResponsable.p_sNom))
       //		FIN
@@ -909,10 +886,10 @@ class :
       //sinon
       //	renvoyer "<Non défini>"
       //FIN
-      si :m_oEnvironnement_Test = null alors
+      si :m_oIDSrc_Environnement_Test = null alors
       	RENVOYER "<Non défini>"
       sinon
-      	RENVOYER :m_oEnvironnement_Test.p_sLibelle
+      	RENVOYER :m_oIDSrc_Environnement_Test.p_sLibelle
       FIN
      type : 458752
    -
@@ -969,8 +946,8 @@ class :
       	si :p_dDateMiseADispo_EnTest = "" alors
       		:p_dDateMiseADispo_EnTest		= DateSys()
       	fin
-      	si :p_oUsr_Test_Dev = null alors
-      		:p_oUsr_Test_Dev				= goApp.m_oUsrCnx
+      	si :p_oIDScr_Usr_TestDev = null alors
+      		:p_oIDScr_Usr_TestDev				= goApp.m_oUsrCnx
       	fin
       SINON
       	
@@ -988,73 +965,6 @@ class :
       
       
       //:ZF_Enregistre()
-     type : 458752
-   -
-     name : sExport
-     procedure_id : 1445047014240279947
-     type_code : 12
-     code : |1+
-      procédure sExport()<métier>:JSON
-      
-      sRetour est un JSON
-      nInd est un entier
-      oTache est un ClDbTache dynamique
-      oCritere est un ClDbCritereAccept dynamique
-      
-      sRetour.id								= :ZF_Get_IdUnique()
-      sRetour.code							= :m_sCodeUserStory
-      sRetour.who								= :m_sEntantQue
-      sRetour.what							= :m_sJaiBesoinDe
-      sRetour.why								= :m_sAfinDe
-      sRetour.cancel							= :m_bannule
-      sRetour.is_test_by_dev					= :m_besttestéparequipedev
-      sRetour.is_test_by_owner				= :m_besttestéparledemandeur
-      sRetour.finish							= :m_btermine
-      sRetour.date_test						= :m_ddatemiseadispo_entest
-      sRetour.date_prod						= :m_ddatemiseenprod
-      sRetour.comment							= :m_scmtr_global
-      sRetour.comment_release					= :m_scmtr_mise_en_prod
-      sRetour.comment_test					= :m_scmtr_retourdetest
-      
-      si :m_oEpic <> Null ALORS
-      	sRetour.epic						= :m_oEpic.sExport()
-      sinon
-      	sRetour.epic						= null
-      FIN
-      
-      si :m_oUsr_Test_Dev <> Null ALORS
-      	sRetour.usr_dev_test				= :m_oUsr_Test_Dev.sExport()
-      sinon
-      	sRetour.usr_dev_test				= null
-      FIN
-      
-      sRetour.usr_owner						= :m_ousrresponsable.sExport()
-      
-      
-      
-      nInd = 0
-      pour tout element oTache de ClColTache.aoFromUS(objet).aItems()	//:aoListeTaches().aItems()
-      	nInd++
-      	sRetour.task[nInd] = oTache.sExport()
-      FIN
-      
-      
-      nInd = 0
-      pour tout element oCritere de ClColCritereAccept.oFromUS(objet).aitems()		//:aoListeCriteresAcceptation().aItems()
-      	nInd++
-      	sRetour.acceptance[nInd] = oCritere.sExport()
-      FIN
-      
-      
-      nInd = 0
-      oMsg est un ClDbMessage dynamique
-      POUR TOUT ELEMENT oMsg DE ClcolMessage.aoListeMessage(objet).aItems()
-      	nInd++
-      	sRetour.message[nInd] = oMsg.sExport()
-      FIN
-      
-      
-      RENVOYER sRetour
      type : 458752
    -
      name : Combo_Charge_Etats
@@ -1137,23 +1047,23 @@ class :
       
       SI PAS :ZF_bModeAjout() ALORS
       	
-      	:m_oProjetParent		<- ClDbProjet.GetObj(Scr_UserStory.IDScr_Projet)
-      	
-      	SI PAS Scr_UserStory.IDScr_Usr_Valideur..Null ALORS
-      		:m_oUsrResponsable	<- ClDbUsr.GetObj(Scr_UserStory.IDScr_Usr_Valideur)
-      	FIN
-      	
-      	SI PAS Scr_UserStory.IDScr_Usr_TestDev..Null ALORS
-      		:m_oUsr_Test_Dev	<- ClDbUsr.GetObj(Scr_UserStory.IDScr_Usr_TestDev)
-      	FIN
-      	
-      	SI PAS Scr_UserStory.IDScr_Epic..Null ALORS
-      		:m_oEpic			<- ClDbEpic.GetObj(Scr_UserStory.IDScr_Epic)
-      	FIN
-      	
-      	SI PAS Scr_UserStory.IDSrc_Environnement_Test..Null ALORS
-      		:m_oEnvironnement_Test <- ClDbEnvironnement.GetObj(Scr_UserStory.IDSrc_Environnement_Test)
-      	FIN
+      //	:m_oProjetParent		<- ClDbProjet.GetObj(Scr_UserStory.IDScr_Projet)
+      //	
+      //	SI PAS Scr_UserStory.IDScr_Usr_Valideur..Null ALORS
+      //		:m_oUsrResponsable	<- ClDbUsr.GetObj(Scr_UserStory.IDScr_Usr_Valideur)
+      //	FIN
+      //	
+      //	SI PAS Scr_UserStory.IDScr_Usr_TestDev..Null ALORS
+      //		:m_oUsr_Test_Dev	<- ClDbUsr.GetObj(Scr_UserStory.IDScr_Usr_TestDev)
+      //	FIN
+      //	
+      //	SI PAS Scr_UserStory.IDScr_Epic..Null ALORS
+      //		:m_oEpic			<- ClDbEpic.GetObj(Scr_UserStory.IDScr_Epic)
+      //	FIN
+      //	
+      //	SI PAS Scr_UserStory.IDSrc_Environnement_Test..Null ALORS
+      //		:m_oEnvironnement_Test <- ClDbEnvironnement.GetObj(Scr_UserStory.IDSrc_Environnement_Test)
+      //	FIN
       	
       	
       	//On mémorise lors du chargement si l'US était déja validée ou non.
@@ -1201,35 +1111,6 @@ class :
       renvoyer bRetour
      type : 458752
    -
-     name : Combo_Charge_EnvironnementsTest
-     procedure_id : 1457004833679768905
-     type_code : 12
-     code : |1+
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //Combo_Charge_EnvironnementsTest (<sNomFenetre_P> est chaîne, <sNomCombo_P> est chaîne)
-      //
-      // Paramètres :
-      //	sNomFenetre_P (chaîne ANSI) : <indiquez ici le rôle de sNomFenetre_P>
-      //	sNomCombo_P (chaîne ANSI) : <indiquez ici le rôle de sNomCombo_P>
-      // Valeur de retour :
-      // 	Aucune
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      PROCEDURE GLOBAL Combo_Charge_EnvironnementsTest(sNomFenetre_P est une chaîne , sNomCombo_P est une chaîne)<ui>:vide
-      
-      ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
-      //oEnvTmp est un ClDbEnvironnement dynamique
-      oCOlEnv est un ClColEnvironnement
-      oCOlEnv.zf_GetAll()
-      oCOlEnv.ZF_ChargeCbo(sNomFenetre_P + "." + sNomCombo_P)
-      //pour TOUT oEnvTmp de oCOlEnv.aItems()
-      //	ListeAjoute(sNomFenetre_P + "." + sNomCombo_P, oEnvTmp.p_sLibelle + glien(oEnvTmp.ZF_Get_IdUnique()))
-      //FIN
-     type : 458752
-   -
      name : TraiteHisto
      procedure_id : 1500637495759226595
      type_code : 12
@@ -1249,27 +1130,27 @@ class :
       
       
       
-      Scr_UserStory.IDScr_Usr_Valideur			= :m_oUsrResponsable.ZF_Get_IdUnique()
-      
-      //Enregistrement de l'utilisateur testeur
-      SI :m_oUsr_Test_Dev = Null ALORS
-      	Scr_UserStory.IDScr_Usr_TestDev..Null	= Vrai
-      SINON
-      	Scr_UserStory.IDScr_Usr_TestDev			= :m_oUsr_Test_Dev.ZF_Get_IdUnique()
-      FIN
-      
-      //Enregistrement de l'épic
-      SI :m_oEpic = Null ALORS
-      	Scr_UserStory.IDScr_Epic..Null			= Vrai
-      SINON
-      	Scr_UserStory.IDScr_Epic				= :m_oEpic.ZF_Get_IdUnique()
-      FIN
-      
-      SI :m_oEnvironnement_Test = Null ALORS
-      	Scr_UserStory.IDSrc_Environnement_Test..Null = Vrai
-      SINON
-      	Scr_UserStory.IDSrc_Environnement_Test	= :m_oEnvironnement_Test.ZF_Get_IdUnique()
-      FIN
+      //Scr_UserStory.IDScr_Usr_Valideur			= :m_oUsrResponsable.ZF_Get_IdUnique()
+      //
+      ////Enregistrement de l'utilisateur testeur
+      //SI :m_oUsr_Test_Dev = Null ALORS
+      //	Scr_UserStory.IDScr_Usr_TestDev..Null	= Vrai
+      //SINON
+      //	Scr_UserStory.IDScr_Usr_TestDev			= :m_oUsr_Test_Dev.ZF_Get_IdUnique()
+      //FIN
+      //
+      ////Enregistrement de l'épic
+      //SI :m_oEpic = Null ALORS
+      //	Scr_UserStory.IDScr_Epic..Null			= Vrai
+      //SINON
+      //	Scr_UserStory.IDScr_Epic				= :m_oEpic.ZF_Get_IdUnique()
+      //FIN
+      //
+      //SI :m_oEnvironnement_Test = Null ALORS
+      //	Scr_UserStory.IDSrc_Environnement_Test..Null = Vrai
+      //SINON
+      //	Scr_UserStory.IDSrc_Environnement_Test	= :m_oEnvironnement_Test.ZF_Get_IdUnique()
+      //FIN
      type : 458752
    -
      name : setCallBackostEnreg
@@ -1302,86 +1183,86 @@ class :
      type : 458752
   properties :
    -
-     name : p_oProjetParent
+     name : p_oIDScr_Projet
      identifier : 0x140dd69a6f57dd8b
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure PUBLIQUE p_oProjetParent() : ClDbProjet
+         procédure PUBLIQUE p_oIDScr_Projet() : ClDbProjet
          
-         renvoyer :m_oProjetParent
+         renvoyer :m_oIDScr_Projet
         type : 1966080
       -
         code : |1-
-         procédure publique p_oProjetParent(oValeur est ClDbProjet):vide
+         procédure publique p_oIDScr_Projet(LOCAL oValeur est ClDbProjet dynamique):vide
          
-         SI PAS ZF_bObjEgal(:m_oProjetParent, oValeur) ALORS
+         SI PAS ZF_bObjEgal(:m_oIDScr_Projet, oValeur) ALORS
          	:ZF_EstModif()
-         	:m_oProjetParent <- oValeur
+         	:m_oIDScr_Projet <- oValeur
          fin
         type : 2031616
      template_refs : []
    -
-     name : p_oUsr_Test_Dev
+     name : p_oIDScr_Usr_TestDev
      identifier : 0x140dd69a6f58dd8b
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure publique p_oUsr_Test_Dev() : ClDbUsr
+         procédure publique p_oIDScr_Usr_TestDev() : ClDbUsr
          
-         renvoyer :m_oUsr_Test_Dev
+         renvoyer :m_oIDScr_Usr_TestDev
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUsr_Test_Dev(oValeur est ClDbUsr):Vide
+         procédure publique p_oIDScr_Usr_TestDev(LOCAL oValeur est ClDbUsr dynamique):Vide
          
-         SI PAS ZF_bObjEgal(:m_oUsr_Test_Dev, oValeur) ALORS
+         SI PAS ZF_bObjEgal(:m_oIDScr_Usr_TestDev, oValeur) ALORS
          	:ZF_EstModif()
-         	:m_oUsr_Test_Dev <- oValeur
+         	:m_oIDScr_Usr_TestDev <- oValeur
          fin
         type : 2031616
      template_refs : []
    -
-     name : p_oUsrResponsable
+     name : p_oIDScr_Usr_Valideur
      identifier : 0x140dd69a6f59dd8b
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure publique p_oUsrResponsable() : ClDbUsr
+         procédure publique p_oIDScr_Usr_Valideur() : ClDbUsr
          
-         renvoyer :m_oUsrResponsable
+         renvoyer :m_oIDScr_Usr_Valideur
         type : 1966080
       -
         code : |1-
-         procédure publique p_oUsrResponsable(oValeur est ClDbUsr):Vide
+         procédure publique p_oIDScr_Usr_Valideur(LOCAL oValeur est ClDbUsr dynamique):Vide
          
-         SI PAS ZF_bObjEgal(:m_oUsrResponsable, oValeur) ALORS
+         SI PAS ZF_bObjEgal(:m_oIDScr_Usr_Valideur, oValeur) ALORS
          	:ZF_EstModif()
-         	:m_oUsrResponsable <- oValeur
+         	:m_oIDScr_Usr_Valideur <- oValeur
          fin
         type : 2031616
      template_refs : []
    -
-     name : p_oEpic
+     name : p_oIDScr_Epic
      identifier : 0x140dd69a6f5add8b
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure publique p_oEpic() : ClDbEpic
+         procédure publique p_oIDScr_Epic() : ClDbEpic
          
-         renvoyer :m_oEpic
+         renvoyer :m_oIDScr_Epic
         type : 1966080
       -
         code : |1-
-         procédure publique p_oEpic(oValeur est ClDbEpic):Vide
+         procédure publique p_oIDScr_Epic(LOCAL oValeur est ClDbEpic dynamique):Vide
          
-         si pas ZF_bObjEgal(:m_oEpic, oValeur) alors
+         si pas ZF_bObjEgal(:m_oIDScr_Epic, oValeur) alors
          	:ZF_EstModif()
-         	:m_oEpic <- oValeur
+         	:m_oIDScr_Epic <- oValeur
          fin
         type : 2031616
      template_refs : []
@@ -1398,7 +1279,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sAfinDe(sValeur est une chaîne):Vide
+         procédure publique p_sAfinDe(LOCAL sValeur est une chaîne):Vide
          
          si :m_sAfinDe <> sValeur alors
          	:ZF_EstModif()
@@ -1419,7 +1300,7 @@ class :
         type : 1966080
       -
         code : |1+
-         procédure publique p_sCodeUserStory(sValeur est une chaîne):Vide
+         procédure publique p_sCodeUserStory(LOCAL sValeur est une chaîne):Vide
          
          
          
@@ -1442,7 +1323,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sEntantQue(sValeur est une chaîne)<métier>:Vide
+         procédure publique p_sEntantQue(LOCAL sValeur est une chaîne)<métier>:Vide
          
          si :m_sEntantQue <> sValeur alors
          	:ZF_EstModif()
@@ -1463,7 +1344,7 @@ class :
         type : 1966080
       -
         code : |1+
-         procédure publique p_sJaiBesoinDe(sValeur est une chaîne)<métier>:Vide
+         procédure publique p_sJaiBesoinDe(LOCAL sValeur est une chaîne)<métier>:Vide
          
          si :m_sJaiBesoinDe <> sValeur ALORS
          	:ZF_EstModif()
@@ -1484,7 +1365,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR_Global(sValeur est une chaîne)<métier>:Vide
+         procédure publique p_sCMTR_Global(LOCAL sValeur est une chaîne)<métier>:Vide
          
          si :m_sCMTR_Global <> sValeur ALORS
          	:ZF_EstModif()
@@ -1507,11 +1388,6 @@ class :
         code : |1-
          procédure publique p_bEstTestéParEquipeDev(bValeur est un booléen)<métier>:Vide
          
-         //SI :m_sCodeUserStory = "CLD043" /*et sValeur = ""*/ ALORS
-         //	STOP
-         //FIN
-         
-         
          si :m_bEstTestéParEquipeDev <> bValeur alors
          	:ZF_EstModif()
          	:m_bEstTestéParEquipeDev=bValeur
@@ -1531,7 +1407,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_bEstTestéParLeDemandeur(bValeur est un booléen)<métier>:Vide
+         procédure publique p_bEstTestéParLeDemandeur(LOCAL bValeur est un booléen)<métier>:Vide
          
          si :m_bEstTestéParLeDemandeur <> bValeur alors
          	:ZF_EstModif()
@@ -1552,7 +1428,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_dDateMiseADispo_EnTest(dValeur est une date)<métier>:Vide
+         procédure publique p_dDateMiseADispo_EnTest(LOCAL dValeur est une date)<métier>:Vide
          
          si :m_dDateMiseADispo_EnTest <> dValeur alors
          	:ZF_EstModif()
@@ -1615,7 +1491,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_dDateMiseEnProd(dValeur est une date)<métier>:Vide
+         procédure publique p_dDateMiseEnProd(LOCAL dValeur est une date)<métier>:Vide
          
          si :m_dDateMiseEnProd <> dValeur ALORS
          	:ZF_EstModif()
@@ -1636,7 +1512,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR_Mise_En_Prod(sValeur est une chaîne)<métier>:Vide
+         procédure publique p_sCMTR_Mise_En_Prod(LOCAL sValeur est une chaîne)<métier>:Vide
          
          si :m_sCMTR_Mise_En_Prod <> sValeur ALORS
          	:ZF_EstModif()
@@ -1657,7 +1533,7 @@ class :
         type : 1966080
       -
         code : |1-
-         procédure publique p_sCMTR_RetourDeTest(sValeur est une chaîne)<métier>:Vide
+         procédure publique p_sCMTR_RetourDeTest(LOCAL sValeur est une chaîne)<métier>:Vide
          
          si :m_sCMTR_RetourDeTest <> sValeur alors
          	:ZF_EstModif()
@@ -1666,126 +1542,126 @@ class :
         type : 2031616
      template_refs : []
    -
-     name : p_oEnvironnement_Test
+     name : p_oIDSrc_Environnement_Test
      identifier : 0x140dd69a6f69dd8b
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure publique p_oEnvironnement_Test()<métier> : ClDbEnvironnement
-         renvoyer m_oEnvironnement_Test
+         procédure publique p_oIDSrc_Environnement_Test()<métier> : ClDbEnvironnement
+         renvoyer m_oIDSrc_Environnement_Test
         type : 1966080
       -
         code : |1-
-         procédure publique p_oEnvironnement_Test(oValeur est ClDbEnvironnement)<métier>:vide
-         SI PAS ZF_bObjEgal(:m_oEnvironnement_Test, oValeur) ALORS
+         procédure publique p_oIDSrc_Environnement_Test(oValeur est ClDbEnvironnement dynamique)<métier>:vide
+         SI PAS ZF_bObjEgal(:m_oIDSrc_Environnement_Test, oValeur) ALORS
          	:ZF_EstModif()
-         	:m_oEnvironnement_Test <- oValeur
+         	:m_oIDSrc_Environnement_Test <- oValeur
          fin
         type : 2031616
      template_refs : []
    -
-     name : p_oEnvironnement_Test_ID
+     name : p_oIDSrc_Environnement_Test_ID
      identifier : 0x140dd69a6f6add8b
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure publique p_oEnvironnement_Test_ID()<métier>:entier
+         procédure publique p_oIDSrc_Environnement_Test_ID()<métier>:entier
          
-         si :m_oEnvironnement_Test = Null ALORS
+         si :m_oIDSrc_Environnement_Test = Null ALORS
          	renvoyer 0
          sinon
-         	RENVOYER :m_oEnvironnement_Test.ZF_Get_IdUnique()
+         	RENVOYER :m_oIDSrc_Environnement_Test.ZF_Get_IdUnique()
          FIN
         type : 1966080
       -
         code : |1-
-         procédure publique p_oEnvironnement_Test_ID(nValeur_P est un entier)<métier>:vide
+         procédure publique p_oIDSrc_Environnement_Test_ID(LOCAL nValeur_P est un entier)<métier>:vide
          
          si nValeur_P = 0 ALORS
-         	:p_oEnvironnement_Test = null
+         	:p_oIDSrc_Environnement_Test = null
          sinon
-         	:p_oEnvironnement_Test = ClDbEnvironnement.GetObj(nValeur_P)
+         	:p_oIDSrc_Environnement_Test = ClDbEnvironnement.GetObj(nValeur_P)
          FIN
         type : 2031616
      template_refs : []
    -
-     name : p_oUsr_Test_Dev_ID
+     name : p_oIDScr_Usr_TestDev_ID
      identifier : 0x140dd69a6f6bdd8b
      type_code : 103
      p_codes :
       -
         code : |1+
-         procédure publique p_oUsr_Test_Dev_ID() <métier>:entier
+         procédure publique p_oIDScr_Usr_TestDev_ID() <métier>:entier
          
-         si :m_oUsr_Test_Dev = Null ALORS
+         si :m_oIDScr_Usr_TestDev = Null ALORS
          	renvoyer 0
          sinon
-         	renvoyer :m_oUsr_Test_Dev.ZF_Get_IdUnique()
+         	renvoyer :m_oIDScr_Usr_TestDev.ZF_Get_IdUnique()
          FIN
         type : 1966080
       -
         code : |1+
-         procédure publique p_oUsr_Test_Dev_ID(nValeur_P est un entier)<métier>:vide
+         procédure publique p_oIDScr_Usr_TestDev_ID(nValeur_P est un entier)<métier>:vide
          
          si nValeur_P = 0 ALORS
-         	:p_oUsr_Test_Dev = null
+         	:p_oIDScr_Usr_TestDev = null
          sinon
-         	:p_oUsr_Test_Dev = ClDbUsr.GetObj(nValeur_P)
+         	:p_oIDScr_Usr_TestDev = ClDbUsr.GetObj(nValeur_P)
          FIN
         type : 2031616
      template_refs : []
    -
-     name : p_oUsrResponsable_ID
+     name : p_oIDScr_Usr_Valideur_ID
      identifier : 0x140dd69a6f6cdd8b
      type_code : 103
      p_codes :
       -
         code : |1+
-         procédure publique p_oUsrResponsable_ID() <métier>:entier
+         procédure publique p_oIDScr_Usr_Valideur_ID() <métier>:entier
          
-         SI :m_oUsrResponsable = Null ALORS
+         SI :m_oIDScr_Usr_Valideur = Null ALORS
          	RENVOYER 0
          SINON
-         	RENVOYER :m_oUsrResponsable.ZF_Get_IdUnique()
+         	RENVOYER :m_oIDScr_Usr_Valideur.ZF_Get_IdUnique()
          FIN
          
         type : 1966080
       -
         code : |1+
-         procédure publique p_oUsrResponsable_ID(nValeur_P est un entier)<métier>:vide
+         procédure publique p_oIDScr_Usr_Valideur_ID(local nValeur_P est un entier)<métier>:vide
          
          SI nValeur_P = 0 ALORS
-         	:p_oUsrResponsable = Null
+         	:p_oIDScr_Usr_Valideur = Null
          SINON
-         	:p_oUsrResponsable = ClDbUsr.GetObj(nValeur_P)
+         	:p_oIDScr_Usr_Valideur = ClDbUsr.GetObj(nValeur_P)
          FIN
         type : 2031616
      template_refs : []
    -
-     name : p_oEpic_ID
+     name : p_oIDScr_Epic_ID
      identifier : 0x140dd69a6f6ddd8b
      type_code : 103
      p_codes :
       -
         code : |1+
-         procédure publique p_oEpic_ID() <métier>:entier
+         procédure publique p_oIDScr_Epic_ID() <métier>:entier
          
-         SI :m_oEpic = Null ALORS
+         SI :m_oIDScr_Epic = Null ALORS
          	RENVOYER 0
          SINON
-         	RENVOYER :m_oEpic.ZF_Get_IdUnique()
+         	RENVOYER :m_oIDScr_Epic.ZF_Get_IdUnique()
          FIN
         type : 1966080
       -
         code : |1-
-         procédure publique p_oEpic_ID(nValeur_P est un entier)<métier>:vide
+         procédure publique p_oIDScr_Epic_ID(LOCAL nValeur_P est un entier)<métier>:vide
          
          SI nValeur_P = 0 ALORS
-         	:p_oEpic = Null
+         	:p_oIDScr_Epic = Null
          SINON
-         	:p_oEpic = ClDbEpic.GetObj(nValeur_P)
+         	:p_oIDScr_Epic = ClDbEpic.GetObj(nValeur_P)
          FIN
         type : 2031616
      template_refs : []
@@ -1800,6 +1676,33 @@ class :
          
          renvoyer m_bTop_RepriseHisto
         type : 1966080
+     template_refs : []
+   -
+     name : p_oIDScr_Projet_ID
+     identifier : 0x159ba6a60ff12722
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet_ID()<métier>:entier
+         //Propriétés de l'objet m_oIDScr_Projet, accessible via son ID
+         SI :p_oIDScr_Projet = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_Projet.ZF_Get_IdUnique()
+         FIN
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet_ID(LOCAL nValeur_p est un entier)<métier>:Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oIDScr_Projet = Null
+         SINON
+         	:p_oIDScr_Projet = ClDbProjet.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
      template_refs : []
   procedure_templates : []
   property_templates : []

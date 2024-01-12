@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_User_Story_Test
  identifier : 0x2cbf0fd704f661b8
- internal_properties : BwAAAAcAAABRZ2TDSo7zc7T5RcEkjF2A5uQ1xzbpT7ogJjb++GHFBvUu4I0IhmnR/ph63c+RnKU/VF4QyNDIYJjYT2tUGgB7sERQSZ8O9RkxCyObN2hWwyhxdhnx4qSZvTGn5/rhZn6Zg7/O/xu6gkP62qoVzZpQh7a2rtSP9BXlLbtjVvLN0Mqs2+xOis6E3xLf26C560PXGCoYHPrYybbDVPhe1zfYqI1tzyNoL1wVVIpxWKJWyYmDJdw6uETIydL7UCliY4rLPju2WfODGYHrw38WwYED+edZt3eTZLSJi/YvOfYc8T5jP999PpuqDuUo7k7cB3fzOaXCnhQIVXdsDt99TzZDQz0OQbDW+Caf0oO0aGuVJdnk7q99szHRULGRfMJsk0i/0H+u5aOxmLiNZeybZrPw42/rJR2k+EukS8gcPx7RVEuoWzrFwlBCFlqtWiP7vNgjfZFuNh0ct0+NAB0cUjIVuPnIDcjYWrqYE+JbInCiUjXjR6HxdpltGGBg57MepnajEyqMbcy8HNpSL0ZBzoVUv1kE85zr48NM3kWQ5mPu2/0BDP3YfEFfDS9yKj6qCQta6pEAAG3bwUN4chwTnZ2+9kwfxn/sOF+/FOCFwGwa5QnG8kzVfEGScAmUOBYWpkP9wldE/kEFUsXd9BxVskEo4n8qCJF+qGLXmDLVY9GEiDdIPcrgspyQwozRZM8BNxcxMCQaz4OnC/E=
+ internal_properties : BwAAAAcAAAAP6AUKR/QPr3enlcqHrfnZO3XQol5Piw5fXeCIwOGkulksRGR7EwQvrQdxSn6w41dcHutGelflhC6M7H/e3f4ykms/7mpdu5UEN7pJG0kCMPPlncor3jhoO4m/UEkrZIVjGAJXzzTb3/8b3yYBezsBVpIKart68poMWGxA/yl8FMTjcneiaqlrt50KVHtcKpjOq96amWWbsHqoStZrt9HgB4os3Fqnf1XYRvSzCsKV3UL10Ve9pXStITfsToH2JmMBBVflGveS6lARfrCqt36qJRt5n5VCksu7fAilSNFWGxyrkkdWtRtZq1IOnPNE77YUuGI/+dvsctOFYDhAfLhimz5ksOK7ADUlDHokE55KZUGi9fPYtYbi4u8YNmfbaNBFXhz23nV4h5alYiqIBaj2p/VIqUi+xdR8xf1gIBmuasUMRBAu9sudaIReLqwWSdxphVp4WX+DGsMjLWkxuSdbFF/da61oIa2GE0117VnVVvHn7v9GjppSZAbh/d/LFDsP5Eu0NdrVB5Od3JPJOzx+PsLCuhzzaqJvUQ26WjdSoABO4oL6Vds25xJ1UIJWVzXsYoB0bxG2vsG+wCvFL0nrtLPdkPaftoBL+Q0u5PNi8/4wnLxUeI8i5CFVUdQMhfAFJOZiJeMjfRaxSyT1cZBupGysKurSc5LKmF2LbkwbQOXYnFsv2d8zfL6Jwz1JZfuj25m/VPjKiq1F
  properties :
   width : 1020
   height : 566
@@ -456,8 +456,8 @@ window :
       				
       				
       				sGrp = ""
-      				si pas oUs.p_oEpic = Null ALORS
-      					sGrp = oUs.p_oEpic.p_sNom
+      				si pas oUs.p_oIDScr_Epic = Null ALORS
+      					sGrp = oUs.p_oIDScr_Epic.p_sNom
       				FIN
       				
       				
@@ -468,12 +468,12 @@ window :
       				FIN
       				
       				
-      				TBL_Liste_User_Stories[nLigne].COL_ChefDeProjet		= oUs.p_oUsrResponsable.p_sNom
+      				TBL_Liste_User_Stories[nLigne].COL_ChefDeProjet		= oUs.p_oIDScr_Usr_Valideur.p_sNom
       				TBL_Liste_User_Stories[nLigne].COL_IDUserStory		= oUs.ZF_Get_IdUnique()
       				TBL_Liste_User_Stories[nLigne].COL_Grp				= sGrp
       				TBL_Liste_User_Stories[nLigne].COL_US				= oUs.sNommination_US()
       				TBL_Liste_User_Stories[nLigne].COL_Taches			= sLstTaches
-      				TBL_Liste_User_Stories[nLigne].COL_Projet			= oUs.p_oProjetParent.p_sNom
+      				TBL_Liste_User_Stories[nLigne].COL_Projet			= oUs.p_oIDScr_Projet.p_sNom
       				TBL_Liste_User_Stories[nLigne].COL_DteMiseEnTest	= oUs.p_dDateMiseADispo_EnTest
       			FIN
       		FIN

@@ -867,7 +867,8 @@ class :
       		si bAfficher alors
       			:m_sChargementTbl += [RC] + TAB + :m_sNomChampsTbl + ".COL_" + stProto_tmp.sNom + "[nLigne] = "
       			SI bEstObj ALORS
-      				:m_sChargementTbl += "[%sRacineLiaison_p%].[%InfoRub.sNomPropriete%] = Null ? """" SINON [%sRacineLiaison_p%].[%InfoRub.sNomPropriete%].sRepresentation()"
+      				:m_sChargementTbl += "ClZF_ObjDbLs.ZF_RepresentationSiNonNull([%sRacineLiaison_p%].[%InfoRub.sNomPropriete%])"
+      //				:m_sChargementTbl += "[%sRacineLiaison_p%].[%InfoRub.sNomPropriete%] = Null ? """" SINON [%sRacineLiaison_p%].[%InfoRub.sNomPropriete%].sRepresentation()"
       			SINON
       				:m_sChargementTbl += "[%sRacineLiaison_p%].[%InfoRub.sNomPropriete%]"
       			FIN

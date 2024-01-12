@@ -223,14 +223,14 @@ window :
             				bAffUs est un booléen = vrai
             				
             				//L'US a t elle un groupement ?
-            				SI oUs.p_oEpic = Null ALORS
+            				SI oUs.p_oIDScr_Epic = Null ALORS
             					//Non
             					bAffUs = Faux
             				SINON
             					//Oui
             					
             					//Est ce le bon ?
-            					SI oUs.p_oEpic.ZF_Get_IdUnique() <> nID_Groupement ALORS
+            					SI oUs.p_oIDScr_Epic.ZF_Get_IdUnique() <> nID_Groupement ALORS
             						//Non
             						bAffUs = Faux
             					sinon

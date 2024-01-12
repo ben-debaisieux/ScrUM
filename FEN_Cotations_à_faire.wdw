@@ -373,16 +373,16 @@ window :
       			
       			SI oTache_Tmp.bCotationAFaire() ALORS
       				
-      				si oUs.p_oEpic = Null ALORS
+      				si oUs.p_oIDScr_Epic = Null ALORS
       					sGrp = ""
       				sinon
-      					sGrp = rc + oUs.p_oEpic.p_sNom
+      					sGrp = rc + oUs.p_oIDScr_Epic.p_sNom
       				FIN
       				
       				
       				nNumLigne									= TableAjouteLigne(TBL_taches)
       				TBL_taches[nNumLigne].COL_idTache			= oTache_Tmp.Get_IdUnique()
-      				TBL_taches[nNumLigne].COL_Projet			= oUs.p_oProjetParent.p_sNom + sGrp
+      				TBL_taches[nNumLigne].COL_Projet			= oUs.p_oIDScr_Projet.p_sNom + sGrp
       				TBL_taches[nNumLigne].COL_US				= oUs.p_sCodeUserStory +  " - " + oUs.sNommination_US()
       				TBL_taches[nNumLigne].COL_US..Bulle			= oUs.p_sCMTR_Global
       				TBL_taches[nNumLigne].COL_Tache				= oTache_Tmp.p_sCodeTache + " - " + oTache_Tmp.p_sDescription

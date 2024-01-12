@@ -125,19 +125,19 @@ procedure_set :
       	bAPrendre = vrai
       	
       	si oEpic_P <> null alors
-      		si oUS.p_oEpic = null ALORS
+      		si oUS.p_oIDScr_Epic = null ALORS
       			bAPrendre = faux
       		sinon
       			
-      			SI oUS.p_oEpic.ZF_Get_IdUnique() <> oEpic_P.ZF_Get_IdUnique() ALORS
+      			SI oUS.p_oIDScr_Epic.ZF_Get_IdUnique() <> oEpic_P.ZF_Get_IdUnique() ALORS
       				bAPrendre = Faux
       			FIN
       		FIN
       	sinon
-      		si oUS.p_oEpic <> null alors		//Epuration de vieux stocks historique.
-      			SI oUS.p_oEpic.p_sNom DANS ("Statistiques (post lancement)", "Poseurs (post lancement)", "Signature électronique (post lancement)", "Base Lunel fournisseur (post lancement)", "") ALORS
+      		si oUS.p_oIDScr_Epic <> null alors		//Epuration de vieux stocks historique.
+      			SI oUS.p_oIDScr_Epic.p_sNom DANS ("Statistiques (post lancement)", "Poseurs (post lancement)", "Signature électronique (post lancement)", "Base Lunel fournisseur (post lancement)", "") ALORS
       				bAPrendre = Faux
-      				Trace("Groupement ignoré : " + oUS.p_oEpic.p_sNom)
+      				Trace("Groupement ignoré : " + oUS.p_oIDScr_Epic.p_sNom)
       			FIN
       		FIN
       	fin
@@ -366,7 +366,7 @@ procedure_set :
       FIN
       
       pour tout oTache de oColTaches.aItems()
-      	oListeProj.ZF_addItem(oTache.p_oUserStoryParent.p_oProjetParent)
+      	oListeProj.ZF_addItem(oTache.p_oUserStoryParent.p_oIDScr_Projet)
       fin
       aUsrCdp <- ClColUsr_Projet.aoUsersCDPFromColProjet(oListeProj)
       
@@ -390,7 +390,7 @@ procedure_set :
       	fin
       	
       	//ajout des données dans le graphe
-      	oPrj <- oTache.p_oUserStoryParent.p_oProjetParent
+      	oPrj <- oTache.p_oUserStoryParent.p_oIDScr_Projet
       	nNumPrj = oPrj.ZF_Get_IdUnique()
       	SI stRetour.aStProjets[nNumPrj]..Vide ALORS
       		stRetour.aStProjets[nNumPrj] = allouer un STR_Charge_InfoPrj

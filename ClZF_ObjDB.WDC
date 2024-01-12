@@ -129,8 +129,8 @@ class :
       	FIN
       	
       	
-      	//Est ce que l'enregistrement courant correspond à l'enregistrement de la classe ?
-      	SI :ZF_Get_IdUnique() <> {:p_ZF_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique} ALORS
+      	//Est ce que l'enregistrement courant correspond à l'enregistrement de la classe ? (bug en fhsql...)
+      	SI :ZF_Get_IdUnique() <> {:p_ZF_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique} /*OU ClZF_ObjDbLs::mg_oApp.sTypeCnx() = hAccèsHF7*/ ALORS
       		//Non : Repositionnement, mais sans actualisation des membres de l'instance.
       		:ZF_Charge(Vrai)
       	FIN

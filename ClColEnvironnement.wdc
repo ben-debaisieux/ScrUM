@@ -67,6 +67,33 @@ class :
       sClasse est une chaîne = ClDbEnvironnement
       RENVOYER sClasse
      type : 458752
+   -
+     name : Combo_Charge_EnvironnementsTest
+     procedure_id : 1556493575679276311
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Combo_Charge_EnvironnementsTest (<sNomFenetre_P> est chaîne, <sNomCombo_P> est chaîne)
+      //
+      // Paramètres :
+      //	sNomFenetre_P (chaîne ANSI) : <indiquez ici le rôle de sNomFenetre_P>
+      //	sNomCombo_P (chaîne ANSI) : <indiquez ici le rôle de sNomCombo_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE GLOBAL Combo_Charge_EnvironnementsTest(sNomFenetre_P est une chaîne , sNomCombo_P est une chaîne)<ui>:vide
+      
+      ListeSupprimeTout(sNomFenetre_P + "." + sNomCombo_P)
+      
+      oCOlEnv est un ClColEnvironnement
+      oCOlEnv.zf_GetAll()
+      oCOlEnv.ZF_ChargeCbo(sNomFenetre_P + "." + sNomCombo_P)
+      
+     type : 458752
   properties :
    -
      name : p_aoObj

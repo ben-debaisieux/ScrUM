@@ -80,10 +80,9 @@ class :
   procedures :
    -
      name : Constructeur
-     internal_properties : BwAAAAcAAADNVx0MUNTe+ZBvdzhHkp7zdKNq9AbltHNMVJDYGM1YxZWcS+SdrE6MuXFbZQWCj4Ul+gaKyZMWgzguAJoqd+BkZORzyMbFTa7SyVIU9pA6fgRfgp60pxzaSYpPRH6UJ4h1k8EBc9wHGxKMqoMTBS0ceVTrLCZUf7LSADgjOq+mrv4AQZ2tt2WxlQBdhOpfh8olr1OYY8c9az0FfJI5x6PP4U1fzJP8tdsxeNkYvz0ZlHPoKDbnBQ43aOXxXRBH+vgHTTRnEay4kOYxzjDz4Y0n/1jfa/c7QjBqAnTa3op8UHVYJ5YXvAFnRMaaXEEvG/cqJwox6giqi2ek2tQWZVpErbtPGOhgH+NWGjTn7QB6
      procedure_id : 1424026768731914247
      type_code : 27
-     code : |1-
+     code : |1+
       PROCEDURE Constructeur()
       
       si pas m_ZF_bSingleton ALORS
@@ -99,6 +98,9 @@ class :
       HSurErreur("*",hErrTout,"")
       
       :cnxbdd()
+      
+      hgererep(faux)
+      
      type : 589824
    -
      name : Destructeur
@@ -504,23 +506,24 @@ class :
       FIN
      type : 458752
    -
-     name : nTypeCnx
+     name : sTypeCnx
      procedure_id : 1546472570589914485
      type_code : 12
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] nTypeCnx ()
+      //[ <Résultat> = ] sTypeCnx ()
       //
       // Paramètres :
       //	Aucun
+      
       // Valeur de retour :
-      // 	entier : <indiquez ici le rôle de la valeur de retour>
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure nTypeCnx() <métier>:entier
+      procédure sTypeCnx() <métier>:chaine
       renvoyer :m_ZF_cnxBDD..Provider
       
      type : 458752

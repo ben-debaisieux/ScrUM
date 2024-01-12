@@ -536,6 +536,15 @@ class :
       procédure VIRTUELLE ZF_sNomTable() <métier>:chaine
       RENVOYER :m_ZF_sNomTable
      type : 458752
+   -
+     name : ZF_RepresentationSiNonNull
+     procedure_id : 1557757009095937969
+     type_code : 12
+     code : |1-
+      procédure publique globale ZF_RepresentationSiNonNull(oDb est un ClZF_ObjDbLs dynamique) <métier>:chaine
+      
+      renvoyer oDb = Null ? oDb.sRepresentation() SINON ""
+     type : 458752
   properties :
    -
      name : p_nPointeur

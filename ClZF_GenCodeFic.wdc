@@ -435,11 +435,16 @@ class :
       		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
       		si stRelTmp.sTablePK = :m_sNomTable ALORS
       			TableauAjoute(:m_aFK_de_PK, stRelTmp)
-      		sinon
+      //		sinon
+      //			sRub = stRelTmp.sRubriqueFK
+      //			:m_aPK_de_FK[sRub]		= stRelTmp
+      		FIN
+      		
+      		SI stRelTmp.sTableFK = :m_sNomTable ALORS
       			sRub = stRelTmp.sRubriqueFK
       			:m_aPK_de_FK[sRub]		= stRelTmp
       		FIN
-      		
+      			
       		
       //		//Identification des relations associées à la clé primaire de la table en cours.
       //		si ExtraitChaîne(sLigneCle,2,tab) = :m_sNomTable et ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto et ExtraitChaîne(sLigneCle,7,TAB) dans("0,1", "1,1") ALORS

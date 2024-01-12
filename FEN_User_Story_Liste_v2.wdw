@@ -508,7 +508,7 @@ window :
       -
         code : |1-
          oNewUS est un ClDbUserStory(ClZF_ObjDbLs.cstModeCreation)
-         oNewUS.p_oProjetParent = zoProjet_p
+         oNewUS.p_oIDScr_Projet = zoProjet_p
          si Ouvre(FEN_User_Story_Detail_v2,oNewUS) alors
          	ListeUserStories()
          fin
@@ -745,14 +745,14 @@ window :
       		// oui 
       		
       		//L'US a t elle un groupement ?
-      		si oUs.p_oEpic = Null alors
+      		si oUs.p_oIDScr_Epic = Null alors
       			//Non
       			bAffUs = Faux
       		sinon
       			//Oui
       			
       			//Est ce le bon ?
-      			si oUs.p_oEpic.ZF_Get_IdUnique() <> CBO_Groupement..ValeurMémorisée ALORS
+      			si oUs.p_oIDScr_Epic.ZF_Get_IdUnique() <> CBO_Groupement..ValeurMémorisée ALORS
       				//Non
       				bAffUs = Faux
       			FIN
@@ -780,12 +780,12 @@ window :
       		TBL_Liste_User_Stories[nLigne].COL_EnTantQue		= oUs.p_sEnTantQue
       		TBL_Liste_User_Stories[nLigne].COL_Besoin			= oUs.p_sJaiBesoinDe
       		TBL_Liste_User_Stories[nLigne].COL_AfinDe			= oUs.p_sAfinDe
-      		TBL_Liste_User_Stories[nLigne].COL_Responsable		= oUs.p_oUsrResponsable.p_sNom
+      		TBL_Liste_User_Stories[nLigne].COL_Responsable		= ClZF_ObjDbLs.ZF_RepresentationSiNonNull(oUs.p_oIDScr_Usr_Valideur)
       		TBL_Liste_User_Stories[nLigne].COL_Etat				= ClDbUserStory.sNomDeEtat(oUs.Get_EtatUS()) + sComplementEtat
       		TBL_Liste_User_Stories[nLigne].COL_Charge			= oUs.User_Story_Poids()
-      		si oUs.p_oEpic <> Null ALORS
-      			TBL_Liste_User_Stories[nLigne].COL_Groupement	= oUs.p_oEpic.p_sNom
-      			TBL_Liste_User_Stories[nLigne].COL_idGroupement	= oUs.p_oEpic.ZF_Get_IdUnique()
+      		si oUs.p_oIDScr_Epic <> Null ALORS
+      			TBL_Liste_User_Stories[nLigne].COL_Groupement	= oUs.p_oIDScr_Epic.p_sNom
+      			TBL_Liste_User_Stories[nLigne].COL_idGroupement	= oUs.p_oIDScr_Epic.ZF_Get_IdUnique()
       		sinon
       			TBL_Liste_User_Stories[nLigne].COL_Groupement	= ""
       			TBL_Liste_User_Stories[nLigne].COL_idGroupement	= 0
