@@ -1,0 +1,274 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClDbVersion
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x2e891ed60e6db
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClDbVersion est une Classe
+      	hérite de ClZF_ObjDB
+      
+      PRIVÉ
+      	m_sNom	est un chaîne	<MAPPING=Nom>
+      	m_oIDScr_Projet	est un ClDbProjet dynamique	<note="mapping=IDScr_Projet">
+      	m_dDteSouhaite	est une Date	<MAPPING=DteSouhaite>
+      
+      GLOBAL
+      PUBLIC
+      mg_oEx_CompoNonInst_IDScr_Projet	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception1	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception2	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception3	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception4	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception5	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception6	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception7	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception8	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception9	est un ClZF_Exception dynamique
+      	// mg_oEx_Exception10	est un ClZF_Exception dynamique
+      FIN
+      
+      mg_oEx_CompoNonInst_IDScr_Projet	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Projet est requis.")			// A faire : Reprendre le message
+      // mg_oEx_Exception1	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception2	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception3	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception4	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception5	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception6	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception7	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception8	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception9	= Allouer un ClZF_Exception(". . .")
+      // mg_oEx_Exception10	= Allouer un ClZF_Exception(". . .")
+      
+      
+      
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 818663403874005
+     type_code : 27
+     code : |1+
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier)
+      Ancêtre.Constructeur(Scr_Version..Nom, Scr_Version.IDScr_Version..Nom,nID_P)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 818663403874006
+     type_code : 28
+     code : |1+
+      Procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetObj
+     procedure_id : 818663403874007
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbVersion
+      
+      sClasse est une chaîne = ClDbVersion
+      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+     type : 458752
+   -
+     name : init_ObjBD
+     procedure_id : 818663403874008
+     type_code : 12
+     code : |1+
+      PROCÉDURE PROTÉGÉ init_ObjBD()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
+      
+      
+     type : 458752
+   -
+     name : Pre_Enregistre
+     procedure_id : 818663403874009
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ Pre_Enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.Pre_Enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      //. . .
+      SINON
+      
+      	//
+      	SI :m_oIDScr_Projet = Null ALORS
+      		mg_oEx_CompoNonInst_IDScr_Projet.ZF_Declenche()
+      	FIN
+      
+      
+      FIN
+     type : 458752
+   -
+     name : post_enregistre
+     procedure_id : 818663403874010
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉ post_enregistre()<métier>:vide
+      // Redéfinition de la méthode ClZF_ObjDB.post_enregistre()
+      
+      
+      SI :ZF_bEstsupprime() ALORS
+      // . . .
+      
+      
+      
+      FIN
+     type : 458752
+   -
+     name : sRepresentation
+     procedure_id : 1573471985160108015
+     type_code : 12
+     code : |1-
+      // Redéfinition de la méthode ClZF_ObjDbLs.sRepresentation
+      PROCÉDURE VIRTUELLE sRepresentation() <métier>:chaîne
+      renvoyer p_sNom
+     type : 458752
+   -
+     name : Get_VersionDeNom
+     procedure_id : 1573856573505046668
+     type_code : 12
+     code : |1-
+      procédure globale Get_VersionDeNom(oPrj_P est un ClDbProjet, sNom_P est une chaîne)<métier>:ClDbVersion
+      
+      oRetour		est un ClDbVersion dynamique
+      oColVers	est un ClColVersion
+      sReq		est une chaîne
+      
+      sReq = [
+      SELECT
+      	Scr_Version.*
+      	
+      FROM Scr_Version
+      
+      where Scr_Version.IDScr_Projet = [%oPrj_P.ZF_Get_IdUnique()%]
+      	AND Scr_Version.Nom = '[%ClZF_App.sFormateTexteSQL(gauche(sNom_P, Scr_Version.Nom..taille))%]'
+      	
+      ]
+      oColVers.ZF_LoadSQL(sReq)
+      
+      si oColVers.ZF_nTaille() = 1 ALORS
+      	oRetour <- oColVers.oItem(1)
+      FIN
+      
+      renvoyer oRetour
+     type : 458752
+  properties :
+   -
+     name : p_sNom
+     identifier : 0x2e891ed60e6d1
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_sNom()<métier>:chaîne
+         //Propriétés de m_sNom
+         
+         RENVOYER :m_sNom
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_sNom(sValeur_p est un chaîne)<métier>:Vide
+         
+         SI :m_sNom <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sNom = sValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Projet
+     identifier : 0x2e891ed60e6d2
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet()<métier>:ClDbProjet
+         //Propriétés de m_oIDScr_Projet
+         
+         RENVOYER :m_oIDScr_Projet
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet(oValeur_p est un ClDbProjet dynamique)<métier>:Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_Projet, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_Projet = oValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Projet_ID
+     identifier : 0x2e891ed60e6d3
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet_ID()<métier>:entier
+         //Propriétés de l'objet m_oIDScr_Projet, accessible via son ID
+         SI :p_oIDScr_Projet = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_Projet.ZF_Get_IdUnique()
+         FIN
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Projet_ID(nValeur_p est un entier)<métier>:Vide
+         
+         SI nValeur_P = 0 ALORS
+         	:p_oIDScr_Projet = Null
+         SINON
+         	:p_oIDScr_Projet = ClDbProjet.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_dDteSouhaite
+     identifier : 0x2e891ed60e6d4
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_dDteSouhaite()<métier>:Date
+         //Propriétés de m_dDteSouhaite
+         
+         RENVOYER :m_dDteSouhaite
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_dDteSouhaite(dValeur_p est une Date)<métier>:Vide
+         
+         SI :m_dDteSouhaite <> dValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_dDteSouhaite = dValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x2e891ed60e6dc
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

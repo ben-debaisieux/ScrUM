@@ -153,6 +153,24 @@ class :
       sClasse est une chaîne = ClDbSprint
       RENVOYER sClasse
      type : 458752
+   -
+     name : oFiltre_Termine
+     procedure_id : 1563539233066519689
+     type_code : 12
+     code : |1+
+      procédure oFiltre_Termine(bTermine_p est un booléen = vrai):ClColSprint
+      
+      oSpr est un ClDbSprint dynamique
+      oColSpr est un ClColSprint
+      
+      pour tout oSpr de :p_aoObj
+      	si oSpr.p_bTop_Termine = bTermine_p ALORS
+      		oColSpr.ZF_addItem(oSpr)
+      	FIN
+      FIN
+      
+      renvoyer oColSpr
+     type : 458752
   properties :
    -
      name : p_aoObj

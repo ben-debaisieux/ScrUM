@@ -146,7 +146,7 @@ class :
      procedure_id : 1444814321205784442
      type_code : 12
      code : |1-
-      procédure globale Get_EpicDeNom(oPrj_P est un ClDbProjet, sNom_P est une chaîne):ClDbEpic
+      procédure globale Get_EpicDeNom(oPrj_P est un ClDbProjet, sNom_P est une chaîne)<métier>:ClDbEpic
       
       oRetour est un ClDbEpic dynamique
       oColEpics est un ClColEpic
@@ -222,7 +222,7 @@ class :
       		
       	CAS ::cst_posFin
       		bDeplaceAmont = Faux
-      		nNouvPos = ClColEpic.from_projet(:m_oProjet).ZF_nTaille()
+      		nNouvPos = ClColEpic.oFromprojet(:m_oProjet).ZF_nTaille()
       //		nNouvPos = Dimension(:m_oProjet.aoEpics())
       		
       	AUTRE CAS
@@ -231,7 +231,7 @@ class :
       
       
       oEpic_Tmp est un ClDbEpic dynamique
-      pour tout element oEpic_Tmp de ClColEpic.from_projet(:m_oProjet).aItems()
+      pour tout element oEpic_Tmp de ClColEpic.oFromprojet(:m_oProjet).aItems()
       	
       	si oEpic_Tmp = objet alors
       		:p_nOrdre = nNouvPos

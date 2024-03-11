@@ -102,6 +102,7 @@ class :
       	cstDefRubObj		= 3
       	cstDefRubInclusion	= 4
       	
+      	cstRelErreur		= -1
       	cstRelNonDef		= 0
       	cstRelAsso			= 1
       	cstRelAsso_Suf		= "Asso"
@@ -429,10 +430,14 @@ class :
       		stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,nColTableFK,TAB)
       		stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,nColRubFK,TAB)
       		
-      		stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,nSymboleFK,TAB))
-      		stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,nSymbolePK,TAB))
-      		
-      		stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      		quand exception dans
+      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,nSymboleFK,TAB))
+      			stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,nSymbolePK,TAB))
+      		faire
+      			stRelTmp.nTypeRel		= cstRelErreur
+      		sinon
+      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      		fin
       		si stRelTmp.sTablePK = :m_sNomTable ALORS
       			TableauAjoute(:m_aFK_de_PK, stRelTmp)
       //		sinon
@@ -718,7 +723,20 @@ class :
      type_code : 12
      code : |1+
       procedure globale sListeFicAna()<metier>:chaine
-      renvoyer HListeFichier()
+      
+      aTablesExclues est un tableau de chaîne = goapp.TablesExclues()
+      sRetour est une chaîne
+      sTable est une chaîne
+      
+      pour toute chaine sTable de HListeFichier() separee par rc
+      	si tableaucherche(aTablesExclues,tcLinéaire,sTable) = -1 ALORS
+      		sRetour += [rc] + sTable
+      	FIN
+      FIN
+      
+      
+      
+      renvoyer sRetour
      type : 458752
    -
      name : mEval

@@ -86,6 +86,8 @@ class :
       	fin
       	
       	SELON stRelTmp.nTypeRel
+      		CAS ClZF_GenCodeFic.cstRelErreur
+      			traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" aberrante ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).")
       		CAS ClZF_GenCodeFic.cstRelNonDef
       			traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).")
       		CAS ClZF_GenCodeFic.cstRelIncl
@@ -148,7 +150,7 @@ class :
       POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.m_aRub
       	//SI le libellé et le nom de la rubrique sont identiques, c'est que le libellé n'a pas été redéfinit
       	si sRub = stRubTmp.sLibelleRubrique ALORS
-      		traceInfo("Le libellé de la rubrique ""[%sRub%]"" n'a pas été redéfinit.")
+      		traceInfo("Le libellé de la rubrique ""[%sRub%]"" n'a pas été redéfini.")
       	FIN
       FIN
       
@@ -382,6 +384,8 @@ class :
       			FIN
       		FIN
       	FIN
+      sinon
+      	sRapport += [RC + RC] + "La classe [%:m_oClasseGen.sNomClasseGen()%] n'existe pas."
       FIN
       
       :m_sRapport = sRapport
@@ -538,14 +542,14 @@ class :
       	POUR TOUT ÉLÉMENT stRelTmp DE :m_oClasseGen.m_aPK_de_FK
       		SI stRelTmp.nTypeRel DANS (ClZF_GenCodeFic.cstRelCompo) ALORS
       			
-      			sConstRef	= ClZF_GenCodeClCol.sNomConstanteColCompo(stRelTmp)
-      			sConstRef	= """" + stRelTmp.sTableFK + "." + stRelTmp.sRubriqueFK + """"		//recréation de la valeur de la constant, car ExécuteCode bugge
+      			sConstRef	= ClZF_GenCodeClCol.sNomConstanteColCompo(stRelTmp,<bValeurConstante_p>:vrai)
+      			//sConstRef	= """" + stRelTmp.sTableFK + "." + stRelTmp.sRubriqueFK + """"		//recréation de la valeur de la constant, car ExécuteCode bugge
       			
       			QUAND EXCEPTION DANS
       				sCode est une chaîne = ChaîneConstruit([
       					clOCol%1 est un [%:m_oClasseGen.sNomClasseColGen()%]()
       					clODb%1 est un [%:m_oClasseGen.sNomClasseGen()%](ClZF_ObjDbLs.cstModeCreation)
-      					clOCol%1 <- clODb%1.ZF_GetCol([%sConstRef%])
+      					clOCol%1 <- clODb%1.ZF_GetCol("[%sConstRef%]")
       					libérer clODb%1
       					libérer clOCol%1
       				], DonneIdentifiant())
@@ -553,7 +557,7 @@ class :
       			FAIRE
       				SELON ExceptionInfo(errCode)
       					CAS ClZF_App.mg_oExTypeColNonDefinit.ZF_Code
-      						TableauAjoute(tabACleMqt, sConstRef)
+      						TableauAjoute(tabACleMqt, ClZF_GenCodeClCol.sNomConstanteColCompo(stRelTmp,Vrai))
       					AUTRE CAS
       						ExceptionPropage()
       				FIN
@@ -606,6 +610,99 @@ class :
       //
       procédure bMsgInfo() <métier>:booleen
       renvoyer :m_sRapport <> ""
+      
+     type : 458752
+   -
+     name : AnaFkMqt
+     procedure_id : 1569839189853034151
+     type_code : 12
+     code : |1+
+      PROCÉDURE AnaFkMqt()<métier>:Vide
+      
+      
+      sRapport		est une chaîne
+      stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
+      //stRelTmp		est un ClZF_GenCodeFic.str_rel
+      sRub			est une chaîne
+      //nNbFkIncl		est un entier
+      //sListeFkCompo	est une chaîne
+      //stInfoRub		est un ClZF_GenCodeFic.STR_DefRub
+      
+      
+      //sNomPK			est une chaîne	= :m_oClasseGen.p_sNomRubId
+      oTblTmp			est un ClZF_GenCodeFic dynamique
+      sNomTblTmp		est une chaine
+      
+      pour toute chaine sNomTblTmp de ClZF_GenCodeFic.sListeFicAna() separee par RC
+      	oTblTmp = allouer un ClZF_GenCodeFic(sNomTblTmp)
+      	oTblTmp.Analyse()
+      	POUR TOUT ÉLÉMENT stRubTmp, sRub DE m_oClasseGen.m_aRub
+      		//trace(oTblTmp.p_sNomRubId + " -" + sRub)
+      		si ChaîneCommencePar(sRub, oTblTmp.p_sNomRubId) _et_ stRubTmp.stRelFkAsso.sTablePK <> sNomTblTmp alors
+      			
+      			traceInfo([
+      				La rubrique [%srub%] ne référence pas la clé primaire [%sNomTblTmp%].[%oTblTmp.p_sNomRubId%], alors qu'elles ont le même nom.
+      				])
+      			
+      		FIN
+      	FIN
+      FIN
+      
+      
+      //POUR TOUT ÉLÉMENT stRelTmp, sRub DE :m_oClasseGen.m_aPK_de_FK
+      //
+      //	//Récupération de la définition de la rubrique associé à la contrainte FK
+      //	si sRub <> :m_oClasseGen.p_sNomRubId alors
+      //		stInfoRub  = :m_oClasseGen.m_aRub[sRub]
+      //	sinon
+      //		stInfoRub  = :m_oClasseGen.p_stDefId
+      //	fin
+      //	
+      //	SELON stRelTmp.nTypeRel
+      //		CAS ClZF_GenCodeFic.cstRelNonDef
+      //			traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).")
+      //		CAS ClZF_GenCodeFic.cstRelIncl
+      //			nNbFkIncl++
+      //			sListeFkCompo += [RC] + stRelTmp.sNomRel
+      //			
+      //			si stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ALORS
+      //				traceInfo("Liaison ""[%stRelTmp.sNomRel%]"", de type ""Inclusion"", pointe vers une rubrique non unique : [%sRub%].")
+      //			FIN
+      //		autres cas :
+      //			//Pas d'autres analyses particulières.
+      //	FIN
+      //	
+      //	SI stInfoRub.bNullable ET stRelTmp.bRubFKOblig ALORS
+      //		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] nullable et relation de type ""1,1"".")
+      //	FIN
+      //	SI PAS stInfoRub.bNullable ET PAS stRelTmp.bRubFKOblig ALORS
+      //		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] non nullable et relation de type ""0,1"".")
+      //	FIN
+      //	
+      //	
+      //	
+      //	SI stInfoRub.nTypeCle = ClZF_GenCodeFic.cstTypeCleUnique ET pas stRelTmp.bRubFKUnique ALORS
+      //		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] clé unique et relation de type ""0,n"" ou ""1,n"".")
+      //	FIN
+      //	SI stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ET stRelTmp.bRubFKUnique ALORS
+      //		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] non clé unique et relation de type ""0,1"" ou ""1,1"".")
+      //	FIN
+      //	
+      //FIN
+      //
+      //
+      //
+      //SI nNbFkIncl > 1 ALORS
+      //	traceInfo("[%nNbFkIncl%] liaisons sont de type ""Inclusion"", dans cette table (1 seule maxi): " + RC + sListeFkCompo)
+      //FIN
+      
+      
+      :m_sRapport = sRapport
+      
+      
+      PROCÉDURE INTERNE traceInfo(sMessage):vide
+      	sRapport += [RC] + sMessage
+      FIN
       
      type : 458752
   properties :

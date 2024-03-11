@@ -45,6 +45,7 @@ class :
       fin
       
       STR_TICKET_TRELLO est une structure
+      	sID est une chaine
       	sSujet est une chaîne
       	sDescription est une chaine
       	sIDStatut est une chaine
@@ -459,6 +460,64 @@ class :
       FIN
       
       renvoyer bTrouve
+     type : 458752
+   -
+     name : Recup_Liste_Ticket_Trello
+     procedure_id : 1575701833119499405
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Recup_Liste_Ticket_Trello (<sIDColonne_Tableau_p> est chaîne [, <aStTicket_p> est tableau (STR_TICKET_TRELLO)])
+      //
+      // Paramètres :
+      //	sIDColonne_Tableau_p (chaîne ANSI) : <indiquez ici le rôle de sIDColonne_Tableau>
+      //	aStTicket_p (tableau (STR_TICKET_TRELLO)) : <indiquez ici le rôle de aStTicket_p>
+      
+      // Valeur de retour :
+      // 	tableau (STR_TICKET_TRELLO) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GLOBALE Recup_Liste_Ticket_Trello(LOCAL sIDColonne_Tableau_p est une chaine,LOCAL aStTicket_p est un tableau de STR_TICKET_TRELLO = []):tableau de STR_TICKET_TRELLO
+      
+      // variables
+      rest_Requete		est un restRequête
+      rest_Reponse		est un restRéponse
+      vRetour				est un Variant
+      stTicket est un STR_TICKET_TRELLO
+      
+      
+      // url pour récupérer informations sur un utilisateur
+      rest_Requete..URL						= "https://api.trello.com/1/lists/[%sIDColonne_Tableau_p%]/cards" +  ClTrello_req.sAuth
+      
+      rest_Requete..Méthode					= httpGet
+      
+      rest_Requete..ContentType				= "application/json"
+      
+      
+      // envoi de la requête
+      rest_Reponse							= RESTEnvoie(rest_Requete)
+      
+      SI rest_Reponse..CodeEtat PAS DANS (200,201,202) ALORS
+      	
+      SINON
+      	// récupère variant
+      	vRetour		= JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	POUR i = 1 _À_ TableauOccurrence(vRetour)
+      		VariableRAZ(stTicket)
+      		
+      		stTicket.sID = vRetour[i].id
+      		stTicket.sDescription = vRetour[i].desc
+      		stTicket.sSujet = vRetour[i].name
+      		
+      		TableauAjoute(aStTicket_p,stTicket)
+      	FIN
+      FIN
+      
+      RENVOYER aStTicket_p
      type : 458752
   procedure_templates : []
   property_templates : []

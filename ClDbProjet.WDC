@@ -26,7 +26,13 @@ class :
       	m_nChargeProvisionelle	est un entier sur 2 octets	<mapping=ChargeProvisionelle>
       	m_sGroupement			est une chaîne				<mapping=Groupement>
       	m_nOrdreGrp				est un entier sur 2 octets	<mapping=Ordre>
-      	m_sCode					est une chaine 				<mapping=PrefixeUS>
+      	m_sCode					est une chaine				<mapping=PrefixeUS>
+      	
+      	m_sIdPlanner			est un chaîne				<MAPPING=IdPlanner>
+      	m_sIdcolPlan_AFaire		est un chaîne				<MAPPING=IdcolPlan_AFaire>
+      	m_sIdcolPlan_EnCours	est un chaîne				<MAPPING=IdcolPlan_EnCours>
+      	m_sIdcolPlan_ATester	est un chaîne				<MAPPING=IdcolPlan_ATester>
+      	m_sIdcolPlan_ALivrer	est un chaîne				<MAPPING=IdcolPlan_ALivrer>
       	
       	m_anStatsUS				est un tableau associatif de entier
       	m_bInitStatsUS			est un booléen
@@ -60,6 +66,7 @@ class :
       mg_oEx_SuppImpossible_PresUS	= allouer un ClZF_Exception("Impossible de supprimer un projet, tant que des user stories sont affectées")
       mg_oEx_PbNom					= allouer un ClZF_Exception("Le nom du projet est obligatoire")
       //mg_oEx_CdpAbsent				= allouer un ClZF_Exception("Un chef de projet est obligatoire pour le projet")
+      
      type : 131072
   procedures :
    -
@@ -852,45 +859,6 @@ class :
       renvoyer aoRetour
      type : 458752
    -
-     name : sExport
-     procedure_id : 1444815455093011608
-     type_code : 12
-     code : |1+
-      procédure sExport():json
-      
-      sRetour est un JSON
-      nInd est un entier
-      //oUsr est un ClDbUsr dynamique
-      oUS est un ClDbUserStory dynamique
-      
-      
-      
-      sRetour.id					= :ZF_Get_IdUnique()
-      sRetour.name				= :m_sNom
-      sRetour.is_departement		= :m_btop_direction
-      sRetour.is_finish			= :m_btop_termine
-      sRetour.forcastload			= :m_nchargeprovisionelle
-      sRetour.group				= :m_sGroupement
-      sRetour.order_grooup		= :m_nOrdreGrp
-      
-      //sRetour.user_manager		= :m_ousr_chefprojet.sExport()
-      
-      //nInd = 0
-      //pour tout element oUsr de :aoInvite_Liste().aItems()
-      //	nInd++
-      //	sRetour.user_guest[nInd] = oUsr.sExport()
-      //FIN
-      
-      nInd = 0
-      pour tout element oUS de ClColUserStory.oFromProjet(objet).aitems()	//:aoListeUS().aItems()
-      	nInd++
-      	sRetour.user_Stories[nInd] = oUS.sExport()
-      FIN
-      
-      
-      renvoyer sRetour
-     type : 458752
-   -
      name : bUsrAffecteAuProjet
      procedure_id : 1444815455093208216
      type_code : 12
@@ -955,9 +923,13 @@ class :
       //pour tout element oUser de :aoInvite_Liste().aItems()
       //	:Invite_Supprime(oUser)
       //FIN
+      oVers est un ClDbVersion dynamique
+      POUR TOUT ÉLÉMENT oVers DE ClColVersion.oFromProjet(objet).aItems()
+      	AppSupp(oVers)
+      FIN
       
       oEpic est un ClDbEpic dynamique
-      pour tout element oEpic de ClColEpic.from_projet(objet).aItems()
+      pour tout element oEpic de ClColEpic.oFromprojet(objet).aItems()
       	AppSupp(oEpic)
       fin
       
@@ -1045,6 +1017,22 @@ class :
       // Redéfinition de la méthode ClZF_ObjDbLs.sRepresentation
       PROCÉDURE sRepresentation() <métier>:chaîne
       renvoyer :p_sNom
+     type : 458752
+   -
+     name : oProjetDeNom
+     procedure_id : 1575221990849287525
+     type_code : 12
+     code : |1-
+      procédure globale oProjetDeNom(local sNom_P est une chaîne)<metier>:ClDbProjet
+      
+      oPrj est un ClDbProjet dynamique
+      
+      HLitRecherche(Scr_Projet,Nom,sNom_P,hIdentique+hLimiteParcours)
+      SI HTrouve(Scr_Projet) ALORS
+      	oPrj <- ClDbProjet.GetObj(Scr_Projet.IDScr_Projet)
+      FIN
+      
+      RENVOYER oPrj
      type : 458752
   properties :
    -
@@ -1184,6 +1172,120 @@ class :
          aTmp est un tableau associatif de ClColUsr
          renvoyer aTmp	//m_aClassifInvite
         type : 1966080
+     template_refs : []
+   -
+     name : p_sIdPlanner
+     identifier : 0x15e08d3f06be9ba5
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_sIdPlanner()<métier>:chaîne
+         //Propriétés de m_sIdPlanner
+         
+         RENVOYER :m_sIdPlanner
+        type : 1966080
+      -
+        code : |1-
+         PROCEDURE p_sIdPlanner(sValeur_p est un chaîne)<métier>:Vide
+         
+         SI :m_sIdPlanner <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sIdPlanner = sValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sIdcolPlan_AFaire
+     identifier : 0x15e08d5b06eb0b18
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_sIdcolPlan_AFaire()<métier>:chaîne
+         //Propriétés de m_sIdcolPlan_AFaire
+         
+         RENVOYER :m_sIdcolPlan_AFaire
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_sIdcolPlan_AFaire(sValeur_p est un chaîne)<métier>:Vide
+         
+         SI :m_sIdcolPlan_AFaire <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sIdcolPlan_AFaire = sValeur_p
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sIdcolPlan_EnCours
+     identifier : 0x15e08d7407176b87
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_sIdcolPlan_EnCours()<métier>:chaîne
+         //Propriétés de m_sIdcolPlan_EnCours
+         
+         RENVOYER :m_sIdcolPlan_EnCours
+        type : 1966080
+      -
+        code : |1-
+         PROCEDURE p_sIdcolPlan_EnCours(sValeur_p est un chaîne)<métier>:Vide
+         
+         SI :m_sIdcolPlan_EnCours <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sIdcolPlan_EnCours = sValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sIdcolPlan_ATester
+     identifier : 0x15e08da607992ded
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_sIdcolPlan_ATester()<métier>:chaîne
+         //Propriétés de m_sIdcolPlan_ATester
+         
+         RENVOYER :m_sIdcolPlan_ATester
+         
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_sIdcolPlan_ATester(sValeur_p est un chaîne)<métier>:Vide
+         
+         SI :m_sIdcolPlan_ATester <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sIdcolPlan_ATester = sValeur_p
+         FIN
+         
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_sIdcolPlan_ALivrer
+     identifier : 0x15e08dc807c5b2ad
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_sIdcolPlan_ALivrer()<métier>:chaîne
+         //Propriétés de m_sIdcolPlan_ALivrer
+         
+         RENVOYER :m_sIdcolPlan_ALivrer
+        type : 1966080
+      -
+        code : |1-
+         PROCEDURE p_sIdcolPlan_ALivrer(sValeur_p est un chaîne)<métier>:Vide
+         
+         SI :m_sIdcolPlan_ALivrer <> sValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_sIdcolPlan_ALivrer = sValeur_p
+         FIN
+        type : 2031616
      template_refs : []
   procedure_templates : []
   property_templates : []

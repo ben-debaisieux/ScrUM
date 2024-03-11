@@ -241,7 +241,10 @@ class :
       		renvoyer "En cours (Planifié)"
       	CAS cst_Statut_EnAttente_ID
       		renvoyer "En attente"
-      		
+      	CAS cst_Statut_Resolut_ID
+      		RENVOYER "Résolu"
+      	CAS cst_Statut_Clos_ID
+      		RENVOYER "Clos"
       	AUTRE CAS
       		renvoyer ""
       FIN

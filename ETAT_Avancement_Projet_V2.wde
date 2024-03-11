@@ -639,7 +639,7 @@ report :
       	stUserStorie.nIDResponsable		= oUs.p_oIDScr_Usr_Valideur.ZF_Get_IdUnique()
       	stUserStorie.bAtester			= oUs.p_bEstTestéParLeDemandeur
       	stUserStorie.eEtatUserStorie	= oUs.Get_EtatUS()
-      	stUserStorie.sCharge			= oUs.User_Story_Poids()
+      	stUserStorie.sCharge			= oUs.stInfoCharge().sRepres
       //	stUserStorie.nRetard			= oUs.Get_EtatRetard()
       //	stUserStorie.nNbrSprintRetard	= oUs.Get_NbSprintRetard()
       	

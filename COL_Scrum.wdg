@@ -29,29 +29,30 @@ procedure_set :
       
       //Structure User Story
       STR_UserStorie est une structure
-      	nIDUserStorie est un entier
-      	sCodeUserStorie est une chaine
-      	sEnTantQue est une chaine
-      	sBesoinUserStorie est une chaine
-      	sAfindeUserStorie est une chaîne
-      	nPrioritéUserStorie est un entier
-      
-      	nIDResponsable est un entier
-      	nIDProjet est un entier
-      	eEtatUserStorie est un ClDbUserStory.ECompteNbUS
-      
-      	bAtester est un booléen
-      	sCmtrGeneral est une chaine
-      	sCmtrTest est une chaine
+      	nIDUserStorie		est un entier
+      	sCodeUserStorie		est une chaine
+      	sEnTantQue			est une chaine
+      	sBesoinUserStorie	est une chaine
+      	sAfindeUserStorie	est une chaîne
+      	nPrioritéUserStorie	est un entier
       	
-      	nIdEpic est un entier
+      	nIDResponsable		est un entier
+      	nIDProjet			est un entier
+      	eEtatUserStorie		est un ClDbUserStory.ECompteNbUS
+      	nBusinessValue		est un entier
+      	bAtester			est un booléen
+      	sCmtrGeneral		est une chaine
+      	sCmtrTest			est une chaine
+      	
+      	nIdEpic				est un entier
+      	nIdVersion			est un entier
       	
       	//Variables pour tableau Dev Prevu
-      	sCharge est une chaine
-      	sNPeriodeDeDemarage est une chaîne
-      	nSprint est un entier
-      	nOrdre est un entier
-      	sProjet est une chaine //nom du projet
+      	sCharge				est une chaine
+      	sNPeriodeDeDemarage	est une chaîne
+      	nSprint				est un entier
+      	nOrdre				est un entier
+      	sProjet				est une chaine	//nom du projet
       FIN
       
       STR_Tache est une structure

@@ -280,7 +280,7 @@ class :
      procedure_id : 1466666275991524507
      type_code : 12
      code : |1-
-      procedure globale sNomConstanteColCompo(stRel_p est un ClZF_GenCodeFic.STR_Rel, bAvecClasseParente_p est un booléen = vrai)<metier>:chaine
+      procedure globale sNomConstanteColCompo(stRel_p est un ClZF_GenCodeFic.STR_Rel, bAvecClasseParente_p est un booléen = vrai, bValeurConstante_p est un booléen = faux)<metier>:chaine
       
       sRetour est une chaîne
       oInfoSource est un ClZF_GenCodeFic(stRel_p.sTablePK)
@@ -289,11 +289,14 @@ class :
       oInfoSource.Analyse()
       oInfoCible.Analyse()
       
-      si bAvecClasseParente_p ALORS
-      	sRetour = oInfoSource.sNomClasseGen() + "."
-      FIN
-      sRetour += "cstGetCol_" + oInfoCible.p_sNomUsage
-      
+      si pas bValeurConstante_p alors
+      	si bAvecClasseParente_p ALORS
+      		sRetour = oInfoCible.sNomClasseColGen() + "."
+      	FIN
+      	sRetour += "cstGet_" + oInfoCible.p_sNomUsage + "De" + oInfoSource.p_sNomUsage
+      sinon
+      	sRetour = oInfoCible.p_sNomUsage + "De" + oInfoSource.p_sNomUsage
+      fin
       
       renvoyer sRetour
      type : 458752

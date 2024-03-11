@@ -20,6 +20,10 @@ class :
       prive
       	m_aoEpic est un tableau ClDbEpic dynamique
       fin
+      
+      constante
+      	cstGet_EpicDeProjet = "EpicDeProjet"
+      fin
      type : 131072
   procedures :
    -
@@ -55,14 +59,14 @@ class :
       ZF_InitCol(:m_aoEpic)
      type : 458752
    -
-     name : from_projet
+     name : oFromProjet
      procedure_id : 1449244419702655458
      type_code : 12
      code : |1-
-      procédure globale from_projet(oProjet_p est un ClDbProjet)<metier>:ClColEpic
+      procédure globale oFromProjet(oProjet_p est un ClDbProjet)<metier>:ClColEpic
       
-      oRetour est un ClColEpic
-      sReq est une chaîne
+      oRetour	est un ClColEpic
+      sReq	est une chaîne
       
       si oRetour.ZF_bEstExpire() alors
       	sReq = [
@@ -101,20 +105,21 @@ class :
       //
       PROCEDURE globale Combo_Charge_from_projet(local sNomFenetre_P est une chaîne , LOCAL sNomCombo_P est une chaîne, oProjet_p est un ClDbProjet, sValDef_P est une chaîne = "", aCompl_P est un tableau associatif de chaine =  [])<ui>:Vide
       
-      oEpic est un ClDbEpic dynamique
-      sNomComplet est une chaîne = sNomFenetre_P + "." + sNomCombo_P
-      sCle est une chaîne
-      sComp est une chaîne
+      //oEpic		est un ClDbEpic dynamique
+      sNomComplet	est une chaîne	= sNomFenetre_P + "." + sNomCombo_P
+      sCle		est une chaîne
+      sComp		est une chaîne
       
       
       ListeSupprimeTout(sNomComplet)
       
-      pour tout sComp, sCle de aCompl_P
-      	ListeAjoute(sNomComplet, sComp + gLien(sCle))
-      fin
       
-      pour TOUT element oEpic de ::from_projet(oProjet_p).aItems()
-      	ListeAjoute(sNomComplet, oEpic.p_sNom + glien(oEpic.ZF_Get_IdUnique()))
+      
+      ::oFromProjet(oProjet_p).ZF_ChargeCbo(sNomComplet)
+      
+      
+      POUR TOUT sComp, sCle de aCompl_P
+      	ListeInsère(sNomComplet, sComp + gLien(sCle), 1)
       FIN
       
       
@@ -169,7 +174,7 @@ class :
       	tableauajoute(aGroupement,sCle + "=" + sComp)
       FIN
       
-      POUR TOUT ÉLÉMENT oEpic DE ::from_projet(oProjet_p).aItems()
+      POUR TOUT ÉLÉMENT oEpic DE ::oFromProjet(oProjet_p).aItems()
       	TableauAjoute(aGroupement,oEpic.ZF_Get_IdUnique() + "=" + oEpic.p_sNom)
       FIN
       

@@ -624,7 +624,8 @@ window :
          	sInit = zoEpic_p.ZF_Get_IdUnique()
          FIN
          
-         ClColEpic.Combo_Charge_from_projet(MaFenêtre..Nom, CBO_Groupement..nom, zoProjet_p, sInit, asComplément)
+         ClColEpic.Combo_Charge_from_projet(MaFenêtre..Nom, CBO_Groupement..Nom, zoProjet_p, sInit, asComplément)
+         
         type : 14
       -
         type : 35
@@ -782,7 +783,7 @@ window :
       		TBL_Liste_User_Stories[nLigne].COL_AfinDe			= oUs.p_sAfinDe
       		TBL_Liste_User_Stories[nLigne].COL_Responsable		= ClZF_ObjDbLs.ZF_RepresentationSiNonNull(oUs.p_oIDScr_Usr_Valideur)
       		TBL_Liste_User_Stories[nLigne].COL_Etat				= ClDbUserStory.sNomDeEtat(oUs.Get_EtatUS()) + sComplementEtat
-      		TBL_Liste_User_Stories[nLigne].COL_Charge			= oUs.User_Story_Poids()
+      		TBL_Liste_User_Stories[nLigne].COL_Charge			= oUs.stInfoCharge().sRepres
       		si oUs.p_oIDScr_Epic <> Null ALORS
       			TBL_Liste_User_Stories[nLigne].COL_Groupement	= oUs.p_oIDScr_Epic.p_sNom
       			TBL_Liste_User_Stories[nLigne].COL_idGroupement	= oUs.p_oIDScr_Epic.ZF_Get_IdUnique()

@@ -214,7 +214,7 @@ report :
          LIB_Etat_US			= "Statut : " + ClDbUserStory.sNomDeEtat(zoUS.Get_EtatUS())
          LIB_Demarrage_US	= sInfoSprint
          LIB_CodeUS			= "(" + zoUS.p_sCodeUserStory + ")"
-         LIB_ChargeUS		= "Charge : " + zoUS.User_Story_Poids()
+         LIB_ChargeUS		= "Charge : " + zoUS.stInfoCharge().sRepres
          LIB_CmtrUS			= zoUS.p_sCMTR_Global
         type : 327692
       -

@@ -500,7 +500,7 @@ class :
       			//La tache est elle suspendue ?
       			SI ::bLabelPresent(stInfoTacheTrello.aIDLabel, [cst_Label_Suspend, cst_Label_Attente]) ALORS
       				//Oui : on s'assure qu'il y ait le motif.
-      				SI oTache.p_sCMTR_Blocage = "" ALORS
+      				SI oTache.p_sCMTR_Blocage = "" et pas oTache.p_bEstRealise ALORS
       					oTache.p_nStatut = ClDbTache.cstStatut_Suspendu
       					Trace("La tache [%oTache.p_sCodeTache%] est suspendue dans trello, mais n'a pas de motif ([%oTache.p_sDescription%]).")
       				FIN
@@ -558,20 +558,19 @@ class :
       				oTache.p_nNum_Sprint_Demarrage	= oTache.p_nNum_Sprint_Realisation
       			FIN
       			
-      			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
+      			Selon aStInformation_Trello[sClé].sId_Groupe_Tache 
+      				cas cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents
       				
-      //				si pas oTache.p_bEstRealise alors
-      //					trace("La tache [%oTache.p_sCodeTache%] n'était pas marquée comme réalisée, avant la lecture des données de trello (Sp. : [%oTache.p_nNum_Sprint_Fin%]).")
-      //				fin
-      //				SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
-      					SI PAS oTache.p_bEstRealise ET PAS oTache.p_bAnnule ALORS
+      					SI PAS oTache.p_bEstRealise ET PAS oTache.p_bAnnule et oTache.p_nNum_Sprint_Fin <> goApp.m_nNumeroDuSprintActuel ALORS
       						Trace("La tache [%oTache.p_sCodeTache%] n'était pas marquée comme réalisée, avant la lecture des données de trello (Sp. démarrage : [%oTache.p_nNum_Sprint_Demarrage%]).")
       					FIN
-      //				FIN
-      				
-      				oTache.p_bEstRealise			= Vrai
-      			SINON
-      				oTache.p_bEstRealise			= Faux
+      					
+      					oTache.p_bEstRealise			= Vrai
+      					
+      				CAS cst_List_ID_Test_fonctionnel, cst_List_ID_A_livrer_en_pré_prod
+      					oTache.p_bEstRealise			= Vrai
+      				autres cas
+      					oTache.p_bEstRealise			= Faux
       			FIN
       			
       			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
@@ -583,9 +582,7 @@ class :
       				bComptaDansScrum est un booléen = Faux
       				
       				POUR nLigneLabel = 1 _À_ TableauOccurrence(stInfoTacheTrello.aIDLabel)
-      //				POUR nLigneLabel = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel)
       					SI stInfoTacheTrello.aIDLabel[nLigneLabel] DANS(cst_Label_Comptabilise) ALORS
-      //					SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aIDLabel[nLigneLabel] DANS(cst_Label_Comptabilise) ALORS
       						bComptaDansScrum = Vrai
       					FIN
       				FIN
@@ -605,20 +602,16 @@ class :
       			
       			//récupération des actions de la carte
       			POUR nLigne_Action_Trello = TableauOccurrence(stInfoTacheTrello.aListe_Action) a 1 pas -1
-      //			POUR nLigne_Action_Trello = TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action) a 1 pas -1
       				
       				soit stListeActionTrello = aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello]
       				
       				dhEvt = dh_FormatRFC3339_Vers_DateHeure(stListeActionTrello.sDate_Action)
-      //				dhEvt = dh_FormatRFC3339_Vers_DateHeure(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sDate_Action)
       				
       				SI stListeActionTrello.sTitre <> Null ALORS
-      //				SI aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre <> Null ALORS
       					oMessage						= allouer un ClDbMessage(ClZF_ObjDbLs.cstModeCreation)
       					oMessage.p_oTache				= oTache
       					oMessage.p_oUsr					= oUsrDev
       					oMessage.p_sCMTR				= stListeActionTrello.sTitre
-      //					oMessage.p_sCMTR				= aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sTitre
       					oMessage.p_dhDteCreation		= dhEvt
       					oMessage.ZF_Enregistre()
       				FIN
@@ -626,12 +619,6 @@ class :
       				
       				
       				si stListeActionTrello.sListAfter <> "" alors
-      //				si aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sListAfter <> "" alors
-      	//				oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = ""
-      	//				oTache.p_oUserStoryParent.p_dDateMiseEnProd = ""
-      					//oTache.p_bEstRealise = Faux
-      					//oTache.p_nNum_Sprint_Fin = null
-      					
       					
       					SI aSprintDeDate[dhEvt..PartieDate]..Vide ALORS
       						aSprintDeDate[dhEvt..PartieDate] <- ClDbSprint.oGet_SprintDeDate(dhEvt..PartieDate)
@@ -640,7 +627,6 @@ class :
       					
       					
       					SELON stListeActionTrello.sListAfter
-      //					SELON aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello].sListAfter
       						CAS cst_List_ID_Dev_en_cours
       							//TBL_Actions[nLigne].COL_IdList = "En cours"
       							
@@ -677,7 +663,6 @@ class :
       	//						FIN
       							
       						CAS cst_List_ID_Fini, cst_List_ID_A_livrer_en_prod	//, cst_List_ID_Fini_sprint_précédents
-      							//TBL_Actions[nLigne].COL_IdList = "Fin"
       							
       							SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = "" ALORS
       								oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = DateSys()

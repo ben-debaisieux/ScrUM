@@ -44,7 +44,6 @@ class :
       	m_oUserStoryParent			est un objet ClDbUserStory dynamique	<note="mapping=IDScr_UserStory">
       	m_oUsr_Dev					est un objet ClDbUsr dynamique			<note="mapping=IDScr_Usr_Dev">
       	m_oUsr_createur				est un objet ClDbUsr dynamique			<note="mapping=IDScr_Usr_createur">
-      	
       global
       public
       	m_oExPbPoidTache					est un ClZF_Exception dynamique
@@ -211,11 +210,12 @@ class :
       	
       	
       	//Maj du statut
-      	:m_nStatut = :get_statut_tache()
-      	SI :m_nStatut = 0 ALORS
-      		m_oExErreurStatutTacheImpossible.ZF_Declenche([:m_nStatut])
-      	FIN
-      	
+      	si :m_nStatut <> ClDbTache.cstStatut_Suspendu alors
+      		:m_nStatut = :get_statut_tache()
+      		SI :m_nStatut = 0 ALORS
+      			m_oExErreurStatutTacheImpossible.ZF_Declenche([:m_nStatut])
+      		FIN
+      	fin
       		
       	//Si l'ordre n'est pas définit, on ajoute la tache en dernier.
       	si :m_nOrdre <= 0 ALORS
@@ -563,7 +563,7 @@ class :
       FIN
       
       renvoyer [
-      	Projet : [%:m_oUserStoryParent.p_oProjetParent.p_sNom%]
+      	Projet : [%:m_oUserStoryParent.p_oIDScr_Projet.p_sNom%]
       	-------------------------------------------------
       	En tant que : [%:m_oUserStoryParent.p_sEntantQue%]
       	J'ai besoin de : [%:m_oUserStoryParent.p_sJaiBesoinDe%]
@@ -627,6 +627,19 @@ class :
      code : |1-
       // Redéfinition de la méthode ClObjDB.post_enregistre
       PROCÉDURE PROTÉGÉE VIRTUELLE post_enregistre()<metier>:Vide
+      
+      
+      //Recalcul de l'état de l'US parente
+      oUsParente est un ClDbUserStory <- :m_oUserStoryParent
+      oUsParente:RecalcEtatUS()
+      si oUsParente.zf_bestmodifie() ALORS
+      	si oUsParente.p_dDateMiseEnProd = ""
+      		oUsParente.p_bTop_A_Livrer = vrai
+      	fin
+      	
+      	oUsParente.ZF_Enregistre()
+      FIN
+      
       
       //Enregistrement de l'historique des modifications
       //:EnregHisto()

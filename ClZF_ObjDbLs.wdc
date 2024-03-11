@@ -543,7 +543,41 @@ class :
      code : |1-
       procédure publique globale ZF_RepresentationSiNonNull(oDb est un ClZF_ObjDbLs dynamique) <métier>:chaine
       
-      renvoyer oDb = Null ? oDb.sRepresentation() SINON ""
+      renvoyer oDb = Null ? "" sinon oDb.sRepresentation()
+     type : 458752
+   -
+     name : ZF_bObjEgal
+     procedure_id : 1579131858381795732
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_bObjEgal (<oObj1_p> est ClZF_ObjDbLs, <oObj2_p> est ClZF_ObjDbLs)
+      //
+      // Paramètres :
+      //	oObj1_p (ClZF_ObjDbLs) : <indiquez ici le rôle de oObj1_p>
+      //	oObj2_p (ClZF_ObjDbLs) : <indiquez ici le rôle de oObj2_p>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale ZF_bObjEgal(oObj1_p est un ClZF_ObjDBls, oObj2_p est un ClZF_ObjDBls)<métier>:booléen
+      
+      bRetour est un booléen
+      
+      si oObj1_p = Null _et_ oObj2_p = null ALORS
+      	bRetour = vrai
+      sinon
+      	si pas oObj1_p = Null _ET_ pas oObj2_p = Null _et_ oObj1_p.ZF_Get_IdUnique() = oObj2_p.ZF_Get_IdUnique() ALORS
+      		bRetour = Vrai
+      	FIN
+      FIN
+      
+      
+      renvoyer bRetour
      type : 458752
   properties :
    -

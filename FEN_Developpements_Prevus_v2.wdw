@@ -726,8 +726,8 @@ window :
          			TBLH_Projet[nLigneUserStory].COL_Besoin_Utilisateurs_Fonctionnalité..Bulle	= oUS.p_sCMTR_Global
          			TBLH_Projet[nLigneUserStory].COL_Sprint								= oUS.Get_DemarrageTache()
          			TBLH_Projet[nLigneUserStory].COL_Periode_de_démarrage				= sPeriode
-         			TBLH_Projet[nLigneUserStory].COL_Charge								= oUS.User_Story_Poids()
-         			TBLH_Projet[nLigneUserStory].COL_Projet								= oUS.p_oProjetParent.p_sNom
+         			TBLH_Projet[nLigneUserStory].COL_Charge								= oUS.stInfoCharge().sRepres
+         			TBLH_Projet[nLigneUserStory].COL_Projet								= oUS.p_oIDScr_Projet.p_sNom
          			TBLH_Projet[nLigneUserStory].COL_Etat								= oUS.Get_EtatUS()
          	
          			SELON oUS.Get_EtatUS()
@@ -762,7 +762,7 @@ window :
          					si oTache.p_nNum_Sprint_Realisation > 0 alors
          						oSprint <- ClDbSprint.GetObj(oTache.p_nNum_Sprint_Realisation)
          						TBLH_Projet[nLigneTache].COL_Periode_de_démarrage				= oSprint.sSprint_Date()
-         						TBLH_Projet[nLigneTache].COL_Projet								= oUS.p_oProjetParent.p_sNom
+         						TBLH_Projet[nLigneTache].COL_Projet								= oUS.p_oIDScr_Projet.p_sNom
          					fin
          			//		SELON Vrai
          			//			CAS oTache.m_bAnnule

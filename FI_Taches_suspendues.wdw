@@ -316,7 +316,7 @@ window :
       
       oTache est un ClDbTache dynamique
       nNumLigne est un entier
-      oLstTaches est un ClColTache()
+      oLstTaches est un ClColTache dynamique
       
       
       
@@ -327,15 +327,9 @@ window :
       	//Affichage de tous les blocages pour l'équipe info.
       	oLstTaches <- ClColTache.oFromStatut(ClDbTache.cstStatut_Suspendu)
       sinon
+      	//On filtre les blocages, pour les autres utilisateurs.
       	oLstTaches <- ClColTache.oFromUsrPrj(goapp.m_oUsrCnx)
-      	oLstTaches <- oLstTaches.FiltreEtat(ClDbTache.cstStatut_Suspendu).aItems()
-      //	//On filtre les blocages, poru les autres utilisateurs.
-      //	pour tout element oTache de ClDbTache.oTachesSelonStatut(ClDbTache.cstStatut_Suspendu).aItems()
-      //		//Est ce que l'utilisateur courant est affecté au projet de cette tache ?
-      //		si oTache.p_oUserStoryParent.p_oProjetParent.bUsrAffecteAuProjet(goApp.m_oUsrCnx) ALORS
-      //			oLstTaches.ZF_addItem(oTache)
-      //		fin
-      //	FIN
+      	oLstTaches <- oLstTaches.FiltreEtat(ClDbTache.cstStatut_Suspendu)
       FIN
       
       TableSupprimeTout(TBL_Suspendues)
@@ -344,7 +338,7 @@ window :
       	TBL_Suspendues[nNumLigne].COL_IdTache		= oTache.Get_IdUnique()
       	TBL_Suspendues[nNumLigne].COL_Tache			= oTache.p_sDescription
       	TBL_Suspendues[nNumLigne].COL_Tache..Bulle	= "Motif de blocage :" + rc + oTache.p_sCMTR_Blocage
-      	TBL_Suspendues[nNumLigne].COL_Projet		= oTache.p_oUserStoryParent.p_oProjetParent.p_sNom
+      	TBL_Suspendues[nNumLigne].COL_Projet		= oTache.p_oUserStoryParent.p_oIDScr_Projet.p_sNom
       	TBL_Suspendues[nNumLigne].COL_SprintReal	= oTache.p_nNum_Sprint_Realisation
       fin
       

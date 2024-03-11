@@ -22,8 +22,11 @@ class :
       fin
       
       constante
-      	cstTypeTesteur_Dev = 1
-      	cstTypeTesteur_Fonctionnel = 2
+      	cstTypeTesteur_Dev			= 1
+      	cstTypeTesteur_Fonctionnel	= 2
+      	
+      	cstGet_UserStoryDeVersion	= "UserStoryDeVersion"
+      	cstGet_UserStoryDeProjet	= "UserStoryDeProjet"
       fin
      type : 131072
   procedures :
@@ -115,13 +118,13 @@ class :
       FIN
      type : 458752
    -
-     name : from_Epic
+     name : oFrom_Epic
      procedure_id : 1454718295460514070
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] from_Epic (<oEpic_p> est ClDbEpic)
+      //[ <Résultat> = ] oFrom_Epic (<oEpic_p> est ClDbEpic)
       //
       // Paramètres :
       //	oEpic_p (ClDbEpic) : <indiquez ici le rôle de oEpic_p>
@@ -132,7 +135,7 @@ class :
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
-      procédure globale from_Epic(oEpic_p est un ClDbEpic):ClColUserStory
+      procédure globale oFrom_Epic(oEpic_p est un ClDbEpic):ClColUserStory
       
       oRetour est un ClColUserStory
       sReq est une chaîne
@@ -170,7 +173,7 @@ class :
       FONCTION globale oFromProjet(oPrj_p est un ClDbProjet, bForceRecharge_P est un booléen = faux):ClColUserStory
       
       sReq est une chaîne
-      oRetour est un ClColUserStory <- oPrj_p.ZF_GetCol(ClDbUserStory.cstUSDeProjet)
+      oRetour est un ClColUserStory <- oPrj_p.ZF_GetCol(ClcolUserStory.cstGet_UserStoryDeProjet)
       
       si oRetour.ZF_bEstExpire() ou bForceRecharge_P alors
       	
@@ -239,7 +242,7 @@ class :
       		where Scr_UserStory.IDScr_Projet IN ([%sListeIdsPrj%])
       	]
       //	aColUs <- ClZF_ColObjDB.ZF_LoadSQLMulti_Priv(sReq,aColUs, null, oColPrj_p.ZF_Get_Liste_IdUnique(), Scr_UserStory.IDScr_Projet..Nom)
-      	aColUs <- ClZF_ColObjDB.ZF_LoadSQLMulti_2(aColUs, sReq,ClDbUserStory.cstUSDeProjet, oColPrj_p, Scr_UserStory.IDScr_Projet..Nom)
+      	aColUs <- ClZF_ColObjDB.ZF_LoadSQLMulti_2(aColUs, sReq,ClcolUserStory.cstGet_UserStoryDeProjet, oColPrj_p, Scr_UserStory.IDScr_Projet..Nom)
       FIN
       
       RENVOYER aColUs
@@ -346,6 +349,56 @@ class :
       
       
       renvoyer oUsEnDev
+     type : 458752
+   -
+     name : oFiltreSansEpic
+     procedure_id : 1570828260870022985
+     type_code : 12
+     code : |1-
+      procédure oFiltreSansEpic() <métier>:clcoluserstory
+      
+      oUs est un ClDbUserStory dynamique
+      oColUS est un ClColUserStory
+      pour tout oUs de :aitems()
+      	si oUs.p_oIDScr_Epic = null ALORS
+      		oColUS.ZF_addItem(oUs)
+      	FIN
+      FIN
+      
+      renvoyer oColUS
+     type : 458752
+   -
+     name : oFromVersion
+     procedure_id : 1573468149719931354
+     type_code : 12
+     code : |1-
+      FONCTION GLOBALE oFromVersion(oParent_p est un ClDbVersion, LOCAL bForceCharge_p est un booléen = Faux)<métier>:ClColuserstory
+      
+      sReq		est une chaîne
+      oColRetour	est un ClColuserstory()
+      
+      
+      // A faire : ClColUserStory.cstGet_UserStoryDeVersion à déclarer dans <ClZF_App>.CreeCol : "CAS ClColUserStory.cstGet_UserStoryDeVersion : oCol = allouer un ClColVersion()"
+      
+      oColRetour <- oParent_p.ZF_GetCol(ClColUserStory.cstGet_UserStoryDeVersion)
+      
+      SI oColRetour.ZF_bEstExpire() OU bForceCharge_p ALORS
+      	
+      	oColRetour.ZF_vider()
+      	
+      	
+      	sReq = [
+      	SELECT 
+      		Scr_UserStory.*
+      	FROM Scr_UserStory
+      	WHERE Scr_UserStory.IDScr_Version = [%oParent_p.ZF_Get_IdUnique()%]
+      	]
+      	oColRetour.ZF_LoadSQL(sReq)
+      	
+      FIN
+      
+      
+      RENVOYER oColRetour
      type : 458752
   properties :
    -

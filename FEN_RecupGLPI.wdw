@@ -517,6 +517,7 @@ window :
          sImageHtml		est une chaine	= "vide"
          nLigne_Doc		est un entier
          sExtension		est une chaine
+         sInfoDocBASE64 est une chaine
          
          
          Sablier(Vrai)
@@ -568,7 +569,9 @@ window :
          		// recherche id de l'image
          		sImageHtml	= ExtraitChaîneEntre(zaoTickets[nLigne].m_bufDescription,nImage,"src="," ",DepuisDébut)
          		
+         		
          		sImageHtml	= ExtraitChaîneEntre(sImageHtml,1,"docid=","&",DepuisDébut)
+         		
          		
          		// vérifie qu'une image est trouvé
          		SI sImageHtml <> EOT ALORS
@@ -589,6 +592,31 @@ window :
          			
          			SI PAS Minuscule(sExtension) DANS ("jpg","jpeg","png","gif","bmp","tiff","tif","ai") ALORS
          				info("impossible de récupérer l'extension pour l'image du ticket : "+ TBL_GLPI[nIndice_Table].COL_ID)
+         			FIN
+         		SINON
+         			sImageHtml	= ExtraitChaîneEntre(zaoTickets[nLigne].m_bufDescription,nImage,"src="," ",DepuisDébut)
+         			// dans le cas ou l'image n'est pas stocké dans docid
+         			sImageHtml	= ExtraitChaîne(sImageHtml,2,",",DepuisDébut)
+         			
+         			SI sImageHtml <> EOT ALORS
+         				sInfoDocBASE64											= ExtraitChaîne(sImageHtml,1,",",DepuisDébut)
+         				
+         				// ajoute l'image en pièce jointe
+         				nLigne_Doc												= TableauAjouteLigne(zaoTickets[nLigne].m_astDocument)
+         				
+         				// rempli les informations pieces jointes
+         				zaoTickets[nLigne].m_astDocument[nLigne_Doc].nID		= 0
+         				zaoTickets[nLigne].m_astDocument[nLigne_Doc].buFFichier	= Décode(sImageHtml, encodeBASE64)
+         				
+         				
+         				sExtension												= ExtraitChaîne(sInfoDocBASE64,2,"/",DepuisDébut)
+         				
+         				zaoTickets[nLigne].m_astDocument[nLigne_Doc].sNom		= "capture"+NumériqueVersChaîne(nImage) + "." + sExtension
+         				zaoTickets[nLigne].m_astDocument[nLigne_Doc].sExtension	= sExtension
+         				
+         				SI PAS Minuscule(sExtension) DANS ("jpg","jpeg","png","gif","bmp","tiff","tif","ai") ALORS
+         					Info("impossible de récupérer l'extension pour l'image du ticket : "+ TBL_GLPI[nIndice_Table].COL_ID)
+         				FIN
          			FIN
          		FIN
          	FIN

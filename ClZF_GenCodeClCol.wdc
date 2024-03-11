@@ -467,13 +467,17 @@ class :
       		
       	CAS ClZF_GenCodeFic.cstRelCompo
       		bGenere = Vrai
+      		oInfoCible est un ClZF_GenCodeFic(stRelTmp_p.sTableFK)
       		
       		sConstRef est une chaîne = sNomConstanteColCompo(stRelTmp_p)
+      		sValConstRef est une chaîne = ClZF_GenCodeClCol.sNomConstanteColCompo(stRelTmp_p, <bValeurConstante_p>:Vrai)
+      		
       		sParams += ", LOCAL bForceCharge_p est un booléen = Faux"
       		
       		sGenSource = "
       			
-      			// A faire : [%sConstRef%] à déclarer dans ClZF_App.CreeCol : "CAS [%sConstRef%] : oCol = allouer un [%:m_oClasseGen.sNomClasseColGen()%]()"
+      			// A faire : [%sConstRef%] à déclarer dans <ClZF_App>.CreeCol : "CAS [%sConstRef%] : oCol = allouer un [%oInfoCible.sNomClasseColGen()%]()"
+      			// Constante : [%sConstRef%] = ""[%sValConstRef%]""
       			oColRetour <- oParent_p.ZF_GetCol([%sConstRef%])
       			
       			SI oColRetour.ZF_bEstExpire() OU bForceCharge_p ALORS
@@ -539,7 +543,7 @@ class :
      type_code : 12
      code : |1-
       procedure globale sNomFct_ChargeFrom(clOClGen_p est un ClZF_GenCodeFic)<metier>:chaine
-      renvoyer "aoFrom" + clOClGen_p.p_sNomUsage
+      renvoyer "oFrom" + clOClGen_p.p_sNomUsage
      type : 458752
    -
      name : GenProc_sClasseObjDbAsso

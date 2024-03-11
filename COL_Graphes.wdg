@@ -647,7 +647,7 @@ procedure_set :
       oEpic			est un ClDbEpic dynamique
       bAfficher		est un booléen
       
-      pour tout element oEpic de ClColEpic.from_projet(oProjet_P).aitems()
+      pour tout element oEpic de ClColEpic.oFromprojet(oProjet_P).aitems()
       	VariableRAZ(stEpic)
       	
       	
@@ -656,7 +656,7 @@ procedure_set :
       	
       	
       	oUS	est un ClDbUserStory dynamique
-      	pour tout oUS de ClColUserStory.from_Epic(oEpic).aItems()
+      	pour tout oUS de ClColUserStory.oFrom_Epic(oEpic).aItems()
       		oTache est un ClDbTache dynamique
       		pour tout oTache de ClColTache.aoFromUS(oUS).aItems()
       			

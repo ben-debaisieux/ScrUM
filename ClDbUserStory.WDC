@@ -16,6 +16,12 @@ class :
   p_codes :
    -
      code : |1+
+      STR_chargeUs est une structure
+      	nChargeReelle	est un entier
+      	nChargePrev		est un entier
+      	sRepres			est une chaine
+      fin
+      
       ClDbUserStory est une Classe
       	Hérite de ClZF_ObjDB
       	Hérite de ClZF_Histo
@@ -37,13 +43,15 @@ class :
       	m_sCMTR_Mise_En_Prod					est une chaîne						<MAPPING=CMTR_Mise_En_Prod>
       	m_bTop_RepriseHisto						est un booléen						<MAPPING=Top_RepriseHisto>
       	m_sCMTR_RetourDeTest					est une chaîne						<MAPPING=CMTR_RetourDeTest>
+      	m_bTop_A_Livrer							est un Booléen						<MAPPING=Top_A_Livrer>
+      	m_nValeurBusiness						est un Entier sans signe			<MAPPING=ValeurBusiness>
       	
       	m_oIDScr_Projet							est un ClDbProjet dynamique			<note="mapping=IDScr_Projet">
       	m_oIDScr_Usr_Valideur					est un ClDbUsr dynamique			<note="mapping=IDScr_Usr_Valideur">
       	m_oIDScr_Usr_TestDev					est un ClDbUsr dynamique			<note="mapping=IDScr_Usr_TestDev">
       	m_oIDScr_Epic							est un ClDbEpic dynamique			<note="mapping=IDScr_Epic">
       	m_oIDSrc_Environnement_Test				est un ClDbEnvironnement dynamique	<note="mapping=IDSrc_Environnement_Test">
-      	
+      	m_oIDScr_Version						est un ClDbVersion dynamique		<note="mapping=IDScr_Version">
       	
       	m_bMemoEstFini							est un booléen			//Permet de mémoriser si lors du chargement en base, l'US était déjà finie.
       	
@@ -69,15 +77,12 @@ class :
       FIN
       
       constante
-      	cstUSDeProjet			= "USDeProjet"
-      	
       	//Statuts des US
       	cst_StatutUS_Annulée	= "Annulée"
       	cst_StatutUS_Terminée	= "Terminée"
       	cst_StatutUS_Commencée	= "Commencée"
       	cst_StatutUS_En_Test	= "En Test"
       	cst_StatutUS_A_faire	= "A faire"
-      	
       fin
       
       ECompteNbUS est une énumération
@@ -101,7 +106,7 @@ class :
       mg_oEx_AucunProjet						= allouer un ClZF_Exception("Aucun projet n'est définit pour la user story ""%1"".")
       mg_oEx_US_A_tester_sans_env				= allouer un ClZF_Exception("La user story ""%1"" ne peut pas partir en test fonctionnel, car l'environnement de test n'est pas défini.")
       mg_oEx_DateMiseADispoManquantePourTests	= allouer un ClZF_Exception("Une date de mise à dispo en test de ""%1"", est obligatoire, si les tests unitaires sont validés.")
-      mg_oEx_DateMiseADispoManquantePourProd	= allouer un ClZF_Exception("Une date de mise en production est obligatoire, pour valider la user story ""%1"".")
+      mg_oEx_DateMiseADispoManquantePourProd	= allouer un ClZF_Exception("Une date de mise en production est obligatoire, pour valider la user story ""%1"", sauf si elle est ""à livrer"".")
       mg_oEx_EtatUsNonDefinit					= allouer un ClZF_Exception("Etat de l'US ""ID : %1"" non prévu.")
       mg_oEx_CodeDejaPris						= allouer un ClZF_Exception("Le code ""%1"" est déjà utilisé.")
      type : 131072
@@ -182,21 +187,12 @@ class :
       	
       sinon
       	
-      //	//Si on est en modif, on actualise les données en mémoire, pour générer l'historique.
-      //	si pas :ZF_bModeAjout() ALORS
-      //		m_EnrUsActu = Scr_UserStory
-      //		:ZF_Charge(Vrai)
-      //		m_EnrUsOrigine = Scr_UserStory
-      //		Scr_UserStory = m_EnrUsActu
-      //	fin
-      	
       	si bCodeDejaPris() ALORS
       		mg_oEx_CodeDejaPris.ZF_Declenche([:m_sCodeUserStory])
       	FIN
       	
       	SI :m_oIDScr_Projet = Null ALORS
       		mg_oEx_AucunProjet.ZF_Declenche([:m_sCodeUserStory])
-      		//ExceptionDéclenche(1,ChaîneConstruit("Aucun projet n'est définit pour la user story ""%1"".", ))
       	FIN
       	Scr_UserStory.IDScr_Projet					= :m_oIDScr_Projet.ZF_Get_IdUnique()
       	
@@ -209,20 +205,17 @@ class :
       		//Obligation d'avoir un environnement de test définit, si l'US part en test.
       		si pas :m_bEstTestéParLeDemandeur et :m_oIDSrc_Environnement_Test = Null ALORS
       			mg_oEx_US_A_tester_sans_env.ZF_Declenche([:m_sCodeUserStory])
-      			//ExceptionDéclenche(1,"La user story ne peut pas partir en test fonctionnel, car l'environnement de test n'est pas défini.")
       		FIN
       		
       		//Obligation d'avoir une date de mise à dispo en test, si l'US est testée en dev
       		SI :m_dDateMiseADispo_EnTest = "" ALORS
       			mg_oEx_DateMiseADispoManquantePourTests.ZF_Declenche([:m_sCodeUserStory])
-      			//ExceptionDéclenche(1,"Une date de mise à dispo en test, est obligatoire, si les tests unitaires sont validés.")
       		FIN
       	FIN
       	
       	//Obligation d'avoir une date de mise à dispo en prod, si l'US est testée
-      	SI :m_bEstTestéParLeDemandeur ET :m_dDateMiseEnProd = "" ALORS
+      	SI :m_bEstTestéParLeDemandeur ET :m_dDateMiseEnProd = "" et pas :m_bTop_A_Livrer ALORS
       		mg_oEx_DateMiseADispoManquantePourProd.ZF_Declenche([:m_sCodeUserStory])
-      		//ExceptionDéclenche(1,"Une date de mise en production est obligatoire, pour valider la user story.")
       	FIN
       	
       	
@@ -236,7 +229,7 @@ class :
       	sinon
       	
       		//Projet parent
-      		:ZF_HistoriseInfo("Associé au projet : %1", Scr_UserStory.IDScr_Projet..nom, p_oIDScr_Projet.ZF_Get_IdUnique(), p_oIDScr_Projet.p_sNom)
+      		:ZF_HistoriseInfo("Associé au projet : %1", Scr_UserStory.IDScr_Projet..nom, :p_oIDScr_Projet.ZF_Get_IdUnique(), p_oIDScr_Projet.p_sNom)
       //		si m_EnrUsOrigine.IDScr_Projet <> :m_oProjetParent.ZF_Get_IdUnique() ALORS
       //			:AjouteHistorique(ChaîneConstruit("Association du projet à : %1", :m_oProjetParent.p_sNom))
       //		FIN
@@ -412,37 +405,39 @@ class :
       FIN
      type : 458752
    -
-     name : User_Story_Poids
+     name : stInfoCharge
      procedure_id : 1445047014238969227
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] User_Story_Poids ()
+      //[ <Résultat> = ] stInfoCharge ()
       //
       // Paramètres :
       //	Aucun
       // Valeur de retour :
-      // 	chaîne ANSI : // 	Aucune
+      // 	STR_chargeUs : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // Indiquez ici un exemple d'utilisation.
       //
       //	stUS_p (STR_UserStorie) : <indiquez ici le rôle de nIDUserStory>
-      FONCTION User_Story_Poids()<métier>:chaîne 
+      FONCTION stInfoCharge()<métier>:STR_chargeus
       
-      nPoids est un entier
-      sdPoidsUS est une source de données
-      sReq est une chaîne
-      bTacheSansPoids est un booléen
-      sRetour est une chaîne
-      rBorne1 est un réel = (1 / 3) * goApp.m_nVelociteMoyenne
-      rBorne2 est un réel = (1 / 6) * goApp.m_nVelociteMoyenne
+      nPoids			est un entier
+      sdPoidsUS		est une source de données
+      sReq			est une chaîne
+      bTacheSansPoids	est un booléen
+      stRetour		est un STR_chargeUs
+      rBorne1			est un réel	= (1 / 3) * goApp.m_nVelociteMoyenne
+      rBorne2			est un réel	= (1 / 6) * goApp.m_nVelociteMoyenne
+      
       
       
       sReq = ChaîneConstruit([
       	SELECT 
       		SUM(Scr_Tache.Poids) as Poids,
+      		SUM(Scr_Tache.Poids_Previsionnel) as Poids_Previsionnel,
       		SUM(
       			CASE WHEN Scr_Tache.Poids IS NULL THEN 1 ELSE 0 END
       			) as NbreNonCote,
@@ -460,24 +455,28 @@ class :
       ::mg_oApp.Rsql(sdPoidsUS,sReq)
       HLitPremier(sdPoidsUS)
       si htrouve(sdPoidsUS) alors
-      	nPoids = sdPoidsUS.Poids
+      	
+      	nPoids					= sdPoidsUS.Poids
+      	stRetour.nChargePrev	= sdPoidsUS.Poids_Previsionnel
+      	stRetour.nChargeReelle	= sdPoidsUS.Poids
+      	
       	
       	si sdPoidsUS.NbrTache = 0 _ou_ sdPoidsUS.NbreNonCote > 0 alors
       		bTacheSansPoids = vrai
       	FIN
       	
       	si bTacheSansPoids ALORS
-      		sRetour = "?"
+      		stRetour.sRepres = "?"
       	sinon
       		SELON Vrai
       			CAS nPoids >= rBorne1
-      				sRetour = "+++"
+      				stRetour.sRepres = "+++"
       			CAS nPoids >= rBorne2 ET nPoids < rBorne1
-      				sRetour = "++"
+      				stRetour.sRepres = "++"
       			CAS nPoids < rBorne2
-      				sRetour = "+" 
+      				stRetour.sRepres = "+" 
       			AUTRE CAS
-      				sRetour = "!"
+      				stRetour.sRepres = "!"
       		FIN
       	FIN
       	
@@ -485,7 +484,7 @@ class :
       
       HAnnuleDéclaration(sdPoidsUS)
       
-      renvoyer sRetour
+      renvoyer stRetour
      type : 458752
    -
      name : User_Story_Valider
@@ -752,6 +751,17 @@ class :
       FIN
       
       
+      //Si toutes les US sont finies, alors, le projet l'est aussi.
+      oPrj est un ClDbProjet <- :m_oIDScr_Projet
+      nNbreUsFinies est un entier = oPrj.Get_StatUS(ECompteNbUS.Annulée) + oPrj.Get_StatUS(ECompteNbUS.Terminee)
+      nNbreUsTot est un entier = oPrj.Get_StatUS(ECompteNbUS.Toutes)
+      si nNbreUsFinies = nNbreUsTot et nNbreUsTot > 0 ALORS
+      	oPrj.p_bTop_Termine = vrai
+      	oPrj.ZF_Enregistre()
+      FIN
+      
+      
+      
       //Enregistrement de l'historique des modifications
       //:EnregHisto()
      type : 458752
@@ -790,7 +800,6 @@ class :
       		sRetour = "Toutes"
       	autres cas
       		mg_oEx_EtatUsNonDefinit.ZF_Declenche([eType])
-      		//ExceptionDéclenche(1,"Erreur critique : Etat non définit")
       FIN
       
       renvoyer sRetour
@@ -927,13 +936,12 @@ class :
       
       
       
-      //
+      //Est ce que toutes les taches sont réalisées ?
       SI nNbreTacheRestantes = 0 ET :Get_NbreTache(ClDbUserStory.ECompteNbTache.Toutes) > 0 ALORS
       	//Il n'y a plus de taches à réaliser : 
       	
       	SI :bToutesTachesValidees() ALORS
       		:p_bEstTestéParLeDemandeur	= Vrai
-      //		:m_dDateMiseEnProd			= DateSys()
       		:p_bTermine					= Vrai
       		nNbreUsFinies++
       	SINON
@@ -942,7 +950,6 @@ class :
       	FIN
       	
       	:p_bEstTestéParEquipeDev		= Vrai
-      //	:m_nIDSrc_Environnement_Test	= 1
       	si :p_dDateMiseADispo_EnTest = "" alors
       		:p_dDateMiseADispo_EnTest		= DateSys()
       	fin
@@ -954,6 +961,9 @@ class :
       	SI :Get_NbreTache(ClDbUserStory.ECompteNbTache.Toutes) =:Get_NbreTache(ClDbUserStory.ECompteNbTache.Annulée) ET :Get_NbreTache(ClDbUserStory.ECompteNbTache.Toutes) >= 1 ALORS
       		:p_bAnnule					= Vrai
       		:p_bTermine					= Vrai
+      		si :m_dDateMiseEnProd = "" ALORS
+      			:m_dDateMiseEnProd = DateSys()
+      		FIN
       	SINON
       		:p_bEstTestéParLeDemandeur	= Faux
       		:p_bEstTestéParEquipeDev	= Faux
@@ -961,10 +971,6 @@ class :
       	FIN
       	:p_dDateMiseADispo_EnTest		= ""
       FIN
-      
-      
-      
-      //:ZF_Enregistre()
      type : 458752
    -
      name : Combo_Charge_Etats
@@ -1013,27 +1019,29 @@ class :
       //
       procédure sLibelleDeEtat()<metier>:chaine
       
-      sRetour est une chaîne
+      renvoyer ClDbUserStory.sNomDeEtat(:Get_EtatUS())
       
-      selon :Get_EtatUS()
-      	CAS ECompteNbUS.A_faire
-      		sRetour = "A faire"
-      	CAS ECompteNbUS.EnCours
-      		sRetour = "En cours"
-      	CAS ECompteNbUS.Terminee
-      		sRetour = "Terminée"
-      	CAS ECompteNbUS.Annulée
-      		sRetour = "Annulée"
-      	CAS En_test_fonctionnel
-      		sRetour = "Test fonctionnel"
-      //	CAS ECompteNbUS.Toutes
-      		
-      	autres cas
-      		mg_oEx_EtatUsNonDefinit.ZF_Declenche([:ZF_Get_IdUnique()])
-      		//ExceptionDéclenche(1, "Etat de l'US ""ID : [%:Get_IdUnique()%]"" non prévu.")
-      FIN
-      
-      renvoyer sRetour
+      //sRetour est une chaîne
+      //
+      //selon :Get_EtatUS()
+      //	CAS ECompteNbUS.A_faire
+      //		sRetour = "A faire"
+      //	CAS ECompteNbUS.EnCours
+      //		sRetour = "En cours"
+      //	CAS ECompteNbUS.Terminee
+      //		sRetour = "Terminée"
+      //	CAS ECompteNbUS.Annulée
+      //		sRetour = "Annulée"
+      //	CAS En_test_fonctionnel
+      //		sRetour = "Test fonctionnel"
+      ////	CAS ECompteNbUS.Toutes
+      //		
+      //	autres cas
+      //		mg_oEx_EtatUsNonDefinit.ZF_Declenche([:ZF_Get_IdUnique()])
+      //		//ExceptionDéclenche(1, "Etat de l'US ""ID : [%:Get_IdUnique()%]"" non prévu.")
+      //FIN
+      //
+      //renvoyer sRetour
      type : 458752
    -
      name : Init_ObjBD
@@ -1189,13 +1197,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure PUBLIQUE p_oIDScr_Projet() : ClDbProjet
+         procédure PUBLIQUE p_oIDScr_Projet()<metier> : ClDbProjet
          
          renvoyer :m_oIDScr_Projet
         type : 1966080
       -
         code : |1-
-         procédure publique p_oIDScr_Projet(LOCAL oValeur est ClDbProjet dynamique):vide
+         procédure publique p_oIDScr_Projet(LOCAL oValeur est ClDbProjet dynamique)<metier>:vide
          
          SI PAS ZF_bObjEgal(:m_oIDScr_Projet, oValeur) ALORS
          	:ZF_EstModif()
@@ -1252,13 +1260,13 @@ class :
      p_codes :
       -
         code : |1-
-         procédure publique p_oIDScr_Epic() : ClDbEpic
+         procédure publique p_oIDScr_Epic()<métier> : ClDbEpic
          
          renvoyer :m_oIDScr_Epic
         type : 1966080
       -
         code : |1-
-         procédure publique p_oIDScr_Epic(LOCAL oValeur est ClDbEpic dynamique):Vide
+         procédure publique p_oIDScr_Epic(LOCAL oValeur est ClDbEpic dynamique)<métier>:Vide
          
          si pas ZF_bObjEgal(:m_oIDScr_Epic, oValeur) alors
          	:ZF_EstModif()
@@ -1700,6 +1708,97 @@ class :
          	:p_oIDScr_Projet = Null
          SINON
          	:p_oIDScr_Projet = ClDbProjet.GetObj(nValeur_p)
+         FIN
+         
+        type : 2031616
+     template_refs : []
+   -
+     name : p_bTop_A_Livrer
+     identifier : 0x15c68b9d212a8a08
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_bTop_A_Livrer()<métier>:Booléen
+         //Propriétés de m_bTop_A_Livrer
+         
+         RENVOYER :m_bTop_A_Livrer
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_bTop_A_Livrer(bValeur_p est un Booléen)<métier>:Vide
+         
+         SI :m_bTop_A_Livrer <> bValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_bTop_A_Livrer = bValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Version
+     identifier : 0x15d6149110b71d1d
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_oIDScr_Version()<métier>:ClDbVersion
+         //Propriétés de m_oIDScr_Version
+         
+         RENVOYER :m_oIDScr_Version
+        type : 1966080
+      -
+        code : |1-
+         PROCEDURE p_oIDScr_Version(oValeur_p est un ClDbVersion dynamique)<métier>:Vide
+         
+         SI PAS ZF_bObjEgal(:m_oIDScr_Version, oValeur_p) ALORS
+         	:ZF_EstModif()
+         	:m_oIDScr_Version = oValeur_p
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_oIDScr_Version_ID
+     identifier : 0x15d614b410b8a8a4
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         PROCEDURE p_oIDScr_Version_ID()<métier>:entier
+         //Propriétés de l'objet m_oIDScr_Version, accessible via son ID
+         SI :p_oIDScr_Version = Null ALORS
+         	RENVOYER 0
+         SINON
+         	RENVOYER :p_oIDScr_Version.ZF_Get_IdUnique()
+         FIN
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_oIDScr_Version_ID(nValeur_p est un entier)<métier>:Vide
+         
+         SI nValeur_p = 0 ALORS
+         	:p_oIDScr_Version = Null
+         SINON
+         	:p_oIDScr_Version = ClDbVersion.GetObj(nValeur_p)
+         FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_nValeurBusiness
+     identifier : 0x15e08c4d066beb20
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_nValeurBusiness()<métier>:Entier sans signe
+         RENVOYER :m_nValeurBusiness
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_nValeurBusiness(nValeur_p est un Entier sans signe)<métier>:Vide
+         
+         SI :m_nValeurBusiness <> nValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_nValeurBusiness = nValeur_p
          FIN
          
         type : 2031616

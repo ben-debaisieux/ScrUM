@@ -55,13 +55,13 @@ class :
       ZF_InitCol(:m_aoCritereAccept)
      type : 458752
    -
-     name : oFromUS
+     name : oFromUserStory
      procedure_id : 1457005456458690896
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] oFromUS (<oUs_p> est ClDbUserStory [, <bForceCharge_p> est booléen])
+      //[ <Résultat> = ] oFromUserStory (<oUs_p> est ClDbUserStory [, <bForceCharge_p> est booléen])
       //
       // Paramètres :
       //	oUs_p (ClDbUserStory) : <indiquez ici le rôle de oUs_p>
@@ -75,7 +75,7 @@ class :
       //
       
       //	bForceCharge_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceCharge_p>
-      FONCTION globale oFromUS(oUs_p est un ClDbUserStory, LOCAL bForceCharge_p est un booléen = 0):ClColCritereAccept
+      FONCTION globale oFromUserStory(oUs_p est un ClDbUserStory, LOCAL bForceCharge_p est un booléen = 0):ClColCritereAccept
       
       sReq est une chaine
       oRetour est un ClColCritereAccept <- oUs_p.ZF_GetCol(ClAppScrum.cstCriteresDeUS)

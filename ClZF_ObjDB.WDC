@@ -130,7 +130,7 @@ class :
       	
       	
       	//Est ce que l'enregistrement courant correspond à l'enregistrement de la classe ? (bug en fhsql...)
-      	SI :ZF_Get_IdUnique() <> {:p_ZF_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique} /*OU ClZF_ObjDbLs::mg_oApp.sTypeCnx() = hAccèsHF7*/ ALORS
+      	SI :ZF_Get_IdUnique() <> {:p_ZF_sNomTable + "." + :p_sNom_Col_Id_Auto,indRubrique} OU ClZF_ObjDbLs::mg_oApp.sTypeCnx() = hAccèsHF7 ALORS
       		//Non : Repositionnement, mais sans actualisation des membres de l'instance.
       		:ZF_Charge(Vrai)
       	FIN
@@ -219,6 +219,7 @@ class :
       faire
       	Trace(ExceptionInfo(errMessage) + "-" + ExceptionInfo(errPile))
       	::mg_oApp.TranAnnule()
+      	ExceptionPropage(ExceptionInfo(errMessage))
       sinon
       	//A t on initialisé le top 'en cours d'enregistrement' dans la procédure ?
       	si bLeverTopEnreg ALORS
@@ -360,13 +361,13 @@ class :
       renvoyer :m_ZF_bModif
      type : 458752
    -
-     name : ZF_bObjEgal
+     name : _ZF_bObjEgal
      procedure_id : 1424025106378709196
      type_code : 12
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] ZF_bObjEgal (<oObj1_p> est ClZF_ObjDbLs, <oObj2_p> est ClZF_ObjDbLs)
+      //[ <Résultat> = ] _ZF_bObjEgal (<oObj1_p> est ClZF_ObjDbLs, <oObj2_p> est ClZF_ObjDbLs)
       //
       // Paramètres :
       //	oObj1_p (ClZF_ObjDbLs) : <indiquez ici le rôle de oObj1_p>
@@ -378,7 +379,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure publique globale ZF_bObjEgal(oObj1_p est un ClZF_ObjDBls, oObj2_p est un ClZF_ObjDBls)<métier>:booléen
+      procédure publique globale _ZF_bObjEgal(oObj1_p est un ClZF_ObjDBls, oObj2_p est un ClZF_ObjDBls)<zombie>:booléen
       
       bRetour est un booléen
       

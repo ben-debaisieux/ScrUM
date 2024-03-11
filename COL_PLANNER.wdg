@@ -51,6 +51,22 @@ procedure_set :
       STR_PLANNER_ETIQUETTE est une structure
       	sIDCategory est une chaine
       	sNom_Category est une chaine
+      	sValeur est une chaine
+      FIN
+      
+      STR_PLANNER_PROJET est une structure
+      	sIDPlanner est une chaine
+      	sIDBucket_A_Faire est une chaine
+      	sIDBucket_En_Cours est une chaine
+      	sIDBucket_A_Tester est une chaine
+      	sIDBucket_A_Livrer est une chaine
+      fin
+      
+      CONSTANTE
+      	cstPlanner_Bucket_A_Faire = "à faire"
+      	cstPlanner_Bucket_En_Cours = "en cours"
+      	cstPlanner_Bucket_A_Tester = "à tester"
+      	cstPlanner_Bucket_A_Livrer = "à livrer"
       FIN
      type : 720896
   procedures :
@@ -112,9 +128,12 @@ procedure_set :
       bRetour				est un booléen
       sDocument_Temp		est une chaine
       sDocument			est une chaine
-      sCrochetFermant		est une chaine	= "]"
       vRetour				est un variant
-      sEtag est une chaine
+      sIDTache est une chaine
+      
+      // encode chaine en JSON
+      stTask_p.sNom_Task		= Encode_Chaine_JSON(stTask_p.sNom_Task)
+      stTask_p.sDescription	= Encode_Chaine_JSON(stTask_p.sDescription)
       
       SI TableauOccurrence(stTask_p.astDocument) > 0 ALORS
       	POUR nLigne =  1 _À_ TableauOccurrence(stTask_p.astDocument)
@@ -135,6 +154,8 @@ procedure_set :
       		
       	]
       FIN
+      
+      
       // structure JSON création tache
       sContenu = [
       	{
@@ -152,27 +173,16 @@ procedure_set :
       	// création task ok !
       	bRetour = vrai
       	
+      	// on est obligé de modifier la tache après l'avoir créé car tous les éléments ne sont pas présent lors de la création de la tache
+      	
       	vRetour = JSONVersVariant(rest_Reponse..Contenu)
       	
-      	sContenu = [
-       	{
-       		"description": "[%stTask_p.sDescription%]"[%sDocument%] 		
-      	} 	
-      	]
+      	// id de la tache
+      	sIDTache = vRetour.id
       	
-      	stTask_p = COL_PLANNER.PLANNER_stTask(vRetour.id)
+      	stTask_p.sIDTask = sIDTache
       	
-      	sEtag = vRetour."@odata.etag"
-      	
-      	rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/tasks/[%vRetour.id%]/details",httpPatch,sContenu,stTask_p.sEtag)
-      	
-      	SI rest_Reponse..CodeEtat DANS (200,201,202,204) ALORS
-      		// modification task ok !
-      		bRetour = Vrai
-      		
-      	SINON
-      		bRetour = Faux
-      	FIN
+      	bRetour = COL_PLANNER.PLANNER_Modification_Tache(stTask_p)
       	
       SINON
       	// requête hs
@@ -343,13 +353,13 @@ procedure_set :
      procedure_id : 1539590126004798071
      type_code : 15
      code : |1+
-      procédure PLANNER_Récupération_Liste_Planner_Par_Groupe(LOCAL sNomGroupe_p est une chaîne)<metier>:tableau de STR_PLANNER
+      procédure PLANNER_Récupération_Liste_Planner_Par_Groupe(LOCAL sNomGroupe_p est une chaîne)<metier>:tableau associatif de STR_PLANNER
       
       // variables
       rest_Reponse	est un restRéponse
       sIDGroupe		est une chaine
       vRetour			est un variant
-      aStPlanner		est un tableau de STR_PLANNER
+      aStPlanner		est un tableau associatif de STR_PLANNER
       stPlanner		est un STR_PLANNER
       
       // récupération ID Groupes
@@ -369,7 +379,10 @@ procedure_set :
       		stPlanner.aStEtiquette	= COL_PLANNER.PLANNER_stListe_Etiquettes_Plan(stPlanner.sIDPlanner)
       		stPlanner.aStBucket		= COL_PLANNER.PLANNER_Récupération_Liste_Bucket_Taches(stPlanner)
       		
-      		TableauAjoute(aStPlanner,stPlanner)
+      		SI PAS aStPlanner[stPlanner.sIDPlanner]..existe ALORS
+      			aStPlanner[stPlanner.sIDPlanner] = allouer un STR_PLANNER
+      			aStPlanner[stPlanner.sIDPlanner] = stPlanner
+      		FIN
       	FIN
       	
       	
@@ -436,7 +449,8 @@ procedure_set :
       	stTask.sEtag = vRetour."@odata.etag"
       	
       	POUR TOUT stReference,sChemin_doc DE vRetour.references
-      		stDocument.sChemin_Complet = sChemin_doc
+      		stDocument.sNom = stReference.alias
+      		stDocument.sChemin_Complet = URLDécode(sChemin_doc)
       		TableauAjoute(stTask.astDocument,stDocument)
       	FIN
       SINON
@@ -485,7 +499,7 @@ procedure_set :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure PLANNER_stListe_Etiquettes_Plan(LOCAL sIDPlan_p est une chaine):tableau associatif de STR_PLANNER_ETIQUETTE
+      procédure PLANNER_stListe_Etiquettes_Plan(LOCAL sIDPlan_p est une chaine)<metier>:tableau associatif de STR_PLANNER_ETIQUETTE
       
       // variables
       rest_Reponse	est un restRéponse
@@ -506,10 +520,13 @@ procedure_set :
       		stEtiquette.sNom_Category	= vRetour.categoryDescriptions..Membre[i]
       		
       		SI stEtiquette.sNom_Category <> "0" ALORS
-      			SI PAS aStEtiquette[stEtiquette.sIDCategory]..Existe ALORS
-      				aStEtiquette[stEtiquette.sIDCategory] = allouer un STR_PLANNER_ETIQUETTE
-      				aStEtiquette[stEtiquette.sIDCategory] = stEtiquette
-      			FIN
+      			// ne rien faire
+      		SINON
+      			stEtiquette.sNom_Category = ""
+      		FIN
+      		SI PAS aStEtiquette[stEtiquette.sIDCategory]..Existe ALORS
+      			aStEtiquette[stEtiquette.sIDCategory]	= allouer un STR_PLANNER_ETIQUETTE
+      			aStEtiquette[stEtiquette.sIDCategory]	= stEtiquette
       		FIN
       	FIN
       SINON
@@ -519,6 +536,452 @@ procedure_set :
       
       RENVOYER aStEtiquette
       
+     type : 458752
+   -
+     name : PLANNER_SCRYNCRONISATION
+     procedure_id : 1575967171920638290
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // PLANNER_SCRYNCRONISATION ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PLANNER_SCRYNCRONISATION()
+      
+      
+     type : 458752
+   -
+     name : PLANNER_LISTE_BUCKET
+     procedure_id : 1575973665912046123
+     type_code : 15
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] PLANNER_LISTE_BUCKET (<sIDPlan_p> est chaîne [, <bPar_Nom_p> est booléen])
+      //
+      // Paramètres :
+      //	sIDPlan_p (chaîne ANSI) : <indiquez ici le rôle de sIDPlan_p>
+      //	bPar_Nom_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bPar_Nom_p>
+      
+      // Valeur de retour :
+      // 	tableau associatif (STR_PLANNER_Bucket) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PLANNER_LISTE_BUCKET(LOCAL sIDPlan_p est une chaine, LOCAL bPar_Nom_p est un booleen = faux)<metier>:tableau associatif de STR_PLANNER_Bucket
+      
+      
+      // https://graph.microsoft.com/v1.0/planner/plans/{plan_id}/buckets
+      
+      // variables
+      rest_Reponse	est un restRéponse
+      vRetour			est un Variant
+      aStBucket est un tableau associatif de STR_PLANNER_Bucket
+      stBucket est un STR_PLANNER_Bucket
+      
+      // récupération des plans du groupe
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/beta/planner/plans/[%sIDPlan_p%]/buckets",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour				= JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	POUR i = 1 _À_ TableauOccurrence(vRetour.value)
+      		VariableRAZ(stBucket)
+      		stBucket.sIDBucket = vRetour.value[i].id
+      		stBucket.sNom_Bucket = vRetour.value[i].name
+      		
+      		SI bPar_Nom_p = Vrai ALORS
+      			SI PAS aStBucket[stBucket.sNom_Bucket]..Existe ALORS
+      				aStBucket[stBucket.sNom_Bucket]	= allouer un STR_PLANNER_Bucket
+      				aStBucket[stBucket.sNom_Bucket]	= stBucket
+      			FIN
+      		SINON
+      			SI PAS aStBucket[stBucket.sIDBucket]..Existe ALORS
+      				aStBucket[stBucket.sIDBucket]	= allouer un STR_PLANNER_Bucket
+      				aStBucket[stBucket.sIDBucket]	= stBucket
+      			FIN
+      		FIN
+      	FIN
+      SINON
+      	// requête hs
+      	
+      FIN
+      
+      RENVOYER aStBucket
+     type : 458752
+   -
+     name : PLANNER_Modification_Tache
+     procedure_id : 1576037661005258262
+     type_code : 15
+     code : |1-
+      procédure PLANNER_Modification_Tache(LOCAL stTask_p	est un STR_PLANNER_Task):booléen
+      
+      
+      // variables
+      rest_Reponse		est un restRéponse
+      sContenu			est une chaine
+      bRetour				est un booléen
+      sCategory est une chaine
+      sEtag est une chaine
+      vRetour est un variant
+      
+      
+      // récupération JSON étiquette
+      POUR TOUT stEtiquette DE stTask_p.aStEtiquette
+      	sCategory += ["," + RC] + [
+      	"[%stEtiquette.sIDCategory%]": [%stEtiquette.sValeur%]
+      	]
+      FIN
+      
+      // encode chaine en JSON
+      stTask_p.sNom_Task = Encode_Chaine_JSON(stTask_p.sNom_Task)
+      stTask_p.sDescription = Encode_Chaine_JSON(stTask_p.sDescription)
+      
+      sContenu = [
+       	{
+       		"title": "[%stTask_p.sNom_Task%]",
+       		"description": "[%stTask_p.sDescription%]",
+       		"appliedCategories": {
+        			[%sCategory%]
+        		}
+      	} 	
+      ]
+      
+      // premiere requette GET pour récupérer l'etag de la tache
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/tasks/[%stTask_p.sIDTask%]",httpGet)
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	vRetour	= JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	sEtag			= vRetour."@odata.etag"
+      	
+      	// deuxième requette modifie la tache
+      	rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/tasks/[%stTask_p.sIDTask%]",httpPatch,sContenu,sEtag)
+      	
+      	SI rest_Reponse..CodeEtat DANS (200,201,202,204) ALORS
+      		sContenu = [
+       	{
+       		"description": "[%stTask_p.sDescription%]"
+      	} 	
+      		]
+      		
+      		// troisième requette récupère etag du detail de la tache
+      		rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/tasks/[%stTask_p.sIDTask%]/details",httpGet)
+      		
+      		SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      			vRetour			= JSONVersVariant(rest_Reponse..Contenu)
+      			
+      			sEtag			= vRetour."@odata.etag"
+      			
+      			// troisième requette modifie les détails de la tache
+      			rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/tasks/[%stTask_p.sIDTask%]/details",httpPatch,sContenu,sEtag)
+      			
+      			SI rest_Reponse..CodeEtat DANS (200,201,202,204) ALORS
+      				// modification task ok !
+      				bRetour = Vrai
+      				
+      			SINON
+      				bRetour = Faux
+      			FIN
+      		SINON
+      			bRetour = faux
+      		FIN
+      		
+      	SINON
+      		bRetour = Faux
+      	FIN
+      SINON
+      	bRetour = Faux
+      FIN
+      
+      
+      
+      
+      RENVOYER bRetour
+     type : 458752
+   -
+     name : PLANNER_Modif_Etiquette
+     procedure_id : 1576040817806432190
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] PLANNER_Modif_Etiquette (<sIDPlan_p> est chaîne, <aStEtiquette_p> est tableau (STR_PLANNER_ETIQUETTE))
+      //
+      // Paramètres :
+      //	sIDPlan_p (chaîne ANSI) : <indiquez ici le rôle de sIDPlan_p>
+      //	aStEtiquette_p (tableau (STR_PLANNER_ETIQUETTE)) : <indiquez ici le rôle de stAstEtiquette_p>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PLANNER_Modif_Etiquette(LOCAL sIDPlan_p est une chaine,aStEtiquette_p est un tableau de STR_PLANNER_ETIQUETTE)<métier>:booleen
+      
+      // variables
+      rest_Reponse	est un restRéponse
+      bRetour est un booléen
+      sContenu est une chaine
+      sCategory est une chaine
+      sEtag est une chaine
+      vRetour est un variant
+      
+      
+      POUR i = 1 _À_ aStEtiquette_p..Occurrence
+      	sCategory += [RC] + [
+      	"[%aStEtiquette_p[i].sIDCategory%]": "[%aStEtiquette_p[i].sNom_Category%]",
+      	]
+      FIN
+      
+      sContenu = [
+      {
+      	"categoryDescriptions": {
+      		[%sCategory%]
+      	}
+      }
+      ]
+      
+      // recupération Etag
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/plans/[%sIDPlan_p%]/details",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour = JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	sEtag = vRetour."@odata.etag"
+      SINON
+      	// requête hs
+      	bRetour = Faux
+      FIN
+      
+      // modif etiquette
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/plans/[%sIDPlan_p%]/details",httpPatch,sContenu,sEtag)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202,204) ALORS
+      	// requête ok
+      	bRetour = vrai
+      SINON
+      	// requête hs
+      	bRetour = Faux
+      FIN
+      
+      RENVOYER bRetour
+     type : 458752
+   -
+     name : PLANNER_Récupération_Liste_Planner_Sans_Les_Taches
+     procedure_id : 1576413487675132706
+     type_code : 15
+     code : |1+
+      procédure PLANNER_Récupération_Liste_Planner_Sans_Les_Taches(LOCAL sNomGroupe_p est une chaîne)<metier>:tableau associatif de STR_PLANNER
+      
+      // variables
+      rest_Reponse	est un restRéponse
+      sIDGroupe		est une chaine
+      vRetour			est un variant
+      aStPlanner		est un tableau associatif de STR_PLANNER
+      stPlanner		est un STR_PLANNER
+      
+      // récupération ID Groupes
+      sIDGroupe		= COL_PLANNER.PLANNER_ID_GROUPES(sNomGroupe_p)
+      
+      // récupération des plans du groupe
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/groups/[%sIDGroupe%]/planner/plans",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour = JSONVersVariant(rest_Reponse..Contenu)
+      	POUR nLigne = 1 _À_ TableauOccurrence(vRetour.value)
+      		stPlanner.sNom_Planer	= vRetour.value[nLigne].title
+      		stPlanner.sIDPlanner	= vRetour.value[nLigne].id
+      		stPlanner.sIDGroupe		= vRetour.value[nLigne].owner
+      		
+      		SI PAS aStPlanner[stPlanner.sIDPlanner]..Existe ALORS
+      			aStPlanner[stPlanner.sIDPlanner]	= allouer un STR_PLANNER
+      			aStPlanner[stPlanner.sIDPlanner]	= stPlanner
+      		FIN
+      	FIN
+      	
+      	
+      SINON
+      	// requête hs
+      	
+      FIN
+      
+      RENVOYER aStPlanner
+      
+     type : 458752
+   -
+     name : PLANNER_Récupération_Plan_Complet
+     procedure_id : 1576413977301453227
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] PLANNER_Récupération_Plan_Complet (<sIDPlan_p>)
+      //
+      // Paramètres :
+      //	sIDPlan_p : <indiquez ici le rôle de sIDPlan_p>
+      
+      // Valeur de retour :
+      // 	tableau associatif (STR_PLANNER) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PLANNER_Récupération_Plan_Complet(LOCAL sIDPlan_p)<métier>:STR_PLANNER
+      
+      // variables
+      rest_Reponse	est un restRéponse
+      vRetour			est un Variant
+      stPlanner		est un STR_PLANNER
+      
+      
+      // récupération des plans du groupe
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/plans/[%sIDPlan_p%]",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour					= JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	stPlanner.sNom_Planer	= vRetour.title
+      	stPlanner.sIDPlanner	= vRetour.id
+      	stPlanner.sIDGroupe		= vRetour.owner
+      	
+      	stPlanner.aStEtiquette	= COL_PLANNER.PLANNER_stListe_Etiquettes_Plan(stPlanner.sIDPlanner)
+      	stPlanner.aStBucket		= COL_PLANNER.PLANNER_Récupération_Liste_Bucket_Taches(stPlanner)
+      	
+      SINON
+      	// requête hs
+      	
+      FIN
+      
+      RENVOYER stPlanner
+      
+      
+      
+     type : 458752
+   -
+     name : PLANNER_Récupération_Plan_Par_ID
+     procedure_id : 1576702358595368402
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] PLANNER_Récupération_Plan_Par_ID (<sIDPlan_p>)
+      //
+      // Paramètres :
+      // 	sIDPlan_p : <indiquez ici le rôle de sIDPlan_p>
+      // Valeur de retour :
+      // 	STR_PLANNER : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PLANNER_Récupération_Plan_Par_ID(LOCAL sIDPlan_p)<métier>:STR_PLANNER
+      
+      
+      // variables
+      rest_Reponse	est un restRéponse
+      vRetour			est un Variant
+      stPlanner		est un STR_PLANNER
+      
+      
+      // récupération des plans du groupe
+      rest_Reponse	= COL_PLANNER.PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/planner/plans/[%sIDPlan_p%]",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	// requête ok
+      	vRetour					= JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	stPlanner.sNom_Planer	= vRetour.title
+      	stPlanner.sIDPlanner	= vRetour.id
+      	stPlanner.sIDGroupe		= vRetour.owner
+      	
+      	
+      SINON
+      	// requête hs
+      	
+      FIN
+      
+      RENVOYER stPlanner
+      
+     type : 458752
+   -
+     name : PLANNER_Récupération_Nom_Groupe
+     procedure_id : 1576703415157634504
+     type_code : 15
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] PLANNER_Récupération_Nom_Groupe (<sIDGroupe_p> est chaîne)
+      //
+      // Paramètres :
+      //	sIDGroupe_p (chaîne ANSI) : <indiquez ici le rôle de sIDGroupe_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PLANNER_Récupération_Nom_Groupe(LOCAL sIDGroupe_p est une chaîne)<métier>:chaîne
+      
+      sNomGroupe		est une chaîne
+      rest_Reponse	est une restRéponse
+      vRetour			est un Variant
+      
+      rest_Reponse = PLANNER_Construction_Execution_Requete("https://graph.microsoft.com/v1.0/groups/[%sIDGroupe_p%]",httpGet)
+      
+      SI rest_Reponse..CodeEtat DANS (200,201,202) ALORS
+      	
+      	vRetour = JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	sNomGroupe = vRetour.displayName
+      
+      FIN
+      
+      RENVOYER sNomGroupe
+      
+     type : 458752
+   -
+     name : Encode_Chaine_JSON
+     procedure_id : 1578174523149056166
+     type_code : 15
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Encode_Chaine_JSON (<sChaine_p> est chaîne)
+      //
+      // Paramètres :
+      //	sChaine_p (chaîne ANSI) : <indiquez ici le rôle de sChaine_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure Encode_Chaine_JSON(LOCAL sChaine_p est une chaine)
+      
+      sChaine_Retour est une chaine
+      
+      sChaine_Retour = sChaine_p
+      
+      // échappement dans sujet
+      sChaine_Retour		= Remplace(sChaine_Retour,"\","\\")
+      sChaine_Retour		= Remplace(sChaine_Retour,Caract(34),"\" + Caract(34))
+      sChaine_Retour		= Remplace(sChaine_Retour,TAB,"\t")
+      
+      RENVOYER sChaine_Retour
      type : 458752
   procedure_templates : []
   property_templates : []

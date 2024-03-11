@@ -24,6 +24,13 @@ class :
       	mg_oEx_IndiceInexistant est un ClZF_Exception dynamique
       fin
       
+      constante
+      	cstMvPremier	= -1
+      	cstMvPrec		= -2
+      	cstMvSuiv		= -3
+      	cstMvDer		= -4
+      fin
+      
       mg_oEx_IndiceInexistant = allouer un ClZF_Exception("Indice hors de porté : il doit être compris ente 0 et %1")
      type : 131072
   procedures :
@@ -55,10 +62,10 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //ZF_addItem (<oEntite_p> est ClZF_ObjDbLs)
+      //ZF_addItem (<oEntite_p> est ClZF_ObjDbLs dynamique)
       //
       // Paramètres :
-      //	oEntite_p (ClZF_ObjDbLs) : <indiquez ici le rôle de oEntite_p>
+      //	oEntite_p (ClZF_ObjDbLs dynamique) : <indiquez ici le rôle de oEntite_p>
       // Valeur de retour :
       // 	Aucune
       //
@@ -66,7 +73,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       // 	bSansVerifDoublon_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bSansVerifDoublon_p>
-      procédure ZF_addItem(oEntite_p est un ClZF_ObjDbLs)<métier>:vide
+      procédure ZF_addItem(oEntite_p est un ClZF_ObjDbLs dynamique)<métier>:vide
       
       //L'objet est il déjà présent dans la collection ?
       si pas :ZF_bTrouve(oEntite_p) ALORS
@@ -300,7 +307,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       procédure publique ZF_Supp(nPos_P est un entier)<métier>:vide
-      TableauSupprime(:p_aoObj, nPos_P)
+      TableauSupprime(:m_aoObj, nPos_P)
      type : 458753
    -
      name : ZF_LoadSQL
@@ -912,6 +919,81 @@ class :
       procédure protegee abstraite sClasseObjDbAsso():chaine
       //sClasse est une chaine = ClZF_ObjDbLs
       //Renvoyer sClasse
+      
+     type : 458752
+   -
+     name : ZF_MvPos
+     procedure_id : 1579127760981975390
+     type_code : 12
+     code : |1+
+      procedure publique ZF_MvPos(oObjDb_p est un ClZF_ObjDbLs, nMouvement_p est un entier)<metier>:vide
+      
+      nPosActu est un entier = :ZF_Recherche(oObjDb_p)
+      nNouvPos est un entier
+      
+      
+      selon nMouvement_p
+      	CAS cstMvPremier
+      		nNouvPos = 1
+      	CAS cstMvPrec
+      		nNouvPos = max(1, nPosActu - 1)
+      	CAS cstMvSuiv
+      		nNouvPos = Min(:ZF_nTaille(), nPosActu + 1)
+      	CAS cstMvDer
+      		nNouvPos = :ZF_nTaille()
+      	cas 1 <= * <= :ZF_nTaille()
+      		nNouvPos = nMouvement_p
+      	AUTRE CAS
+      		
+      FIN
+      
+      
+      oColTmp	est un ClZF_ColObjDB dynamique	<- :m_aoObj
+      oObjTmp	est un ClZF_ObjDbLs dynamique
+      nCpt	est un entier
+      
+      // Parcours de tous les éléments du tableau d'origine
+      pour tout oObjTmp, nCpt de oColTmp:aItems()
+      	
+      	// Est ce que la position en cours correspond à la position de destination ?
+      	si nCpt = nNouvPos ALORS
+      		// Oui
+      		oColTmp.ZF_addItem(oObjTmp)
+      	fin
+      	
+      	// Est ce que l'objet actuellement parcouru est celui à déplacer ?
+      	SI PAS ClZF_ObjDbLs.ZF_bObjEgal(oObjTmp,oObjDb_p) ALORS
+      		// Non : on l'ajoute à la liste
+      		oColTmp.ZF_addItem(oObjTmp)
+      	FIN
+      FIN
+      
+      :m_aoObj <- oColTmp
+      
+     type : 458752
+   -
+     name : ZF_EnrPos
+     procedure_id : 1579138373854663993
+     type_code : 12
+     code : |1-
+      PROCÉDURE PUBLIQUE ZF_EnrPos(sProprieteOrdre_p est une chaîne)<metier>:vide
+      
+      oObjTmp	est un ClZF_ObjDbLs dynamique
+      oObjTmp2	est un ClZF_ObjDb dynamique
+      nCpt	est un entier
+      
+      ClZF_ObjDbLs.mg_oApp.TranDebut()
+      
+      // Parcours de tous les éléments du tableau d'origine
+      POUR TOUT oObjTmp, nCpt de :aItems()
+      	oObjTmp2 <- oObjTmp
+      	{"oObjTmp2." + sProprieteOrdre_p,indVariable} = nCpt
+      	si oObjTmp2.ZF_bEstModifie() alors
+      		oObjTmp2.ZF_Enregistre()
+      	FIN
+      FIN
+      
+      ClZF_ObjDbLs.mg_oApp.TranFin()
      type : 458752
   properties :
    -

@@ -352,23 +352,24 @@ class :
       nVelocitéMoyenne	est un entier
       nNumSprintActuel	est un entier	= goApp.m_nNumeroDuSprintActuel
       oSprint				est un ClDbSprint dynamique
-      sReq				est une chaîne
-      oColSprints			est un ClColSprint()
       
-      sReq = [
-      	
-      	SELECT
-      		Scr_Sprint.*
-      	
-      	FROM Scr_Sprint
-      	
-      	WHERE Scr_Sprint.Top_Termine = 1
-      	
-      	ORDER BY Scr_Sprint.Num_Sprint
-      	
-      ]
-      oColSprints.ZF_LoadSQL(sReq)
-      pour tout element oSprint de oColSprints.aItems()
+      //sReq				est une chaîne
+      //oColSprints			est un ClColSprint()
+      //
+      //sReq = [
+      //	
+      //	SELECT
+      //		Scr_Sprint.*
+      //	
+      //	FROM Scr_Sprint
+      //	
+      //	WHERE Scr_Sprint.Top_Termine = 1
+      //	
+      //	ORDER BY Scr_Sprint.Num_Sprint
+      //	
+      //]
+      //oColSprints.ZF_LoadSQL(sReq)
+      pour tout element oSprint de ClColSprint.oListeSprint().aItems()
       	
       	si nNumSprintActuel > oSprint.ZF_Get_IdUnique() ALORS
       		nPointsSprint				+= oSprint.p_nNbPointsRealise
@@ -378,13 +379,15 @@ class :
       		nVelocitéMoyenne			= goApp.m_nVelociteMoyenne 
       	FIN
       	
-      	si oSprint.p_nVelociteMoyenneRes <> nVelocitéMoyenne ALORS
-      		oSprint.m_nVelociteMoyenneRes = nVelocitéMoyenne
+      	oSprint.p_nVelociteMoyenneRes = nVelocitéMoyenne
+      	SI oSprint.ZF_bEstModifie() ALORS
       		oSprint.ZF_Enregistre()
       	FIN
       	
       	nNbrSprint++ 
       FIN
+      
+      
      type : 458752
    -
      name : oGet_SprintDeDate
@@ -494,6 +497,15 @@ class :
          
          renvoyer :m_nVelociteMoyenneRes
         type : 1966080
+      -
+        code : |1+
+         procédure p_nVelociteMoyenneRes(nValeur est un entier):vide
+         
+         SI m_nVelociteMoyenneRes <> nValeur ALORS
+         	:ZF_EstModif()
+         	m_nVelociteMoyenneRes=nValeur
+         FIN
+        type : 2031616
      template_refs : []
    -
      name : p_bTop_Termine

@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_ExploreProjet
  identifier : 0x222677d4194cab02
- internal_properties : BwAAAAcAAABnAO/0JQfeDKeqSKQrw4o7+Y4Pt31OHP8nPyYGF6+qincT88ZwaRH7N2BwfToYJGPpE53Nx2irdwujHOpzSTajOHF24dmV+MXwIvnF6PlBl1AugQHh4M3O0Mz9MGMq/Mg3vBpkpxZFmDbLXRPuB9+RnkWQoRRtd3S3yGf7lmWGnuhxQpZ9W/KKtJOMqdrLg+4Ry47FQEFO9Fn04ovLtYPDhU46W5x08BaoSzX+TCnZN8yLGMkGyqOWsIBX0dHz1iTiBOXzGP2U41rEgI95YFnelKauYY/r0K0rSaaJGX97BYdNwWQofbdJ/rIL2I3XHC7q0O/hpV+g5TD6nqpBYbjRW4GAWnjxDiGu1NcTSi7qkDTea5ClrxhHkQenrPoaRypHycHPQeFEjgLbiv9289ewTNgdYOGAu2VaoLVHFCLkIQ84B5jh+oEwq5xwMgRqqhajoo4UdmEMrwQkGMO9G10d86v8FPtHwC9qfan5YFBD0nLITatEtdod6pDHYtUdnFW6mOaiSWWGZuztmshAmV1qV9Qn7K1dKpLhLfspZGUpBED4rIbHwyx/Jlby/b0X1F0d9nWHsQPFjHl0Zq8f75LCDdr93u4rrOp//yGkwpVmqzU/GRP1bFUlkdukY6cZB+sn/F7eIehU2l99ojW8IGMtiS3QyuNxV40eVOYiz7PTVCBIS8UhfdBYMhMtdSZiiA==
+ internal_properties : BwAAAAcAAADk42XuhrzxoTLwnHZbA4SY6yEN2ulBQzpQQwF7wVujfgO12Y6VqwyrNZeuuDrLKm3DxH6arNsgIDirbdOZd5PaOcmM6TOfzfu+1vb495ivYmY87M3jsPLly92WyzRQdOgwkrMKa5pt9gkOLrobu3itEJjYAr6WbzQ7KPYsNoOlYtU4/+QruEbJ8XV+illmpIbp9peHHg1Fp+S9E0ceOMsTnamz92q27ok16z8UeWIT+AiprmtTOZbFBdMhMvNu1vgeEhn2XDXmApebY+T/8nKMu/zJK2DJrx0pJDUIT+5nBUTwjT2c4Cz4qJTeqzl3QR1AwRurgLDGY6f4BIN7yCZwUdOnYl8Bp6bQ572K8vSRxxQJ86RH/qmYWT7BvSTWqpG5hNHrV6hNQQg+vCC2QXDn6q3LVt2XDhiYQyuE8ORpYNVRgdoVEwb1NwuuMQoG+cm7D4zyymD3/IDHWkZfc/KEYc5iigdGp3A6IB+GnDJy5Syxc3EA1G+OSsG/zcoL4/ppGAaTE7wznCc0krRIs5xPiBknTnMVpOZSzWhhsvW+39uuuFij9J+RyeQTtRHJkV581pP81UuWu36ARHx4uHj89nN3iPYskzAZU3LYpHdmB6hjpyIt8fwitstZEzYSrd6j85MoS6v1HT5IqTOXP5O3nncLw7Qdt9ZWzsRMZhbvxr8JE8tVtjYUaN8ULyZIi0g=
  properties :
   width : 847
   height : 506
@@ -408,7 +408,7 @@ window :
       TableSupprimeTout(TBLH_SelUS)
       znPremLigneAff = 1
       
-      aOLstEpics <- ClColEpic.from_projet(zoPrj_P).aItems()
+      aOLstEpics <- ClColEpic.oFromprojet(zoPrj_P).aItems()
       TableauInsère(aOLstEpics, 1, Null)
       
       POUR TOUT ÉLÉMENT oEpic DE aOLstEpics
@@ -612,7 +612,7 @@ window :
       TableSupprimeTout(TBLH_SelUS)
       znPremLigneAff = 1
       
-      aOLstEpics <- ClColEpic.from_projet(zoPrj_P).aItems()
+      aOLstEpics <- ClColEpic.oFromprojet(zoPrj_P).aItems()
       TableauInsère(aOLstEpics, 1, Null)
       
       POUR TOUT ÉLÉMENT oEpic DE aOLstEpics

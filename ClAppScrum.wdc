@@ -206,7 +206,7 @@ class :
       
       <COMPILE SI Configuration="ScrUM">
       
-       ::Sprint_Num_Actuel()
+      ::Sprint_Num_Actuel()
       
       //Enregistrement de l'utilisateur en cours, dans l'application.
       :m_oUsrCnx <- ClDbUsr.oGetUsrDeNumAD(sLoginAD)
@@ -268,10 +268,6 @@ class :
       oCol est un ClZF_ColObjDB dynamique
       
       selon sCle_p
-      	CAS ClDbProjetMap.cstKeyCol_MapDeProjet, ClDbProjetMap.cstGetCol_ProjetMap
-      		oCol = allouer un ClColProjetMap()
-      	cas ClDbUserStory.cstUSDeProjet
-      		oCol = allouer un ClColUserStory()
       	cas cstCriteresDeUS
       		oCol = allouer un ClColCritereAccept()
       	cas cstColUsrInvite
@@ -290,7 +286,12 @@ class :
       		oCol = allouer un ClColUsr_Projet()
       	CAS ClDbProjet_Situation.cstGetCol_Projet_Situation
       		oCol = allouer un ClcolProjet_Situation()
-      		
+      	CAS ClcolVersion.cstGetVersionDeProjet
+      		oCol = allouer un ClColVersion()
+      	CAS ClColEpic.cstGet_EpicDeProjet :
+      		oCol = allouer un ClColEpic
+      	CAS ClColUserStory.cstGet_UserStoryDeVersion, ClColUserStory.cstGet_UserStoryDeProjet :
+      		oCol = allouer un ClColUserStory()
       	AUTRE CAS
       		::mg_oExTypeColNonDefinit.ZF_Declenche([sCle_p])
       FIN
@@ -504,7 +505,14 @@ class :
       Si pas HEnDehors(sdToutLesSprints) alors
       	//On récupère le numéro du sprint
       	goApp.p_nNumeroDuSprintActuel = sdToutLesSprints.Num_Sprint
-      	goApp.m_nVelociteMoyenne = sdToutLesSprints.VelociteMoyenneRes
+      	
+      	si sdToutLesSprints.VelociteMoyenneRes <> 0 alors
+      		goApp.m_nVelociteMoyenne = sdToutLesSprints.VelociteMoyenneRes
+      	Sinon
+      		ClDbSprint.Calcul_Velocite_Moyenne()
+      		oSpr est un ClDbSprint <- ClDbSprint.oGet_SprintDeDate(DateSys())
+      		goApp.m_nVelociteMoyenne = oSpr.p_nVelociteMoyenneRes
+      	fin
       Sinon
       	goApp.p_nNumeroDuSprintActuel	= 0
       	goApp.m_nVelociteMoyenne		= 0
@@ -515,6 +523,23 @@ class :
       
       //RENVOYER nNumSprint
       
+     type : 458752
+   -
+     name : TablesExclues
+     procedure_id : 1559447838806087562
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_App.TablesExclues
+      PROCÉDURE TablesExclues()<métier>:tableau de chaine
+      
+      aRetour est un tableau de chaîne
+      
+      TableauAjoute(aRetour, Scr_Process_Metier..nom)
+      TableauAjoute(aRetour,Scr_Process_Metier_Axe..Nom)
+      TableauAjoute(aRetour,Scr_Process_Metier_Intervenant..Nom)
+      TableauAjoute(aRetour,Scr_Process_Metier_Intervenant_Type..Nom)
+      
+      RENVOYER aRetour
      type : 458752
   properties :
    -

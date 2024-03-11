@@ -527,6 +527,15 @@ class :
       renvoyer :m_ZF_cnxBDD..Provider
       
      type : 458752
+   -
+     name : TablesExclues
+     procedure_id : 1559447439373642584
+     type_code : 12
+     code : |1-
+      procédure TablesExclues()<metier>:tableau de chaîne
+      aRetour est un tableau de chaîne
+      renvoyer aretour
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :
