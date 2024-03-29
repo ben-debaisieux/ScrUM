@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_menu
  identifier : 0x2cb46a8100b2f628
- internal_properties : BwAAAAcAAADJlPTb5WgJaxbgDcAGn5npiw1/StUwZJQ/hKvIQ/DymmyUkFmBbX8W/GbxiLpSZyW3nxilxoACJ1Bgu6ixUgiB+j8Ik5/kibIdKAFpyzunhj7MyumG3zbWGXxdhlwWtAbz0qGjlrNNbgoTY7pxDpnQuX5S/l20nPr8ypjnJpKPcC5St4vKELI067Zx+7k+6OPXftumXtxBFx/cBL5f+P1GO/7qW0tDQOBkVQ2waZbIFYUYAq7VoH3RPN5pwVSILnU2qoytECBunCHEDOhGDPbCYEuWIbom5Rq4r3HObeL7ViN9xPAv0WvYIPtz4Tw5KOJ4X8D5IBfNBm4YW0uqPOpkAmJLpTFIW4k2BvdeXMyAI5Lj+fLwS/qByMk55q3nxtfyBaMuhyJS3cvakwG8xFD/sB+as8MzMYUgMSMlMia6OYKR6/knsk4cFrMe6jovZR+tyUHdo4LsPsglxC8asaK+toq15ZqxBjVUCQ193LnHUV18kj2nb+X+TNcHsbG3J8BKzoVOhwwYz3L5+pliNFZhOQheM78B5cGWl9M2p4CGXTny9gKgsvJZr97pZH9Rh7kQnlRc511xPq2gk0/Liqh6S26jDd33tQzTmaxwe7Cji4AjD96SN2pR3Dem5DAyvisXB6gp1SeJ6808lqQiwJgFR1jChupcejPcHlBSaRuPT4eWwBIdpIyXtTDZRpeIU2GhRJpXEeI6Pw==
+ internal_properties : BwAAAAcAAAD/8ZJZ8GigrxmZSbkwfFMSUPCBLEGCRyHrXj+xDNocnZCkGRxhpf2O47e97er+3UBeSpS3uuolSUNJb2FjaPX6Yi+eJIYX8isRKEqGlqL00oevB6F+xjgKgk0faP+uqqNy/x4oO5ZZuBS3T0VizUgdYsOcUkpj5FAr3VkKxWFD0gFtXkPfRfoVGIm9Hadf/sUZiBlazCJwAjZVV8B78HTuDZzQAcPyBk6USHNJQUMrbnntw7aAKUgX3SLIM8Lid9DGfHZGcLAx5j8jaoEZkRimfoQD4p76vyxvZzw0sPynm3EzrSluSfMEooJjQsF8IaTKu9cdMZLU08r7Pwx2MeiHwmZhXsPmhXp9TLLGxyn7u0mo6tsvowcTYf6wUQnPCdj0P4RSIzYoyDam44AVDT5BdKbyuR4lr+uccjdYPjqVvAxUw9uGm9j4K0VKq+/tj5JEUTHEVDatwgbzipHEcAdO0sozyn0hCcnr4rbikYkjkbpxZULo1Epc6DqXwfCPkOVvz0rWS356xonF0L12BWABoeFXmh+LEc/q5v11V/H4+6+cSrVNBUo4fjDsv4eZuKJgohXS7ECWRuwFUgyBk20s/yFtzzC0aHRmwq3ufZNYPbeQ90bd6KhwjaiEGDQJ8hlzkjQZQzeA1P3nHvs3oB9guNMxZa7z+yzvYszJHlSRm4NZnsYnbmREcGQTJsknNekQLUKsORkxlU8=
  properties :
   width : 1032
   height : 600
@@ -777,41 +777,83 @@ window :
       		TDB_General[nInd]..Visible = Vrai
       		TDB_General.ChangeTailleWidget(nInd, 1, 2)
       		TDB_General.DéplaceWidget(nInd, 2, 1)
-      				
-      		nInd = TDB_General.AjouteWidget(FI_MesTaches, "FI_MesTaches")
+      
+      		nInd = TDB_General.AjouteWidget(FI_UsDuSprint, "FI_UsDuSprint")
       		TDB_General[nInd]..Visible = Vrai
+      		TDB_General.ChangeTailleWidget(nInd, 1, 2)
       		TDB_General.DéplaceWidget(nInd, 3, 1)
-      				
+      		
       		nInd = TDB_General.AjouteWidget(FI_MesTestsFonctionnels, "FI_MesTestsFonctionnels")
       		TDB_General[nInd]..Visible = Vrai
+      		TDB_General.ChangeTailleWidget(nInd, 1, 2)
       		TDB_General.DéplaceWidget(nInd, 4, 1)
-      
       		
-      		nInd = TDB_General.AjouteWidget(FI_MesTestsUnitaires, "FI_MesTestsUnitaires")
-      		TDB_General[nInd]..Visible = Vrai
-      		TDB_General.DéplaceWidget(nInd, 3, 2)
       		
-      		nInd = TDB_General.AjouteWidget(FI_MesBrouillons, "FI_MesBrouillons")
-      		TDB_General[nInd]..Visible = Vrai
-      		TDB_General.DéplaceWidget(nInd, 4, 2)
-      
       		
-      		nInd = TDB_General.AjouteWidget(FI_MesCritèresAControler, "FI_MesCritèresAControler")
+      		
+      		
+      		
+      		nInd = TDB_General.AjouteWidget(FI_MesTaches, "FI_MesTaches")
       		TDB_General[nInd]..Visible = Vrai
       		TDB_General.DéplaceWidget(nInd, 1, 3)
       		
       		nInd = TDB_General.AjouteWidget(FI_CotationsAFaire, "FI_CotationsAFaire")
       		TDB_General[nInd]..Visible = Vrai
       		TDB_General.DéplaceWidget(nInd, 2, 3)
-      				
+      		
       		nInd = TDB_General.AjouteWidget(FI_Taches_suspendues, "FI_Taches_suspendues")
       		TDB_General[nInd]..Visible = Vrai
       		TDB_General.DéplaceWidget(nInd, 3, 3)
-      				
-      //		nInd = TDB_General.AjouteWidget(FI_MesMessages, "FI_MesMessages")
-      //		TDB_General[nInd]..Visible = Vrai
-      //		TDB_General.DéplaceWidget(nInd, 4, 3)
       		
+      		nInd = TDB_General.AjouteWidget(FI_MesCritèresAControler, "FI_MesCritèresAControler")
+      		TDB_General[nInd]..Visible = Vrai
+      		TDB_General.DéplaceWidget(nInd, 4, 3)
+      
+      //		nInd = TDB_General.AjouteWidget(FI_MesTestsUnitaires, "FI_MesTestsUnitaires")
+      //		TDB_General[nInd]..Visible = Vrai
+      //		TDB_General.DéplaceWidget(nInd, 3, 2)
+      
+      
+      		
+      		
+      		
+      		
+      		
+      //		nInd = TDB_General.AjouteWidget(FI_Taches_a_faire, "FI_Taches_a_faire")
+      //		TDB_General[nInd]..Visible = Vrai
+      //		TDB_General.ChangeTailleWidget(nInd, 1, 2)
+      //		TDB_General.DéplaceWidget(nInd, 2, 1)
+      //				
+      //		nInd = TDB_General.AjouteWidget(FI_MesTaches, "FI_MesTaches")
+      //		TDB_General[nInd]..Visible = Vrai
+      //		TDB_General.DéplaceWidget(nInd, 3, 1)
+      //				
+      //		nInd = TDB_General.AjouteWidget(FI_MesTestsFonctionnels, "FI_MesTestsFonctionnels")
+      //		TDB_General[nInd]..Visible = Vrai
+      //		TDB_General.DéplaceWidget(nInd, 4, 1)
+      //
+      //		
+      //		nInd = TDB_General.AjouteWidget(FI_MesTestsUnitaires, "FI_MesTestsUnitaires")
+      //		TDB_General[nInd]..Visible = Vrai
+      //		TDB_General.DéplaceWidget(nInd, 3, 2)
+      //		
+      //		nInd = TDB_General.AjouteWidget(FI_UsDuSprint, "FI_UsDuSprint")
+      //		TDB_General[nInd]..Visible = Vrai
+      //		TDB_General.DéplaceWidget(nInd, 4, 2)
+      //
+      //		
+      //		nInd = TDB_General.AjouteWidget(FI_MesCritèresAControler, "FI_MesCritèresAControler")
+      //		TDB_General[nInd]..Visible = Vrai
+      //		TDB_General.DéplaceWidget(nInd, 1, 3)
+      //		
+      //		nInd = TDB_General.AjouteWidget(FI_CotationsAFaire, "FI_CotationsAFaire")
+      //		TDB_General[nInd]..Visible = Vrai
+      //		TDB_General.DéplaceWidget(nInd, 2, 3)
+      //				
+      //		nInd = TDB_General.AjouteWidget(FI_Taches_suspendues, "FI_Taches_suspendues")
+      //		TDB_General[nInd]..Visible = Vrai
+      //		TDB_General.DéplaceWidget(nInd, 3, 3)
+      				
       	// Mode manager
       	CAS 2
       		

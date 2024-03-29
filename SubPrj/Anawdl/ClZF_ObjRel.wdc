@@ -1,0 +1,157 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_ObjRel
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1522ff852510d6f0
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_ObjRel est une Classe, abstraite
+      	herite de ClZF_ObjDB
+      PRIVE
+      	m_aCompoClePrim est un tableau associatif de ClZF_ObjDbLs dynamique
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1523060571322308336
+     type_code : 27
+     code : |1-
+      procédure Constructeur(sNomTable_P est une chaîne , sNomColIdAuto_P est une chaîne , nId_P est un entier = 0)
+      Ancêtre.Constructeur(sNomTable_P, sNomColIdAuto_P, nId_P)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1523060571322373872
+     type_code : 28
+     code : |1-
+      procédure Destructeur()
+      //sCle est une chaîne = ZF_sGetNomInstanceRel()
+      //:ZF_LibereInstance(sCle)
+     type : 655360
+   -
+     name : AddMembreCle
+     procedure_id : 1523060571322439408
+     type_code : 12
+     code : |1+
+      procédure protege AddMembreCle(local sCle_p est une chaîne)<metier>:vide
+      
+      si :m_aCompoClePrim[sCle_p]..vide ALORS
+      	:m_aCompoClePrim[sCle_p] = null
+      FIN
+     type : 458752
+   -
+     name : setCle
+     procedure_id : 1529759220910027727
+     type_code : 12
+     code : |1-
+      procedure protege setCle(LOCAL sCle_p est une chaîne, oObjDB est un ClZF_ObjDbLs)<metier>:vide
+      :m_aCompoClePrim[sCle_p] = oObjDB
+     type : 458752
+   -
+     name : RechEnrDeCles
+     procedure_id : 1523060571322504944
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] RechEnrDeCles ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	ClZF_ObjDbLs : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure RechEnrDeCles() <métier>:ClZF_ObjDbLs
+      
+      sRubs		est une chaîne
+      sRubMap		est une chaîne
+      sReq		est une chaîne
+      sdGetEnr	est une source de données
+      oObj		est un ClZF_ObjDbLs dynamique
+      oObjRetour	est un ClZF_ObjDbLs dynamique
+      bErreurInit	est un booléen
+      
+      
+      sCle est une chaîne = ZF_sGetNomInstanceRel()
+      //oInst est un ClZF_ColObjDB dynamique <- goApp.mg_aoInstances[sCle]
+      oObjRetour <- ClZF_App.mg_aoInstances[sCle]
+      si oObjRetour = null _ou_ oObjRetour.ZF_bEstExpire() alors
+      //	Trace(sCle + "!")
+      	//trace(dbgInfo(dbgPile))
+      	//Construction de la condition de sélection
+      	pour toute oObj, sRubMap de :m_aCompoClePrim
+      		si oObj = Null ou oObj.ZF_Get_IdUnique() <= 0 ALORS
+      			bErreurInit = vrai
+      			sortir
+      		sinon
+      			sRubs += [RC + "AND "] + sRubMap + " = " + oObj.ZF_Get_IdUnique()
+      		FIN
+      	FIN
+      	
+      	
+      	si pas bErreurInit alors
+      		
+      		sReq = [
+      		SELECT
+      			*
+      		FROM [%:p_ZF_sNomTable%]
+      		WHERE [%sRubs%]
+      			AND [%:p_sNom_Col_Id_Auto%] <> [%:ZF_Get_IdUnique()%]
+      		]
+      		
+      		mg_oApp.Rsql(sdGetEnr,sReq)
+      		HLitPremier(sdGetEnr)
+      		si pas HEnDehors(sdGetEnr) ALORS
+      			oObjRetour <- ClZF_ObjDB.ZF_GetObj(objet..classe, ClZF_ObjDbLs.cstModeSansChargement)
+      			oObjRetour.ZF_Charge_source(sdGetEnr)
+      		sinon
+      			oObjRetour <- objet
+      		FIN
+      		ClZF_App.mg_aoInstances[sCle] <- oObjRetour
+      	fin
+      sinon
+      //	Trace(sCle + "ok")
+      	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_Cache++
+      fin
+      
+      renvoyer oObjRetour
+      
+     type : 458752
+   -
+     name : ZF_sGetNomInstanceRel
+     procedure_id : 1541627470235910688
+     type_code : 12
+     code : |1+
+      procedure ZF_sGetNomInstanceRel()<métier>:chaîne
+      
+      sRetour est une chaîne
+      POUR TOUTE oObj, sRubMap de :m_aCompoClePrim
+      	sRetour += ZF_sCleOdb(oObj..Classe, oObj.ZF_Get_IdUnique())
+      FIN
+      RENVOYER sRetour
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x1521c1091fb3bf63
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

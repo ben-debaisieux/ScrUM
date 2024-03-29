@@ -1,0 +1,107 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_ObjCache
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x15436bd41cbefeea
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_ObjCache est une Classe
+      
+      privé
+      	m_ZF_dhExpiration				est un dateheure			<Sérialise=faux>
+      	m_ZF_nDureeTimeOut				est un entier				<Sérialise=faux>
+      GLOBAL
+      	
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1532186856995684074
+     type_code : 27
+     code : |1-
+      procédure Constructeur()
+      
+      //Le membre est initialisé à l'heure système lors de la déclaration. On force l'objet à un état expiré par défaut.
+      m_ZF_dhExpiration..Milliseconde -= 1
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1532186856995749610
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : ZF_bEstExpire
+     procedure_id : 1532187385311649728
+     type_code : 12
+     code : |1-
+      procédure ZF_bEstExpire():booléen
+      
+      //nDuree est une durée = DateHeureDifférence(DateHeureSys(),:m_ZF_dhExpiration)
+      //si :m_ZF_dhExpiration < DateHeureSys() alors trace(" Exp : " + objet..classe + " - " + nDuree..EnSecondes)
+      
+      renvoyer :m_ZF_dhExpiration < DateHeureSys()
+     type : 458752
+   -
+     name : ZF_setDhExpire
+     procedure_id : 1532187385311715530
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_setDhExpire ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	nNbSecondes_p (entier - valeur par défaut=-1) : <indiquez ici le rôle de nNbSecondes_p>
+      procédure publique ZF_setDhExpire()<metier>:vide
+      
+      
+      :m_ZF_dhExpiration = DateHeureSys()
+      :m_ZF_dhExpiration..Seconde += :m_ZF_nDureeTimeOut
+      
+     type : 458752
+   -
+     name : ZF_DefTimeOut
+     procedure_id : 1532188935839376145
+     type_code : 12
+     code : |1-
+      PROCÉDURE PROTÉGÉE ZF_DefTimeOut(nNbSecondes_p est un entier, bAvecMajExpiration_p est un booléen = faux)<metier>:vide
+      
+      
+      :m_ZF_nDureeTimeOut = nNbSecondes_p
+      
+      si bAvecMajExpiration_p ALORS
+      	ZF_setDhExpire()
+      FIN
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x15436bc01cb8b01f
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

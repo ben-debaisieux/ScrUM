@@ -26,6 +26,11 @@ class :
       	m_vBody				est un variant
       fin
       
+      STR_GLPI_ITEMS est une structure
+      	nID est un entier
+      	sNom est une chaine
+      fin
+      
       CONSTANTE
       	cstGLPI_Categories_Autres = 11
       	cstGLPI_Categories_Droits_Acces = 12
@@ -36,6 +41,8 @@ class :
       	cstGLPI_Categories_Telephonie = 7
       	//cstGLPI_Categories_Wifi = 0
       	cstGLPI_Categories_WinMat = 8
+      	cstGLPI_Type_Membre_User = 1
+      	cstGLPI_Type_Membre_Group = 2
       	
       FIN
      type : 131072
@@ -826,11 +833,12 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] UpdateTicketAssign (<nIDTicket> est entier, <sIDUser> est chaîne)
+      //[ <Résultat> = ] UpdateTicketAssign (<nIDTicket> est entier, <sIDMembre_p> est chaîne [, <nType_Membre_p> est entier])
       //
       // Paramètres :
       //	nIDTicket (entier) : <indiquez ici le rôle de nIDTicket>
-      //	sIDUser (chaîne ANSI) : <indiquez ici le rôle de nGroupe>
+      //	sIDMembre_p (chaîne ANSI) : <indiquez ici le rôle de nGroupe>
+      //	nType_Membre_p (entier - valeur par défaut=1) : <indiquez ici le rôle de nType_Membre_p>
       
       // Valeur de retour :
       // 	booléen : <indiquez ici le rôle de la valeur de retour>
@@ -838,28 +846,37 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure UpdateTicketAssign(LOCAL nIDTicket est un entier, LOCAL sIDUser est une chaine)
+      procédure UpdateTicketAssign(LOCAL nIDTicket est un entier, LOCAL sIDMembre_p est une chaine,nType_Membre_p est un entier = cstGLPI_Type_Membre_User)
       
       
       vRetour	est un Variant
       vInput	est un Variant
       vBody	est un Variant
+      sUrl est une chaine
       
-      //Maj du statut
-      m_sURL						= "https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket%]/Ticket_User/"
+      
+      //Maj attribution
+      SI nType_Membre_p = cstGLPI_Type_Membre_User ALORS
+      	sUrl				= "https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket%]/Ticket_User/"
+      	vInput.tickets_id	= nIDTicket
+      	vInput.users_id		= sIDMembre_p
+      SINON
+      	sUrl				= "https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket%]/group_ticket/"
+      	vInput.groups_id = sIDMembre_p
+      	vInput.tickets_id	= nIDTicket
+      FIN
+      
+      // élément qui ne change pas
+      vInput.type					= "2"
+      vInput.use_notification		= "1"
+      vBody.input					= vInput
+      
+      m_sURL						= sUrl
       m_nMethode					= httpPost
       m_sParam					= ""
-      //vInput.id					= nIDTicket
-      vInput.tickets_id	= nIDTicket
-      vInput.users_id = sIDUser
-      vInput.type = "2"
-      vInput.use_notification = "1"
       
       
-      vBody.input					= vInput
-      	
-      
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket%]/Ticket_User/", httpPost, *, vBody)	
+      InitRequete(sUrl, httpPost, *, vBody)	
       SI PAS Exec(vRetour) ALORS
       	RENVOYER Faux
       FIN
@@ -943,6 +960,58 @@ class :
       
       
       RENVOYER vRetour
+     type : 458752
+   -
+     name : GetInfoGroup
+     procedure_id : 1580518441323274495
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetInfoGroup (<sFiltre_Prefixe_p> est chaîne)
+      //
+      // Paramètres :
+      //	sFiltre_Prefixe_p (chaîne ANSI) : <indiquez ici le rôle de sFiltre_Prefixe_p>
+      // Valeur de retour :
+      // 	tableau associatif (STR_GLPI_ITEMS) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetInfoGroup(LOCAL sFiltre_Prefixe_p est une chaine):Tableau associatif de STR_GLPI_ITEMS
+      
+      sFinCrochet est une chaine = "]"
+      aStGroupes est un Tableau associatif de STR_GLPI_ITEMS
+      nID est un entier
+      //sBody est une chaine
+      
+      vRetour	est un Variant
+      sLien est une chaine = "https://glpi.union-materiaux.fr/apirest.php/search/Group?criteria[0][field]=1&criteria[0][searchtype]=contains&criteria[0][value]=[%sFiltre_Prefixe_p%]&forcedisplay[0]=2"
+      
+      
+      
+      //Maj du statut
+      m_sURL						= sLien
+      m_nMethode					= httpGet
+      m_sParam = ""
+      
+      
+      SI PAS Exec(vRetour) ALORS
+      	
+      SINON
+      	POUR i = 1 _À_ vRetour.data..Occurrence
+      		
+      		nID = vRetour.data[i]."2"
+      		SI PAS aStGroupes[nID]..Existe ALORS
+      			aStGroupes[nID] = allouer un STR_GLPI_ITEMS
+      			aStGroupes[nID].nID = nID
+      			aStGroupes[nID].sNom = vRetour.data[i]."1"
+      		FIN
+      	FIN
+      FIN
+      
+      
+      RENVOYER aStGroupes
      type : 458752
   procedure_templates : []
   property_templates : []

@@ -27,11 +27,14 @@ class :
      name : Constructeur
      procedure_id : 1478167472292734181
      type_code : 27
-     code : |1-
+     code : |1+
       procédure Constructeur(sNomTable_p est une chaine)
       
-      :m_oClasseGen = allouer un  ClZF_GenCodeFic(sNomTable_p)
-      :m_oClasseGen.Analyse()
+      
+      
+      :m_oClasseGen = ClZF_GenCodeFic.oGetGenCodeFic(sNomTable_p)
+      //:m_oClasseGen = allouer un  ClZF_GenCodeFic(sNomTable_p)
+      //:m_oClasseGen.Analyse()
      type : 589824
    -
      name : Destructeur
@@ -56,7 +59,7 @@ class :
       procedure AnaPk()<metier>:vide
       
       SI :m_oClasseGen.p_sNomRubId = "" ALORS
-      	:m_sRapport	= "Aucune rubrique 'PK' n'est identifiée."
+      	:m_sRapport	= "Aucune rubrique ""PK"" n'est identifiée."
       FIN
      type : 458752
    -
@@ -89,7 +92,9 @@ class :
       		CAS ClZF_GenCodeFic.cstRelErreur
       			traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" aberrante ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).")
       		CAS ClZF_GenCodeFic.cstRelNonDef
+      			<compile si TypeConfiguration<>Webservice>
       			traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).")
+      			<fin>
       		CAS ClZF_GenCodeFic.cstRelIncl
       			nNbFkIncl++
       			sListeFkCompo += [RC] + stRelTmp.sNomRel
@@ -102,19 +107,19 @@ class :
       	FIN
       	
       	SI stInfoRub.bNullable ET stRelTmp.bRubFKOblig ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] nullable et relation de type ""1,1"".")
+      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] nullable et associé à une contrainte de type ""1,1"")")
       	FIN
       	SI PAS stInfoRub.bNullable ET PAS stRelTmp.bRubFKOblig ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] non nullable et relation de type ""0,1"".")
+      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] non nullable et associé à une contrainte de type ""0,1"")")
       	FIN
       	
       	
       	
       	SI stInfoRub.nTypeCle = ClZF_GenCodeFic.cstTypeCleUnique ET pas stRelTmp.bRubFKUnique ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] clé unique et relation de type ""0,n"" ou ""1,n"".")
+      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] clé unique et associé à une contrainte de type ""0,n"" ou ""1,n"".")
       	FIN
       	SI stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ET stRelTmp.bRubFKUnique ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] non clé unique et relation de type ""0,1"" ou ""1,1"".")
+      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] non clé unique et associé à une contrainte de type ""0,1"" ou ""1,1"".")
       	FIN
       	
       FIN
@@ -187,7 +192,7 @@ class :
       		FIN
       		
       		si pas stRubTmp.bNullDefaut ALORS
-      			traceInfo("La rubrique ""[%sRub%]"" est nullable, mais n'est pas a null par défaut.")
+      			traceInfo("La rubrique ""[%sRub%]"" est nullable, mais n'est pas à null par défaut.")
       		FIN
       	FIN
       FIN
@@ -634,14 +639,17 @@ class :
       sNomTblTmp		est une chaine
       
       pour toute chaine sNomTblTmp de ClZF_GenCodeFic.sListeFicAna() separee par RC
-      	oTblTmp = allouer un ClZF_GenCodeFic(sNomTblTmp)
-      	oTblTmp.Analyse()
+      	//trace("-> " + sNomTblTmp)
+      	
+      	oTblTmp <- ClZF_GenCodeFic.oGetGenCodeFic(sNomTblTmp)
+      //	oTblTmp = allouer un ClZF_GenCodeFic(sNomTblTmp)
+      //	oTblTmp.Analyse()
       	POUR TOUT ÉLÉMENT stRubTmp, sRub DE m_oClasseGen.m_aRub
       		//trace(oTblTmp.p_sNomRubId + " -" + sRub)
       		si ChaîneCommencePar(sRub, oTblTmp.p_sNomRubId) _et_ stRubTmp.stRelFkAsso.sTablePK <> sNomTblTmp alors
       			
       			traceInfo([
-      				La rubrique [%srub%] ne référence pas la clé primaire [%sNomTblTmp%].[%oTblTmp.p_sNomRubId%], alors qu'elles ont le même nom.
+      				La rubrique "[%srub%]" ne référence pas la clé primaire [%sNomTblTmp%].[%oTblTmp.p_sNomRubId%], alors qu'elles ont le même nom.
       				])
       			
       		FIN

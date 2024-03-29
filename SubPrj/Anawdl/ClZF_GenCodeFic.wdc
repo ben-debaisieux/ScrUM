@@ -1,0 +1,1177 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenCodeFic
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x1408fca4c669569e
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      STR_Rel est une Structure
+      	sNomRel			est une chaîne
+      	sTablePK		est une chaîne
+      	sRubriquePK		est une chaîne
+      	sTableFK		est une chaîne
+      	sRubriqueFK		est une chaîne
+      	bRubFKOblig		est un booléen
+      	bRubFKUnique	est un booléen
+      	nTypeRel		est un entier
+      FIN
+      
+      STR_DefRub est une structure
+      	nTypeRub				est un entier
+      	nTypeRubHF				est un entier
+      	
+      	bNullable				est un booléen
+      	sNomMembre				est une chaîne
+      	sNomPropriete			est une chaîne
+      	sPrefixe				est une chaîne
+      	sNomDeclarationComplet	est une chaîne
+      	sNomDeclarationCourt	est une chaîne
+      	
+      	sLibelleRubrique		est une chaîne
+      	bVisibleUsr				est un booléen
+      	nTaille					est un entier
+      	nScale					est un entier
+      	bNullDefaut				est un booléen
+      	sValDef					est une chaine
+      	nTypeCle				est un entier
+      	
+      	oObj_Parent				est un ClZF_GenCodeFic dynamique
+      	stRelFkAsso				est un STR_Rel
+      fin
+      
+      STR_InfoCol est une Structure
+      	sDeclaration		est une chaîne
+      	sTableDesti			est une chaîne
+      	sCleDesti			est une chaîne
+      FIN
+      
+      
+      STR_DescRub est une structure
+      	bRepresentation	est un booléen
+      	bObligatoire	est un booléen
+      	sValMin			est une chaîne
+      	sValMax			est une chaîne
+      	nPctNull		est un entier
+      	sMeta			est une chaîne
+      	sGrpExclu		est une chaîne
+      FIN
+      
+      STR_DescFic est une structure
+      	bTopLs		est un booléen
+      	bTopHisto	est un booléen
+      	nNbLigneGen	est un entier
+      	taRubs		est un tableau associatif de STR_DescRub
+      FIN
+      
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      
+      ClZF_GenCodeFic est une Classe
+      public
+      	m_aRub			est un tableau associatif (ccSansCasse) de STR_DefRub
+      	m_aCol_Enfant	est un tableau de STR_InfoCol		// a faire : vérifier utilité ?
+      	m_aFK_de_PK		est un tableau de str_rel
+      	m_aPK_de_FK		est un tableau associatif de str_rel
+      	m_stConfigTbl	est un STR_DescFic
+      PRIVE
+      	m_sNomTable		est une chaîne
+      	m_sNomUsage		est une chaîne
+      	m_sLibelle		est une chaîne
+      	m_sNomRubId		est une chaîne
+      	m_stDefId		est un STR_DefRub
+      //	m_nTypeHfRubId_old	est un entier
+      	m_bClasseExiste	est un booléen
+      	m_bClasseLS		est un booléen
+      	m_bTableHyerarchisee est un booléen
+      globale
+      public
+      	mg_sPrefixeTable	est une chaîne ANSI
+      	mg_aGenCodeFic		est un tableau associatif de ClZF_gencodefic dynamique
+      fin
+      
+      constante
+      	cstDefRubNum		= 1
+      	cstDefRubChaine		= 2
+      	cstDefRubObj		= 3
+      	cstDefRubInclusion	= 4
+      	
+      	cstRelErreur		= -1
+      	cstRelNonDef		= 0
+      	cstRelAsso			= 1
+      	cstRelAsso_Suf		= "Asso"
+      	cstRelAgr			= 2
+      	cstRelAgr_Suf		= "Agr"
+      	cstRelCompo			= 3
+      	cstRelCompo_Suf		= "Compo"
+      	cstRelIncl			= 4
+      	cstRelIncl_Suf		= "Inc"
+      	
+      	cstTypeCleAucune	= 0
+      	cstTypeCleUnique	= 1
+      	cstTypeCleDoublon	= 2
+      	
+      	
+      	
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1443681465206134430
+     type_code : 27
+     code : |1-
+      procédure Constructeur(local sNomTable_P est une chaîne = "")
+      
+      
+      SI mg_aGenCodeFic[sNomTable_P]..Vide ALORS
+      	mg_aGenCodeFic[sNomTable_P] = objet
+      FIN
+      
+      
+      :m_sNomTable = sNomTable_P
+      :m_sNomUsage = sNomTable_P
+      si ChaîneCommencePar(:m_sNomTable, ::mg_sPrefixeTable) ALORS
+      	:m_sNomUsage[[ a taille(::mg_sPrefixeTable)]] = ""
+      FIN
+      //:m_sNomUsage = remplace(sNomTable_P, ::mg_sPrefixeTable , "", SansCasse)
+      
+      si sNomTable_P <> "" ALORS
+      	:m_sLibelle = {sNomTable_P,indFichier}..Libellé
+      FIN
+      
+      :Analyse()
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1443681465206199966
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : aLstRubs
+     procedure_id : 1443681465206527646
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aLstRubs ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure aLstRubs()<métier>:tableau de chaine
+      
+      aRetour	est un tableau de chaines
+      stTmp	est un STR_DefRub
+      sCle	est une chaîne
+      
+      pour tout element stTmp, sCle de :m_aRub
+      	TableauAjoute(aRetour, sCle)
+      FIN
+      
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : GetInfoRubPrefix
+     procedure_id : 1443681465206593182
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetInfoRubPrefix (<nTypeHF_p> est entier)
+      //
+      // Paramètres :
+      //	nTypeHF_p (entier) : <indiquez ici le rôle de nStypeHF_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetInfoRubPrefix(nTypeHF_p est un entier)<métier>:chaine
+      
+      sRetour est une chaîne
+      
+      selon nTypeHF_p
+      	CAS hRubBooléen
+      		sRetour = "b"
+      	CAS hRubdate6, hRubDate8
+      		sRetour = "d"
+      	CAS hRubDateHeure
+      		sRetour = "dh"
+      	CAS hRubEntier1, hRubEntier2, hRubEntier4, hRubEntier8, hRubEntierNonSigné1, hRubEntierNonSigné2, hRubEntierNonSigné4, hRubEntierNonSigné8
+      		sRetour = "n"
+      	CAS hRubMémoTexte, hRubMémoUnicode, hRubTexte, hRubTexteUnicode
+      		sRetour = "s"
+      	CAS hRubMonétaire
+      		sRetour = "m"
+      	CAS hRubRéel4, hRubRéel8
+      		sRetour = "r"	
+      	cas hRubImage, hRubMémoBinaire, hRubMémoBinaire4
+      		sRetour = "bu"	
+      	AUTRE CAS
+      		
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : GetInfoRubType
+     procedure_id : 1443681465206658718
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetInfoRubType (<nTypeHF_p> est entier [, <bComplet_p> est booléen])
+      //
+      // Paramètres :
+      //	nTypeHF_p (entier) : <indiquez ici le rôle de nTypeHF_p>
+      // 	bComplet_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bComplet_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale GetInfoRubType(nTypeHF_p est un entier, bComplet_p est un booléen = faux)<métier>:chaine
+      
+      sRetour		est une chaîne
+      sDeclare	est une chaîne
+      
+      SELON nTypeHF_p
+      	CAS hRubBooléen : sRetour = "Booléen"
+      	CAS hRubDate6 : sRetour = "Date sur 6"
+      	CAS hRubDate8 : sRetour = "Date"
+      	CAS hRubDateHeure : sRetour = "DateHeure"
+      	CAS hRubEntier1 : sRetour = "Entier sur 1 octet"
+      	CAS hRubEntier2 : sRetour = "Entier sur 2 octets"
+      	CAS hRubEntier4, hRubIDAuto4 : sRetour = "Entier"
+      	CAS hRubEntier8, hRubIDAuto : sRetour = "Entier sur 8 octets"
+      	CAS hRubEntierNonSigné1 : sRetour = "Entier sans signe sur 1 octet"
+      	CAS hRubEntierNonSigné2 : sRetour = "Entier sans signe sur 2 octets"
+      	CAS hRubEntierNonSigné4 : sRetour = "Entier sans signe"
+      	CAS hRubEntierNonSigné8 : sRetour = "Entier sans signe sur 8 octets"
+      	CAS hRubMémoTexte : sRetour = "chaîne"
+      	CAS hRubMémoUnicode : sRetour = "chaîne UNICODE"
+      	CAS hRubMonétaire : sRetour = "Monétaire"
+      	CAS hRubRéel4 : sRetour = "Réel"
+      	CAS hRubRéel8 : sRetour = "Réel sur 8 octets"
+      	CAS hRubTexte : sRetour = "chaîne"
+      	CAS hRubTexteUnicode : sRetour = "chaîne UNICODE"
+      	cas hRubImage, hRubMémoBinaire, hRubMémoBinaire4 : sRetour = "Buffer"
+      	cas hRubHeure: sRetour = "Heure"
+      	cas hRubNumérique: sRetour = "Numérique"
+      	cas hRubBinaire: sRetour = "Binaire"
+      	autre cas
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([nTypeHF_p])
+      FIN
+      
+      
+      si bComplet_p ALORS
+      	si nTypeHF_p dans (hRubDate6, hRubDate8, hRubDateHeure) ALORS
+      		sDeclare = "est une "
+      	sinon
+      		sDeclare = "est un "
+      	FIN
+      	sRetour = sDeclare + sRetour
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : Analyse
+     procedure_id : 1443681465206920862
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // Analyse ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure prive Analyse()<metier>:vide
+      
+      
+      sRubs		est une chaîne	= HListeRubrique(:m_sNomTable,hLstDétail)
+      sLiaisons	est une chaîne	= HListeLiaison(:m_sNomTable)
+      sLigne		est une chaîne
+      sLigneCle	est une chaîne
+      sRub		est une chaîne
+      stRubTmp	est un STR_DefRub
+      stCol		est un STR_InfoCol
+      oGenTmp		est un ClZF_GenCodeFic dynamique
+      sRubIdAuto	est une chaîne
+      stRelTmp	est un str_rel
+      sDeclareObj est une chaîne
+      
+      
+      
+      TableauSupprimeTout(m_aRub)
+      TableauSupprimeTout(m_aCol_Enfant)
+      TableauSupprimeTout(m_aFK_de_PK)
+      TableauSupprimeTout(m_aPK_de_FK)
+      VariableRAZ(m_stConfigTbl)
+      
+      
+      
+      //On vérifie si la classe existe
+      sDeclareObj = "oTmp est un " + :sNomClasseGen()
+      si compile(sDeclareObj) = "" ALORS
+      	:m_bClasseExiste = vrai
+      	
+      	//On vérifie su la classe est en LS
+      	SI Compile(sDeclareObj + rc + "oTmp.ZF_bModeAjout()") = "" ALORS
+      		:m_bClasseLS = Faux
+      	SINON
+      		:m_bClasseLS = vrai
+      	FIN
+      sinon
+      	:m_bClasseExiste = faux
+      FIN
+      
+      
+      ///////////////////////////////////////////////////
+      //Recherche PK
+      nIndRech est un entier
+      bOk est un booléen
+      
+      pour nIndRech = 1 a 2
+      	si sRubIdAuto = "" alors
+      		//Identification de la PK de la table
+      		POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
+      			VariableRAZ(stRubTmp)
+      			sRub = ExtraitChaîne(sLigne, 1)
+      			
+      			stRubTmp.nTypeRubHF = ExtraitChaîne(sLigne, 3)
+      			
+      			selon nIndRech
+      				CAS 1
+      					//Est on sur la clé primaire ?
+      					SI stRubTmp.nTypeRubHF DANS (hRubIDAuto, hRubIDAuto4) ALORS
+      						//Oui
+      						bOk = vrai
+      					FIN
+      					
+      				CAS 2
+      					//Est on sur la clé primaire ?
+      					SI stRubTmp.nTypeRubHF DANS (hRubEntier1, hRubEntier2, hRubEntier4, hRubEntier8, hRubEntierNonSigné1, hRubEntierNonSigné2, hRubEntierNonSigné4, hRubEntierNonSigné8) et ...
+      							{:m_sNomTable + "." + sRub,indRubrique}..TypeClé = hCléUnique ALORS
+      						//Oui
+      						bOk = vrai
+      					FIN
+      					
+      				AUTRE CAS
+      					
+      			FIN
+      			
+      			si bOk ALORS
+      				sRubIdAuto		= sRub
+      				:m_stDefId		= stRubTmp
+      				sortir
+      			FIN
+      		fin
+      	fin
+      fin
+      
+      
+      
+      ////////////////////////////////////////////////////////////////////
+      //Analyse des FK
+      si sRubIdAuto <> "" alors
+      	POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
+      		
+      		bTablePrimaryAGauche	est un booléen
+      		nColTableFK				est un entier
+      		nColRubFK				est un entier
+      		nColTablePK				est un entier
+      		nColRubPK				est un entier
+      		nSymbolePK				est un entier
+      		nSymboleFK				est un entier
+      		
+      		si ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto ET minuscule(ExtraitChaîne(sLigneCle,7,TAB)) DANS("0,1", "1,1") ALORS
+      			bTablePrimaryAGauche = vrai
+      		FIN
+      		
+      		si bTablePrimaryAGauche ALORS
+      			nColTablePK	= 2
+      			nColRubPK	= 3
+      			nSymbolePK	= 4
+      			
+      			nColTableFK	= 5
+      			nColRubFK	= 6
+      			nSymboleFK	= 7
+      		sinon
+      			nColTablePK	= 5
+      			nColRubPK	= 6
+      			nSymbolePK	= 7
+      			
+      			nColTableFK	= 2
+      			nColRubFK	= 3
+      			nSymboleFK	= 4
+      		FIN
+      		stRelTmp.sNomRel		= ExtraitChaîne(sLigneCle,1,TAB)
+      		
+      		stRelTmp.sTablePK		= ExtraitChaîne(sLigneCle,nColTablePK,TAB)
+      		stRelTmp.sRubriquePK	= ExtraitChaîne(sLigneCle,nColRubPK,TAB)
+      		
+      		stRelTmp.sTableFK		= ExtraitChaîne(sLigneCle,nColTableFK,TAB)
+      		stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,nColRubFK,TAB)
+      		
+      		quand exception dans
+      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,nSymboleFK,TAB))
+      			stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,nSymbolePK,TAB))
+      		faire
+      			stRelTmp.nTypeRel		= cstRelErreur
+      		sinon
+      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      		fin
+      		si stRelTmp.sTablePK = :m_sNomTable ALORS
+      			TableauAjoute(:m_aFK_de_PK, stRelTmp)
+      		FIN
+      		
+      		SI stRelTmp.sTableFK = :m_sNomTable ALORS
+      			sRub = stRelTmp.sRubriqueFK
+      			:m_aPK_de_FK[sRub]		= stRelTmp
+      		FIN
+      			
+      		
+      		
+      		si stRelTmp.sTablePK = stRelTmp.sTableFK ALORS
+      			:m_bTableHyerarchisee = vrai
+      		FIN
+      	FIN
+      fin
+      
+      
+      
+      POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
+      	
+      	
+      	VariableRAZ(stRubTmp)
+      	sRub				= ExtraitChaîne(sLigne, 1)
+      	
+      	stRubTmp.nTypeRubHF	= ExtraitChaîne(sLigne, 3)
+      	
+      	si pas ::bTypeHfExclu(stRubTmp.nTypeRubHF) alors
+      		
+      		//Est on sur la clé primaire ?
+      		SI sRub = sRubIdAuto ALORS
+      			
+      			//Mémorisation du nom de la clé
+      			:m_sNomRubId = sRub
+      			
+      			//On liste les relations, pour identifier les clés étrangères, des autres tables
+      			pour tout stRelTmp de m_aFK_de_PK
+      				VariableRAZ(stCol)
+      				stCol.sTableDesti	= stRelTmp.sTableFK
+      				stCol.sCleDesti		= stRelTmp.sRubriqueFK
+      				oGenTmp				<- ClZF_GenCodeFic.oGetGenCodeFic(stCol.sTableDesti)
+      //				oGenTmp				= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      				stCol.sDeclaration	= "[%oGenTmp.sNomClasseColGen(vrai)%]_[%stRelTmp.sRubriqueFK%] est un [%oGenTmp.sNomClasseColGen()%]"
+      				TableauAjoute(:m_aCol_Enfant, stCol)
+      			FIN
+      			
+      		SINON
+      			SELON ExtraitChaîne(sLigne, 2)
+      				CAS "T"
+      					stRubTmp.nTypeRub = ::cstDefRubChaine
+      				CAS "N"
+      					stRubTmp.nTypeRub = ::cstDefRubNum
+      				AUTRE CAS
+      					
+      			FIN
+      			
+      			stRubTmp.bNullable			= {:m_sNomTable + "." + sRub,indRubrique}..NullAutorisé et pas stRubTmp.nTypeRubHF dans(hRubMémoTexte, hRubMémoUnicode)
+      			stRubTmp.sLibelleRubrique	= {:m_sNomTable + "." + sRub,indRubrique}..libelle
+      			stRubTmp.bVisibleUsr		= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
+      			
+      			selon stRubTmp.nTypeRubHF
+      				CAS hRubNumérique
+      					stRubTmp.nScale		= {:m_sNomTable + "." + sRub,indRubrique}..PartieDécimale
+      					stRubTmp.nTaille	= {:m_sNomTable + "." + sRub,indRubrique}..PartieEntière + stRubTmp.nScale
+      					
+      				AUTRE CAS
+      					stRubTmp.nTaille	= {:m_sNomTable + "." + sRub,indRubrique}..Taille
+      			FIN
+      			
+      			si {:m_sNomTable + "." + sRub,indRubrique}..NbElémentTableau = 1 alors
+      				stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}..ValeurParDéfaut
+      			sinon
+      				//trace("Rubrique tableau : [%:m_sNomTable%].[%sRub%].")
+      				stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}[1]..ValeurParDéfaut
+      			fin
+      			//stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}..ValeurParDéfaut
+      			
+      			stRubTmp.bNullDefaut		= {:m_sNomTable + "." + sRub,indRubrique}..null			
+      			
+      			selon {:m_sNomTable + "." + sRub,indRubrique}..TypeClé
+      				CAS hNonClé
+      					stRubTmp.nTypeCle = cstTypeCleAucune
+      				CAS hCléUnique
+      					stRubTmp.nTypeCle = cstTypeCleUnique
+      				CAS hCléDoublon
+      					stRubTmp.nTypeCle = cstTypeCleDoublon
+      				AUTRE CAS
+      					ExceptionDéclenche(1, "Cas non traité")
+      			FIN
+      			
+      			
+      			
+      			//Parcourt de toutes les liaisons, de la table en cours
+      			si pas m_aPK_de_FK[sRub]..vide alors
+      				stRelTmp = m_aPK_de_FK[sRub]
+      							
+      				VariableRAZ(stCol)
+      				stCol.sTableDesti		= stRelTmp.sTablePK
+      				stCol.sCleDesti			= stRelTmp.sRubriquePK
+      				oGenTmp					<- ClZF_GenCodeFic.oGetGenCodeFic(stCol.sTableDesti)
+      //				oGenTmp					= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      				stCol.sDeclaration		= "[%oGenTmp.sNomClasseColGen(Vrai)%]_[%sRub%] est un [%oGenTmp.sNomClasseColGen()%]"
+      				
+      				stRubTmp.oObj_Parent	= oGenTmp
+      				
+      				//La relation associée à cette rubrique est elle de type 'inclusion' ?
+      				SI stRelTmp.nTypeRel = ::cstRelIncl ALORS
+      					stRubTmp.nTypeRub	= ::cstDefRubInclusion
+      				sinon
+      					stRubTmp.nTypeRub	= ::cstDefRubObj
+      				fin
+      				
+      				stRubTmp.stRelFkAsso	= stRelTmp
+      			FIN
+      			
+      	
+      			SELON stRubTmp.nTypeRub
+      				CAS ::cstDefRubObj, ::cstDefRubInclusion
+      					stRubTmp.sPrefixe				= "o"
+      					stRubTmp.sNomDeclarationComplet	= "est un [%stRubTmp.oObj_Parent.sNomClasseGen()%] dynamique"
+      					stRubTmp.sNomDeclarationCourt	= stRubTmp.oObj_Parent.sNomClasseGen()
+      				AUTRE CAS
+      					stRubTmp.sPrefixe				= :GetInfoRubPrefix(stRubTmp.nTypeRubHF)
+      					stRubTmp.sNomDeclarationComplet	= ::GetInfoRubType(stRubTmp.nTypeRubHF, Vrai)
+      					stRubTmp.sNomDeclarationCourt	= ::GetInfoRubType(stRubTmp.nTypeRubHF)
+      				
+      			FIN
+      			
+      			stRubTmp.sNomMembre = "m_[%stRubTmp.sPrefixe%][%sRub%]"
+      			stRubTmp.sNomPropriete = "p_[%stRubTmp.sPrefixe%][%sRub%]"
+      			
+      			:m_aRub[sRub] = stRubTmp
+      		FIN
+      	fin
+      FIN
+     type : 458752
+   -
+     name : analyseFkOblig
+     procedure_id : 1477795270606607052
+     type_code : 12
+     code : |1-
+      procedure prive analyseFkOblig(sSymbole_p est une chaîne)<metier>:booleen
+      si pas sSymbole_p dans("0,1", "1,1") ALORS
+      	ExceptionDéclenche(1,"Erreur d'analyse du type de relation (""0,1"" ou ""1,1"" attendu)")
+      FIN
+      renvoyer sSymbole_p ="1,1"
+     type : 458752
+   -
+     name : sNomClasseColGen
+     procedure_id : 1443688143883210887
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sNomClasseColGen ( [<bObj_P> est booléen])
+      //
+      // Paramètres :
+      //	bObj_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bObj_P>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure sNomClasseColGen(bObj_P est un booléen = faux)<métier>:chaine
+      
+      si bObj_P ALORS
+      	RENVOYER "oCol" + :m_sNomUsage
+      sinon
+      	RENVOYER "ClCol" + :m_sNomUsage
+      FIN
+      
+     type : 458752
+   -
+     name : sNomClasseGen
+     procedure_id : 1443688143883277127
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sNomClasseGen ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure sNomClasseGen()<métier>:chaine
+      
+      renvoyer "ClDb" + :m_sNomUsage
+     type : 458752
+   -
+     name : nTypeRelDeNom
+     procedure_id : 1464839140887792433
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] nTypeRelDeNom (<sNomRel_p> est chaîne)
+      //
+      // Paramètres :
+      //	sNomRel_p (chaîne ANSI) : <indiquez ici le rôle de sNomRel_p>
+      
+      // Valeur de retour :
+      // 	entier : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure privée nTypeRelDeNom(sNomRel_p est une chaîne) <métier>:entier
+      
+      sSufixe est une chaîne = ExtraitChaîne(sNomRel_p,1,"_",DepuisFin)
+      selon majuscule(sSufixe)
+      	CAS Majuscule(cstRelAsso_Suf)
+      		renvoyer cstRelAsso
+      	CAS Majuscule(cstRelAgr_Suf)
+      		renvoyer cstRelAgr
+      	CAS Majuscule(cstRelCompo_Suf)
+      		renvoyer cstRelCompo
+      	CAS Majuscule(cstRelincl_Suf)
+      		renvoyer cstRelincl
+      	AUTRE CAS
+      		renvoyer cstRelNonDef
+      FIN
+      
+     type : 458752
+   -
+     name : sListeFicAna
+     procedure_id : 1464991259952214531
+     type_code : 12
+     code : |1+
+      procedure globale sListeFicAna()<metier>:chaine
+      
+      aTablesExclues est un tableau de chaîne = goapp.TablesExclues()
+      sRetour est une chaîne
+      sTable est une chaîne
+      
+      aTbls est un tableau de chaînes
+      
+      ChaîneVersTableau(HListeFichier(), aTbls, rc)
+      TableauTrie(aTbls)
+      
+      pour toute sTable de aTbls
+      	si tableaucherche(aTablesExclues,tcLinéaire,sTable) = -1 ALORS
+      		sRetour += [rc] + sTable
+      	FIN
+      FIN
+      
+      
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : mEval
+     procedure_id : 1469527698899029832
+     type_code : 12
+     code : |1+
+      procedure mEval()<metier>:monetaire
+      
+      nCleTable		est un entier	= 1
+      nCleRub			est un entier	= 2
+      nCleRubFKAsso	est un entier	= 3
+      nCleRubFKAgr	est un entier	= 4
+      nCleRubFKCompo	est un entier	= 5
+      nCleRubFKIncl	est un entier	= 6
+      nCleFen			est un entier	= 7
+      nCleFenMetOrga	est un entier	= 8
+      
+      
+      taVals est un tableau associatif de monétaires
+      
+      taVals[nCleTable]		= 25
+      taVals[nCleRub]			= 3
+      taVals[nCleRubFKAsso]	= 10
+      taVals[nCleRubFKAgr]	= 5
+      taVals[nCleRubFKCompo]	= 15
+      taVals[nCleRubFKIncl]	= 15
+      taVals[nCleFen]			= 50
+      taVals[nCleFenMetOrga]			= 100
+      
+      
+      moRetour	est un monetaire
+      sRub		est une chaîne
+      stRub		est une STR_DefRub
+      stRel		est une STR_Rel
+      
+      
+      si :m_bClasseExiste alors
+      	AddPx(nCleTable)
+      	
+      	pour tout stRub, sRub de :m_aRub
+      		AddPx(nCleRub)
+      		
+      		si pas :m_bClasseLS ALORS
+      			AddPx(nCleFen)
+      		FIN
+      		
+      		//Eval mnt des méta types
+      		selon :m_stConfigTbl.taRubs[sRub].sMeta
+      			CAS ClZF_GenFenMeta.cstMetaoOrgani:
+      				AddPx(nCleFenMetOrga)
+      				
+      			cas ClZF_GenFenMeta.cstMetaoOrgani_parent:
+      				//Ras
+      			AUTRE CAS
+      				
+      		FIN
+      		
+      		
+      		si :m_aRub[sRub].stRelFkAsso.sNomRel <> "" ALORS
+      			stRel = :m_aPK_de_FK[sRub]
+      //		si pas :M_aPK_de_FK[sRub]..vide ALORS
+      //			stRel = :m_aPK_de_FK[sRub]
+      			selon :m_aRub[sRub].stRelFkAsso.nTypeRel
+      				CAS cstRelAsso
+      					AddPx(nCleRubFKAsso)
+      				CAS cstRelAgr
+      					AddPx(nCleRubFKAgr)
+      				CAS cstRelCompo
+      					AddPx(nCleRubFKCompo)
+      				CAS cstRelIncl
+      					AddPx(nCleRubFKIncl)
+      				AUTRE CAS
+      					
+      			FIN
+      		FIN
+      		
+      	FIN
+      fin	
+      
+      renvoyer moRetour
+      
+      procédure interne AddPx(nCle_p est un entier):vide
+      	moRetour += taVals[nCle_p]
+      fin
+      
+      
+      
+     type : 458752
+   -
+     name : sNomFicConf
+     procedure_id : 1472168425190691182
+     type_code : 12
+     code : |1-
+      procedure prive sNomFicConf()<metier>:chaine
+      renvoyer :m_sNomTable + ".json"
+     type : 458752
+   -
+     name : chargeConfTable
+     procedure_id : 1472108682186412195
+     type_code : 12
+     code : |1+
+      PROCÉDURE chargeConfTable()<métier>:Vide
+      
+      sFicJSON		est une chaîne	= sNomFicConf()
+      sJson			est une chaîne
+      stRubAnaTmp		est un str_DefRub
+      
+      
+      SI fFichierExiste(sFicJSON) ALORS
+      	sJson			= fChargeTexte(sFicJSON)
+      	Désérialise(m_stConfigTbl, sJson, psdJSON)
+      FIN
+      
+      //S'il y a plus de rubriques que ce qui est récupéré, on complète
+      POUR TOUT stRubAnaTmp, sRub DE :m_aRub
+      	si m_stConfigTbl.taRubs[sRub]..Vide ALORS
+      		m_stConfigTbl.taRubs[sRub] = allouer un STR_DescRub
+      	FIN
+      FIN
+     type : 458752
+   -
+     name : sauveConfTable
+     procedure_id : 1472164834592412051
+     type_code : 12
+     code : |1+
+      PROCÉDURE sauveConfTable(stSauve est un STR_DescFic)<métier>:Vide
+      
+      sJson		est une chaîne
+      Sérialise(stSauve, sJson, psdJSON)
+      fSauveTexte(sNomFicConf(),sJson)
+     type : 458752
+   -
+     name : aTableDependances
+     procedure_id : 1474825930687461673
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aTableDependances ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	tableau (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale aTableDependances()<metier>:tableau de chaines
+      
+      taTbls	est un tableau associatif de ClZF_GenCodeFic dynamique
+      pclStTblTmp	est un ClZF_GenCodeFic dynamique
+      aRetour	est un tableau de chaînes
+      sTbl	est une chaîne
+      bMqt	est un booléen
+      stRel	est un ClZF_GenCodeFic.STR_Rel
+      
+      
+      pour toute chaine sTbl de sListeFicAna() separee par rc
+      	taTbls[sTbl] <- ClZF_GenCodeFic.oGetGenCodeFic(sTbl)
+      //	taTbls[sTbl] = allouer un ClZF_GenCodeFic(sTbl)
+      //	taTbls[sTbl].Analyse()
+      FIN
+      
+      
+      tantque taTbls..Occurrence > 0
+      	
+      	//Parcourt de toutes les entités non traitées
+      	pour tout pclStTblTmp, sTbl de taTbls
+      		bMqt = faux
+      		//On liste toutes les FK qui la compose
+      		pour tout stRel de pclStTblTmp.m_aPK_de_FK
+      			//Pour chaque relations, on regarde si on traité
+      			si stRel.sTablePK <> sTbl _et_ TableauCherche(aRetour,tcLinéaire,stRel.sTablePK) <= 0 ALORS
+      				bMqt = vrai
+      			FIN
+      		FIN
+      		
+      		
+      		
+      		si pas bMqt ALORS
+      			TableauAjoute(aRetour, sTbl)
+      			TableauSupprime(taTbls, sTbl)
+      		FIN
+      	FIN
+      	
+      	
+      	
+      FIN
+      
+      
+      
+      
+      renvoyer aRetour
+      
+     type : 458752
+   -
+     name : bRubriqueRelationInclusion
+     procedure_id : 1478898643233443542
+     type_code : 12
+     code : |1+
+      // Résumé : Retourne vrai si la rubrique passée en paramètres est associée à une relation de type inclusion
+      // Syntaxe :
+      //[ <Résultat> = ] bRubriqueRelationInclusion (<sRub_p> est chaîne)
+      //
+      // Paramètres :
+      //	sRub_p (chaîne ANSI) : <indiquez ici le rôle de sRub_p>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici les valeurs possibles ainsi que leur interprétation>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procedure publique bRubriqueRelationInclusion(sRub_p est une chaîne)<metier>:booleen
+      
+      bRetour est un booléen
+      
+      SI PAS :m_aPK_de_FK[sRub_p]..Vide ALORS
+      	//Récupération des infos de la clé étrangère associés à le rubrique en cours
+      	stRel_tmp est un ClZF_GenCodeFic.STR_Rel
+      	stRel_tmp = :m_aPK_de_FK[sRub_p]
+      	
+      	//Pour les relation de type "inclusion", la classe parente sera définie par cette relation
+      	SI stRel_tmp.nTypeRel = ::cstRelIncl ALORS
+      		bRetour = vrai
+      	FIN
+      FIN
+      
+      
+      renvoyer bRetour
+      
+     type : 458752
+   -
+     name : sNomRelationDeType
+     procedure_id : 1479654248423490036
+     type_code : 12
+     code : |1-
+      procedure globale sNomRelationDeType(nType_P est un entier)<métier>:chaine
+      
+      sRetour est une chaîne
+      
+      selon nType_P
+      	CAS cstRelAgr
+      		sRetour = "Agrégation"
+      	CAS cstRelAsso
+      		sRetour = "Association"
+      	CAS cstRelCompo
+      		sRetour = "Composition"
+      	CAS cstRelIncl
+      		sRetour = "Inclusion"
+      		
+      	AUTRE CAS
+      		ExceptionDéclenche(1, "Type de relation non prévu")
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : bTypeHfExclu
+     procedure_id : 1550831176441799258
+     type_code : 12
+     code : |1+
+      procédure privée globale bTypeHfExclu(nTypeHF_p est un entier) <métier>:booleen
+      
+      renvoyer nTypeHF_p dans(hRubUUID128, hRubUUID128Auto, hRubUUID256, hRubUUID256Auto)
+     type : 458752
+   -
+     name : analyseFkUnique
+     procedure_id : 1551080520736243141
+     type_code : 12
+     code : |1-
+      procédure privée globale analyseFkUnique(sSymbole_p est une chaine) <métier>:booleen
+      
+      SI PAS Minuscule(Droite(sSymbole_p, 1)) DANS("1", "n") ALORS
+      	ExceptionDéclenche(1,"Erreur d'analyse du type de relation (""x,1"" ou ""x,n"" attendu)")
+      FIN
+      
+      //SI PAS sSymbole_p DANS("0,1", "1,1") ALORS
+      //	ExceptionDéclenche(1,"Erreur d'analyse du type de relation (""0,1"" ou ""0,n"" attendu)")
+      //FIN
+      RENVOYER Minuscule(Droite(sSymbole_p, 1)) = ""
+     type : 458752
+   -
+     name : bProteger
+     procedure_id : 1580255353245677216
+     type_code : 12
+     code : |1+
+      procedure globale bProteger(nTypeHF_p est un entier)<métier>:booleen
+      
+      bRetour est un booléen
+      
+      selon nTypeHF_p
+      	CAS hRubBinaire, ...
+      		hRubCaractère, ...
+      		hRubDate6, ...
+      		hRubDate8, ...
+      		hRubDateHeure, ...
+      		hRubDurée, ...
+      		hRubHeure, ...
+      		hRubImage, ...
+      		hRubInvalide, ...
+      		hRubMémoBinaire, ...
+      		hRubMémoBinaire4, ...
+      		hRubMémoTexte, ...
+      		hRubMémoUnicode, ...
+      		hRubTexte, ...
+      		hRubTexteUnicode
+      		
+      		bRetour = vrai
+      		
+      	CAS hRubBooléen, ...
+      		hRubEntier1, ...
+      		hRubEntier2, ...
+      		hRubEntier4, ...
+      		hRubEntier8, ...
+      		hRubEntierNonSigné1, ...
+      		hRubEntierNonSigné2, ...
+      		hRubEntierNonSigné4, ...
+      		hRubEntierNonSigné8, ...
+      		hRubMonétaire, ...
+      		hRubNumEnr, ...
+      		hRubNumérique, ...
+      		hRubRéel4, ...
+      		hRubRéel8, ...
+      		hRubRéelTurbo, ...
+      		hRubIDAuto, ...
+      		hRubIDAuto4
+      		
+      		bRetour = faux
+      		
+      	AUTRE CAS
+      		ExceptionDéclenche(1, "Type non prévu")
+      FIN
+      
+      
+      
+      
+      
+      
+      renvoyer bRetour
+      
+     type : 458752
+   -
+     name : oGetGenCodeFic
+     procedure_id : 1586534711270844512
+     type_code : 12
+     code : |1-
+      PROCÉDURE GLOBALE oGetGenCodeFic(LOCAL sNomTable_p est une chaîne)<métier>:ClZF_gencodefic
+      
+      
+      SI mg_aGenCodeFic[sNomTable_p]..Vide ALORS
+      	oTmp est un ClZF_GenCodeFic(sNomTable_p)
+      FIN
+      
+      
+      RENVOYER mg_aGenCodeFic[sNomTable_p]
+     type : 458752
+  properties :
+   -
+     name : p_sNomTable
+     identifier : 0x1408fca4c66a569e
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomTable() : chaîne
+         renvoyer m_sNomTable
+        type : 1966080
+     template_refs : []
+   -
+     name : p_sNomRubId
+     identifier : 0x14090446c9e22a7b
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomRubId() : chaîne
+         renvoyer m_sNomRubId
+        type : 1966080
+     template_refs : []
+   -
+     name : p_sNomUsage
+     identifier : 0x1409044fc9e34ca9
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sNomUsage() : chaîne
+         renvoyer m_sNomUsage
+        type : 1966080
+     template_refs : []
+   -
+     name : p_bClasseExiste
+     identifier : 0x145a0a470b0be1a3
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bClasseExiste() : booléen
+         renvoyer m_bClasseExiste
+        type : 1966080
+     template_refs : []
+   -
+     name : p_sLibelle
+     identifier : 0x14624010024fb040
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_sLibelle() : chaîne
+         renvoyer m_sLibelle
+        type : 1966080
+     template_refs : []
+   -
+     name : p_bClasseLS
+     identifier : 0x1464dc3301b14df2
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bClasseLS() : booléen
+         renvoyer m_bClasseLS
+        type : 1966080
+     template_refs : []
+   -
+     name : p_bTableHyerarchisee
+     identifier : 0x147e3cbb02c0d915
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_bTableHyerarchisee() : booléen
+         renvoyer m_bTableHyerarchisee
+        type : 1966080
+     template_refs : []
+   -
+     name : p_nTypeHfRubId_old
+     identifier : 0x147f910c04d6352f
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_nTypeHfRubId_old()<zombie>: entier
+         
+         renvoyer 0
+        type : 1966080
+     template_refs : []
+   -
+     name : p_stDefId
+     identifier : 0x1563cd801c00fa0c
+     type_code : 103
+     p_codes :
+      -
+        code : |1-
+         procédure publique p_stDefId() <métier> : STR_DefRub
+         
+         renvoyer m_stDefId
+        type : 1966080
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13e8dca31b897f1f
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

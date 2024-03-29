@@ -1,0 +1,177 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_GenFenTDB
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x148b6eba016fa9a1
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_GenFenTDB est une Classe, abstraite
+      	herite de ClZF_GenFen
+      
+      PRotege
+      	m_sProprieteDim est une chaîne
+      fin
+      
+      constante
+      	cstTDB_Table			= "Table"
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1480398647688538529
+     type_code : 27
+     code : |1-
+      procédure Constructeur(oClasseGen est un ClZF_GenCodeFic, sProprieteDim_p est une chaîne)
+      
+      Ancêtre.Constructeur(oClasseGen)
+      
+      :m_sProprieteDim = sProprieteDim_p
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1480398647688604065
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : Charge_TypeTDB
+     procedure_id : 1480398647688669601
+     type_code : 12
+     code : |1+
+      Procedure globale Charge_TypeTDB(sCbo_p est une chaîne)<ui>:vide
+      
+      ListeSupprimeTout(sCbo_p)
+      ListeAjoute(sCbo_p, cstTDB_Table)
+     type : 458752
+   -
+     name : chargeListeMembresObj
+     procedure_id : 1480406039330220786
+     type_code : 12
+     code : |1+
+      procedure globale chargeListeMembresObj(local sCbo_p est une chaîne, oClasseGen_p est un ClZF_GenCodeFic)<ui>:vide
+      
+      
+      sRub	est une chaine
+      stRub	est un ClZF_GenCodeFic.STR_DefRub
+      
+      
+      ListeSupprimeTout(sCbo_p)
+      ListeAjoute(sCbo_p, "a_definir")
+      
+      pour tout element stRub, sRub de oClasseGen_p.m_aRub
+      	si stRub.oObj_Parent <> Null ALORS
+      		ListeAjoute(sCbo_p, stRub.sNomPropriete)
+      	FIN
+      FIN
+      
+      
+      
+     type : 458752
+   -
+     name : sCodeDeclStruct
+     procedure_id : 1484849833585179862
+     type_code : 12
+     code : |1+
+      procedure protege sCodeDeclStruct()<metier>:chaine
+      
+      sRetour est une chaîne
+      
+      
+      sRetour = [
+      
+      str_Stat est une Structure
+      	sLib		est une chaîne
+      	sLibBulle	est une chaîne
+      	nVal		est un entier
+      	sValBulle	est une chaîne
+      FIN
+      
+      ]
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : sCodeRecupData
+     procedure_id : 1484850005383911842
+     type_code : 12
+     code : |1+
+      procedure protege sCodeRecupData()<metier>:chaine
+      
+      sRetour est une chaîne
+      sProc est une chaine = "aRecupData"
+      
+      sRetour = [
+      PROCEDURE [%sProc%]()<metier>:tableau associatif de str_stat
+      
+      aTblStat	est un tableau associatif de str_Stat
+      stStat		est un str_Stat
+      oColStat	est un ClColItemTest()
+      pclODbStat	est un ClDbItemTest dynamique
+      sReq		est une chaîne
+      sId			est une chaîne
+      
+      
+      sReq = "
+      SELECT *
+      FROM [%:m_oClasseGen.p_sNomTable%]
+      "
+      
+      oColStat.ZF_LoadSQL(sReq)
+      
+      POUR TOUT ÉLÉMENT pclODbStat DE oColStat.aItems()
+      	//Est on sur un nouveau regroupement ?
+      	SI aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID]..Vide ALORS
+      		//Oui : Création de l'entité
+      		aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID] = allouer un str_Stat
+      		VariableRAZ(stStat)
+      		stStat.sLib			= pclODbStat.[%:m_sProprieteDim%].sRepresentation()
+      		stStat.sLibBulle	= stStat.sLib		// a faire : à redéfinir
+      	SINON
+      		//Non :
+      		stStat = aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID]
+      	FIN
+      	
+      	//Opération de chaque entité
+      	stStat.nVal++
+      	stStat.sValBulle	= stStat.nVal		// a faire : à redéfinir
+      	
+      	aTblStat[pclODbStat.[%:m_sProprieteDim%]_ID] = stStat
+      FIN
+      
+      RENVOYER aTblStat
+      ]
+      
+      renvoyer :GenBloc_ProcedureLoc(sRetour, sProc)
+      
+     type : 458752
+   -
+     name : sCodeProcActualise
+     procedure_id : 1484851504327978296
+     type_code : 12
+     code : |1+
+      PROCÉDURE abstraite sCodeProcActualise()<métier>:chaîne
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x149dea73037e234a
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

@@ -36,7 +36,6 @@ class :
       	sPrefixe				est une chaîne
       	sNomDeclarationComplet	est une chaîne
       	sNomDeclarationCourt	est une chaîne
-      	bVisibleInterface		est un booléen
       	
       	sLibelleRubrique		est une chaîne
       	bVisibleUsr				est un booléen
@@ -58,11 +57,13 @@ class :
       
       
       STR_DescRub est une structure
-      	sValMin		est une chaîne
-      	sValMax		est une chaîne
-      	nPctNull	est un entier
-      	sMeta		est une chaîne
-      	sGrpExclu	est une chaîne
+      	bRepresentation	est un booléen
+      	bObligatoire	est un booléen
+      	sValMin			est une chaîne
+      	sValMax			est une chaîne
+      	nPctNull		est un entier
+      	sMeta			est une chaîne
+      	sGrpExclu		est une chaîne
       FIN
       
       STR_DescFic est une structure
@@ -93,7 +94,8 @@ class :
       	m_bTableHyerarchisee est un booléen
       globale
       public
-      	mg_sPrefixeTable est une chaîne ANSI
+      	mg_sPrefixeTable	est une chaîne ANSI
+      	mg_aGenCodeFic		est un tableau associatif de ClZF_gencodefic dynamique
       fin
       
       constante
@@ -129,6 +131,12 @@ class :
      code : |1-
       procédure Constructeur(local sNomTable_P est une chaîne = "")
       
+      
+      SI mg_aGenCodeFic[sNomTable_P]..Vide ALORS
+      	mg_aGenCodeFic[sNomTable_P] = objet
+      FIN
+      
+      
       :m_sNomTable = sNomTable_P
       :m_sNomUsage = sNomTable_P
       si ChaîneCommencePar(:m_sNomTable, ::mg_sPrefixeTable) ALORS
@@ -139,6 +147,8 @@ class :
       si sNomTable_P <> "" ALORS
       	:m_sLibelle = {sNomTable_P,indFichier}..Libellé
       FIN
+      
+      :Analyse()
      type : 589824
    -
      name : Destructeur
@@ -302,7 +312,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure Analyse()<metier>:vide
+      procédure prive Analyse()<metier>:vide
       
       
       sRubs		est une chaîne	= HListeRubrique(:m_sNomTable,hLstDétail)
@@ -515,6 +525,7 @@ class :
       
       POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
       	
+      	
       	VariableRAZ(stRubTmp)
       	sRub				= ExtraitChaîne(sLigne, 1)
       	
@@ -533,7 +544,8 @@ class :
       				VariableRAZ(stCol)
       				stCol.sTableDesti	= stRelTmp.sTableFK
       				stCol.sCleDesti		= stRelTmp.sRubriqueFK
-      				oGenTmp				= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      				oGenTmp				<- ClZF_GenCodeFic.oGetGenCodeFic(stCol.sTableDesti)
+      //				oGenTmp				= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
       				stCol.sDeclaration	= "[%oGenTmp.sNomClasseColGen(vrai)%]_[%stRelTmp.sRubriqueFK%] est un [%oGenTmp.sNomClasseColGen()%]"
       				TableauAjoute(:m_aCol_Enfant, stCol)
       			FIN
@@ -561,11 +573,15 @@ class :
       					stRubTmp.nTaille	= {:m_sNomTable + "." + sRub,indRubrique}..Taille
       			FIN
       			
-      			stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}..ValeurParDéfaut
-      			stRubTmp.bNullDefaut		= {:m_sNomTable + "." + sRub,indRubrique}..null
-      			stRubTmp.bVisibleInterface	= {:m_sNomTable + "." + sRub,indRubrique}..VisibleUtilisateurFinal
-      			//stRubTmp.sMeta				= {:m_sNomTable + "." + sRub,indRubrique}..Métadonnées
+      			si {:m_sNomTable + "." + sRub,indRubrique}..NbElémentTableau = 1 alors
+      				stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}..ValeurParDéfaut
+      			sinon
+      				//trace("Rubrique tableau : [%:m_sNomTable%].[%sRub%].")
+      				stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}[1]..ValeurParDéfaut
+      			fin
+      			//stRubTmp.sValDef			= {:m_sNomTable + "." + sRub,indRubrique}..ValeurParDéfaut
       			
+      			stRubTmp.bNullDefaut		= {:m_sNomTable + "." + sRub,indRubrique}..null			
       			
       			selon {:m_sNomTable + "." + sRub,indRubrique}..TypeClé
       				CAS hNonClé
@@ -587,7 +603,8 @@ class :
       				VariableRAZ(stCol)
       				stCol.sTableDesti		= stRelTmp.sTablePK
       				stCol.sCleDesti			= stRelTmp.sRubriquePK
-      				oGenTmp					= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
+      				oGenTmp					<- ClZF_GenCodeFic.oGetGenCodeFic(stCol.sTableDesti)
+      //				oGenTmp					= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
       				stCol.sDeclaration		= "[%oGenTmp.sNomClasseColGen(Vrai)%]_[%sRub%] est un [%oGenTmp.sNomClasseColGen()%]"
       				
       				stRubTmp.oObj_Parent	= oGenTmp
@@ -851,7 +868,7 @@ class :
       FIN
       
       //S'il y a plus de rubriques que ce qui est récupéré, on complète
-      POUR TOUT ÉLÉMENT stRubAnaTmp, sRub DE :m_aRub
+      POUR TOUT stRubAnaTmp, sRub DE :m_aRub
       	si m_stConfigTbl.taRubs[sRub]..Vide ALORS
       		m_stConfigTbl.taRubs[sRub] = allouer un STR_DescRub
       	FIN
@@ -897,8 +914,9 @@ class :
       
       
       pour toute chaine sTbl de sListeFicAna() separee par rc
-      	taTbls[sTbl] = allouer un ClZF_GenCodeFic(sTbl)
-      	taTbls[sTbl].Analyse()
+      	taTbls[sTbl] <- ClZF_GenCodeFic.oGetGenCodeFic(sTbl)
+      //	taTbls[sTbl] = allouer un ClZF_GenCodeFic(sTbl)
+      //	taTbls[sTbl].Analyse()
       FIN
       
       
@@ -1019,6 +1037,81 @@ class :
       //	ExceptionDéclenche(1,"Erreur d'analyse du type de relation (""0,1"" ou ""0,n"" attendu)")
       //FIN
       RENVOYER Minuscule(Droite(sSymbole_p, 1)) = ""
+     type : 458752
+   -
+     name : bProteger
+     procedure_id : 1580255353245677216
+     type_code : 12
+     code : |1+
+      procedure globale bProteger(nTypeHF_p est un entier)<métier>:booleen
+      
+      bRetour est un booléen
+      
+      selon nTypeHF_p
+      	CAS hRubBinaire, ...
+      		hRubCaractère, ...
+      		hRubDate6, ...
+      		hRubDate8, ...
+      		hRubDateHeure, ...
+      		hRubDurée, ...
+      		hRubHeure, ...
+      		hRubImage, ...
+      		hRubInvalide, ...
+      		hRubMémoBinaire, ...
+      		hRubMémoBinaire4, ...
+      		hRubMémoTexte, ...
+      		hRubMémoUnicode, ...
+      		hRubTexte, ...
+      		hRubTexteUnicode
+      		
+      		bRetour = vrai
+      		
+      	CAS hRubBooléen, ...
+      		hRubEntier1, ...
+      		hRubEntier2, ...
+      		hRubEntier4, ...
+      		hRubEntier8, ...
+      		hRubEntierNonSigné1, ...
+      		hRubEntierNonSigné2, ...
+      		hRubEntierNonSigné4, ...
+      		hRubEntierNonSigné8, ...
+      		hRubMonétaire, ...
+      		hRubNumEnr, ...
+      		hRubNumérique, ...
+      		hRubRéel4, ...
+      		hRubRéel8, ...
+      		hRubRéelTurbo, ...
+      		hRubIDAuto, ...
+      		hRubIDAuto4
+      		
+      		bRetour = faux
+      		
+      	AUTRE CAS
+      		ExceptionDéclenche(1, "Type non prévu")
+      FIN
+      
+      
+      
+      
+      
+      
+      renvoyer bRetour
+      
+     type : 458752
+   -
+     name : oGetGenCodeFic
+     procedure_id : 1586534711270844512
+     type_code : 12
+     code : |1-
+      PROCÉDURE GLOBALE oGetGenCodeFic(LOCAL sNomTable_p est une chaîne)<métier>:ClZF_gencodefic
+      
+      
+      SI mg_aGenCodeFic[sNomTable_p]..Vide ALORS
+      	oTmp est un ClZF_GenCodeFic(sNomTable_p)
+      FIN
+      
+      
+      RENVOYER mg_aGenCodeFic[sNomTable_p]
      type : 458752
   properties :
    -

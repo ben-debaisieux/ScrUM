@@ -268,18 +268,20 @@ window :
      procedure_id : 2278218561562896903
      type_code : 14
      code : |1-
-      procédure Actualise(LOCAL znSprint est un entier, ...
-      	LOCAL znNbSprint est un entier, ...
-      	LOCAL znSelecteur est un ClDbTache.ETypeCharge)
+      procédure Actualise(LOCAL nSprint_p est un entier, ...
+      	LOCAL nNbSprint_p est un entier, ...
+      	LOCAL eSelecteur_p est un ClDbTache.ETypeCharge)<ui>:vide
       		
-      		
-      stGraphe est un col_graphes.STR_Charge		
-      sStPrj est une col_graphes.STR_Charge_InfoPrj
-      stSpr est une col_graphes.STR_Charge_Spr
-      nInd est un entier
-      nInd2 est un entier
       
-      stGraphe = col_graphes.Graphe_Charge_Sprints(znSprint, znNbSprint, znSelecteur)
+      stGraphe	est un col_graphes.STR_Charge		
+      stPrj		est une col_graphes.STR_Charge_InfoPrj
+      stSpr		est une col_graphes.STR_Charge_Spr
+      nInd		est un entier
+      aLstSprints est un tableau d'entiers
+      
+      
+      
+      stGraphe = col_graphes.Graphe_Charge_Sprints(nSprint_p, nNbSprint_p, eSelecteur_p, faux)
       
       
       grSupprimeSérie(GRF_Planification)
@@ -304,20 +306,27 @@ window :
       
       
       GRF_Planification..Titre = stGraphe.sTitre
-      //nInd = 0
-      POUR TOUT ELEMENT sStPrj DE stGraphe.aStProjets
+      
+      
+      
+      
+      //Création des indices de série des sprints.
+      nInd2 est un entier
+      pour nInd2 = nSprint_p _a_ nSprint_p + nNbSprint_p
+      	TableauAjoute(aLstSprints,nInd2)
+      FIN
+      
+      POUR TOUT stPrj DE stGraphe.aStProjets
       	nInd++
       	//nom du projet pour le nom de l'étiquette 
-      	grEtiquetteSérie(GRF_Planification,nInd, sStPrj.sNom)
+      	grEtiquetteSérie(GRF_Planification, nInd, stPrj.sNom)
       	//donne une couleur à la série
-      	grCouleurSérie(GRF_Planification, nInd , sStPrj.nCouleur)
+      	grCouleurSérie(GRF_Planification, nInd , stPrj.nCouleur)
       	
-      	nInd2 = 0
       	//parcours les projets compris dans l'intervalle de sprints
-      	POUR TOUT stSpr DE sStPrj.aSpr
-      		nInd2++
+      	POUR TOUT stSpr, sNumSprint DE stPrj.aSpr
       		//ajout des données dans le graphe
-      		grAjouteDonnée(GRF_Planification, nInd, nInd2, stSpr.nPts)
+      		grAjouteDonnée(GRF_Planification, nInd, nIndiceSprint(sNumSprint), stSpr.nPts)
       	FIN
       FIN
       
@@ -331,89 +340,11 @@ window :
       
       
       grDessine(GRF_Planification)
-      //
-      //
-      ////a faire : Déplacer dans la collection globale
-      //
-      //
-      //oPrj			est un ClDbProjet dynamique
-      //oSprint			est un ClSprint dynamique
-      //i,j				sont des entiers
-      //nNumSprint		est un entier				= znSprint
-      //aTableauProjet	est un tableau de ClDbProjet	= ClDbProjet.aoProjets_sur_periode(nNumSprint, znNbSprint, znSelecteur)
-      //nPoints			est un entier
-      //
-      //SELON znSelecteur
-      //	CAS ClTache.ETypeCharge.Charge_réelle
-      //		GRF_Planification..Titre += " en production"
-      //	CAS ClTache.ETypeCharge.Charge_prévisionelle
-      //		GRF_Planification..Titre += " prévisionnel"	
-      //FIN
-      //
-      //
-      //grSupprimeSérie(GRF_Planification)
-      //grLibellé(GRF_Planification, grAfficheEtiquette, Vrai)
-      //
-      //POUR i = 1 _À_ znNbSprint //pour chaque sprint on effectue la boucle suivante
-      //	j = 0
-      //	//parcours les projets compris dans l'intervalle de sprints
-      //	POUR TOUT ELEMENT oPrj DE aTableauProjet
-      //		j++
-      //		//recuperation du nb de la charge du projet
-      //		nPoints = oPrj.Projet_Sprint_Points(nNumSprint,znSelecteur)
-      //		
-      //		//ajout des donnée dans le graphe
-      //		grAjouteDonnée(GRF_Planification,j,nPoints)
-      //		
-      //	FIN
-      //	
-      //	
-      //	si nNumSprint > goapp.m_nNumeroDuSprintActuel ALORS
-      //		//ajout des donnée dans le graphe
-      //		grAjouteDonnée(GRF_Planification, j + 1, nChargeReccurcive * (nNumSprint - goApp.m_nNumeroDuSprintActuel))
-      //	sinon
-      //		grAjouteDonnée(GRF_Planification, j + 1, 0)
-      //	FIN
-      //	
-      //	
-      //	//affichage des dates du sprint en graduation
-      //	oSprint <- ClSprint.GetObj(nNumSprint)
-      //	
-      //	grEtiquetteCatégorie(GRF_Planification,i,oSprint.sSprint_Date())
-      //	
-      //	nNumSprint++
-      //FIN
-      //
-      //j = 0
-      ////parcours les projets compris dans l'intervalle de sprints
-      //POUR TOUT ELEMENT oPrj DE aTableauProjet
-      //	j++
-      //	//nom du projet pour le nom de l'étiquette 
-      //	grEtiquetteSérie(GRF_Planification,j,oPrj.p_oUsr_ChefProjet.m_sNom + RC + oPrj.p_sNom)
-      //	//donne une couleur à la série
-      //	grCouleurSérie(GRF_Planification, j, DonneCouleur(j, coulSérieDéfaut))
-      //FIN
-      //
-      ////nom du projet pour le nom de l'étiquette 
-      //grEtiquetteSérie(GRF_Planification,j+1,"Charge récursive" + RC + "(Impondérables)")
-      ////donne une couleur à la série
-      //grCouleurSérie(GRF_Planification, j+1, COL_Scrum.gnCouleur_Gris)
-      //
-      //
-      //
-      ////Affiche une ligne representant la vélocité moyenne actuelle
-      //// - type de la série
-      //grTypeSérie(GRF_Planification, (j+2), grDroiteConstante, goApp.m_nVelociteMoyenne)
-      //// - étiquette
-      //grEtiquetteSérie(GRF_Planification, (j+2), "Vélocité moyenne")
-      //// - type de trait
-      //grTypeTraitSérie(GRF_Planification,(j+2), TraitContinu)
-      //// - épaisseur du trait
-      //grEpaisseurTrait(GRF_Planification, (j+2), 2)
-      //// - couleur
-      //grCouleurSérie(GRF_Planification, (j+2),RougeClair)
-      //
-      //grDessine(GRF_Planification)
+      
+      
+      	procedure interne nIndiceSprint(sSprint_p est une chaine):entier
+      		renvoyer max(0, TableauCherche(aLstSprints, tcLinéaire, sSprint_p))
+      	FIN
      type : 458752
   procedure_templates : []
   property_templates : []

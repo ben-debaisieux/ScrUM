@@ -931,7 +931,6 @@ class :
       nPosActu est un entier = :ZF_Recherche(oObjDb_p)
       nNouvPos est un entier
       
-      
       selon nMouvement_p
       	CAS cstMvPremier
       		nNouvPos = 1
@@ -947,29 +946,10 @@ class :
       		
       FIN
       
-      
-      oColTmp	est un ClZF_ColObjDB dynamique	<- :m_aoObj
-      oObjTmp	est un ClZF_ObjDbLs dynamique
-      nCpt	est un entier
-      
-      // Parcours de tous les éléments du tableau d'origine
-      pour tout oObjTmp, nCpt de oColTmp:aItems()
-      	
-      	// Est ce que la position en cours correspond à la position de destination ?
-      	si nCpt = nNouvPos ALORS
-      		// Oui
-      		oColTmp.ZF_addItem(oObjTmp)
-      	fin
-      	
-      	// Est ce que l'objet actuellement parcouru est celui à déplacer ?
-      	SI PAS ClZF_ObjDbLs.ZF_bObjEgal(oObjTmp,oObjDb_p) ALORS
-      		// Non : on l'ajoute à la liste
-      		oColTmp.ZF_addItem(oObjTmp)
-      	FIN
+      si nPosActu <> nNouvPos alors
+      	TableauSupprime(:m_aoObj,nPosActu)
+      	TableauInsèreRéférence(:m_aoObj,nNouvPos,oObjDb_p)
       FIN
-      
-      :m_aoObj <- oColTmp
-      
      type : 458752
    -
      name : ZF_EnrPos
@@ -978,7 +958,6 @@ class :
      code : |1-
       PROCÉDURE PUBLIQUE ZF_EnrPos(sProprieteOrdre_p est une chaîne)<metier>:vide
       
-      oObjTmp	est un ClZF_ObjDbLs dynamique
       oObjTmp2	est un ClZF_ObjDb dynamique
       nCpt	est un entier
       

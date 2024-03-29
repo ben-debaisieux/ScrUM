@@ -378,7 +378,7 @@ window :
       duWeekEnd				est une Durée
       
       
-      duWeekEnd..EnJours = 3
+      duWeekEnd..EnJours = 1
       
       //Recuperation de la date du dernier sprint
       HLitDernier(Scr_Sprint)
@@ -401,7 +401,8 @@ window :
       	dDateDebut											= dDateFinDernierSprint + duWeekEnd
       	
       	//calcul de la duree du sprint
-      	duDureeSprint..EnJours								= (nSemaines - 1) * 7 + 4 //on ne compte pas le we sur la derniere semaine
+      	duDureeSprint..EnJours								= (nSemaines) * 7 - 1
+      //	duDureeSprint..EnJours								= (nSemaines - 1) * 7 + 4 //on ne compte pas le we sur la derniere semaine
       	dDateFin											= dDateDebut + duDureeSprint
       	
       	//Les variables de derniers sprint deviennent ce sprint

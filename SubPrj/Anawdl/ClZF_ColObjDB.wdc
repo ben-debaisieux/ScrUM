@@ -1,0 +1,1002 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : ClZF_ColObjDB
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x13c3277019cc6b58
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      ClZF_ColObjDB est une Classe, abstraite
+      	herite de ClZF_ObjCache
+      prive
+      	m_aoObj est un tableau de ClZF_ObjDBls dynamique
+      public
+      GLOBAL
+      	mg_oEx_IndiceInexistant est un ClZF_Exception dynamique
+      fin
+      
+      constante
+      	cstMvPremier	= -1
+      	cstMvPrec		= -2
+      	cstMvSuiv		= -3
+      	cstMvDer		= -4
+      fin
+      
+      mg_oEx_IndiceInexistant = allouer un ClZF_Exception("Indice hors de porté : il doit être compris ente 0 et %1")
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     internal_properties : BwAAAAcAAABPVzr0hBjj+cPjOeRhkjsKfhRbRm6Vm5sOFq0e/ChT2AIbIH7WFUjW5X9+ohvY7O6oW25Jv9xwmIZ5+EFBYSm9evfFbuI6aetzxgXcRiCDDYHkYhcZBpS9i8ZAgY7zz73JNgcUW9K3yh+j9P1D9dXP3KxSma+3+hBgDcYJKmfMe/CTw3dAZ2RSdGqMkPy8mwd22F9C1Bq0eS4Cyn2zrN0yUqPRmIufRJP89IQsulAtnyXphf9ARUcXw1nCcOXxrbqgwxHUbYzHtiwMMpSWnjjkY1NxqXnq8UodRiOEUi07KmeG603Lau7Cm5Ul8Do38eQcGY9RNohd6QaZpe0exa+y3LIqEiUbl/i+C6B4vNs=
+     procedure_id : 1424025269601921880
+     type_code : 27
+     code : |1+
+      procédure Constructeur()
+      :init()
+      //:m_aoObj <- :p_aoObj
+      //ZF_InitCol(:p_aoObj)
+      
+      //Par défaut, les objets expirent au bout de 24h
+      :ZF_DefTimeOut(ClZF_App.cstTimeOutDef)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1424025269601987416
+     type_code : 28
+     code : |1-
+      procédure Destructeur()
+     type : 655360
+   -
+     name : ZF_addItem
+     procedure_id : 1424025269602052952
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_addItem (<oEntite_p> est ClZF_ObjDbLs dynamique)
+      //
+      // Paramètres :
+      //	oEntite_p (ClZF_ObjDbLs dynamique) : <indiquez ici le rôle de oEntite_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      // 	bSansVerifDoublon_p (booléen - valeur par défaut=0) : <indiquez ici le rôle de bSansVerifDoublon_p>
+      procédure ZF_addItem(oEntite_p est un ClZF_ObjDbLs dynamique)<métier>:vide
+      
+      //L'objet est il déjà présent dans la collection ?
+      si pas :ZF_bTrouve(oEntite_p) ALORS
+      	//Non : on l'ajoute
+      	:ZF_addRef_int(oEntite_p)
+      FIN
+     type : 458752
+   -
+     name : ZF_Recherche
+     procedure_id : 1424025269602118488
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_Recherche (<oObj_p> est ClZF_ObjDbLs)
+      //
+      // Paramètres :
+      //	oObj_p (ClZF_ObjDbLs) : <indiquez ici le rôle de nIdUnique_p>
+      
+      // Valeur de retour :
+      // 	entier : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_Recherche(oObj_p est un ClZF_ObjDbLs)<métier>:entier
+      
+      nInd est un entier
+      nPointeurRech est un entier sur 8 octets = oObj_p.p_nPointeur
+      pour tout element oTmp, nInd de :aItems()
+      	si oTmp.p_nPointeur = nPointeurRech ALORS
+      		renvoyer nInd
+      	FIN
+      FIN
+      
+      renvoyer 0
+      
+     type : 458752
+   -
+     name : ZF_bTrouve
+     procedure_id : 1547941642670238123
+     type_code : 12
+     code : |1+
+      PROCÉDURE ZF_bTrouve(oObj_p est un ClZF_ObjDbLs)<métier>:Booleen
+      
+      
+      //nPointeurRech	est un entier sur 8 octets					= oObj_p.p_nPointeur
+      //aListeObj		est un tableau de ClZF_ObjDbLs dynamique	<- :aItems()
+      //
+      //renvoyer VérifieUnVrai(aListeObj, oObjTmp => oObjTmp.p_nPointeur = nPointeurRech)
+      
+      nPointeurRech est un entier sur 8 octets = oObj_p.p_nPointeur
+      POUR TOUT element oTmp de :aItems()
+      	SI oTmp.p_nPointeur = nPointeurRech ALORS
+      		RENVOYER vrai
+      	FIN
+      FIN
+      
+      RENVOYER faux
+     type : 458752
+   -
+     name : addItemById
+     procedure_id : 1424025269602184024
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //addItemById (<nId_P> est entier)
+      //
+      // Paramètres :
+      //	nId_P (entier) : <indiquez ici le rôle de nId_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure addItemById(LOCAL nId_P est un entier)<métier>:vide
+      :ZF_addItem(ClZF_ObjDbLs.ZF_GetObj(:sClasseObjDbAsso(),nId_P))
+     type : 458752
+   -
+     name : ZF_vider
+     procedure_id : 1424025269602249560
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_vider ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_vider()<métier>:vide
+      dimension(:m_aoObj, 0)
+     type : 458752
+   -
+     name : ZF_addRef_int
+     procedure_id : 1424025269602315096
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_addRef_int (<oObj_P> est ClZF_ObjDbLs)
+      //
+      // Paramètres :
+      //	oObj_P (ClZF_ObjDbLs) : <indiquez ici le rôle de oObj_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure prive ZF_addRef_int(oObj_P est un ClZF_ObjDbLs)<métier>:vide
+      //aOObj est un tableau de ClZF_ColObjDB dynamique = 
+      TableauAjouteRéférence(:m_aoObj, oObj_P)
+     type : 458752
+   -
+     name : aItems
+     procedure_id : 1424025269602380632
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aItems ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau (ClZF_ObjDbLs dynamique) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ABSTRAITE aItems()<métier>:tableau de ClZF_ObjDBls dynamique
+      
+     type : 458752
+   -
+     name : ZF_nTaille
+     procedure_id : 1424025269602446168
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_nTaille ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	entier : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_nTaille()<métier>:entier
+      renvoyer TableauOccurrence(:m_aoObj)
+     type : 458752
+   -
+     name : ZF_InitCol
+     procedure_id : 1424025269602511704
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_InitCol (<oListeEnfant_p>)
+      //
+      // Paramètres :
+      //	oListeEnfant_p : <indiquez ici le rôle de oListeEnfant_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_InitCol(oListeEnfant_p)<métier>:vide
+      :m_aoObj <- oListeEnfant_p
+     type : 458752
+   -
+     name : Init
+     procedure_id : 1424025269602577240
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Init ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ABSTRAITE Init()<métier>:vide
+      
+     type : 458752
+   -
+     name : ZF_Supp
+     procedure_id : 1424365336575907092
+     type_code : 12
+     code : |1+
+      procédure publique ZF_Supp(oObj_p est un ClZF_ObjDB)<métier>:vide
+      nPos est un entier = :ZF_recherche(oObj_p)
+      si nPos > 0 ALORS
+      	:ZF_Supp(nPos)
+      FIN
+      
+      
+     type : 458752
+   -
+     name : ZF_Supp
+     procedure_id : 1424365336575907092
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Supp (<oObj_p> est ClZF_ObjDB)
+      //
+      // Paramètres :
+      //	oObj_p (ClZF_ObjDB) : <indiquez ici le rôle de nPos_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique ZF_Supp(nPos_P est un entier)<métier>:vide
+      TableauSupprime(:m_aoObj, nPos_P)
+     type : 458753
+   -
+     name : ZF_LoadSQL
+     procedure_id : 1424025269602773848
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_LoadSQL (<sSql_P> est chaîne)
+      //
+      // Paramètres :
+      //	sSql_P (chaîne ANSI) : <indiquez ici le rôle de sSql_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_LoadSQL(sSql_P est une chaîne) <métier>:vide
+      
+      sdLoadColSQL est une source de données
+      bRecupObj est un booléen
+      
+      ClZF_ObjDbLs.mg_oApp.Rsql(sdLoadColSQL,sSql_P)
+      
+      HLitPremier(sdLoadColSQL, hSansRafraîchir)
+      si ChaîneOccurrence(HListeRubrique(sdLoadColSQL), rc) > 0 alors
+      	bRecupObj = faux
+      	
+      	//Appel au pré chargement des données dépendantes (s'il y en a)
+      	:pre_load(sdLoadColSQL)
+      	HLitPremier(sdLoadColSQL, hSansRafraîchir)
+      	
+      sinon
+      	bRecupObj = vrai
+      FIN
+      
+      tantque pas HEnDehors(sdLoadColSQL)
+      	
+      	si bRecupObj alors
+      		:addItemById(HRécupèreRubrique(sdLoadColSQL, 1))
+      	sinon
+      		:addItemBySource(sdLoadColSQL)
+      	fin
+      	HLitSuivant(sdLoadColSQL)
+      FIN
+      
+      :ZF_setDhExpire()
+      
+      
+      HAnnuleDéclaration(sdLoadColSQL)
+     type : 458752
+   -
+     name : addItemBySource
+     procedure_id : 1424025269602839384
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //addItemBySource (<sdSource_p> est objet source de données)
+      //
+      // Paramètres :
+      //	sdSource_p (objet source de données) : <indiquez ici le rôle de nId_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	sClasse_p (chaîne ANSI) : <indiquez ici le rôle de sClasse_p>
+      //	nId_p (entier) : <indiquez ici le rôle de nId_p>
+      procédure addItemBySource(sdSource_p est une source de données)<métier>:vide
+      
+      oObj est un ClZF_ObjDbLs <- ClZF_ObjDbLs.ZF_GetObj(:sClasseObjDbAsso(),ClZF_ObjDbLs.cstModeSansChargement)
+      //:ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept)
+      nId est un entier = {sdSource_p..nom + "." + oObj.p_ZF_sNom_Col_Id_Auto, indRubrique}
+      
+      
+      bObjEnCache	est un booléen
+      sCle		est une chaîne
+      
+      
+      //Référencement de l'objet chargé (si pas déjà en mémoire)
+      sCle  = ClZF_ObjDB.ZF_sCleOdb(:sClasseObjDbAsso(), nId)
+      SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
+      	//Chargement de l'objet 'vierge' avec les données de la source
+      	//Mise en cache de l'objet
+      	ClZF_App.mg_aoInstances[sCle] <- oObj
+      	
+      SINON
+      	//L'objet est déjà en cache.
+      	oObj <- ClZF_App.mg_aoInstances[sCle]
+      	
+      	SI :ZF_bEstExpire() ALORS
+      		ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbObjBd_Expire++
+      	SINON
+      		bObjEnCache = Vrai
+      	FIN
+      FIN
+      
+      
+      //Chargement de l'objet 'vierge' avec les données de la source
+      oObj.ZF_Charge_source(sdSource_p)
+      
+      
+      //Les objets de relation ont une seconde clé.
+      SI oObj est ClZF_ObjRel ALORS
+      	oObjRel_tmp est un ClZF_ObjRel <- oObj
+      	sCle  = oObjRel_tmp.ZF_sGetNomInstanceRel()
+      	//	trace(sCle)
+      	//trace(dbgInfo(dbgPile))
+      	ClZF_App.mg_aoInstances[sCle] <- oObj
+      FIN
+      
+      
+      
+      //Métriques : Récupération du nombre de déclarations (avec ou sans cache)
+      ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd++
+      SI bObjEnCache ALORS
+      	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_Cache++
+      SINON
+      	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_NonCache++
+      FIN
+      
+      //Ajout de l'objet courant à la collection
+      :ZF_addItem(oObj)
+     type : 458752
+   -
+     name : ZF_addItemBySource_prot
+     procedure_id : 1424025269602904920
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_addItemBySource_prot (<sdSource_p> est objet source de données, <oObjBd_p> est ClZF_ObjDbLs dynamique, <nId_p> est entier)
+      //
+      // Paramètres :
+      //	sdSource_p (objet source de données) : <indiquez ici le rôle de sdSource_p>
+      //	oObjBd_p (ClZF_ObjDbLs dynamique) : <indiquez ici le rôle de oObjBd_p>
+      //	nId_p (entier) : <indiquez ici le rôle de nId_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	sClasse_p (chaîne ANSI) : <indiquez ici le rôle de sClasse_p>
+      procédure protege ZF_addItemBySource_prot(sdSource_p est une source de données, oObjBd_p est un ClZF_ObjDbLs dynamique, local nId_p est un entier)<zombie>:vide
+      //
+      //bObjEnCache	est un booléen
+      //sCle		est une chaîne
+      //
+      //
+      ////Référencement de l'objet chargé (si pas déjà en mémoire)
+      //sCle  = ClZF_ObjDB.ZF_sCleOdb(oObjBd_p..Classe, nId_p)
+      //SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
+      //	//Chargement de l'objet 'vierge' avec les données de la source
+      //	//Mise en cache de l'objet
+      //	ClZF_App.mg_aoInstances[sCle] <- oObjBd_p
+      //	
+      //SINON
+      //	//L'objet est déjà en cache.
+      //	oObjBd_p <- ClZF_App.mg_aoInstances[sCle]
+      //	
+      //	SI :ZF_bEstExpire() ALORS
+      //		ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbObjBd_Expire++
+      //	sinon
+      //		bObjEnCache = Vrai
+      //	FIN
+      //FIN
+      //
+      //
+      ////Chargement de l'objet 'vierge' avec les données de la source
+      //oObjBd_p.ZF_Charge_source(sdSource_p)
+      //
+      //
+      ////Les objets de relation ont une seconde clé.
+      //SI oObjBd_p est ClZF_ObjRel ALORS
+      //	oObjRel_tmp est un ClZF_ObjRel <- oObjBd_p
+      //	sCle  = oObjRel_tmp.ZF_sGetNomInstanceRel()
+      ////	trace(sCle)
+      //	//trace(dbgInfo(dbgPile))
+      //	ClZF_App.mg_aoInstances[sCle] <- oObjBd_p
+      //FIN
+      //
+      //
+      //
+      ////Métriques : Récupération du nombre de déclarations (avec ou sans cache)
+      //ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd++
+      //SI bObjEnCache ALORS
+      //	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_Cache++
+      //SINON
+      //	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_NonCache++
+      //FIN
+      //
+      ////Ajout de l'objet courant à la collection
+      //:ZF_addItem(oObjBd_p)
+     type : 458752
+   -
+     name : pre_load
+     procedure_id : 1429594330365713019
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //pre_load (<sdSource_P> est source de données)
+      //
+      // Paramètres :
+      //	sdSource_P (source de données) : <indiquez ici le rôle de sdSource_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure protégée pre_load(sdSource_P est une source de données<utile>)<métier>:vide
+      
+     type : 458752
+   -
+     name : ZF_LoadArray
+     procedure_id : 1431074629166656569
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_LoadArray (<aIDs_P> est tableau (entier))
+      //
+      // Paramètres :
+      //	aIDs_P (tableau (entier)) : <indiquez ici le rôle de sSql_P>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_LoadArray(aIDs_P est un tableau d'entiers) <zombie>:vide
+      
+      nId est un entier
+      
+      pour tout nId de aIDs_P
+      	:addItemById(nId)
+      FIN
+      
+      :ZF_setDhExpire()
+     type : 458752
+   -
+     name : oItem
+     procedure_id : 1458698583437345665
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oItem (<nPos_p>)
+      //
+      // Paramètres :
+      // 	nPos_p : <indiquez ici le rôle de nPos_p>
+      // Valeur de retour :
+      // 	ClZF_ObjDbLs : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure oItem(nPos_p)<métier>:ClZF_ObjDbLs
+      
+      si pas(0 < nPos_p <= :ZF_nTaille()) ALORS
+      	mg_oEx_IndiceInexistant.ZF_Declenche([:ZF_nTaille()])
+      FIN
+      //aTblTmp est un tableau de ClZF_ObjDbLs dynamique <- :p_aoObj
+      renvoyer :m_aoObj[nPos_p]
+     type : 458752
+   -
+     name : ZF_Tri
+     procedure_id : 1458735958317189940
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //ZF_Tri (<sOrdre_p> est chaîne)
+      //
+      // Paramètres :
+      //	sOrdre_p (chaîne ANSI) : <indiquez ici le rôle de sOrdre_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_Tri(sOrdre_p est une chaîne)<metier>:vide
+      
+      TableauTrie(:p_aoObj, ttMembre, sOrdre_p)
+     type : 458752
+   -
+     name : ZF_ChargeCbo
+     procedure_id : 1467415051771389681
+     type_code : 12
+     code : |1+
+      procedure ZF_ChargeCbo(sCombo_p est une chaîne, sPropriete_p est une chaîne = "", sLibItemNull_p est une chaîne = "")<ui>:vide
+      
+      oTmp est un objet dynamique
+      ListeSupprimeTout(sCombo_p)
+      
+      si sLibItemNull_p <> "" ALORS
+      	ListeAjoute(sCombo_p, "<" + sLibItemNull_p + ">" + gLien(0))
+      FIN
+      
+      pour tout element oTmp de :aItems()
+      	si sPropriete_p = "" alors
+      		ListeAjoute(sCombo_p, oTmp.sRepresentation() + gLien(oTmp.ZF_Get_IdUnique()))
+      	sinon
+      		ListeAjoute(sCombo_p, {"oTmp." + sPropriete_p} + gLien(oTmp.ZF_Get_IdUnique()))
+       	fin
+      	
+      FIN
+      
+      ListeSelectPlus(sCombo_p, 1)
+     type : 458752
+   -
+     name : ZF_ChargeTblComplete
+     procedure_id : 1467780321537743548
+     type_code : 12
+     code : |1+
+      procedure protege ZF_ChargeTblComplete(sNomTable_p est une chaîne)<metier>:vide
+      
+      :ZF_LoadSQL([
+      	SELECT *
+      	FROM [%sNomTable_p%]
+      	])
+     type : 458752
+   -
+     name : ZF_GetAll
+     procedure_id : 1467781111812368545
+     type_code : 12
+     code : |1+
+      procedure ZF_GetAll()<metier>:vide
+      //ZF_ChargeTblComplete(MaTable..nom)
+      
+      oObj est un ClZF_ObjDbLs dynamique <- ClZF_ObjDbLs.ZF_GetObj(:sClasseObjDbAsso(),ClZF_ObjDbLs.cstModeSansChargement)
+      :ZF_LoadSQL([
+      	SELECT *
+      	FROM [%oObj.p_zf_sNomTable%]
+      ])
+     type : 458752
+   -
+     name : ZF_SaveItems
+     procedure_id : 1472810686079956035
+     type_code : 12
+     code : |1-
+      procedure ZF_SaveItems()<métier>:vide
+      
+      
+      oItem_tmp est un objet dynamique
+      
+      QUAND EXCEPTION DANS
+      	ClZF_ObjDbLs.mg_oApp.TranDebut()
+      	
+      	POUR TOUT ÉLÉMENT oItem_tmp DE :aItems()
+      		oItem_tmp.ZF_Enregistre()
+      	FIN
+      	
+      	ClZF_ObjDbLs.mg_oApp.TranFin()
+      	
+      FAIRE
+      	ClZF_ObjDbLs.mg_oApp.TranAnnule()
+      	ExceptionPropage()
+      FIN
+     type : 458752
+   -
+     name : ZF_SupprimeItems
+     procedure_id : 1530128862881489556
+     type_code : 12
+     code : |1-
+      procedure ZF_SupprimeItems()<métier>:vide
+      
+      
+      oItem_tmp est un objet dynamique
+      
+      QUAND EXCEPTION DANS
+      	ClZF_ObjDbLs.mg_oApp.TranDebut()
+      	
+      	POUR TOUT ÉLÉMENT oItem_tmp DE :aItems()
+      		oItem_tmp.ZF_Supprimer()
+      		oItem_tmp.ZF_Enregistre()
+      	FIN
+      	
+      	ClZF_ObjDbLs.mg_oApp.TranFin()
+      	
+      FAIRE
+      	ClZF_ObjDbLs.mg_oApp.TranAnnule()
+      	ExceptionPropage()
+      FIN
+     type : 458752
+   -
+     name : ZF_LoadSQLMulti_Priv
+     procedure_id : 1531039911359763086
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_LoadSQLMulti_Priv (<sSQL_p> est chaîne, <aRetour_p>, <oModele_p> est ClZF_ColObjDB dynamique, <anListeIds_p> est tableau (entier), <sRubVentilation_p> est chaîne)
+      //
+      // Paramètres :
+      //	sSQL_p (chaîne ANSI) : <indiquez ici le rôle de sSQL_p>
+      //	aRetour_p : <indiquez ici le rôle de aRetour_p>
+      //	oModele_p (ClZF_ColObjDB dynamique) : <indiquez ici le rôle de oModele_p>
+      //	anListeIds_p (tableau (entier)) : <indiquez ici le rôle de aNListeIds_p>
+      //	sRubVentilation_p (chaîne ANSI) : <indiquez ici le rôle de sRubVentilation_p>
+      // Valeur de retour :
+      // 	Type indéterminé : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      //	oColModele_p (ClZF_ColObjDB) : <indiquez ici le rôle de oColModele_p>
+      procédure publique globale ZF_LoadSQLMulti_Priv(sSQL_p est une chaîne, aRetour_p, oModele_p est un ClZF_ColObjDB dynamique, anListeIds_p est un tableau d'entiers, sRubVentilation_p est une chaine)<metier>	//:tableau associatif d'objets dynamique
+      
+      oColTemp		est un ClZF_ColObjDB dynamique
+      sdLoadColSQL	est une Source de Données
+      nId				est un entier
+      
+      si anListeIds_p.Occurrence() > 0 alors
+      	//Création de toutes les collections attendues, dans la variable de retour
+      	POUR TOUT nId DE anListeIds_p
+      		si aRetour_p[nId]..Vide ALORS
+      			aRetour_p[nId] <- Clone(oModele_p)
+      		FIN
+      	FIN
+      	
+      	
+      	ClZF_ObjDbLs.mg_oApp.Rsql(sdLoadColSQL,sSQL_p)
+      	
+      	HLitPremier(sdLoadColSQL, hSansRafraîchir)
+      	
+      	TANTQUE PAS HEnDehors(sdLoadColSQL)
+      		
+      		oColTemp <- aRetour_p[{sdLoadColSQL..Nom + "." + sRubVentilation_p,indRubrique}]
+      		
+      		oColTemp.addItemBySource(sdLoadColSQL)
+      		
+      		//On considère que la collection sera chargée.
+      		oColTemp.ZF_setDhExpire()
+      		
+      		HLitSuivant(sdLoadColSQL)
+      	FIN
+      	
+      	HAnnuleDéclaration(sdLoadColSQL)
+      FIN
+      
+      renvoyer aRetour_p
+      
+      
+      
+      
+      
+      
+     type : 458752
+   -
+     name : ZF_LoadSQLMulti_2
+     procedure_id : 1543040540315661743
+     type_code : 12
+     code : |1-
+      PROCÉDURE PUBLIQUE GLOBALE ZF_LoadSQLMulti_2(aRetour, sSQL_p est une chaîne, sCleCol_p est une chaîne, oColVentil_p est un ClZF_ColObjDB dynamique, sRubVentilation_p est une chaine)<metier>	//:tableau associatif d'objets dynamique
+      
+      //aRetour		est un tableau associatif  de ClZF_ColObjDB dynamique
+      oItempTmp	est un objet dynamique
+      oColTmp		est un objet dynamique
+      nIdPrj		est un entier
+      
+      
+      
+      //aRetour <- ::ZF_aoInitCols(aRetour, oColPrj_p, ClDbUserStory.cstUSDeProjet)
+      
+      //Préparation du tableau de collection de retour
+      POUR TOUT oItempTmp DE oColVentil_p.aItems()
+      	
+      	oColTmp <- oItempTmp.ZF_GetCol(sCleCol_p)
+      	oColTmp.ZF_vider()
+      	
+      	//On considère que la collection sera chargée.
+      	oColTmp.ZF_setDhExpire()
+      	
+      	nIdPrj = oItempTmp.ZF_Get_IdUnique()
+      	aRetour[nIdPrj] <- oColTmp
+      FIN
+      
+      
+      
+      //aRetour <- ClZF_ColObjDB.ZF_LoadSQLMulti_Priv(sSQL_p,aRetour, Null, oColVentil_p.ZF_Get_Liste_IdUnique(), sRubVentilation_p)
+      
+      oColTemp		est un ClZF_ColObjDB dynamique
+      sdLoadColSQL	est une Source de Données
+      
+      
+      //SI anListeIds_p.Occurrence() > 0 ALORS
+      
+      	
+      	
+      	ClZF_ObjDbLs.mg_oApp.Rsql(sdLoadColSQL,sSQL_p)
+      	
+      	HLitPremier(sdLoadColSQL, hSansRafraîchir)
+      	
+      	TANTQUE PAS HEnDehors(sdLoadColSQL)
+      		
+      		oColTemp <- aRetour[{sdLoadColSQL..Nom + "." + sRubVentilation_p,indRubrique}]
+      		oColTemp.addItemBySource(sdLoadColSQL)
+      		
+      		//On considère que la collection sera chargée.
+      //		oColTemp.ZF_setDhExpire()
+      		
+      		HLitSuivant(sdLoadColSQL)
+      	FIN
+      	
+      	HAnnuleDéclaration(sdLoadColSQL)
+      //FIN
+      
+      
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : ZF_Get_Liste_IdUnique
+     procedure_id : 1531051928702485582
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_Get_Liste_IdUnique ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	tableau (entier) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_Get_Liste_IdUnique()<metier>:tableau d'EntierS
+      
+      aRetour est un tableau d'entiers
+      oObjTmp est un objet dynamique	//ClZF_ObjDbLs dynamique
+      pour tout oObjTmp de :m_aoObj
+      	tableauajoute(aRetour,oObjTmp.ZF_Get_IdUnique())
+      FIN
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : ZF_Join
+     procedure_id : 1539042436382877815
+     type_code : 12
+     code : |1+
+      procedure ZF_Join(oCol_p est un ClZF_ColObjDB)<metier>:Vide
+      
+      
+      //:m_aoObj.Union(oCol_p.p_aoObj)
+      
+      oItempTmp	est un objet dynamique
+      POUR TOUT oItempTmp DE oCol_p.aItems()
+      	:ZF_addRef_int(oItempTmp)
+      fin
+     type : 458752
+   -
+     name : ZF_VersTableauAssociatif
+     procedure_id : 1542014961559293653
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] ZF_VersTableauAssociatif (<sNomMembre_p> est chaîne)
+      //
+      // Paramètres :
+      //	sNomMembre_p (chaîne ANSI) : <indiquez ici le rôle de sNomMembre_p>
+      // Valeur de retour :
+      // 	tableau associatif (ClZF_ObjDbLs dynamique) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure ZF_VersTableauAssociatif(sNomMembre_p est une chaîne) <métier>:tableau associatif de ClZF_ObjDbLs dynamique
+      
+      aRetour est un tableau associatif de ClZF_ObjDbLs dynamique
+      //oObjTmp est un ClZF_ObjDbLs dynamique
+      sCle est une chaîne
+      
+      pour tout oObjTmp de :m_aoObj
+      	sCle = {"oObjTmp." + sNomMembre_p,indVariable}
+      	aRetour[sCle] <- oObjTmp
+      FIN
+      
+      
+      renvoyer aRetour
+     type : 458752
+   -
+     name : sClasseObjDbAsso
+     procedure_id : 1542746811122461069
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sClasseObjDbAsso ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure protegee abstraite sClasseObjDbAsso()<métier>:chaine
+      //sClasse est une chaine = ClZF_ObjDbLs
+      //Renvoyer sClasse
+      
+     type : 458752
+   -
+     name : ZF_MvPos
+     procedure_id : 1579127760981975390
+     type_code : 12
+     code : |1+
+      procedure publique ZF_MvPos(oObjDb_p est un ClZF_ObjDbLs, nMouvement_p est un entier)<metier>:vide
+      
+      nPosActu est un entier = :ZF_Recherche(oObjDb_p)
+      nNouvPos est un entier
+      
+      selon nMouvement_p
+      	CAS cstMvPremier
+      		nNouvPos = 1
+      	CAS cstMvPrec
+      		nNouvPos = max(1, nPosActu - 1)
+      	CAS cstMvSuiv
+      		nNouvPos = Min(:ZF_nTaille(), nPosActu + 1)
+      	CAS cstMvDer
+      		nNouvPos = :ZF_nTaille()
+      	cas 1 <= * <= :ZF_nTaille()
+      		nNouvPos = nMouvement_p
+      	AUTRE CAS
+      		
+      FIN
+      
+      si nPosActu <> nNouvPos alors
+      	TableauSupprime(:m_aoObj,nPosActu)
+      	TableauInsèreRéférence(:m_aoObj,nNouvPos,oObjDb_p)
+      FIN
+     type : 458752
+   -
+     name : ZF_EnrPos
+     procedure_id : 1579138373854663993
+     type_code : 12
+     code : |1-
+      PROCÉDURE PUBLIQUE ZF_EnrPos(sProprieteOrdre_p est une chaîne)<metier>:vide
+      
+      oObjTmp2	est un ClZF_ObjDb dynamique
+      nCpt	est un entier
+      
+      ClZF_ObjDbLs.mg_oApp.TranDebut()
+      
+      // Parcours de tous les éléments du tableau d'origine
+      POUR TOUT oObjTmp, nCpt de :aItems()
+      	oObjTmp2 <- oObjTmp
+      	{"oObjTmp2." + sProprieteOrdre_p,indVariable} = nCpt
+      	si oObjTmp2.ZF_bEstModifie() alors
+      		oObjTmp2.ZF_Enregistre()
+      	FIN
+      FIN
+      
+      ClZF_ObjDbLs.mg_oApp.TranFin()
+     type : 458752
+  properties :
+   -
+     name : p_aoObj
+     identifier : 0x155fb95d202e6210
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         procédure publique abstraite p_aoObj()<metier>:tableau de ClZF_ColObjDB dynamique
+        type : 1966080
+      -
+        code : |1+
+         procédure protégée abstraite p_aoObj(Valeur)<metier>:vide
+        type : 2031616
+     template_refs : []
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x13696d040aa53da2
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

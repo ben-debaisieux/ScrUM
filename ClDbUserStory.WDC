@@ -1189,6 +1189,16 @@ class :
       PROCÉDURE PROTÉGÉE ZF_Charge(bSansRechargement_P est un booléen = Faux)<métier>:Vide
       ClZF_ObjDB.ZF_Charge(bSansRechargement_P)
      type : 458752
+   -
+     name : sRepresentation
+     procedure_id : 1582823361298748713
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjDbLs.sRepresentation
+      PROCÉDURE VIRTUELLE sRepresentation() <métier>:chaîne
+      
+      renvoyer :sNommination_US()
+     type : 458752
   properties :
    -
      name : p_oIDScr_Projet

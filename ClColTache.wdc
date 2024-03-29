@@ -21,6 +21,12 @@ class :
       	m_aoTaches est un tableau de ClDbTache dynamique
       fin
       
+      ETypeEtatTacheAFaire est une Enumération
+      	PasseEtActuelle
+      	Future
+      	Toutes
+      FIN
+      
       constante
       	cstTachesDeUS			= "TachesDeUS"
       	cstTachesDeProjet		= "TachesDeProjet"
@@ -714,13 +720,13 @@ class :
       
       //Récupération des taches des projets, associées à un utilisateur.
       sReq = [
-      	SELECT<§cs:3§>
-      		Scr_Tache.*<§cs:3§>
-      	FROM Scr_Tache<§cs:3§>
-      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)<§cs:3§>
-      		INNER JOIN Scr_Projet ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)<§cs:3§>
-      		INNER JOIN Scr_Usr_Projet ON (Scr_Usr_Projet.IDScr_Projet = Scr_Projet.IDScr_Projet)<§cs:3§>
-      	WHERE Scr_Tache.Statut = [%oUsr_p.ZF_Get_IdUnique()%]<§cs:3§>
+      	SELECT
+      		Scr_Tache.*
+      	FROM Scr_Tache
+      		INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
+      		INNER JOIN Scr_Projet ON (Scr_Projet.IDScr_Projet = Scr_UserStory.IDScr_Projet)
+      		INNER JOIN Scr_Usr_Projet ON (Scr_Usr_Projet.IDScr_Projet = Scr_Projet.IDScr_Projet)
+      	WHERE Scr_Tache.Statut = [%oUsr_p.ZF_Get_IdUnique()%]
       ]
       
       oTaches.ZF_LoadSQL(sReq)
@@ -766,6 +772,68 @@ class :
       oTaches.ZF_LoadSQL(sReq)
       
       RENVOYER oTaches
+      
+     type : 458752
+   -
+     name : oFromNumSprint
+     procedure_id : 1581537224816167289
+     type_code : 12
+     code : |1-
+      procedure GLOBALE oFromNumSprint(local nNumSprint_p est un entier, local eNSelecteur est un ClDbTache.ETypeCharge) <métier>:ClColTache
+      oColSprint est un ClColSprint()
+      oColSprint.ZF_addItem(ClDbSprint.GetObj(nNumSprint_p))
+      renvoyer oFromSprints(oColSprint, eNSelecteur)
+     type : 458752
+   -
+     name : Taches_a_faire
+     procedure_id : 1585422014707728068
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Taches_a_faire (<eFiltre> est ClTache.ETypeEtatTacheAFaire)
+      //
+      // Paramètres :
+      //	eFiltre (ClTache.ETypeEtatTacheAFaire) : <indiquez ici le rôle de eFiltre>
+      // Valeur de retour :
+      // 	ClColTaches : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      PROCEDURE globale Taches_a_faire(eFiltre est un ETypeEtatTacheAFaire)<metier>:ClColTache
+      
+      sReq	est une chaîne
+      oTaches	est un ClColTache
+      sFilre	est une chaîne
+      
+      selon eFiltre
+      	CAS PasseEtActuelle
+      		sFilre = "AND Scr_Tache.Num_Sprint_Realisation <= " + goApp.m_nNumeroDuSprintActuel
+      	CAS Future
+      		sFilre = "AND Scr_Tache.Num_Sprint_Realisation > " + goApp.m_nNumeroDuSprintActuel
+      	CAS Toutes
+      		
+      FIN
+      
+      sReq = [
+      	
+      	SELECT
+      		Scr_Tache.*
+      		
+      	FROM Scr_Tache
+      	
+      	where Scr_Tache.Num_Sprint_Demarrage is Null
+      		AND Scr_Tache.Top_Annule = 0
+      		AND Scr_Tache.Top_Brouillon = 0
+      		AND Scr_Tache.Top_Realise = 0
+      		[%sFilre%]
+      		
+      ]
+      
+      oTaches.ZF_LoadSQL(sReq)
+      
+      renvoyer oTaches
      type : 458752
   properties :
    -

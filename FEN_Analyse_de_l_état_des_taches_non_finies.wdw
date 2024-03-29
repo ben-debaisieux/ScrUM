@@ -333,7 +333,7 @@ window :
       		
       		oCOlTaches2.ZF_addItem(oTache)
       		oColUs.ZF_addItem(oTache.p_oUserStoryParent)
-      		oColPj.ZF_addItem(oTache.p_oUserStoryParent.p_oProjetParent)
+      		oColPj.ZF_addItem(oTache.p_oUserStoryParent.p_oIDScr_Projet)
       	fin
       fin
       
@@ -344,7 +344,7 @@ window :
       		TBLH_Taches_non_finies[nLignePrj].COL_Taches	= oPrj.p_sNom
       		
       		POUR TOUT ÉLÉMENT oUS DE oColUs.aItems()
-      			si oUS.p_oProjetParent.ZF_Get_IdUnique() = oPrj.ZF_Get_IdUnique() alors
+      			si oUS.p_oIDScr_Projet.ZF_Get_IdUnique() = oPrj.ZF_Get_IdUnique() alors
       				nLigneUS									= TableAjouteFils(TBLH_Taches_non_finies,nLignePrj)
       				TBLH_Taches_non_finies[nLigneUS].COL_Taches	= oUS.p_sCodeUserStory + " - " + oUS.sNommination_US()
       				
@@ -425,7 +425,7 @@ window :
       si znIdProjet_P <> 0 ALORS
       //	oPrjFiltre <- ClDbProjet.GetObj(znIdProjet_P)
       	sFiltrePrj = [
-      	AND Scr_UserStory.IDScr_Projet = [%znIdProjet_P%]<§cs:3§>
+      	AND Scr_UserStory.IDScr_Projet = [%znIdProjet_P%]
       	]
       FIN
       
@@ -448,21 +448,21 @@ window :
       
       
       sReq est une chaine = [
-      SELECT Scr_Tache.*<§cs:3§>
-      FROM Scr_Tache<§cs:3§>
-      INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)<§cs:3§>
-      <§cs:3§>
-      WHERE Scr_Tache.Num_Sprint_Demarrage BETWEEN 1 and [%goApp.m_nNumeroDuSprintActuel%]<§cs:3§>
-      	AND Scr_Tache.Top_Annule = 0<§cs:3§>
-      	AND Scr_Tache.Top_Brouillon = 0<§cs:3§>
-      	AND Scr_Tache.Num_Sprint_Fin is null<§cs:3§>
-      	[%sFiltrePrj%]<§cs:3§>
+      SELECT Scr_Tache.*
+      FROM Scr_Tache
+      INNER JOIN Scr_UserStory ON (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
+      
+      WHERE Scr_Tache.Num_Sprint_Demarrage BETWEEN 1 and [%goApp.m_nNumeroDuSprintActuel%]
+      	AND Scr_Tache.Top_Annule = 0
+      	AND Scr_Tache.Top_Brouillon = 0
+      	AND Scr_Tache.Num_Sprint_Fin is null
+      	[%sFiltrePrj%]
       ]
       oCOlTaches.ZF_LoadSQL(sReq)
       
       POUR TOUT oTache DE oCOlTaches.aItems()
       	oColUs.ZF_addItem(oTache.p_oUserStoryParent)
-      	oColPj.ZF_addItem(oTache.p_oUserStoryParent.p_oProjetParent)
+      	oColPj.ZF_addItem(oTache.p_oUserStoryParent.p_oIDScr_Projet)
       fin
       
       
@@ -472,7 +472,7 @@ window :
       		TBLH_Taches_non_finies[nLignePrj].COL_Taches	= oPrj.p_sNom
       		
       		POUR TOUT ÉLÉMENT oUS DE oColUs.aItems()
-      			si oUS.p_oProjetParent.ZF_Get_IdUnique() = oPrj.ZF_Get_IdUnique() alors
+      			si oUS.p_oIDScr_Projet.ZF_Get_IdUnique() = oPrj.ZF_Get_IdUnique() alors
       				nLigneUS									= TableAjouteFils(TBLH_Taches_non_finies,nLignePrj)
       				TBLH_Taches_non_finies[nLigneUS].COL_Taches	= oUS.p_sCodeUserStory + " - " + oUS.sNommination_US()
       				

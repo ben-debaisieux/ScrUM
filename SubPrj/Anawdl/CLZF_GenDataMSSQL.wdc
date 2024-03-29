@@ -1,0 +1,551 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : CLZF_GenDataMSSQL
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x147657be00978709
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      CLZF_GenDataMSSQL est une Classe
+      	herite de CLZF_GenData
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1474462401575814921
+     type_code : 27
+     code : |1+
+      procédure Constructeur(OlGen_p est un ClZF_GenCodeFic)
+      ancetre.constructeur(OlGen_p)
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1474462401575880457
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+     type : 655360
+   -
+     name : sRubSqlDeTypeHF
+     procedure_id : 1474468380170634330
+     type_code : 12
+     code : |1+
+      procedure PROTÉGÉE sRubSqlDeTypeHF(stRub_p est un ClZF_GenCodeFic.STR_DefRub)<metier>:chaine
+      
+      sRetour est une chaîne
+      selon stRub_p.nTypeRubHF
+      	CAS hRubBinaire
+      		sRetour = "BINARY"
+      	CAS hRubBooléen
+      		sRetour = "BIT"
+      	CAS hRubCaractère
+      		sRetour = "CHAR(" + stRub_p.nTaille + ")"
+      	CAS hRubDate8
+      		sRetour = "DATE"			//*
+      	CAS hRubDateHeure
+      		sRetour = "Datetime2"		//*
+      	CAS hRubDurée
+      		sRetour = "Datetime2"		//*
+      	CAS hRubEntier1
+      		sRetour = "smallint"
+      	CAS hRubEntier2
+      		sRetour = "smallint"
+      	CAS hRubEntier4
+      		sRetour = "int"
+      	CAS hRubEntier8
+      		sRetour = "bigint"
+      	CAS hRubEntierNonSigné1
+      		sRetour = "tinyint"
+      	CAS hRubEntierNonSigné2
+      		sRetour = "INT"
+      	CAS hRubEntierNonSigné4
+      		sRetour = "int"
+      	CAS hRubEntierNonSigné8
+      		sRetour = "bigint"
+      	CAS hRubHeure
+      		sRetour = "Time(0)"
+      	CAS hRubIDAuto
+      		sRetour= "bigint"
+      	CAS hRubIDAuto4
+      		sRetour = "int"
+      	CAS hRubImage
+      		sRetour = "IMAGE"
+      	CAS hRubMémoBinaire
+      		sRetour = "VARBINARY(max)"
+      	CAS hRubMémoBinaire4
+      		sRetour = "VARBINARY(max)"
+      	CAS hRubMémoTexte
+      		sRetour = "Text"
+      	CAS hRubMémoUnicode
+      		sRetour = "nText"
+      	CAS hRubMonétaire
+      		sRetour = "Money"
+      	CAS hRubNumérique
+      		sRetour = "DECIMAL ([%stRub_p.nTaille%], [%stRub_p.nScale%])"
+      	CAS hRubRéel4
+      		sRetour = "Real"
+      	CAS hRubRéel8
+      		sRetour = "Float"
+      	CAS hRubRéelTurbo
+      		sRetour = "Real"
+      	CAS hRubTexte
+      		sRetour = "Varchar(" + stRub_p.nTaille + ")"
+      	CAS hRubTexteUnicode
+      		sRetour = "nVarchar(" + stRub_p.nTaille + ")"
+      	AUTRE CAS
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([stRub_p.nTypeRubHF])
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : stGenSQLRub
+     procedure_id : 1474472812576933184
+     type_code : 12
+     code : |1-
+      procedure PROTÉGÉE stGenSQLRub(sRub_p est une chaine, stRubSql_p est un CLZF_GenData.STR_RubSQL)<metier>:CLZF_GenData.STR_RubSQL
+      
+      
+      stRetour est un CLZF_GenData.STR_RubSQL = identifieEtatElements(sRub_p, stRubSql_p)
+      
+      
+      selon stRetour.nTypeAlterRub
+      	CAS CLZF_GenData.cstTypeAlterRub_SuppRub
+      		stRetour.sCodeSQL += "ALTER TABLE [%:m_oColGen.p_sNomTable%] DROP COLUMN [%sRub_p%]"
+      	CAS CLZF_GenData.cstTypeAlterRub_CreeTable
+      		stRetour.sCodeSQL += sRub_p
+      	CAS CLZF_GenData.cstTypeAlterRub_CreeRub
+      		stRetour.sCodeSQL += "ALTER TABLE [%:m_oColGen.p_sNomTable%] ADD [%sRub_p%]"
+      	CAS CLZF_GenData.cstTypeAlterRub_ModRub
+      		stRetour.sCodeSQL += "ALTER TABLE [%:m_oColGen.p_sNomTable%] ALTER COLUMN [%sRub_p%]"
+      	cas cstTypeAlterRub_RAS
+      		//pas de modif
+      	AUTRE CAS
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([stRetour.nTypeAlterRub])
+      FIN
+      
+      SI PAS stRetour.nTypeAlterRub DANS(CLZF_GenData.cstTypeAlterRub_SuppRub, CLZF_GenData.cstTypeAlterRub_RAS) ALORS
+      	stRetour.sCodeSQL += " " + stRetour.sType
+      	
+      	si pas stRetour.bEstNullable ALORS
+      		stRetour.sCodeSQL += " NOT"
+      	FIN
+      	stRetour.sCodeSQL += " NULL"
+      	
+      	
+      
+      
+      	//Génération du code de contrainte par défaut
+      	sNomDF est une chaîne
+      	sNomDF = sNomRelDF(:m_oCOlGen.p_sNomTable, sRub_p)
+      	
+      	SI stRetour.nTypeAlterDef DANS(cstTypeAlterDef_Cree, cstTypeAlterDef_Mod) alors
+      		
+      		SI stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeTable ALORS
+      			stRetour.sCodeSQL += " CONSTRAINT [%sNomDF%] DEFAULT ([%stRetour.sValeurDefaut%])"
+      		SINON
+      			stRetour.sCodeAddDef = [
+      			ALTER TABLE [%:m_oColGen.p_sNomTable%]
+      				ADD CONSTRAINT [%sNomDF%] DEFAULT ([%stRetour.sValeurDefaut%]) FOR [[%sRub_p%]]
+      			]
+      		FIN
+      	FIN
+      		
+      	
+      	
+      	//Génération du code de contrainte FK
+      	SI stRetour.nTypeAlterFK = cstTypeAlterFK_Cree ALORS
+      		
+      		sNomFK est une chaîne
+      		sNomFK = ::sNomRelFK(:m_oCOlGen.p_sNomTable, sRub_p, stRetour.sRefTablePK, stRetour.sRefRubIdPK)
+      		
+      		SI stRetour.nTypeAlterRub DANS(CLZF_GenData.cstTypeAlterRub_CreeTable) ALORS
+      			stRetour.sCodeKey = "CONSTRAINT [%sNomFK%] FOREIGN KEY ([%sRub_p%]) REFERENCES [%stRetour.sRefTablePK%] ([%stRetour.sRefRubIdPK%]) ON DELETE NO ACTION ON UPDATE NO ACTION"
+      		sinon
+      			stRetour.sCodeKey = [
+      				ALTER TABLE [[%:m_oCOlGen.p_sNomTable%]] WITH CHECK ADD CONSTRAINT [[%sNomFK%]] FOREIGN KEY([[%sRub_p%]])
+      				REFERENCES [[%stRetour.sRefTablePK%]] ([[%stRetour.sRefRubIdPK%]]) ON DELETE NO ACTION ON UPDATE NO ACTION
+      				]
+      		FIN
+      	FIN
+      FIN
+      
+      
+      SI stRetour.nTypeAlterDef DANS(cstTypeAlterDef_Supp, cstTypeAlterDef_Mod) ALORS
+      	stRetour.sCodeDropDef = [
+      			ALTER TABLE [%:m_oColGen.p_sNomTable%]
+      				DROP CONSTRAINT [%stRubSql_p.sNomContrainteDef%]
+      	]
+      	
+      FIN
+      
+      
+      renvoyer stRetour
+     type : 458752
+   -
+     name : GetDefRubSQL
+     procedure_id : 1475212517645710165
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetDefRubSQL ()
+      //
+      // Paramètres :
+      //	Aucun
+      
+      // Valeur de retour :
+      // 	tableau associatif (STR_RubSQL) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure PROTÉGÉE GetDefRubSQL()<metier>:tableau associatif de CLZF_GenData.STR_RubSQL
+      
+      
+      sReq		est une chaîne
+      sdDefTbl	est une source de données
+      stRub		est un CLZF_GenData.STR_RubSQL
+      aRetour		est un tableau associatif de CLZF_GenData.STR_RubSQL
+      
+      
+      sReq = [
+      
+      SELECT
+      --	sys.columns.column_id AS ObjectID_RubriqueDansTable,
+      --	columns.object_id AS ID_Table,
+      --	tables.name AS NomTable,
+      	columns.NAME AS Rubrique,
+      --	columns.system_type_id AS CodeType,
+      	types.NAME AS Type,
+      	columns.max_length AS Taille,
+      	columns.precision,
+      	columns.scale,
+      	columns.is_nullable AS EstNullable,
+      
+      	default_constraints.name as NomContainteDef,
+      	NULLIF(default_constraints.definition, '(NULL)') As ValeurDefaut,	--Si on a déja une contrainte, qui met 'NULL' par défaut, on considère qu'il n'y a pas de contrainte (on généralise le traitement)
+      			
+      	CASE WHEN TmpInfoIndex.object_id IS NULL
+      		THEN 0
+      		ELSE 1
+      	END AS EstIndex,
+      	isnull(TmpInfoIndex.is_unique, 0) AS EstIndexUnique,
+      			
+      	CASE WHEN tmpColFullText.object_id IS NULL
+      		THEN 0
+      		ELSE 1
+      	END AS EstFullText,
+      			
+      	CASE WHEN tmpColCleEtrangere.ID_CleEtrangere IS NULL
+      		THEN 0
+      		ELSE 1
+      	END AS EstCleEtrangere,
+      	tmpColCleEtrangere.Nom_Table_CleReferencee,
+      	tmpColCleEtrangere.Nom_CleReference
+      		
+      		
+      FROM sys.columns
+      	INNER JOIN sys.tables ON (tables.object_id = columns.object_id)
+      	LEFT OUTER JOIN sys.types ON (types.system_type_id = columns.system_type_id)
+      	LEFT OUTER JOIN sys.default_constraints ON (default_constraints.parent_object_id = columns.object_id
+      		AND default_constraints.parent_column_id = columns.column_id)
+      		
+      -- Rubrique index ?
+      LEFT OUTER JOIN (
+      		
+      	SELECT 
+      		indexes.object_id,
+      		index_columns.index_id,
+      		MAX(index_columns.column_id) AS column_id,
+      		max(cast(indexes.is_unique as tinyint)) AS is_unique
+      			
+      	FROM sys.index_columns
+      		INNER JOIN sys.indexes ON (indexes.index_id = index_columns.index_id
+      			AND indexes.object_id = index_columns.object_id)
+      			
+      	WHERE index_columns.is_included_column = 0
+      		
+      GROUP BY indexes.object_id,
+      	index_columns.index_id
+      	HAVING count(*) = 1
+      		
+      ) AS TmpInfoIndex
+      	ON (TmpInfoIndex.object_id = columns.object_id AND TmpInfoIndex.column_id = columns.column_id)
+      		
+      -- Rubrique full text ?
+      LEFT OUTER JOIN (
+      		
+      	SELECT
+      		fulltext_index_columns.object_id,
+      		fulltext_index_columns.column_id
+      	FROM sys.fulltext_index_columns
+      		
+      ) AS tmpColFullText 
+      	ON (tmpColFullText.object_id = columns.object_id AND tmpColFullText.column_id = columns.column_id)
+      		
+      -- Rubrique clé étrangère ?
+      LEFT OUTER JOIN (
+      		
+      	SELECT
+      		foreign_key_columns.parent_column_id AS ID_CleEtrangere,
+      		foreign_key_columns.parent_object_id AS ID_TableEtrangere,
+      		object_name(foreign_key_columns.parent_object_id) AS Nom_Table_CleEtrangere,
+      		ColPrim.name AS Nom_CleEtrangere,
+      				
+      		foreign_key_columns.referenced_column_id AS ID_CleReference,
+      		foreign_key_columns.referenced_object_id AS ID_TableReferencee,
+      		object_name(foreign_key_columns.referenced_object_id) AS Nom_Table_CleReferencee,
+      		colEtrangere.name AS Nom_CleReference
+      			
+      	FROM sys.foreign_key_columns
+      			
+      	INNER JOIN sys.columns AS colEtrangere 
+      		ON (colEtrangere.object_id = foreign_key_columns.parent_object_id and colEtrangere.column_id = foreign_key_columns.parent_column_id)
+      			
+      	INNER JOIN sys.columns AS ColPrim 
+      		ON (ColPrim.object_id = foreign_key_columns.referenced_object_id and ColPrim.column_id = foreign_key_columns.referenced_column_id) 
+      		
+      ) AS tmpColCleEtrangere
+      	ON (tmpColCleEtrangere.ID_CleEtrangere = sys.columns.column_id 
+      		AND tmpColCleEtrangere.ID_TableEtrangere = columns.object_id)
+      		
+      where sys.tables.name = '[%:m_oCOlGen.p_sNomTable%]'
+      ]
+      ClZF_ObjDbLs.mg_oApp.Rsql(sdDefTbl, sReq)
+      
+      
+      pour tout sdDefTbl
+      	VariableRAZ(stRub)
+      
+      	stRub.sType				= sdDefTbl.Type
+      	selon Majuscule(sdDefTbl.Type)
+      		CAS "DECIMAL"
+      			stRub.nTaille			= sdDefTbl.PRECISION
+      			stRub.nScale			= sdDefTbl.Scale
+      			
+      		AUTRE CAS
+      			stRub.nTaille			= sdDefTbl.Taille
+      			
+      	FIN
+      	stRub.bEstNullable		= sdDefTbl.EstNullable
+      	stRub.sValeurDefaut		= sdDefTbl.ValeurDefaut
+      	stRub.bEstIndexUnique	= sdDefTbl.EstIndexUnique
+      	stRub.sRefTablePK		= sdDefTbl.Nom_Table_CleReferencee
+      	stRub.sRefRubIdPK		= sdDefTbl.Nom_CleReference
+      	stRub.sNomContrainteDef	= sdDefTbl.NomContainteDef
+      	
+      	aRetour[sdDefTbl.Rubrique] = stRub
+      FIN
+      
+      renvoyer aRetour
+      
+      
+      
+     type : 458752
+   -
+     name : bRubCompatible
+     procedure_id : 1476194235531916167
+     type_code : 12
+     code : |1+
+      procedure protegee  bRubCompatible(nTypeHF_p est un entier, sTypeSQL_P est une chaîne)<metier>:booleen
+      
+      bRetour est un booléen
+      selon majuscule(sTypeSQL_P)
+      	CAS "BINARY"
+      		bRetour = nTypeHF_p dans (hRubBinaire)
+      	CAS "BIT"
+      		bRetour = nTypeHF_p DANS (hRubBooléen)
+      		
+      	CAS "CHAR"
+      		bRetour = nTypeHF_p DANS (hRubCaractère)
+      		
+      	CAS "DATE"
+      		bRetour = nTypeHF_p DANS (hRubDate8)
+      		
+      	CAS "DAYETIME2"
+      		bRetour = nTypeHF_p DANS (hRubDateHeure, hRubDurée)
+      		
+      	CAS "SMALLINT"
+      		bRetour = nTypeHF_p DANS (hRubEntier1, hRubEntier2)
+      		
+      	CAS "INT"
+      		bRetour = nTypeHF_p DANS (hRubEntier4, hRubEntierNonSigné2, hRubIDAuto4)
+      		
+      	CAS "BIGINT"
+      		bRetour = nTypeHF_p DANS (hRubEntier8, hRubEntierNonSigné8, hRubEntierNonSigné4, hRubIDAuto)
+      		
+      	CAS "TINYINT"
+      		bRetour = nTypeHF_p DANS (hRubEntierNonSigné1)
+      		
+      	CAS "TIME"
+      		bRetour = nTypeHF_p DANS (hRubHeure)
+      		
+      	CAS "IMAGE"
+      		bRetour = nTypeHF_p DANS (hRubImage)
+      		
+      	CAS "VARBINARY"
+      		bRetour = nTypeHF_p DANS (hRubMémoBinaire, hRubMémoBinaire4)
+      		
+      	CAS "TEXT"
+      		bRetour = nTypeHF_p DANS (hRubMémoTexte)
+      		
+      	CAS "NTEXT"
+      		bRetour = nTypeHF_p DANS (hRubMémoUnicode)
+      		
+      	CAS "MONEY"
+      		bRetour = nTypeHF_p DANS (hRubMonétaire)
+      		
+      /*	CAS hRubNumérique
+      		sRetour = "Float(" + nTaille_p + ")"		// !!!!<§cs:10§>
+      		bRetour = nTypeHF_p DANS ()<§cs:10§>
+      		*/
+      	CAS "REAL"
+      		bRetour = nTypeHF_p DANS (hRubRéel4, hRubRéelTurbo)
+      		
+      	CAS "FLOAT"
+      		bRetour = nTypeHF_p DANS (hRubRéel8)
+      		
+      	CAS "VARCHAR"
+      		bRetour = nTypeHF_p DANS (hRubTexte)
+      		
+      	CAS "NVARCHAR"
+      		bRetour = nTypeHF_p DANS (hRubTexteUnicode)
+      		
+      	CAS "DECIMAL"
+      		bRetour = nTypeHF_p DANS (hRubNumérique)
+      		
+      	AUTRE CAS
+      		bRetour = faux
+      FIN
+      
+      renvoyer bRetour
+      
+      
+     type : 458752
+   -
+     name : GenCodeDiff
+     procedure_id : 1524488917916055523
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode CLZF_GenData.GenCodeDiff
+      PROCÉDURE GenCodeDiff():Vide
+      
+      sRub			est une chaîne
+      sCode			est une chaîne
+      stRubSql		est un CLZF_GenData.STR_RubSQL
+      aStRubSQL		est un tableau associatif de CLZF_GenData.STR_RubSQL
+      //aRubs			est un tableau associatif de CLZF_GenData.STR_RubSQL
+      sIndicateurPK	est une chaîne
+      
+      //
+      //aRubs = :GetDefRubSQL()
+      //
+      //
+      //SI aRubs..Occurrence = 0 ALORS
+      //	:m_bCreeTable	= Vrai
+      //SINON
+      //	:m_bCreeTable	= Faux
+      //FIN
+      //
+      //
+      //
+      //POUR TOUT sRub DE :m_oColGen.aLstRubs()
+      //	SI aRubs[sRub]..Vide ALORS
+      //		VariableRAZ(stRubSql)
+      //	SINON
+      //		stRubSql = aRubs[sRub]
+      //	FIN
+      //	
+      //	aStRubSQL[sRub]	= :stGenSQLRub(sRub, stRubSql)
+      //FIN
+      
+      aStRubSQL = GenCodeDiffinit()
+      
+      SI :m_bCreeTable ALORS
+      	//Table en création :
+      	sTypeId est une chaîne
+      	
+      	//Récupération du type de la rubrique
+      	sTypeId = CLZF_GenDataMSSQL.sRubSqlDeTypeHF(:m_oColGen.p_stDefId)
+      	
+      	//Ajout de l'auto incrément si le type est définit comme tel
+      	SI :m_oColGen.p_stDefId.nTypeRubHF DANS (hRubIDAuto4, hRubIDAuto) ALORS
+      		sIndicateurPK = "identity(1, 1)"
+      	FIN
+      	
+      	//Définition de la rubrique de la colonne ID.
+      	sCode += TAB + "[%:m_oColGen.p_sNomRubId%] [%sTypeId%] not null [%sIndicateurPK%]," + RC
+      	
+      	//Rénération de la définition de toutes les rubriques.
+      	POUR TOUT stRubSql, sRub de aStRubSQL
+      		sCode += TAB + stRubSql.sCodeSQL + "," + RC
+      	FIN
+      	
+      	sCode += TAB + "CONSTRAINT PK_[%:m_oColGen.p_sNomTable%]_[%:m_oColGen.p_sNomRubId%] PRIMARY KEY NONCLUSTERED ([%:m_oColGen.p_sNomRubId%])"
+      	
+      	POUR TOUT stRubSql, sRub de aStRubSQL
+      		SI stRubSql.sCodeKey <> "" ALORS
+      			sCode += "," + RC + TAB + stRubSql.sCodeKey
+      		FIN
+      	FIN
+      	
+      	
+      	sCode = [
+      	CREATE TABLE [%:m_oColGen.p_sNomTable%] (
+      	[%sCode%]
+      	)
+      	
+      	]
+      SINON
+      	
+      	POUR TOUT stRubSql, sRub de aStRubSQL
+      		SI sRub <> :m_oColGen.p_sNomRubId _ET_ stRubSql.nTypeAlterRub <> CLZF_GenData.cstTypeAlterFK_RAS ALORS
+      			sCode += [RC + RC] + "--" + sRub
+      			sCode += RC + stRubSql.sCodeDropDef
+      			sCode += RC + stRubSql.sCodeSQL
+      			sCode += RC + stRubSql.sCodeAddDef
+      		FIN
+      	FIN
+      	
+      	POUR TOUT stRubSql, sRub de aStRubSQL
+      		SI sRub <> :m_oColGen.p_sNomRubId ALORS
+      			sCode += [RC + RC] + stRubSql.sCodeKey
+      		FIN
+      	FIN
+      	
+      FIN
+      
+      
+      :m_sCode = sCode
+     type : 458752
+   -
+     name : sNomRelFK
+     procedure_id : 1527176511318483966
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode CLZF_GenData.sNomRelFK
+      PROCÉDURE PROTÉGÉE sNomRelFK(LOCAL sTableFK_p est une chaîne, LOCAL sRubriqueFK_p est une chaîne, LOCAL sTablePK_p est une chaîne, LOCAL sRubriquePK_p est une chaîne)<métier>:chaîne
+      renvoyer Gauche(Ancêtre.sNomRelFK(sTableFK_p, sRubriqueFK_p, sTablePK_p, sRubriquePK_p), 128)
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x147657b90091718d
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

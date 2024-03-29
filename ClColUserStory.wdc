@@ -290,26 +290,37 @@ class :
       selon nTypTesteur_p
       	CAS cstTypeTesteur_Dev
       		
-      		sWhere = ChaîneConstruit([
-      		AND (
-      			Scr_UserStory.IDScr_Usr_TestDev = %1
-      			OR
-      			Scr_UserStory.IDScr_Usr_TestDev IS NULL
-      			)
+      		sWhere = [
       			AND Scr_UserStory.EstTesteParEquipeDev = 0
-      		], oUser_p.ZF_Get_IdUnique())
+      			]
+      		
+      		si oUser_p <> null ALORS
+      			sWhere += rc + [
+      				AND (
+      					Scr_UserStory.IDScr_Usr_TestDev = [%oUser_p.ZF_Get_IdUnique()%]
+      					OR
+      					Scr_UserStory.IDScr_Usr_TestDev IS NULL
+      					)			
+      				]
+      		FIN
       		
       	CAS cstTypeTesteur_Fonctionnel
       		
-      		sWhere = ChaîneConstruit([
-      		AND Scr_UserStory.IDScr_Usr_Valideur = %1
-      		AND Scr_UserStory.EstTesteParEquipeDev = 1
-      		AND Scr_UserStory.EstTesteParFonctionnel = 0
-      		], oUser_p.ZF_Get_IdUnique())
+      		sWhere = [
+      			AND Scr_UserStory.EstTesteParEquipeDev = 1
+      			AND Scr_UserStory.EstTesteParFonctionnel = 0
+      			]
+      		
+      		SI oUser_p <> Null ALORS
+      			sWhere += RC + [
+      				AND Scr_UserStory.IDScr_Usr_Valideur = [%oUser_p.ZF_Get_IdUnique()%]
+      				]
+      		FIN
       		
       	AUTRES CAS
       		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([nTypTesteur_p])
       FIN
+      
       
       
       sReq = [

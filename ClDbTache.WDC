@@ -88,12 +88,6 @@ class :
       	Charge_Demarre
       fin
       
-      ETypeEtatTacheAFaire est une énumération
-      	PasseEtActuelle
-      	Future
-      	Toutes
-      fin
-      
       
       m_oExPbPoidTache			= allouer un ClZF_Exception("Valeur incorrecte, pour le poids de la tache")
       m_oExPbPoidTachePrev		= allouer un ClZF_Exception("Valeur incorrecte, pour le poids prévisionnel")
@@ -484,57 +478,6 @@ class :
       renvoyer nTotal
      type : 458752
    -
-     name : Taches_a_faire
-     procedure_id : 1444819982169229908
-     type_code : 12
-     code : |1-
-      // Résumé : <indiquez ici ce que fait la procédure>
-      // Syntaxe :
-      //[ <Résultat> = ] Taches_a_faire (<eFiltre> est ClTache.ETypeEtatTacheAFaire)
-      //
-      // Paramètres :
-      //	eFiltre (ClTache.ETypeEtatTacheAFaire) : <indiquez ici le rôle de eFiltre>
-      // Valeur de retour :
-      // 	ClColTaches : <indiquez ici le rôle de la valeur de retour>
-      //
-      // Exemple :
-      // Indiquez ici un exemple d'utilisation.
-      //
-      PROCEDURE globale Taches_a_faire(eFiltre est un ETypeEtatTacheAFaire)<metier>:ClColTache
-      
-      sReq	est une chaîne
-      oTaches	est un ClColTache
-      sFilre	est une chaîne
-      
-      selon eFiltre
-      	CAS PasseEtActuelle
-      		sFilre = "AND Scr_Tache.Num_Sprint_Realisation <= " + goApp.m_nNumeroDuSprintActuel
-      	CAS Future
-      		sFilre = "AND Scr_Tache.Num_Sprint_Realisation > " + goApp.m_nNumeroDuSprintActuel
-      	CAS Toutes
-      		
-      FIN
-      
-      sReq = [
-      	
-      	SELECT
-      		Scr_Tache.*
-      		
-      	FROM Scr_Tache
-      	
-      	where Scr_Tache.Num_Sprint_Demarrage is Null
-      		AND Scr_Tache.Top_Annule = 0
-      		AND Scr_Tache.Top_Brouillon = 0
-      		AND Scr_Tache.Top_Realise = 0
-      		[%sFilre%]
-      		
-      ]
-      
-      oTaches.ZF_LoadSQL(sReq)
-      
-      renvoyer oTaches
-     type : 458752
-   -
      name : sBulleTache
      procedure_id : 1444819982169295444
      type_code : 12
@@ -916,7 +859,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure globale changeOrdre(oTache_p est un ClDbTache, nChangePos_P est un entier)<metier>:Vide
+      procédure globale changeOrdre(oTache_p est un ClDbTache, nChangePos_P est un entier)<metier,zombie>:Vide
       
       nPosInit		est un entier
       nNouvPos		est un entier
