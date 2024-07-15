@@ -68,7 +68,7 @@ class :
       
       
       restRequete..URL					= "https://api.openai.com/v1/chat/completions"
-      restRequete["Authorization"]		= "Bearer " + cstCle
+      restRequete["Authorization"]		= "Bearer " + ::cstCle
       restRequete["OpenAI-Organization"]	= "org-yikcGSyHbYh7vbf5H9t0e1HD"
       
       restRequete..Contenu			= [

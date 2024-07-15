@@ -77,7 +77,7 @@ class :
       sHerite			est une chaîne
       
       
-      pour tout element stDefRub, sRub de :m_oClasseGen.m_aRub
+      pour tout element stDefRub, sRub de :m_oClasseGen.aListeRubriques()
       	sListeMembres += [rc] + TAB + ::sDeclareMembre(stDefRub, sRub)
       FIN
       
@@ -86,7 +86,11 @@ class :
       si :m_bLectureSeule ALORS
       	sHerite = ClZF_ObjDbLs
       sinon
-      	sHerite = ClZF_ObjDb
+      	si :m_oClasseGen.m_bTableRelation ALORS
+      		sHerite = ClZF_ObjRel
+      	sinon
+      		sHerite = ClZF_ObjDB
+      	FIN
       fin
       
       
@@ -121,7 +125,7 @@ class :
       ]
       
       si :m_bNatif ALORS
-      	sRetour = GenBlocCL_Init(sRetour, :m_oClasseGen.sNomClasseGen())
+      	sRetour = :GenBlocCL_Init(sRetour, :m_oClasseGen.sNomClasseGen())
       FIN
       
       renvoyer sRetour
@@ -159,7 +163,7 @@ class :
       ]
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       renvoyer sRetour
@@ -193,7 +197,7 @@ class :
       
       si pas :m_bLectureSeule ALORS
       	
-      	pour tout stRub, sRub de :m_oClasseGen.m_aRub
+      	pour tout stRub, sRub de :m_oClasseGen.aListeRubriques()
       		si stRub.stRelFkAsso.nTypeRel = ClZF_GenCodeFic.cstRelIncl ALORS
       			sListeInit += [rc] + tab + ":[%stRub.sNomMembre%]	= allouer un [%stRub.sNomDeclarationCourt%]()"
       		FIN
@@ -223,7 +227,7 @@ class :
       
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       renvoyer sRetour
@@ -255,7 +259,7 @@ class :
       sNomVarExc	est une chaîne
       
       
-      POUR TOUT stTmp, sCle DE :m_oClasseGen.m_aRub
+      POUR TOUT stTmp, sCle DE :m_oClasseGen.aListeRubriques()
       	si stTmp.oObj_Parent <> null alors
       		
       		// la rubrique en cours est elle liés à une relation d'inclusion ?
@@ -324,7 +328,7 @@ class :
       
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       
@@ -354,57 +358,62 @@ class :
       sRetour		est une chaîne
       sPropR		est une chaîne
       sPropw		est une chaîne
-      sPropDecl	est une chaîne
-      stRub		est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.m_aRub[sRub_p]
+      //sPropDecl	est une chaîne
+      stRub		est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.stRub(sRub_p)
       sPropriete	est une chaîne
-      sMembre		est une chaîne
-      sTestModif	est une chaîne
-      sParam		est une chaîne
-      
-      
-      //si :m_bNatif ALORS
-      	sPropDecl = "PROCEDURE"
+      //sMembre		est une chaîne
+      //sTestModif	est une chaîne
+      //sParam		est une chaîne
+      //
+      //
+      //sPropDecl = "PROCEDURE"
+      //
+      //si stRub.oObj_Parent = Null ALORS
+      //	sMembre		= stRub.sNomMembre
+      //	sPropriete	= stRub.sNomPropriete
+      //	sTestModif	= "SI :[%sMembre%] <> [%:m_oClasseGen.GetInfoRubPrefix(stRub.nTypeRubHF)%]Valeur_p ALORS"
       //sinon
-      //	sPropDecl = "PROPRIETE"
+      //	sMembre		= "m_o" + sRub_p
+      //	sPropriete	= "p_o" + sRub_p
+      //	sTestModif	= "SI PAS ZF_bObjEgal(:[%sMembre%], oValeur_p) ALORS"
+      //FIN
+      //
+      //sParam = stRub.sPrefixe + "Valeur_p" + ClZF_GenCodeFic.GetInfoRubType(stRub.nTypeRubHF,Vrai)
+      //
+      //
+      //
+      //sPropR = [
+      //	[%sPropDecl%] [%sPropriete%]()<métier>:[%stRub.sNomDeclarationCourt%]
+      //	//Propriétés de [%sMembre%]
+      //	
+      //	RENVOYER :[%sMembre%]
+      //	
+      //	]
+      //
+      //si pas :m_bLectureSeule alors
+      //	sPropw = [
+      //		[%sPropDecl%] [%sPropriete%]([%stRub.sPrefixe%]Valeur_p [%stRub.sNomDeclarationComplet%])<métier>:Vide
+      //		
+      //		[%sTestModif%]
+      //		[%TAB%]:ZF_EstModif()
+      //		[%TAB%]:[%sMembre%] = [%stRub.sPrefixe%]Valeur_p
+      //		FIN
+      //		
+      //		]
       //FIN
       
-      si stRub.oObj_Parent = Null ALORS
-      	sMembre		= stRub.sNomMembre
-      	sPropriete	= stRub.sNomPropriete
-      	sTestModif	= "SI :[%sMembre%] <> [%:m_oClasseGen.GetInfoRubPrefix(stRub.nTypeRubHF)%]Valeur_p ALORS"
-      sinon
-      	sMembre		= "m_o" + sRub_p
-      	sPropriete	= "p_o" + sRub_p
-      	sTestModif	= "SI PAS ZF_bObjEgal(:[%sMembre%], oValeur_p) ALORS"
-      FIN
-      
-      sParam = stRub.sPrefixe + "Valeur_p" + ClZF_GenCodeFic.GetInfoRubType(stRub.nTypeRubHF,Vrai)
       
       
       
-      sPropR = [
-      [%sPropDecl%] [%sPropriete%]()<métier>:[%stRub.sNomDeclarationCourt%]
-      //Propriétés de [%sMembre%]
-      
-      RENVOYER :[%sMembre%]
-      
-      ]
+      sPropR = :sCodePropriete(sRub_p, faux)
       
       si pas :m_bLectureSeule alors
-      	sPropw = [
-      	[%sPropDecl%] [%sPropriete%]([%stRub.sPrefixe%]Valeur_p [%stRub.sNomDeclarationComplet%])<métier>:Vide
-      	
-      	[%sTestModif%]
-      	[%TAB%]:ZF_EstModif()
-      	[%TAB%]:[%sMembre%] = [%stRub.sPrefixe%]Valeur_p
-      	FIN
-      	
-      	]
+      	sPropw = :sCodePropriete(sRub_p, vrai)
       FIN
       
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Propriete(sPropR, sPropw, sPropriete)
+      	sRetour = :GenBlocCL_Propriete(sPropR, sPropw, sPropriete)
       sinon
       	sRetour = sPropR + rc + rc + sPropw
       FIN
@@ -412,7 +421,7 @@ class :
       
       //Génération des acces a la popriété objet
       si stRub.oObj_Parent <> Null ALORS
-      	sRetour += rc + GenProprieteID(sRub_p)
+      	sRetour += rc + :GenProprieteID(sRub_p)
       FIN
       
       
@@ -443,7 +452,7 @@ class :
       sPropR		est une chaîne
       sPropw		est une chaîne
       sPropDecl	est une chaîne
-      stRub		est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.m_aRub[sRub_p]
+      stRub		est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.stRub(sRub_p)
       sPropriete	est une chaîne
       sMembre		est une chaîne
       
@@ -491,7 +500,7 @@ class :
       
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Propriete(sPropR, sPropw, sPropriete + "_ID")
+      	sRetour = :GenBlocCL_Propriete(sPropR, sPropw, sPropriete + "_ID")
       SINON
       	sRetour = sPropR + RC + RC + sPropw
       FIN
@@ -555,7 +564,7 @@ class :
       	]
       	
       	SI :m_bNatif ALORS
-      		sModele = GenBlocCL_Procedure(sModele, sNomProc)
+      		sModele = :GenBlocCL_Procedure(sModele, sNomProc)
       	FIN
       
       	
@@ -596,7 +605,7 @@ class :
       sClasse += :GenConstructeur() + rc
       sClasse += :GenDestructeur() + rc
       
-      SI pas m_bNatif ALORS
+      SI pas :m_bNatif ALORS
       	sClasse += sProprietes + rc
       FIN
       
@@ -614,13 +623,13 @@ class :
       sClasse = :GenDeclaration() + rc + sClasse
       
       
-      SI m_bNatif ALORS
+      SI :m_bNatif ALORS
       	sClasse += "  properties :" + rc + sProprietes + RC
-      	sClasse += GenBlocCL_Fin()
+      	sClasse += :GenBlocCL_Fin()
       FIN
       
       
-      m_sCode = sClasse
+      :m_sCode = sClasse
      type : 458752
    -
      name : GenConstructeur
@@ -641,16 +650,18 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       //	oGencode_p (ClZF_GenCodeFic) : <indiquez ici le rôle de oGencode_p>
-      procédure prive GenConstructeur()<métier>:chaîne
+      procédure protege GenConstructeur()<métier>:chaîne
       
-      sRetour			est une chaîne = [
-      PROCÉDURE Constructeur(LOCAL nID_P est un entier)
-      Ancêtre.Constructeur([%:m_oClasseGen.p_sNomTable%]..Nom, [%:m_oClasseGen.p_sNomTable%].[%:m_oClasseGen.p_sNomRubId%]..Nom,nID_P)
       
-      ]
+      sRetour			est une chaîne = :sCodeConstructeur()
+      //sRetour			est une chaîne = [
+      //PROCÉDURE Constructeur(LOCAL nID_P est un entier)
+      //Ancêtre.Constructeur([%:m_oClasseGen.p_sNomTable%]..Nom, [%:m_oClasseGen.p_sNomTable%].[%:m_oClasseGen.p_sNomRubId%]..Nom,nID_P)
+      //
+      //]
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Constructeur(sRetour)
+      	sRetour = :GenBlocCL_Constructeur(sRetour)
       FIN
       
       renvoyer sRetour
@@ -682,7 +693,7 @@ class :
       ]
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Destructeur(sRetour)
+      	sRetour = :GenBlocCL_Destructeur(sRetour)
       FIN
       
       renvoyer sRetour
@@ -702,7 +713,7 @@ class :
       
       sRetour = tab + "[%:m_oClasseGen.p_sNomTable%].[%:m_oClasseGen.p_sNomRubId%]	= cst"
       
-      pour tout element stDefRub, sRub de :m_oClasseGen.m_aRub
+      pour tout element stDefRub, sRub de :m_oClasseGen.aListeRubriques()
       	sRetour += rc + TAB + :m_oClasseGen.p_sNomTable + "." + sRub + "	= "
       FIN
       
@@ -720,7 +731,7 @@ class :
       
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Procedure(sRetour, sProcedure)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sProcedure)
       FIN
       
       renvoyer sRetour
@@ -734,7 +745,7 @@ class :
       sRetour est une chaîne
       stConst est un STR_Const
       
-      pour tout stConst de m_aConstantes
+      pour tout stConst de :m_aConstantes
       	sRetour += [rc] + tab + stConst.sCle + "	= " + stConst.sVal
       FIN
       
@@ -778,34 +789,17 @@ class :
       //sNomVarExc	est une chaîne
       
       
-      POUR TOUT ÉLÉMENT stTmp, sCle DE :m_oClasseGen.m_aRub
-      //	si stTmp.oObj_Parent <> null alors
+      POUR TOUT ÉLÉMENT stTmp, sCle DE :m_oClasseGen.aListeRubriques()
+      	
+      	// la rubrique en cours est elle liés à une relation d'inclusion ?
+      	si :m_oClasseGen.bRubriqueRelationInclusion(sCle) ALORS
+      		sRetour += [RC] + [
+      		[%TAB%]//Suppression de ""[%stTmp.oObj_Parent.p_sNomUsage%]"" parent.
+      		[%TAB%]:[%stTmp.sNomMembre%].ZF_Supprimer()
+      		[%TAB%]:[%stTmp.sNomMembre%].ZF_Enregistre()
       		
-      		// la rubrique en cours est elle liés à une relation d'inclusion ?
-      		si :m_oClasseGen.bRubriqueRelationInclusion(sCle) ALORS
-      			sRetour += [RC] + [
-      			[%TAB%]//Suppression de ""[%stTmp.oObj_Parent.p_sNomUsage%]"" parent.
-      			[%TAB%]:[%stTmp.sNomMembre%].ZF_Supprimer()
-      			[%TAB%]:[%stTmp.sNomMembre%].ZF_Enregistre()
-      			
-      			]
-      		FIN
-      		
-      //		si pas stTmp.bNullable ALORS
-      //			sNomVarExc = "mg_oEx_CompoNonInst_" + sCle
-      //			:m_sEx_Decl += [rc] + sNomVarExc + "	est un ClZF_Exception dynamique"
-      //			:m_sEx_Inst += [rc] + sNomVarExc + "	= Allouer un ClZF_Exception(""Enregistrement impossible : [%stTmp.sNomMembre%] est requis."")			// A faire : Reprendre le message"
-      //			
-      //			sRetour += [RC] + [
-      //			[%TAB%]//
-      //			[%TAB%]SI :[%stTmp.sNomMembre%] = Null ALORS
-      //			[%TAB%][%TAB%][%sNomVarExc%].ZF_Declenche()
-      //			[%TAB%]FIN
-      //			
-      //			]
-      //		FIN
-      		
-      //	FIN
+      		]
+      	FIN
       FIN
       
       
@@ -826,7 +820,7 @@ class :
       
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       
@@ -850,6 +844,74 @@ class :
       
       renvoyer sListeMembres
      type : 458752
+   -
+     name : sCodeConstructeur
+     procedure_id : 1601753339538826300
+     type_code : 12
+     code : |1+
+      procédure VIRTUELLE protege sCodeConstructeur() <métier>:chaine
+      
+      sRetour			est une chaîne = [
+      PROCÉDURE Constructeur(LOCAL nID_P est un entier)
+      Ancêtre.Constructeur([%:m_oClasseGen.p_sNomTable%]..Nom, [%:m_oClasseGen.p_sNomTable%].[%:m_oClasseGen.p_sNomRubId%]..Nom,nID_P)
+      
+      ]
+      
+      renvoyer sRetour
+      
+     type : 458752
+   -
+     name : sCodePropriete
+     procedure_id : 1601758978843339443
+     type_code : 12
+     code : |1-
+      procédure virtuelle protege sCodePropriete(sRub_p est une chaîne, bEcriture_p est un booléen) <métier>:chaine
+      
+      sPropDecl	est une chaîne
+      stRub		est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.stRub(sRub_p)
+      sPropriete	est une chaîne
+      sMembre		est une chaîne
+      sTestModif	est une chaîne
+      sParam		est une chaîne
+      sRetour		est une chaîne
+      
+      sPropDecl = "PROCEDURE"
+      
+      SI stRub.oObj_Parent = Null ALORS
+      	sMembre		= stRub.sNomMembre
+      	sPropriete	= stRub.sNomPropriete
+      	sTestModif	= "SI :[%sMembre%] <> [%:m_oClasseGen.GetInfoRubPrefix(stRub.nTypeRubHF)%]Valeur_p ALORS"
+      SINON
+      	sMembre		= "m_o" + sRub_p
+      	sPropriete	= "p_o" + sRub_p
+      	sTestModif	= "SI PAS ZF_bObjEgal(:[%sMembre%], oValeur_p) ALORS"
+      FIN
+      
+      sParam	= stRub.sPrefixe + "Valeur_p" + ClZF_GenCodeFic.GetInfoRubType(stRub.nTypeRubHF,Vrai)
+      
+      
+      si pas bEcriture_p alors
+      	sRetour = [
+      		[%sPropDecl%] [%sPropriete%]()<métier>:[%stRub.sNomDeclarationCourt%]
+      		//Propriétés de [%sMembre%]
+      		
+      		RENVOYER :[%sMembre%]
+      		
+      		]
+      sinon
+      	sRetour = [
+      		[%sPropDecl%] [%sPropriete%]([%stRub.sPrefixe%]Valeur_p [%stRub.sNomDeclarationComplet%])<métier>:Vide
+      		
+      		[%sTestModif%]
+      		[%TAB%]:ZF_EstModif()
+      		[%TAB%]:[%sMembre%] = [%stRub.sPrefixe%]Valeur_p
+      		FIN
+      		
+      		]
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
   properties :
    -
      name : GetCode
@@ -859,7 +921,7 @@ class :
       -
         code : |1-
          procédure GetCode() : chaîne
-         renvoyer m_sCode
+         renvoyer :m_sCode
         type : 1966080
      template_refs : []
    -
@@ -870,12 +932,12 @@ class :
       -
         code : |1-
          procédure publique p_bLectureSeule() : booléen
-         renvoyer m_bLectureSeule
+         renvoyer :m_bLectureSeule
         type : 1966080
       -
         code : |1-
          procédure publique p_bLectureSeule(bValeur est un booléen)
-         m_bLectureSeule=bValeur
+         :m_bLectureSeule=bValeur
         type : 2031616
      template_refs : []
    -
@@ -886,7 +948,7 @@ class :
       -
         code : |1-
          procédure publique p_bGenCodeFinal(bValeur est un booléen)
-         m_bGenCodeFinal=bValeur
+         :m_bGenCodeFinal=bValeur
         type : 2031616
      template_refs : []
   procedure_templates : []

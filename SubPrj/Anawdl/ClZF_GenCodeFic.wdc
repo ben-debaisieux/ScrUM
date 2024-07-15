@@ -67,31 +67,39 @@ class :
       FIN
       
       STR_DescFic est une structure
-      	bTopLs		est un booléen
-      	bTopHisto	est un booléen
-      	nNbLigneGen	est un entier
-      	taRubs		est un tableau associatif de STR_DescRub
+      	bTopLs			est un booléen
+      	bTopRelation	est un booléen
+      	bTopHisto		est un booléen
+      	nNbLigneGen		est un entier
+      	taRubs			est un tableau associatif de STR_DescRub
       FIN
+      
+      STR_CleCompo est une structure
+      	sNom	est une chaîne
+      	bUnique	est un booléen
+      	aRubs	est un tableau de chaines
+      fin
       
       //////////////////////////////////////////////////////////////////////////////////////////////
       
       ClZF_GenCodeFic est une Classe
       public
-      	m_aRub			est un tableau associatif (ccSansCasse) de STR_DefRub
-      	m_aCol_Enfant	est un tableau de STR_InfoCol		// a faire : vérifier utilité ?
-      	m_aFK_de_PK		est un tableau de str_rel
-      	m_aPK_de_FK		est un tableau associatif de str_rel
-      	m_stConfigTbl	est un STR_DescFic
+      	m_aCol_Enfant			est un tableau de STR_InfoCol		// a faire : vérifier utilité ?
+      	m_aFK_de_PK				est un tableau de str_rel
+      	m_aCleCompo				est un tableau de STR_CleCompo
+      	m_aPK_de_FK				est un tableau associatif de str_rel
+      	m_stConfigTbl			est un STR_DescFic
+      	m_bTableRelation		est un booléen
       PRIVE
-      	m_sNomTable		est une chaîne
-      	m_sNomUsage		est une chaîne
-      	m_sLibelle		est une chaîne
-      	m_sNomRubId		est une chaîne
-      	m_stDefId		est un STR_DefRub
-      //	m_nTypeHfRubId_old	est un entier
-      	m_bClasseExiste	est un booléen
-      	m_bClasseLS		est un booléen
-      	m_bTableHyerarchisee est un booléen
+      	m_aRub					est un tableau associatif (ccSansCasse) de STR_DefRub
+      	m_sNomTable				est une chaîne
+      	m_sNomUsage				est une chaîne
+      	m_sLibelle				est une chaîne
+      	m_sNomRubId				est une chaîne
+      	m_stDefId				est un STR_DefRub
+      	m_bClasseExiste			est un booléen
+      	m_bClasseLS				est un booléen
+      	m_bTableHyerarchisee	est un booléen
       globale
       public
       	mg_sPrefixeTable	est une chaîne ANSI
@@ -118,9 +126,6 @@ class :
       	cstTypeCleAucune	= 0
       	cstTypeCleUnique	= 1
       	cstTypeCleDoublon	= 2
-      	
-      	
-      	
       fin
      type : 131072
   procedures :
@@ -128,25 +133,25 @@ class :
      name : Constructeur
      procedure_id : 1443681465206134430
      type_code : 27
-     code : |1-
-      procédure Constructeur(local sNomTable_P est une chaîne = "")
+     code : |1+
+      procédure Constructeur(local sNomTable_P est une chaîne)
       
-      
-      SI mg_aGenCodeFic[sNomTable_P]..Vide ALORS
-      	mg_aGenCodeFic[sNomTable_P] = objet
+      si sNomTable_P = "" ALORS
+      	ExceptionDéclenche(1, "Paramète invalide : le nom de la table doit être définit")
       FIN
       
+      //Mise en cache de l'objet courant
+      SI ::mg_aGenCodeFic[sNomTable_P]..Vide ALORS
+      	::mg_aGenCodeFic[sNomTable_P] = objet
+      FIN
       
       :m_sNomTable = sNomTable_P
       :m_sNomUsage = sNomTable_P
       si ChaîneCommencePar(:m_sNomTable, ::mg_sPrefixeTable) ALORS
       	:m_sNomUsage[[ a taille(::mg_sPrefixeTable)]] = ""
       FIN
-      //:m_sNomUsage = remplace(sNomTable_P, ::mg_sPrefixeTable , "", SansCasse)
       
-      si sNomTable_P <> "" ALORS
-      	:m_sLibelle = {sNomTable_P,indFichier}..Libellé
-      FIN
+      :m_sLibelle = {sNomTable_P,indFichier}..Libellé
       
       :Analyse()
      type : 589824
@@ -317,23 +322,24 @@ class :
       
       sRubs		est une chaîne	= HListeRubrique(:m_sNomTable,hLstDétail)
       sLiaisons	est une chaîne	= HListeLiaison(:m_sNomTable)
+      //sLiaisons	est une chaîne	= HListeLiaison(:m_sNomTable)
       sLigne		est une chaîne
       sLigneCle	est une chaîne
       sRub		est une chaîne
       stRubTmp	est un STR_DefRub
       stCol		est un STR_InfoCol
       oGenTmp		est un ClZF_GenCodeFic dynamique
-      sRubIdAuto	est une chaîne
+      sRubClePrim	est une chaîne
       stRelTmp	est un str_rel
       sDeclareObj est une chaîne
       
       
       
-      TableauSupprimeTout(m_aRub)
-      TableauSupprimeTout(m_aCol_Enfant)
-      TableauSupprimeTout(m_aFK_de_PK)
-      TableauSupprimeTout(m_aPK_de_FK)
-      VariableRAZ(m_stConfigTbl)
+      TableauSupprimeTout(:m_aRub)
+      TableauSupprimeTout(:m_aCol_Enfant)
+      TableauSupprimeTout(:m_aFK_de_PK)
+      TableauSupprimeTout(:m_aPK_de_FK)
+      VariableRAZ(:m_stConfigTbl)
       
       
       
@@ -358,14 +364,26 @@ class :
       nIndRech est un entier
       bOk est un booléen
       
+      
+      //Identification de la clé unique, grâce aux contraintes
+      aLstPk est un tableau de chaines
+      aLstPk = :alistRubAvecLiaisonPK()
+      si TableauOccurrence(aLstPk) = 1 ALORS
+      	sRubClePrim = aLstPk[1]
+      	:m_stDefId.nTypeRubHF = {:m_sNomTable + "." + sRubClePrim, indRubrique}..Type
+      FIN
+      
+      
+      //Identification de la clé primaire, via les types de données
       pour nIndRech = 1 a 2
-      	si sRubIdAuto = "" alors
+      	si sRubClePrim = "" alors
       		//Identification de la PK de la table
       		POUR TOUTE CHAÎNE sLigne DE sRubs SÉPARÉE PAR RC
       			VariableRAZ(stRubTmp)
       			sRub = ExtraitChaîne(sLigne, 1)
       			
       			stRubTmp.nTypeRubHF = ExtraitChaîne(sLigne, 3)
+      			stRubTmp.nTypeCle	= ::cstTypeCleUnique
       			
       			selon nIndRech
       				CAS 1
@@ -388,7 +406,7 @@ class :
       			FIN
       			
       			si bOk ALORS
-      				sRubIdAuto		= sRub
+      				sRubClePrim		= sRub
       				:m_stDefId		= stRubTmp
       				sortir
       			FIN
@@ -400,7 +418,7 @@ class :
       
       ////////////////////////////////////////////////////////////////////
       //Analyse des FK
-      si sRubIdAuto <> "" alors
+      //si sRubClePrim <> "" alors
       	POUR TOUTE CHAÎNE sLigneCle DE sLiaisons SÉPARÉE PAR RC
       		
       		bTablePrimaryAGauche	est un booléen
@@ -411,7 +429,13 @@ class :
       		nSymbolePK				est un entier
       		nSymboleFK				est un entier
       		
-      		si ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,3,TAB) = sRubIdAuto ET minuscule(ExtraitChaîne(sLigneCle,7,TAB)) DANS("0,1", "1,1") ALORS
+      //		STOP SI :m_sNomTable = "AGENCE_LOGISTIQUE"
+      		
+      		//si ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET ExtraitChaîne(sLigneCle,3,TAB) = sRubClePrim ET minuscule(ExtraitChaîne(sLigneCle,7,TAB)) DANS("0,1", "1,1") ALORS
+      		si ExtraitChaîne(sLigneCle,2,TAB) = :m_sNomTable ET ...
+      				TableauCherche(:alistRubAvecLiaisonPK(),tcLinéaire,ExtraitChaîne(sLigneCle,3,TAB)) >= 1 ET ...
+      				minuscule(ExtraitChaîne(sLigneCle,7,TAB)) DANS("0,1", "1,1") ALORS
+      			
       			bTablePrimaryAGauche = vrai
       		FIN
       		
@@ -441,12 +465,12 @@ class :
       		stRelTmp.sRubriqueFK	= ExtraitChaîne(sLigneCle,nColRubFK,TAB)
       		
       		quand exception dans
-      			stRelTmp.bRubFKOblig	= analyseFkOblig(ExtraitChaîne(sLigneCle,nSymboleFK,TAB))
-      			stRelTmp.bRubFKUnique	= analyseFkUnique(ExtraitChaîne(sLigneCle,nSymbolePK,TAB))
+      			stRelTmp.bRubFKOblig	= :analyseFkOblig(ExtraitChaîne(sLigneCle,nSymboleFK,TAB))
+      			stRelTmp.bRubFKUnique	= ::analyseFkUnique(ExtraitChaîne(sLigneCle,nSymbolePK,TAB))
       		faire
-      			stRelTmp.nTypeRel		= cstRelErreur
+      			stRelTmp.nTypeRel		= ::cstRelErreur
       		sinon
-      			stRelTmp.nTypeRel		= nTypeRelDeNom(stRelTmp.sNomRel)
+      			stRelTmp.nTypeRel		= :nTypeRelDeNom(stRelTmp.sNomRel)
       		fin
       		si stRelTmp.sTablePK = :m_sNomTable ALORS
       			TableauAjoute(:m_aFK_de_PK, stRelTmp)
@@ -463,7 +487,7 @@ class :
       			:m_bTableHyerarchisee = vrai
       		FIN
       	FIN
-      fin
+      //fin
       
       
       
@@ -478,18 +502,17 @@ class :
       	si pas ::bTypeHfExclu(stRubTmp.nTypeRubHF) alors
       		
       		//Est on sur la clé primaire ?
-      		SI sRub = sRubIdAuto ALORS
+      		SI sRub = sRubClePrim ALORS
       			
       			//Mémorisation du nom de la clé
       			:m_sNomRubId = sRub
       			
       			//On liste les relations, pour identifier les clés étrangères, des autres tables
-      			pour tout stRelTmp de m_aFK_de_PK
+      			pour tout stRelTmp de :m_aFK_de_PK
       				VariableRAZ(stCol)
       				stCol.sTableDesti	= stRelTmp.sTableFK
       				stCol.sCleDesti		= stRelTmp.sRubriqueFK
       				oGenTmp				<- ClZF_GenCodeFic.oGetGenCodeFic(stCol.sTableDesti)
-      //				oGenTmp				= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
       				stCol.sDeclaration	= "[%oGenTmp.sNomClasseColGen(vrai)%]_[%stRelTmp.sRubriqueFK%] est un [%oGenTmp.sNomClasseColGen()%]"
       				TableauAjoute(:m_aCol_Enfant, stCol)
       			FIN
@@ -529,11 +552,11 @@ class :
       			
       			selon {:m_sNomTable + "." + sRub,indRubrique}..TypeClé
       				CAS hNonClé
-      					stRubTmp.nTypeCle = cstTypeCleAucune
+      					stRubTmp.nTypeCle = ::cstTypeCleAucune
       				CAS hCléUnique
-      					stRubTmp.nTypeCle = cstTypeCleUnique
+      					stRubTmp.nTypeCle = ::cstTypeCleUnique
       				CAS hCléDoublon
-      					stRubTmp.nTypeCle = cstTypeCleDoublon
+      					stRubTmp.nTypeCle = ::cstTypeCleDoublon
       				AUTRE CAS
       					ExceptionDéclenche(1, "Cas non traité")
       			FIN
@@ -541,14 +564,13 @@ class :
       			
       			
       			//Parcourt de toutes les liaisons, de la table en cours
-      			si pas m_aPK_de_FK[sRub]..vide alors
-      				stRelTmp = m_aPK_de_FK[sRub]
+      			si pas :m_aPK_de_FK[sRub]..vide alors
+      				stRelTmp = :m_aPK_de_FK[sRub]
       							
       				VariableRAZ(stCol)
       				stCol.sTableDesti		= stRelTmp.sTablePK
       				stCol.sCleDesti			= stRelTmp.sRubriquePK
       				oGenTmp					<- ClZF_GenCodeFic.oGetGenCodeFic(stCol.sTableDesti)
-      //				oGenTmp					= allouer un ClZF_GenCodeFic(stCol.sTableDesti)
       				stCol.sDeclaration		= "[%oGenTmp.sNomClasseColGen(Vrai)%]_[%sRub%] est un [%oGenTmp.sNomClasseColGen()%]"
       				
       				stRubTmp.oObj_Parent	= oGenTmp
@@ -582,6 +604,27 @@ class :
       			:m_aRub[sRub] = stRubTmp
       		FIN
       	fin
+      FIN
+      
+      
+      //////////////////////////////////////////////////////////////////////
+      //Analyse des clés composées
+      stCleTmp	est un STR_CleCompo
+      sCle		est une chaine
+      sClesCopos	est une chaîne	= HListeClé(:m_sNomTable,hLstCléComposée + hLstDétailPlus)
+      
+      pour toute chaine sCle de sClesCopos separee par rc
+      	variableraz(stCleTmp)
+      	stCleTmp.sNom		= ExtraitChaîne(sCle, 1,tab)
+      	stCleTmp.bUnique	= (extraitchaine(sCle, 5,tab) = "1")
+      	ChaîneVersTableau(extraitchaine(sCle, 4,tab), stCleTmp.aRubs, "+")
+      	
+      	TableauAjoute(:m_aCleCompo, stCleTmp)
+      	
+      	//Si on a une clé composée unique, on considère que c'est la clé primaire
+      	si stCleTmp.bUnique et stCleTmp.aRubs..Occurrence > 1 ALORS
+      		:m_bTableRelation = vrai
+      	FIN
       FIN
      type : 458752
    -
@@ -665,16 +708,16 @@ class :
       
       sSufixe est une chaîne = ExtraitChaîne(sNomRel_p,1,"_",DepuisFin)
       selon majuscule(sSufixe)
-      	CAS Majuscule(cstRelAsso_Suf)
-      		renvoyer cstRelAsso
-      	CAS Majuscule(cstRelAgr_Suf)
-      		renvoyer cstRelAgr
-      	CAS Majuscule(cstRelCompo_Suf)
-      		renvoyer cstRelCompo
-      	CAS Majuscule(cstRelincl_Suf)
-      		renvoyer cstRelincl
+      	CAS Majuscule(::cstRelAsso_Suf)
+      		renvoyer ::cstRelAsso
+      	CAS Majuscule(::cstRelAgr_Suf)
+      		renvoyer ::cstRelAgr
+      	CAS Majuscule(::cstRelCompo_Suf)
+      		renvoyer ::cstRelCompo
+      	CAS Majuscule(::cstRelincl_Suf)
+      		renvoyer ::cstRelincl
       	AUTRE CAS
-      		renvoyer cstRelNonDef
+      		renvoyer ::cstRelNonDef
       FIN
       
      type : 458752
@@ -683,16 +726,21 @@ class :
      procedure_id : 1464991259952214531
      type_code : 12
      code : |1+
-      procedure globale sListeFicAna()<metier>:chaine
+      procedure globale sListeFicAna(bOrdreCréation_p est un booléen = faux)<metier>:chaine
       
-      aTablesExclues est un tableau de chaîne = goapp.TablesExclues()
+      aTablesExclues est un tableau de chaîne = ClZF_ObjDbLs.mg_oApp.TablesExclues()
       sRetour est une chaîne
       sTable est une chaîne
       
       aTbls est un tableau de chaînes
       
-      ChaîneVersTableau(HListeFichier(), aTbls, rc)
-      TableauTrie(aTbls)
+      ChaîneVersTableau(HListeFichier(hLstTout), aTbls, rc)
+      
+      si pas bOrdreCréation_p ALORS
+      	TableauTrie(aTbls)
+      sinon
+      	TableauInverse(aTbls)
+      FIN
       
       pour toute sTable de aTbls
       	si tableaucherche(aTablesExclues,tcLinéaire,sTable) = -1 ALORS
@@ -703,6 +751,17 @@ class :
       
       
       renvoyer sRetour
+     type : 458752
+   -
+     name : aListeFicAna
+     procedure_id : 1609701734853730091
+     type_code : 12
+     code : |1-
+      PROCÉDURE GLOBALE aListeFicAna(bOrdreCréation_p est un booléen = Faux)<métier>:tableau de chaines
+      aRetour est un tableau de chaines
+      sListe est une chaine = ::sListeFicAna(bOrdreCréation_p)
+      ChaîneVersTableau(sListe,aRetour,RC)
+      renvoyer aRetour
      type : 458752
    -
      name : mEval
@@ -763,16 +822,14 @@ class :
       		
       		si :m_aRub[sRub].stRelFkAsso.sNomRel <> "" ALORS
       			stRel = :m_aPK_de_FK[sRub]
-      //		si pas :M_aPK_de_FK[sRub]..vide ALORS
-      //			stRel = :m_aPK_de_FK[sRub]
       			selon :m_aRub[sRub].stRelFkAsso.nTypeRel
-      				CAS cstRelAsso
+      				CAS ::cstRelAsso
       					AddPx(nCleRubFKAsso)
-      				CAS cstRelAgr
+      				CAS ::cstRelAgr
       					AddPx(nCleRubFKAgr)
-      				CAS cstRelCompo
+      				CAS ::cstRelCompo
       					AddPx(nCleRubFKCompo)
-      				CAS cstRelIncl
+      				CAS ::cstRelIncl
       					AddPx(nCleRubFKIncl)
       				AUTRE CAS
       					
@@ -787,8 +844,6 @@ class :
       procédure interne AddPx(nCle_p est un entier):vide
       	moRetour += taVals[nCle_p]
       fin
-      
-      
       
      type : 458752
    -
@@ -806,20 +861,20 @@ class :
      code : |1+
       PROCÉDURE chargeConfTable()<métier>:Vide
       
-      sFicJSON		est une chaîne	= sNomFicConf()
+      sFicJSON		est une chaîne	= :sNomFicConf()
       sJson			est une chaîne
       stRubAnaTmp		est un str_DefRub
       
       
       SI fFichierExiste(sFicJSON) ALORS
       	sJson			= fChargeTexte(sFicJSON)
-      	Désérialise(m_stConfigTbl, sJson, psdJSON)
+      	Désérialise(:m_stConfigTbl, sJson, psdJSON)
       FIN
       
       //S'il y a plus de rubriques que ce qui est récupéré, on complète
       POUR TOUT stRubAnaTmp, sRub DE :m_aRub
-      	si m_stConfigTbl.taRubs[sRub]..Vide ALORS
-      		m_stConfigTbl.taRubs[sRub] = allouer un STR_DescRub
+      	si :m_stConfigTbl.taRubs[sRub]..Vide ALORS
+      		:m_stConfigTbl.taRubs[sRub] = allouer un STR_DescRub
       	FIN
       FIN
      type : 458752
@@ -832,7 +887,7 @@ class :
       
       sJson		est une chaîne
       Sérialise(stSauve, sJson, psdJSON)
-      fSauveTexte(sNomFicConf(),sJson)
+      fSauveTexte(:sNomFicConf(),sJson)
      type : 458752
    -
      name : aTableDependances
@@ -855,50 +910,48 @@ class :
       procédure publique globale aTableDependances()<metier>:tableau de chaines
       
       taTbls	est un tableau associatif de ClZF_GenCodeFic dynamique
-      pclStTblTmp	est un ClZF_GenCodeFic dynamique
+      oTblTmp	est un ClZF_GenCodeFic dynamique
       aRetour	est un tableau de chaînes
       sTbl	est une chaîne
       bMqt	est un booléen
       stRel	est un ClZF_GenCodeFic.STR_Rel
       
       
-      pour toute chaine sTbl de sListeFicAna() separee par rc
+      //On récupère la définition de toutes les tables
+      pour toute sTbl de ::aListeFicAna()
       	taTbls[sTbl] <- ClZF_GenCodeFic.oGetGenCodeFic(sTbl)
-      //	taTbls[sTbl] = allouer un ClZF_GenCodeFic(sTbl)
-      //	taTbls[sTbl].Analyse()
       FIN
       
-      
+      //Tant qu'il reste des tables à traiter...
       tantque taTbls..Occurrence > 0
       	
-      	//Parcourt de toutes les entités non traitées
-      	pour tout pclStTblTmp, sTbl de taTbls
+      	//Parcourt de toutes les entités restantes.
+      	pour tout oTblTmp, sTbl de taTbls
       		bMqt = faux
-      		//On liste toutes les FK qui la compose
-      		pour tout stRel de pclStTblTmp.m_aPK_de_FK
-      			//Pour chaque relations, on regarde si on traité
-      			si stRel.sTablePK <> sTbl _et_ TableauCherche(aRetour,tcLinéaire,stRel.sTablePK) <= 0 ALORS
+      		
+      		//On liste toutes les FK pour trouver les dépendances.
+      		pour tout stRel de oTblTmp.m_aPK_de_FK
+      			
+      			//Pour chaque relations, on regarde si on a déjà traité la table parente.
+      			si stRel.sTablePK <> sTbl _et_ ...
+      					TableauCherche(aRetour, tcLinéaire, stRel.sTablePK) <= 0 _et_ 	//on recherche les tables traitées
+      					pas taTbls[stRel.sTablePK]..vide ALORS							//on exclue la dépendance, si la table n'est pas dans les non traités (cas de tables exclues)
+      				//Non : on a une dépendance non résolue
       				bMqt = vrai
       			FIN
       		FIN
       		
       		
-      		
+      		//SI on a pas de dpéndance sur la table, on l'ajoute à la liste des tables traitée (et est retiré des tables à traiter)
       		si pas bMqt ALORS
       			TableauAjoute(aRetour, sTbl)
       			TableauSupprime(taTbls, sTbl)
       		FIN
       	FIN
-      	
-      	
-      	
       FIN
       
       
-      
-      
       renvoyer aRetour
-      
      type : 458752
    -
      name : bRubriqueRelationInclusion
@@ -947,13 +1000,13 @@ class :
       sRetour est une chaîne
       
       selon nType_P
-      	CAS cstRelAgr
+      	CAS ::cstRelAgr
       		sRetour = "Agrégation"
-      	CAS cstRelAsso
+      	CAS ::cstRelAsso
       		sRetour = "Association"
-      	CAS cstRelCompo
+      	CAS ::cstRelCompo
       		sRetour = "Composition"
-      	CAS cstRelIncl
+      	CAS ::cstRelIncl
       		sRetour = "Inclusion"
       		
       	AUTRE CAS
@@ -985,7 +1038,7 @@ class :
       //SI PAS sSymbole_p DANS("0,1", "1,1") ALORS
       //	ExceptionDéclenche(1,"Erreur d'analyse du type de relation (""0,1"" ou ""0,n"" attendu)")
       //FIN
-      RENVOYER Minuscule(Droite(sSymbole_p, 1)) = ""
+      RENVOYER Minuscule(Droite(sSymbole_p, 1)) = "1"
      type : 458752
    -
      name : bProteger
@@ -1055,12 +1108,92 @@ class :
       PROCÉDURE GLOBALE oGetGenCodeFic(LOCAL sNomTable_p est une chaîne)<métier>:ClZF_gencodefic
       
       
-      SI mg_aGenCodeFic[sNomTable_p]..Vide ALORS
+      SI ::mg_aGenCodeFic[sNomTable_p]..Vide ALORS
       	oTmp est un ClZF_GenCodeFic(sNomTable_p)
+      	oTmp.sNomClasseGen()//inutile, mais pour enlever le warning
+      FIN
+      
+      //stop si mg_aGenCodeFic[sNomTable_p] = null
+      
+      RENVOYER ::mg_aGenCodeFic[sNomTable_p]
+     type : 458752
+   -
+     name : alistRubAvecLiaisonPK
+     procedure_id : 1600637567123839656
+     type_code : 12
+     code : |1-
+      procédure publique alistRubAvecLiaisonPK() <métier>:tableau de chaînes
+      
+      
+      aRetour			est un tableau de chaines
+      
+      POUR TOUTE CHAÎNE sLigneCle DE HListeLiaison(:m_sNomTable) SÉPARÉE PAR RC
+      	
+      	sTbl1			est une chaîne		= ExtraitChaîne(sLigneCle, 2,tab)
+      	sRub1			est une chaîne		= ExtraitChaîne(sLigneCle, 3,tab)
+      	sCardinalite1	est une chaîne		= ExtraitChaîne(sLigneCle, 4,tab)
+      	sTbl2			est une chaîne		= ExtraitChaîne(sLigneCle, 5,tab)
+      	sRub2			est une chaîne		= ExtraitChaîne(sLigneCle, 6,tab)
+      	sCardinalite2	est une chaîne		= ExtraitChaîne(sLigneCle, 7,tab)
+      	
+      	
+      	SI sCardinalite1 <> sCardinalite2 /*ET sTbl1 <> sTbl2*/ ALORS
+      		
+      		MemoRubPK(sTbl1,sCardinalite1,sRub1)
+      		
+      		MemoRubPK(sTbl2,sCardinalite2,sRub2)
+      	FIN
+      FIN
+      
+      renvoyer aRetour
+      
+      
+      	procedure interne MemoRubPK(sTbl_p est une chaîne, sCardinalite_p est une chaine, sRub_p est une chaine):vide
+      		
+      		SI sTbl_p = :m_sNomTable ALORS
+      			SI Droite(Minuscule(sCardinalite_p), 1) = "n" ALORS
+      				si TableauCherche(aRetour,tccSansAccent+tccSansCasse+tccSansEspace+tccSansEspaceIntérieur+tccSansPonctuationNiEspace+tcLinéaire, sRub_p) = -1 ALORS
+      					TableauAjoute(aRetour,sRub_p)
+      				FIN
+      			FIN
+      		FIN
+      	FIN
+      	
+     type : 458752
+   -
+     name : aListeRubriques
+     procedure_id : 1609529549583656097
+     type_code : 12
+     code : |1+
+      procedure publique aListeRubriques(bAvecPK_p est un booléen = faux)<métier>:tableau associatif de STR_DefRub
+      
+      aRetour est un tableau associatif (ccSansCasse) de STR_DefRub
+      
+      aRetour <= :m_aRub
+      
+      si bAvecPK_p et :m_sNomRubId <> "" ALORS
+      	aRetour[:m_sNomRubId] = :m_stDefId
       FIN
       
       
-      RENVOYER mg_aGenCodeFic[sNomTable_p]
+      renvoyer aRetour
+     type : 458752
+   -
+     name : stRub
+     procedure_id : 1609533539629257706
+     type_code : 12
+     code : |1+
+      procedure publique stRub(sNom_p est une chaine)<metier>:str_defrub
+      renvoyer :m_aRub[sNom_p]
+      
+     type : 458752
+   -
+     name : bRubExiste
+     procedure_id : 1609534093682854538
+     type_code : 12
+     code : |1-
+      procedure publique bRubExiste(sNom_p est une chaine)<metier>:booleen
+      renvoyer pas :m_aRub[sNom_p]..vide
      type : 458752
   properties :
    -
@@ -1071,7 +1204,7 @@ class :
       -
         code : |1-
          procédure publique p_sNomTable() : chaîne
-         renvoyer m_sNomTable
+         renvoyer :m_sNomTable
         type : 1966080
      template_refs : []
    -
@@ -1082,7 +1215,7 @@ class :
       -
         code : |1-
          procédure publique p_sNomRubId() : chaîne
-         renvoyer m_sNomRubId
+         renvoyer :m_sNomRubId
         type : 1966080
      template_refs : []
    -
@@ -1093,7 +1226,7 @@ class :
       -
         code : |1-
          procédure publique p_sNomUsage() : chaîne
-         renvoyer m_sNomUsage
+         renvoyer :m_sNomUsage
         type : 1966080
      template_refs : []
    -
@@ -1104,7 +1237,7 @@ class :
       -
         code : |1-
          procédure publique p_bClasseExiste() : booléen
-         renvoyer m_bClasseExiste
+         renvoyer :m_bClasseExiste
         type : 1966080
      template_refs : []
    -
@@ -1115,7 +1248,7 @@ class :
       -
         code : |1-
          procédure publique p_sLibelle() : chaîne
-         renvoyer m_sLibelle
+         renvoyer :m_sLibelle
         type : 1966080
      template_refs : []
    -
@@ -1126,7 +1259,7 @@ class :
       -
         code : |1-
          procédure publique p_bClasseLS() : booléen
-         renvoyer m_bClasseLS
+         renvoyer :m_bClasseLS
         type : 1966080
      template_refs : []
    -
@@ -1137,7 +1270,7 @@ class :
       -
         code : |1-
          procédure publique p_bTableHyerarchisee() : booléen
-         renvoyer m_bTableHyerarchisee
+         renvoyer :m_bTableHyerarchisee
         type : 1966080
      template_refs : []
    -
@@ -1148,7 +1281,6 @@ class :
       -
         code : |1-
          procédure publique p_nTypeHfRubId_old()<zombie>: entier
-         
          renvoyer 0
         type : 1966080
      template_refs : []
@@ -1161,7 +1293,7 @@ class :
         code : |1-
          procédure publique p_stDefId() <métier> : STR_DefRub
          
-         renvoyer m_stDefId
+         renvoyer :m_stDefId
         type : 1966080
      template_refs : []
   procedure_templates : []

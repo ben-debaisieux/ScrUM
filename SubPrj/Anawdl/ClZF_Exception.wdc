@@ -41,7 +41,7 @@ class :
      procedure_id : 1424027314207699178
      type_code : 27
      code : |1-
-      procédure Constructeur(sMessage_p est une chaîne, nInfoLog_p est un entier = cstInfoLogSans, nCode_p est un entier = 0)
+      procédure Constructeur(sMessage_p est une chaîne, nInfoLog_p est un entier = ::cstInfoLogSans, nCode_p est un entier = 0)
       
       si nCode_p = 0 ALORS
       	:m_nCode		= 0
@@ -99,7 +99,7 @@ class :
       		sMsg += rc + rc + "MsgLog :"
       		
       		selon :m_nLog
-      			CAS cstInfoLogHF
+      			CAS ::cstInfoLogHF
       				sMsg += rc + rc + HErreurInfo(hErrMessage)
       			AUTRE CAS
       				
@@ -112,10 +112,10 @@ class :
       selon :m_nLog
       //	CAS cstInfoLogSans
       //		//Rien a faire
-      	CAS cstInfoDebug
+      	CAS ::cstInfoDebug
       		SI EnModeTest() ALORS trace(sMsg)
-      	CAS cstInfoLogAssert
-      		dbgAssertion(faux, sMsg)
+      //	CAS cstInfoLogAssert
+      //		dbgAssertion(faux, sMsg)
       	AUTRE CAS
       		ExceptionDéclenche(:ZF_Code, sMsg)
       FIN
@@ -130,7 +130,7 @@ class :
       oExcTmp est un ClZF_Exception dynamique
       sMsg est une chaîne
       
-      pour tout oExcTmp de mg_aListeExceptions
+      pour tout oExcTmp de ::mg_aListeExceptions
       	sMsg = ""
       	addMsg(oExcTmp.p_sDeclaration)
       	
@@ -161,7 +161,7 @@ class :
          
          SI :m_nCode = 0 ALORS
          	::mg_nCpt++
-         	:m_nCode = 500 + mg_nCpt
+         	:m_nCode = 500 + ::mg_nCpt
          FIN
          
          renvoyer :m_nCode
@@ -180,7 +180,7 @@ class :
         code : |1-
          procédure publique p_sMessage() : chaîne
          
-         renvoyer m_sMessage
+         renvoyer :m_sMessage
         type : 1966080
      template_refs : []
    -
@@ -192,7 +192,7 @@ class :
         code : |1-
          procédure publique p_sDeclaration() : chaîne
          
-         renvoyer m_sDeclaration
+         renvoyer :m_sDeclaration
         type : 1966080
      template_refs : []
   procedure_templates : []

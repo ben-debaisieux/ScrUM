@@ -22,7 +22,7 @@ class :
       public
       	
       PROTÉGÉ
-      	m_oClasseGen est un ClZF_GenCodeFic
+      	m_oClasseGen est un ClZF_GenCodeFic dynamique
       	m_sCode est une chaîne
       fin
      type : 131072
@@ -180,10 +180,10 @@ class :
       sRetour est une chaîne = [
          -
            name : [%sNom_p%]
-           procedure_id : [%GenProcIdent()%]
+           procedure_id : [%:GenProcIdent()%]
            type_code : 14
            code : |1+
-      [%sIndentSpace(sCode_p)%]
+      [%:sIndentSpace(sCode_p)%]
            type : 458752
       ]
       RENVOYER sRetour
@@ -231,7 +231,7 @@ class :
         code : |1-
          procédure publique p_sCode() : chaîne
          
-         renvoyer m_sCode
+         renvoyer :m_sCode
         type : 1966080
      template_refs : []
   procedure_templates : []

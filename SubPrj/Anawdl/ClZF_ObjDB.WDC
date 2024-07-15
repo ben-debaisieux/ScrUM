@@ -32,11 +32,11 @@ class :
       FIN
       
       
-      mg_oExDupplicationObjet = allouer un ClZF_Exception([
+      ::mg_oExDupplicationObjet = allouer un ClZF_Exception([
       			Erreur : la référence de l'objet %1 est différente de celle d'origine.
       			L'objet a été dupliqué.
       			], ClZF_Exception.cstInfoLogSimple)	
-      mg_oExEchecEnregistrement = allouer un ClZF_Exception("Echec de l'enregistrement", ClZF_Exception.cstInfoLogHF)
+      ::mg_oExEchecEnregistrement = allouer un ClZF_Exception("Echec de l'enregistrement", ClZF_Exception.cstInfoLogHF)
       
      type : 131072
   procedures :
@@ -117,7 +117,7 @@ class :
       	
       	//On s'assure qu'on enregistre bien l'instance d'origine.
       	si pas :ZF_bVerifPointeur() alors
-      		mg_oExDupplicationObjet.ZF_Declenche([Objet..Classe])
+      		::mg_oExDupplicationObjet.ZF_Declenche([Objet..Classe])
       	FIN
       	
       	
@@ -162,7 +162,7 @@ class :
       			//Rien a faire : l'élément n'était pas enregistré
       		SINON
       			SI PAS HAjoute(:p_ZF_sNomTable) ALORS
-      				mg_oExEchecEnregistrement.ZF_Declenche()
+      				::mg_oExEchecEnregistrement.ZF_Declenche()
       			sinon
       				
       				//Récupération de l'ID généré
@@ -179,7 +179,7 @@ class :
       		SI :m_ZF_bEstSupprime ALORS
       			:ZF_Charge(Vrai)	//Bug WD : si on ne se repositionne pas : il n'est plus positionné
       			SI PAS HSupprime(:p_ZF_sNomTable) ALORS
-      				mg_oExEchecEnregistrement.ZF_Declenche()
+      				::mg_oExEchecEnregistrement.ZF_Declenche()
       			sinon
       				sRef est une chaîne
       				sRef = :ZF_sGetNomInstance()
@@ -192,7 +192,7 @@ class :
       		SINON
       			si :m_ZF_bModif alors
       				SI PAS HModifie(:p_zf_sNomTable) ALORS
-      					mg_oExEchecEnregistrement.ZF_Declenche()
+      					::mg_oExEchecEnregistrement.ZF_Declenche()
       				sinon
       					oObjDb est un ClZF_ObjDB dynamique <- ClZF_App.mg_aoInstances[:ZF_sGetNomInstance()]
       					oObjDb.ZF_Transfere(objet)
@@ -206,7 +206,7 @@ class :
       	:post_enregistre()
       
       	
-      	si m_procCallPostEnreg <> null ALORS
+      	si :m_procCallPostEnreg <> null ALORS
       		//Procédure de callback, après enregistrement
       		:m_procCallPostEnreg(objet)
       	FIN
@@ -339,7 +339,7 @@ class :
      procedure_id : 1424025106378381516
      type_code : 12
      code : |1-
-      procédure  sExport()<métier>:json 
+      procédure  sExport()<zombie>:json 
       Ret est un json
       renvoyer Ret
      type : 458752
@@ -439,8 +439,8 @@ class :
       	SI PAS bSansRechargement_P ALORS
       		FichierVersMémoire(objet, :p_ZF_sNomTable)
       		//Chargement des objets enfants
-      		ZF_GetObjectsFromIds()
-      		Init_ObjBD()
+      		:ZF_GetObjectsFromIds()
+      		:Init_ObjBD()
       	FIN
       sinon
       	ancetre.zf_charge(bSansRechargement_P)
@@ -478,7 +478,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure prive ZF_GetObjectsIds() <métier>
+      procédure prive ZF_GetObjectsIds() <métier>:vide
       
       sRub			est une chaîne
       nVal			est un entier
@@ -513,10 +513,10 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClZF_ObjDbLs.ZF_GetObjectsFromIds
-      PROCÉDURE prive ZF_GetObjectsFromIds()
+      PROCÉDURE prive ZF_GetObjectsFromIds(sNomSource_p est une chaîne = :p_ZF_sNomTable)<métier>:vide
       
       bMemoModif	est un booléen = :m_ZF_bModif
-      ancetre.ZF_GetObjectsFromIds()
+      ancetre.ZF_GetObjectsFromIds(sNomSource_p)
       :m_ZF_bModif = bMemoModif
      type : 458752
    -

@@ -150,6 +150,30 @@ procedure_set :
       
       si EnModeTest() alors wl.trace(sMessage_p)
      type : 458752
+   -
+     name : HListeLiaison
+     procedure_id : 1616598511803245039
+     type_code : 15
+     code : |1+
+      procédure HListeLiaison(sNomTable_p, vParam_p = null) <métier>:chaine
+      
+      cnxTmp est une chaine = {sNomTable_p, indFichier}..Connexion
+      
+      si vParam_p = Null ALORS
+      	si {cnxTmp,indConnexion}..Provider = hAccèsHF7 ALORS
+      		RENVOYER WL.HListeLiaison(sNomTable_p)
+      	sinon
+      		RENVOYER WL.HListeLiaison(sNomTable_p, cnxTmp)
+      	FIN
+      //	renvoyer WL.HListeLiaison(sNomTable_p, {sNomTable_p, indFichier}..Connexion)
+      sinon
+      	SI {cnxTmp,indConnexion}..Provider = hAccèsHF7 ALORS
+      		RENVOYER WL.HListeLiaison(sNomTable_p, vParam_p)
+      	sinon
+      		RENVOYER WL.HListeLiaison(sNomTable_p, cnxTmp, vParam_p)
+      	FIN
+      FIN
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

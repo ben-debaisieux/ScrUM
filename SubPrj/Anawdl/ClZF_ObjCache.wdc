@@ -33,7 +33,7 @@ class :
       procédure Constructeur()
       
       //Le membre est initialisé à l'heure système lors de la déclaration. On force l'objet à un état expiré par défaut.
-      m_ZF_dhExpiration..Milliseconde -= 1
+      :m_ZF_dhExpiration..Milliseconde -= 1
      type : 589824
    -
      name : Destructeur
@@ -91,7 +91,7 @@ class :
       :m_ZF_nDureeTimeOut = nNbSecondes_p
       
       si bAvecMajExpiration_p ALORS
-      	ZF_setDhExpire()
+      	:ZF_setDhExpire()
       FIN
      type : 458752
   procedure_templates : []

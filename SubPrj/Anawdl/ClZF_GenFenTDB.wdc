@@ -54,7 +54,7 @@ class :
       Procedure globale Charge_TypeTDB(sCbo_p est une chaîne)<ui>:vide
       
       ListeSupprimeTout(sCbo_p)
-      ListeAjoute(sCbo_p, cstTDB_Table)
+      ListeAjoute(sCbo_p, ::cstTDB_Table)
      type : 458752
    -
      name : chargeListeMembresObj
@@ -71,7 +71,7 @@ class :
       ListeSupprimeTout(sCbo_p)
       ListeAjoute(sCbo_p, "a_definir")
       
-      pour tout element stRub, sRub de oClasseGen_p.m_aRub
+      pour tout element stRub, sRub de oClasseGen_p.aListeRubriques()
       	si stRub.oObj_Parent <> Null ALORS
       		ListeAjoute(sCbo_p, stRub.sNomPropriete)
       	FIN

@@ -117,9 +117,9 @@ window :
               code : |1-
                
                
-               oClasseGen est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
+               oClasseGen est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                
-               oClasseGen.Analyse()
+               //oClasseGen.Analyse()
                
                
                
@@ -174,9 +174,9 @@ window :
             -
               code : |1-
                
-               oClasseGen est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
+               oClasseGen est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                
-               oClasseGen.Analyse()
+               //oClasseGen.Analyse()
                
                
                
@@ -228,7 +228,7 @@ window :
               code : |1+
                oAudit est un ClZF_AuditModele(CBO_TableSource..ValeurMémorisée)
                oAudit.AnaPropriete()
-               SAI_Classe_BD1 = oAudit.p_sRapport
+               SAI_Classe_BD1 = oAudit.sRapportTxt()
                
               type : 18
             -
@@ -250,9 +250,9 @@ window :
             -
               code : |1-
                
-               oClasseGen est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
+               oClasseGen est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                
-               oClasseGen.Analyse()
+               //oClasseGen.Analyse()
                
                
                
@@ -301,9 +301,13 @@ window :
            p_codes :
             -
               code : |1-
+               
+              type : 14
+            -
+              code : |1-
                oAudit est un ClZF_AuditModele(CBO_TableSource..ValeurMémorisée)
                oAudit.AnaFk()
-               SAI_Classe_BD1 = oAudit.p_sRapport
+               SAI_Classe_BD1 = oAudit.sRapportTxt()
               type : 18
             -
               type : 161
@@ -322,7 +326,7 @@ window :
            type_code : 4
            p_codes :
             -
-              code : |1-
+              code : |1+
                SAI_Classe_BD1 = ""
                
                oAudit est un ClZF_AuditModele dynamique
@@ -336,23 +340,18 @@ window :
                	
                	SAI_Classe_BD1 += [rc + rc] + oAudit.sRamureTbl()
                	
-               	SI INT_SansNom1.CheckPK		alors oAudit.AnaPk();RecupAudit(oAudit)
-               	SI INT_SansNom1.CheckFK		alors oAudit.Anafk();RecupAudit(oAudit)
-               	SI INT_SansNom1.PropMqt		alors oAudit.AnaPropriete();RecupAudit(oAudit)
-               	SI INT_SansNom1.MethMqt		alors oAudit.AnaMeta();RecupAudit(oAudit)
-               	SI INT_SansNom1.ColMqt		alors oAudit.AnaColMqt();RecupAudit(oAudit)
-               	SI INT_SansNom1.CheckLibs	alors oAudit.AnaLibRubs();RecupAudit(oAudit)
-               	SI INT_SansNom1.CheckNulls	alors oAudit.AnaRubsNull();RecupAudit(oAudit)
-               	SI INT_SansNom1.FkMqt		alors oAudit.AnaFkMqt();RecupAudit(oAudit)
+               	SI INT_SansNom1.CheckPK		alors oAudit.AnaPk()
+               	SI INT_SansNom1.CheckFK		alors oAudit.Anafk()
+               	SI INT_SansNom1.PropMqt		alors oAudit.AnaPropriete()
+               	SI INT_SansNom1.MethMqt		alors oAudit.AnaMeta()
+               	SI INT_SansNom1.ColMqt		alors oAudit.AnaColMqt()
+               	SI INT_SansNom1.CheckLibs	alors oAudit.AnaRubs()
+               	SI INT_SansNom1.CheckNulls	alors oAudit.AnaRubsNull()
+               	SI INT_SansNom1.FkMqt		alors oAudit.AnaFkMqt()
+               	
+               	SAI_Classe_BD1 += [RC + RC] + oAudit.sRapportTxt()
                FIN
                
-               
-               
-               procédure interne RecupAudit(clOAudit_p est un ClZF_AuditModele):vide
-               	si clOAudit_p.bMsgInfo() ALORS
-               		SAI_Classe_BD1 += [RC + RC] + clOAudit_p.p_sRapport
-               	FIN
-               fin
               type : 18
             -
               type : 161
@@ -384,9 +383,9 @@ window :
                	ListeSelectPlus(CBO_TableSource,nInd)
                	
                	
-               	oClasseGen est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
+               	oClasseGen est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                	
-               	oClasseGen.Analyse()
+               //	oClasseGen.Analyse()
                	oClasseGen.chargeConfTable()
                	
                	moPx = oClasseGen.mEval()
@@ -418,7 +417,7 @@ window :
               code : |1+
                oAudit est un ClZF_AuditModele(CBO_TableSource..ValeurMémorisée)
                oAudit.AnaMeta()
-               SAI_Classe_BD1 = oAudit.p_sRapport
+               SAI_Classe_BD1 = oAudit.sRapportTxt()
               type : 18
             -
               type : 161
@@ -444,7 +443,7 @@ window :
               code : |1+
                oAudit est un ClZF_AuditModele(CBO_TableSource..ValeurMémorisée)
                oAudit.AnaColMqt()
-               SAI_Classe_BD1 = oAudit.p_sRapport
+               SAI_Classe_BD1 = oAudit.sRapportTxt()
                
                
                
@@ -468,11 +467,11 @@ window :
             -
               code : |1-
                
-               clOCol1	est un ClColEpic()
-               clODb1	est un ClDbEpic(ClZF_ObjDbLs.cstModeCreation)
-               clOCol1 <- clODb1.ZF_GetCol("PM_Epic.IDPM_Theme")
-               libérer clODb1
-               libérer clOCol1
+               //clOCol1	est un ClColEpic()
+               //clODb1	est un ClDbEpic(ClZF_ObjDbLs.cstModeCreation)
+               //clOCol1 <- clODb1.ZF_GetCol("PM_Epic.IDPM_Theme")
+               //libérer clODb1
+               //libérer clOCol1
               type : 18
             -
               type : 161
@@ -494,7 +493,7 @@ window :
               code : |1+
                oAudit est un ClZF_AuditModele(CBO_TableSource..ValeurMémorisée)
                oAudit.AnaPk()
-               SAI_Classe_BD1 = oAudit.p_sRapport
+               SAI_Classe_BD1 = oAudit.sRapportTxt()
               type : 18
             -
               type : 161
@@ -554,8 +553,8 @@ window :
             -
               code : |1-
                oAudit est un ClZF_AuditModele(CBO_TableSource..ValeurMémorisée)
-               oAudit.AnaLibRubs()
-               SAI_Classe_BD1 = oAudit.p_sRapport
+               oAudit.AnaRubs()
+               SAI_Classe_BD1 = oAudit.sRapportTxt()
               type : 18
             -
               type : 161
@@ -577,7 +576,7 @@ window :
               code : |1-
                oAudit est un ClZF_AuditModele(CBO_TableSource..ValeurMémorisée)
                oAudit.AnaRubsNull()
-               SAI_Classe_BD1 = oAudit.p_sRapport
+               SAI_Classe_BD1 = oAudit.sRapportTxt()
               type : 18
             -
               type : 161
@@ -627,19 +626,12 @@ window :
                oAudit est un ClZF_AuditModele(CBO_TableSource..ValeurMémorisée)
                
                oAudit.AnaPk()
-               SAI_Classe_BD1 = oAudit.p_sRapport
-               
                oAudit.AnaFk()
-               SAI_Classe_BD1 += [rc] + oAudit.p_sRapport
-               
                oAudit.AnaRubsNull()
-               SAI_Classe_BD1 += [RC] + oAudit.p_sRapport
-               
-               oAudit.AnaLibRubs()
-               SAI_Classe_BD1 += [RC] + oAudit.p_sRapport
-               
+               oAudit.AnaRubs()
                oAudit.AnaFkMqt()
-               SAI_Classe_BD1 += [RC] + oAudit.p_sRapport
+               
+               SAI_Classe_BD1 += [RC] + oAudit.sRapportTxt()
               type : 18
             -
               type : 161
@@ -660,14 +652,12 @@ window :
             -
               code : |1+
                oAudit est un ClZF_AuditModele(CBO_TableSource..ValeurMémorisée)
+               
                oAudit.AnaPropriete()
-               SAI_Classe_BD1 = oAudit.p_sRapport
-               
                oAudit.AnaMeta()
-               SAI_Classe_BD1 += [rc] + oAudit.p_sRapport
-               
                oAudit.AnaColMqt()
-               SAI_Classe_BD1 += [rc] + oAudit.p_sRapport
+               
+               SAI_Classe_BD1 += [rc] + oAudit.sRapportTxt()
               type : 18
             -
               type : 161
@@ -960,7 +950,7 @@ window :
           identifier : 0x246d1b970c39c346
           internal_properties : BwAAAAcAAACLAvyYiBsVZ8slWyL4eFOTqC5oiVv7GMSTwSiE+Blr8IKpDyyHv8h+JOnYMoAEa9TOD8ZDuwiqbdIPPW3IgxX80wbP5Mjk4rRESWlGHjuITAYElfPnJZx5b5wYy0qAAjOgsyg4I35AkMjwnxhwlbD8NmGb5VhFX856FtB1DEUcZazlZx3YEClQarxNJIzd+68x+kqnoEhG3yyMEW2ZczG+6WAUVltMgp975OxCZmT7qAog4mMQ8w8KlG0P5mDq9v29BKe8UHR58FaakAkKMkRU12qJN9IB2JA9cNeNSGmAKwcamxvJ4O6kSEwuUIjmqkirfzY349c49uKRY5vKw1x9GEeszYTd+B1ebLAE9FUlDM1qknm7kG9wXxtwgnGL7acO9I1d8z3JLZloeAbem5Mcm39LoIFLINmIqM8FAWWu/WS8pDB5+JMBfEXYfhGiEvSX+59aKSbAwkFX3ph/OWV77ASAqDhOWPT+vfmB19B8LOJF4+qVJ9kOGsnBDejRgBdmwtwTssXc+DrdoSgpxd2Er05PPOsCKCz3CXBf4bV7WMH0rSUPhv3wEFWOztmCYksSui3R7ZBghgveMKJuYwRax983J9COAI6iljYo+2THMDoXbSy8+HN/RA07qCy7eQArd9XrYAPv+YAuJkvEzPv7XtTq5jHMrgbJxddrV7CkMQYN8hATMtGRdVqiJBHSSvsYypHXy9RuVLXnpKpraRPY1NdQZo7/NA8AumZaSBn9NV+iaZpsHwLMZwrw0PPeiaW+4yuU+SKzzN/mKDGfykMxsH55t3MPJ+KimvyreJvGM6i1OPvp/Lc3SgeSw1e+Q+urt3Z7LITt0wDwbzbMekFq+jo9/aQY9qfX/8W3yuhpWBuctD/fo2WCa43dR4E3W8INKh5gFwwZRpxjq3vtgJ84pYRyADjGMiSualGKmjFGVf3Yg7zX8eyScbyR0mstjj45wmjb6xox8Kx7IUbvtPYoLXLjTBJxsGyyHze1w/osU2xK2R14SFjUOKGBzsVqwqpX0P1gFCfsMDH9gx1cJx0h3t5FvS/P4tAZr/bcvUuuP1M9Nxq9TisFOBQ0dpcH8Gjor/hnF4jwL+I0G3HYhcaR41KiG/OwOVt5eFvbFr0=
           properties :
-           x : 204
+           x : 144
            y : 14
            width : 100
            height : 28
@@ -977,7 +967,7 @@ window :
           identifier : 0x246d1ba90c3d0977
           internal_properties : BwAAAAcAAAAYl3EnBbhOPDCClnG906FKPdM9pJYkEb10ake/p+gcWfEgSsH4Dn9FA8BzFc9T0GFBik1QGJN1gBlGkKw/0spB1v427Ol3Jsq8gVvM0PeUOH6MzdPtAQDN57QKNUi4Arss73TsScoseEQMgV6KQbyQhvlHGeJ97z6q5vIbLlngAQh5Vz3SAC2YDtivkv7Rx9up2konAgjeX8wk7xsz5+EWnbQ0ZoVsooODHAqEvBQ/5DJI5n9SI/uutI1F9BKG+okddHOQjqDJmH6aOkNQkkhYPwLBDwxB2FylwKlfNrkMtw/SZ8/bQBagBDB8gpbWYoCnq2KLobuk6lpZkVUI8zQF4D8MNT5V7GVWlB5ShoEthOluDpX5RCd8qweWgOunWaOO/FX1ne0pSUVMskyQz+/oR7t7sHsDVLXUzI3XLxXmrZBYIJzrYBe9+PEW4Gca6sxfA9ca0940CoVDVAKViRlPEPiASBb69MTCiVPviSzYQFpdl2bbU03W8vn7u7qdAD9u+jx7NDXk7H7JG46jAb0kA9r7UE3CFPQjPYrxh82nhB2wUREhTvVVm/CvxchhrwahCayOoNv746otDZ2xThXpZn4GgBdNpzfhRedPYsuQj50quJG7n/rE/yjAS3s6ukeSJlREl+KudrvJzzJfdwgGTfvh3xQnydsQnDgC7tc5VC00SWmWtVwS8MUTo5gJ/65f0fjAPn9xIRS2dZlmbAhjQ0ZXd+VeO1yj7atlG/TagBqllIvfwo2hLnFpZ5JVcoyBJkblKPFyBbIJTdSipWBMr334yPqG9it5oQ2if0JTTkcUT4Tcx5rY0W53Zn4lhDoaZuW4Y0PUAOMzPHkHLXYNMTkM+juHhWz+tg6mvSP265ZXr+CmmlS73gDGZrSisCWYdbElCj9kGzfekFbkh1B/fNNRNQsxfflB7daFhVQHlIQval0+UCsb3EcuRUpMC7m0hWuYyllQUWPC5lnG22szyJXOcfW00xGFcoRQVsV9os89xDbrK0PB2xTydaxx5036c7g1IyZJC52ZNsQMgWXpCFhjn6dV0viHPRrgvUmiM6mLlUgNPPsVHuqY6s/NbORm7d4hT3JIR6xuRy1cY+5YorvndpbVZATWBehWiSo=
           properties :
-           x : 310
+           x : 250
            y : 14
            width : 100
            height : 28
@@ -1011,7 +1001,6 @@ window :
               type : 14
             -
               code : |1+
-               
                
                stSauve			est un ClZF_GenCodeFic.STR_DescFic
                stSauveLigne	est un ClZF_GenCodeFic.STR_DescRub
@@ -1059,7 +1048,7 @@ window :
               code : |1+
                stDesfRub		est un ClZF_GenCodeFic.STR_DefRub
                stDefRel		est un ClZF_GenCodeFic.STR_Rel
-               oClasseGen		est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
+               oClasseGen		est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                oClasseFK		est un ClZF_GenCodeFic dynamique
                stSauveLigne	est un ClZF_GenCodeFic.STR_DescRub
                nLigne			est un entier
@@ -1067,7 +1056,7 @@ window :
                sRelation		est une chaîne
                
                
-               oClasseGen.Analyse()
+               //oClasseGen.Analyse()
                oClasseGen.chargeConfTable()
                
                TableSupprimeTout(TBL_Configs)
@@ -1084,8 +1073,8 @@ window :
                	
                	
                	
-               	si pas oClasseGen.m_aRub[sRub]..vide alors
-               		stDesfRub	= oClasseGen.m_aRub[sRub]
+               	si oClasseGen.bRubExiste(sRub) alors
+               		stDesfRub	= oClasseGen.stRub(sRub)
                		
                		
                		si pas stDesfRub.stRelFkAsso.nTypeRel dans(ClZF_GenCodeFic.cstRelErreur, ClZF_GenCodeFic.cstRelNonDef) alors
@@ -1094,16 +1083,14 @@ window :
                		
                		si pas oClasseGen.m_aPK_de_FK[sRub]..vide alors
                			stDefRel		= oClasseGen.m_aPK_de_FK[sRub]
-               			oClasseFK		= allouer ClZF_GenCodeFic(stDefRel.sTablePK)
-               			oClasseFK.Analyse()
+               			oClasseFK		 <- ClZF_GenCodeFic.oGetGenCodeFic(stDefRel.sTablePK)
                			oClasseFK.chargeConfTable()
                			nNbEnr			= oClasseFK.m_stConfigTbl.nNbLigneGen
-               			liberer oClasseFK
                		fin
                	fin
                	
                	TBL_Configs[nLigne].COL_Rubrique		= sRub
-               	SI PAS oClasseGen.m_aRub[sRub]..Vide ALORS
+               	SI PAS oClasseGen.bRubExiste(sRub) ALORS
                		TBL_Configs[nLigne].COL_Type			= ClZF_GenCodeFic.GetInfoRubType(stDesfRub.nTypeRubHF)
                		TBL_Configs[nLigne].COL_bNullable		= stDesfRub.bNullable
                		TBL_Configs[nLigne].COL_TypeRelation	= sRelation
@@ -1324,25 +1311,29 @@ window :
               code : |1-
                
                
-               oClasseGen est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               
-               oClasseGen.Analyse()
+               oClasseGen est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                oClasseGen.chargeConfTable()
                
                
-               oGenClBd est un ClZF_GenCodeClBd(oClasseGen)
-               oGenClBd.p_bLectureSeule = INT_SansNom4
-               oGenClBd.SetNatif = INT_SansNom2
+               oGenClBd est un ClZF_GenCodeClBd dynamique
+               si pas oClasseGen.m_bTableRelation ALORS
+               	oGenClBd = allouer un ClZF_GenCodeClBd(oClasseGen)
+               sinon
+               	oGenClBd = allouer un ClZF_GenCodeClBdRel(oClasseGen)
+               FIN
+               
+               oGenClBd.p_bLectureSeule	= INT_SansNom4
+               oGenClBd.SetNatif			= INT_SansNom2
                oGenClBd.Genere()
-               SAI_Classe_BD = oGenClBd.GetCode
-               SAI_Fichier_DB = oClasseGen.sNomClasseGen() + ".wdc"
+               SAI_Classe_BD	= oGenClBd.GetCode
+               SAI_Fichier_DB	= oClasseGen.sNomClasseGen() + ".wdc"
                
                
                oGenClCOl est un ClZF_GenCodeClCol(oClasseGen)
                oGenClCOl.SetNatif = INT_SansNom2
                oGenClCOl.Genere()
-               SAI_Classe_Col = oGenClCOl.p_sCode
-               SAI_Fichier_Col = oClasseGen.sNomClasseColGen() + ".wdc"
+               SAI_Classe_Col	= oGenClCOl.p_sCode
+               SAI_Fichier_Col	= oClasseGen.sNomClasseColGen() + ".wdc"
               type : 18
             -
               type : 161
@@ -1563,11 +1554,10 @@ window :
               code : |1+
                SI PAS zbGenMasse ALORS SAI_SQL1 = ""
                
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               oClasseGen.Analyse()
-               oClasseGen.chargeConfTable()
-               
                oData			est un CLZF_GenData dynamique
+               oClasseGen		est un ClZF_GenCodeFic	<- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
+               
+               oClasseGen.chargeConfTable()
                
                SELON ClZF_ObjDbLs.mg_oApp.sTypeCnx()
                	CAS hAccèsNatifSQLServer
@@ -1575,7 +1565,7 @@ window :
                	CAS hAccèsNatifMySQL
                		oData = allouer un CLZF_GenDataMySQL(oClasseGen)
                	AUTRE CAS
-               		
+               		stop
                FIN
                
                oData.GenCodeDiff()
@@ -1670,8 +1660,8 @@ window :
            p_codes :
             -
               code : |1-
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               oClasseGen.Analyse()
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
+               //oClasseGen.Analyse()
                oClasseGen.chargeConfTable()
                
                si oClasseGen.p_bClasseExiste alors
@@ -1917,8 +1907,8 @@ window :
                
                
                
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               oClasseGen.Analyse()
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
+               //oClasseGen.Analyse()
                oClasseGen.chargeConfTable()
                
                oData			est un CLZF_GenData dynamique
@@ -2041,8 +2031,8 @@ window :
                
                sCode		est une chaîne
                
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               oClasseGen.Analyse()
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
+               //oClasseGen.Analyse()
                
                sCode = ChaîneConstruit([
                if exists(select * from sys.tables where object_id = object_id('%1'))
@@ -2232,8 +2222,8 @@ window :
                
                
                
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               oClasseGen.Analyse()
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
+               //oClasseGen.Analyse()
                oClasseGen.chargeConfTable()
                
                oData			est un CLZF_GenDataMySQL(oClasseGen)
@@ -2380,9 +2370,9 @@ window :
               code : |1+
                
                
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                
-               oClasseGen.Analyse()
+               //oClasseGen.Analyse()
                
                
                oGenFen		est un ClZF_GenFenFic(oClasseGen)
@@ -2458,8 +2448,8 @@ window :
               code : |1+
                
                
-               oClasseGen est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               oClasseGen.Analyse()
+               oClasseGen est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
+               //oClasseGen.Analyse()
                
                
                oGenFen est un ClZF_GenFenFic(oClasseGen)
@@ -2484,8 +2474,8 @@ window :
             -
               code : |1+
                
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               oClasseGen.Analyse()
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
+               //oClasseGen.Analyse()
                
                
                oGenFenTbl		est un ClZF_GenFenTable(oClasseGen)
@@ -2587,9 +2577,9 @@ window :
             -
               code : |1+
                
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                
-               oClasseGen.Analyse()
+               //oClasseGen.Analyse()
                
                si oClasseGen.p_bClasseExiste alors
                	oGenFen		est un ClZF_GenFenFic(oClasseGen)
@@ -2716,9 +2706,9 @@ window :
               code : |1+
                
                
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                
-               oClasseGen.Analyse()
+               //oClasseGen.Analyse()
                
                
                oGenFen		est un ClZF_GenEtatTable(oClasseGen)
@@ -2964,8 +2954,8 @@ window :
            p_codes :
             -
               code : |1+
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               oClasseGen.Analyse()
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
+               //oClasseGen.Analyse()
                oClasseGen.chargeConfTable()
                
                oGenFen		est un ClZF_GenFenMetaOrgani(oClasseGen)
@@ -3032,8 +3022,8 @@ window :
             -
               code : |1+
                SI CBO_TableSource <> -1 ALORS
-               	oClasseGen est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
-               	oClasseGen.Analyse()
+               	oClasseGen est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
+               //	oClasseGen.Analyse()
                	ClZF_GenFenTDB.chargeListeMembresObj(MoiMême..nom, oClasseGen)
                	ListeSelectPlus(MoiMême, 1)
                FIN
@@ -3059,9 +3049,9 @@ window :
            p_codes :
             -
               code : |1+
-               oClasseGen	est un ClZF_GenCodeFic(CBO_TableSource..ValeurMémorisée)
+               oClasseGen	est un ClZF_GenCodeFic <- ClZF_GenCodeFic.oGetGenCodeFic(CBO_TableSource..ValeurMémorisée)
                
-               oClasseGen.Analyse()
+               //oClasseGen.Analyse()
                
                oGenFen		est un ClZF_GenFenTDB_Tbl(oClasseGen, CBO_ProprieteTDB)
                oGenFen.Genere()
@@ -3197,12 +3187,14 @@ window :
   type_code : 1
   p_codes :
    -
-     code : |1+
+     code : |1-
       PROCEDURE MaFenêtre()
       
       
       zbGenMasse est un booléen
       ClZF_GenCodeFic.mg_sPrefixeTable = ClZF_GenEltWD.sIdentPrefixe(ClZF_GenCodeFic.sListeFicAna())
+      
+      ClZF_AuditModele.gm_nNiveauErreur = ClZF_AuditModele.cstNiveauZF
    -
      code : |1+
       INT_SansNom2 = vrai

@@ -62,10 +62,10 @@ class :
       sRetour est une chaîne = [
          -
            name : Constructeur
-           procedure_id : [%GenProcIdent()%]
+           procedure_id : [%:GenProcIdent()%]
            type_code : 27
            code : |1+
-      [%sIndentSpace(sCode_p)%]
+      [%:sIndentSpace(sCode_p)%]
            type : 589824
       ]
       RENVOYER sRetour
@@ -93,10 +93,10 @@ class :
       sRetour est une chaîne = [
          -
            name : Destructeur
-           procedure_id : [%GenProcIdent()%]
+           procedure_id : [%:GenProcIdent()%]
            type_code : 28
            code : |1+
-      [%sIndentSpace(sCode_p)%]
+      [%:sIndentSpace(sCode_p)%]
            type : 655360
       ]
       RENVOYER sRetour
@@ -131,7 +131,7 @@ class :
         original_name : Classe1
       resources :
        string_res :
-        identifier : [%GenProcIdent()%]
+        identifier : [%:GenProcIdent()%]
         internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
       custom_note :
        internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
@@ -170,14 +170,14 @@ class :
        description : ""
        subtype : 0
       class :
-       identifier : [%GenProcIdent(*, vrai)%]
+       identifier : [%:GenProcIdent(*, vrai)%]
        internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
        code_elements :
         type_code : 10
         p_codes :
          -
            code : |1-
-      [%sIndentSpace(sCode_p)%]
+      [%:sIndentSpace(sCode_p)%]
            type : 131072
         procedures :
       ]
@@ -206,10 +206,10 @@ class :
       sRetour est une chaîne = [
          -
            name : [%sNom_p%]
-           procedure_id : [%GenProcIdent()%]
+           procedure_id : [%:GenProcIdent()%]
            type_code : 12
            code : |1-
-      [%sIndentSpace(sCode_p)%]
+      [%:sIndentSpace(sCode_p)%]
            type : 458752
       ]
       RENVOYER sRetour
@@ -247,7 +247,7 @@ class :
       si sCode_R_p <> "" ALORS
       	sBlocR = [
               code : |1-
-      [%sIndentSpace(sCode_R_p, 9)%]
+      [%:sIndentSpace(sCode_R_p, 9)%]
               type : 1966080
       	]
       FIN
@@ -255,7 +255,7 @@ class :
       SI sCode_R_p <> "" ALORS
       	sBlocW = [
               code : |1-
-      [%sIndentSpace(sCode_w_p, 9)%]
+      [%:sIndentSpace(sCode_w_p, 9)%]
               type : 2031616
       	]
       FIN
@@ -263,7 +263,7 @@ class :
       sRetour est une chaîne = [
          -
            name : [%sNom_p%]
-           identifier : [%GenProcIdent()%]
+           identifier : [%:GenProcIdent()%]
            type_code : 103
            p_codes :
             -
@@ -310,7 +310,7 @@ class :
         code : |1-
          procédure publique SetNatif(bValeur est un booléen)
          
-         m_bNatif=bValeur
+         :m_bNatif = bValeur
         type : 2031616
      template_refs : []
   procedure_templates : []

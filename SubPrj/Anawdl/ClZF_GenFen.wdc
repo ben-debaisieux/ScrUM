@@ -134,10 +134,10 @@ class :
       sRetour est une chaîne = [
          -
            name : [%sNom_p%]
-           procedure_id : [%GenProcIdent()%]
+           procedure_id : [%:GenProcIdent()%]
            type_code : 14
            code : |1+
-      [%sIndentSpace(sCode_p)%]
+      [%:sIndentSpace(sCode_p)%]
            type : 458752
       ]
       RENVOYER sRetour
