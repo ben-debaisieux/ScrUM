@@ -20,9 +20,8 @@ class :
       
       PRIVÉ
       	m_oNum_Sprint	est un ClDbSprint dynamique
-      	m_sCMTR	est un chaîne	<MAPPING=CMTR>
-      	m_oIDScr_Retro_Commentaire_Type	est un ClDbRetro_Commentaire_Type dynamique <note="mapping=IDScr_Retro_Commentaire_Type">
-      
+      	m_sCMTR			est un chaîne	<MAPPING=CMTR>
+      	
       GLOBAL
       PUBLIC
       	// mg_oEx_Exception1	est un ClZF_Exception dynamique
@@ -88,10 +87,6 @@ class :
       	SI PAS Scr_Retro_Commentaire.Num_Sprint..Null ALORS
       			:m_oNum_Sprint	<- ClDbSprint.GetObj(Scr_Retro_Commentaire.Num_Sprint)
       	FIN
-      
-      	SI PAS Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type..Null ALORS
-      			:m_oIDScr_Retro_Commentaire_Type	<- ClDbRetro_Commentaire_Type.GetObj(Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type)
-      	FIN
       FIN
       
      type : 458752
@@ -125,12 +120,6 @@ class :
       	Scr_Retro_Commentaire.Num_Sprint..Null	= Vrai
       SINON
       	Scr_Retro_Commentaire.Num_Sprint	= :m_oNum_Sprint.ZF_Get_IdUnique()
-      FIN
-      //
-      SI :m_oIDScr_Retro_Commentaire_Type = Null _OU_ :m_oIDScr_Retro_Commentaire_Type.ZF_Get_IdUnique() = 0 ALORS
-      	Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type..Null	= Vrai
-      SINON
-      	Scr_Retro_Commentaire.IDScr_Retro_Commentaire_Type	= :m_oIDScr_Retro_Commentaire_Type.ZF_Get_IdUnique()
       FIN
       
      type : 458752
@@ -205,56 +194,6 @@ class :
          	:ZF_EstModif()
          	:m_sCMTR = sValeur_p
          FIN
-        type : 2031616
-     template_refs : []
-   -
-     name : p_oIDScr_Retro_Commentaire_Type
-     identifier : 0x2e56cd3d46104
-     type_code : 103
-     p_codes :
-      -
-        code : |1-
-         PROCEDURE p_oIDScr_Retro_Commentaire_Type() : ClDbRetro_Commentaire_Type
-         //Propriétés de m_oIDScr_Retro_Commentaire_Type
-         
-         RENVOYER :m_oIDScr_Retro_Commentaire_Type
-        type : 1966080
-      -
-        code : |1-
-         PROCEDURE p_oIDScr_Retro_Commentaire_Type(oValeur_p est un ClDbRetro_Commentaire_Type dynamique):Vide
-         
-         SI PAS ZF_bObjEgal(:m_oIDScr_Retro_Commentaire_Type, oValeur_p) ALORS
-         	:ZF_EstModif()
-         	:m_oIDScr_Retro_Commentaire_Type = oValeur_p
-         FIN
-        type : 2031616
-     template_refs : []
-   -
-     name : p_oIDScr_Retro_Commentaire_Type_ID
-     identifier : 0x2e56cd3d46105
-     type_code : 103
-     p_codes :
-      -
-        code : |1+
-         PROCEDURE p_oIDScr_Retro_Commentaire_Type_ID():entier
-         //Propriétés de l'objet m_oIDScr_Retro_Commentaire_Type, accessible via son ID
-         SI :p_oIDScr_Retro_Commentaire_Type = Null ALORS
-         	RENVOYER 0
-         SINON
-         	RENVOYER :p_oIDScr_Retro_Commentaire_Type.ZF_Get_IdUnique()
-         FIN
-         
-        type : 1966080
-      -
-        code : |1+
-         PROCEDURE p_oIDScr_Retro_Commentaire_Type_ID(nValeur_p est un entier):Vide
-         
-         SI nValeur_P = 0 ALORS
-         	:p_oIDScr_Retro_Commentaire_Type = Null
-         SINON
-         	:p_oIDScr_Retro_Commentaire_Type = ClDbRetro_Commentaire_Type.GetObj(nValeur_p)
-         FIN
-         
         type : 2031616
      template_refs : []
   procedure_templates : []

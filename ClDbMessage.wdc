@@ -255,58 +255,58 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
-      PROCÉDURE  Init_ObjBD()
+      PROCÉDURE  Init_ObjBD()<métier>:Vide
       
       SI :ZF_bModeAjout() ALORS
       	:m_oUsr	<- goApp.m_oUsrCnx
       	:m_bTop_Visible = Vrai
       SINON
       	//Récupération du rédacteur du message
-      	:m_oUsr <- ClDbUsr.GetObj(Scr_Message.IDScr_Usr)
-      	
-      	//Récupération de l'US, si le message est associé à une US.
-      	SI Scr_Message.IDScr_UserStory..Null ALORS
-      		:m_oUserStory = Null
-      	SINON
-      		:m_oUserStory <- ClDbUserStory.GetObj(Scr_Message.IDScr_UserStory)
-      	FIN
-      	
-      	//Récupération de la tache, si le message est associé à une tache.
-      	SI Scr_Message.IDScr_Tache..Null ALORS
-      		:m_oTache = Null
-      	SINON
-      		:m_oTache <- ClDbTache.GetObj(Scr_Message.IDScr_Tache)
-      	FIN
-      	
-      	//Récupération du critère d'acceptation, si le message est associé à un critère.
-      	SI Scr_Message.IDScr_CritereAccept..Null ALORS
-      		:m_oCritereAccept = Null
-      	SINON
-      		:m_oCritereAccept <- ClDbCritereAccept.GetObj(Scr_Message.IDScr_CritereAccept)
-      	FIN
-      	
-      	//Récupération du message parent, si le message est associé à un autre message.
-      	SI Scr_Message.IDScr_Message_Parent..Null ALORS
-      		:m_oMsgparent = Null
-      	SINON
-      		:m_oMsgparent <- ClDbMessage.GetObj(Scr_Message.IDScr_Message_Parent)
-      	FIN
-      	
-      	//----------------------------------------------------------------------------------------
-      	sReq est une chaîne
-      	
-      	//Récupération des messages de l'entité.
-      	sReq = [
-      		
-      		SELECT
-      			Scr_Message.*
-      			
-      		FROM Scr_Message
-      		
-      		where Scr_Message.IDScr_Message_Parent = [%:ZF_Get_IdUnique()%]
-      		
-      	]
-      	:m_oMsgEnfant.ZF_LoadSQL(sReq)
+      //	:m_oUsr <- ClDbUsr.GetObj(Scr_Message.IDScr_Usr)
+      //	
+      //	//Récupération de l'US, si le message est associé à une US.
+      //	SI Scr_Message.IDScr_UserStory..Null ALORS
+      //		:m_oUserStory = Null
+      //	SINON
+      //		:m_oUserStory <- ClDbUserStory.GetObj(Scr_Message.IDScr_UserStory)
+      //	FIN
+      //	
+      //	//Récupération de la tache, si le message est associé à une tache.
+      //	SI Scr_Message.IDScr_Tache..Null ALORS
+      //		:m_oTache = Null
+      //	SINON
+      //		:m_oTache <- ClDbTache.GetObj(Scr_Message.IDScr_Tache)
+      //	FIN
+      //	
+      //	//Récupération du critère d'acceptation, si le message est associé à un critère.
+      //	SI Scr_Message.IDScr_CritereAccept..Null ALORS
+      //		:m_oCritereAccept = Null
+      //	SINON
+      //		:m_oCritereAccept <- ClDbCritereAccept.GetObj(Scr_Message.IDScr_CritereAccept)
+      //	FIN
+      //	
+      //	//Récupération du message parent, si le message est associé à un autre message.
+      //	SI Scr_Message.IDScr_Message_Parent..Null ALORS
+      //		:m_oMsgparent = Null
+      //	SINON
+      //		:m_oMsgparent <- ClDbMessage.GetObj(Scr_Message.IDScr_Message_Parent)
+      //	FIN
+      //	
+      //	//----------------------------------------------------------------------------------------
+      //	sReq est une chaîne
+      //	
+      //	//Récupération des messages de l'entité.
+      //	sReq = [
+      //		
+      //		SELECT
+      //			Scr_Message.*
+      //			
+      //		FROM Scr_Message
+      //		
+      //		where Scr_Message.IDScr_Message_Parent = [%:ZF_Get_IdUnique()%]
+      //		
+      //	]
+      //	:m_oMsgEnfant.ZF_LoadSQL(sReq)
       FIN
       
      type : 458752
@@ -316,7 +316,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClZF_ObjDB.pre_enregistre_data
-      PROCÉDURE PROTÉGÉE pre_enregistre_data()
+      PROCÉDURE PROTÉGÉE pre_enregistre_data()<métier>:Vide
       
       nNbreCle est un entier
       

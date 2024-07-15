@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_Analyse_de_l_état_des_taches_non_finies
  identifier : 0x2f92e3a92eb37124
- internal_properties : BwAAAAcAAAATlPEvLnz8/Ha4FWqgj8lOS3Euhf59pKdSPnxAw4DpUBR+BgXJWU5LR+83HwIxlVjrkN2rblJ6wRA9sJwZucdkkTQ45FbUsJ9zR/mKVdx/iwH1ALQBXZqL3R+QoUbtBocgGFg8xQv5rk5FUCuvj9ttmBhod6zUA0Y7uzsBM7x6kcDf3eajVDOK3Icz2c1PNPDesr0UOgDoxMt6FXLWjWwFUb69mCc05La5zQJyip0vmsA7yI6jtbwQnREgmDvnl1IQPtKIH/Wa0ALjOuE6n7ccvHnXRsE5RR4RqMW0lsMcruyk3/eQYUIwQ9ro+C5JgTp4hsYoOyYKPaD77cbSX98E6PW2Rszwtn2rxdfe9GXruFlMmJAjHC2YZCznwQu6CR4dvAh2LVEWHJ1nUfd4GATGMVCRVpgPRgGlHDTf+ocjXwpijae1mgUn220f9SkkeLdHN2DEQZDfbz34IF4TpmKSENmmYIi0LEYsTqfFuekLxs7rzComXRcDQ0k5sptjXtShVO+fS6Zds8gHGdD6Kjw4Mw5JMxXoCiA4QxVmG7QGrtHjeoyRowS3icCaV4yJiS4p5dJMxxey/pA1pIi/VydiUu8GkEPWDXXgo2g5CjKb9ixWrhnNroD1y3ZCmqZoi0XnQ8yGV266kD/tD6wh0UIe8kb1UTnBA68n+vGT50nPQGcvilRXaYUoboXH0vQucbUu05y1RCBrOkBLgvzXqsilui+5aSnShXVOdgsPYAc=
+ internal_properties : BwAAAAcAAABHXh4D4gRltV8AviF2i5kK57XJk/P8lcEwbLtynO5gBeFC2N/ibZLnUYk/zIxjAYLB95ZQwME9iibnV9Ac/kRwaDxQn5Prz4csITExYE0JCMiC0uhrM0s6xRx5/s3GqnDWKOkVfFQTLTjxoq1MQ/WwCTQSkkP0p+mzpPWQ/G1KNU9nYStnVsez/ocU7KPPLGTUpuM5qEDQAerauiJy8Gt4tHuLjtNE3rqO6ZND2a23cm/0chTZ0dsbQSUD6GeLKYl9lHf515TlDa7UOo2dUIYIN/wgaXb5zb0JdPoY/xKSd0O/UExVk/6ZFtdsCGL3glVBPbuz4GeyAFyoVDz4MzNI+M/Mxj0E7ZVMfsJVrJlgREOM6w5Oee0FhRPiXDuPinPsuY9bYvOyccKi5mAgXtCkKUytV7xSk37gywdOfaJEQeGpTf8Y0dYZ84lvwPVdNuBzvxqepu3wD9pSwsy35ZIpQ7G2gLMLFJuOASdZb4lxJIqne8EjIa53ScH8QpY+CK1yewj+9rkWrql//ei5ECH275+6rbgki6dI4R1KWnXmF1WFmZtWot5PvZBPoBK056le14ieFuqC8a/Pp6Lo7hgdIxgxDdbMSwUL/2tX61RN2b69YSBH+4JOy5vl6rJvlOMKcCBvV8O8Y9Wagg0YvKWywC0ZFv/m6gd6tVTlSx8yUAVGLDioxlmg4H9xpX9hM3RnMpJ8s/PwiS6OP/vYNGV0E1xUhewBhQTWu1ZalWFIyw==
  properties :
   width : 587
   height : 450
@@ -229,7 +229,7 @@ window :
       			nLigneUS									= TableAjouteFils(TBLH_Taches_non_finies,nLignePrj)
       			TBLH_Taches_non_finies[nLigneUS].COL_Taches	= oUS.p_sCodeUserStory + " - " + oUS.sNommination_US()
       			
-      			POUR TOUT ÉLÉMENT oTache DE ClColTache.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
+      			POUR TOUT ÉLÉMENT oTache DE ClColTache.oFromUserStory(oUS).aItems()	//oUS.aoListeTaches().aItems()
       				SI 0 < oTache.p_nNum_Sprint_Demarrage <= goApp.m_nNumeroDuSprintActuel ET ...
       					PAS oTache.p_bAnnule ET ...
       					PAS oTache.p_bBrouillon ET ...

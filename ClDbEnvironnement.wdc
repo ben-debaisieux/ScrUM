@@ -48,7 +48,7 @@ class :
      procedure_id : 1444813286111477540
      type_code : 12
      code : |1+
-      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier):ClDbEnvironnement
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbEnvironnement
       
       sClasse est une chaîne = ClDbEnvironnement
       RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
@@ -58,7 +58,7 @@ class :
      procedure_id : 1444813286111543076
      type_code : 12
      code : |1+
-      PROCÉDURE init_ObjBD()
+      PROCÉDURE init_ObjBD()<métier>:Vide
       // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
       
      type : 458752
@@ -67,7 +67,7 @@ class :
      procedure_id : 1461102081306530024
      type_code : 12
      code : |1-
-      procédure globale Init_Data()
+      procédure globale Init_Data()<métier>:Vide
       
       
       SI PAS HRecherche(Scr_Environnement, IDSrc_Environnement, cstEnvironnementProd) ALORS

@@ -191,7 +191,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
-      PROCÉDURE  Init_ObjBD()
+      PROCÉDURE  Init_ObjBD()<métier>:Vide
       
       
       SI pas :ZF_bModeAjout() ALORS

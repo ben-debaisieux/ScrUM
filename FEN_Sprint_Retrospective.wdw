@@ -36,14 +36,14 @@ window :
          //nLigneTypeCom est un entier
          bRetrospectiveValide est un booléen = vrai
          
-         // Parcours de contrôles
-         POUR i = 1 _a_ TableOccurrence(TBL_Retrospective)
-         	si TBL_Retrospective[i].COL_Commentaire.INT_Defaut = 1 ET TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire = "" alors
-         		erreur("Vous devez remplir les champs par défaut pour enregistrer la rétrospective.")
-         		bRetrospectiveValide = faux
-         		Sortir
-         	FIN
-         fin
+         //// Parcours de contrôles
+         //POUR i = 1 _a_ TableOccurrence(TBL_Retrospective)
+         //	si TBL_Retrospective[i].COL_Commentaire.INT_Defaut = 1 ET TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire = "" alors
+         //		erreur("Vous devez remplir les champs par défaut pour enregistrer la rétrospective.")
+         //		bRetrospectiveValide = faux
+         //		Sortir
+         //	FIN
+         //fin
          
          si bRetrospectiveValide alors
          	
@@ -52,7 +52,7 @@ window :
          		oCmtr.p_sCMTR = TBL_Retrospective[i].COL_Commentaire.SAI_Commentaire
          		
          		si oCmtr.ZF_bModeAjout() ALORS
-         			oCmtr.p_oIDScr_Retro_Commentaire_Type_ID = TBL_Retrospective[i].COL_Commentaire.CBO_Type_Cmtr..ValeurMémorisée
+         //			oCmtr.p_oIDScr_Retro_Commentaire_Type_ID = TBL_Retrospective[i].COL_Commentaire.CBO_Type_Cmtr..ValeurMémorisée
          			oCmtr.p_oNum_Sprint = goApp.p_nNumeroDuSprintActuel
          		FIN
          		
@@ -71,7 +71,7 @@ window :
          		ClDbSprint.Calcul_Velocite_Moyenne()
          		
          		//Recalcul du n° de sprint
-         		ClDbSprint.Sprint_Num_Actuel()
+         		ClAppScrum.Sprint_Num_Actuel()
          		Info("Rétrospective enregistrée.")
          		Ferme()
          	FIN
@@ -283,39 +283,9 @@ window :
         properties : {}
         controls :
          -
-           name : CBO_Type_Cmtr
-           identifier : 0x2ce2784704ec799a
-           internal_properties : BwAAAAcAAABM5baWt7OMH5HMTBqHj3A7e8DwxN15qRUpZUJ+7oErgasZAA78qCwTprjDRw7J9MK7j+jIgEM3ZnipKVknsXfd+TnQYXdcUnNLo8SXhcgKoy8VvM+UU1cbWdnZSrzGfXlBEfge0z4eJEE8qVRGCQ4J6Gn/3QhSbd8Y3TyehkQ43SSB7UJtWV9pbjUYskDqBdsFK2+yn7VWpvIunNHQVusLSqi2uugmUmiW+mDc5p48LgVWYWDpOThJUhHQSz+i7npIrJSaZ0tXqZ26YpkNOfP4cfPbYBNRoq79vm1PSybG0ylSTwGyufdjdyQLt8YFixAI8OUWxxd81mLLLUirU9IxI4Gxjvqu/D95CWIPIGIQL9ASne+fIa4D4jx8zF1WFotNwfO2WBi1HFCU3jBzLOcDK+cqc9sj3b3MM2eALhrMRBWSWFrxSkwrcp+cUysBVRZRnl9wNmEcrVSAWMGkR6o24LhsEugS3LFY8H/3JRJtG2Bp92Kwr5V7kGWH1h+CTOZs6WVnjd8VOA6NRrU77fHLejAElaFVnGhXaG1FLZgALZyeiFPs78se5q5dxSGFdslKAuHNpFQkFrgD1K7045u6yJmB67c2DdisoCRbnQAG0O7emajrpQSjdT64nynqZmukmpz4eaY5IU9ZtTQsZMnr0eMAYdOS1gBf4PiQ3ROGadjcdxTtZcDiXyR4ToE+j7W4vFDJC1k/rSwtyFnFqclrhJd7Qr9kwL7/kv/bUGdmCbvB4KV4EkJBfUqbmFivBFk89L8hikfbNopfaEvP9RzxxbZ2xhiN3fxHz2Asiig28DJY0zrc/Ojf34Ip5s/L5g0M5d4yphWoFvbOH1vP1sZ9OFf/p4tpYHwQRQbXs86nmT7Bh5N8QmK3LIYtSr0PO7hakVuQcHqHkjxjEaayBE627nlUL8rPSSfSLCyDCsZukZAeHsSZjcME6UmD8aJJbBdGLm4DwObuKjJ9HD6/fe4b7NTpeUAOwSuYRt64pUznHbld5mxE9EIZ0f74yrGOeOstPqpTjXyh4v6ALo/HJXYZbEGqHJI24+wkS5fdDhs0aXhJkk1I8/KlrsXTWCPc5F5aQU1u2GdzFtwrd9bJt5qrRwFr/SIQycfbsNPeP6TFKm2AvKmys/TIXSiZSVfoB7kkdPjPDtjChTyDOVd3gMaANJeHFtNt8SrsO1ccdoJ6vgMIyRM56KQBzmu3T1oaGfjjRkZBjevvo1X0EwTraGXCsyEaHFGpGE/0rtj/wuHriU5kuU94hJFar3Mlhth/m7XsElNkVdIoBosej5D+WZRX/w4s8xejZREzkR5qBZoxa9ZYuRQ3ECc86XGO1b648qjSGqldBE521oe8qOEabieee6gKzIGyLvGqt30tNXHogGaChKFncO4jjz/DE86DSTO3iBdCqzzYWbQY8dyIE5VIMWzof5sz58bt4vSfrHDnWPt4Z8JiQdw2MVKNCJugmLZCzG1r2J6HnteiqMCkZGIai2W5nAZ7acQz6fjZ9iF6vf53V0Li86wldUDkU6YBkjJ4P9aAn65LGO1rwqwwHo0+KQdvhs0j42dVU2p2PsH6A6DJV5Elfp1Ow2iXelI22n1Upp7Dmm05oK2MX4MuSzPcKou6LAP37hijrHdVcQzUCTtdwyJQTjf0wtwanrtXbvz8C1CoecR+caIbBAZC03RdpL3qOwu2tzD2YRnPaSAOGMpU6PIkiI4Nrj82nYCRaT6k2P2DdanP5vbcZsDWqL/G6zAYYWREUzS3oWqvr/eRavs+pOYlYdU6Mgx4G08=
-           properties :
-            x : 3
-            y : 6
-            width : 254
-            height : 24
-           dropdown :
-            internal_properties : BwAAAAcAAAB71x4u/EBSpoiDNAfhWgNzpB9DP6VE2xoyLYAYrF+okV+Q+RahdlGwtPlHUGDqv9fX1Nl+yuvg544YRibaWaJkU5RHW+JPC4XEVhXwMmzXBih4JK89Vcs2kNwsQWh+uiGuXmvpiHyoj3ShSCYE1P0fNnOEa1ERxuVwAX5yDT1j8dR24HtN+PR9S9egeUglJMcJQV4kaVE8g6jAo7JBDQQqUrkTSsb3S4cAUl+0PBfQAPxJBh6qGy0UoUb9YU1IoS5FNuIjdx3j4d1uurRD11JehxuzwUDoFwn142IXBrJ0/vIDi2VdTXX9Ooj2sz63a+IeohwogXhyBImKCnPO15ivO7GhJ434pJ7tgEXL1Cua0zkL5EC1riLUgzY3S9lhp/P+RUYV+OpFdaMdcgKjFePta/HbVb8RewLcDaLg3MW6U/kFXzLKCU/YvLwqBh//gQA/18vYNPx0bkX9ahhH2ZvNcOYfJd/Qu5nrMxLjoVsV5n6PqVho655+fUib/0EgrXLnf22xkg7NYY7Jz0tZLnvB9y3Y2blX2z/s3h6D9jZS9qCanDaGo/t+Yuw9kVpkjM50uHvZKC3j/aWkrkIEHs+juHjgI5vsQFl1r8mVxX0t457AcuhCq+mBIOw1N2pC8zAsm3bSA5HSSJUc9EdqtszI3zPXTbwMMOjwSbrP2yV9UgHk26e5Iw2bUVwab2UodRHzqRa4cAJUEZ8YAjSEcWx0HMbgeKrpgehQcYuaSgjntFbi
-            type : 7
-           type : 14
-           code_elements :
-            type_code : 23
-            p_codes :
-             -
-               code : |1-
-                
-               type : 14
-             -
-               type : 35
-               enabled : false
-             -
-               code : |1-
-                
-               type : 33
-             -
-               type : 17
-               enabled : false
-         -
            name : SAI_Commentaire
            identifier : 0x2ce2784704ed799a
-           internal_properties : BwAAAAcAAADUcR9Av42xkU5hX7mGDVJzWDKdrdbnzXy8GqddgpodYKK2M/nVomKzIppYkI4rJiBnAWX8r7kGxiHnUO39pPlVPc1iIYvzvKJipJop3cFrK2PIvAGmSN26Pq5v2AuK7pNcWp3g4/01n64UVMMLMU7bOykvRgQHSehf2XQyYnsqS2RJu827g281V8GtkLXqXHodPUQJcl6Bf+Bs/LJGMPshrU7cQEE4fWdYiN4PezUq3++gcJC36C9i+iLKXu7lhtSOSDbH3zHlzjNO8aAqL4r2D2W2BbIhFzy3m6d+90jr8Kdr4p6KwXz9/u4XGIP7PG4p4WB6nnlHg0AsKkrFSztXUsfCakrNS0KvXfZK6XQpS6gRn2IyZDE+nEyO+1Z8yXk1Z8FxByvBNZ/n6n0SOJQN3Hjz6iyhXiYuu3YG8iI3roigzqwdbHnrUx6PpLnmKRsljSggrDfh/6xk/DdMyDEAw91pYx+oaNVZZR4Xb0L9gNjNrceOkVaz7zz1jhOiydhL50Fn6vfV2IE3qgrY+aaGl0DhcJaEuUp8QS6BjNO3krFezNpGNeZ7YBVaHu8wxgQggNWZ0IzqCfQ7xVX7hYqum/DuXNOaLhLW2uNUrvCuw5ya3jTlUypQrEFz5ap9I8vYN7K4qX62fr07p8xjkWHdqG5deaePcLvBrwHEw2hPMuTwHYM1m5fNwl8dOkZO6k1dPt7/vW+bCHuTWbtCzAfs+LJ/o3+6mJ+ukeDABr8s4bFCXwGw6SlxCDzJ/JJDvUxCj4i0QClNXsKRwQbAscYEriXYkKpFBBZ4lTZHqLhR166OP+9ZPcCwHNNDvU8GfnAdtDI57d1sFy0KbUGMdhexOH7b5D0bV7RPK8Hbh6CxlyvS68C64l5Il/DMSetfshUfbNwg9DnZ9Vj5hXHYvqgFqHkJ/NkLu424QGkAzPhvqAzWB3aLpBvfFIfJMIvHiMWabsSamT9b90UF/lPmCJ57FHZxTPvlrmZyou2gN3sCcM7nmqoSXRlBYnsgvGmZJf1uX6gVbLDGLtXI3+hR+XCMJG6IDPZsDgNJskqCh5PZx0mF9jF65dj0zw/nOVGVskSUVnq2j1JZ4ld6XapSydhi4WZU1T8KurUSC1b5sIDcUTHzi2IiRjx8zTf9Z5m8+XONRUZrArai+NC3r+uBSy6jd6lYfsdU7B+cjLHlnx9gPxWkExW9/NaQhoxsSuz2pE5CV7A/g6cc4G/I+ZE+rJykKnxO28xHqcNpTmglbpbWgs8+wHSSzjACq5XOKVz4gkqcI/Kfm+R75pFNv+9WRnzXofE6t9cWXXpirTJK/ng+siP8xaI=
+           internal_properties : BwAAAAcAAAAIstbYmJBSbMrc/uXlubywvTAjTG0Z+qR1sdOK7/+86f9Z7VQ4AuSmPjcMyDWq8SNr7EaWkAWnM3JFgAZOD+lDKV5campDyreIJ+niAJpSQYoBk4jruKSgwc8yILXRxtTog0Cc8F66T76eIJEW5KcLUy8fhPFKINIOcZI+nFv2po8HraDNr1HTCqxbCXsYyWIb+NCxCAalyffNi9B1CSMjyWo+mDM06RBFfc99fae3C6LjJsNhzcyYQQfGM+Ev36110OisggtzORp0vY3pfydDzCKGsPRAVdDwBJplcaIrqW5mfpoPBVI8Qh0WnxmC+vvDRnnD+kzl15/YG0wCpJO0qcenJZyJY0L63QV4Fa6nt7nO5K3TE6dKdt4Teq1SlFiQp48dKLgIVMLXVvIUYPTo6pKn1Tj32gn37Zvv1AdxpQGEOazat6ZaFZTGC83UwkWeSlFbxDWL8Q+VmldZ8C3bTqcUdwsnQNJXBEQM6c0uJErDvyuTSB5ZBtgjZJDXQvHVZQjVTLL75HrsmoY1i5Jh5dc+zY5uKUUsZSSoQ3qbWccji87uniwgJyfotzcBO0A20YZXozbCaXr8Oh9y/na17SAgRh6pjs/5Px1gqzhtnbROY6Z3gam1jlmSJhDzOjY6XxIQZB7/+IeGzNnl8t46+PIQCKNKisHdllyBUVERvYZo8rQTBqEjGmZuiWLpdKbXak9qLb5HgEVSIpK0jRGv2ppKUnVf2t26doM5bqhYsiHs4kSWDvsv9Gs0l4AKsfUyGS8DnFbdYkS2HM8a2Hj/mF2BDVTeROIeiHtm3pur6DYAsBzRSn5C4ISUYuX7Mnl32BeOUcLyueVxjKZ6E63uLHTGl3Vy++zZpgqai03Byp9gRjvASRBWz8tpyAN0qlBzJiUrhOQxQV42VmRSf5jKboUoExuU5XvgE57LXsPJqZ4m6H158QcvIvrwKxf4nLYUHsu3cTKrgydwiwrAwYokbuaEs5lGqp6QlR4T2QTIh6zPJzMslK8LhgZbU7OIlSKsxyeQmgeAxPHL8J91OAzz9AwnwwrXGrPPk9dzJV5BTK1nPZ7SjOpy37Ri6OscVA/eHod7b/OvZENnqG30UJLLCWx9cvnh8Jc+HqNcWI0eVBP/pE0uA6A8szyQqrXBwfC5cw0+9vmS7Gp8qtA5iprSj69vbemp0mlwFfZQc4bI6uHGLsAJ6RYswKG/2RSPQrvQF/PWN6qGpleBysg8lfTHRjo3O+hUYnlfWYowy2JTWg+VIV+q+sRPOBROhLLj0svVIrZIGHsGendAQileS99utwHZpeDEPTk2MI0YzzuCRVoHCw==
            properties :
             x : 3
             y : 36
@@ -337,9 +307,9 @@ window :
          -
            name : SAI_ID
            identifier : 0x2ce2784704ee799a
-           internal_properties : BwAAAAcAAAAjMOnTZ1A5Srwfu2l/RAVrN6udNxQfVelWfzT4Q6sCHq7SiyY1bZFlHgHanCDiX77M6mgzc4eSTBwJduYn8ulzL4aFcvqi1pvXhpC8KM7niQybeq9cZMgwxvvC7/V9yXzQgf82DUyqa1+tt/mVScsxHU70PofDgR40IFbVfqplNmGlA1M7WJPQukZq/vNDgO4iF9k+2gC21ZsJDuq6LHQ/nfRntroqHm4Cpcf/Q0CGp+NKDxqfrShiPWFcA1m0Zy6TZQ9UKobBMP8LTmWukeLWnd23mVAf2HSBj8nPu/SzYMfF1EOccOSuKoJhsVf84lNQgCeSIvbowT8EV8Trzr9ZmO4HYDq35KYjJBcFLq05lnHiyg8qq+7ntyBTfAq02JL0wIRy+NJT6+rRQ8tH+PgKxuZJ/oyzw89jmEP93PX3jxeeZXXQ7tYOKHmOgUYJMiXrFMBfeQMcYTqewey8kedmIAa6BVXufxotQI35td05DvaNV10zN/8ChmYSGpDH9QtVbltqURFxlDw6H9jMyfUFxFwMQLFyqhyfHi3t3B/WeIo/JumpkRyOpwOcs4JvgDceNMXkc58WXUjmnxwwip4HcKbfayA7F2lXF0xKlDD4wrGMEfSnH/6GPyK7rpUSvsQSbTqFUAFJxl0d/wKqe/m17pb3OFYcPZWj2XkL7rkkpvbgYHl4+oYqZuUcbjv18xAjGaGFLCWMkrLQZ5qU9PUsBNqD0pxf2VInnjPzf3RD1Wm+ETnGwWzDXWvE6OtOX6GmU8ylC3D7bXMCRV40fy5nY9hR1znZHPq6WpmiK52T2wTWYq1CRL1sl5juvYlsoxnKAIzasRaDfCeas31MBM5SNS84LsBzW61J4dNsAcOFSPnUa4axdouvnKQ9z8xpHM2QrmDNCJEWd2+CxGBQR2aTsCo3d38iCDgFSDq3UXT/Ys4kRwk61iunIKStI9BG4RgX5NVqn9+7QUgPYb9nlspYIbVyYCr6EEeVi+IShfFdEX5vyt39WhCAXSOXGaNrmRDCr42TJTw6AtfaGAhbPuPgMgP8XKtvsTcxY1L+Tth+F4RGnVJrtSFhQemBXUUxRZ5+JuwQk1q4A2kGbNjVYBTueHCsB0tZBhihaK0wmb3wALbuLrqK2QvfDxf1ZUZKTWKLoCWuUT8AerwgR/w4MvUvq5zjmYVYihp4Wp5TR/F9UvnUMiku8gF8JJibtdEFNntIMEw+vcuaZioLfz4ZpBk/cIkXksPo7TVqrjjkUuKzsPJiLkwHb8NgDyQJ+L0FnWGF2F25EoFgtr4B7Se6MlJARF+4hE06oGf/kTndO6UqLQ==
+           internal_properties : BwAAAAcAAACJ4LhkUsJJj08epk1InpNU78j6Yj1RN3slwiGhEYBA3vV7lXlflJk9NvBDJCkHkxjnbhi7ne5khFh8nodm62FkA7/obYHWJb2/tzsc/VxgDXdT+V4Lajq7O/rtRoPOl1ZyksaG8Bvw5TDoXuAV94JXXdi/jutRvZwUS736xdLZRqY3v+9lcTX6xylD2+77qtJ+n835LukU7v34EgSmCOIr+DTu1L4u49H6bjPJeHaeFjUzcGvf1kxAxJXHMH57ziSjDGrv3UwhxgZb3Vts2SXZolwsFfRTgv9map4Umo1ABb1Gt34gPx0NV+mQP6iuODwTIfGSvfjKtJ1Qw5dfhYhehxL/h3bBqivYUJRg38vD4lBkmvERc+3wV4F80GIXaCeBLzrK015jlp9QghBJET2SDTk7I2Bj3Oz2zsUelBkkA5whNNE7dN3RyC+WgvnhklPhCfZyCNoKIe2pkNt0ZLp9nx9unXq5s7aSVpt5TBXYqT6odT0Qe48Al2VDm24LKmgI5cvVnc934FbJBW90HdDCB49+Ip9P0xgFZha73aU+gdKSff0W414FBCG8ceQ76/m4BS1nOJramxjN+AKNGYoMQTDaYfoPGZHjqQ4+pSot0v3t40Ba2isMTDxoA9UQ4o7+xM/HcsiRCoOcq2aHztTo/HdH/JzHnginlNWsPjsNZyzdzh/s+0VTxvIKrZmZROsDurWVAvIfBRJ/eUXYjk79DCP9XCi6/nGflQnqrxJ+VtPnoSUEcrmQsyq0K09IMup62Na3K+vmFqXdwRWCXxOwdZlx21c8mRdKEYP1Bc0eZFJ1fOcG+4CvBXccqr3+Qr52+Rga4zvC3deDDXDGeEkns9Ikpj6YsHi/0oF5vwMizRkbmdzhG2DmdIU7DhIVv3ikC2xFSvzDRlHVWsU0ScWSqmEDX6X7I88dm674s6wq6xALF40Qq9DOTqmV6GyIzC2huUkiuVTKcBQ2CQSNshXvswZmuFSB00ApsnjBy7l2AlgAjg0rMS/9UfQnzN2b5tGsVvMhlZv5QUnlZr1ZJhhNVPIMOLnK6OgfoI5lFKg9CPBfG9Af9o4sJZTdfo/BVhUA4/Iu28nLeG8Dhov/sG3zmGdgd0ke5SUXx+0FbZ+NpXB1wLxeAPLmv3y5bl6IoI8B3wGu1+YBewyfeaV46IJgxfHXsYexT3suJ8yqp5c2Z0Nj7JveO4yJoKE1DlGb3TT6vaok8dhj89S+dW1/MEB4Tm5SnfaN8Nn2U3TsDPqIvPfp8OifIW3A9sgO1NbIg5eJjFZ94eCIUjSuEhDJ14WcplCTc4sdtlMY6uRNUoT+
            properties :
-            x : 283
+            x : 331
             y : 6
             width : 136
             height : 22
@@ -356,44 +326,6 @@ window :
              -
                type : 278
                enabled : false
-         -
-           name : BTN_Ajouter_Type
-           identifier : 0x2ce66bc906ac6a3f
-           internal_properties : BwAAAAcAAABCOMNuCEstNNDJEyosazxtRdY/2G/+fV2aXZqNxkZ6BL5qsR/eGWkCFx/7ArOW0DwQHkoVGJX9vT8VHHOKzqtJAE/kLUu9sOsgcnDAb3vUrhurIKmu+ZTAq4vyP3VjZay8JSWVIeTKcpMI+cO3GgrUL3P6N9ptLMK29A6oCnt+e+jFUcgCFrC1N8kebhz4//8q7RsoRlGwsBzkhB8xTcCA7PJJCfDuQIet4a+/KMJHnl+h8cUiuf5Z99VBWAHl2maAQmUQXkVaDXsCqgTc0AwViTPsD0j4YVqjE68/kyze7S+GflZ8zdBtYa6vOeGb4GJtP3q4SR+Mxb7+GJbK/Q2Yz7DXQLSszVYEDOkUCHavlz0YuQ6zRc8p4xDRhjj0buyseZgLBFhWupLW3JTPnCfJIxb7Sp/7wJk9pa2emARZXyumBeACmQ9esvj5volxBzwb6NA6MdoZxgA/1x5iWG3r3Qb99rRqvnGglh8jRJ9LSefjD3vJ7c8cfaodW5lC3mnttm2Y73+hsFy+9opVJ4t5J0x9ypRM1qhhX+OnQPN1Y2igl7XR0muYSK4fvowoIYID2fWDqabmh1Nz6d+1vojmCaufK6sknFjL//AQllpj6dqNQf4qE3g1ErS2vrCfCQH3NRFj32M9KWHTaHw+7nsQOijlW2XOv9CIluHHOjPw5W4I1ACVMYWvSwXPojeUMmxvvwqpLYA4MJitUoQa2TfzwSuWpp431fNN9GQ4BfC2Gz/L
-           properties :
-            x : 263
-            y : 6
-            width : 80
-            height : 24
-           type : 4
-           code_elements :
-            type_code : 4
-            p_codes :
-             -
-               code : |1+
-                Ouvre(FEN_Types_Commentaires)
-                chargement_cbo_type_commentaire()
-               type : 18
-             -
-               type : 161
-               enabled : false
-         -
-           name : INT_Defaut
-           identifier : 0x2ce2784704ef799a
-           internal_properties : BwAAAAcAAABuekddHCy+rmGkW/Teld/kkzE/X0B1CLhCA1IJ28+QdFfKZKeNLW3+xTnN0L5Zm2VEdCBa1ffzPcNw6c/sjgl8rwfiu+HbmClIR0D3rg2Lk7NvM7I4426d9vzg2nTCNV+k7cDHnJUbtjtqN1hUA2Yt3l7otrqHkD7O258wBLu+017/nLsiBP9Wq3zgBYs3g0t23Qc8C3vdGKbw2du7uYCJF1GcjiXYfINrExqPfftTmUWNdTPguPSgMslOu2Xp8UYEQVX03u8nH/E7R4xHLx0x4ZAQXzboYcBIFSjZXf1CbOIAEm0eLQ2Ill0U2+HiYFEno0Ck7GFmI+YaHBKQGmh1xTQNlRPv6wBrAw8B8SDp4keuAKFYJIamHR8UkAEbikXVAQQOq7jiK7qXY2qKh8kp268cxdWw4bKAVtNMxEljxk8xLTI3vieyM97+GDkBe/Q7/b4PUxXIAGkcmKP3ponwZLeWiTg3h4zb43g5MKAikBxoy0Gdk3pg9XWrCVxobYvOjdCy3iwIt2ZI65oISwWuFJnMno50jkpsR/0RzCcw4vrZk3zevtDhs1zpUBCz+qlRgEzx8wDjC9JyhKRn1TqXR389C+v4ixZhNtHhk0CmTas2EBsxvWlSFrJ/+iBITWYHm4Vw1uQsr1Z/tyiUSjITfEE8XG0kmbi1Hs6JfNL8FZ/ZvWo8KmzM29zxDJ9c8sEXoOy73PFgoleIuHRnVyt7WYIvplgi5hrFN+ViWBLeD5ORetNAPISWyiIWAbDy/8wGecXHcOGNvlghzyfTD/St9jrMhEaxN49wtnVZ6WjiPcjN/5U72CYEEl72XRhIR1uQXH7sq22SxIuumT5GTOjUE3UntfHNHoTlWBlV2G0PPkwfekwqTdbRO8W2YeFRgE2ijrUWuJDgMbhTfrm7/MF6DC4mH46fraZFmda8K84bC8LWCOJEVtLIlslCzRAdtArD9Cm90A2dr88D3fhbZv+IVYpAHxBB+5gPaS3tFLNC4Ukv9YScX0awO6SFIXJVLI9AF6ngcw4EFCR1PaDlgCLIyAjsXdaLmI74Ql+OkS3jxS1unn4gCOk3FfzgIV0RV9S8laKU23V/4yWfGVX1n/PflEuBcYn3j7i0/hABPkNgssRj6w==
-           properties :
-            x : 462
-            y : 6
-            width : 91
-            height : 24
-           options :
-            -
-              internal_properties : BwAAAAcAAAA4QkGQ0Tfff2OgZDuqpOCORWu80JdUAyC25XRl+eqHJ9xWBWUbQLNP7i4B+n4FYVYyB/+yA3wtKu0Gw71+c/bVeG+8aDhx4HAVepO2sirOrtfnYZYZbyo9b5Fc+RKyLL0atiWGsGrGjn6zm4j4mjoJCR0=
-           type : 5
-           controls : []
-           code_elements :
-            type_code : 5
-            p_codes : []
         type : 40
        controls : []
        code_elements :
@@ -478,7 +410,7 @@ window :
          
          TBL_Retrospective[nligne].COL_Commentaire.SAI_Commentaire = ""
          TBL_Retrospective[nligne].COL_Commentaire.SAI_ID = 0
-         TBL_Retrospective[nligne].COL_Commentaire.BTN_Ajouter_Type..Visible = vrai
+         //TBL_Retrospective[nligne].COL_Commentaire.BTN_Ajouter_Type..Visible = vrai
          
          
          //TBL_Retrospective[nligne].COL_Commentaire.INT_Defaut..Visible = vrai
@@ -578,8 +510,8 @@ window :
          
          
          POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
-         	POUR TOUT ELÉMENT oUS DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS(Vrai).aItems()
-         		POUR TOUT ELÉMENT oTache DE ClColTache.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
+         	POUR TOUT ELÉMENT oUS DE ClColUserStory.oFromProjet(oPrj).aitems()
+         		POUR TOUT ELÉMENT oTache DE ClColTache.oFromUserStory(oUS).aItems()
          			selon oTache.p_nStatut 
          				
          				cas ClDbTache.cstStatut_Suspendu
@@ -660,9 +592,6 @@ window :
    -
      code : |1+
       Liste_Tache_Realisee()
-      
-      
-      chargement_cbo_type_commentaire()
       Retrospective()
       
      type : 34
@@ -770,7 +699,7 @@ window :
       
       sdRechercheCommentaire	est une source de Données
       oCmtrRetro				est un ClDbRetro_Commentaire dynamique
-      oCmtrRetro_Type			est un ClDbRetro_Commentaire_Type dynamique
+      //oCmtrRetro_Type			est un ClDbRetro_Commentaire_Type dynamique
       sReq					est une chaîne
       
       
@@ -796,7 +725,7 @@ window :
       	
       ]
       
-      nligcbo est un entier
+      //nLigcbo est un entier
       
       goApp.Rsql(sdRechercheCommentaire,sReq)
       
@@ -808,24 +737,15 @@ window :
       		oCmtrRetro = allouer un  ClDbRetro_Commentaire(ClZF_ObjDbLs.cstModeCreation)
       	fin
       	
-      	oCmtrRetro_Type <- ClDbRetro_Commentaire_Type.GetObj(sdRechercheCommentaire.IDScr_Retro_Commentaire_Type)
       
-      	si oCmtrRetro_Type.p_bTop_Par_Defaut _OU_ sdRechercheCommentaire.IDScr_Retro_Commentaire <> 0 alors
       		
-      		nLigne												= TableAjouteLigne(TBL_Retrospective)
-      		
-      		TBL_Retrospective[nLigne].COL_Commentaire.SAI_ID			= sdRechercheCommentaire.IDScr_Retro_Commentaire
-      		
-      		nligcbo												= listecherche(CBO_Type_Cmtr_ref,oCmtrRetro_Type.ZF_Get_IdUnique(),vrai,1)
-      		TBL_Retrospective.COL_Commentaire[nLigne].CBO_Type_Cmtr	= CBO_Type_Cmtr_Ref[nligcbo]..ValeurAffichée
-      		
-      		TBL_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire	= oCmtrRetro.p_sCMTR
-      		TBL_Retrospective[nLigne].COL_Commentaire.INT_Defaut		= oCmtrRetro_Type.p_bTop_Par_Defaut
-      		
-      		//Les commentaires déja remplis sont grisés
-      		si TBL_Retrospective[nLigne].COL_Commentaire.SAI_ID <> 0 alors
-      			TBL_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire..grisé = vrai
-      		fin
+      	nLigne														= TableAjouteLigne(TBL_Retrospective)
+      	TBL_Retrospective[nLigne].COL_Commentaire.SAI_ID			= sdRechercheCommentaire.IDScr_Retro_Commentaire
+      	TBL_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire	= oCmtrRetro.p_sCMTR
+      	
+      	//Les commentaires déja remplis sont grisés
+      	si TBL_Retrospective[nLigne].COL_Commentaire.SAI_ID <> 0 alors
+      		TBL_Retrospective[nLigne].COL_Commentaire.SAI_Commentaire..grisé = vrai
       	fin
       FIN
       
@@ -856,9 +776,9 @@ window :
       //sContenu_Cbo_Conteneur est une chaine 
       //sdSource_Liste_Type_Commentaire est une Source de Données
       sReq_Liste_Type_Commentaire est une chaîne
-      oColCmtr_type est un ClColRetro_Commentaire_Type
+      //oColCmtr_type est un ClColRetro_Commentaire_Type
       
-      ListeSupprimeTout(TBL_Retrospective.COL_Commentaire.CBO_Type_Cmtr)
+      //ListeSupprimeTout(TBL_Retrospective.COL_Commentaire.CBO_Type_Cmtr)
       
       sReq_Liste_Type_Commentaire = [
       	SELECT
@@ -872,8 +792,8 @@ window :
       		OR
       		Scr_Retro_Commentaire_Type.Top_Par_Defaut = 1	
       ]
-      oColCmtr_type.ZF_LoadSQL(sReq_Liste_Type_Commentaire)
-      oColCmtr_type.ChargeCbo(MaFenêtre..Nom, CBO_Type_Cmtr_Ref..nom)
+      //oColCmtr_type.ZF_LoadSQL(sReq_Liste_Type_Commentaire)
+      //oColCmtr_type.ChargeCbo(MaFenêtre..Nom, CBO_Type_Cmtr_Ref..nom)
       
       //goApp.Rsql(sdSource_Liste_Type_Commentaire,sReq_Liste_Type_Commentaire)
       //

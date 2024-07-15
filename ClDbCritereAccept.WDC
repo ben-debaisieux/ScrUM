@@ -461,81 +461,35 @@ class :
       renvoyer ClZF_ObjDB.ZF_GetObj(ClDbCritereAccept, nIdUnique_P)
      type : 458752
    -
-     name : sExport
-     procedure_id : 1444813827280170187
-     type_code : 12
-     code : |1+
-      procédure sExport():JSON
-      
-      sRetour est un JSON
-      nInd est un entier
-      oCritCompo est un ClDbCritereAccept_Composant dynamique
-      oMsg est un ClDbMessage dynamique
-      
-      sRetour.id					= :p_ZF_nIdUnique
-      sRetour.user_writer			= :m_ousrredacteur.sExport()
-      sRetour.date_create			= :m_ddatecreation
-      sRetour.user_validator		= :m_ousrvalideur.sExport()
-      sRetour.date_validator		= :m_ddatevalidation
-      
-      
-      nInd = 0
-      pour tout element oCritCompo de :Get_aoEtantDonneQue().aItems()
-      	nInd++
-      	sRetour.given[nInd]		= oCritCompo.sExport()
-      FIN
-      
-      nInd = 0
-      pour tout element oCritCompo de :Get_aoAuMomentDe().aItems()
-      	nInd++
-      	sRetour.when[nInd]		= oCritCompo.sExport()
-      FIN
-      
-      nInd = 0
-      pour tout element oCritCompo de :Get_aoJAttendsQue().aItems()
-      	nInd++
-      	sRetour.then[nInd]		= oCritCompo.sExport()
-      FIN
-      
-      nInd = 0
-      POUR TOUT ELEMENT oMsg DE ClcolMessage.aoListeMessage(objet).aitems()
-      	nInd++
-      	sRetour.message[nInd] = oMsg.sExport()
-      FIN
-      
-      
-      RENVOYER sRetour
-     type : 458752
-   -
      name : Init_ObjBD
      procedure_id : 1444813827280235723
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
-      PROCÉDURE  Init_ObjBD()
+      PROCÉDURE  Init_ObjBD()<metier>:vide
       
       
       SI :ZF_bModeAjout() ALORS
       	:m_oEtat				= ClDbCritereAccept_Etat.GetObj(::cst_Critere_En_cours_de_rédaction)
-      SINON
-      	:m_oEtat				<- ClDbCritereAccept_Etat.GetObj(Scr_CritereAccept.IDScr_CritereAccept_Etat)
+      //SINON
+      //	:m_oEtat				<- ClDbCritereAccept_Etat.GetObj(Scr_CritereAccept.IDScr_CritereAccept_Etat)
       FIN
       
       
-      :m_oUserStoryParente		<- ClDbUserStory.GetObj(Scr_CritereAccept.IDScr_UserStory)
-      
-      
-      SI PAS Scr_CritereAccept.IDSrc_Usr_Redacteur..Null ALORS
-      	:m_oUsrRedacteur		<- ClDbUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Redacteur)
-      FIN
-      
-      SI PAS Scr_CritereAccept.IDSrc_Usr_Valideur..Null ALORS
-      	:m_oUsrValideur			<- ClDbUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Valideur)
-      FIN
-      
-      SI PAS Scr_CritereAccept.IDSrc_Usr_Desactivation..Null ALORS
-      	:m_oUserDesactivateur	<- ClDbUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Desactivation)
-      FIN
+      //:m_oUserStoryParente		<- ClDbUserStory.GetObj(Scr_CritereAccept.IDScr_UserStory)
+      //
+      //
+      //SI PAS Scr_CritereAccept.IDSrc_Usr_Redacteur..Null ALORS
+      //	:m_oUsrRedacteur		<- ClDbUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Redacteur)
+      //FIN
+      //
+      //SI PAS Scr_CritereAccept.IDSrc_Usr_Valideur..Null ALORS
+      //	:m_oUsrValideur			<- ClDbUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Valideur)
+      //FIN
+      //
+      //SI PAS Scr_CritereAccept.IDSrc_Usr_Desactivation..Null ALORS
+      //	:m_oUserDesactivateur	<- ClDbUsr.GetObj(Scr_CritereAccept.IDSrc_Usr_Desactivation)
+      //FIN
       
      type : 458752
    -

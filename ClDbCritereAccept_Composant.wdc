@@ -93,14 +93,14 @@ class :
      procedure_id : 1445049372315893361
      type_code : 12
      code : |1+
-      PROCÉDURE init_ObjBD()
+      PROCÉDURE init_ObjBD()<métier>:Vide
       // Redéfinition de la méthode ClZF_ObjDB.init_ObjBD
       
-      SI PAS :ZF_bModeAjout() ALORS
-      	:m_oIDScr_CritereAccept	<- ClDbCritereAccept.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept)
-      
-      	:m_oIDScr_CritereAccept_Composant_Type	<- ClDbCritereAccept_Composant_Type.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant_Type)
-      FIN
+      //SI PAS :ZF_bModeAjout() ALORS
+      //	:m_oIDScr_CritereAccept	<- ClDbCritereAccept.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept)
+      //
+      //	:m_oIDScr_CritereAccept_Composant_Type	<- ClDbCritereAccept_Composant_Type.GetObj(Scr_CritereAccept_Composant.IDScr_CritereAccept_Composant_Type)
+      //FIN
       
       
       

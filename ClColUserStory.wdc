@@ -172,8 +172,8 @@ class :
       //	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
       FONCTION globale oFromProjet(oPrj_p est un ClDbProjet, bForceRecharge_P est un booléen = faux):ClColUserStory
       
-      sReq est une chaîne
-      oRetour est un ClColUserStory <- oPrj_p.ZF_GetCol(ClcolUserStory.cstGet_UserStoryDeProjet)
+      sReq	est une chaîne
+      oRetour	est un ClColUserStory	<- oPrj_p.ZF_GetCol(ClcolUserStory.cstGet_UserStoryDeProjet)
       
       si oRetour.ZF_bEstExpire() ou bForceRecharge_P alors
       	
@@ -408,6 +408,31 @@ class :
       	
       FIN
       
+      
+      RENVOYER oColRetour
+     type : 458752
+   -
+     name : oEnTestFct
+     procedure_id : 1623154289689781019
+     type_code : 12
+     code : |1-
+      FONCTION GLOBALE oEnTestFct()<métier>:ClColuserstory
+      
+      sReq		est une chaîne
+      oColRetour	est un ClColuserstory()
+      
+      
+      sReq = [
+      SELECT 
+      	Scr_UserStory.*
+      FROM Scr_UserStory
+      WHERE Scr_UserStory.EstTesteParEquipeDev = 1
+      	AND Scr_UserStory.EstTesteParFonctionnel = 0
+      	--AND Scr_UserStory.Top_A_Livrer = 0
+      	AND Scr_UserStory.Top_Annule = 0
+      	AND Scr_UserStory.Top_Termine = 0
+      ]
+      oColRetour.ZF_LoadSQL(sReq)
       
       RENVOYER oColRetour
      type : 458752

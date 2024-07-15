@@ -67,7 +67,7 @@ class :
       POUR TOUT ÉLÉMENT stTmp, sRub DE :m_oClasseGen.m_stConfigTbl.taRubs
       	
       	VariableRAZ(stRel)
-      	si stTmp.sMeta dans(cstMetaoOrgani, cstMetaoOrgani_parent) alors
+      	si stTmp.sMeta dans(::cstMetaoOrgani, ::cstMetaoOrgani_parent) alors
       		
       		SI pas :m_oClasseGen.m_aPK_de_FK[sRub]..Vide ALORS
       			stRel	= :m_oClasseGen.m_aPK_de_FK[sRub]
@@ -78,18 +78,18 @@ class :
       		fin
       		
       		SELON stTmp.sMeta
-      			CAS cstMetaoOrgani_parent
+      			CAS ::cstMetaoOrgani_parent
       				
       				:m_sCleColTop				= ClZF_GenCodeClCol.sNomFct_ChargeFrom(oColTmp)
       				:m_sNomColTop				= oColTmp.sNomClasseColGen()
       				:m_sNomDbTop				= oColTmp.sNomClasseGen()
       				:m_bMultiTopHierarchie		= Vrai
       				
-      			CAS cstMetaoOrgani
+      			CAS ::cstMetaoOrgani
       				
       				:m_sCleColParent			= ClZF_GenCodeClCol.sNomFct_ChargeFrom(oColTmp)
       				
-      				stRub est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.m_aRub[sRub]
+      				stRub est un ClZF_GenCodeFic.STR_DefRub	= :m_oClasseGen.stRub(sRub)
       				:m_sNomProprieteObjParent	= stRub.sNomPropriete
       				
       			AUTRE CAS
@@ -142,14 +142,14 @@ class :
       #To edit and compare internal_properties, use WINDEV integrated tools.
       #Internal properties refer to the properties of controls in windows, reports, etc.
       info :
-       name : [%sNomFI()%]
+       name : [%:sNomFI()%]
        major_version : 27
        minor_version : 0
        type : 8
        description : ""
        subtype : 0
       window :
-       name : [%sNomFI()%]
+       name : [%:sNomFI()%]
        identifier : [%:GenProcIdent(1)%]
        internal_properties : BwAAAAcAAAC8nf/BwQdGd4tk8cIZEoRlQPLy6NjiL7VRibRcJEVcGaoTYStONzKwU0XSKt0bRxHC80kmYZKnti2tavWquRXt9Ni8266kG1eNDTi9CNNsTUIQX7kHs1mZvlYK67qtAOfVHUgt9W9v7v9COnLgJGb/i+LGljb3DdRJThCuX8BUGFov5uwfGswLceVojzYs3BKB9UtJ9BMIO5ALeF/OnD1z8f01jZP57RiEWjDEO6mPbB+vo3lWZolirDlbEf6wR79k5I3OqF6pzVDSMvhEErPY7TwFuO+xH3c2sJL9Fo5oFXeZbYBGPW4NK5a1xCKQV60xDeQGM1wIXInkk2ksUpzlKpbGWGbvpVtXnOF9mo3FrSyJiAwUoovbv5PlLglIaQ6GVMhKy40BXNOmnTKazM5X0jynWtX/enz+r8rNoFP0Ln0H/l67m9I3GXGBghLpkIFeX9opULxmoYVuaTSMCycLou2c5CP8sgP38qXGmVBx1Oc9TSo2wbSaqB5HBuH9uGHeETyLcizr7Wb54CkhIEkd4kM2IeOtrVh7frWFii9C3M+E0CbxG3pJKpoD4bHf4pyu1I1q8aAPx3FaON9E26VwacUEEJ2Z8JPi5IDCe2MwWrEapqs8xAioR4R8DRDPMKUgQeOTGdXVn70Qpxm3piXiDT3Yz8WHdDGd17ivq0ZL6iUWv76iJ1pVN8qWfOvqlwXSPWzM7F4NVpD+1o4HnU8v6XxXJmct5AlghwspWLNRo7Y=
        properties :
@@ -157,7 +157,7 @@ class :
         height : 120
        controls :
         -
-          name : [%sNomFI()%]
+          name : [%:sNomFI()%]
           identifier : [%:GenProcIdent(2)%]
           internal_properties : BwAAAAcAAAAuF2tAp9TyaQ/BqTyog7rmuyjIxvM7u8voU6Kdpfx11LbHSLhdjNEE7aiV8uf5WKQPvbwQgVF5BAlTyzLMcAZhBPFsMiHy6GBYmPYLLOtfpxEPcT4A7q7gFWleIobGc/7mQrNPMvXTpe3mf042MaIzL6XBxOYZc0Sc4U4BUtkyN7VZSTZ1aALbj5GDImZ+i4gYdHIvkpM1Ssk2mJSA9S9C5MgyO6dTOUFBkB5TZRncW7d2t2kC7yjmQY912+YG90WQ6Hkgr8zmwyUkxcdrRTcqQ+FZIZQI3yXDz2hO+ipvfrAWPesyw0aseh4pYYveeIMdkdyQMRcJ//yfisejVfFXpgs+DmRG9DS+Rm+wXnLN6m0FTckCN3jDHAL6fiCnVXW8HVglR7igZQ8y72iTA71sNDjqxu0oervmSbaGI0OvekkMVW5hTnV6ZOAs7PMjWQ==
           properties :
@@ -282,7 +282,7 @@ class :
            p_codes :
             -
               code : |1+
-      [%:sIndentSpace(sGenOuvertureFi(), 9)%]
+      [%:sIndentSpace(:sGenOuvertureFi(), 9)%]
        menu :
         name : _Menu
         identifier : [%:GenProcIdent(9)%]
@@ -325,7 +325,7 @@ class :
         property_templates : []
        code_parameters :
         internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
-        original_name : [%sNomFI()%]
+        original_name : [%:sNomFI()%]
       resources :
        string_res :
         identifier : [%:GenProcIdent(12)%]
@@ -361,7 +361,7 @@ class :
        subtype : 0
       window :
        name : [%:sNomFen()%]
-       identifier : [%GenProcIdent(1)%]
+       identifier : [%:GenProcIdent(1)%]
        internal_properties : BwAAAAcAAADVJhEQHDR5CCaMpFhIbT6jJq8XgM362xr1JUiqTnsV+Mraq4eaOI62TVAsLbFSwRppEDewI208ax7s974e1D5gz6JgeKAX50owNo4mgItyeIwXHZ+OzuiBzMA/J+wHHpXh31q8//lEA9sb/OEaj7CEk9rNHQwi0qxGDnLo/VFUafjgGQRzmMFumMYHTjEoX13uzWXdZNp+6z8fX8+rqKR2KsM2ik8/0l3++SaU+LpP9/2vCuTicYBi+S1jMhpr6UbnbR3QWotgKYrw1blWpPXTFlM+fibRMEg8ETsdVOLlC5DK8VxpVJXcQd2k+G8uX8oeKJcyx2SehuLcSTswX4lqJ555d/30V4L9qSe0kidAFodSVKj4SseU6lUFFGpuji/R135Q3aEApGUwWLEgF+tGkOZqwxVeodX/yHVr1l0xlHChg9WmK44srUs+80wZ/yFrbtpozve392Kcz4oYLClusus60t/ROL0U1XS6Af9c7GBQ/E33QoRJWetLqtYpBLOjd8bv2kX0P37Qa3grXoC5z2qdPsM+QaQlT05eWZNb3jPQT/W8e8I50Ai8JvPDjali8HqxE780iI3idCekczRpUrD2u9MUHd4GzPAkv4EKzuffG6GqX0/KrgsCQP3yLhZr828DjCBYOc0prT5dWDUoulYuhITeriBrffvShtYg
        properties :
         width : 1024
@@ -371,7 +371,7 @@ class :
        controls :
         -
           name : ORGA_SansNom1
-          identifier : [%GenProcIdent(2)%]
+          identifier : [%:GenProcIdent(2)%]
           internal_properties : BwAAAAcAAAC3nMV+TLESeiEyU3SVyg+ziDkYYaFWB2fcZmbAARQKYEiHe+uONmsKOg3tIjefaZFp4FftwKWskl09AEF5xn+i3J1q0gTIHpchJC3QkQ0LlwEi1OAyDo8Hl4jvdvuKqXXcE/YPdTOTE2ot67x/c9AdV1U0wWATEOW31z49XyKRWyueyDpBn8jihNb7YS4rnneAa9yTWp76Fa/bnlXyQCpC2FWqvI0ms6iN884inFX6ys3jTHfudem0YOQqMkxkma4q8iwFPPFhtk780QmvXXb+wMWgsPR+EESOGs6ltNsRe2XIQdwgCkMVsGClIgQ7aHo8T475+/1GN78YaBINRuU8xznhGrExgqDs8Q/TpNntYbaD1dV2aiH2Hb2a0/o8r3MpK1VL4YeCYWYVi6VhOxiWzM++Y+b+bxreTKLibKfaEGzGAxTBq+dE8EZR+PycPwffgXP+NIHs2ZFZyrp2xwlhEQSMkyPBr6DlepmS/uT7/qXqxcqvPCBprbfU/xQ5wRuKj8914wz44qJOTztHaSzYy6IUjEA1pq29a0kMKfRq6faAj/fMGjHUULCixeBK9rJ38X1r2NWEa2o9XCrDOgDhiz1pxdmOGa2v1iRzNmxNdwU9vez6taEE+3zYMu1LlxelTqTfEgMm2i0gzfyMb/kyJSQtDdKvSa6O0I2+xQobNTVmBuCakg/Vi6xuBAlbDG1DXF0zc2rc6QW5VCIsgsno4BOvZxTFoaDe3MLiPO0VWNmk6xvSncB0Vq2pW6PhjIzpzNpO15d4f8kItWiEys/Dm60LFttgQSJNmq4Sgz2hWRBwSwBJpS2up8uNfkRwRrbGpJxq4KwdDO348o1EHBV2KEyoEYmBgdt680hGHcI0QPhfQygxgxcJBu9TGOMB5SxxKA3vRTSpV92d4Kn7YFo26E+rJNJRwjLPihf03ubL22lgJX2zK5BvpGMkMEUIAjKpK
       vBVXIE95sS3ZlFzbIXmY+5sZ5gbhYv1UOzzyLE1FoIEyGRyUEYkOHx0K/fI0nXqOeZhZpYiwLHc9rtOB7xst+LuFnlrGDo0gdBkC6/A0a7NlCMvyp/1fCtdkQbrl3WU9MvjQEs=
           properties :
@@ -393,7 +393,7 @@ class :
               type : 160
        menu :
         name : _Menu
-        identifier : [%GenProcIdent(3)%]
+        identifier : [%:GenProcIdent(3)%]
         internal_properties : BwAAAAcAAABHivBqFH8xYQq/QELUltmClIuqm9KM3lg0XSaBAQ41WqT06R9JfU0qGK5sHUl8/xHCuvP3y9tLeLLOVaAgM2FjnfwSCRBgXqneLsHogwTYpIXuB1zp2uXtmOXYyGd6i+ek6BBvtJ0ylgF/MxkRihdZ26pl/9Jf5c+sxo07G0ZzHfcLEu9WD07gTSld25EPGWjvi/e5TxaHOZSRE8C5Ig+YdJawYdK89l+x1ofEmw3pfCNLUe3tNoiwg4AbC1jLdufmJ97Xc0JHDAy7gJsHBzEWwcuroqy2By4PJ4c6Wg==
         options : []
        languages :
@@ -427,7 +427,7 @@ class :
         original_name : [%:sNomFen()%]
       resources :
        string_res :
-        identifier : [%GenProcIdent(4)%]
+        identifier : [%:GenProcIdent(4)%]
         internal_properties : BwAAAAcAAAAZ++HSz2luvwiNhadWl8v3mh2d0Pq0fCIps02kogrcwVHmCg==
       custom_note :
        internal_properties : BwAAAAcAAAC68/W0/adbG0nFCRhrE42B5HRnbDzVHaz86sSQyxlBk7I=

@@ -53,22 +53,22 @@ class :
       	mg_aZF_aGetId						est un tableau associatif de chaine
       FIN
       
-      mg_oExSelonCasNonTraite = allouer un ClZF_Exception("Valeur non évaluée sans un ""SELON"" : ""%1"".", ...
+      ::mg_oExSelonCasNonTraite = allouer un ClZF_Exception("Valeur non évaluée sans un ""SELON"" : ""%1"".", ...
       	ClZF_Exception.cstInfoLogAssert)
       
-      mg_oExPlusieursInstancesClAapp = allouer un ClZF_Exception("Une seule instance de la classe ""%1"" est permise.", ...
+      ::mg_oExPlusieursInstancesClAapp = allouer un ClZF_Exception("Une seule instance de la classe ""%1"" est permise.", ...
       	ClZF_Exception.cstInfoLogSimple)
       	
-      mg_oExErreurSQL = allouer un ClZF_Exception("Echec de la récupération des données", ...
+      ::mg_oExErreurSQL = allouer un ClZF_Exception("Echec de la récupération des données", ...
       	ClZF_Exception.cstInfoLogHF)
       
-      mg_oExErreurTRS = allouer un ClZF_Exception("Echec de la transaction", ...
+      ::mg_oExErreurTRS = allouer un ClZF_Exception("Echec de la transaction", ...
       	ClZF_Exception.cstInfoLogHF)
       
-      mg_oExTypeColNonDefinit = allouer un ClZF_Exception("Aucun prototype de collection trouvée dans le projet, pour la clé ""%1"".", ...
+      ::mg_oExTypeColNonDefinit = allouer un ClZF_Exception("Aucun prototype de collection trouvée dans le projet, pour la clé ""%1"".", ...
       	ClZF_Exception.cstInfoLogSimple)
       
-      mg_oExClasseNonParametree = allouer un ClZF_Exception("La classe ""%1"" n'est pas paramétrée pour instancier des objets.", ...
+      ::mg_oExClasseNonParametree = allouer un ClZF_Exception("La classe ""%1"" n'est pas paramétrée pour instancier des objets.", ...
       	ClZF_Exception.cstInfoLogSimple)
       
       
@@ -86,10 +86,10 @@ class :
      code : |1+
       PROCEDURE Constructeur()
       
-      si pas m_ZF_bSingleton ALORS
-      	m_ZF_bSingleton = vrai
+      si pas :m_ZF_bSingleton ALORS
+      	:m_ZF_bSingleton = vrai
       sinon
-      	mg_oExPlusieursInstancesClAapp.ZF_Declenche([objet..Classe])
+      	::mg_oExPlusieursInstancesClAapp.ZF_Declenche([objet..Classe])
       	//ExceptionDéclenche(1, "Une seule instance de la classe ""[%%]"" est permise.")
       FIN
       
@@ -147,11 +147,11 @@ class :
       //trace(sReq_P)
       //trace(dbginfo(dbgPile))
       SI PAS HExécuteRequêteSQL( sdSource_P, :m_ZF_cnxBDD, hRequêteSansCorrection, sReq_P) ALORS
-      	mg_oExErreurSQL.ZF_Declenche()
+      	::mg_oExErreurSQL.ZF_Declenche()
       FIN
       
       //Métriques : Nombre d'exécutions de requetes
-      m_aMetriques[1].nNbRequetes++
+      :m_aMetriques[1].nNbRequetes++
       
       //renvoyer vrai
      type : 458752
@@ -185,7 +185,7 @@ class :
       	
       	//On active la transaction qu'au 1er appel de la procédure.
       	SI PAS HTransactionDébut(:m_ZF_cnxBDD) ALORS
-      		mg_oExErreurTRS.ZF_Declenche()
+      		::mg_oExErreurTRS.ZF_Declenche()
       		//ExceptionDéclenche(1, HErreurInfo(hErrMessage))
       	FIN
       fin
@@ -221,7 +221,7 @@ class :
       
       	SI :m_ZF_nNbreTrsOuverte = 0 ALORS
       		si pas HTransactionFin(:m_ZF_cnxBDD) ALORS
-      			mg_oExErreurTRS.ZF_Declenche()
+      			::mg_oExErreurTRS.ZF_Declenche()
       			//ExceptionDéclenche(1,HErreurInfo(hErrMessage))
       		FIN
       	FIN
@@ -255,7 +255,7 @@ class :
       //Trace("TA " + :nNbreTrsOuverte)
       
       si pas HTransactionAnnule(:m_ZF_cnxBDD) ALORS
-      	mg_oExErreurTRS.ZF_Declenche()
+      	::mg_oExErreurTRS.ZF_Declenche()
       	//ExceptionDéclenche(1, HErreurInfo(hErrMessage))
       FIN
      type : 458752
@@ -330,13 +330,14 @@ class :
       
       
       QUAND EXCEPTION DANS
-      	oRetour <- Exécute(mg_aZF_aGetId[sClasse_P], nId_P)
+      	oRetour <- Exécute(::mg_aZF_aGetId[sClasse_P], nId_P)
       FAIRE
+      	//A faire : détecter le code d'erreur qui correcpond à la non implémentation de la classe et inverser le déclenchement de l'exception
       	selon ExceptionInfo(errCode)
       		CAS ClZF_ObjDbLs.mg_oExPositionnementImpossible.ZF_Code
       			exceptionpropage()
       		AUTRE CAS
-      			mg_oExClasseNonParametree.ZF_Declenche([sClasse_P])
+      			::mg_oExClasseNonParametree.ZF_Declenche([sClasse_P])
       	FIN
       fin
       
@@ -347,7 +348,7 @@ class :
      name : ExceptGenerale
      procedure_id : 1434630806552584165
      type_code : 12
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //ExceptGenerale ()
@@ -362,6 +363,10 @@ class :
       //
       procédure abstraite ExceptGenerale()<metier>:vide
       
+      
+      //DélaiAvantFermeture(1000)
+      //Info("Suite à une erreur, le programme doit être relancé.")
+      //FinProgramme(Faux)
      type : 458752
    -
      name : GetMetriques
@@ -383,14 +388,14 @@ class :
       procédure publique GetMetriques()<metier>:tableau de STR_metrique
       
       
-      m_aMetriques[1].nNbTransactions = :m_ZF_nNbreTrsOuverte
-      TableauInsère(m_aMetriques, 1)
-      si m_aMetriques..Occurrence > 60 ALORS
-      	Dimension(m_aMetriques, 60)
+      :m_aMetriques[1].nNbTransactions = :m_ZF_nNbreTrsOuverte
+      TableauInsère(:m_aMetriques, 1)
+      si :m_aMetriques..Occurrence > 60 ALORS
+      	Dimension(:m_aMetriques, 60)
       FIN
       
       
-      renvoyer m_aMetriques
+      renvoyer :m_aMetriques
      type : 458752
    -
      name : ZF_LibereInstancesMemo
@@ -462,10 +467,10 @@ class :
       // Prototype : 
       //oCol est un ClZF_ColObjDB dynamique
       //SELON sCle_p
-      //	CAS ...
-      //		oCol = allouer un ClCol...
-      //	CAS ...
-      //		oCol = allouer un ClCol...
+      ////	CAS ...
+      ////		oCol = allouer un ClCol...
+      ////	CAS ...
+      ////		oCol = allouer un ClCol...
       //		
       //	AUTRE CAS
       //		::mg_oExTypeColNonDefinit.ZF_Declenche([sCle_p])
@@ -492,7 +497,7 @@ class :
       //
       procédure publique globale PrepareCreationSiBesoin(sClasse_P est une chaine) <métier>:vide
       
-      SI mg_aZF_aGetId[sClasse_P]..Vide ALORS
+      SI ::mg_aZF_aGetId[sClasse_P]..Vide ALORS
       	sProc	est une chaîne	= "ZF_CreeObj_[%sClasse_P%]"
       	sCode	est une chaîne	= [
       		PROCEDURE [%sProc%](nId_P est un entier):[%sClasse_P%]
@@ -510,7 +515,7 @@ class :
      name : sTypeCnx
      procedure_id : 1546472570589914485
      type_code : 12
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] sTypeCnx ()
@@ -526,14 +531,13 @@ class :
       //
       procédure sTypeCnx() <métier>:chaine
       renvoyer :m_ZF_cnxBDD..Provider
-      
      type : 458752
    -
      name : TablesExclues
      procedure_id : 1559447439373642584
      type_code : 12
      code : |1-
-      procédure TablesExclues()<metier>:tableau de chaîne
+      procédure virtuelle TablesExclues()<metier>:tableau de chaîne
       aRetour est un tableau de chaîne
       renvoyer aretour
      type : 458752

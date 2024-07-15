@@ -23,8 +23,10 @@ class :
       fin
       constante
       
-      	sAuth								= "?key=5b1c38be737f85f556604d643b571003&token=0c6e5cd1de31ab1fe63b8919526ab4884dbb1d7def9b4d85739ac9098675ed1b"
-      	
+      	sAuth	= "?key=5b1c38be737f85f556604d643b571003&token=0c6e5cd1de31ab1fe63b8919526ab4884dbb1d7def9b4d85739ac9098675ed1b"
+      	sAuth_Apres_Contenu	= "&key=5b1c38be737f85f556604d643b571003&token=0c6e5cd1de31ab1fe63b8919526ab4884dbb1d7def9b4d85739ac9098675ed1b"
+      	sAuth_Camille = "?key=446cbc1d6532c596ddc610207ead5576&token=ATATT3xFfGF0GF7ZYnHzYRXWC8ChLDSj6W7fkswWcHRCIMsilnm4hwo4vWHG0ZColks2yv-4xWsjRu4poiICey3HopNVbrwbRhiF5jqEUR29FZWgjZWh7MXECaxUI2qzxDaE8V9sY_VocmhNrGdRj5sc-KopDp2-CupHZWR72Ep6Ee7FGLNr8rs=2B4474D0"
+      
       //	cst_List_ID_A_faire					= "5e6f30b2e199570356971064"
       //	cst_List_ID_Dev_en_cours			= "5e6f30c62a48854eb7642c3e"
       //	cst_List_ID_A_faire_tester_par_DEV2	= "5e6f30de31befa31788b71d5"
@@ -42,6 +44,8 @@ class :
       //	
       //	cst_TableauScrum					= "AcWZ1BSV"
       //	cst_TableauKanban					= "5a9e4eacd0c55e84ed2ddbd2"
+      	cst_Trello_Hashtag_GLPI = "#glpi"
+      	cst_Trello_Hashtag_GLPIEnvoyé = "#glpiEnvoyé"
       fin
       
       STR_TICKET_TRELLO est une structure
@@ -61,6 +65,7 @@ class :
       STR_Commentaire_Trello est une structure
       	sCommentaire	est une chaîne
       	sID_Ticket		est une chaine
+      	sID_Commentaire est une chaine
       FIN
       
      type : 131072
@@ -225,7 +230,7 @@ class :
       		
       		// ajoute le fichier temp
       		sCheminDoc = stTicket_Trello_p.aPieces_Jointes[nLigne]
-      		
+      		si fFichierExiste(sCheminDoc) alors
       		// url de l'ajout de pièce jointe
       		sReq		= ChaîneConstruit("https://api.trello.com/1/cards/%2/attachments%1", ClTrello_req.sAuth,jsBody.id)
       		
@@ -245,6 +250,9 @@ class :
       		SINON
       			// erreur
       			sRetour_Procédure = ErreurInfo(errComplet)
+      		FIN
+      		sinon
+      			trace("Envoi impossible du fichier ""[%sCheminDoc%] dans trello.")
       		FIN
       	FIN
       	
@@ -327,29 +335,31 @@ class :
       RENVOYER aID_Ticket_Retour
      type : 458752
    -
-     name : Recup_Commentaire_Ticket
+     name : astRecup_Commentaire_Ticket
      procedure_id : 1453941619061900979
      type_code : 12
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] Recup_Commentaire_Ticket (<sID_Ticket_p> est chaîne)
+      //[ <Résultat> = ] astRecup_Commentaire_Ticket (<sID_Ticket_p> est chaîne)
       //
       // Paramètres :
       //	sID_Ticket_p (chaîne ANSI) : <indiquez ici le rôle de sID_Ticket_p>
+      
       // Valeur de retour :
-      // 	variant : <indiquez ici le rôle de la valeur de retour>
+      // 	tableau (STR_Commentaire_Trello) : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure globale Recup_Commentaire_Ticket(LOCAL sID_Ticket_p est une chaine)
+      procédure globale astRecup_Commentaire_Ticket(LOCAL sID_Ticket_p est une chaine)
       
       // variables
       rest_Requete		est un restRequête
       rest_Reponse		est un restRéponse
       vRetour est un variant
-      aRetour				est un tableau de chaine
+      aStComment_Trello est un tableau de ClTrello_req.STR_Commentaire_Trello
+      stComment est un ClTrello_req.STR_Commentaire_Trello
       
       
       // url pour récupérer informations sur un utilisateur
@@ -370,13 +380,17 @@ class :
       	vRetour		= JSONVersVariant(rest_Reponse..Contenu)
       	
       	POUR i = 1 _À_ TableauOccurrence(vRetour)
-      		TableauAjoute(aRetour,vRetour[i].data.text)
+      		stComment.sID_Ticket = sID_Ticket_p
+      		stComment.sID_Commentaire = vRetour[i].id
+      		stComment.sCommentaire = vRetour[i].data.text
+      		
+      		TableauAjoute(aStComment_Trello,stComment)
       	FIN
       	
       FIN
       
       
-      RENVOYER aRetour
+      RENVOYER aStComment_Trello
       
       
       
@@ -518,6 +532,323 @@ class :
       FIN
       
       RENVOYER aStTicket_p
+     type : 458752
+   -
+     name : aRecup_Commentaire_Ticket
+     procedure_id : 1614932901956195474
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] aRecup_Commentaire_Ticket (<sID_Ticket_p> est chaîne)
+      //
+      // Paramètres :
+      //	sID_Ticket_p (chaîne ANSI) : <indiquez ici le rôle de sID_Ticket_p>
+      // Valeur de retour :
+      // 	tableau (chaîne ANSI) : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure globale aRecup_Commentaire_Ticket(LOCAL sID_Ticket_p est une chaine)
+      
+      // variables
+      rest_Requete		est un restRequête
+      rest_Reponse		est un restRéponse
+      vRetour est un variant
+      aStComment_Trello est un tableau de chaine
+      
+      
+      // url pour récupérer informations sur un utilisateur
+      rest_Requete..URL						= "https://api.trello.com/1/cards/" + sID_Ticket_p + "/actions" +  ClTrello_req.sAuth
+      
+      rest_Requete..Méthode					= httpGet
+      
+      rest_Requete..ContentType				= "application/json"
+      
+      
+      // envoi de la requête
+      rest_Reponse							= RESTEnvoie(rest_Requete)
+      
+      SI rest_Reponse..CodeEtat PAS DANS (200,201,202) ALORS
+      	
+      SINON
+      	// récupère variant
+      	vRetour		= JSONVersVariant(rest_Reponse..Contenu)
+      	
+      	POUR i = 1 _À_ TableauOccurrence(vRetour)
+      		TableauAjoute(aStComment_Trello,vRetour[i].data.text)
+      	FIN
+      	
+      FIN
+      
+      
+      RENVOYER aStComment_Trello
+      
+      
+      
+      
+     type : 458752
+   -
+     name : Modif_Commentaire
+     procedure_id : 1614984737919187969
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Modif_Commentaire (<sIDComment_p> est chaîne, <sCommentaire_p>)
+      //
+      // Paramètres :
+      //	sIDComment_p (chaîne ANSI) : <indiquez ici le rôle de sIDComment_p>
+      // 	sCommentaire_p : <indiquez ici le rôle de sCommentaire_p>
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale Modif_Commentaire(LOCAL stCommentaire_p est un STR_Commentaire_Trello)<metier>:booleen
+      
+      // variables
+      rest_Requete		est un restRequête
+      rest_Reponse		est un restRéponse
+      bRetour				est un booleen
+      
+      // url pour supprimer le commentaire
+      rest_Requete..URL							= "https://api.trello.com/1/actions/[%stCommentaire_p.sID_Commentaire%]" +  ClTrello_req.sAuth
+      
+      rest_Requete..Méthode						= httpDelete
+      
+      rest_Requete..ContentType					= "application/json"
+      
+      // envoi de la requête
+      rest_Reponse							= RESTEnvoie(rest_Requete)
+      
+      SI rest_Reponse..CodeEtat PAS DANS (200,201,202) ALORS
+      	bRetour = Faux
+      SINON
+      	
+      	SI ChaîneCommencePar(stCommentaire_p.sCommentaire,"#") ALORS
+      		stCommentaire_p.sCommentaire = "\" + stCommentaire_p.sCommentaire
+      	FIN
+      	
+      	stCommentaire_p.sCommentaire = ChaîneVersUTF8(stCommentaire_p.sCommentaire)
+      	// on recrée le commentaire
+      	SI ADD_Commentaire_Ticket(stCommentaire_p.sCommentaire,stCommentaire_p.sID_Ticket) ALORS
+      		bRetour = Vrai
+      	SINON
+      		bRetour = Faux
+      	FIN
+      FIN
+      
+      
+      RENVOYER bRetour
+     type : 458752
+   -
+     name : Synchro_Commentaire_Trello_Vers_Glpi
+     procedure_id : 1615271663226394858
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClTrello_req.Synchro_Commentaire_Trello_Vers_Glpi
+      PROCÉDURE PUBLIQUE GLOBALE Synchro_Commentaire_Trello_Vers_Glpi(LOCAL aStTicket_p	est un tableau de ClTrello_req.STR_TICKET_TRELLO)<metier>
+      
+      aStCommentaire_Ticket_Trello	est un tableau de ClTrello_req.STR_Commentaire_Trello
+      sIDGlpi							est une chaîne
+      oGLPI_Ticket					est un ClGLPI_Ticket
+      aoGLPI_Ticket					est un tableau de ClGLPI_Ticket
+      oGPLIMoteur						est un ClGLPI_Moteur(aoGLPI_Ticket)
+      nLigne_Ticket					est un entier
+      sTexte_Commentaire_Glpi			est une chaine
+      sNouveau_Commentaire_TRELLO		est une chaine
+      stCommentaire_A_Modifier		est un ClTrello_req.STR_Commentaire_Trello
+      nLigne							est un entier
+      
+      POUR nLigne_Ticket = 1 _À_ TableauOccurrence(aStTicket_p)
+      	
+      	// récupération IDGLPI
+      	sIDGlpi = ExtraitChaîneEntre(aStTicket_p[nLigne_Ticket].sSujet,1,"#"," ",DepuisDébut)
+      	
+      	// Récupération commentaire trello dans le cas ou on a l'id du ticket GLPI
+      	SI sIDGlpi <> "" _ET_ sIDGlpi <> EOT ALORS
+      		SI PAS VérifieExpressionRégulière(sIDGlpi,"^[0-9]+$") ALORS
+      			SI VérifieExpressionRégulière(Gauche(sIDGlpi,sIDGlpi..Taille-1),"^[0-9]+$") ALORS
+      				sIDGlpi = Gauche(sIDGlpi,sIDGlpi..Taille-1)
+      			SINON
+      				sIDGlpi = ""
+      			FIN
+      		FIN
+      		SI sIDGlpi <> "" ALORS
+      			SI oGPLIMoteur.GetTicket(sIDGlpi,oGLPI_Ticket) ALORS
+      				oGPLIMoteur.m_opclEntite		= oGLPI_Ticket
+      				//oGLPIMoteur_Ticket est un ClGLPI_Moteur(oGLPI_Ticket)
+      				
+      				// OK
+      				// tableau commentaire trello
+      				aStCommentaire_Ticket_Trello	= ClTrello_req.astRecup_Commentaire_Ticket(aStTicket_p[nLigne_Ticket].sID)
+      				
+      				// parcoure des ticket trello pour ne prendre que les tickets trello avec #glpi
+      				
+      				POUR nLigne = 1 _À_ aStCommentaire_Ticket_Trello..Occurrence
+      					SI ChaîneCommencePar(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,"\") ALORS
+      						aStCommentaire_Ticket_Trello[nLigne].sCommentaire = Droite(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,aStCommentaire_Ticket_Trello[nLigne].sCommentaire..Taille-1)
+      					FIN
+      					
+      					// on vérifie qu'on veut envoyer le commentaire à GLPI
+      					SI ChaîneCommencePar(Majuscule(aStCommentaire_Ticket_Trello[nLigne].sCommentaire),Majuscule(ClTrello_req.cst_Trello_Hashtag_GLPI)) <> 0 _ET_ ChaîneCommencePar(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPIEnvoyé) = 0  ALORS
+      						// on veut envoyer le commentaire à GLPI
+      						
+      						// ON envoie le commentaire à GLPI
+      						
+      						sTexte_Commentaire_Glpi = SansEspace(ChaîneSupprime(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPI,SansCasse))
+      						
+      						SI PAS oGPLIMoteur.CreateFollowup(sTexte_Commentaire_Glpi) ALORS
+      							Trace("Erreur lors de l'ajout du commentaire GLPI [%sIDGlpi%]")
+      						FIN
+      						
+      						
+      						// On modifie le commentaire dans trello pour ne pas le renvoyer.
+      						sNouveau_Commentaire_TRELLO					= ClTrello_req.cst_Trello_Hashtag_GLPIEnvoyé + " [%DateVersChaîne(DateSys())%] [%HeureVersChaîne(HeureSys())%] " + SansEspace(ChaîneSupprime(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPI))
+      						
+      						stCommentaire_A_Modifier.sCommentaire		= sNouveau_Commentaire_TRELLO
+      						stCommentaire_A_Modifier.sID_Commentaire	= aStCommentaire_Ticket_Trello[nLigne].sID_Commentaire
+      						stCommentaire_A_Modifier.sID_Ticket			= aStCommentaire_Ticket_Trello[nLigne].sID_Ticket
+      						
+      						SI PAS ClTrello_req.Modif_Commentaire(stCommentaire_A_Modifier) ALORS
+      							Trace("Erreur lors de la modification du commentaire Trello [%sIDGlpi%]")
+      						FIN
+      						
+      					SINON
+      						// on ne veut pas envoyé commentaire à GLPI
+      						
+      					FIN
+      				FIN
+      			SINON
+      				// KO
+      			FIN
+      		FIN
+      	FIN
+      FIN
+      
+      libérer(oGPLIMoteur)
+      
+      FIN:
+      
+      
+     type : 458752
+   -
+     name : Synchro_Commentaire_Trello_Vers_Glpi_old
+     procedure_id : 1621232777167165374
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Synchro_Commentaire_Trello_Vers_Glpi ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale Synchro_Commentaire_Trello_Vers_Glpi_old()
+      
+     type : 458752
+   -
+     name : Change_Statut_Ticket
+     procedure_id : 1620831399506958122
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] Change_Statut_Ticket (<sIDTicket_p> est chaîne, <sIDList_p> est chaîne)
+      //
+      // Paramètres :
+      //	sIDTicket_p (chaîne ANSI) : <indiquez ici le rôle de sIDTicket_p>
+      //	sIDList_p (chaîne ANSI) : <indiquez ici le rôle de sIDList_p>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale Change_Statut_Ticket(LOCAL sIDTicket_p est une chaine,LOCAL sIDList_p est une chaine)<métier>:booleen
+      
+      // variables
+      rest_Requete		est un restRequête
+      rest_Reponse		est un restRéponse
+      sContenu est une chaine
+      bRetour est un booléen
+      
+      
+      // url pour récupérer informations sur un utilisateur
+      rest_Requete..URL						= "https://api.trello.com/1/cards/" + sIDTicket_p +  ClTrello_req.sAuth
+      
+      rest_Requete..Méthode					= httpPut
+      
+      rest_Requete..ContentType				= "application/json"
+      
+      sContenu = [
+      {
+      	"idList":"[%sIDList_p%]"
+      }
+      ]
+      
+      rest_Requete..Contenu = ChaîneVersJSON(sContenu)
+      
+      // envoi de la requête
+      rest_Reponse							= RESTEnvoie(rest_Requete)
+      
+      SI rest_Reponse..CodeEtat PAS DANS (200,201,202) ALORS
+      	bRetour = faux
+      SINON
+      	bRetour = vrai
+      FIN
+      
+      RENVOYER bRetour
+     type : 458752
+   -
+     name : Recup_Colonne_Trello
+     procedure_id : 1620837863433064157
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //Recup_Colonne_Trello (<sIDTableau_Trello_p> est chaîne)
+      //
+      // Paramètres :
+      //	sIDTableau_Trello_p (chaîne ANSI) : <indiquez ici le rôle de sIDTableau_Trello_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure publique globale Recup_Colonne_Trello(LOCAL sIDTableau_Trello_p est une chaine) <métier>
+      
+      
+      // variables
+      rest_Requete		est un restRequête
+      rest_Reponse		est un restRéponse
+      
+      // url pour récupérer informations sur un utilisateur
+      rest_Requete..URL						= "https://api.trello.com/1/boards/[%sIDTableau_Trello_p%]/lists" +  ClTrello_req.sAuth
+      
+      rest_Requete..Méthode					= httpGet
+      
+      rest_Requete..ContentType				= "application/json"
+      
+      // envoi de la requête
+      rest_Reponse							= RESTEnvoie(rest_Requete)
+      
+      SI rest_Reponse..CodeEtat PAS DANS (200,201,202) ALORS
+      	
+      SINON
+      	// récupère variant
+      
+      FIN
      type : 458752
   procedure_templates : []
   property_templates : []

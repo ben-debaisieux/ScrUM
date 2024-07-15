@@ -24,7 +24,7 @@ class :
       	m_nIDStatut			est entier
       	m_sStatut			est chaine
       	m_bufDescription	est buffer
-      	m_anUID				est tableau associatif d'entier
+      //	m_anUID				est tableau associatif d'entier
       	m_sLieu				est chaine
       	m_nIDLieu			est entier
       	m_astSuiviCom		est tableau de STR_Suivi_Commentaire
@@ -79,6 +79,10 @@ class :
       	cst_Statut_EnAttente_ID			= 4
       	cst_Statut_Resolut_ID			= 5
       	cst_Statut_Clos_ID				= 6
+      	
+      	
+      	cstLnkGLPI		= "https://glpi.union-materiaux.fr/front/ticket.form.php?id=%1"
+      	
       FIN
      type : 131072
   procedures :
@@ -248,6 +252,23 @@ class :
       	AUTRE CAS
       		renvoyer ""
       FIN
+      
+     type : 458752
+   -
+     name : OuvreTicketNavig
+     procedure_id : 1596841584815078518
+     type_code : 12
+     code : |1-
+      procedure globale OuvreTicketNavig(LOCAL nNumTicket_p est un entier)<ui>:vide
+      LanceAppliAssociée(sUrlTicket(nNumTicket_p))
+     type : 458752
+   -
+     name : sUrlTicket
+     procedure_id : 1604876201720219548
+     type_code : 12
+     code : |1-
+      procedure globale sUrlTicket(local nNumTicket_p est un entier)<metier>:chaine
+      renvoyer ChaîneConstruit(cstLnkGLPI, nNumTicket_p)
      type : 458752
   procedure_templates : []
   property_templates : []

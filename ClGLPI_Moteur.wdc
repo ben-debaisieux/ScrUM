@@ -43,7 +43,12 @@ class :
       	cstGLPI_Categories_WinMat = 8
       	cstGLPI_Type_Membre_User = 1
       	cstGLPI_Type_Membre_Group = 2
-      	
+      	cstGLPI_URL_Complet = "https://glpi.union-materiaux.fr/apirest.php/"
+      	cstGLPI_URL = "https://glpi.union-materiaux.fr/"
+      	cstGLPI_APP_TOKEN = "TYUBaYZKwbVtqXFQQcbveIoLJGKIRcaQsi9lMwZw"
+      	// IP test nouveau environnement glpi
+      	//cstGLPI_URL_Complet	= "http://10.20.30.113/apirest.php/"
+      	//cstGLPI_URL			= "http://10.20.30.113/"
       FIN
      type : 131072
   procedures :
@@ -98,8 +103,9 @@ class :
       
       restRequete..Méthode 			= "GET"
       restRequete..ContentType 		= "application/json"
-      restRequete..url 				= "https://glpi.union-materiaux.fr/apirest.php/initSession"
-      restRequete["App-Token"]		= "TYUBaYZKwbVtqXFQQcbveIoLJGKIRcaQsi9lMwZw"
+      //restRequete..url 				= "https://glpi.union-materiaux.fr/apirest.php/initSession"
+      restRequete..url 				= cstGLPI_URL_Complet + "initSession"
+      restRequete["App-Token"]		= cstGLPI_APP_TOKEN
       restRequete["Authorization"]	= "user_token rp7bu1tY2OzAJmvg5GaReGm2kOqz8qf4UMNcGBMP"	
       
       restReponse = RESTEnvoie(restRequete)
@@ -160,7 +166,7 @@ class :
       	restRequete.Contenu = variantversjson(m_vBody)
       FIN
       
-      restRequete["App-Token"]		= "TYUBaYZKwbVtqXFQQcbveIoLJGKIRcaQsi9lMwZw"
+      restRequete["App-Token"]		= cstGLPI_APP_TOKEN
       restRequete["session-token"]	= m_sSessionToken
       
       restReponse						= RESTEnvoie(restRequete)
@@ -192,12 +198,13 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GetTicketsOpenedWinmat (<nStatut> est entier, <sCategorie> est chaîne [, <sDate_p> est chaîne])
+      //[ <Résultat> = ] GetTicketsOpenedWinmat (<nStatut> est entier, <sCategorie> est chaîne [, <sDate_p> est chaîne [, <nIDUser_p> est entier]])
       //
       // Paramètres :
       //	nStatut (entier) : <indiquez ici le rôle de nStatut>
       //	sCategorie (chaîne ANSI) : <indiquez ici le rôle de sCategorie>
-      // 	sDate_p (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de sDate_p>
+      //	sDate_p (chaîne ANSI - valeur par défaut="") : <indiquez ici le rôle de sDate_p>
+      //	nIDUser_p (entier - valeur par défaut=0) : <indiquez ici le rôle de nIDUser_p>
       
       // Valeur de retour :
       // 	booléen : <indiquez ici le rôle de la valeur de retour>
@@ -206,7 +213,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       //	nStatut (entier) : <indiquez ici le rôle de nStatut>
-      procédure GetTicketsOpenedWinmat(nStatut est un entier, sCategorie est une chaine, sDate_p est une chaine="")
+      procédure GetTicketsOpenedWinmat(nStatut est un entier, sCategorie est une chaine, sDate_p est une chaine="", nIDUser_p est un entier = 0)
       sID		est une chaine
       oTicket	est un ClGLPI_ticket dynamique
       vData	est un variant
@@ -223,9 +230,13 @@ class :
       	sParam			+= "&criteria[2][link]=AND&criteria[2][field]=15&criteria[2][searchtype]=morethan&criteria[2][value]=" + sDate_p
       FIN
       
+      SI nIDUser_p <> 0 ALORS
+      	sParam			+= "&criteria[3][link]=AND&criteria[3][field]=5&criteria[3][searchtype]=equals&criteria[3][value]=" + nIDUser_p
+      FIN
+      
       sParam			+= "&range=0-200"
       
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/search/Ticket", httpGet, sParam) 
+      InitRequete(cstGLPI_URL_Complet + "search/Ticket", httpGet, sParam) 
       
       SI PAS Exec(vRetour) ALORS
       	RENVOYER Faux
@@ -272,7 +283,7 @@ class :
       sURL	est une chaine
       stLink	est une ClGLPI_Ticket.STR_links
       
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/" + sID)
+      InitRequete(cstGLPI_URL_Complet + "Ticket/" + sID)
       
       si pas exec(vRetour) ALORS
       	renvoyer faux
@@ -302,14 +313,14 @@ class :
       	GetTicketLocation(sURL, oTicket)
       FIN
       
-      sURL = "https://glpi.union-materiaux.fr/apirest.php/User/" + vRetour.users_id_recipient
+      sURL = cstGLPI_URL_Complet + "User/" + vRetour.users_id_recipient
       oTicket.m_sUtilisateur = GetTicketUsername(sURL)
-      //nIndice = tableaucherche(oTicket.m_astLinks, tcLinéaire, "sRel", "User")
-      //
-      //si nIndice <> -1 ALORS
-      //	sURL = oTicket.m_astLinks[nIndice].shref
-      //	oTicket.m_sUtilisateur = GetTicketUsername(sURL)
-      //FIN
+      nIndice = tableaucherche(oTicket.m_astLinks, tcLinéaire, "sRel", "User")
+      
+      si nIndice <> -1 ALORS
+      	sURL = oTicket.m_astLinks[nIndice].shref
+      	oTicket.m_sUtilisateur = GetTicketUsername(sURL)
+      FIN
       
       nIndice = tableaucherche(oTicket.m_astLinks, tcLinéaire, "sRel", "Document_Item")
       
@@ -381,6 +392,7 @@ class :
       vRetour est un variant
       sNom 	est une chaine
       sPrenom est une chaine
+      sNom_Renvoyer est une chaine
       
       InitRequete(sURL)
       
@@ -388,10 +400,27 @@ class :
       	renvoyer ""
       FIN
       
-      sPrenom = vRetour.firstname
-      sNom	= vRetour.realname  
+      SI CONTIENT(sURL,"group") ALORS
+      	
+      	// group
+      	SI PAS contient(sURL,"0") ALORS
+      		sNom_Renvoyer = vRetour.name
+      	FIN
+      SINON
+      	// User
+      	sPrenom	= vRetour.firstname
+      	sNom	= vRetour.realname  
+      	
+      	sNom_Renvoyer = sPrenom + " " + sNom
+      	
+      	SI SansEspace(sNom_Renvoyer) = ""
+      		sNom_Renvoyer = vRetour.name
+      	FIN
+      	
+      FIN
       
-      renvoyer  sPrenom + " " + sNom
+      
+      renvoyer sNom_Renvoyer
      type : 458752
    -
      name : GetTicketDocuments
@@ -424,7 +453,7 @@ class :
       FIN
       
       pour tout vDocument de vRetour
-      	sURL = "https://glpi.union-materiaux.fr/apirest.php/Document/" + vDocument.documents_id
+      	sURL = cstGLPI_URL_Complet + "Document/" + vDocument.documents_id 
       	si pas GetTicketDocument(sURL, stDoc) ALORS
       		renvoyer faux
       	FIN
@@ -489,7 +518,7 @@ class :
       procédure GetTicketDocumentBuffer(nIDDocument est un entier)
       vRetour est un variant
       
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/document/" + nIDDocument, httpGet, "?alt=media" )
+      InitRequete(cstGLPI_URL_Complet + "document/" + nIDDocument, httpGet, "?alt=media" )
       
       si pas exec(vRetour) ALORS
       	renvoyer ""
@@ -530,7 +559,7 @@ class :
       FIN
       
       pour tout vSuivi de vRetour
-      	stSuivi.sUtilisateur 	= GetTicketUsername("https://glpi.union-materiaux.fr/apirest.php/User/" + vSuivi.users_id)
+      	stSuivi.sUtilisateur 	= GetTicketUsername(cstGLPI_URL_Complet + "User/" + vSuivi.users_id)
       	stSuivi.dhCreation		= vSuivi.date_creation
       	stSuivi.sDateAffichage	= DateHeureVersChaîne(stSuivi.dhCreation, "JJ/MM/AAAA HH:mm")
       	stSuivi.buContent		= HTMLverstexte(vSuivi.content)
@@ -538,14 +567,14 @@ class :
       	tableauajoute(aStSuivi, stSuivi)
       	
       	//Si on a une image on l'a rajoute en tant que doc
-      	nIDDoc = ExtraitChaîneEntre(HTMLVersTexte(vSuivi.content), rangpremier, "https://glpi.union-materiaux.fr/front/document.send.php?docid=", "&tickets_id") 
+      	nIDDoc = ExtraitChaîneEntre(HTMLVersTexte(vSuivi.content), rangpremier, cstGLPI_URL + "front/document.send.php?docid=", "&tickets_id") 
        	tantque nIDDoc <> 0	
        		si tableaucherche(oTicket.m_astDocument, tcLinéaire, "nID", nIDDoc) = -1 ALORS
-      	 		GetTicketDocument("https://glpi.union-materiaux.fr/apirest.php/Document/" + nIDDoc, stDoc)
+      	 		GetTicketDocument(cstGLPI_URL_Complet + "Document/" + nIDDoc, stDoc)
        			tableauajoute(oTicket.m_astDocument, stDoc)
       		FIN
       		
-      		nIDDoc = ExtraitChaîneEntre(HTMLVersTexte(vSuivi.content), rangsuivant, "https://glpi.union-materiaux.fr/front/document.send.php?docid=", "&") 
+      		nIDDoc = ExtraitChaîneEntre(HTMLVersTexte(vSuivi.content), rangsuivant, cstGLPI_URL + "front/document.send.php?docid=", "&") 
       	FIN
       FIN
       
@@ -577,7 +606,7 @@ class :
       vBody 	est un variant
       
       //Maj du statut
-      m_surl 			= "https://glpi.union-materiaux.fr/apirest.php/Ticket/"
+      m_surl 			= cstGLPI_URL_Complet + "Ticket/"
       m_nMethode 		= httpput
       m_sParam		= ""
       vInput.id 		= nIDTicket
@@ -586,7 +615,7 @@ class :
       
       vBody.input = vInput	
       
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/", httpPut, *, vBody)	
+      InitRequete(cstGLPI_URL_Complet + "Ticket/", httpPut, *, vBody)	
       si pas Exec(vRetour) ALORS
       	renvoyer faux
       FIN
@@ -620,7 +649,7 @@ class :
       vBody	est un variant
       
       //Maj de l'attribution si le user n'est pas attribué
-      m_sURL			= "https://glpi.union-materiaux.fr/apirest.php/Ticket/" + nIDTicket + "/ticket_user"
+      m_sURL			= cstGLPI_URL_Complet + "Ticket/" + nIDTicket + "/ticket_user"
       m_nMethode		= httppost
       
       vInput.tickets_id	= nIDTicket
@@ -629,7 +658,7 @@ class :
       
       vBody.input	= vInput	
       
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/" + nIDTicket + "/ticket_user", httpPost, *, vBody)
+      InitRequete(cstGLPI_URL_Complet + "Ticket/" + nIDTicket + "/ticket_user", httpPost, *, vBody)
       
       SI PAS Exec(vRetour) ALORS
       	RENVOYER Faux
@@ -658,7 +687,7 @@ class :
       procédure privée KillSession()
       vRetour est un variant
       
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/killSession")
+      InitRequete(cstGLPI_URL_Complet + "killSession")
       
       si pas exec(vRetour) ALORS
       	erreur("Impossible de détruire la session")
@@ -699,7 +728,7 @@ class :
       
       vBody.input		= vInput	
       
-      InitRequete(ChaîneConstruit("https://glpi.union-materiaux.fr/apirest.php/Ticket/%1/TicketFollowup", oTicket.m_nId), httpPost, "", vBody)
+      InitRequete(ChaîneConstruit(cstGLPI_URL_Complet + "Ticket/%1/TicketFollowup", oTicket.m_nId), httpPost, "", vBody)
       
       si pas exec(vRetour) ALORS
       	renvoyer faux
@@ -768,7 +797,7 @@ class :
       vBody 	est un variant
       
       //Maj du statut
-      m_surl 			= "https://glpi.union-materiaux.fr/apirest.php/Ticket/"
+      m_surl 			= cstGLPI_URL_Complet + "Ticket/"
       m_nMethode 		= httpput
       m_sParam		= ""
       vInput.id 		= nIDTicket
@@ -776,7 +805,7 @@ class :
       
       vBody.input = vInput	
       
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/", httpPut, *, vBody)	
+      InitRequete(cstGLPI_URL_Complet + "Ticket/", httpPut, *, vBody)	
       si pas Exec(vRetour) ALORS
       	renvoyer faux
       FIN
@@ -811,12 +840,12 @@ class :
       vRetour	est un variant
       
       //Maj du statut
-      m_sURL						= "https://glpi.union-materiaux.fr/apirest.php/ITILCategory"
+      m_sURL						= cstGLPI_URL_Complet + "ITILCategory"
       m_nMethode					= httpGet
       m_sParam					= ""
       	
       
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/ITILCategory", httpGet)	
+      InitRequete(cstGLPI_URL_Complet + "ITILCategory", httpGet)	
       SI PAS Exec(vRetour) ALORS
       
       FIN
@@ -857,11 +886,11 @@ class :
       
       //Maj attribution
       SI nType_Membre_p = cstGLPI_Type_Membre_User ALORS
-      	sUrl				= "https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket%]/Ticket_User/"
+      	sUrl				= cstGLPI_URL_Complet + "Ticket/[%nIDTicket%]/Ticket_User/"
       	vInput.tickets_id	= nIDTicket
       	vInput.users_id		= sIDMembre_p
       SINON
-      	sUrl				= "https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket%]/group_ticket/"
+      	sUrl				= cstGLPI_URL_Complet + "Ticket/[%nIDTicket%]/group_ticket/"
       	vInput.groups_id = sIDMembre_p
       	vInput.tickets_id	= nIDTicket
       FIN
@@ -905,7 +934,7 @@ class :
       
       
       vRetour	est un Variant
-      sLien est une chaine = "https://glpi.union-materiaux.fr/apirest.php/User?criteria[0][field]=is_active&criteria[0][value]=1&criteria[1][link]=AND&criteria[1][field]=is_deleted&criteria[1][value]=0&range=0-1500"
+      sLien est une chaine = cstGLPI_URL_Complet + "User?criteria[0][field]=is_active&criteria[0][value]=1&criteria[1][link]=AND&criteria[1][field]=is_deleted&criteria[1][value]=0&range=0-1500"
       
       
       //Maj du statut
@@ -946,12 +975,12 @@ class :
       vRetour	est un Variant
       
       //Maj du statut
-      m_sURL						= "https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket_p%]/Ticket_User"
+      m_sURL						= cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/Ticket_User"
       m_nMethode					= httpGet
       m_sParam					= ""
       
       
-      InitRequete("https://glpi.union-materiaux.fr/apirest.php/Ticket/[%nIDTicket_p%]/Ticket_User", httpGet)	
+      InitRequete(cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/Ticket_User", httpGet)	
       SI PAS Exec(vRetour) ALORS
       	
       FIN
@@ -986,8 +1015,7 @@ class :
       //sBody est une chaine
       
       vRetour	est un Variant
-      sLien est une chaine = "https://glpi.union-materiaux.fr/apirest.php/search/Group?criteria[0][field]=1&criteria[0][searchtype]=contains&criteria[0][value]=[%sFiltre_Prefixe_p%]&forcedisplay[0]=2"
-      
+      sLien est une chaine = cstGLPI_URL_Complet + "search/Group?criteria[0][field]=1&criteria[0][searchtype]=contains&criteria[0][value]=[%sFiltre_Prefixe_p%]&forcedisplay[0]=2"
       
       
       //Maj du statut
@@ -1012,6 +1040,45 @@ class :
       
       
       RENVOYER aStGroupes
+     type : 458752
+   -
+     name : GetTicketGroupAssign
+     procedure_id : 1599052024072144163
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketGroupAssign (<nIDTicket_p> est entier)
+      //
+      // Paramètres :
+      //	nIDTicket_p (entier) : <indiquez ici le rôle de nIDTicket_p>
+      
+      // Valeur de retour :
+      // 	variant : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicketGroupAssign(LOCAL nIDTicket_p est un entier)
+      
+      
+      vRetour	est un Variant
+      
+      //Maj du statut
+      m_sURL						= cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/group_ticket"
+      m_nMethode					= httpGet
+      m_sParam					= ""
+      
+      
+      InitRequete(cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/group_ticket", httpGet)	
+      SI PAS Exec(vRetour) ALORS
+      	
+      FIN
+      
+      
+      
+      
+      RENVOYER vRetour
      type : 458752
   procedure_templates : []
   property_templates : []

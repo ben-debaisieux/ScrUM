@@ -38,7 +38,7 @@ window :
          nLigne est un entier
          nIndice est un entier 
          
-         vRetour = oGPLIMoteur.GetInfoGroup("Expert")
+         vRetour = oGPLIMoteur.GetInfoUser()
          
          POUR nLigne = 1 _À_ TableauOccurrence(vRetour)
          	nIndice = TableAjouteLigne(TBL_utilisateur_GLPI)
@@ -250,7 +250,7 @@ window :
          aID_Ticket_Trello = ClTrello_req.Rechercher_Ticket(sTitre)
          
          POUR i = 1 _À_ TableauOccurrence(aID_Ticket_Trello)
-         	aCommentaire_Ticket_Trello = ClTrello_req.Recup_Commentaire_Ticket(aID_Ticket_Trello[i])
+         	aCommentaire_Ticket_Trello = ClTrello_req.aRecup_Commentaire_Ticket(aID_Ticket_Trello[i])
          FIN
         type : 18
       -

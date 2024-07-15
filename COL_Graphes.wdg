@@ -103,7 +103,7 @@ procedure_set :
      procedure_id : 1288012627202703584
      type_code : 15
      code : |1+
-      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClDbProjet, oEpic_P est un ClDbEpic dynamique = Null) <ui>
+      procédure InfoProjet(sChamp_P est une chaîne, oProjet_P est un ClDbProjet, oEpic_P est un ClDbEpic dynamique = Null) <ui>:vide
       
       sTitre			est une chaîne
       bAPrendre		est un booléen
@@ -179,8 +179,9 @@ procedure_set :
       
       grMAJAutomatiqueEtiquetteCatégorie(graphe, Vrai)
       
-      grSMNAjouteDonnée(graphe, zcst_Developpe + TAB + zcst_Teste, nFinies)
       grSMNCouleurPortion(graphe,zcst_Developpe, COL_Scrum.gnCouleur_VertVif)
+      
+      grSMNAjouteDonnée(graphe, zcst_Developpe + TAB + zcst_Teste, nFinies)
       grSMNCouleurPortion(graphe,zcst_Developpe + TAB + zcst_Teste, COL_Scrum.gnCouleur_BleuPale)
       
       grSMNAjouteDonnée(graphe, zcst_Developpe + TAB + zcst_Non_Teste, nATester)
@@ -591,7 +592,7 @@ procedure_set :
       	oUS	est un ClDbUserStory dynamique
       	pour tout oUS de ClColUserStory.oFrom_Epic(oEpic).aItems()
       		oTache est un ClDbTache dynamique
-      		pour tout oTache de ClColTache.aoFromUS(oUS).aItems()
+      		pour tout oTache de ClColTache.oFromUserStory(oUS).aItems()
       			
       			stEpic.nPointsCotation += oTache.p_nPoids
       			
@@ -642,6 +643,31 @@ procedure_set :
       FIN
       
       grDessine(graphe)
+     type : 458752
+   -
+     name : Graph_EtatSprint
+     procedure_id : 1607207965223237259
+     type_code : 15
+     code : |1-
+      procédure Graph_EtatSprint() <métier>:tableau associatif de entiers
+      
+      oTache			est un ClDbTache dynamique
+      oUs				est un ClDbUserStory dynamique
+      aRes			est un tableau associatif de entiers
+      sTag est une chaine
+      
+      pour tout oTache de ClColTache.oFromNumSprint(goApp.m_nNumeroDuSprintActuel, ClDbTache.Charge_réelle).aItems()
+      	sTag = oTache.sStatut()
+      	
+      	//Pour les taches réalisées, on suffixe avec l'état de l'US
+      	si oTache.p_nStatut = ClDbTache.cstStatut_realise ALORS
+      		oUs <- oTache.p_oUserStoryParent
+      		sTag += rc + oUs.sLibelleDeEtat()
+      	FIN
+      	aRes[sTag] += oTache.p_nPoids
+      FIN
+      
+      renvoyer aRes
      type : 458752
   procedure_templates : []
   property_templates : []

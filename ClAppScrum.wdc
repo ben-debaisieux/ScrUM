@@ -30,17 +30,17 @@ class :
       	
       GLOBAL
       PUBLIC
-      	gnCoul01	est un entier	= RVB(173, 35, 64)
-      	gnCoul02	est un entier	= RVB(64, 173, 35)
-      	gnCoul03	est un entier	= RVB(35, 64, 173)
-      	gnCoul04	est un entier	= RVB(173, 145, 35)
-      	gnCoul05	est un entier	= RVB(35, 173, 145)
-      	gnCoul06	est un entier	= RVB(145, 35, 173)
-      	gnCoul07	est un entier	= RVB(64, 173, 145)
-      	gnCoul08	est un entier	= RVB(173, 64, 145)
-      	gnCoul09	est un entier	= RVB(145, 173, 35)
-      	gnCoul10	est un entier	= RVB(35, 145, 173)
-      	
+      //	gnCoul01	est un entier	= RVB(173, 35, 64)
+      //	gnCoul02	est un entier	= RVB(64, 173, 35)
+      //	gnCoul03	est un entier	= RVB(35, 64, 173)
+      //	gnCoul04	est un entier	= RVB(173, 145, 35)
+      //	gnCoul05	est un entier	= RVB(35, 173, 145)
+      //	gnCoul06	est un entier	= RVB(145, 35, 173)
+      //	gnCoul07	est un entier	= RVB(64, 173, 145)
+      //	gnCoul08	est un entier	= RVB(173, 64, 145)
+      //	gnCoul09	est un entier	= RVB(145, 173, 35)
+      //	gnCoul10	est un entier	= RVB(35, 145, 173)
+      //	
       	mg_oExPbCnx				est un ClZF_Exception dynamique
       FIN
       
@@ -53,7 +53,7 @@ class :
       	cstDoscDeUS				= "DoscDeUS"
       	
       	
-      	cstTimeOutProd = 60
+      	cstTimeOutProd	= 60
       FIN
      type : 131072
   procedures :
@@ -99,8 +99,8 @@ class :
       //		:m_ZF_cnxBDD..Provider			= hAccèsNatifSQLServer
       //		:m_ZF_cnxBDD..Accès				= hOLectureEcriture
       //		:m_ZF_cnxBDD..Utilisateur		= "sa"
-      //		:m_ZF_cnxBDD..MotDePasse		= "sa@sql2016"
-      //		:m_ZF_cnxBDD..Serveur			= "10.20.30.140"
+      //		:m_ZF_cnxBDD..MotDePasse		= "sa@sql2022!"
+      //		:m_ZF_cnxBDD..Serveur			= "preprod-sql01"
       //		
       //		:m_ZF_cnxBDD..BaseDeDonnées		= "SCRUM"
       //		:m_ZF_cnxBDD..Cryptage			= hCryptageNon
@@ -176,6 +176,7 @@ class :
       	faire
       		selon ExceptionInfo(errCode)
       			CAS ClDbUsr.mg_oEx_IdAbsentAD.ZF_Code
+      				HLitPremier(Scr_Usr)
       				SI HNbEnr(Scr_Usr) = 0 ALORS
       					//Il s'agit du 1er lancement : on crée l'utilisateur avec les infos de l’utilisateur courant.
       					oUsr = allouer un ClDbUsr(ClZF_ObjDbLs.cstModeCreation)
@@ -278,7 +279,7 @@ class :
       		oCol = allouer un ClColCritereAccept_Composant()
       	cas ClDbMessage.cst_col_messages
       		oCol = allouer un ClColMessage()
-      	cas ClColTache.cstTachesDeUS, ClColTache.cstTachesDeProjet
+      	cas ClColTache.cstGet_TacheDeUserStory, ClColTache.cstTachesDeProjet, ClColTache.cstTachesDeSprint_Reel, ClColTache.cstTachesDeSprint_Prev, ClColTache.cstTachesDeSprint_Fin, ClColTache.cstTachesDeSprint_Demarre
       		oCol = allouer un ClColTache()
       	CAS ClDbEpic.cstGetCol_Epic_Usr
       		oCol = allouer un ClColEpic_Usr()
@@ -295,6 +296,9 @@ class :
       	AUTRE CAS
       		::mg_oExTypeColNonDefinit.ZF_Declenche([sCle_p])
       FIN
+      
+      
+      
       
       renvoyer oCol
      type : 458752

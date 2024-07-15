@@ -254,7 +254,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.charge_obj_enfants
-      PROCÉDURE  init_ObjBD()
+      PROCÉDURE  init_ObjBD()<métier>:Vide
       
       //SI pas :ZF_bModeAjout() ALORS
       //	:m_oProjet		<- ClDbProjet.GetObj(Scr_Epic.IDScr_Projet)

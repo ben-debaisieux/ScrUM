@@ -19,15 +19,15 @@ class :
       	hérite de ClZF_ObjRel
       
       PRIVÉ
-      	m_oNum_Sprint	est un ClDbSprint dynamique	<note="mapping=Num_Sprint">
-      	m_oIDScr_Projet	est un ClDbProjet dynamique	<note="mapping=IDScr_Projet">
-      	m_bTop_Prioritaire	est un Booléen	<MAPPING=Top_Prioritaire>
-      	m_sCMTR	est un chaîne	<MAPPING=CMTR>
+      	m_oNum_Sprint		est un ClDbSprint dynamique	<note="mapping=Num_Sprint">
+      	m_oIDScr_Projet		est un ClDbProjet dynamique	<note="mapping=IDScr_Projet">
+      	m_bTop_Prioritaire	est un Booléen				<MAPPING=Top_Prioritaire>
+      	m_sCMTR				est un chaîne				<MAPPING=CMTR>
       
       GLOBAL
       PUBLIC
-      mg_oEx_CompoNonInst_Num_Sprint	est un ClZF_Exception dynamique
-      mg_oEx_CompoNonInst_IDScr_Projet	est un ClZF_Exception dynamique
+      	mg_oEx_CompoNonInst_Num_Sprint	est un ClZF_Exception dynamique
+      	mg_oEx_CompoNonInst_IDScr_Projet	est un ClZF_Exception dynamique
       	// mg_oEx_Exception1	est un ClZF_Exception dynamique
       	// mg_oEx_Exception2	est un ClZF_Exception dynamique
       	// mg_oEx_Exception3	est un ClZF_Exception dynamique
@@ -40,7 +40,7 @@ class :
       	// mg_oEx_Exception10	est un ClZF_Exception dynamique
       FIN
       
-      mg_oEx_CompoNonInst_Num_Sprint	= Allouer un ClZF_Exception("Enregistrement impossible : m_oNum_Sprint est requis.")			// A faire : Reprendre le message
+      mg_oEx_CompoNonInst_Num_Sprint		= Allouer un ClZF_Exception("Enregistrement impossible : m_oNum_Sprint est requis.")			// A faire : Reprendre le message
       mg_oEx_CompoNonInst_IDScr_Projet	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Projet est requis.")			// A faire : Reprendre le message
       // mg_oEx_Exception1	= Allouer un ClZF_Exception(". . .")
       // mg_oEx_Exception2	= Allouer un ClZF_Exception(". . .")
@@ -67,8 +67,6 @@ class :
       PROCÉDURE Constructeur(LOCAL nID_P est un entier)
       Ancêtre.Constructeur(Scr_Projet_Situation..Nom, Scr_Projet_Situation.IdScr_Projet_Situation..Nom,nID_P)
       
-      :AddMembreCle(Scr_Projet_Situation.IDScr_Projet..nom)
-      :AddMembreCle(Scr_Projet_Situation.Num_Sprint..nom)
      type : 589824
    -
      name : Constructeur
@@ -78,14 +76,9 @@ class :
       PROCÉDURE Constructeur(LOCAL nIDProjet_P est un entier, local nIDSprint_P est un entier)
       Ancêtre.Constructeur(Scr_Projet_Situation..Nom, Scr_Projet_Situation.IdScr_Projet_Situation..Nom, ClZF_ObjDbLs.cstModeSansChargement)
       
-      
-      :AddMembreCle(Scr_Projet_Situation.IDScr_Projet..Nom)
-      :AddMembreCle(Scr_Projet_Situation.Num_Sprint..Nom)
-      
-      :p_oIDScr_Projet_ID = nIDProjet_P
-      :p_oNum_Sprint_ID = nIDSprint_P
-      
-      objet = ClZF_ObjRel.ZF_sGetNomInstanceRel()
+      :p_oIDScr_Projet_ID	= nIDProjet_P
+      :p_oNum_Sprint_ID	= nIDSprint_P
+      RechEnrDeCles()
      type : 589825
    -
      name : Destructeur
@@ -155,6 +148,18 @@ class :
       
       
       FIN
+     type : 458752
+   -
+     name : defCleCompoPrimaire
+     procedure_id : 1619929516592858021
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjRel.defCleCompoPrimaire
+      PROCÉDURE  defCleCompoPrimaire()<métier>:Vide
+      
+      
+      :AddMembreCle(Scr_Projet_Situation.IDScr_Projet..Nom)
+      :AddMembreCle(Scr_Projet_Situation.Num_Sprint..Nom)
      type : 458752
   properties :
    -

@@ -45,7 +45,7 @@ procedure_set :
       	bChangePrj = Vrai
       	POUR TOUT ÉLÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
       		bChangeUs = Vrai
-      		POUR TOUT ÉLÉMENT oTache_Tmp DE ClColTache.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      		POUR TOUT ÉLÉMENT oTache_Tmp DE ClColTache.oFromUserStory(oUs).aItems()	//oUs.aoListeTaches().aItems()
       			VariableRAZ(stOTmp)
       			stOTmp.oPrj			<- oPrj
       			stOTmp.bChangePrj	= bChangePrj

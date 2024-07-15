@@ -54,9 +54,9 @@ class :
       
       ListeSupprimeTout(sCbo_p)
       ListeAjoute(sCbo_p, "")
-      ListeAjoute(sCbo_p, cstMetaoOrgani)
-      ListeAjoute(sCbo_p, cstMetaoOrgani_parent)
-      ListeAjoute(sCbo_p, cstMetaOrdre)
+      ListeAjoute(sCbo_p, ::cstMetaoOrgani)
+      ListeAjoute(sCbo_p, ::cstMetaoOrgani_parent)
+      ListeAjoute(sCbo_p, ::cstMetaOrdre)
      type : 458752
    -
      name : sNomFI
@@ -96,7 +96,7 @@ class :
         code : |1-
          procédure publique p_sCodeFI() : chaîne
          
-         renvoyer m_sCodeFI
+         renvoyer :m_sCodeFI
         type : 1966080
      template_refs : []
   procedure_templates : []

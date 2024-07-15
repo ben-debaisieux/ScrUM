@@ -84,7 +84,7 @@ class :
       	cstTypeAlterDef_Supp		= 3
       fin
       
-      gm_oExRecupValsTest = allouer un ClZF_Exception("Impossible de récupérer les valeurs de clé étrangère de la table : %1")
+      ::gm_oExRecupValsTest = allouer un ClZF_Exception("Impossible de récupérer les valeurs de clé étrangère de la table : %1")
      type : 131072
   procedures :
    -
@@ -126,14 +126,14 @@ class :
       stRubActu	est un STR_Export
       stVal		est un STR_Export_rubs
       
-      TableauSupprimeTout(m_aExport)
+      TableauSupprimeTout(:m_aExport)
       
       SI :m_oCOlGen.p_bClasseExiste ALORS
       	
       	sRub			est une chaîne
       	stRubAnaTmp		est un ClZF_GenCodeFic.str_DefRub
       	
-      	POUR TOUT ÉLÉMENT stRubAnaTmp, sRub DE :m_oCOlGen.m_aRub
+      	POUR TOUT ÉLÉMENT stRubAnaTmp, sRub DE :m_oCOlGen.aListeRubriques()
       		//trace(sRub)
       		VariableRAZ(stRubActu)
       		
@@ -220,7 +220,7 @@ class :
       			FIN
       		FIN
       		
-      		TableauAjoute(m_aExport, stRubActu)
+      		TableauAjoute(:m_aExport, stRubActu)
       	FIN
       FIN
       
@@ -251,7 +251,7 @@ class :
       				TableauAjoute(aRetour,sdIds.Id)
       			FIN
       		FAIRE
-      			gm_oExRecupValsTest.ZF_Declenche([oClasseGen_p.p_sNomTable])
+      			::gm_oExRecupValsTest.ZF_Declenche([oClasseGen_p.p_sNomTable])
       		fin
       		
       		RENVOYER aRetour
@@ -292,7 +292,7 @@ class :
       
       
       sLigne = "ID"
-      POUR TOUT stRubActu DE m_aExport
+      POUR TOUT stRubActu DE :m_aExport
       	sLigne += [TAB] + stRubActu.sLibelle
       FIN
       sRetour += [RC] + sLigne
@@ -307,7 +307,7 @@ class :
       
       POUR nInd = 1 _À_ :m_oCOlGen.m_stConfigTbl.nNbLigneGen
       	sLigne = nInd
-      	POUR TOUT stRubActu DE m_aExport
+      	POUR TOUT stRubActu DE :m_aExport
       		sLigne += [TAB] + stRubActu.sValeurs[nInd].sValeur
       	FIN
       	sRetour += [RC] + sLigne
@@ -332,7 +332,7 @@ class :
       stRubActu	est un STR_Export
       nNbOccurence est un entier
       
-      POUR TOUT stRubActu DE m_aExport
+      POUR TOUT stRubActu DE :m_aExport
       	sPatern += [", "] + stRubActu.sNomRub
       FIN
       
@@ -347,7 +347,7 @@ class :
       
       POUR nInd = 1 _À_ nNbOccurence
       	sLigne = ""
-      	POUR TOUT stRubActu DE m_aExport
+      	POUR TOUT stRubActu DE :m_aExport
       		
       		stVal	= stRubActu.sValeurs[nInd]
       		sVal	= stVal.sValeur
@@ -390,7 +390,7 @@ class :
      name : sRubSqlDeTypeHF
      procedure_id : 1524442850095025336
      type_code : 12
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] sRubSqlDeTypeHF (<stRub_p> est STR_RubSQL)
@@ -475,6 +475,54 @@ class :
       */
      type : 458752
    -
+     name : sRubHFDeTypeSql
+     procedure_id : 1614353343337229202
+     type_code : 12
+     code : |1+
+      PROCÉDURE ABSTRAITE sRubHFDeTypeSql(sType_p est une chaine)<métier>:entier
+      /*
+      <§cs:10§>
+      nTypeRetour est un entier<§cs:10§>
+      <§cs:10§>
+      SELON Minuscule(sType_p)<§cs:10§>
+      //	CAS "year" :<§cs:10§>
+      //		nTypeRetour	= hRubEntierNonSigné2<§cs:10§>
+      //	CAS "varchar" :<§cs:10§>
+      //		nTypeRetour	= hRubTexte<§cs:10§>
+      //	CAS "tinyint" :<§cs:10§>
+      //		nTypeRetour	= hRubEntier1<§cs:10§>
+      //	CAS "timestamp" :<§cs:10§>
+      //		nTypeRetour	= hRubEntier4<§cs:10§>
+      //	CAS "text" :<§cs:10§>
+      //		nTypeRetour	= hRubMémoTexte<§cs:10§>
+      //	CAS "smallint" :<§cs:10§>
+      //		nTypeRetour	= hRubEntier2<§cs:10§>
+      //	CAS "set" :<§cs:10§>
+      //		nTypeRetour	= hRubEntier1<§cs:10§>
+      //	CAS "mediumint" :<§cs:10§>
+      //		nTypeRetour	= hRubEntier4<§cs:10§>
+      //	CAS "int" :<§cs:10§>
+      //		nTypeRetour	= hRubEntier4<§cs:10§>
+      //	CAS "geometry" :<§cs:10§>
+      //		nTypeRetour	= hRubBinaire<§cs:10§>
+      //	CAS "enum" :<§cs:10§>
+      //		nTypeRetour	= hRubEntier1<§cs:10§>
+      //	CAS "decimal" :<§cs:10§>
+      //		nTypeRetour	= hRubRéel8<§cs:10§>
+      //	CAS "datetime" :<§cs:10§>
+      //		nTypeRetour	= hRubDateHeure<§cs:10§>
+      //	CAS "char" :<§cs:10§>
+      //		nTypeRetour	= hRubCaractère<§cs:10§>
+      //	CAS "blob" :<§cs:10§>
+      	//		nTypeRetour	= hRubBinaire<§cs:10§>
+      	AUTRE CAS<§cs:10§>
+      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([sType_p])<§cs:10§>
+      FIN<§cs:10§>
+      <§cs:10§>
+      RENVOYER nTypeRetour<§cs:10§>
+      */
+     type : 458752
+   -
      name : GenCodeDiff
      procedure_id : 1524443472865820862
      type_code : 12
@@ -521,16 +569,16 @@ class :
       stInfoRub	est un ClZF_GenCodeFic.STR_DefRub
       
       
-      SI :m_oColGen.m_aRub[sRub_p]..Vide ET stRubSql_p.sType <> "" ET PAS sRub_p = :m_oColGen.p_sNomRubId ALORS
+      SI pas :m_oColGen.bRubExiste(sRub_p) ET stRubSql_p.sType <> "" ET PAS sRub_p = :m_oColGen.p_sNomRubId ALORS
       	stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_SuppRub
       SINON
-      	stInfoRub				= :m_oColGen.m_aRub[sRub_p]
+      	stInfoRub				= :m_oColGen.stRub(sRub_p)
       	
       	stRetour				= stRubSql_p
-      	stRetour.nTypeAlterRub	= cstTypeAlterRub_RAS
+      	stRetour.nTypeAlterRub	= ::cstTypeAlterRub_RAS
       	
       	//Récupération du type et de la définition
-      	stRetour.sType			= :sRubSqlDeTypeHF(stInfoRub)
+      	stRetour.sType			= ::sRubSqlDeTypeHF(stInfoRub)
       	stRetour.bEstNullable	= stInfoRub.bNullable
       	stRetour.nTaille		= stInfoRub.nTaille
       FIN
@@ -541,16 +589,16 @@ class :
       SINON
       	//Non :
       	//La rubrique existe t elle ?
-      	SI PAS :m_oColGen.m_aRub[sRub_p]..Vide ET stRubSql_p.sType = "" ALORS
+      	SI :m_oColGen.bRubExiste(sRub_p) ET stRubSql_p.sType = "" ALORS
       		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_CreeRub
       	FIN
       FIN
       
-      SI stRetour.nTypeAlterRub = cstTypeAlterRub_RAS ALORS
-      	SI PAS bRubCompatible(stInfoRub.nTypeRubHF, stRubSql_p.sType) OU ...		//Type différent
+      SI stRetour.nTypeAlterRub = ::cstTypeAlterRub_RAS ALORS
+      	SI PAS :bRubCompatible(stInfoRub.nTypeRubHF, stRubSql_p.sType) OU ...		//Type différent
       			(stInfoRub.nTypeRubHF dans (hRubTexte, hRubTexteUnicode, hRubCaractère) et stInfoRub.nTaille <> stRubSql_p.nTaille) OU ...	//Taille différent où cela a une incidence
       			(stInfoRub.nTypeRubHF dans (hRubNumérique) et (stInfoRub.nTaille <> stRubSql_p.nTaille ou stInfoRub.nScale <> stRubSql_p.nScale)) OU ...	//Taille différent où cela a une incidence
-      			stInfoRub.bNullable <> stRubSql_p.bEstNullable ALORS				//Nullabilité différente
+      			(pas stInfoRub.nTypeRubHF DANS (hRubMémoBinaire, hRubMémoBinaire4, hRubMémoTexte, hRubMémoUnicode, hRubImage) et stInfoRub.bNullable <> stRubSql_p.bEstNullable) ALORS				//Nullabilité différente (hormis pour les mémos qui n'ont pas de nullité dans l'analyse)
       		
       		stRetour.nTypeAlterRub = CLZF_GenData.cstTypeAlterRub_ModRub
       	FIN
@@ -559,16 +607,16 @@ class :
       
       
       //Identification de ce qu'il faut générer comme code, pour les contraintes "défaut"
-      stRetour.nTypeAlterDef = cstTypeAlterDef_RAS
+      stRetour.nTypeAlterDef = ::cstTypeAlterDef_RAS
       
       SI stRetour.nTypeAlterRub DANS (CLZF_GenData.cstTypeAlterRub_SuppRub, CLZF_GenData.cstTypeAlterRub_ModRub) OU ...	//Modification rubrique
       		stInfoRub.bNullable ET stRubSql_p.sNomContrainteDef <> "" ALORS												//Contrainte défaut à supprimer
       	
       	SELON stRetour.nTypeAlterRub
       		CAS CLZF_GenData.cstTypeAlterRub_SuppRub
-      			stRetour.nTypeAlterDef = cstTypeAlterDef_Supp
+      			stRetour.nTypeAlterDef = ::cstTypeAlterDef_Supp
       		CAS CLZF_GenData.cstTypeAlterRub_ModRub
-      			stRetour.nTypeAlterDef = cstTypeAlterDef_Mod
+      			stRetour.nTypeAlterDef = ::cstTypeAlterDef_Mod
       			
       		AUTRE CAS
       			
@@ -582,21 +630,25 @@ class :
       		CAS CLZF_GenData.cstTypeAlterRub_CreeTable, CLZF_GenData.cstTypeAlterRub_CreeRub
       			
       			//La contrainte défaut est à créer
-      			stRetour.nTypeAlterDef = cstTypeAlterDef_Cree
-      			
-      			//Récupération de la valeur par défaut a appliquer à la rubrique
-      			stRetour.sValeurDefaut	= stInfoRub.sValDef
-      			SI ClZF_GenCodeFic.bProteger(stInfoRub.nTypeRubHF) ALORS
-      				stRetour.sValeurDefaut = "'" + stRetour.sValeurDefaut + "'"
-      			FIN
+      			stRetour.nTypeAlterDef = ::cstTypeAlterDef_Cree
       			
       		CAS CLZF_GenData.cstTypeAlterRub_ModRub
-      			stRetour.nTypeAlterDef = cstTypeAlterDef_Mod
+      			stRetour.nTypeAlterDef = ::cstTypeAlterDef_Mod
       			
       		AUTRE CAS
       			
       	FIN
       FIN
+      
+      //Si on touche à la valeur par défaut, on mémorise cette valeur (en la protégeant si besoin)
+      si stRetour.nTypeAlterDef dans (::cstTypeAlterDef_Cree, ::cstTypeAlterDef_Mod) ALORS
+      	//Récupération de la valeur par défaut a appliquer à la rubrique
+      	stRetour.sValeurDefaut	= stInfoRub.sValDef
+      	SI ClZF_GenCodeFic.bProteger(stInfoRub.nTypeRubHF) ALORS
+      		stRetour.sValeurDefaut = "'" + stRetour.sValeurDefaut + "'"
+      	FIN
+      FIN
+      
       
       
       //Identification de ce qu'il faut générer comme code, pour les contraintes "clé étrangères"
@@ -610,9 +662,9 @@ class :
       
       //Faut il créer une clé étrangère ?
       SI stRetour.sRefTablePK = "" ALORS
-      	stRetour.nTypeAlterFK = cstTypeAlterFK_RAS
+      	stRetour.nTypeAlterFK = ::cstTypeAlterFK_RAS
       SINON
-      	stRetour.nTypeAlterFK = cstTypeAlterFK_Cree
+      	stRetour.nTypeAlterFK = ::cstTypeAlterFK_Cree
       FIN
       
       
@@ -702,7 +754,7 @@ class :
         code : |1-
          procédure publique p_sCode() : chaîne
          
-         renvoyer m_sCode
+         renvoyer :m_sCode
         type : 1966080
      template_refs : []
   procedure_templates : []

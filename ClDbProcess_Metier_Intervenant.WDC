@@ -533,7 +533,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
-      PROCÉDURE  Init_ObjBD()
+      PROCÉDURE  Init_ObjBD()<métier>:Vide
       
       
       //On mémorise tous les id de intervenants qu'on déclare pour s'assurer de ne pas ouvrir 2 fois le même

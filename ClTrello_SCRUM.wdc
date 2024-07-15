@@ -333,7 +333,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure globale JSON_Tout_Recup()
+      procédure globale JSON_Tout_Recup()<metier>:vide
       
       STR_Action_Trello est une Structure
       	sID_Action		est une chaîne
@@ -377,7 +377,7 @@ class :
       
       // tableau avec toute les informations trello
       aStInformation_Trello	est un tableau associatif de STR_Groupe_Tache_Trello
-      
+      stGrpTache_tmp			est un STR_Groupe_Tache_Trello
       // recherche enregistrement trello
       HLitPremier(Scr_TrelloMemo)
       SI HEnDehors(Scr_TrelloMemo) ALORS
@@ -401,55 +401,58 @@ class :
       	
       	// ajout nouveau groupement de taches
       	SI aStInformation_Trello[sClé]..Vide = Vrai ALORS
+      
+      		VariableRAZ(stGrpTache_tmp)
       		
-      		aStInformation_Trello[sClé]						= allouer un STR_Groupe_Tache_Trello
-      		aStInformation_Trello[sClé].sId_Groupe_Tache	= json_Trello.groupTache[i].id
-      		aStInformation_Trello[sClé].sNom_Groupe_Tache	= json_Trello.groupTache[i].name
-      		
+      		aStInformation_Trello[sClé]			= allouer un STR_Groupe_Tache_Trello
+      		stGrpTache_tmp.sId_Groupe_Tache		= json_Trello.groupTache[i].id
+      		stGrpTache_tmp.sNom_Groupe_Tache	= json_Trello.groupTache[i].name
+      	sinon
+      		stGrpTache_tmp = aStInformation_Trello[sClé]
       	FIN
       	json_list_trello = json_Trello.groupTache[i].list
       	
       	// liste des taches
       	POUR j = 1 _À_ TableauOccurrence(json_list_trello)
       		
-      		nLigne																		= TableauAjouteLigne(aStInformation_Trello[sClé].aliste_Tache_Trello)
+      		nLigne																		= TableauAjouteLigne(stGrpTache_tmp.aliste_Tache_Trello)
       		
       		
       		
-      		//		SI ChaîneCommencePar(json_list_trello[j].name, "T1212") ALORS STOP
+      		//SI ChaîneCommencePar(json_list_trello[j].name, "T1841") ALORS STOP
       		
-      		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sNom_Tache_Trello	= json_list_trello[j].name
-      		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sID_Cartes			= json_list_trello[j].idCartes
-      		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sID					= json_list_trello[j].id
-      		aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sCode				= json_list_trello[j].code
+      		stGrpTache_tmp.aliste_Tache_Trello[nLigne].sNom_Tache_Trello	= json_list_trello[j].name
+      		stGrpTache_tmp.aliste_Tache_Trello[nLigne].sID_Cartes			= json_list_trello[j].idCartes
+      		stGrpTache_tmp.aliste_Tache_Trello[nLigne].sID					= json_list_trello[j].id
+      		stGrpTache_tmp.aliste_Tache_Trello[nLigne].sCode				= json_list_trello[j].code
       		
       		POUR m = 1 _À_ TableauOccurrence(json_list_trello[j].idLabels)
-      			TableauAjoute(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aIDLabel, json_list_trello[j].idLabels[m].id)
+      			TableauAjoute(stGrpTache_tmp.aliste_Tache_Trello[nLigne].aIDLabel, json_list_trello[j].idLabels[m].id)
       		FIN
       		
       		SI json_list_trello[j].idMembers[1].id <> Null ALORS
       			
-      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].sIDUsrDev		= json_list_trello[j].idMembers[1].id
+      			stGrpTache_tmp.aliste_Tache_Trello[nLigne].sIDUsrDev		= json_list_trello[j].idMembers[1].id
       		FIN
       		
       		json_action_trello		= json_list_trello[j].list
       		
       		// action lié aux taches
       		POUR k = 1 _À_ TableauOccurrence(json_action_trello)
-      			nLigne_Action																						= TableauAjouteLigne(aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action)	
-      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sID_Action		= json_action_trello[k].id
-      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sTitre			= json_action_trello[k].titre
-      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sUtilisateur	= json_action_trello[k].user
-      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sDate_Action	= json_action_trello[k].date
-      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sListAfter		= json_action_trello[k].listAfter
+      			nLigne_Action																						= TableauAjouteLigne(stGrpTache_tmp.aliste_Tache_Trello[nLigne].aListe_Action)	
+      			stGrpTache_tmp.aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sID_Action		= json_action_trello[k].id
+      			stGrpTache_tmp.aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sTitre			= json_action_trello[k].titre
+      			stGrpTache_tmp.aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sUtilisateur	= json_action_trello[k].user
+      			stGrpTache_tmp.aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sDate_Action	= json_action_trello[k].date
+      			stGrpTache_tmp.aliste_Tache_Trello[nLigne].aListe_Action[nLigne_Action].sListAfter		= json_action_trello[k].listAfter
       		FIN
       	FIN
       	
       	goApp.TranDebut()
       	
-      	POUR nLigne_Liste_Carte = 1 _À_ TableauOccurrence(aStInformation_Trello[sClé].aliste_Tache_Trello)
+      	POUR nLigne_Liste_Carte = 1 _À_ TableauOccurrence(stGrpTache_tmp.aliste_Tache_Trello)
       		
-      		soit stInfoTacheTrello = aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte]
+      		soit stInfoTacheTrello = stGrpTache_tmp.aliste_Tache_Trello[nLigne_Liste_Carte]
       		
       		sCodeTache = SansEspace(ExtraitChaîne(stInfoTacheTrello.sNom_Tache_Trello,1,"-"))
       		
@@ -462,8 +465,7 @@ class :
       		////////////////////////////////////////////////////////
       		//Vérification du blocage de la tache
       		SI oTache = Null ALORS
-      			//TBL_Cartes[nLigne].COL_Id		= "!!!" + sCodeTache + "!!!"
-      			SI aStInformation_Trello[sClé].sId_Groupe_Tache  <> cst_List_ID_Fini_sprint_précédents ALORS
+      			SI stGrpTache_tmp.sId_Groupe_Tache  <> cst_List_ID_Fini_sprint_précédents ALORS
       				Trace("Référence de tache non trouvée : [%sCodeTache%].")
       			FIN
       		SINON
@@ -475,8 +477,7 @@ class :
       				TableauAjoute(aLstTacheImportes,sCodeTache)
       			FIN
       			
-      			aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].sID = oTache.Get_IdUnique()
-      			//TBL_Cartes[nLigne].COL_Id		= oTache.Get_IdUnique()
+      			stGrpTache_tmp.aliste_Tache_Trello[nLigne_Liste_Carte].sID = oTache.Get_IdUnique()
       			
       			
       			SI oTache.p_bAnnule ALORS
@@ -487,16 +488,8 @@ class :
       				FIN
       			FIN
       		FIN
-      		
-      		SI oTache <> Null ALORS
-      			
-      			
-      //			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
-      //				SI PAS oTache.p_bEstRealise et PAS oTache.p_bAnnule ALORS
-      //					Trace("La tache [%oTache.p_sCodeTache%] n'était pas marquée comme réalisée, avant la lecture des données de trello (Sp. : [%oTache.p_nNum_Sprint_Fin%]).")
-      //				FIN
-      //			FIN
-      				
+      
+      		si oTache <> null alors
       			//La tache est elle suspendue ?
       			SI ::bLabelPresent(stInfoTacheTrello.aIDLabel, [cst_Label_Suspend, cst_Label_Attente]) ALORS
       				//Oui : on s'assure qu'il y ait le motif.
@@ -512,7 +505,7 @@ class :
       				FIN
       				
       				
-      				SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_Dev_en_cours, cst_List_ID_A_faire_tester_par_DEV2, cst_List_ID_Test_unitaire) ALORS
+      				SI stGrpTache_tmp.sId_Groupe_Tache DANS(cst_List_ID_Dev_en_cours, cst_List_ID_A_faire_tester_par_DEV2, cst_List_ID_Test_unitaire) ALORS
       					oTache.p_nStatut = ClDbTache.cstStatut_en_cours
       				FIN
       			FIN
@@ -543,13 +536,13 @@ class :
       				//Non : on prend l'utilisateur courant.
       				oUsrDev = goApp.m_oUsrCnx
       				
-      				SI aStInformation_Trello[sClé].sId_Groupe_Tache <> cst_List_ID_A_faire ALORS
+      				SI pas stGrpTache_tmp.sId_Groupe_Tache dans (cst_List_ID_A_faire, cst_List_ID_Fini_sprint_précédents) ALORS
       					trace("La tache [%oTache.p_sCodeTache%] est démarrée, mais n'a pas de développeur associé.")
       				fin
       			FIN
       			
       			
-      			SI aStInformation_Trello[sClé].sId_Groupe_Tache = cst_List_ID_A_faire ALORS
+      			SI stGrpTache_tmp.sId_Groupe_Tache = cst_List_ID_A_faire ALORS
       				oTache.p_oUsr_Dev				= Null
       				oTache.p_nNum_Sprint_Demarrage	= Null
       				oTache.p_bEstRealise			= Faux
@@ -558,7 +551,7 @@ class :
       				oTache.p_nNum_Sprint_Demarrage	= oTache.p_nNum_Sprint_Realisation
       			FIN
       			
-      			Selon aStInformation_Trello[sClé].sId_Groupe_Tache 
+      			Selon stGrpTache_tmp.sId_Groupe_Tache 
       				cas cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents
       				
       					SI PAS oTache.p_bEstRealise ET PAS oTache.p_bAnnule et oTache.p_nNum_Sprint_Fin <> goApp.m_nNumeroDuSprintActuel ALORS
@@ -573,11 +566,11 @@ class :
       					oTache.p_bEstRealise			= Faux
       			FIN
       			
-      			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
+      			SI stGrpTache_tmp.sId_Groupe_Tache DANS(cst_List_ID_A_livrer_en_prod, cst_List_ID_Fini, cst_List_ID_Fini_sprint_précédents) ALORS
       				oTache.p_nNum_Sprint_Fin		= oTache.p_nNum_Sprint_Realisation
       			FIN
       			
-      			SI aStInformation_Trello[sClé].sId_Groupe_Tache DANS(cst_List_ID_Fini_sprint_précédents) ALORS
+      			SI stGrpTache_tmp.sId_Groupe_Tache DANS(cst_List_ID_Fini_sprint_précédents) ALORS
       				
       				bComptaDansScrum est un booléen = Faux
       				
@@ -603,7 +596,7 @@ class :
       			//récupération des actions de la carte
       			POUR nLigne_Action_Trello = TableauOccurrence(stInfoTacheTrello.aListe_Action) a 1 pas -1
       				
-      				soit stListeActionTrello = aStInformation_Trello[sClé].aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello]
+      				soit stListeActionTrello = stGrpTache_tmp.aliste_Tache_Trello[nLigne_Liste_Carte].aListe_Action[nLigne_Action_Trello]
       				
       				dhEvt = dh_FormatRFC3339_Vers_DateHeure(stListeActionTrello.sDate_Action)
       				
@@ -646,21 +639,6 @@ class :
       								oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = dhEvt..PartieDate
       							FIN
       							
-      							
-      	//					CAS cst_List_ID_A_livrer_en_prod
-      	//						//TBL_Actions[nLigne].COL_IdList = "Liv Prod"
-      	//						
-      	//						SI oTache.p_bEstRealise ALORS
-      	//							oTache.p_nNum_Sprint_Fin	= oSpr.ZF_Get_IdUnique()
-      	//						FIN
-      	//						
-      	//						SI oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest < dhEvt..PartieDate ALORS
-      	//							oTache.p_oUserStoryParent.p_dDateMiseADispo_EnTest = dhEvt..PartieDate
-      	//						FIN
-      	//						
-      	//						SI oTache.p_oUserStoryParent.p_dDateMiseEnProd < dhEvt..PartieDate ALORS
-      	//							oTache.p_oUserStoryParent.p_dDateMiseEnProd = dhEvt..PartieDate
-      	//						FIN
       							
       						CAS cst_List_ID_Fini, cst_List_ID_A_livrer_en_prod	//, cst_List_ID_Fini_sprint_précédents
       							
@@ -710,6 +688,8 @@ class :
       	FIN
       	
       	goApp.TranFin()
+      	
+      	aStInformation_Trello[sClé] = stGrpTache_tmp
       FIN
       
       

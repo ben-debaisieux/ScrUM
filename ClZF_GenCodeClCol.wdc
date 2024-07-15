@@ -62,9 +62,9 @@ class :
       sClasse += :GenDestructeur() + RC
       sClasse += :GenPropriete() + RC
       //sClasse += :GenProc_addItemById() + RC
+      sClasse += :GenProc_sClasseObjDbAsso() + RC
       sClasse += :GenProc_aItems() + RC
       sClasse += :GenProc_Init() + RC
-      sClasse += :GenProc_sClasseObjDbAsso() + RC
       //sClasse += :GenProc_addItemBySource() + RC
       //sClasse += :GenProc_GetAll() + RC
       
@@ -75,8 +75,8 @@ class :
       	sClasse += sProcsChargeCol + RC
       FIN
       
-      si m_bNatif ALORS
-      	sClasse += GenBlocCL_Fin()
+      si :m_bNatif ALORS
+      	sClasse += :GenBlocCL_Fin()
       FIN
       
       
@@ -108,13 +108,13 @@ class :
       [%sNom%] est une Classe
       [%TAB%]hérite de ClZF_ColObjDB
       PRIVÉ
-      [%TAB%][%m_sNomListeObj%] est un tableau [%m_sNomClasseBD%] dynamique
+      [%TAB%][%:m_sNomListeObj%] est un tableau [%:m_sNomClasseBD%] dynamique
       FIN
       ]
       
       si :m_bNatif ALORS
       	//Génération du code natif de l'objet pour WD
-      	sRetour = GenBlocCL_Init(sRetour,sNom)
+      	sRetour = :GenBlocCL_Init(sRetour,sNom)
       FIN
       
       renvoyer sRetour
@@ -142,13 +142,13 @@ class :
       sRetour est une chaine = [
       PROCÉDURE [%sNomProc%](LOCAL nId_P est un entier)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemById
-      :ZF_addItem([%m_sNomClasseBD%].GetObj(nId_P))
+      :ZF_addItem([%:m_sNomClasseBD%].GetObj(nId_P))
       
       ]
       
       SI :m_bNatif ALORS
       	//Génération du code natif de l'objet pour WD
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       RENVOYER sRetour
@@ -174,15 +174,15 @@ class :
       procédure privée GenProc_aItems()<métier>:chaine
       sNomProc est une chaîne = "aItems"
       sRetour est une chaine = [
-      PROCÉDURE [%sNomProc%]()<métier>:tableau de [%m_sNomClasseBD%] dynamique
+      PROCÉDURE [%sNomProc%]()<métier>:tableau de [%:m_sNomClasseBD%] dynamique
       // Redéfinition de la méthode ClColObjDB.aItems
-      RENVOYER :[%m_sNomListeObj%]
+      RENVOYER :[%:m_sNomListeObj%]
       
       ]
       
       SI :m_bNatif ALORS
       	//Génération du code natif de l'objet pour WD
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       
@@ -211,13 +211,13 @@ class :
       sRetour est une chaine = [
       PROCÉDURE [%sNomProc%]()<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.Init
-      ZF_InitCol(:[%m_sNomListeObj%])
+      ZF_InitCol(:[%:m_sNomListeObj%])
       
       ]
       
       SI :m_bNatif ALORS
       	//Génération du code natif de l'objet pour WD
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       
@@ -249,14 +249,14 @@ class :
       sRetour est une chaine = [
       PROCÉDURE PROTÉGÉE VIRTUELLE [%sNomProc%](sdSource_p est une Source de Données)<métier>:Vide
       // Redéfinition de la méthode ClColObjDB.addItemBySource
-      oObj est un [%m_sNomClasseBD%](ClZF_ObjDbLs.cstModeSansChargement)
+      oObj est un [%:m_sNomClasseBD%](ClZF_ObjDbLs.cstModeSansChargement)
       :ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.[%:m_oClasseGen.p_sNomRubId%])
       
       ]
       
       SI :m_bNatif ALORS
       	//Génération du code natif de l'objet pour WD
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       
@@ -291,7 +291,7 @@ class :
       
       SI :m_bNatif ALORS
       	//Génération du code natif de l'objet pour WD
-      	sRetour = GenBlocCL_Constructeur(sRetour)
+      	sRetour = :GenBlocCL_Constructeur(sRetour)
       FIN
       
       renvoyer sRetour
@@ -323,7 +323,7 @@ class :
       ]
       SI :m_bNatif ALORS
       	//Génération du code natif de l'objet pour WD
-      	sRetour = GenBlocCL_Destructeur(sRetour)
+      	sRetour = :GenBlocCL_Destructeur(sRetour)
       FIN
       
       
@@ -355,7 +355,7 @@ class :
       oClas		est un ClZF_GenCodeFic dynamique
       sRub		est une chaîne
       
-      pour tout element stLien, sRub de oGencode_p.m_aRub
+      pour tout element stLien, sRub de oGencode_p.aListeRubriques()
       	si stLien.oObj_Parent <> null alors
       		oClas = stLien.oObj_Parent
       		
@@ -384,7 +384,7 @@ class :
       		]
       		
       		SI :m_bNatif ALORS
-      			sModele = GenBlocCL_Procedure(sModele, sNomProc)
+      			sModele = ::GenBlocCL_Procedure(sModele, sNomProc)
       		FIN
       	
       		
@@ -419,7 +419,7 @@ class :
       
       
       POUR TOUT ÉLÉMENT stRelTmp DE :m_oClasseGen.m_aPK_de_FK
-      	sRetour += [rc] + GenProc_ChargeFromDeRel(stRelTmp)
+      	sRetour += [rc] + :GenProc_ChargeFromDeRel(stRelTmp)
       FIN
       
       
@@ -446,11 +446,11 @@ class :
       sGenSource	est une chaîne	= chaineconstruit(-%"
       		
       	sReq = [
-      	%3SELECT 
-      	%3%3%1.*
-      	%3FROM %1
-      	%3WHERE %1.%2 = [%oParent_p.ZF_Get_IdUnique()%]
-      	%3]
+      		%3SELECT 
+      			%3%3%1.*
+      		%3FROM %1
+      		%3WHERE %1.%2 = [%oParent_p.ZF_Get_IdUnique()%]
+      		%3]
       	oColRetour.ZF_LoadSQL(sReq)
       			
       	", ...
@@ -460,17 +460,17 @@ class :
       
       
       SELON stRelTmp_p.nTypeRel
-      	CAS ClZF_GenCodeFic.cstRelNonDef, ClZF_GenCodeFic.cstRelAgr, ClZF_GenCodeFic.cstRelIncl
+      	CAS ClZF_GenCodeFic.cstRelIncl
       		//Pas de création de procédure de chargement pour ces types de liaisons
       		
-      	CAS ClZF_GenCodeFic.cstRelAsso
+      	CAS ClZF_GenCodeFic.cstRelNonDef, ClZF_GenCodeFic.cstRelAgr, ClZF_GenCodeFic.cstRelAsso
       		bGenere = Vrai
       		
       	CAS ClZF_GenCodeFic.cstRelCompo
       		bGenere = Vrai
       		oInfoCible est un ClZF_GenCodeFic(stRelTmp_p.sTableFK)
       		
-      		sConstRef est une chaîne = sNomConstanteColCompo(stRelTmp_p)
+      		sConstRef est une chaîne = ::sNomConstanteColCompo(stRelTmp_p)
       		sValConstRef est une chaîne = ClZF_GenCodeClCol.sNomConstanteColCompo(stRelTmp_p, <bValeurConstante_p>:Vrai)
       		
       		sParams += ", LOCAL bForceCharge_p est un booléen = Faux"
@@ -495,7 +495,7 @@ class :
       
       
       SI bGenere ALORS
-      	sNomFct est une chaîne = sNomFct_ChargeFrom(oClGen_tmp)
+      	sNomFct est une chaîne = ::sNomFct_ChargeFrom(oClGen_tmp)
       	sCode = [
       		FONCTION GLOBALE [%sNomFct%]([%sParams%])<métier>:[%:m_oClasseGen.sNomClasseColGen()%]
       		
@@ -506,10 +506,11 @@ class :
       		
       		RENVOYER oColRetour
       		
+      		
       	]
       	
       	SI :m_bNatif ALORS
-      		sRetour = GenBlocCL_Procedure(sCode, sNomFct)
+      		sRetour = :GenBlocCL_Procedure(sCode, sNomFct)
       	SINON
       		sRetour = sCode
       	FIN
@@ -532,7 +533,7 @@ class :
       
       SI :m_bNatif ALORS
       	//Génération du code natif de l'objet pour WD
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       RENVOYER sRetour
@@ -569,13 +570,13 @@ class :
       sNomProc est une chaîne = "sClasseObjDbAsso"
       sRetour est une chaine = [
       	PROCÉDURE [%sNomProc%]()<métier>:chaîne
-      	sClasse est une chaîne = [%m_sNomClasseBD%]
+      	sClasse est une chaîne = [%:m_sNomClasseBD%]
       	RENVOYER sClasse
       	]
       
       SI :m_bNatif ALORS
       	//Génération du code natif de l'objet pour WD
-      	sRetour = GenBlocCL_Procedure(sRetour, sNomProc)
+      	sRetour = :GenBlocCL_Procedure(sRetour, sNomProc)
       FIN
       
       
@@ -632,7 +633,7 @@ class :
       
       
       SI :m_bNatif ALORS
-      	sRetour = GenBlocCL_Propriete(sPropR, sPropw, sPropriete)
+      	sRetour = :GenBlocCL_Propriete(sPropR, sPropw, sPropriete)
       sinon
       	sRetour = sPropR + rc + rc + sPropw + RC 
       FIN

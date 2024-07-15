@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_Developpements_Prevus_v2
  identifier : 0x2e9220b528341837
- internal_properties : BwAAAAcAAABMUwU64R18jDpfGYCnvM7xOIZ4QuFlvH6LgXrSxK4aFpW+hLOOwSJaYcW7OA8oFnotlXkVqwvLbCWBUm4EfnBsqU7/o/HeudzvXCFm50+QigS9YraWAIAYwgydwd4aHiuVTPX9IoeGlK8roK816LXw+42BCsQKRUv3gK/J8Aq1QxUWzz4If/EHb2GQlUdI7e+AnILueADy+po3b6A75kC/Xm04MzETsGph6r39X2zgrZfczqjL6uoAYiRSqFq1SzXjEtELXx9a3Fc7KWF5RNJD+hhTcJOoCQ3TojqZwKCkVHs+Ux55r+5eASv3+mim6IyxtcvziI8CeGDI4Oxocoi58aBz1VJ7Avy9e8fONw93OscwZ5IQU3fFFnyJJcLww0Thp/3VvL3yN34m+GYkesR6QWRLCc6EYUCCVaXId+iCTzUVN43+S1T12e+5vmsHyFJHJIIkDBtC4er6mDbT+YYjQyEmGDuzPp+Y2yhofDwEqzXKKNSuCv08WtJpzReVK2AjtMGNdXah36SyrNly78Dn5jYzS3BkKWZ6kubxA4AvaESpxvDbahl3t4r3K6sJcfk4KNa5Kmbg75nZTcg8cIQp8ajKXfy8kUL5/ufRUX5vxnRFJzXXIUqRMK3OeAzDU3LdZHCgARuPgerbWEWYJwLwCkPDtCfpV9MyPWjYw4WMbCF77ad/Z9IdzNfJPd+ZM5RMnwHFRMGi8Viga5CVf5g5di+X2omgJmfVumVjnmhDwA==
+ internal_properties : BwAAAAcAAADpaKoCNdqkbyUsYGGlUDXnAdrqlr3UEP7/YzivW7nWsPkmBj/96BO2fMooMTqhZENW0wl4Xb66JFIu9shhMIkJmUVjmFsVGGw/nJdQ0yAYE1Kl5a7w0IWkmaM/POHXW7plnw77tZKp1rEiOa5+mrAxxYqBg6ENkdnUMD5rqBXTdHxcUAAXWUT55d0/9dMCVPITtwCXIKg42UNQE1kvh0B//CbH71mGIbykCpVH844Cyke9K9g3wngAdRx3hP1UXAbiqIX/u9g4R0wgPSS2Nv723f+GQktqG/nog+46cDimCtNMCanhIduk+78DtO0tO6e7c5cZVdI8bIcMKrbBeK5oaiLbTq3dIBuftqklahdecoF+OreLiUUoGkTTBy6JvQVKT9b+6PUfTR+X24B7UzYcm6eHNdmt2UmYXf7y8YhtV16b+UybyW9R01vK/0wm9x7FvPumOj41Py1lPBkTgjCaAaTP0DdW78iYOz7Ur0YCXRKIyCJWfutqASdSPQWxs+jHzYCCb93VPkqsW3CnK339DrcDD5beENq/C/J7QCjtYVUQwQrXt0XOWoPrbj/AopSXzvWwq6zIcWUaeMAn1B4sySVggCGDebrpL7lK1WnqHI0NsDdFyLVgEvKynk4mj1t+eaPAvRi1oJwysqs4Wgwi/DgPVdBPvprLuZGQQlaLug0kuQyaOVv88vo0ju930loXfm4LT29PAchSgLdO4TbLIWVeckqEN32LJc5Nd2Qm9ms=
  properties :
   width : 880
   height : 590
@@ -748,7 +748,7 @@ window :
          			
          			
          			si bAvecTache alors
-         				POUR TOUT ELEMENT oTache DE ClColTache.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
+         				POUR TOUT ELEMENT oTache DE ClColTache.oFromUserStory(oUS).aItems()
          					
          					
          					nLigneTache														= TableAjouteFils(TBLH_Projet,nLigneUserStory)

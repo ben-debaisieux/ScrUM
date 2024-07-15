@@ -30,6 +30,7 @@ class :
       	cst_StatutKanban_Test_Fonctionnel					= "5a9e4f0e654263f2ddc61798"
       	cst_StatutKanban_Prod_Attente_Validation			= "5c361089065f670f2e607b84"
       	cst_StatutKanban_Fini								= "5a9e4f12597b548f994df103"
+      	cst_StatutKanban_Résolu								= "667d7a19f69139dbed77d238"
       	
       	
       	// carte
@@ -45,14 +46,15 @@ class :
       	cst_LabelKanban_Dette_technique						= "5a9e4eac35b91abfde76e3c7"
       	cst_LabelKanban_Transmettre_à_l_infra				= "63e518b1ab21f8fe54d6af32"
       	
+      	
       	// membre
-      	cst_MembersKanban_NM = "5a9e4e274709322e75d2ca4d"
-      	cst_MembersKanban_BD = "5975ee2f655c7d8d3a96ea8b"
-      	cst_MembersKanban_JD = "55bf756d79699693a1c8f953"
-      	cst_MembersKanban_CM = "5a9e61b6a43e919710e16ae4"
-      	cst_MembersKanban_JG = "5c76784f47cb1379291bba94"
-      	cst_MembersKanban_HG = "620651b3e70d864e4614d45a"
-      	cst_MembersKanban_CF = "6143547a372c976fca3bcecd"
+      	//	cst_MembersKanban_NM = "5a9e4e274709322e75d2ca4d"
+      	cst_MembersKanban_BD								= "5975ee2f655c7d8d3a96ea8b"
+      	cst_MembersKanban_JD								= "55bf756d79699693a1c8f953"
+      	cst_MembersKanban_CM								= "5a9e61b6a43e919710e16ae4"
+      	//	cst_MembersKanban_JG = "5c76784f47cb1379291bba94"
+      	cst_MembersKanban_HG								= "620651b3e70d864e4614d45a"
+      	cst_MembersKanban_CF								= "6143547a372c976fca3bcecd"
       fin
      type : 131072
   procedures :
@@ -71,6 +73,129 @@ class :
      code : |1-
       procédure Destructeur()
      type : 655360
+   -
+     name : Synchro_Ticket_Fini_Trello_Vers_GLPI
+     procedure_id : 1620569986375720414
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // Synchro_Ticket_Fini_Trello_Vers_GLPI ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GLOBAL Synchro_Ticket_Fini_Trello_Vers_GLPI()
+      
+      
+      aStTicket						est un tableau de ClTrello_req.STR_TICKET_TRELLO
+      sIDGlpi							est une chaine
+      oGLPI_Ticket					est un ClGLPI_Ticket
+      aoGLPI_Ticket					est un tableau de ClGLPI_Ticket
+      oGPLIMoteur						est un ClGLPI_Moteur(aoGLPI_Ticket)
+      aStCommentaire_Ticket_Trello	est un tableau de ClTrello_req.STR_Commentaire_Trello
+      sTexte_Commentaire_Glpi			est une chaine
+      stCommentaire_A_Modifier		est un ClTrello_req.STR_Commentaire_Trello
+      sNouveau_Commentaire_TRELLO		est une chaine
+      
+      aStTicket	= ClTrello_Kanban.Recup_Liste_Ticket_Trello(ClTrello_Kanban.cst_StatutKanban_Résolu)
+      
+      POUR nLigne_Ticket = 1 _À_ TableauOccurrence(aStTicket)
+      	// récupération du ticket GLPI 
+      	// récupération IDGLPI
+      	sIDGlpi = ExtraitChaîneEntre(aStTicket[nLigne_Ticket].sSujet,1,"#"," ",DepuisDébut)
+      	
+      	// Récupération commentaire trello dans le cas ou on a l'id du ticket GLPI
+      	SI sIDGlpi <> "" _ET_ sIDGlpi <> EOT ALORS
+      		SI PAS VérifieExpressionRégulière(sIDGlpi,"^[0-9]+$") ALORS
+      			SI VérifieExpressionRégulière(Gauche(sIDGlpi,sIDGlpi..Taille-1),"^[0-9]+$") ALORS
+      				sIDGlpi = Gauche(sIDGlpi,sIDGlpi..Taille-1)
+      			SINON
+      				sIDGlpi = ""
+      			FIN
+      		FIN
+      		SI sIDGlpi <> "" ALORS
+      			// le ticket est un ticket GLPI on a récupéré l'ID
+      			// 1 er étape dans GLPI on met le commentaire du dev si le dev donne une information sur le ticket
+      			
+      			SI oGPLIMoteur.GetTicket(sIDGlpi,oGLPI_Ticket) ALORS
+      				oGPLIMoteur.m_opclEntite		= oGLPI_Ticket
+      				//oGLPIMoteur_Ticket est un ClGLPI_Moteur(oGLPI_Ticket)
+      				
+      				// OK
+      				// tableau commentaire trello
+      				aStCommentaire_Ticket_Trello	= ClTrello_req.astRecup_Commentaire_Ticket(aStTicket[nLigne_Ticket].sID)
+      				
+      				// parcoure des ticket trello pour ne prendre que les tickets trello avec #glpi
+      				
+      				POUR nLigne = 1 _À_ aStCommentaire_Ticket_Trello..Occurrence
+      					SI ChaîneCommencePar(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,"\") ALORS
+      						aStCommentaire_Ticket_Trello[nLigne].sCommentaire = Droite(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,aStCommentaire_Ticket_Trello[nLigne].sCommentaire..Taille-1)
+      					FIN
+      					
+      					// on vérifie qu'on veut envoyer le commentaire à GLPI
+      					SI ChaîneCommencePar(Majuscule(aStCommentaire_Ticket_Trello[nLigne].sCommentaire),Majuscule(ClTrello_req.cst_Trello_Hashtag_GLPI)) <> 0 _ET_ ChaîneCommencePar(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPIEnvoyé) = 0  ALORS
+      						// on veut envoyer le commentaire à GLPI
+      						
+      						// ON envoie le commentaire à GLPI
+      						
+      						sTexte_Commentaire_Glpi = SansEspace(ChaîneSupprime(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPI,SansCasse))
+      						
+      						SI PAS oGPLIMoteur.CreateFollowup(sTexte_Commentaire_Glpi) ALORS
+      							Trace("Erreur lors de l'ajout du commentaire GLPI [%sIDGlpi%]")
+      						FIN
+      						
+      						
+      						// On modifie le commentaire dans trello pour ne pas le renvoyer.
+      						sNouveau_Commentaire_TRELLO					= ClTrello_req.cst_Trello_Hashtag_GLPIEnvoyé + " [%DateVersChaîne(DateSys())%] [%HeureVersChaîne(HeureSys())%] " + SansEspace(ChaîneSupprime(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPI))
+      						
+      						stCommentaire_A_Modifier.sCommentaire		= sNouveau_Commentaire_TRELLO
+      						stCommentaire_A_Modifier.sID_Commentaire	= aStCommentaire_Ticket_Trello[nLigne].sID_Commentaire
+      						stCommentaire_A_Modifier.sID_Ticket			= aStCommentaire_Ticket_Trello[nLigne].sID_Ticket
+      						
+      						SI PAS ClTrello_req.Modif_Commentaire(stCommentaire_A_Modifier) ALORS
+      							Trace("Erreur lors de la modification du commentaire Trello [%sIDGlpi%]")
+      						FIN
+      						
+      					SINON
+      						// on ne veut pas envoyé commentaire à GLPI
+      						
+      					FIN
+      				FIN
+      				// 2eme étape dans GLPI on met un commentaire pour dire à l'utilisateur que sans réponse de sa part on passe le ticket en fini sous 15 jours
+      				sTexte_Commentaire_Glpi = [
+      				Bonjour,
+      
+      				Sans retour de votre part, nous considérerons que le ticket est résolu. Il sera clôturé dans un délai de 15 jours.
+      				
+      				N'hésitez pas si vous avez besoin de plus de précisions.
+      				Cordialement,
+      				]
+      				
+      				SI PAS oGPLIMoteur.CreateFollowup(sTexte_Commentaire_Glpi) ALORS
+      					Trace("Erreur lors de l'ajout du commentaire GLPI [%sIDGlpi%]")
+      				SINON
+      					
+      					// 3eme étape on passe le ticket en résolue
+      					SI PAS oGPLIMoteur.UpdateTicketStatut(val(sIDGlpi), ClGLPI_Ticket.cst_Statut_Resolut_ID) ALORS
+      						Trace("Impossible de mettre à jour le statut du ticket dans GLPI [%sIDGlpi%].")
+      					SINON
+      						// 4eme étape on change le ticket kanban de colonne on le passe en fini
+      						ClTrello_req.Change_Statut_Ticket(aStTicket[nLigne_Ticket].sID,ClTrello_Kanban.cst_StatutKanban_Fini)
+      					FIN
+      				FIN
+      			SINON
+      				// KO
+      			FIN
+      		FIN
+      	FIN
+      FIN
+     type : 458752
   procedure_templates : []
   property_templates : []
  code_parameters :

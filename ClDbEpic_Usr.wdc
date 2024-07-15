@@ -27,9 +27,9 @@ class :
       	
       GLOBAL
       PUBLIC
-      mg_oEx_CompoNonInst_IDScr_Usr	est un ClZF_Exception dynamique
-      mg_oEx_CompoNonInst_IDScr_Epic	est un ClZF_Exception dynamique
-      mg_oEx_CompoNonInst_IDScr_Epic_Usr_Role	est un ClZF_Exception dynamique
+      	mg_oEx_CompoNonInst_IDScr_Usr	est un ClZF_Exception dynamique
+      	mg_oEx_CompoNonInst_IDScr_Epic	est un ClZF_Exception dynamique
+      	mg_oEx_CompoNonInst_IDScr_Epic_Usr_Role	est un ClZF_Exception dynamique
       	// mg_oEx_Exception1	est un ClZF_Exception dynamique
       	// mg_oEx_Exception2	est un ClZF_Exception dynamique
       	// mg_oEx_Exception3	est un ClZF_Exception dynamique
@@ -42,8 +42,8 @@ class :
       	// mg_oEx_Exception10	est un ClZF_Exception dynamique
       FIN
       
-      mg_oEx_CompoNonInst_IDScr_Usr	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Usr est requis.")			// A faire : Reprendre le message
-      mg_oEx_CompoNonInst_IDScr_Epic	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Epic est requis.")			// A faire : Reprendre le message
+      mg_oEx_CompoNonInst_IDScr_Usr			= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Usr est requis.")			// A faire : Reprendre le message
+      mg_oEx_CompoNonInst_IDScr_Epic			= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Epic est requis.")			// A faire : Reprendre le message
       mg_oEx_CompoNonInst_IDScr_Epic_Usr_Role	= Allouer un ClZF_Exception("Enregistrement impossible : m_oIDScr_Epic_Usr_Role est requis.")			// A faire : Reprendre le message
       // mg_oEx_Exception1	= Allouer un ClZF_Exception(". . .")
       // mg_oEx_Exception2	= Allouer un ClZF_Exception(". . .")
@@ -64,13 +64,24 @@ class :
      name : Constructeur
      procedure_id : 817308190975081
      type_code : 27
-     code : |1-
+     code : |1+
       PROCÉDURE Constructeur(LOCAL nID_P est un entier)
       Ancêtre.Constructeur(Scr_Epic_Usr..Nom, Scr_Epic_Usr.IDScr_Epic_Usr..Nom,nID_P)
       
-      :AddMembreCle(Scr_Epic_Usr.IDScr_Epic..Nom)
-      :AddMembreCle(Scr_Epic_Usr.IDScr_Usr..Nom)
      type : 589824
+   -
+     name : Constructeur
+     procedure_id : 817308190975081
+     type_code : 27
+     code : |1-
+      PROCÉDURE Constructeur(LOCAL nIDEpic_P est un entier, LOCAL nIDUser_P est un entier)
+      Ancêtre.Constructeur(Scr_Epic_Usr..Nom, Scr_Epic_Usr.IDScr_Epic_Usr..Nom,ClZF_ObjDbLs.cstModeSansChargement)
+      
+      :p_oIDScr_Epic_ID	= nIDEpic_P
+      :p_oIDScr_Usr_ID	= nIDUser_P
+      
+      :RechEnrDeCles()
+     type : 589825
    -
      name : Destructeur
      procedure_id : 817308190975082
@@ -86,9 +97,46 @@ class :
      code : |1+
       PROCÉDURE GLOBALE GetObj(LOCAL nIdUnique_P est un entier)<métier>:ClDbEpic_Usr
       
-      sClasse est une chaîne = ClDbEpic_Usr
-      RENVOYER ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+      oRetour	est un ClDbEpic_Usr dynamique
+      
+      sClasse	est une chaîne	= ClDbEpic_Usr
+      oRetour <- ClZF_ObjDB.ZF_GetObj(sClasse, nIdUnique_P)
+      //oRetour.ZF_RenommeCle()
+      RENVOYER oRetour
      type : 458752
+   -
+     name : GetObj
+     procedure_id : 817308190975083
+     type_code : 12
+     code : |1-
+      PROCÉDURE GLOBALE GetObj(LOCAL nIdEpic_P est un entier, LOCAL nIdUsr_P est un entier)<métier>:ClDbEpic_Usr
+      
+      oRetour	est un ClDbEpic_Usr dynamique
+      sClasse	est une chaîne
+      sCle	est une chaîne
+      
+      sClasse = ClDbEpic
+      oIdEpic	est un ClDbEpic <- ClZF_ObjDB.ZF_GetObj(sClasse, nIdEpic_P)
+      sClasse = ClDbUsr
+      oIdUSR	est un ClDbUsr <- ClZF_ObjDB.ZF_GetObj(sClasse, nIdUsr_P)
+      
+      sCle = ZF_sGenTblCleInstance(oIdEpic, oIdUSR)
+      
+      
+      oRetour <- ClZF_ObjDbLs.ZF_RecupObjDeCle(sCle)
+      si oRetour = Null ALORS
+      	oRetour = allouer un ClDbEpic_Usr(nIdEpic_P, nIdUsr_P)
+      FIN
+      
+      
+      
+      sClasse = ClDbEpic_Usr
+      sCle	= ::ZF_sCleOdb(sClasse, oRetour.ZF_Get_IdUnique())
+      ClZF_App.mg_aoInstances[sCle] <- oRetour
+      
+      
+      renvoyer oRetour
+     type : 458753
    -
      name : init_ObjBD
      procedure_id : 817308190975084
@@ -143,6 +191,17 @@ class :
       
       
       FIN
+     type : 458752
+   -
+     name : defCleCompoPrimaire
+     procedure_id : 1619930057759322225
+     type_code : 12
+     code : |1+
+      // Redéfinition de la méthode ClZF_ObjRel.defCleCompoPrimaire
+      PROCÉDURE  defCleCompoPrimaire()<métier>:Vide
+      
+      :AddMembreCle(Scr_Epic_Usr.IDScr_Epic..Nom)
+      :AddMembreCle(Scr_Epic_Usr.IDScr_Usr..Nom)
      type : 458752
   properties :
    -

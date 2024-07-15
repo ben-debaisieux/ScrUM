@@ -18,10 +18,12 @@ class :
       ClZF_ColObjDB est une Classe, abstraite
       	herite de ClZF_ObjCache
       prive
-      	m_aoObj est un tableau de ClZF_ObjDBls dynamique
+      	m_aoObj			est un tableau de ClZF_ObjDBls dynamique
+      	m_sMembreTri	est une chaîne 
       public
       GLOBAL
       	mg_oEx_IndiceInexistant est un ClZF_Exception dynamique
+      	mg_oEx_TriManquant est un ClZF_Exception dynamique
       fin
       
       constante
@@ -31,7 +33,8 @@ class :
       	cstMvDer		= -4
       fin
       
-      mg_oEx_IndiceInexistant = allouer un ClZF_Exception("Indice hors de porté : il doit être compris ente 0 et %1")
+      ::mg_oEx_IndiceInexistant	= allouer un ClZF_Exception("Indice hors de porté : il doit être compris ente 0 et %1")
+      ::mg_oEx_TriManquant		= allouer un ClZF_Exception("Aucune propriété de tri n'a été définie, avant d'effectuer le changement d'ordre")
      type : 131072
   procedures :
    -
@@ -313,7 +316,7 @@ class :
      name : ZF_LoadSQL
      procedure_id : 1424025269602773848
      type_code : 12
-     code : |1-
+     code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //ZF_LoadSQL (<sSql_P> est chaîne)
@@ -340,7 +343,6 @@ class :
       	//Appel au pré chargement des données dépendantes (s'il y en a)
       	:pre_load(sdLoadColSQL)
       	HLitPremier(sdLoadColSQL, hSansRafraîchir)
-      	
       sinon
       	bRecupObj = vrai
       FIN
@@ -359,6 +361,11 @@ class :
       
       
       HAnnuleDéclaration(sdLoadColSQL)
+      
+      //Application du tri si définit
+      si :m_sMembreTri <> "" ALORS
+      	:ZF_AppTri()
+      FIN
      type : 458752
    -
      name : addItemBySource
@@ -381,19 +388,21 @@ class :
       //	nId_p (entier) : <indiquez ici le rôle de nId_p>
       procédure addItemBySource(sdSource_p est une source de données)<métier>:vide
       
-      oObj est un ClZF_ObjDbLs <- ClZF_ObjDbLs.ZF_GetObj(:sClasseObjDbAsso(),ClZF_ObjDbLs.cstModeSansChargement)
-      //:ZF_addItemBySource_prot(sdSource_p, oObj, sdSource_p.IDScr_CritereAccept)
-      nId est un entier = {sdSource_p..nom + "." + oObj.p_ZF_sNom_Col_Id_Auto, indRubrique}
-      
-      
       bObjEnCache	est un booléen
       sCle		est une chaîne
+      oObj		est un ClZF_ObjDbLs Dynamique
+      nId			est un entier
+      
+      
+      
+      //Chargement de l'objet 'vierge' avec les données de la source
+      oObj <- ClZF_ObjDbLs.ZF_GetObj(:sClasseObjDbAsso(),ClZF_ObjDbLs.cstModeSansChargement)
+      nId = {sdSource_p..nom + "." + oObj.p_ZF_sNom_Col_Id_Auto, indRubrique}
       
       
       //Référencement de l'objet chargé (si pas déjà en mémoire)
       sCle  = ClZF_ObjDB.ZF_sCleOdb(:sClasseObjDbAsso(), nId)
       SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
-      	//Chargement de l'objet 'vierge' avec les données de la source
       	//Mise en cache de l'objet
       	ClZF_App.mg_aoInstances[sCle] <- oObj
       	
@@ -404,13 +413,16 @@ class :
       	SI :ZF_bEstExpire() ALORS
       		ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbObjBd_Expire++
       	SINON
+      		
       		bObjEnCache = Vrai
       	FIN
       FIN
       
       
-      //Chargement de l'objet 'vierge' avec les données de la source
-      oObj.ZF_Charge_source(sdSource_p)
+      si pas bObjEnCache alors
+      	//Chargement de l'objet 'vierge' avec les données de la source
+      	oObj.ZF_Charge_source(sdSource_p)
+      fin
       
       
       //Les objets de relation ont une seconde clé.
@@ -523,7 +535,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure protégée pre_load(sdSource_P est une source de données<utile>)
+      procédure protégée pre_load(sdSource_P est une source de données<utile>)<métier>:vide
       
      type : 458752
    -
@@ -570,10 +582,10 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure oItem(nPos_p):ClZF_ObjDbLs
+      procédure oItem(nPos_p)<métier>:ClZF_ObjDbLs
       
       si pas(0 < nPos_p <= :ZF_nTaille()) ALORS
-      	mg_oEx_IndiceInexistant.ZF_Declenche([:ZF_nTaille()])
+      	::mg_oEx_IndiceInexistant.ZF_Declenche([:ZF_nTaille()])
       FIN
       //aTblTmp est un tableau de ClZF_ObjDbLs dynamique <- :p_aoObj
       renvoyer :m_aoObj[nPos_p]
@@ -595,9 +607,10 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure ZF_Tri(sOrdre_p est une chaîne)<metier>:vide
-      
-      TableauTrie(:p_aoObj, ttMembre, sOrdre_p)
+      procédure ZF_Tri(sOrdre_p est une chaîne)<zombie>:vide
+      :m_sMembreTri = sOrdre_p
+      :ZF_AppTri()
+      //TableauTrie(:p_aoObj, ttMembre, sOrdre_p)
      type : 458752
    -
      name : ZF_ChargeCbo
@@ -888,7 +901,6 @@ class :
       procédure ZF_VersTableauAssociatif(sNomMembre_p est une chaîne) <métier>:tableau associatif de ClZF_ObjDbLs dynamique
       
       aRetour est un tableau associatif de ClZF_ObjDbLs dynamique
-      //oObjTmp est un ClZF_ObjDbLs dynamique
       sCle est une chaîne
       
       pour tout oObjTmp de :m_aoObj
@@ -916,7 +928,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure protegee abstraite sClasseObjDbAsso():chaine
+      procédure protegee abstraite sClasseObjDbAsso()<métier>:chaine
       //sClasse est une chaine = ClZF_ObjDbLs
       //Renvoyer sClasse
       
@@ -931,14 +943,20 @@ class :
       nPosActu est un entier = :ZF_Recherche(oObjDb_p)
       nNouvPos est un entier
       
+      //On s'assure qu'il y ait eu un tri appliqué, pour effectuer le déplacement.
+      si :m_sMembreTri = "" ALORS
+      	::mg_oEx_TriManquant.ZF_Declenche()
+      FIN
+      
+      
       selon nMouvement_p
-      	CAS cstMvPremier
+      	CAS ::cstMvPremier
       		nNouvPos = 1
-      	CAS cstMvPrec
+      	CAS ::cstMvPrec
       		nNouvPos = max(1, nPosActu - 1)
-      	CAS cstMvSuiv
+      	CAS ::cstMvSuiv
       		nNouvPos = Min(:ZF_nTaille(), nPosActu + 1)
-      	CAS cstMvDer
+      	CAS ::cstMvDer
       		nNouvPos = :ZF_nTaille()
       	cas 1 <= * <= :ZF_nTaille()
       		nNouvPos = nMouvement_p
@@ -956,23 +974,70 @@ class :
      procedure_id : 1579138373854663993
      type_code : 12
      code : |1-
-      PROCÉDURE PUBLIQUE ZF_EnrPos(sProprieteOrdre_p est une chaîne)<metier>:vide
+      PROCÉDURE PUBLIQUE ZF_EnrPos(oExclusion_p est un ClZF_ObjDB dynamique = null)<metier>:vide
+      //PROCÉDURE PUBLIQUE ZF_EnrPos(sProprieteOrdre_p est une chaîne, oExclusion_p est un ClZF_ObjDB dynamique = null)<metier>:vide
       
       oObjTmp2	est un ClZF_ObjDb dynamique
       nCpt	est un entier
+      
+      
+      //On s'assure qu'il y ait eu un tri appliqué, pour effectuer le déplacement.
+      SI :m_sMembreTri = "" ALORS
+      	::mg_oEx_TriManquant.ZF_Declenche()
+      FIN
       
       ClZF_ObjDbLs.mg_oApp.TranDebut()
       
       // Parcours de tous les éléments du tableau d'origine
       POUR TOUT oObjTmp, nCpt de :aItems()
       	oObjTmp2 <- oObjTmp
-      	{"oObjTmp2." + sProprieteOrdre_p,indVariable} = nCpt
+      	{"oObjTmp2." + :m_sMembreTri,indVariable} = nCpt
+      	//A t on eu une modification ? et est ce que l'objet n'est pas exclu pour l'enregistrement ?
       	si oObjTmp2.ZF_bEstModifie() alors
-      		oObjTmp2.ZF_Enregistre()
+      		si PAS ClZF_ObjDbLs.ZF_bObjEgal(oObjTmp,oExclusion_p) alors
+      			oObjTmp2.ZF_Enregistre()
+      		FIN
       	FIN
       FIN
       
       ClZF_ObjDbLs.mg_oApp.TranFin()
+     type : 458752
+   -
+     name : ZF_DefTri
+     procedure_id : 1606733633214590423
+     type_code : 12
+     code : |1+
+      procédure ZF_DefTri(sMethode_p est une chaîne) <métier>:vide
+      
+      si EnModeTest() ALORS
+      	defCollection	est une Définition
+      	LstPropriete	est une Description de propriété 
+      	bTrouve			est un booléen
+      	defCollection = RécupèreDéfinitionType(:sClasseObjDbAsso())
+      	pour tout LstPropriete de defCollection.Propriété
+      		si sMethode_p = LstPropriete..nom ALORS
+      			bTrouve = vrai
+      			sortir
+      		FIN
+      	FIN
+      	si pas bTrouve ALORS
+      		ExceptionDéclenche(1, "Propriété de tri [%sMethode_p%] non trouvée dans le classe [%:sClasseObjDbAsso()%]")
+      	FIN
+      FIN
+      
+      :m_sMembreTri = sMethode_p
+      
+      si :ZF_nTaille() > 0 ALORS
+      	:ZF_AppTri()
+      FIN
+     type : 458752
+   -
+     name : ZF_AppTri
+     procedure_id : 1606741875388315415
+     type_code : 12
+     code : |1+
+      procedure prive ZF_AppTri()<metier>:vide
+      TableauTrie(:m_aoObj, ttMembre, ":" + :m_sMembreTri)
      type : 458752
   properties :
    -

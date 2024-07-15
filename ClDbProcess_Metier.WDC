@@ -235,7 +235,7 @@ class :
       		//AjouteRéférence(aoRetour,oInterTmp)
       	FIN
       FIN
-      aoRetour.ZF_Tri("OrdreAbsolu")
+      aoRetour.ZF_DefTri("Ordre")
       
       
       renvoyer aoRetour
@@ -438,7 +438,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
-      PROCÉDURE  Init_ObjBD()
+      PROCÉDURE  Init_ObjBD()<métier>:Vide
       
       
       oAxeTmp est un ClDbProcess_Metier_Axe dynamique

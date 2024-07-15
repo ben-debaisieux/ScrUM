@@ -129,7 +129,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
-      PROCÉDURE  Init_ObjBD()
+      PROCÉDURE  Init_ObjBD()<métier>:Vide
       
       oInterTmp est un ClDbProcess_Metier_Intervenant dynamique
       

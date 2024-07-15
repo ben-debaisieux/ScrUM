@@ -180,7 +180,7 @@ class :
       	HAnnuleDéclaration(sdDelUserStoresHisto)
       	
       	//Suppression de toues les taches si encore présentes.
-      	POUR TOUT Element oTache de ClColTache.aoFromUS(objet).aItems()	//:aoListeTaches(Vrai).aItems()
+      	POUR TOUT Element oTache de ClColTache.oFromUserStory(objet).aItems()	//:aoListeTaches(Vrai).aItems()
       		oTache.ZF_Supprimer()
       		oTache.ZF_Enregistre()
       	FIN
@@ -509,7 +509,7 @@ class :
       
       oTache est un ClDbTache dynamique
       
-      pour tout element oTache de ClColTache.aoFromUS(objet).aItems()	//:aoListeTaches().aItems()
+      pour tout element oTache de ClColTache.oFromUserStory(objet).aItems()	//:aoListeTaches().aItems()
       	si oTache.p_nNum_Sprint_Fin = 0 et pas oTache.p_btache_tech ALORS
       		oTache.p_nNum_Sprint_Fin = goApp.m_nNumeroDuSprintActuel
       		si oTache.p_nNum_Sprint_Realisation > goApp.m_nNumeroDuSprintActuel ALORS
@@ -565,7 +565,7 @@ class :
       
       
       //Définition de l'etat de l'us (finie, commencée, pas commencée, annulée)
-      pour tout element oTache de ClColTache.aoFromUS(objet).aItems()	//:aoListeTaches().aItems()
+      pour tout element oTache de ClColTache.oFromUserStory(objet).aItems()	//:aoListeTaches().aItems()
       	
       	si oTache.p_bAnnule = Vrai alors
       		:m_nNbreTacheAnnulee++
@@ -605,7 +605,7 @@ class :
       si :m_bAnnule alors
       	:m_eEtatUserStorie = ECompteNbUS.Annulée
       sinon
-      	oColTaches est un ClColTache <- ClColTache.aoFromUS(objet)
+      	oColTaches est un ClColTache <- ClColTache.oFromUserStory(objet)
       	
       	si oColTaches.ZF_nTaille() = 0 ALORS
       		//Si elle a été testée, alors elle est finie
@@ -742,7 +742,7 @@ class :
       //Est ce qu'on vient de valider les tests fonctionnels ?
       si :m_bEstTestéParLeDemandeur et pas :m_bMemoEstFini alors
       	//Oui, on passe les taches en "fini".
-      	POUR TOUT ELEMENT oTacheTmp DE ClColTache.aoFromUS(objet).aItems()	//:aoListeTaches().aItems()
+      	POUR TOUT ELEMENT oTacheTmp DE ClColTache.oFromUserStory(objet).aItems()	//:aoListeTaches().aItems()
       		si oTacheTmp.p_nNum_Sprint_Fin = 0 et oTacheTmp.p_btache_tech = faux alors
       			oTacheTmp.p_nNum_Sprint_Fin		= goApp.p_nNumeroDuSprintActuel
       			oTacheTmp.ZF_Enregistre()
@@ -860,7 +860,7 @@ class :
       
       
       //Recherche de la 1ere tache de l'US
-      pour tout element oTacheTmp de ClColTache.aoFromUS(objet).aItems()	//:aoListeTaches().aItems()
+      pour tout element oTacheTmp de ClColTache.oFromUserStory(objet).aItems()	//:aoListeTaches().aItems()
       	si oTacheTmp.p_nNum_Sprint_Realisation <> 0 ALORS
       		si nPremSprint = 0 ou nPremSprint > oTacheTmp.p_nNum_Sprint_Realisation ALORS
       			nPremSprint = oTacheTmp.p_nNum_Sprint_Realisation
@@ -1018,30 +1018,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       procédure sLibelleDeEtat()<metier>:chaine
-      
       renvoyer ClDbUserStory.sNomDeEtat(:Get_EtatUS())
-      
-      //sRetour est une chaîne
-      //
-      //selon :Get_EtatUS()
-      //	CAS ECompteNbUS.A_faire
-      //		sRetour = "A faire"
-      //	CAS ECompteNbUS.EnCours
-      //		sRetour = "En cours"
-      //	CAS ECompteNbUS.Terminee
-      //		sRetour = "Terminée"
-      //	CAS ECompteNbUS.Annulée
-      //		sRetour = "Annulée"
-      //	CAS En_test_fonctionnel
-      //		sRetour = "Test fonctionnel"
-      ////	CAS ECompteNbUS.Toutes
-      //		
-      //	autres cas
-      //		mg_oEx_EtatUsNonDefinit.ZF_Declenche([:ZF_Get_IdUnique()])
-      //		//ExceptionDéclenche(1, "Etat de l'US ""ID : [%:Get_IdUnique()%]"" non prévu.")
-      //FIN
-      //
-      //renvoyer sRetour
      type : 458752
    -
      name : Init_ObjBD

@@ -19,12 +19,12 @@ class :
       ClDbTache est une Classe
       	Hérite de ClZF_ObjDB
       	Hérite de ClZF_Histo
-      //	Hérite de ClHistorique
       	
       prive
       	m_sCodeTache				est une chaîne							<MAPPING=CodeTache>
       	m_sDescription				est une chaîne							<MAPPING=description>
       	m_nPoids					est un entier sur 2 octets				<MAPPING=Poids>
+      	m_nOrdreSprint				est un Entier sans signe sur 1 octet	<MAPPING=OrdreSprint>
       	m_nPoids_Previsionnel		est un entier sur 2 octets				<MAPPING=Poids_previsionnel>
       	m_nOrdre					est un entier sur 2 octets				<MAPPING=Ordre>
       	m_bEstRealise				est un booléen							<MAPPING=Top_Realise>
@@ -178,26 +178,14 @@ class :
       //
       PROCEDURE VIRTUELLE pre_enregistre()<metier>:Vide
       
-      //m_EnrActu est un Enregistrement de Scr_Tache
-      //m_EnrOrigine est un Enregistrement de Scr_Tache
       
       SI :ZF_bEstsupprime() ALORS
       	//On supprime tous les historiques de la user story
       	goApp.EnregHistoBDD(objet)
-      	//:CleanHisto()
       	
       	//Desenregistrement de la tache de l'US parente
-      	ClColTache.aoFromUS(:p_oUserStoryParent).ZF_Supp(objet)
+      	ClColTache.oFromUserStory(:p_oUserStoryParent).ZF_Supp(objet)
       SINON
-      //	SI PAS :ZF_bModeAjout() ALORS
-      //		//En modification :
-      //		
-      //		//On actualise les données en mémoire, pour générer l'historique.
-      //		m_EnrActu = Scr_Tache
-      //		:ZF_Charge(Vrai)
-      //		m_EnrOrigine = Scr_Tache
-      //		Scr_Tache = m_EnrActu
-      //	FIN
       	
       	//Initialisation de l'historisation.
       	:ZF_InitMemo()
@@ -214,8 +202,29 @@ class :
       	//Si l'ordre n'est pas définit, on ajoute la tache en dernier.
       	si :m_nOrdre <= 0 ALORS
       		trace("Pb ordre pour [%:m_sCodeTache%] : [%:m_nOrdre%]")
-      //		:changeOrdre(::cstChangeOrdre_Dernier)
       	FIN
+      	
+      //	//Gestion de l'ordre de la tache dans le sprint de réalisation
+      //	si :m_nNum_Sprint_Realisation > 0 ALORS
+      //		si :m_nOrdreSprint <= 0 ou :m_nOrdreSprint <> Scr_Tache.OrdreSprint alors
+      //			oSpr est un ClDbSprint dynamique	<- ClDbSprint.GetObj(:m_nNum_Sprint_Realisation)
+      //			oColTache est un ClColTache			<- ClColTache.oFromSprint(oSpr, Charge_réelle)
+      //			oColTache.ZF_addItem(objet)			//Ajoute la tache en cours à la collection (si elle ne l'est pas déja)
+      //			:p_nOrdreSprint = oColTache.ZF_nTaille() + 1
+      //		fin
+      //	SINON
+      //		:m_nOrdreSprint = 0
+      //	FIN
+      //	SI Scr_Tache.OrdreSprint > 0 ALORS
+      //		SI :m_nOrdreSprint <> Scr_Tache.OrdreSprint ALORS
+      //			oSpr		est un ClDbSprint dynamique	<- ClDbSprint.GetObj(Scr_Tache.OrdreSprint)
+      //			oColTache	est un ClColTache			<- ClColTache.oFromSprint(oSpr, Charge_réelle)
+      //			oColTache.ZF_Supp(objet)	//Ajoute la tache en cours à la collection (si elle ne l'est pas déja)
+      //			oColTache.ZF_EnrPos("p_nOrdreSprint", objet)
+      //		FIN
+      //	FIN
+      		
+      	
       	
       	si :m_nNum_Sprint_Creation > :m_nNum_Sprint_Demarrage et :m_nNum_Sprint_Demarrage <> 0 alors
       		m_oExPbSpDemarrageErreur.ZF_Declenche([:m_nNum_Sprint_Creation, :m_nNum_Sprint_Demarrage, :m_sCodeTache])
@@ -239,6 +248,10 @@ class :
       	
       	SI :m_nNum_Sprint_Demarrage = 0 ET :m_bEstRealise ALORS
       		mg_oExTacheFinieSansSprintDemarrage.ZF_Declenche([:m_sCodeTache])
+      	FIN
+      	
+      	SI :m_oUserStoryParent = Null ALORS
+      		m_oExEnregUsParentAbsente.ZF_Declenche()
       	FIN
       	
       	//En création ou en modification, son s'assure que le code article n'est pas pris.
@@ -419,7 +432,7 @@ class :
       
       bPoidsValide est un booléen
       
-      aValeurAcepte est un tableau d'entier = [0,1,2,5,8,13,20]
+      aValeurAcepte est un tableau d'entier = [0,1,2,3,5,8,13,20]
       nIndice est un entier 
       
       nIndice = TableauCherche(aValeurAcepte,tcDichotomique,nPoids_p)
@@ -698,51 +711,6 @@ class :
       //FIN
      type : 458752
    -
-     name : sExport
-     procedure_id : 1444819982169885268
-     type_code : 12
-     code : |1+
-      procédure sExport()<metier>:JSON
-      
-      sRetour est un JSON
-      nInd est un entier
-      
-      sRetour.id							= :ZF_Get_IdUnique()
-      sRetour.code						= :m_scodetache
-      sRetour.description					= :m_sdescription
-      sRetour.cancel						= :m_bannule
-      sRetour.is_draft					= :m_bbrouillon
-      sRetour.is_finish					= :m_bestrealise
-      sRetour.is_technic					= :m_btache_tech
-      sRetour.sprint_create				= :m_nnum_sprint_creation
-      sRetour.sprint_start				= :m_nnum_sprint_demarrage
-      sRetour.sprint_end					= :m_nnum_sprint_fin
-      sRetour.sprint_forcast				= :m_nnum_sprint_previsionnel
-      sRetour.sprint_completion			= :m_nnum_sprint_realisation
-      sRetour.num_ticket					= :m_nnumticketincident
-      sRetour.order						= :m_nordre
-      sRetour.width						= :m_npoids
-      sRetour.width_forcast				= :m_npoids_previsionnel
-      sRetour.status						= :m_nstatut
-      sRetour.comment						= :m_scmtr
-      sRetour.comment_stop				= :m_scmtr_blocage
-      sRetour.user_creator				= :m_ousr_createur.sExport()
-      
-      si :m_oUsr_Dev <> null ALORS
-      	sRetour.user_dev				= :m_oUsr_Dev.sExport()
-      FIN
-      
-      
-      nInd = 0
-      oMsg est un ClDbMessage dynamique
-      POUR TOUT ELEMENT oMsg DE ClcolMessage.aoListeMessage(objet).aItems()
-      	nInd++
-      	sRetour.message[nInd] = oMsg.sExport()
-      FIN
-      
-      RENVOYER sRetour
-     type : 458752
-   -
      name : bEstValidee
      procedure_id : 1444819982169950804
      type_code : 12
@@ -764,29 +732,35 @@ class :
       
      type : 458752
    -
-     name : sLibDeStatut
+     name : sStatut
      procedure_id : 1444819982170016340
      type_code : 12
-     code : |1-
-      procédure sLibDeStatut()<metier>:chaine
-      
-      sRetour est une chaîne 
-      
+     code : |1+
+      procédure sStatut()<metier>:chaine
       
       si :m_nStatut = 0 ALORS
       	:m_nStatut = get_statut_tache()
       	trace("Etat à '0' : " + :m_sCodeTache)
       FIN
+      renvoyer sLibDeStatut(:m_nStatut)
+     type : 458752
+   -
+     name : sLibDeStatut
+     procedure_id : 1612405116063064014
+     type_code : 12
+     code : |1-
+      procedure globale sLibDeStatut(local nStatut_p est un entier)<metier>:chaine
       
+      sRetour est une chaîne 
       
-      selon :m_nStatut
-      	cas ::cstStatut_Brouillon
+      SELON nStatut_p
+      	CAS ::cstStatut_Brouillon
       		sRetour = "Brouillon"
       	CAS ::cstStatut_a_coter
       		sRetour = "A coter"
       	CAS ::cstStatut_a_faire
       		sRetour = "A faire"
-      	cas ::cstStatut_en_cours
+      	CAS ::cstStatut_en_cours
       		sRetour = "En cours"
       	CAS ::cstStatut_realise
       		sRetour = "Réalisé"
@@ -796,10 +770,8 @@ class :
       		sRetour = "Suspendue"
       	AUTRE CAS
       		//ExceptionDéclenche(1, "Statut non prévu")
-      		m_oExErreurStatutTacheImpossible.ZF_Declenche([:m_nStatut])
+      		m_oExErreurStatutTacheImpossible.ZF_Declenche([nStatut_p])
       FIN
-      
-      
       renvoyer sRetour
      type : 458752
    -
@@ -807,7 +779,7 @@ class :
      procedure_id : 1444819982170081876
      type_code : 12
      code : |1-
-      procédure privée bCodeTacheDispo(sCodeTache_P est une chaîne)<metier>:booléen
+      procédure privée bCodeTacheDispo(LOCAL sCodeTache_P est une chaîne)<metier>:booléen
       
       
       sdRechCodeTache est une Source de Données
@@ -864,7 +836,7 @@ class :
       nPosInit		est un entier
       nNouvPos		est un entier
       nNbPos			est un entier
-      oLstTachesUS	est un ClColTache	= ClColTache.aoFromUS(oTache_p.p_oUserStoryParent)
+      oLstTachesUS	est un ClColTache	= ClColTache.oFromUserStory(oTache_p.p_oUserStoryParent)
       oTacheTmp		est un ClDbTache dynamique
       bModifTache		est un booléen
       nDecalage		est un entier
@@ -946,7 +918,7 @@ class :
      type_code : 12
      code : |1-
       // Redéfinition de la méthode ClHistorique.TraiteHisto
-      PROCÉDURE  TraiteHisto()
+      PROCÉDURE  TraiteHisto()<métier>:Vide
       
       //a faire
      type : 458752
@@ -980,10 +952,6 @@ class :
       	Scr_Tache.Num_Sprint_Realisation..Null	= Vrai
       FIN
       
-      
-      SI m_oUserStoryParent = Null ALORS
-      	m_oExEnregUsParentAbsente.ZF_Declenche()
-      FIN
       
       //Enregistrement du sprint de fin
       SI :m_nNum_Sprint_Fin = 0 ALORS
@@ -1019,6 +987,62 @@ class :
      code : |1-
       PROCÉDURE PRIVÉ setCallBackostEnreg()<métier>:Vide
       :m_procCallPostEnreg = goApp.EnregHistoBDD
+     type : 458752
+   -
+     name : sGetNextNumTache
+     procedure_id : 1599066511029000056
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] sGetNextNumTache (<oUS_p> est ClDbUserStory)
+      //
+      // Paramètres :
+      //	oUS_p (ClDbUserStory) : <indiquez ici le rôle de oPrj_p>
+      
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure sGetNextNumTache(oUS_p est un ClDbUserStory)<métier>:chaine
+      
+      sRetour			est une chaîne
+      sPrefixe		est une chaîne	= oUS_p.p_sCodeUserStory
+      sSufixe			est une chaîne
+      sdCodesTaches	est une Source de Données
+      sReq			est une chaîne
+      
+      sReq = [
+      select top 1
+      
+      	Scr_Tache.CodeTache
+      
+      
+      from Scr_Tache
+      	INNER JOIN Scr_UserStory on (Scr_UserStory.IDScr_UserStory = Scr_Tache.IDScr_UserStory)
+      
+      
+      where Scr_Tache.CodeTache like '[%sPrefixe%]]%'
+      	--and SUBSTRING(Scr_Tache.CodeTache, [%(taille(sPrefixe) + 1) %], 1) between '0' and '9'
+      
+      order by Scr_Tache.CodeTache desc
+      ]
+      goapp.RSQL(sdCodesTaches,sReq)
+      HLitPremier(sdCodesTaches, hSansRafraîchir)
+      si HEnDehors(sdCodesTaches) alors
+      	sSufixe = "a"
+      sinon
+      	sSufixe = droite(sdCodesTaches.CodeTache,1)
+      	sSufixe = caract(Asc(sSufixe) + 1)
+      FIN
+      HAnnuleDéclaration(sdCodesTaches)
+      
+      sRetour = sPrefixe + sSufixe
+      
+      renvoyer sRetour
+      
      type : 458752
   properties :
    -
@@ -1060,6 +1084,10 @@ class :
          si PAS ZF_bObjEgal(:m_oUserStoryParent, oValeur) alors
          	:ZF_EstModif()
          	:m_oUserStoryParent <- oValeur
+         	
+         	
+         //	:p_sCodeTache = :sGetNextNumTache(oValeur)
+         	
          fin
         type : 2031616
      template_refs : []
@@ -1563,6 +1591,29 @@ class :
          SINON
          	:p_oUserStoryParent = ClDbUserStory.GetObj(nValeur_p)
          FIN
+        type : 2031616
+     template_refs : []
+   -
+     name : p_nOrdreSprint
+     identifier : 0x16295d6c0a2b7a60
+     type_code : 103
+     p_codes :
+      -
+        code : |1+
+         PROCEDURE p_nOrdreSprint()<métier>:Entier
+         //Propriétés de m_nOrdreSprint
+         
+         RENVOYER :m_nOrdreSprint
+        type : 1966080
+      -
+        code : |1+
+         PROCEDURE p_nOrdreSprint(nValeur_p est un Entier sans signe sur 1 octet)<métier>:Vide
+         
+         SI :m_nOrdreSprint <> nValeur_p ALORS
+         	:ZF_EstModif()
+         	:m_nOrdreSprint = nValeur_p
+         FIN
+         
         type : 2031616
      template_refs : []
   procedure_templates : []

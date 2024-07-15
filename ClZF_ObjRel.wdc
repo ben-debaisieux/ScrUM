@@ -19,6 +19,7 @@ class :
       	herite de ClZF_ObjDB
       PRIVE
       	m_aCompoClePrim est un tableau associatif de ClZF_ObjDbLs dynamique
+      	m_sNomCleCompo est une chaîne 
       fin
      type : 131072
   procedures :
@@ -26,9 +27,10 @@ class :
      name : Constructeur
      procedure_id : 1523060571322308336
      type_code : 27
-     code : |1-
+     code : |1+
       procédure Constructeur(sNomTable_P est une chaîne , sNomColIdAuto_P est une chaîne , nId_P est un entier = 0)
       Ancêtre.Constructeur(sNomTable_P, sNomColIdAuto_P, nId_P)
+      :defCleCompoPrimaire()
      type : 589824
    -
      name : Destructeur
@@ -54,9 +56,14 @@ class :
      name : setCle
      procedure_id : 1529759220910027727
      type_code : 12
-     code : |1-
+     code : |1+
       procedure protege setCle(LOCAL sCle_p est une chaîne, oObjDB est un ClZF_ObjDbLs)<metier>:vide
+      
+      //Mémorisation du nouvel objet en tant que composante de clé primaire.
       :m_aCompoClePrim[sCle_p] = oObjDB
+      
+      //Restion du changement de la clé identifiant l'objet.
+      :ZF_RenommeCle()
      type : 458752
    -
      name : RechEnrDeCles
@@ -65,17 +72,17 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] RechEnrDeCles ()
+      //RechEnrDeCles ()
       //
       // Paramètres :
       //	Aucun
       // Valeur de retour :
-      // 	ClZF_ObjDbLs : <indiquez ici le rôle de la valeur de retour>
+      // 	Aucune
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure RechEnrDeCles() <métier>:ClZF_ObjDbLs
+      procédure RechEnrDeCles() <métier>:vide
       
       sRubs		est une chaîne
       sRubMap		est une chaîne
@@ -86,12 +93,11 @@ class :
       bErreurInit	est un booléen
       
       
-      sCle est une chaîne = ZF_sGetNomInstanceRel()
-      //oInst est un ClZF_ColObjDB dynamique <- goApp.mg_aoInstances[sCle]
+      sCle est une chaîne = :ZF_sGetNomInstanceRel()
       oObjRetour <- ClZF_App.mg_aoInstances[sCle]
+      
       si oObjRetour = null _ou_ oObjRetour.ZF_bEstExpire() alors
-      //	Trace(sCle + "!")
-      	//trace(dbgInfo(dbgPile))
+      
       	//Construction de la condition de sélection
       	pour toute oObj, sRubMap de :m_aCompoClePrim
       		si oObj = Null ou oObj.ZF_Get_IdUnique() <= 0 ALORS
@@ -110,39 +116,156 @@ class :
       			*
       		FROM [%:p_ZF_sNomTable%]
       		WHERE [%sRubs%]
-      			AND [%:p_sNom_Col_Id_Auto%] <> [%:ZF_Get_IdUnique()%]
+      		
       		]
       		
-      		mg_oApp.Rsql(sdGetEnr,sReq)
+      		::mg_oApp.Rsql(sdGetEnr,sReq)
       		HLitPremier(sdGetEnr)
       		si pas HEnDehors(sdGetEnr) ALORS
-      			oObjRetour <- ClZF_ObjDB.ZF_GetObj(objet..classe, ClZF_ObjDbLs.cstModeSansChargement)
-      			oObjRetour.ZF_Charge_source(sdGetEnr)
+      			:ZF_Charge_source(sdGetEnr)
       		sinon
-      			oObjRetour <- objet
+      			//erreur !
       		FIN
       		ClZF_App.mg_aoInstances[sCle] <- oObjRetour
+      	sinon
+      		//entité inexistante : on passe en mode création
       	fin
       sinon
       //	Trace(sCle + "ok")
       	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_Cache++
       fin
       
-      renvoyer oObjRetour
+      //renvoyer oObjRetour
+      //sRubs		est une chaîne
+      //sRubMap		est une chaîne
+      //sReq		est une chaîne
+      //sdGetEnr	est une source de données
+      //oObj		est un ClZF_ObjDbLs dynamique
+      //oObjRetour	est un ClZF_ObjDbLs dynamique
+      //bErreurInit	est un booléen
+      //
+      //
+      //sCle est une chaîne = ZF_sGetNomInstanceRel()
+      ////oInst est un ClZF_ColObjDB dynamique <- goApp.mg_aoInstances[sCle]
+      //oObjRetour <- ClZF_App.mg_aoInstances[sCle]
+      //si oObjRetour = null _ou_ oObjRetour.ZF_bEstExpire() alors
+      ////	Trace(sCle + "!")
+      //	//trace(dbgInfo(dbgPile))
+      //	//Construction de la condition de sélection
+      //	pour toute oObj, sRubMap de :m_aCompoClePrim
+      //		si oObj = Null ou oObj.ZF_Get_IdUnique() <= 0 ALORS
+      //			bErreurInit = vrai
+      //			sortir
+      //		sinon
+      //			sRubs += [RC + "AND "] + sRubMap + " = " + oObj.ZF_Get_IdUnique()
+      //		FIN
+      //	FIN
+      //	
+      //	
+      //	si pas bErreurInit alors
+      //		
+      //		sReq = [
+      //		SELECT
+      //			*
+      //		FROM [%:p_ZF_sNomTable%]
+      //		WHERE [%sRubs%]
+      //			AND [%:p_sNom_Col_Id_Auto%] <> [%:ZF_Get_IdUnique()%]
+      //		]
+      //		
+      //		mg_oApp.Rsql(sdGetEnr,sReq)
+      //		HLitPremier(sdGetEnr)
+      //		si pas HEnDehors(sdGetEnr) ALORS
+      //			oObjRetour <- ClZF_ObjDB.ZF_GetObj(objet..classe, ClZF_ObjDbLs.cstModeSansChargement)
+      //			oObjRetour.ZF_Charge_source(sdGetEnr)
+      //		sinon
+      //			oObjRetour <- objet
+      //		FIN
+      //		ClZF_App.mg_aoInstances[sCle] <- oObjRetour
+      //	fin
+      //sinon
+      ////	Trace(sCle + "ok")
+      //	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbDeclarationObjBd_Cache++
+      //fin
+      //
+      //renvoyer oObjRetour
       
      type : 458752
    -
      name : ZF_sGetNomInstanceRel
      procedure_id : 1541627470235910688
      type_code : 12
-     code : |1+
+     code : |1-
       procedure ZF_sGetNomInstanceRel()<métier>:chaîne
+      RENVOYER ::ZF_sGenNomInstance(:m_aCompoClePrim)
+     type : 458752
+   -
+     name : defCleCompoPrimaire
+     procedure_id : 1619929147224994850
+     type_code : 12
+     code : |1+
+      procedure abstraite defCleCompoPrimaire()<metier>:vide
+      
+      //:AddMembreCle(aaa.zzz..Nom)
+      //:AddMembreCle(aaa.eee..Nom)
+     type : 458752
+   -
+     name : ZF_sGenNomInstance
+     procedure_id : 1620120612641566102
+     type_code : 12
+     code : |1+
+      procédure globale ZF_sGenNomInstance(aCles_p est un tableau associatif de ClZF_ObjDbLs dynamique)<metier>:chaine
       
       sRetour est une chaîne
-      POUR TOUTE oObj, sRubMap de :m_aCompoClePrim
-      	sRetour += ZF_sCleOdb(oObj..Classe, oObj.ZF_Get_IdUnique())
+      POUR TOUTE oObj de aCles_p
+      	
+      	//Si une composante n'est pas instancié, on sort du traitement
+      	si oObj = null ALORS
+      		sRetour = ""
+      		sortir
+      	FIN
+      	
+      	sRetour += ::ZF_sCleOdb(oObj..Classe, oObj.ZF_Get_IdUnique())
       FIN
       RENVOYER sRetour
+     type : 458752
+   -
+     name : ZF_sGenTblCleInstance
+     procedure_id : 1620126866114356533
+     type_code : 12
+     code : |1+
+      procedure globale ZF_sGenTblCleInstance(*)<metier>:tableau de ClZF_ObjDbLs dynamique
+      
+      aCles_p est un tableau de ClZF_ObjDbLs dynamique
+      nParam est un entier
+      
+      POUR nParam = 1 _A_ MesParamètres..Occurrence
+      	TableauAjouteRéférence(aCles_p, MesParamètres[nParam])
+      FIN
+      
+      renvoyer aCles_p
+     type : 458752
+   -
+     name : ZF_RenommeCle
+     procedure_id : 1625871844539684103
+     type_code : 12
+     code : |1-
+      procedure ZF_RenommeCle()<métier>:vide
+      
+      //Calcul du nom de la nouvelle clé
+      sNomCleActu est une chaîne = ZF_sGetNomInstanceRel()
+      
+      //A t elle changée ?
+      si sNomCleActu <> "" _et_ :m_sNomCleCompo <> sNomCleActu ALORS
+      	//Oui : on renomme la clé qui référence l'objet.
+      	si :m_sNomCleCompo <> "" alors
+      		si pas ClZF_App.mg_aoInstances[:m_sNomCleCompo]..vide ALORS
+      			TableauSupprime(ClZF_App.mg_aoInstances, :m_sNomCleCompo)
+      		FIN
+      	FIN
+      	
+      	ClZF_App.mg_aoInstances[sNomCleActu] <- objet
+      	:m_sNomCleCompo = sNomCleActu
+      FIN
      type : 458752
   procedure_templates : []
   property_templates : []

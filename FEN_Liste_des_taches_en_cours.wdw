@@ -269,9 +269,9 @@ window :
       
       
       POUR TOUT ELÉMENT oPrj DE ClColProjet.aoListeProjets().aItems()
-      	POUR TOUT ELÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()	//oPrj.aoListeUS().aItems()
+      	POUR TOUT ELÉMENT oUs DE ClColUserStory.oFromProjet(oPrj).aitems()
       		
-      		POUR TOUT ELÉMENT oTache_Tmp DE ClColTache.aoFromUS(oUs).aItems()	//oUs.aoListeTaches().aItems()
+      		POUR TOUT ELÉMENT oTache_Tmp DE ClColTache.oFromUserStory(oUs).aItems()
       			
       //			Trace("Tache : " + oTache_Tmp.p_sCodeTache)
       //			Trace("Aff" + oTache_Tmp:p_nPoids + "-" + oTache_Tmp:p_nPoids_Previsionnel + "-" + oTache_Tmp:p_bAnnule + "-" + oTache_Tmp.p_bBrouillon)
@@ -279,13 +279,13 @@ window :
       			SI oTache_Tmp.p_nStatut DANS(ClDbTache.cstStatut_en_cours) ALORS
       				nNumLigne									= TableAjouteLigne(TBL_taches)
       				TBL_taches[nNumLigne].COL_idTache			= oTache_Tmp.Get_IdUnique()
-      				TBL_taches[nNumLigne].COL_Projet			= oUs.p_oProjetParent.p_sNom
+      				TBL_taches[nNumLigne].COL_Projet			= oUs.p_oIDScr_Projet.p_sNom
       				TBL_taches[nNumLigne].COL_US				= oUs.p_sCodeUserStory +  " - " + oUs.sNommination_US()
       				TBL_taches[nNumLigne].COL_US..Bulle			= oUs.p_sCMTR_Global
       				TBL_taches[nNumLigne].COL_Tache				= oTache_Tmp.p_sCodeTache + " - " + oTache_Tmp.p_sDescription
       				TBL_taches[nNumLigne].COL_Tache..Bulle		= oTache_Tmp.p_sCMTR
       				TBL_taches[nNumLigne].COL_Sprint			= oTache_Tmp.p_nNum_Sprint_Realisation
-      				TBL_taches[nNumLigne].COL_Statut			= oTache_Tmp.sLibDeStatut()
+      				TBL_taches[nNumLigne].COL_Statut			= oTache_Tmp.sStatut()
       				
       				SI oTache_Tmp.p_oUsr_Dev = Null ALORS
       					//stop

@@ -35,7 +35,9 @@ procedure_set :
       	sBesoinUserStorie	est une chaine
       	sAfindeUserStorie	est une chaîne
       	nPrioritéUserStorie	est un entier
-      	
+      		
+      	bNouvFormat			est un booléen
+      
       	nIDResponsable		est un entier
       	nIDProjet			est un entier
       	eEtatUserStorie		est un ClDbUserStory.ECompteNbUS
@@ -56,34 +58,33 @@ procedure_set :
       FIN
       
       STR_Tache est une structure
-      	nIDTache est un entier
-      	sCodeTache est une chaîne
-      	sDescription est une chaine
-      	nIDUserStorie est un entier
-      	nNumSprintCreation est un entier
-      	nPoids est un variant
-      	nPoids_Prevision est un variant
-      	sRealise est une chaine
-      	sCommentaire est une chaîne
-      
-      	sProjet est une chaine
-      	sGroupement est une chaine
-      	sTesteur est une  chaine
-      	bDemarree est un booleen
-      	bTermine est un booleen
-      	bAnnulee est un booleen
-      	bBrouillon est un booléen
-      	bTechnique est un booléen
-      	nOrdre est un entier
+      	nIDTache				est un entier
+      	sCodeTache				est une chaîne
+      	sDescription			est une chaine
+      	nIDUserStorie			est un entier
+      	nNumSprintCreation		est un entier
+      	nPoids					est un variant
+      	nPoids_Prevision		est un variant
+      	sCommentaire			est une chaîne
       	
-      	nNumSprintDemarage est un entier
-      	nNumSprintRealisation est un entier
-      	nNumSprintPrevision est un entier
-      	nNumSprintFin est un entier
+      	sProjet					est une chaine
+      	sGroupement				est une chaine
+      	sTesteur				est une  chaine
+      	bDemarree				est un booleen
+      	bTermine				est un booleen
+      	bAnnulee				est un booleen
+      	bBrouillon				est un booléen
+      	bTechnique				est un booléen
+      	nOrdre					est un entier
+      	
+      	nNumSprintDemarage		est un entier
+      	nNumSprintRealisation	est un entier
+      	nNumSprintPrevision		est un entier
+      	nNumSprintFin			est un entier
       	
       	//ETAT du sprint
-      	sEtat est une chaine
-      	sBesoinUserStory est une chaine
+      	sEtat					est une chaine
+      	sBesoinUserStory		est une chaine
       fin
       
       STR_Projet est une structure
@@ -336,24 +337,38 @@ procedure_set :
       aoRes		est un tableau de ClZF_ObjDB dynamique
       
       sReq = [
-      
-      SELECT
-      	1 AS Type,
-      	Scr_UserStory.IDScr_UserStory AS Id
-      FROM Scr_UserStory
-      WHERE match(Scr_UserStory.CodeUserStory, Scr_UserStory.EntantQue, Scr_UserStory.JaiBesoinDe, Scr_UserStory.AfinDe, Scr_UserStory.CMTR_Global, Scr_UserStory.CMTR_Mise_En_Prod, Scr_UserStory.CMTR_RetourDeTest)
-      	AGAINST ('[%sRech_p%]')
-      
-      UNION ALL
-      	
-      SELECT
-      	2 AS Type,
-      	Scr_Tache.IDScr_Tache AS Id
-      FROM Scr_Tache
-      WHERE match(Scr_Tache.CodeTache, Scr_Tache.Description, Scr_Tache.CMTR, Scr_Tache.CMTR_Blocage) AGAINST ('[%sRech_p%]')
-      
-      	
+      <§cs:3§>
+      SELECT<§cs:3§>
+      	1 AS Type,<§cs:3§>
+      	Scr_UserStory.IDScr_UserStory AS Id<§cs:3§>
+      FROM Scr_UserStory<§cs:3§>
+      WHERE match(Scr_UserStory.CodeUserStory, Scr_UserStory.EntantQue, Scr_UserStory.JaiBesoinDe, Scr_UserStory.AfinDe, Scr_UserStory.CMTR_Global, Scr_UserStory.CMTR_Mise_En_Prod, Scr_UserStory.CMTR_RetourDeTest)<§cs:3§>
+      	AGAINST ('[%sRech_p%]')<§cs:3§>
+      <§cs:3§>
+      UNION ALL<§cs:3§>
+      	<§cs:3§>
+      SELECT<§cs:3§>
+      	2 AS Type,<§cs:3§>
+      	Scr_Tache.IDScr_Tache AS Id<§cs:3§>
+      FROM Scr_Tache<§cs:3§>
+      WHERE match(Scr_Tache.CodeTache, Scr_Tache.Description, Scr_Tache.CMTR, Scr_Tache.CMTR_Blocage) AGAINST ('[%sRech_p%]')<§cs:3§>
+      <§cs:3§>
+      	<§cs:3§>
       ]
+      
+      
+      si EstNumérique(sRech_p) ALORS
+      	sReq += rc + rc + [
+      	UNION<§cs:3§>
+      	<§cs:3§>
+      	SELECT<§cs:3§>
+      		2 AS Type,<§cs:3§>
+      		Scr_Tache.IDScr_Tache AS Id<§cs:3§>
+      	FROM Scr_Tache<§cs:3§>
+      	WHERE Scr_Tache.NumTicketIncident = [%sRech_p%]<§cs:3§>
+      	]
+      FIN
+      
       
       goApp.Rsql(sdRech,sReq)
       

@@ -15,12 +15,110 @@ class :
   p_codes :
    -
      code : |1+
+      STR_Rapport est une structure
+      	nNivErr		est un entier
+      	nNumErr		est un entier
+      	sMessage	est une chaîne
+      	sRubrique	est une chaîne
+      	sConseil	est une chaîne
+      fin
+      STR_MetriqueRub est une structure
+      	sType						est une chaîne
+      	nTaille						est un entier
+      	bEstNullable				est un booléen
+      	sValeurDefaut				est une chaîne 
+      	bEstIndex					est un booléen
+      	bEstIndexUnique				est un booléen
+      	bEstFullText				est un booléen
+      	bEstCleEtrangere			est un booléen
+      	sNom_Table_CleReferencee	est une chaîne 
+      	sNom_CleReference			est une chaîne 
+      	nNbValDiff					est un entier
+      	bContenuNumerique			est un booléen
+      	nNbValNull					est un entier
+      //	nTailleMin					est un entier
+      //	nTailleMax					est un entier
+      	nTailleChaineMin			est un entier
+      	nTailleChaineMax			est un entier
+      	nBitsSignificatifs			est un entier
+      	bRubAbsente					est un booléen
+      FIN
+      STR_MetriqueTbl est une structure
+      	nNbLignes		est un entier
+      	sNomTblAnalyse	est une chaine
+      	aRubs			est un tableau associatif de STR_MetriqueRub
+      FIN
+      
       ClZF_AuditModele est une Classe
       
       PROTÉGÉ
       	m_oClasseGen	est un ClZF_GenCodeFic dynamique
-      	m_sRapport		est une chaîne
+      	m_aRapport		est un tableau de STR_Rapport
+      
+      GLOBAL
+      public
+      	gm_nNiveauErreur	est un entier
       fin
+      
+      constante
+      	cstNiveauAucun		= 0
+      	cstNiveauErreur		= 1
+      	cstNiveauWarning	= 2
+      	cstNiveauInfo		= 3
+      	cstNiveauZF			= 4
+      	
+      	
+      	
+      	cstNumErr_ClePrimaireNonIdentifie					= 1
+      	cstNumErr_PKAbsente									= 11
+      	cstNumErr_MultiCleComposeUnique						= 9
+      	cstNumErr_PKIncoherente_NonUniqueAssocieA_1			= 12
+      	cstNumErr_PKIncoherente_UniqueAssocieA_n			= 13
+      	
+      	cstNumErr_FKAberrante								= 2
+      	cstNumErr_FKAbsenteEnBDD							= 3
+      	cstNumErr_FKIncoherente_NonNullableVers0_1			= 4
+      	cstNumErr_FKIncoherente_NullableVers1_1				= 5
+      	cstNumErr_FKManquantAna								= 6
+      	cstNumErr_LibelleRubriqueNonRedef					= 8
+      	cstNumErr_RubAvecNomIdentiquePKSansFK				= 14
+      	cstNumErr_RubAvecNomSemblablePKSansFK				= 15
+      	cstNumErr_RubChaineAvecContenuNumerique				= 16
+      	cstNumErr_RubNullableAControler						= 17
+      	cstNumErr_RubNullableSansNull						= 18
+      	cstNumErr_RubNullableSansNullDefaut					= 19
+      	cstNumErr_RubNulleAnalyseMaisPasBDD					= 20
+      	cstNumErr_RubNulleBDDMaisPasAnalyse					= 21
+      	cstNumErr_RubNumeriqueGrandeCapaciteAControler		= 22
+      	cstNumErr_RubriqueInutile							= 23
+      	cstNumErr_RubTailleVarAvecContenuFixe				= 24
+      	cstNumErr_RubTypeNonStandard						= 25
+      	cstNumErr_ValDefDifferenteEntreBddEtAna				= 27
+      
+      	cstNumErr_MySQL_TypeDonneeIncomatible				= 10
+      	cstNumErr_SQLServer_TypeDonneeIncomatible			= 26
+      	
+      	cstNumErr_ZF_AccesseurIDManquantE					= 28
+      	cstNumErr_ZF_AccesseurIDManquantL					= 29
+      	cstNumErr_ZF_AccesseurIDManquantLE					= 30
+      	cstNumErr_ZF_AccesseurManquantE						= 31
+      	cstNumErr_ZF_AccesseurManquantL						= 32
+      	cstNumErr_ZF_AccesseurManquantLE					= 33
+      	cstNumErr_ZF_AnaluseImpossiblePropriete				= 34
+      	cstNumErr_ZF_ClasseColAbsente						= 35
+      	cstNumErr_ZF_ClasseDbAbsente						= 36
+      	cstNumErr_ZF_CodeDeclarationDeCollectionManquant	= 37
+      	cstNumErr_ZF_FKInclusionVersCleNonUnique			= 38
+      	cstNumErr_ZF_LiaisonInclusionMultiple				= 39
+      	cstNumErr_ZF_MethodeManquante						= 40
+      	cstNumErr_ZF_RubNonMap								= 41
+      	cstNumErr_ZF_RubNonMapMaisDansAna					= 42
+      	cstNumErr_ZF_FKNonNormalise							= 7
+      	
+      fin
+      
+      //Par défaut, le seuil d'analyse est au niveau 'info'
+      ::gm_nNiveauErreur = ::cstNiveauInfo
      type : 131072
   procedures :
    -
@@ -31,10 +129,8 @@ class :
       procédure Constructeur(sNomTable_p est une chaine)
       
       
-      
       :m_oClasseGen = ClZF_GenCodeFic.oGetGenCodeFic(sNomTable_p)
-      //:m_oClasseGen = allouer un  ClZF_GenCodeFic(sNomTable_p)
-      //:m_oClasseGen.Analyse()
+      
      type : 589824
    -
      name : Destructeur
@@ -48,18 +144,40 @@ class :
      procedure_id : 1478167979099321461
      type_code : 12
      code : |1+
-      procedure sRamureTbl()<metier>:chaine
-      renvoyer Répète("#", 100) + RC + :m_oClasseGen.p_sNomTable + RC + Répète("#", 100) + RC
+      procedure sRamureTbl(sComplement_p est une chaîne = "")<metier,zombie>:chaine
+      
+      sMsg est une chaîne = :m_oClasseGen.p_sNomTable
+      si sComplement_p <> "" ALORS
+      	sMsg += rc + sComplement_p
+      FIN
+      renvoyer Répète("#", 100) + RC + sMsg + RC + Répète("#", 100) + RC
      type : 458752
    -
      name : AnaPk
      procedure_id : 1478177952015573514
      type_code : 12
-     code : |1+
+     code : |1-
       procedure AnaPk()<metier>:vide
       
       SI :m_oClasseGen.p_sNomRubId = "" ALORS
-      	:m_sRapport	= "Aucune rubrique ""PK"" n'est identifiée."
+      	:traceInfo(::cstNiveauErreur, ::cstNumErr_PKAbsente, "Aucune clé primaire n'est identifiée.")
+      FIN
+      
+      aLstPK est un tableau de chaines = :m_oClasseGen.alistRubAvecLiaisonPK()
+      si TableauOccurrence(aLstPK) > 1 ALORS
+      	sListe est une chaine = TableauVersChaîne(aLstPK, ", ")
+      	:traceInfo(::cstNiveauWarning, ::cstNumErr_ClePrimaireNonIdentifie, "[%TableauOccurrence(aLstPK)%] clés primaires ont été identifiées ([%sListe%]).")
+      FIN
+      
+      nNbCleCompoUnique est un entier
+      stCleComp est un ClZF_GenCodeFic.STR_CleCompo
+      pour tout stCleComp de :m_oClasseGen.m_aCleCompo
+      	si stCleComp.bUnique ALORS
+      		nNbCleCompoUnique++
+      	FIN
+      FIN
+      si nNbCleCompoUnique > 1 ALORS
+      	:traceInfo(::cstNiveauErreur, ::cstNumErr_MultiCleComposeUnique, "La table contient [%nNbCleCompoUnique%] clés composées uniques")
       FIN
      type : 458752
    -
@@ -69,8 +187,6 @@ class :
      code : |1+
       PROCÉDURE AnaFk()<métier>:Vide
       
-      
-      sRapport		est une chaîne
       stRelTmp		est un ClZF_GenCodeFic.str_rel
       sRub			est une chaîne
       nNbFkIncl		est un entier
@@ -83,43 +199,41 @@ class :
       
       	//Récupération de la définition de la rubrique associé à la contrainte FK
       	si sRub <> :m_oClasseGen.p_sNomRubId alors
-      		stInfoRub  = :m_oClasseGen.m_aRub[sRub]
+      		stInfoRub  = :m_oClasseGen.stRub(sRub)
       	sinon
       		stInfoRub  = :m_oClasseGen.p_stDefId
       	fin
       	
       	SELON stRelTmp.nTypeRel
       		CAS ClZF_GenCodeFic.cstRelErreur
-      			traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" aberrante ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).")
+      			:traceInfo(::cstNiveauErreur, ::cstNumErr_FKAberrante, "Liaison ""[%stRelTmp.sNomRel%]"" aberrante ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).", sRub)
       		CAS ClZF_GenCodeFic.cstRelNonDef
-      			<compile si TypeConfiguration<>Webservice>
-      			traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).")
-      			<fin>
+      			:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_FKNonNormalise, "Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).", sRub)
       		CAS ClZF_GenCodeFic.cstRelIncl
       			nNbFkIncl++
       			sListeFkCompo += [RC] + stRelTmp.sNomRel
       			
       			si stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ALORS
-      				traceInfo("Liaison ""[%stRelTmp.sNomRel%]"", de type ""Inclusion"", pointe vers une rubrique non unique : [%sRub%].")
+      				:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_FKInclusionVersCleNonUnique, "Liaison ""[%stRelTmp.sNomRel%]"", de type ""Inclusion"", pointe vers une rubrique non unique : [%sRub%].", sRub)
       			FIN
       		autres cas :
       			//Pas d'autres analyses particulières.
       	FIN
       	
       	SI stInfoRub.bNullable ET stRelTmp.bRubFKOblig ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] nullable et associé à une contrainte de type ""1,1"")")
+      		:traceInfo(::cstNiveauErreur, ::cstNumErr_FKIncoherente_NullableVers1_1, "Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] nullable et associé à une contrainte de type ""1,1"")", sRub)
       	FIN
       	SI PAS stInfoRub.bNullable ET PAS stRelTmp.bRubFKOblig ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] non nullable et associé à une contrainte de type ""0,1"")")
+      		:traceInfo(::cstNiveauErreur, ::cstNumErr_FKIncoherente_NonNullableVers0_1, "Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] non nullable et associé à une contrainte de type ""0,1"")", sRub)
       	FIN
       	
       	
       	
       	SI stInfoRub.nTypeCle = ClZF_GenCodeFic.cstTypeCleUnique ET pas stRelTmp.bRubFKUnique ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] clé unique et associé à une contrainte de type ""0,n"" ou ""1,n"".")
+      		:traceInfo(::cstNiveauErreur, ::cstNumErr_PKIncoherente_UniqueAssocieA_n, "Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] clé unique et associé à une contrainte de type ""0,n"" ou ""1,n"".", sRub)
       	FIN
       	SI stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ET stRelTmp.bRubFKUnique ALORS
-      		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] non clé unique et associé à une contrainte de type ""0,1"" ou ""1,1"".")
+      		:traceInfo(::cstNiveauErreur, ::cstNumErr_PKIncoherente_NonUniqueAssocieA_1, "Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] non clé unique et associé à une contrainte de type ""0,1"" ou ""1,1"".", sRub)
       	FIN
       	
       FIN
@@ -127,47 +241,105 @@ class :
       
       
       SI nNbFkIncl > 1 ALORS
-      	traceInfo("[%nNbFkIncl%] liaisons sont de type ""Inclusion"", dans cette table (1 seule maxi): " + RC + sListeFkCompo)
-      FIN
-      
-      
-      :m_sRapport = sRapport
-      
-      
-      PROCÉDURE INTERNE traceInfo(sMessage):vide
-      	sRapport += [RC] + sMessage
+      	:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_LiaisonInclusionMultiple, "[%nNbFkIncl%] liaisons sont de type ""Inclusion"", dans cette table (1 seule maxi): " + RC + sListeFkCompo)
       FIN
       
      type : 458752
    -
-     name : AnaLibRubs
-     procedure_id : 1479647406539584332
+     name : sLibNivErreur
+     procedure_id : 1589012800022205281
+     type_code : 12
+     code : |1-
+      procedure globale sLibNivErreur(nNivErreur_p est un entier)<metier>:chaine
+      
+      sPrefixe est une chaîne
+      SELON nNivErreur_p
+      	CAS ::cstNiveauErreur
+      		sPrefixe = "[Erreur]"
+      	CAS ::cstNiveauWarning
+      		sPrefixe = "[Alerte]"
+      	CAS ::cstNiveauInfo
+      		sPrefixe = "[Info]"
+      	CAS ::cstNiveauZF
+      		sPrefixe = "[Framework]"
+      	AUTRE CAS
+      		
+      FIN
+      
+      renvoyer sPrefixe
+     type : 458752
+   -
+     name : sFormateRapport
+     procedure_id : 1588960852481737097
+     type_code : 12
+     code : |1-
+      procedure globale sFormateRapport(stRapport_p est un STR_Rapport)<metier>:chaine
+      
+      sRetour est une chaine = ::sLibNivErreur(stRapport_p.nNivErr) + " " + stRapport_p.sMessage
+      
+      SI stRapport_p.sConseil <> "" ALORS
+      	sRetour += RC + ::sSepCode()
+      	sRetour += RC + stRapport_p.sConseil
+      	sRetour += RC + ::sSepCode()
+      FIN
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : traceInfo
+     procedure_id : 1588376818439165963
      type_code : 12
      code : |1+
-      PROCÉDURE AnaLibRubs()<métier>:Vide
+      PROCÉDURE prive traceInfo(LOCAL nNiveau_p est un entier, LOCAL nNumErr_P est un entier, local sMessage_p est une chaîne, LOCAL sRub_p est une chaîne = "", LOCAL sCodeConseil_p est une chaîne = "")<métier>:vide
       
+      stRapport est un STR_Rapport
+      stRapport.nNivErr	= nNiveau_p
+      stRapport.nNumErr	= nNumErr_P
+      stRapport.sMessage	= sMessage_p
+      stRapport.sRubrique	= sRub_p
+      stRapport.sConseil	= sCodeConseil_p
+      TableauAjoute(:m_aRapport, stRapport)
       
-      sRapport		est une chaîne
+     type : 458752
+   -
+     name : bAffRapport
+     procedure_id : 1589134446460501541
+     type_code : 12
+     code : |1-
+      procedure globale bAffRapport(stRapport_p est un STR_Rapport)<métier>:booleen
+      RENVOYER (stRapport_p.nNivErr <= ::gm_nNiveauErreur)
+     type : 458752
+   -
+     name : AnaRubs
+     procedure_id : 1479647406539584332
+     type_code : 12
+     code : |1-
+      PROCÉDURE AnaRubs()<métier>:Vide
+      
       stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
       sRub			est une chaîne
       
       
-      POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.m_aRub
+      POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.aListeRubriques(Vrai)
       	//SI le libellé et le nom de la rubrique sont identiques, c'est que le libellé n'a pas été redéfinit
       	si sRub = stRubTmp.sLibelleRubrique ALORS
-      		traceInfo("Le libellé de la rubrique ""[%sRub%]"" n'a pas été redéfini.")
+      		:traceInfo(::cstNiveauInfo, ::cstNumErr_LibelleRubriqueNonRedef, "Le libellé de la rubrique ""[%sRub%]"" n'a pas été redéfini.", sRub)
+      	FIN
+      	
+      	si :m_oClasseGen.m_aPK_de_FK[sRub]..vide alors
+      		//Ces analyses ne concernent pas les clés étrangères : on aura le rapport, sur l"analyse de la clé primaire
+      		selon stRubTmp.nTypeRubHF
+      			CAS hRubIDAuto, hRubEntier8, hRubEntierNonSigné8, hRubRéel8
+      				:traceInfo(::cstNiveauInfo, ::cstNumErr_RubNumeriqueGrandeCapaciteAControler, "La rubrique ""[%sRub%]"" stocke une valeur numérique sur 8 octets : assurez vous d'avoir besoin d'une telle précision.", sRub)
+      				
+      			CAS hRubMotDePasseSécurisé, hRubCombinaison, hRubEnumération
+      				:traceInfo(::cstNiveauInfo, ::cstNumErr_RubTypeNonStandard, "La rubrique ""[%sRub%]"" n'est pas d'un type standard : son utilisation peut être un frein pour les évolutions.", sRub)
+      				
+      			AUTRE CAS
+      				//Les autres cas sont corrects
+      		FIN
       	FIN
       FIN
-      
-      
-      :m_sRapport = sRapport
-      
-      
-      PROCÉDURE INTERNE traceInfo(sMessage):vide
-      	sRapport += [RC] + sMessage
-      FIN
-      
-      
      type : 458752
    -
      name : AnaRubsNull
@@ -176,35 +348,50 @@ class :
      code : |1+
       PROCÉDURE AnaRubsNull()<métier>:Vide
       
-      
-      sRapport		est une chaîne
       stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
       sRub			est une chaîne
       
       
-      POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.m_aRub
-      	//Si la rubique est nullable 
+      POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.aListeRubriques()
+      	//Si la rubrique est nullable 
       	SI stRubTmp.bNullable ALORS
       		
       		//et n'est pas une clé étrngère (cas normal)
       		si :m_oClasseGen.m_aPK_de_FK[sRub]..Vide alors
-      			traceInfo("Vérifier s'il est pertinent que la rubrique ""[%sRub%]"" soit nullable.")
+      			:traceInfo(::cstNiveauInfo, ::cstNumErr_RubNullableAControler, "Vérifier s'il est pertinent que la rubrique ""[%sRub%]"" soit nullable.", sRub)
       		FIN
       		
       		si pas stRubTmp.bNullDefaut ALORS
-      			traceInfo("La rubrique ""[%sRub%]"" est nullable, mais n'est pas à null par défaut.")
+      			:traceInfo(::cstNiveauWarning, ::cstNumErr_RubNullableSansNullDefaut, "La rubrique ""[%sRub%]"" est nullable, mais n'est pas à null par défaut.", sRub)
       		FIN
       	FIN
       FIN
+     type : 458752
+   -
+     name : AnaTypesRubriques
+     procedure_id : 1589873704727945899
+     type_code : 12
+     code : |1+
+      PROCÉDURE AnaTypesRubriques()<métier>:Vide
+      
+      stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
+      sRub			est une chaîne
       
       
-      :m_sRapport = sRapport
-      
-      
-      	PROCÉDURE INTERNE traceInfo(sMessage):Vide
-      		sRapport += [RC] + sMessage
+      POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.aListeRubriques(Vrai)
+      	quand exception dans
+      		oTmpMSSQL est un CLZF_GenDataMSSQL(:m_oClasseGen)
+      		oTmpMSSQL.sRubSqlDeTypeHF(stRubTmp)
+      	FAIRE
+      		:traceInfo(::cstNiveauInfo, ::cstNumErr_SQLServer_TypeDonneeIncomatible, "Le type de données de la rubrique ""[%sRub%]"" est incompatible avec MS-SQL Server.", sRub)
       	FIN
-      
+      	QUAND EXCEPTION DANS
+      		oTmpMySQL est un CLZF_GenDataMSSQL(:m_oClasseGen)
+      		oTmpMySQL.sRubSqlDeTypeHF(stRubTmp)
+      	FAIRE
+      		:traceInfo(::cstNiveauInfo, ::cstNumErr_MySQL_TypeDonneeIncomatible, "Le type de données de la rubrique ""[%sRub%]"" est incompatible avec MySQL.", sRub)
+      	FIN
+      FIN
      type : 458752
    -
      name : AnaPropriete
@@ -212,7 +399,6 @@ class :
      type_code : 12
      code : |1+
       procedure AnaPropriete()<metier>:vide
-      
       
       
       str_compareObj est une Structure
@@ -227,7 +413,7 @@ class :
       FIN
       
       
-      sRapport est une chaîne
+      //sRapport est une chaîne
       
       SI :m_oClasseGen.p_bClasseExiste ALORS
       	
@@ -239,15 +425,9 @@ class :
       	quand exception dans
       		oTmp = ClZF_ObjDbLs.ZF_GetObj(:m_oClasseGen.sNomClasseGen(), ClZF_ObjDbLs.cstModeSansChargement)
       	faire
-      		sRapport = [
-      			Analyse impossible des propriétés de la classe : [%:m_oClasseGen.sNomClasseGen()%] :
-      			[%ExceptionInfo(errMessage)%]
-      			]
+      		:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_AnaluseImpossiblePropriete, "Analyse impossible des propriétés de la classe : [%:m_oClasseGen.sNomClasseGen()%]", ...
+      			ExceptionInfo(errMessage))
       	fin
-      //	SI PAS oTmp est ClZF_ObjDbLs ALORS
-      //		ExceptionDéclenche(1,"Type incompatible")
-      //		RETOUR
-      //	FIN
       	
       	
       	oObjBD est un ClZF_GenCodeClBd(:m_oClasseGen)
@@ -267,7 +447,7 @@ class :
       	stInfosDiffRub	est un tableau associatif (ccSansCasse + ccSansEspace) de str_compareObj
       	stDiffRub		est un str_compareObj
       	
-      	POUR TOUT ÉLÉMENT stRubAnaTmp, sRub DE :m_oClasseGen.m_aRub
+      	POUR TOUT ÉLÉMENT stRubAnaTmp, sRub DE :m_oClasseGen.aListeRubriques()
       		VariableRAZ(stDiffRub)
       		stDiffRub.bPresAnalyse		= Vrai
       		stDiffRub.bMembreObj		= (stRubAnaTmp.oObj_Parent <> null)
@@ -316,7 +496,7 @@ class :
       			sMembre		= Prop.Nom
       			sMembre[1]	= "m"
       			
-      			//Parcout des rubriques attendues :
+      			//Parcourt des rubriques attendues :
       			POUR TOUT ÉLÉMENT stDiffRub, sRub DE stInfosDiffRub
       				
       				SI sMembre ~= stDiffRub.sNomMembre ALORS
@@ -342,79 +522,55 @@ class :
       		
       		
       		SI PAS stDiffRub.bMembreMap ALORS
-      			sRapport += [RC + RC] + "Rubrique ""[%sRub%]"" non mappée dans la classe [%:m_oClasseGen.sNomClasseGen()%]."
-      			
-      			blocMapping(m_oClasseGen.m_aRub[sRub], sRub)
+      			:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_RubNonMap, "Rubrique ""[%sRub%]"" non mappée dans la classe [%:m_oClasseGen.sNomClasseGen()%].", ...
+      				ClZF_GenCodeClBd::sDeclareMembre(:m_oClasseGen.stRub(sRub), sRub))
       		FIN
       		
       		SI PAS stDiffRub.bPresAnalyse ALORS
-      			sRapport += [RC + RC] + "Rubrique ""[%sRub%]"" mappée dans la classe ""[%:m_oClasseGen.sNomClasseGen()%]"", mais non présente dans la table ""[%:m_oClasseGen.p_sNomTable%]""."
+      			:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_RubNonMapMaisDansAna, "Rubrique ""[%sRub%]"" mappée dans la classe ""[%:m_oClasseGen.sNomClasseGen()%]"", mais non présente dans la table ""[%:m_oClasseGen.p_sNomTable%]"".", sRub)
       		FIN
       		
       		SI stDiffRub.bPresAnalyse ET stDiffRub.bMembreMap ALORS
       			
       			SI PAS stDiffRub.bPropLect ET PAS stDiffRub.bPropEcr ALORS
-      				sRapport += [RC + RC] + "Accesseur en lecture / écriture manquant pour le membre ""[%stDiffRub.sNomMembre%]""."
-      				blocPropriete(oObjBD, sRub)
+      				:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_AccesseurManquantLE, "Accesseur en lecture / écriture manquant pour le membre ""[%stDiffRub.sNomMembre%]"".", ...
+      					oObjBD.GenPropriete(sRub))
       			SINON
       				SI PAS stDiffRub.bPropLect ALORS
-      					sRapport += [RC + RC] + "Accesseur en lecture manquant pour le membre ""[%stDiffRub.sNomMembre%]""."
-      					blocPropriete(oObjBD, sRub)
+      					:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_AccesseurManquantL, "Accesseur en lecture manquant pour le membre ""[%stDiffRub.sNomMembre%]"".", ...
+      						oObjBD.GenPropriete(sRub))
       				FIN
       				
       				SI PAS stDiffRub.bPropEcr ALORS
-      					sRapport += [RC + RC] + "Accesseur en écriture manquant pour le membre ""[%stDiffRub.sNomMembre%]""."
-      					blocPropriete(oObjBD, sRub)
+      					:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_AccesseurManquantE, "Accesseur en écriture manquant pour le membre ""[%stDiffRub.sNomMembre%]"".", ...
+      						oObjBD.GenPropriete(sRub))
       				FIN
       			FIN
       			
       			SI stDiffRub.bMembreObj ALORS
       				SI PAS stDiffRub.bPropIdLect ET PAS stDiffRub.bPropIdEcr ...		//s'il manque les propriétés des ids
       						et (stDiffRub.bPropLect ou stDiffRub.bPropEcr) ALORS		//mais qu'il y a les propriétés sur l'objet	(sinon, déja traitée plus haut)
-      					sRapport += [RC + RC] + "Accesseur en lecture / écriture manquant pour le membre objet ""[%stDiffRub.sNomMembre%]"" via son ID."
-      					blocProprieteId(oObjBD, sRub)
+      					:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_AccesseurIDManquantLE, "Accesseur en lecture / écriture manquant pour le membre objet ""[%stDiffRub.sNomMembre%]"" via son ID.", ...
+      						oObjBD.GenProprieteID(sRub))
       				SINON
       					SI PAS stDiffRub.bPropIdLect ...								//S'il manque la propriété de l'ID en lecture
       							ET stDiffRub.bPropLect ALORS							//mais qu'il y a la propriété sur l'objet
-      						sRapport += [RC + RC] + "Accesseur en lecture manquant pour le membre objet ""[%stDiffRub.sNomMembre%]"" via son ID."
-      						blocProprieteId(oObjBD, sRub)
+      						:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_AccesseurIDManquantL, "Accesseur en lecture manquant pour le membre objet ""[%stDiffRub.sNomMembre%]"" via son ID.", ...
+      							oObjBD.GenProprieteID(sRub))
       					FIN
       					
       					SI PAS stDiffRub.bPropIdEcr ...									//S'il manque la propriété de l'ID en écriture
       							ET stDiffRub.bPropEcr ALORS								//mais qu'il y a la propriété sur l'objet
-      						sRapport += [RC + RC] + "Accesseur en écriture manquant pour le membre objet ""[%stDiffRub.sNomMembre%]"" via son ID."
-      						blocProprieteId(oObjBD, sRub)
+      						:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_AccesseurIDManquantE, "Accesseur en écriture manquant pour le membre objet ""[%stDiffRub.sNomMembre%]"" via son ID.", ...
+      							oObjBD.GenProprieteID(sRub))
       					FIN
       				FIN
       			FIN
       		FIN
       	FIN
       sinon
-      	sRapport += [RC + RC] + "La classe [%:m_oClasseGen.sNomClasseGen()%] n'existe pas."
+      	:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_ClasseDbAbsente, "La classe [%:m_oClasseGen.sNomClasseGen()%] n'existe pas.")
       FIN
-      
-      :m_sRapport = sRapport
-      
-      
-      
-      
-      	PROCÉDURE INTERNE blocPropriete(oObjBD_p est un ClZF_GenCodeClBd, sRub_p est une chaine):vide
-      		sRapport += RC + :sSepCode()
-      		sRapport += RC + oObjBD_p.GenPropriete(sRub_p)
-      		sRapport += RC + :sSepCode()
-      	FIN
-      
-      	PROCÉDURE INTERNE blocProprieteId(oObjBD_p est un ClZF_GenCodeClBd, sRub_p est une chaine):vide
-      		sRapport += RC + :sSepCode()
-      		sRapport += RC + oObjBD_p.GenProprieteId(sRub_p)
-      		sRapport += RC + :sSepCode()
-      	FIN
-      
-      	PROCÉDURE INTERNE blocMapping(stDefRub_p est un ClZF_GenCodeFic.STR_DefRub, sRub_p est une chaîne):vide
-      		sRapport += RC + :sSepCode()
-      		sRapport += RC + ClZF_GenCodeClBd::sDeclareMembre(stDefRub_p, sRub_p)
-      		sRapport += RC + :sSepCode()
-      	FIN
       
      type : 458752
    -
@@ -422,7 +578,7 @@ class :
      procedure_id : 1556374308591352724
      type_code : 12
      code : |1+
-      PROCÉDURE prive sSepCode()<metier>:chaîne
+      PROCÉDURE globale sSepCode()<metier>:chaîne
       RENVOYER Répète("-",150)
      type : 458752
    -
@@ -432,8 +588,6 @@ class :
      code : |1+
       pROCÉDURE AnaMeta()<métier>:Vide
       
-      
-      
       str_compareMeth est une Structure
       	bPresAnalyse	est un booléen
       	bPresObj		est un booléen
@@ -441,12 +595,7 @@ class :
       FIN
       
       
-      
-      
-      sRapport est une chaîne
-      
       SI :m_oClasseGen.p_bClasseExiste ALORS
-      	
       	
       	stRelTmp		est un ClZF_GenCodeFic.STR_Rel
       	stDiffRub		est un str_compareMeth
@@ -499,43 +648,26 @@ class :
       		
       		POUR TOUT ÉLÉMENT stDiffRub, sRub DE stInfosDiffRub
       			SI stDiffRub.bPresAnalyse ET PAS stDiffRub.bPresObj ALORS
-      				sRapport += [RC + RC] + "Méthode ""[%sRub%]"" non présente dans la classe [%:m_oClasseGen.sNomClasseColGen()%]."
-      				blocCode(stDiffRub.sCodeCrea)
+      				:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_MethodeManquante, "Méthode ""[%sRub%]"" non présente dans la classe [%:m_oClasseGen.sNomClasseColGen()%].", ...
+      					stDiffRub.sCodeCrea)
       			FIN
       		FIN
       		
       	SINON
-      		sRapport += [RC + RC] + "Classe ""[%:m_oClasseGen.sNomClasseColGen()%]"" non présente."
+      		:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_ClasseColAbsente, "Classe ""[%:m_oClasseGen.sNomClasseColGen()%]"" non présente.")
       	FIN
       FIN
-      
-      
-      :m_sRapport = sRapport
-      
-      
-      
-      PROCÉDURE INTERNE blocCode(sMsg)
-      	sRapport += RC + :sSepCode()
-      	sRapport += RC + sMsg
-      	sRapport += RC + :sSepCode()
-      FIN
-      
      type : 458752
    -
      name : AnaColMqt
      procedure_id : 1478175220415671222
      type_code : 12
-     code : |1-
+     code : |1+
       PROCÉDURE AnaColMqt()<métier>:Vide
       
       
       
-      
-      sRapport est une chaîne
-      
-      
       SI :m_oClasseGen.p_bClasseExiste ALORS
-      	
       	
       	stRelTmp			est un ClZF_GenCodeFic.STR_Rel
       	sConstRef			est une chaîne
@@ -579,28 +711,17 @@ class :
       			[%TAB%]oCol = allouer un [%:m_oClasseGen.sNomClasseColGen()%]
       		]
       		
-      		sRapport += [RC + RC] + "Code de déclaration des collections manquant (procédure CreeCol)."
-      		blocCode(sCodeCrea)
+      		:traceInfo(::cstNiveauZF, ::cstNumErr_ZF_CodeDeclarationDeCollectionManquant, "Code de déclaration des collections manquant (procédure CreeCol).", ...
+      			sCodeCrea)
       		
       	FIN
       FIN
-      
-      
-      :m_sRapport = sRapport
-      
-      
-      
-      	PROCÉDURE INTERNE blocCode(sMsg)
-      		sRapport += RC + :sSepCode()
-      		sRapport += RC + sMsg
-      		sRapport += RC + :sSepCode()
-      	FIN
      type : 458752
    -
      name : bMsgInfo
      procedure_id : 1478180915544287250
      type_code : 12
-     code : |1+
+     code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
       //[ <Résultat> = ] bMsgInfo ()
@@ -613,9 +734,8 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure bMsgInfo() <métier>:booleen
-      renvoyer :m_sRapport <> ""
-      
+      procédure bMsgInfo() <métier,zombie>:booleen
+      renvoyer faux	//:m_sRapport <> ""
      type : 458752
    -
      name : AnaFkMqt
@@ -624,106 +744,221 @@ class :
      code : |1+
       PROCÉDURE AnaFkMqt()<métier>:Vide
       
-      
-      sRapport		est une chaîne
-      stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
-      //stRelTmp		est un ClZF_GenCodeFic.str_rel
       sRub			est une chaîne
-      //nNbFkIncl		est un entier
-      //sListeFkCompo	est une chaîne
-      //stInfoRub		est un ClZF_GenCodeFic.STR_DefRub
-      
-      
-      //sNomPK			est une chaîne	= :m_oClasseGen.p_sNomRubId
-      oTblTmp			est un ClZF_GenCodeFic dynamique
       sNomTblTmp		est une chaine
+      stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
+      oTblTmp			est un ClZF_GenCodeFic dynamique
+      nNiveau			est un entier
+      nCodeErreur		est un entier
       
+      //Parcourt de toutes les tables de la base de données
       pour toute chaine sNomTblTmp de ClZF_GenCodeFic.sListeFicAna() separee par RC
-      	//trace("-> " + sNomTblTmp)
-      	
       	oTblTmp <- ClZF_GenCodeFic.oGetGenCodeFic(sNomTblTmp)
-      //	oTblTmp = allouer un ClZF_GenCodeFic(sNomTblTmp)
-      //	oTblTmp.Analyse()
-      	POUR TOUT ÉLÉMENT stRubTmp, sRub DE m_oClasseGen.m_aRub
-      		//trace(oTblTmp.p_sNomRubId + " -" + sRub)
-      		si ChaîneCommencePar(sRub, oTblTmp.p_sNomRubId) _et_ stRubTmp.stRelFkAsso.sTablePK <> sNomTblTmp alors
+      	
+      	//Parcourt des rubriques de la table en cours d'analyse
+      	POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.aListeRubriques(Vrai)
+      		
+      		
+      		
+      		si :m_oClasseGen.p_sNomRubId <> sRub _et_ ...							//On ne cherche pas à référencer une clé primaire, comme une clé étrangère.
+      				ChaîneCommencePar(oTblTmp.p_sNomRubId, sRub) _et_ ...			//est ce que le nom de la clé en cours, commence par la même racine que la clé primaire de la table parcourue ?
+      				:m_oClasseGen.m_aPK_de_FK[sRub]..Vide _et_ ...	//La rubrique en cours ne doit pas etre déja une clé étrangère.
+      				stRubTmp.stRelFkAsso.sTablePK <> sNomTblTmp alors
       			
-      			traceInfo([
-      				La rubrique "[%srub%]" ne référence pas la clé primaire [%sNomTblTmp%].[%oTblTmp.p_sNomRubId%], alors qu'elles ont le même nom.
-      				])
+      			sMsg est une chaîne = [
+      				La rubrique "[%sRub%]" ne référence pas la clé primaire [%sNomTblTmp%].[%oTblTmp.p_sNomRubId%], alors qu'elles ont 
+      				]
       			
+      			si sRub ~= oTblTmp.p_sNomRubId ALORS
+      				sMsg += "le même nom."
+      				nNiveau = ::cstNiveauWarning
+      				nCodeErreur = ::cstNumErr_RubAvecNomIdentiquePKSansFK
+      			sinon
+      				sMsg += "un nom semblable."
+      				nNiveau = ::cstNiveauInfo
+      				nCodeErreur = ::cstNumErr_RubAvecNomSemblablePKSansFK
+      			FIN
+      			
+      			:traceInfo(nNiveau, nCodeErreur, sMsg, sRub)
+      		FIN
+      	FIN
+      FIN
+      
+     type : 458752
+   -
+     name : sRapportTxt
+     procedure_id : 1589023241073748232
+     type_code : 12
+     code : |1-
+      procedure sRapportTxt()<metier>:chaine
+      
+      sRetour est une chaîne
+      stRapport est un ClZF_AuditModele.STR_Rapport
+      
+      POUR TOUT stRapport DE :m_aRapport
+      	sRetour += [RC] + ClZF_AuditModele.sFormateRapport(stRapport)
+      FIN
+      
+      
+      renvoyer sRetour
+     type : 458752
+   -
+     name : AnaExistContraintes
+     procedure_id : 1607122366415706875
+     type_code : 12
+     code : |1+
+      procédure AnaExistContraintes(astMetriquesTbl_p est un tableau associatif de ClZF_AuditModele.STR_MetriqueTbl) <métier>:vide
+      
+      stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
+      sRub			est une chaîne
+      stMetriqueRuv	est un STR_MetriqueRub
+      stRelTmp		est un clzf_gencodefic.STR_Rel
+      sValDefSgbd		est une chaine
+      stTblTmp		est un ClZF_AuditModele.STR_MetriqueTbl
+      sAlias			est une chaine
+      
+      
+      POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.aListeRubriques()
+      	
+      	POUR TOUT stTblTmp, sAlias de astMetriquesTbl_p
+      		si pas stTblTmp.aRubs[sRub]..vide alors
+      			stMetriqueRuv = stTblTmp.aRubs[sRub]
+      			
+      			//Vérification des clé étrangères.
+      			si stMetriqueRuv.sNom_CleReference <> "" et :m_oClasseGen.m_aPK_de_FK[sRub]..Vide ALORS
+      				:traceInfo(::cstNiveauErreur, ::cstNumErr_FKManquantAna, "Liaison manquante dans l'analyse : [%sAlias%].[%sRub%] est liée à la clé [%stMetriqueRuv.sNom_Table_CleReferencee%].[%stMetriqueRuv.sNom_CleReference%].", sRub)
+      			FIN
+      			
+      			si stMetriqueRuv.sNom_CleReference = "" et pas :m_oClasseGen.m_aPK_de_FK[sRub]..Vide ALORS
+      				stRelTmp = :m_oClasseGen.m_aPK_de_FK[sRub]
+      				:traceInfo(::cstNiveauErreur, ::cstNumErr_FKAbsenteEnBDD, "Liaison ""[%stRelTmp.sNomRel%]"" absente dans la base de données, sur la rubrique [%sAlias%].[%sRub%].", sRub)
+      			FIN
+      			
+      			//Vérification des contraintes défaut.
+      			si pas stRubTmp.nTypeRubHF dans (hRubDate6, hRubDate8, hRubDateHeure)ALORS	//Les valeur par défaut de types date n'ont pas vraiment de sens
+      				sValDefSgbd = remplace(stMetriqueRuv.sValeurDefaut, ["(", "'", ")"], "")
+      				si stRubTmp.sValDef <> sValDefSgbd ALORS
+      					:traceInfo(::cstNiveauErreur, ::cstNumErr_ValDefDifferenteEntreBddEtAna, "Valeur par défaut de la rubrique ""[%sAlias%].[%sRub%]"" différente, entre l'analyse ([%stRubTmp.sValDef%]) et la base de données([%stMetriqueRuv.sValeurDefaut%]).", sRub)
+      				FIN
+      			FIN
+      		fin
+      	fin
+      FIN
+      
+     type : 458752
+   -
+     name : AnaNullite
+     procedure_id : 1607698291460231695
+     type_code : 12
+     code : |1+
+      PROCÉDURE AnaNullite(stMetriquesTbl_p est un tableau associatif de STR_MetriqueTbl) <métier>:vide
+      
+      stRubTmp		est un ClZF_GenCodeFic.STR_DefRub
+      sRub			est une chaîne
+      stMetriqueRuv	est un STR_MetriqueRub
+      stTblTmp		est un ClZF_AuditModele.STR_MetriqueTbl
+      sAlias			est une chaîne
+      
+      //parcourt des rubeiques de la table
+      POUR TOUT ÉLÉMENT stRubTmp, sRub DE :m_oClasseGen.aListeRubriques()
+      	
+      	//parcout des alias de la table
+      	POUR TOUT stTblTmp, sAlias de stMetriquesTbl_p
+      		
+      		stMetriqueRuv = stTblTmp.aRubs[sRub]
+      		
+      		//Différence de paramétrage de nullité sur la rubrique
+      		SI stMetriqueRuv.bEstNullable ET pas stRubTmp.bNullable ALORS
+      			:traceInfo(::cstNiveauErreur, ::cstNumErr_RubNulleAnalyseMaisPasBDD, "La rubrique [%sAlias%].[%sRub%] est nullable dans l'analyse, mais ne l'est pas dans la base de données.", sRub)
+      		FIN
+      		SI PAS stMetriqueRuv.bEstNullable ET stRubTmp.bNullable ALORS
+      			:traceInfo(::cstNiveauErreur, ::cstNumErr_RubNulleBDDMaisPasAnalyse, "La rubrique [%sAlias%].[%sRub%] est nullable dans la base de données, mais ne l'est pas dans l'analyse.", sRub)
+      		FIN
+      		
+      		//Rubriques nullable, sans null
+      		SI stMetriqueRuv.nNbValNull = 0 ET stRubTmp.bNullable ALORS
+      			:traceInfo(::cstNiveauWarning, ::cstNumErr_RubNullableSansNull, "La rubrique [%sAlias%].[%sRub%] est nullable, mais ne contient pas de valeur nulle.", sRub)
       		FIN
       	FIN
       FIN
       
       
-      //POUR TOUT ÉLÉMENT stRelTmp, sRub DE :m_oClasseGen.m_aPK_de_FK
-      //
-      //	//Récupération de la définition de la rubrique associé à la contrainte FK
-      //	si sRub <> :m_oClasseGen.p_sNomRubId alors
-      //		stInfoRub  = :m_oClasseGen.m_aRub[sRub]
-      //	sinon
-      //		stInfoRub  = :m_oClasseGen.p_stDefId
-      //	fin
-      //	
-      //	SELON stRelTmp.nTypeRel
-      //		CAS ClZF_GenCodeFic.cstRelNonDef
-      //			traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" non normalisée ([%stRelTmp.sTablePK%].[%stRelTmp.sRubriquePK%] -> [%stRelTmp.sTableFK%].[%stRelTmp.sRubriqueFK%]).")
-      //		CAS ClZF_GenCodeFic.cstRelIncl
-      //			nNbFkIncl++
-      //			sListeFkCompo += [RC] + stRelTmp.sNomRel
-      //			
-      //			si stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ALORS
-      //				traceInfo("Liaison ""[%stRelTmp.sNomRel%]"", de type ""Inclusion"", pointe vers une rubrique non unique : [%sRub%].")
-      //			FIN
-      //		autres cas :
-      //			//Pas d'autres analyses particulières.
-      //	FIN
-      //	
-      //	SI stInfoRub.bNullable ET stRelTmp.bRubFKOblig ALORS
-      //		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] nullable et relation de type ""1,1"".")
-      //	FIN
-      //	SI PAS stInfoRub.bNullable ET PAS stRelTmp.bRubFKOblig ALORS
-      //		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : ([%sRub%] non nullable et relation de type ""0,1"".")
-      //	FIN
-      //	
-      //	
-      //	
-      //	SI stInfoRub.nTypeCle = ClZF_GenCodeFic.cstTypeCleUnique ET pas stRelTmp.bRubFKUnique ALORS
-      //		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] clé unique et relation de type ""0,n"" ou ""1,n"".")
-      //	FIN
-      //	SI stInfoRub.nTypeCle <> ClZF_GenCodeFic.cstTypeCleUnique ET stRelTmp.bRubFKUnique ALORS
-      //		traceInfo("Liaison ""[%stRelTmp.sNomRel%]"" incohérente : [%sRub%] non clé unique et relation de type ""0,1"" ou ""1,1"".")
-      //	FIN
-      //	
-      //FIN
-      //
-      //
-      //
-      //SI nNbFkIncl > 1 ALORS
-      //	traceInfo("[%nNbFkIncl%] liaisons sont de type ""Inclusion"", dans cette table (1 seule maxi): " + RC + sListeFkCompo)
-      //FIN
+     type : 458752
+   -
+     name : AnaChaineVar
+     procedure_id : 1608043675552669533
+     type_code : 12
+     code : |1+
+      PROCÉDURE AnaChaineVar(astMetriquesTbl_p est un tableau associatif de STR_MetriqueTbl) <métier>:vide
+      
+      sRub			est une chaîne
+      stMetriqueRuv	est un STR_MetriqueRub
+      stTblTmp		est un ClZF_AuditModele.STR_MetriqueTbl
+      sAlias			est une chaîne
       
       
-      :m_sRapport = sRapport
-      
-      
-      PROCÉDURE INTERNE traceInfo(sMessage):vide
-      	sRapport += [RC] + sMessage
+      POUR TOUT stTblTmp, sAlias de astMetriquesTbl_p
+      	
+      	POUR TOUT ÉLÉMENT stMetriqueRuv, sRub DE stTblTmp.aRubs
+      		//On exclue l'analyse des clés étrangères (ce sera fait lors de l'analyse de la PK.)
+      		si :m_oClasseGen.m_aPK_de_FK[sRub]..vide alors
+      			si Majuscule(stMetriqueRuv.sType) dans ("VARCHAR", "NVARCHAR") alors
+      				si stMetriqueRuv.nTailleChaineMin dans (stMetriqueRuv.nTailleChaineMax, stMetriqueRuv.nTailleChaineMax - 1) ALORS
+      					:traceInfo(::cstNiveauWarning, ::cstNumErr_RubTailleVarAvecContenuFixe, "La rubrique [%sAlias%].[%sRub%] est une chaine à taille variable, or elle contient des données à taille fixe.", sRub)
+      				FIN
+      			FIN
+      			
+      			si Majuscule(stMetriqueRuv.sType) dans ("VARCHAR", "NVARCHAR", "CHAR", "NCHAR") alors
+      				si stMetriqueRuv.bContenuNumerique ALORS
+      					:traceInfo(::cstNiveauWarning, ::cstNumErr_RubChaineAvecContenuNumerique, "La rubrique [%sAlias%].[%sRub%] est une chaine et ne contient que des chiffres.", sRub)
+      				FIN
+      			FIN
+      		FIN
+      	FIN
       FIN
       
      type : 458752
+   -
+     name : AnaContenuInnutile
+     procedure_id : 1608045135842414883
+     type_code : 12
+     code : |1+
+      PROCÉDURE AnaContenuInnutile(astMetriquesTbl_p	est un tableau associatif de STR_MetriqueTbl) <métier>:vide
+      
+      sRub			est une chaîne
+      stMetriqueRuv	est un STR_MetriqueRub
+      stTblTmp		est un ClZF_AuditModele.STR_MetriqueTbl
+      sAlias			est une chaîne
+      
+      POUR TOUT stTblTmp, sAlias de astMetriquesTbl_p
+      	si stTblTmp.nNbLignes > 1
+      		POUR TOUT ÉLÉMENT stMetriqueRuv, sRub DE stTblTmp.aRubs
+      			si stMetriqueRuv.nNbValDiff dans (0, 1) ALORS
+      				:traceInfo(::cstNiveauWarning, ::cstNumErr_RubriqueInutile, "La rubrique [%sAlias%].[%sRub%] est inutile : elle ne contient qu'une seule valeur.", sRub)
+      			FIN
+      		FIN
+      	FIN
+      FIN
+     type : 458752
   properties :
    -
-     name : p_sRapport
-     identifier : 0x1483821a00940f4e
+     name : p_aRapport
+     identifier : 0x160d1b8e0616b0e1
      type_code : 103
      p_codes :
       -
         code : |1-
-         procédure publique p_sRapport() : chaîne
-         renvoyer m_sRapport
+         procédure publique p_aRapport() <métier>:tableau de STR_Rapport
+         aTmp est un tableau de STR_Rapport = :m_aRapport
+         //Dimension(:m_aRapport, 0)
+         renvoyer aTmp
         type : 1966080
+      -
+        code : |1-
+         procédure publique p_aRapport(Valeur est un tableau de STR_Rapport)
+         
+         :m_aRapport=Valeur
+        type : 2031616
      template_refs : []
   procedure_templates : []
   property_templates : []

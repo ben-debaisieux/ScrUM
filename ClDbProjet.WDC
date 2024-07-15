@@ -907,7 +907,7 @@ class :
       
       pour tout element oUs de ClColUserStory.oFromProjet(objet).aitems()	//:aoListeUS().aItems()
       	
-      	pour tout element oTache de ClColTache.aoFromUS(oUs).aItems()	//oUs:aoListeTaches().aItems()
+      	pour tout element oTache de ClColTache.oFromUserStory(oUs).aItems()	//oUs:aoListeTaches().aItems()
       		
       		aoMessages <- ClcolMessage.aoListeMessage(oTache)
       		pour tout element oMessage de aoMessages.aItems()
@@ -945,7 +945,7 @@ class :
      type_code : 12
      code : |1+
       // Redéfinition de la méthode ClObjDB.ZF_Init_ObjBD
-      PROCÉDURE  Init_ObjBD()
+      PROCÉDURE  Init_ObjBD()<métier>:Vide
       
       //nInd est un entier
       //aTypes est un tableau d'entiers = [::cstInter_Responsable, ::cstInter_Decideur, ::cstInter_Consulte, ::cstInter_Informe]
