@@ -68,36 +68,45 @@ class :
       	cstNiveauZF			= 4
       	
       	
-      	
+      	//PK
       	cstNumErr_ClePrimaireNonIdentifie					= 1
       	cstNumErr_PKAbsente									= 11
       	cstNumErr_MultiCleComposeUnique						= 9
       	cstNumErr_PKIncoherente_NonUniqueAssocieA_1			= 12
       	cstNumErr_PKIncoherente_UniqueAssocieA_n			= 13
       	
+      	//FK
       	cstNumErr_FKAberrante								= 2
       	cstNumErr_FKAbsenteEnBDD							= 3
       	cstNumErr_FKIncoherente_NonNullableVers0_1			= 4
       	cstNumErr_FKIncoherente_NullableVers1_1				= 5
       	cstNumErr_FKManquantAna								= 6
-      	cstNumErr_LibelleRubriqueNonRedef					= 8
       	cstNumErr_RubAvecNomIdentiquePKSansFK				= 14
       	cstNumErr_RubAvecNomSemblablePKSansFK				= 15
-      	cstNumErr_RubChaineAvecContenuNumerique				= 16
+      	
+      	//Définition à surveiller
       	cstNumErr_RubNullableAControler						= 17
-      	cstNumErr_RubNullableSansNull						= 18
       	cstNumErr_RubNullableSansNullDefaut					= 19
+      	cstNumErr_RubNumeriqueGrandeCapaciteAControler		= 22
+      	cstNumErr_RubTypeNonStandard						= 25
+      	
+      	//Analyse
+      	cstNumErr_LibelleRubriqueNonRedef					= 8
+      	
+      	//Contenu BDD
+      	cstNumErr_RubChaineAvecContenuNumerique				= 16
+      	cstNumErr_RubNullableSansNull						= 18
       	cstNumErr_RubNulleAnalyseMaisPasBDD					= 20
       	cstNumErr_RubNulleBDDMaisPasAnalyse					= 21
-      	cstNumErr_RubNumeriqueGrandeCapaciteAControler		= 22
       	cstNumErr_RubriqueInutile							= 23
       	cstNumErr_RubTailleVarAvecContenuFixe				= 24
-      	cstNumErr_RubTypeNonStandard						= 25
       	cstNumErr_ValDefDifferenteEntreBddEtAna				= 27
-      
+      	
+      	//SGBD
       	cstNumErr_MySQL_TypeDonneeIncomatible				= 10
       	cstNumErr_SQLServer_TypeDonneeIncomatible			= 26
       	
+      	//Framework
       	cstNumErr_ZF_AccesseurIDManquantE					= 28
       	cstNumErr_ZF_AccesseurIDManquantL					= 29
       	cstNumErr_ZF_AccesseurIDManquantLE					= 30

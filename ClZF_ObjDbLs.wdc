@@ -301,7 +301,7 @@ class :
       	sCle = ::ZF_sCleOdb(sClasse_P, nIdUnique_P)
       	
       	//Récupération de l'objet, s'il est instancié
-      	oObjRecup = ZF_RecupObjDeCle(sCle)
+      	oObjRecup = ::ZF_RecupObjDeCle(sCle)
       	
       	si oObjRecup = Null ALORS
       		//Il n'est pas instancié : on le fait

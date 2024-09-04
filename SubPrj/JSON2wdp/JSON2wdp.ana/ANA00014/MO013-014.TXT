@@ -1,0 +1,39 @@
+//MO013-014.TXT ANA00013 TO ANA00014
+actor		NFI		nouveau fichier
+address		NFI		nouveau fichier
+category		NFI		nouveau fichier
+city		NFI		nouveau fichier
+country		NFI		nouveau fichier
+customer		NFI		nouveau fichier
+film		NFI		nouveau fichier
+film_actor		NFI		nouveau fichier
+film_category		NFI		nouveau fichier
+film_text		NFI		nouveau fichier
+inventory		NFI		nouveau fichier
+language		NFI		nouveau fichier
+payment		NFI		nouveau fichier
+rental		NFI		nouveau fichier
+staff		NFI		nouveau fichier
+store		NFI		nouveau fichier
+FK_address_city_id_city_city_id		NWL	city (city_id) et address (city_id)	Nouvelle liaison entre les fichiers city (city_id) et address (city_id)
+FK_city_country_id_country_country_id		NWL	country (country_id) et city (country_id)	Nouvelle liaison entre les fichiers country (country_id) et city (country_id)
+FK_customer_address_id_address_address_id		NWL	address (address_id) et customer (address_id)	Nouvelle liaison entre les fichiers address (address_id) et customer (address_id)
+FK_customer_store_id_store_store_id		NWL	store (store_id) et customer (store_id)	Nouvelle liaison entre les fichiers store (store_id) et customer (store_id)
+FK_film_original_language_id_language_language_id		NWL	language (language_id) et film (original_language_id)	Nouvelle liaison entre les fichiers language (language_id) et film (original_language_id)
+FK_film_language_id_language_language_id		NWL	language (language_id) et film (language_id)	Nouvelle liaison entre les fichiers language (language_id) et film (language_id)
+FK_film_actor_film_id_film_film_id		NWL	film (film_id) et film_actor (film_id)	Nouvelle liaison entre les fichiers film (film_id) et film_actor (film_id)
+FK_film_actor_actor_id_actor_actor_id		NWL	actor (actor_id) et film_actor (actor_id)	Nouvelle liaison entre les fichiers actor (actor_id) et film_actor (actor_id)
+FK_film_category_category_id_category_category_id		NWL	category (category_id) et film_category (category_id)	Nouvelle liaison entre les fichiers category (category_id) et film_category (category_id)
+FK_film_category_film_id_film_film_id		NWL	film (film_id) et film_category (film_id)	Nouvelle liaison entre les fichiers film (film_id) et film_category (film_id)
+FK_inventory_store_id_store_store_id		NWL	store (store_id) et inventory (store_id)	Nouvelle liaison entre les fichiers store (store_id) et inventory (store_id)
+FK_inventory_film_id_film_film_id		NWL	film (film_id) et inventory (film_id)	Nouvelle liaison entre les fichiers film (film_id) et inventory (film_id)
+FK_payment_customer_id_customer_customer_id		NWL	customer (customer_id) et payment (customer_id)	Nouvelle liaison entre les fichiers customer (customer_id) et payment (customer_id)
+FK_payment_rental_id_rental_rental_id		NWL	rental (rental_id) et payment (rental_id)	Nouvelle liaison entre les fichiers rental (rental_id) et payment (rental_id)
+FK_payment_staff_id_staff_staff_id		NWL	staff (staff_id) et payment (staff_id)	Nouvelle liaison entre les fichiers staff (staff_id) et payment (staff_id)
+FK_rental_inventory_id_inventory_inventory_id		NWL	inventory (inventory_id) et rental (inventory_id)	Nouvelle liaison entre les fichiers inventory (inventory_id) et rental (inventory_id)
+FK_rental_staff_id_staff_staff_id		NWL	staff (staff_id) et rental (staff_id)	Nouvelle liaison entre les fichiers staff (staff_id) et rental (staff_id)
+FK_rental_customer_id_customer_customer_id		NWL	customer (customer_id) et rental (customer_id)	Nouvelle liaison entre les fichiers customer (customer_id) et rental (customer_id)
+FK_staff_address_id_address_address_id		NWL	address (address_id) et staff (address_id)	Nouvelle liaison entre les fichiers address (address_id) et staff (address_id)
+FK_staff_store_id_store_store_id		NWL	store (store_id) et staff (store_id)	Nouvelle liaison entre les fichiers store (store_id) et staff (store_id)
+FK_store_address_id_address_address_id		NWL	address (address_id) et store (address_id)	Nouvelle liaison entre les fichiers address (address_id) et store (address_id)
+FK_store_manager_staff_id_staff_staff_id		NWL	staff (staff_id) et store (manager_staff_id)	Nouvelle liaison entre les fichiers staff (staff_id) et store (manager_staff_id)

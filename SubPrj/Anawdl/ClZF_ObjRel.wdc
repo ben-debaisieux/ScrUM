@@ -19,6 +19,7 @@ class :
       	herite de ClZF_ObjDB
       PRIVE
       	m_aCompoClePrim est un tableau associatif de ClZF_ObjDbLs dynamique
+      	m_sNomCleCompo est une chaîne 
       fin
      type : 131072
   procedures :
@@ -55,9 +56,14 @@ class :
      name : setCle
      procedure_id : 1529759220910027727
      type_code : 12
-     code : |1-
+     code : |1+
       procedure protege setCle(LOCAL sCle_p est une chaîne, oObjDB est un ClZF_ObjDbLs)<metier>:vide
+      
+      //Mémorisation du nouvel objet en tant que composante de clé primaire.
       :m_aCompoClePrim[sCle_p] = oObjDB
+      
+      //Restion du changement de la clé identifiant l'objet.
+      :ZF_RenommeCle()
      type : 458752
    -
      name : RechEnrDeCles
@@ -211,6 +217,13 @@ class :
       
       sRetour est une chaîne
       POUR TOUTE oObj de aCles_p
+      	
+      	//Si une composante n'est pas instancié, on sort du traitement
+      	si oObj = null ALORS
+      		sRetour = ""
+      		sortir
+      	FIN
+      	
       	sRetour += ::ZF_sCleOdb(oObj..Classe, oObj.ZF_Get_IdUnique())
       FIN
       RENVOYER sRetour
@@ -219,7 +232,7 @@ class :
      name : ZF_sGenTblCleInstance
      procedure_id : 1620126866114356533
      type_code : 12
-     code : |1-
+     code : |1+
       procedure globale ZF_sGenTblCleInstance(*)<metier>:tableau de ClZF_ObjDbLs dynamique
       
       aCles_p est un tableau de ClZF_ObjDbLs dynamique
@@ -230,6 +243,29 @@ class :
       FIN
       
       renvoyer aCles_p
+     type : 458752
+   -
+     name : ZF_RenommeCle
+     procedure_id : 1625871844539684103
+     type_code : 12
+     code : |1-
+      procedure ZF_RenommeCle()<métier>:vide
+      
+      //Calcul du nom de la nouvelle clé
+      sNomCleActu est une chaîne = ZF_sGetNomInstanceRel()
+      
+      //A t elle changée ?
+      si sNomCleActu <> "" _et_ :m_sNomCleCompo <> sNomCleActu ALORS
+      	//Oui : on renomme la clé qui référence l'objet.
+      	si :m_sNomCleCompo <> "" alors
+      		si pas ClZF_App.mg_aoInstances[:m_sNomCleCompo]..vide ALORS
+      			TableauSupprime(ClZF_App.mg_aoInstances, :m_sNomCleCompo)
+      		FIN
+      	FIN
+      	
+      	ClZF_App.mg_aoInstances[sNomCleActu] <- objet
+      	:m_sNomCleCompo = sNomCleActu
+      FIN
      type : 458752
   procedure_templates : []
   property_templates : []

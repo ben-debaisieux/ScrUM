@@ -901,7 +901,6 @@ class :
       procédure ZF_VersTableauAssociatif(sNomMembre_p est une chaîne) <métier>:tableau associatif de ClZF_ObjDbLs dynamique
       
       aRetour est un tableau associatif de ClZF_ObjDbLs dynamique
-      //oObjTmp est un ClZF_ObjDbLs dynamique
       sCle est une chaîne
       
       pour tout oObjTmp de :m_aoObj
@@ -967,6 +966,11 @@ class :
       
       si nPosActu <> nNouvPos alors
       	TableauSupprime(:m_aoObj,nPosActu)
+      	
+      	si nPosActu < nNouvPos ALORS
+      		nNouvPos--
+      	FIN
+      	
       	TableauInsèreRéférence(:m_aoObj,nNouvPos,oObjDb_p)
       FIN
      type : 458752
@@ -1008,7 +1012,7 @@ class :
      procedure_id : 1606733633214590423
      type_code : 12
      code : |1+
-      procédure ZF_DefTri(sMethode_p est une chaîne) <métier>
+      procédure ZF_DefTri(sMethode_p est une chaîne) <métier>:vide
       
       si EnModeTest() ALORS
       	defCollection	est une Définition
@@ -1036,9 +1040,15 @@ class :
      name : ZF_AppTri
      procedure_id : 1606741875388315415
      type_code : 12
-     code : |1-
+     code : |1+
       procedure prive ZF_AppTri()<metier>:vide
-      TableauTrie(:m_aoObj, ttMembre, ":" + :m_sMembreTri)
+      
+      si :m_sMembreTri[[1]] = "-" ALORS
+      	TableauTrie(:m_aoObj, ttMembre, "-:" + :m_sMembreTri[[2 a ]])
+      sinon
+      	TableauTrie(:m_aoObj, ttMembre, ":" + :m_sMembreTri)
+      FIN
+      
      type : 458752
   properties :
    -

@@ -49,6 +49,9 @@ class :
       	// IP test nouveau environnement glpi
       	//cstGLPI_URL_Complet	= "http://10.20.30.113/apirest.php/"
       	//cstGLPI_URL			= "http://10.20.30.113/"
+      	
+      	cstGLPI_Type_Demandeur = 1
+      	cstGLPI_Type_Attribué_A = 2
       FIN
      type : 131072
   procedures :
@@ -128,10 +131,11 @@ class :
      code : |1+
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] Exec (<vRetour> est variant)
+      //[ <Résultat> = ] Exec (<vRetour> est variant [, <bAvecEnteteAccept> est booléen])
       //
       // Paramètres :
       //	vRetour (variant) : <indiquez ici le rôle de vRetour>
+      // 	bAvecEnteteAccept (booléen - valeur par défaut=1) : <indiquez ici le rôle de bAvecEnteteAccept>
       
       // Valeur de retour :
       // 	booléen : <indiquez ici le rôle de la valeur de retour>
@@ -140,7 +144,7 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       //	bJson (booléen - valeur par défaut=0) : <indiquez ici le rôle de bJson>
-      procédure Exec(vRetour est un variant)
+      procédure Exec(vRetour est un variant, LOCAL bAvecEnteteAccept est un booléen = vrai)
       restRequete		est une restRequete
       restReponse		est une restRéponse
       
@@ -168,12 +172,21 @@ class :
       
       restRequete["App-Token"]		= cstGLPI_APP_TOKEN
       restRequete["session-token"]	= m_sSessionToken
+      restRequete["session-token"]	= m_sSessionToken
+      
+      SI bAvecEnteteAccept ALORS
+      	restRequete["Accept"]	= "application/octet-stream"
+      FIN
       
       restReponse						= RESTEnvoie(restRequete)
       
       SI restReponse.CodeEtat = 0 ALORS
-      	Temporisation(100)
-      	restReponse						= RESTEnvoie(restRequete)
+      	nNbrEssaie est un entier
+      	TANTQUE restReponse.CodeEtat = 0 _ET_ nNbrEssaie < 6
+      		nNbrEssaie++
+      		Temporisation(500)
+      		restReponse						= RESTEnvoie(restRequete)
+      	FIN
       FIN
       
       SI PAS restReponse.CodeEtat DANS (200, 201, 206) ALORS
@@ -268,7 +281,7 @@ class :
       // Paramètres :
       //	sID (chaîne ANSI) : <indiquez ici le rôle de sID>
       //	oTicket (ClGLPI_Ticket) : <indiquez ici le rôle de oTicket>
-      // 	sCategorie_p (chaîne ANSI - valeur par défaut="Winmat") : <indiquez ici le rôle de sCategorie_p>
+      //	sCategorie_p (chaîne ANSI - valeur par défaut="Winmat") : <indiquez ici le rôle de sCategorie_p>
       
       // Valeur de retour :
       // 	booléen : <indiquez ici le rôle de la valeur de retour>
@@ -276,7 +289,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GetTicket(sID est une chaine, oTicket est un ClGLPI_Ticket, LOCAL sCategorie_p est une chaine = "Winmat")
+      procédure GetTicket(local sID est une chaine, oTicket est un ClGLPI_Ticket, LOCAL sCategorie_p est une chaine = "Winmat")<métier>:booleen
       avLinks	est un tableau de variant
       vRetour est un variant
       nIndice	est un entier
@@ -328,13 +341,39 @@ class :
       	sURL = oTicket.m_astLinks[nIndice].shref
       	GetTicketDocuments(sURL, oTicket)
       FIN
-      
-      nIndice = tableaucherche(oTicket.m_astLinks, tcLinéaire, "sRel", "TicketFollowup")
+      //ITILFollowup
+      nIndice = TableauCherche(oTicket.m_astLinks, tcLinéaire, "sRel", "ITILFollowup")
       
       si nIndice <> -1 ALORS
       	sURL = oTicket.m_astLinks[nIndice].shref
       	GetTicketFollowups(sURL, oTicket.m_astSuiviCom, oTicket)
       FIN
+      
+      nIndice = TableauCherche(oTicket.m_astLinks, tcLinéaire, "sRel", "TicketFollowup")
+      
+      SI nIndice <> -1 ALORS
+      	sURL = oTicket.m_astLinks[nIndice].sHref
+      	GetTicketFollowups(sURL, oTicket.m_astSuiviCom, oTicket)
+      FIN
+      
+      // Ticket_User
+      nIndice = TableauCherche(oTicket.m_astLinks, tcLinéaire, "sRel", "Ticket_User")
+      
+      SI nIndice <> -1 ALORS
+      	sURL = oTicket.m_astLinks[nIndice].sHref
+      	GetTicketUserAssign(oTicket.m_nId,oTicket)
+      FIN
+      
+      // Group_Ticket
+      nIndice = TableauCherche(oTicket.m_astLinks, tcLinéaire, "sRel", "Group_Ticket")
+      
+      SI nIndice <> -1 ALORS
+      	sURL = oTicket.m_astLinks[nIndice].sHref
+      	GetTicketGroupAssign(oTicket.m_nId,oTicket)
+      FIN
+      
+      // on récupère les infos des plugin fields
+      oTicket.m_stPluginFields_Info = GetTicketFieldPluggin(oTicket.m_nId)
       
       renvoyer vrai
      type : 458752
@@ -400,7 +439,7 @@ class :
       	renvoyer ""
       FIN
       
-      SI CONTIENT(sURL,"group") ALORS
+      SI CONTIENT(sURL,"Group") ALORS
       	
       	// group
       	SI PAS contient(sURL,"0") ALORS
@@ -444,6 +483,7 @@ class :
       procédure GetTicketDocuments(sURL est une chaine, oTicket est un ClGLPI_Ticket) : booléen
       vRetour 	est un variant
       stDoc		est un ClGLPI_Ticket.STR_Documents
+      nIDDocument est un entier
       
       
       InitRequete(sURL)
@@ -454,10 +494,15 @@ class :
       
       pour tout vDocument de vRetour
       	sURL = cstGLPI_URL_Complet + "Document/" + vDocument.documents_id 
-      	si pas GetTicketDocument(sURL, stDoc) ALORS
-      		renvoyer faux
+      	
+      	nIDDocument = vDocument.documents_id
+      	
+      	SI nIDDocument <> 0 ALORS
+      		SI PAS GetTicketDocument(sURL, stDoc) ALORS
+      			RENVOYER Faux
+      		FIN
+      		TableauAjoute(oTicket.m_astDocument	, stDoc)
       	FIN
-      	tableauajoute(oTicket.m_astDocument	, stDoc)
       FIN
       
       renvoyer vrai
@@ -486,7 +531,7 @@ class :
       
       InitRequete(sURL)
       
-      si pas exec(vRetour) ALORS
+      si pas exec(vRetour,Faux) ALORS
       	renvoyer faux
       FIN
       
@@ -495,6 +540,11 @@ class :
       stDoc.sExtension 	= extraitchaine(sFilePath, 1, "/")
       stDoc.nid 			= vRetour.id
       //stDoc.buFFichier	= GetTicketDocumentBuffer(val(vRetour.document_id))
+      
+      SI PAS Exec(vRetour,Vrai) ALORS
+      	RENVOYER Faux
+      FIN
+      stDoc.buFFichier	= vRetour
       
       renvoyer vrai
      type : 458752
@@ -517,8 +567,13 @@ class :
       //
       procédure GetTicketDocumentBuffer(nIDDocument est un entier)
       vRetour est un variant
+      vBody est un variant
       
-      InitRequete(cstGLPI_URL_Complet + "document/" + nIDDocument, httpGet, "?alt=media" )
+      vBody = [
+      {"input": {"id": [%nIDDocument%]}}
+      ]
+      
+      InitRequete(cstGLPI_URL_Complet + "Document/&alt=media",<vBody>:vBody)
       
       si pas exec(vRetour) ALORS
       	renvoyer ""
@@ -551,6 +606,9 @@ class :
       stSuivi 	est une ClGLPI_Ticket.STR_Suivi_Commentaire
       nIDDoc		est un entier
       stDoc 		est un ClGLPI_Ticket.STR_Documents
+      nIndice est un entier
+      sURL_Doc est une chaine
+      
       
       InitRequete(sURL)
       
@@ -566,16 +624,10 @@ class :
       	
       	tableauajoute(aStSuivi, stSuivi)
       	
-      	//Si on a une image on l'a rajoute en tant que doc
-      	nIDDoc = ExtraitChaîneEntre(HTMLVersTexte(vSuivi.content), rangpremier, cstGLPI_URL + "front/document.send.php?docid=", "&tickets_id") 
-       	tantque nIDDoc <> 0	
-       		si tableaucherche(oTicket.m_astDocument, tcLinéaire, "nID", nIDDoc) = -1 ALORS
-      	 		GetTicketDocument(cstGLPI_URL_Complet + "Document/" + nIDDoc, stDoc)
-       			tableauajoute(oTicket.m_astDocument, stDoc)
-      		FIN
-      		
-      		nIDDoc = ExtraitChaîneEntre(HTMLVersTexte(vSuivi.content), rangsuivant, cstGLPI_URL + "front/document.send.php?docid=", "&") 
-      	FIN
+      	sURL_Doc = cstGLPI_URL_Complet + "ITILFollowup/[%vSuivi.id%]/Document_Item/"
+      	
+      	GetTicketDocuments(sURL_Doc, oTicket)
+      	
       FIN
       
       RENVOYER Vrai
@@ -765,7 +817,7 @@ class :
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure privée InitRequete(sURL est chaine, nMethode est entier = httpget, sParam est chaine = "" , vBody est un variant = null)
+      procédure PROTEGE InitRequete(sURL est chaine, nMethode est entier = httpget, sParam est chaine = "" , vBody est un variant = null)
       
       m_sURL		= sURL
       m_sParam	= sParam
@@ -890,7 +942,7 @@ class :
       	vInput.tickets_id	= nIDTicket
       	vInput.users_id		= sIDMembre_p
       SINON
-      	sUrl				= cstGLPI_URL_Complet + "Ticket/[%nIDTicket%]/group_ticket/"
+      	sUrl				= cstGLPI_URL_Complet + "Ticket/[%nIDTicket%]/Group_Ticket/"
       	vInput.groups_id = sIDMembre_p
       	vInput.tickets_id	= nIDTicket
       FIN
@@ -959,20 +1011,25 @@ class :
      code : |1-
       // Résumé : <indiquez ici ce que fait la procédure>
       // Syntaxe :
-      //[ <Résultat> = ] GetTicketUserAssign (<nIDTicket_p> est entier)
+      //[ <Résultat> = ] GetTicketUserAssign (<nIDTicket_p> est entier, <oTicket> est ClGLPI_Ticket)
       //
       // Paramètres :
       //	nIDTicket_p (entier) : <indiquez ici le rôle de nIDTicket_p>
+      //	oTicket (ClGLPI_Ticket) : <indiquez ici le rôle de oTicket>
+      
       // Valeur de retour :
-      // 	variant : <indiquez ici le rôle de la valeur de retour>
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GetTicketUserAssign(LOCAL nIDTicket_p est un entier)
+      //	nType (entier) : <indiquez ici le rôle de nType>
+      procédure GetTicketUserAssign(LOCAL nIDTicket_p est un entier, oTicket est un ClGLPI_Ticket)
       
-      
-      vRetour	est un Variant
+      vRetour			est un Variant
+      stAffectation	est un ClGLPI_Ticket.STR_GLPI_USER_GROUP_Info
+      nIndice			est un entier
+      sURL			est une chaine
       
       //Maj du statut
       m_sURL						= cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/Ticket_User"
@@ -982,13 +1039,35 @@ class :
       
       InitRequete(cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/Ticket_User", httpGet)	
       SI PAS Exec(vRetour) ALORS
-      	
+      	RENVOYER Faux
+      SINON
+      	SI vRetour..Occurrence > 0 ALORS
+      		POUR i = 1 _À_ vRetour..Occurrence
+      			stAffectation.nID	= vRetour[i].users_id
+      			stAffectation.nType	= cstGLPI_Type_Membre_User
+      			
+      			SI stAffectation.nID > 0 ALORS
+      				sURL				= cstGLPI_URL_Complet + "User/[%stAffectation.nID%]"
+      				
+      				stAffectation.sNom	= GetTicketUsername(sURL)
+      				
+      				SELON vRetour[i].type
+      					CAS cstGLPI_Type_Attribué_A
+      						TableauAjoute(oTicket.m_astAffectation_Ticket,stAffectation)
+      					CAS cstGLPI_Type_Demandeur
+      						TableauAjoute(oTicket.m_astDemandeur_Ticket,stAffectation)
+      					AUTRE CAS
+      						
+      				FIN
+      			FIN
+      		FIN
+      	FIN
       FIN
       
       
       
       
-      RENVOYER vRetour
+      RENVOYER Vrai
      type : 458752
    -
      name : GetInfoGroup
@@ -1052,33 +1131,196 @@ class :
       //
       // Paramètres :
       //	nIDTicket_p (entier) : <indiquez ici le rôle de nIDTicket_p>
-      
       // Valeur de retour :
-      // 	variant : <indiquez ici le rôle de la valeur de retour>
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
       //
       // Exemple :
       // <Indiquez ici un exemple d'utilisation>
       //
-      procédure GetTicketGroupAssign(LOCAL nIDTicket_p est un entier)
+      procédure GetTicketGroupAssign(LOCAL nIDTicket_p est un entier, oTicket est un ClGLPI_Ticket)
       
       
       vRetour	est un Variant
+      stAffectation est un ClGLPI_Ticket.STR_GLPI_USER_GROUP_Info
+      nIndice est un entier
+      sUrl est une chaine
       
       //Maj du statut
-      m_sURL						= cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/group_ticket"
+      m_sURL						= cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/Group_Ticket"
       m_nMethode					= httpGet
       m_sParam					= ""
       
       
-      InitRequete(cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/group_ticket", httpGet)	
+      InitRequete(cstGLPI_URL_Complet + "Ticket/[%nIDTicket_p%]/Group_Ticket", httpGet)	
       SI PAS Exec(vRetour) ALORS
-      	
+      	RENVOYER Faux
+      SINON
+      	SI vRetour..Occurrence > 0 ALORS
+      		POUR i = 1 _À_ vRetour..Occurrence
+      			stAffectation.nID	= vRetour[i].groups_id
+      			stAffectation.nType	= cstGLPI_Type_Membre_Group
+      			
+      			
+      			
+      			SI stAffectation.nID > 0 ALORS
+      				sUrl				= cstGLPI_URL_Complet + "Group/[%stAffectation.nID%]"
+      				
+      				stAffectation.sNom	= GetTicketUsername(sUrl)
+      				
+      				SELON vRetour[i].type
+      					CAS cstGLPI_Type_Attribué_A
+      						TableauAjoute(oTicket.m_astAffectation_Ticket,stAffectation)
+      					CAS cstGLPI_Type_Demandeur
+      						TableauAjoute(oTicket.m_astDemandeur_Ticket,stAffectation)
+      					AUTRE CAS
+      						
+      				FIN
+      				
+      			FIN
+      		FIN
+      	FIN
       FIN
       
       
       
       
-      RENVOYER vRetour
+      RENVOYER Vrai
+     type : 458752
+   -
+     name : GetTicketFieldPluggin
+     procedure_id : 1636525094090263408
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //GetTicketFieldPluggin (<nID_Ticket_p> est entier)
+      //
+      // Paramètres :
+      //	nID_Ticket_p (entier) : <indiquez ici le rôle de nSID_Ticket_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicketFieldPluggin(LOCAL nID_Ticket_p est un entier):clglpi_ticket.STR_PluginFields_Info
+      
+      vRetour est un Variant
+      stPluginFields_Info est un clglpi_ticket.STR_PluginFields_Info
+      
+      // info affinage
+      InitRequete(cstGLPI_URL_Complet + "Ticket/[%nID_Ticket_p%]/PluginFieldsTicketaffinage")
+      
+      //InitRequete(cstGLPI_URL_Complet + "listSearchOptions/Ticket")
+      
+      SI PAS Exec(vRetour) ALORS
+      	//RENVOYER Faux
+      SINON
+      	// requete OK on récupère les infos
+      	SI vRetour..Occurrence > 0 ALORS
+      		stPluginFields_Info.nCotation = vRetour[1].cotationfield
+      		stPluginFields_Info.nSprint = vRetour[1].sprintfield
+      		stPluginFields_Info.nValeurAjoute = vRetour[1].valeurajoutefield
+      		stPluginFields_Info.sTachesScrum = vRetour[1].tachescrumfield
+      	FIN
+      FIN
+      
+      // info expert métier
+      InitRequete(cstGLPI_URL_Complet + "Ticket/[%nID_Ticket_p%]/PluginFieldsTicketexpertmtier")
+      
+      //InitRequete(cstGLPI_URL_Complet + "listSearchOptions/Ticket")
+      
+      SI PAS Exec(vRetour) ALORS
+      	//RENVOYER Faux
+      SINON
+      	// requete OK on récupère les infos
+      	SI vRetour..Occurrence > 0 ALORS
+      		InitRequete(cstGLPI_URL_Complet + "PluginFieldsExpertmtierfieldDropdown/[%vRetour[1].plugin_fields_expertmtierfielddropdowns_id%]")
+      		
+      		//InitRequete(cstGLPI_URL_Complet + "listSearchOptions/Ticket")
+      		
+      		SI PAS Exec(vRetour) ALORS
+      			//RENVOYER Faux
+      		SINON
+      			// requete OK on récupère les infos
+      			stPluginFields_Info.sExpertMetier = vRetour.completename
+      		FIN
+      	FIN
+      FIN
+      
+      // retour de test
+      InitRequete(cstGLPI_URL_Complet + "Ticket/[%nID_Ticket_p%]/PluginFieldsTickettestsutilisateur")
+      
+      //InitRequete(cstGLPI_URL_Complet + "listSearchOptions/Ticket")
+      
+      SI PAS Exec(vRetour) ALORS
+      	//RENVOYER Faux
+      SINON
+      	// requete OK on récupère les infos
+      	SI vRetour..Occurrence > 0 ALORS
+      		stPluginFields_Info.bRetourDeTest		= vRetour[1].retourdetestfield
+      	FIN
+      FIN
+      
+      
+      RENVOYER stPluginFields_Info
+     type : 458752
+   -
+     name : getListTicket
+     procedure_id : 1637540553268457914
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] getListTicket (<aID_Ticket_p> est tableau (entier))
+      //
+      // Paramètres :
+      //	aID_Ticket_p (tableau (entier)) : <indiquez ici le rôle de aID_Ticket_p>
+      
+      // Valeur de retour :
+      // 	booléen : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure getListTicket(LOCAL aID_Ticket_p est un tableau d'entier)
+      
+      sCriteria est une chaine
+      vRetour est un variant
+      sAccoladeFermante est une chaine = "]"
+      oTicket	est un ClGLPI_Ticket dynamique
+      vData	est un Variant
+      siD est une chaine
+      
+      // on parcoure les ID des ticket pour construire la requete
+      POUR i = 1 _À_ aID_Ticket_p..Occurrence
+      	SI i = 1 ALORS
+      		sCriteria = "?&criteria[[%i-1%]][link]=OR&criteria[[%i-1%]][field]=1&criteria[[%i-1%]][searchtype]=equals&criteria[[%i-1%]][value]=[%aID_Ticket_p[i]%]"
+      	SINON
+      		sCriteria += "&criteria[[%i-1%]][link]=OR&criteria[[%i-1%]][field]=1&criteria[[%i-1%]][searchtype]=equals&criteria[[%i-1%]][value]=[%aID_Ticket_p[i]%]"
+      	FIN
+      FIN
+      
+      
+      
+      InitRequete(cstGLPI_URL_Complet + "search/Ticket[%sCriteria%]")
+      
+      SI PAS Exec(vRetour) ALORS
+      	RENVOYER Faux
+      FIN
+      
+      vData = vRetour.data
+      
+      SI vData <> Null ALORS
+      	POUR TOUT vTicket DE vData
+      		oTicket	= allouer un ClGLPI_Ticket
+      		siD		= vTicket."2"
+      		GetTicket(siD, oTicket, vTicket."7")
+      		TableauAjoute(m_aopclEntite, oTicket)
+      	FIN
+      FIN
+      
+      RENVOYER Vrai
      type : 458752
   procedure_templates : []
   property_templates : []

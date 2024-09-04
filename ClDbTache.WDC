@@ -89,6 +89,7 @@ class :
       fin
       
       
+      
       m_oExPbPoidTache			= allouer un ClZF_Exception("Valeur incorrecte, pour le poids de la tache")
       m_oExPbPoidTachePrev		= allouer un ClZF_Exception("Valeur incorrecte, pour le poids prévisionnel")
       //m_oExPbTacheDemrreeSansDev	= allouer un ClZF_Exception("Impossible de démarrer une tache, sans développeur associé.")
@@ -524,6 +525,7 @@ class :
       	En tant que : [%:m_oUserStoryParent.p_sEntantQue%]
       	J'ai besoin de : [%:m_oUserStoryParent.p_sJaiBesoinDe%]
       	Afin de : [%:m_oUserStoryParent.p_sAfinDe%]
+      	Valeur Business : [%:m_oUserStoryParent.p_nValeurBusiness%]
       	-------------------------------------------------
       	[%:m_sCodeTache%]
       	[%:m_sDescription%]

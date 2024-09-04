@@ -1,0 +1,145 @@
+//MO017-018.TXT ANA00017 TO ANA00018
+Document		NFI		nouveau fichier
+Address		NFI		nouveau fichier
+Customer		NFI		nouveau fichier
+Store		NFI		nouveau fichier
+AddressType		NFI		nouveau fichier
+AWBuildVersion		NFI		nouveau fichier
+BillOfMaterials		NFI		nouveau fichier
+BusinessEntity		NFI		nouveau fichier
+BusinessEntityAddress		NFI		nouveau fichier
+BusinessEntityContact		NFI		nouveau fichier
+ContactType		NFI		nouveau fichier
+CountryRegion		NFI		nouveau fichier
+CountryRegionCurrency		NFI		nouveau fichier
+CreditCard		NFI		nouveau fichier
+Culture		NFI		nouveau fichier
+Currency		NFI		nouveau fichier
+CurrencyRate		NFI		nouveau fichier
+DatabaseLog		NFI		nouveau fichier
+Department		NFI		nouveau fichier
+EmailAddress		NFI		nouveau fichier
+Employee		NFI		nouveau fichier
+EmployeeDepartmentHistory		NFI		nouveau fichier
+EmployeePayHistory		NFI		nouveau fichier
+ErrorLog		NFI		nouveau fichier
+Illustration		NFI		nouveau fichier
+JobCandidate		NFI		nouveau fichier
+Location		NFI		nouveau fichier
+Password		NFI		nouveau fichier
+Person		NFI		nouveau fichier
+PersonCreditCard		NFI		nouveau fichier
+PersonPhone		NFI		nouveau fichier
+PhoneNumberType		NFI		nouveau fichier
+Product		NFI		nouveau fichier
+ProductCategory		NFI		nouveau fichier
+ProductCostHistory		NFI		nouveau fichier
+ProductDescription		NFI		nouveau fichier
+ProductDocument		NFI		nouveau fichier
+ProductInventory		NFI		nouveau fichier
+ProductListPriceHistory		NFI		nouveau fichier
+ProductModel		NFI		nouveau fichier
+ProductModelIllustration		NFI		nouveau fichier
+ProductModelProductDescriptionCulture		NFI		nouveau fichier
+ProductPhoto		NFI		nouveau fichier
+ProductProductPhoto		NFI		nouveau fichier
+ProductReview		NFI		nouveau fichier
+ProductSubcategory		NFI		nouveau fichier
+ProductVendor		NFI		nouveau fichier
+PurchaseOrderDetail		NFI		nouveau fichier
+PurchaseOrderHeader		NFI		nouveau fichier
+SalesOrderDetail		NFI		nouveau fichier
+SalesOrderHeader		NFI		nouveau fichier
+SalesOrderHeaderSalesReason		NFI		nouveau fichier
+SalesPerson		NFI		nouveau fichier
+SalesPersonQuotaHistory		NFI		nouveau fichier
+SalesReason		NFI		nouveau fichier
+SalesTaxRate		NFI		nouveau fichier
+SalesTerritory		NFI		nouveau fichier
+SalesTerritoryHistory		NFI		nouveau fichier
+ScrapReason		NFI		nouveau fichier
+Shift		NFI		nouveau fichier
+ShipMethod		NFI		nouveau fichier
+ShoppingCartItem		NFI		nouveau fichier
+SpecialOffer		NFI		nouveau fichier
+SpecialOfferProduct		NFI		nouveau fichier
+StateProvince		NFI		nouveau fichier
+TransactionHistory		NFI		nouveau fichier
+TransactionHistoryArchive		NFI		nouveau fichier
+UnitMeasure		NFI		nouveau fichier
+Vendor		NFI		nouveau fichier
+WorkOrder		NFI		nouveau fichier
+WorkOrderRouting		NFI		nouveau fichier
+FK_Address_StateProvinceID_StateProvince_StateProvinceID		NWL	StateProvince (StateProvinceID) et Address (StateProvinceID)	Nouvelle liaison entre les fichiers StateProvince (StateProvinceID) et Address (StateProvinceID)
+FK_BillOfMaterials_UnitMeasureCode_UnitMeasure_UnitMeasureCode		NWL	UnitMeasure (UnitMeasureCode) et BillOfMaterials (UnitMeasureCode)	Nouvelle liaison entre les fichiers UnitMeasure (UnitMeasureCode) et BillOfMaterials (UnitMeasureCode)
+FK_BusinessEntityAddress_BusinessEntityID_BusinessEntity_BusinessEntityID		NWL	BusinessEntity (BusinessEntityID) et BusinessEntityAddress (BusinessEntityID)	Nouvelle liaison entre les fichiers BusinessEntity (BusinessEntityID) et BusinessEntityAddress (BusinessEntityID)
+FK_CountryRegionCurrency_CurrencyCode_Currency_CurrencyCode		NWL	Currency (CurrencyCode) et CountryRegionCurrency (CurrencyCode)	Nouvelle liaison entre les fichiers Currency (CurrencyCode) et CountryRegionCurrency (CurrencyCode)
+FK_BusinessEntityContact_ContactTypeID_ContactType_ContactTypeID		NWL	ContactType (ContactTypeID) et BusinessEntityContact (ContactTypeID)	Nouvelle liaison entre les fichiers ContactType (ContactTypeID) et BusinessEntityContact (ContactTypeID)
+FK_BusinessEntityContact_BusinessEntityID_BusinessEntity_BusinessEntityID		NWL	BusinessEntity (BusinessEntityID) et BusinessEntityContact (BusinessEntityID)	Nouvelle liaison entre les fichiers BusinessEntity (BusinessEntityID) et BusinessEntityContact (BusinessEntityID)
+FK_BusinessEntityAddress_AddressID_Address_AddressID		NWL	Address (AddressID) et BusinessEntityAddress (AddressID)	Nouvelle liaison entre les fichiers Address (AddressID) et BusinessEntityAddress (AddressID)
+FK_BusinessEntityAddress_AddressTypeID_AddressType_AddressTypeID		NWL	AddressType (AddressTypeID) et BusinessEntityAddress (AddressTypeID)	Nouvelle liaison entre les fichiers AddressType (AddressTypeID) et BusinessEntityAddress (AddressTypeID)
+FK_CountryRegionCurrency_CountryRegionCode_CountryRegion_CountryRegionCode		NWL	CountryRegion (CountryRegionCode) et CountryRegionCurrency (CountryRegionCode)	Nouvelle liaison entre les fichiers CountryRegion (CountryRegionCode) et CountryRegionCurrency (CountryRegionCode)
+FK_Customer_TerritoryID_SalesTerritory_TerritoryID		NWL	SalesTerritory (TerritoryID) et Customer (TerritoryID)	Nouvelle liaison entre les fichiers SalesTerritory (TerritoryID) et Customer (TerritoryID)
+FK_EmailAddress_BusinessEntityID_Person_BusinessEntityID		NWL	Person (BusinessEntityID) et EmailAddress (BusinessEntityID)	Nouvelle liaison entre les fichiers Person (BusinessEntityID) et EmailAddress (BusinessEntityID)
+FK_Employee_BusinessEntityID_Person_BusinessEntityID		NWL	Person (BusinessEntityID) et Employee (BusinessEntityID)	Nouvelle liaison entre les fichiers Person (BusinessEntityID) et Employee (BusinessEntityID)
+FK_EmployeeDepartmentHistory_DepartmentID_Department_DepartmentID		NWL	Department (DepartmentID) et EmployeeDepartmentHistory (DepartmentID)	Nouvelle liaison entre les fichiers Department (DepartmentID) et EmployeeDepartmentHistory (DepartmentID)
+FK_EmployeeDepartmentHistory_ShiftID_Shift_ShiftID		NWL	Shift (ShiftID) et EmployeeDepartmentHistory (ShiftID)	Nouvelle liaison entre les fichiers Shift (ShiftID) et EmployeeDepartmentHistory (ShiftID)
+FK_EmployeeDepartmentHistory_BusinessEntityID_Employee_BusinessEntityID		NWL	Employee (BusinessEntityID) et EmployeeDepartmentHistory (BusinessEntityID)	Nouvelle liaison entre les fichiers Employee (BusinessEntityID) et EmployeeDepartmentHistory (BusinessEntityID)
+FK_EmployeePayHistory_BusinessEntityID_Employee_BusinessEntityID		NWL	Employee (BusinessEntityID) et EmployeePayHistory (BusinessEntityID)	Nouvelle liaison entre les fichiers Employee (BusinessEntityID) et EmployeePayHistory (BusinessEntityID)
+FK_JobCandidate_BusinessEntityID_Employee_BusinessEntityID		NWL	Employee (BusinessEntityID) et JobCandidate (BusinessEntityID)	Nouvelle liaison entre les fichiers Employee (BusinessEntityID) et JobCandidate (BusinessEntityID)
+FK_Password_BusinessEntityID_Person_BusinessEntityID		NWL	Person (BusinessEntityID) et Password (BusinessEntityID)	Nouvelle liaison entre les fichiers Person (BusinessEntityID) et Password (BusinessEntityID)
+FK_Person_BusinessEntityID_BusinessEntity_BusinessEntityID		NWL	BusinessEntity (BusinessEntityID) et Person (BusinessEntityID)	Nouvelle liaison entre les fichiers BusinessEntity (BusinessEntityID) et Person (BusinessEntityID)
+FK_PersonCreditCard_CreditCardID_CreditCard_CreditCardID		NWL	CreditCard (CreditCardID) et PersonCreditCard (CreditCardID)	Nouvelle liaison entre les fichiers CreditCard (CreditCardID) et PersonCreditCard (CreditCardID)
+FK_PersonCreditCard_BusinessEntityID_Person_BusinessEntityID		NWL	Person (BusinessEntityID) et PersonCreditCard (BusinessEntityID)	Nouvelle liaison entre les fichiers Person (BusinessEntityID) et PersonCreditCard (BusinessEntityID)
+FK_PersonPhone_BusinessEntityID_Person_BusinessEntityID		NWL	Person (BusinessEntityID) et PersonPhone (BusinessEntityID)	Nouvelle liaison entre les fichiers Person (BusinessEntityID) et PersonPhone (BusinessEntityID)
+FK_PersonPhone_PhoneNumberTypeID_PhoneNumberType_PhoneNumberTypeID		NWL	PhoneNumberType (PhoneNumberTypeID) et PersonPhone (PhoneNumberTypeID)	Nouvelle liaison entre les fichiers PhoneNumberType (PhoneNumberTypeID) et PersonPhone (PhoneNumberTypeID)
+FK_Product_ProductModelID_ProductModel_ProductModelID		NWL	ProductModel (ProductModelID) et Product (ProductModelID)	Nouvelle liaison entre les fichiers ProductModel (ProductModelID) et Product (ProductModelID)
+FK_Product_ProductSubcategoryID_ProductSubcategory_ProductSubcategoryID		NWL	ProductSubcategory (ProductSubcategoryID) et Product (ProductSubcategoryID)	Nouvelle liaison entre les fichiers ProductSubcategory (ProductSubcategoryID) et Product (ProductSubcategoryID)
+FK_ProductCostHistory_ProductID_Product_ProductID		NWL	Product (ProductID) et ProductCostHistory (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et ProductCostHistory (ProductID)
+FK_ProductDocument_DocumentNode_Document_DocumentNode		NWL	Document (DocumentNode) et ProductDocument (DocumentNode)	Nouvelle liaison entre les fichiers Document (DocumentNode) et ProductDocument (DocumentNode)
+FK_ProductDocument_ProductID_Product_ProductID		NWL	Product (ProductID) et ProductDocument (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et ProductDocument (ProductID)
+FK_ProductInventory_LocationID_Location_LocationID		NWL	Location (LocationID) et ProductInventory (LocationID)	Nouvelle liaison entre les fichiers Location (LocationID) et ProductInventory (LocationID)
+FK_ProductInventory_ProductID_Product_ProductID		NWL	Product (ProductID) et ProductInventory (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et ProductInventory (ProductID)
+FK_ProductListPriceHistory_ProductID_Product_ProductID		NWL	Product (ProductID) et ProductListPriceHistory (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et ProductListPriceHistory (ProductID)
+FK_ProductModelIllustration_IllustrationID_Illustration_IllustrationID		NWL	Illustration (IllustrationID) et ProductModelIllustration (IllustrationID)	Nouvelle liaison entre les fichiers Illustration (IllustrationID) et ProductModelIllustration (IllustrationID)
+FK_ProductModelIllustration_ProductModelID_ProductModel_ProductModelID		NWL	ProductModel (ProductModelID) et ProductModelIllustration (ProductModelID)	Nouvelle liaison entre les fichiers ProductModel (ProductModelID) et ProductModelIllustration (ProductModelID)
+FK_ProductModelProductDescriptionCulture_CultureID_Culture_CultureID		NWL	Culture (CultureID) et ProductModelProductDescriptionCulture (CultureID)	Nouvelle liaison entre les fichiers Culture (CultureID) et ProductModelProductDescriptionCulture (CultureID)
+FK_ProductModelProductDescriptionCulture_ProductDescriptionID_ProductDescription_ProductDescriptionID		NWL	ProductDescription (ProductDescriptionID) et ProductModelProductDescriptionCulture (ProductDescriptionID)	Nouvelle liaison entre les fichiers ProductDescription (ProductDescriptionID) et ProductModelProductDescriptionCulture (ProductDescriptionID)
+FK_ProductModelProductDescriptionCulture_ProductModelID_ProductModel_ProductModelID		NWL	ProductModel (ProductModelID) et ProductModelProductDescriptionCulture (ProductModelID)	Nouvelle liaison entre les fichiers ProductModel (ProductModelID) et ProductModelProductDescriptionCulture (ProductModelID)
+FK_ProductProductPhoto_ProductID_Product_ProductID		NWL	Product (ProductID) et ProductProductPhoto (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et ProductProductPhoto (ProductID)
+FK_ProductProductPhoto_ProductPhotoID_ProductPhoto_ProductPhotoID		NWL	ProductPhoto (ProductPhotoID) et ProductProductPhoto (ProductPhotoID)	Nouvelle liaison entre les fichiers ProductPhoto (ProductPhotoID) et ProductProductPhoto (ProductPhotoID)
+FK_ProductReview_ProductID_Product_ProductID		NWL	Product (ProductID) et ProductReview (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et ProductReview (ProductID)
+FK_ProductSubcategory_ProductCategoryID_ProductCategory_ProductCategoryID		NWL	ProductCategory (ProductCategoryID) et ProductSubcategory (ProductCategoryID)	Nouvelle liaison entre les fichiers ProductCategory (ProductCategoryID) et ProductSubcategory (ProductCategoryID)
+FK_ProductVendor_UnitMeasureCode_UnitMeasure_UnitMeasureCode		NWL	UnitMeasure (UnitMeasureCode) et ProductVendor (UnitMeasureCode)	Nouvelle liaison entre les fichiers UnitMeasure (UnitMeasureCode) et ProductVendor (UnitMeasureCode)
+FK_ProductVendor_ProductID_Product_ProductID		NWL	Product (ProductID) et ProductVendor (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et ProductVendor (ProductID)
+FK_ProductVendor_BusinessEntityID_Vendor_BusinessEntityID		NWL	Vendor (BusinessEntityID) et ProductVendor (BusinessEntityID)	Nouvelle liaison entre les fichiers Vendor (BusinessEntityID) et ProductVendor (BusinessEntityID)
+FK_PurchaseOrderDetail_PurchaseOrderID_PurchaseOrderHeader_PurchaseOrderID		NWL	PurchaseOrderHeader (PurchaseOrderID) et PurchaseOrderDetail (PurchaseOrderID)	Nouvelle liaison entre les fichiers PurchaseOrderHeader (PurchaseOrderID) et PurchaseOrderDetail (PurchaseOrderID)
+FK_PurchaseOrderDetail_ProductID_Product_ProductID		NWL	Product (ProductID) et PurchaseOrderDetail (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et PurchaseOrderDetail (ProductID)
+FK_PurchaseOrderHeader_ShipMethodID_ShipMethod_ShipMethodID		NWL	ShipMethod (ShipMethodID) et PurchaseOrderHeader (ShipMethodID)	Nouvelle liaison entre les fichiers ShipMethod (ShipMethodID) et PurchaseOrderHeader (ShipMethodID)
+FK_SalesOrderDetail_SalesOrderID_SalesOrderHeader_SalesOrderID		NWL	SalesOrderHeader (SalesOrderID) et SalesOrderDetail (SalesOrderID)	Nouvelle liaison entre les fichiers SalesOrderHeader (SalesOrderID) et SalesOrderDetail (SalesOrderID)
+FK_SalesOrderHeader_ShipMethodID_ShipMethod_ShipMethodID		NWL	ShipMethod (ShipMethodID) et SalesOrderHeader (ShipMethodID)	Nouvelle liaison entre les fichiers ShipMethod (ShipMethodID) et SalesOrderHeader (ShipMethodID)
+FK_SalesOrderHeader_TerritoryID_SalesTerritory_TerritoryID		NWL	SalesTerritory (TerritoryID) et SalesOrderHeader (TerritoryID)	Nouvelle liaison entre les fichiers SalesTerritory (TerritoryID) et SalesOrderHeader (TerritoryID)
+FK_SalesOrderHeader_CustomerID_Customer_CustomerID		NWL	Customer (CustomerID) et SalesOrderHeader (CustomerID)	Nouvelle liaison entre les fichiers Customer (CustomerID) et SalesOrderHeader (CustomerID)
+FK_SalesOrderHeader_CreditCardID_CreditCard_CreditCardID		NWL	CreditCard (CreditCardID) et SalesOrderHeader (CreditCardID)	Nouvelle liaison entre les fichiers CreditCard (CreditCardID) et SalesOrderHeader (CreditCardID)
+FK_SalesOrderHeader_CurrencyRateID_CurrencyRate_CurrencyRateID		NWL	CurrencyRate (CurrencyRateID) et SalesOrderHeader (CurrencyRateID)	Nouvelle liaison entre les fichiers CurrencyRate (CurrencyRateID) et SalesOrderHeader (CurrencyRateID)
+FK_SalesOrderHeaderSalesReason_SalesReasonID_SalesReason_SalesReasonID		NWL	SalesReason (SalesReasonID) et SalesOrderHeaderSalesReason (SalesReasonID)	Nouvelle liaison entre les fichiers SalesReason (SalesReasonID) et SalesOrderHeaderSalesReason (SalesReasonID)
+FK_SalesOrderHeaderSalesReason_SalesOrderID_SalesOrderHeader_SalesOrderID		NWL	SalesOrderHeader (SalesOrderID) et SalesOrderHeaderSalesReason (SalesOrderID)	Nouvelle liaison entre les fichiers SalesOrderHeader (SalesOrderID) et SalesOrderHeaderSalesReason (SalesOrderID)
+FK_SalesPerson_BusinessEntityID_Employee_BusinessEntityID		NWL	Employee (BusinessEntityID) et SalesPerson (BusinessEntityID)	Nouvelle liaison entre les fichiers Employee (BusinessEntityID) et SalesPerson (BusinessEntityID)
+FK_SalesPerson_TerritoryID_SalesTerritory_TerritoryID		NWL	SalesTerritory (TerritoryID) et SalesPerson (TerritoryID)	Nouvelle liaison entre les fichiers SalesTerritory (TerritoryID) et SalesPerson (TerritoryID)
+FK_SalesPersonQuotaHistory_BusinessEntityID_SalesPerson_BusinessEntityID		NWL	SalesPerson (BusinessEntityID) et SalesPersonQuotaHistory (BusinessEntityID)	Nouvelle liaison entre les fichiers SalesPerson (BusinessEntityID) et SalesPersonQuotaHistory (BusinessEntityID)
+FK_SalesTaxRate_StateProvinceID_StateProvince_StateProvinceID		NWL	StateProvince (StateProvinceID) et SalesTaxRate (StateProvinceID)	Nouvelle liaison entre les fichiers StateProvince (StateProvinceID) et SalesTaxRate (StateProvinceID)
+FK_SalesTerritory_CountryRegionCode_CountryRegion_CountryRegionCode		NWL	CountryRegion (CountryRegionCode) et SalesTerritory (CountryRegionCode)	Nouvelle liaison entre les fichiers CountryRegion (CountryRegionCode) et SalesTerritory (CountryRegionCode)
+FK_SalesTerritoryHistory_BusinessEntityID_SalesPerson_BusinessEntityID		NWL	SalesPerson (BusinessEntityID) et SalesTerritoryHistory (BusinessEntityID)	Nouvelle liaison entre les fichiers SalesPerson (BusinessEntityID) et SalesTerritoryHistory (BusinessEntityID)
+FK_SalesTerritoryHistory_TerritoryID_SalesTerritory_TerritoryID		NWL	SalesTerritory (TerritoryID) et SalesTerritoryHistory (TerritoryID)	Nouvelle liaison entre les fichiers SalesTerritory (TerritoryID) et SalesTerritoryHistory (TerritoryID)
+FK_ShoppingCartItem_ProductID_Product_ProductID		NWL	Product (ProductID) et ShoppingCartItem (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et ShoppingCartItem (ProductID)
+FK_SpecialOfferProduct_SpecialOfferID_SpecialOffer_SpecialOfferID		NWL	SpecialOffer (SpecialOfferID) et SpecialOfferProduct (SpecialOfferID)	Nouvelle liaison entre les fichiers SpecialOffer (SpecialOfferID) et SpecialOfferProduct (SpecialOfferID)
+FK_SpecialOfferProduct_ProductID_Product_ProductID		NWL	Product (ProductID) et SpecialOfferProduct (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et SpecialOfferProduct (ProductID)
+FK_StateProvince_TerritoryID_SalesTerritory_TerritoryID		NWL	SalesTerritory (TerritoryID) et StateProvince (TerritoryID)	Nouvelle liaison entre les fichiers SalesTerritory (TerritoryID) et StateProvince (TerritoryID)
+FK_StateProvince_CountryRegionCode_CountryRegion_CountryRegionCode		NWL	CountryRegion (CountryRegionCode) et StateProvince (CountryRegionCode)	Nouvelle liaison entre les fichiers CountryRegion (CountryRegionCode) et StateProvince (CountryRegionCode)
+FK_Store_BusinessEntityID_BusinessEntity_BusinessEntityID		NWL	BusinessEntity (BusinessEntityID) et Store (BusinessEntityID)	Nouvelle liaison entre les fichiers BusinessEntity (BusinessEntityID) et Store (BusinessEntityID)
+FK_TransactionHistory_ProductID_Product_ProductID		NWL	Product (ProductID) et TransactionHistory (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et TransactionHistory (ProductID)
+FK_Vendor_BusinessEntityID_BusinessEntity_BusinessEntityID		NWL	BusinessEntity (BusinessEntityID) et Vendor (BusinessEntityID)	Nouvelle liaison entre les fichiers BusinessEntity (BusinessEntityID) et Vendor (BusinessEntityID)
+FK_WorkOrder_ProductID_Product_ProductID		NWL	Product (ProductID) et WorkOrder (ProductID)	Nouvelle liaison entre les fichiers Product (ProductID) et WorkOrder (ProductID)
+FK_WorkOrder_ScrapReasonID_ScrapReason_ScrapReasonID		NWL	ScrapReason (ScrapReasonID) et WorkOrder (ScrapReasonID)	Nouvelle liaison entre les fichiers ScrapReason (ScrapReasonID) et WorkOrder (ScrapReasonID)
+FK_WorkOrderRouting_LocationID_Location_LocationID		NWL	Location (LocationID) et WorkOrderRouting (LocationID)	Nouvelle liaison entre les fichiers Location (LocationID) et WorkOrderRouting (LocationID)
+FK_WorkOrderRouting_WorkOrderID_WorkOrder_WorkOrderID		NWL	WorkOrder (WorkOrderID) et WorkOrderRouting (WorkOrderID)	Nouvelle liaison entre les fichiers WorkOrder (WorkOrderID) et WorkOrderRouting (WorkOrderID)

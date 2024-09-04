@@ -1,0 +1,18 @@
+//MO010-011.TXT ANA00010 TO ANA00011
+article		NFI		nouveau fichier
+client		NFI		nouveau fichier
+commande		NFI		nouveau fichier
+devis		NFI		nouveau fichier
+document		NFI		nouveau fichier
+ligneCommande		NFI		nouveau fichier
+ligneDevis		NFI		nouveau fichier
+prestation		NFI		nouveau fichier
+ligneCommande_idligneCommande_article_idligneCommande_aggregation		NWL	ligneCommande (idligneCommande) et article (idligneCommande)	Nouvelle liaison entre les fichiers ligneCommande (idligneCommande) et article (idligneCommande)
+ligneDevis_idligneDevis_article_idligneDevis_aggregation		NWL	ligneDevis (idligneDevis) et article (idligneDevis)	Nouvelle liaison entre les fichiers ligneDevis (idligneDevis) et article (idligneDevis)
+document_iddocument_commande_iddocument_Inc		NWL	document (iddocument) et commande (iddocument)	Nouvelle liaison entre les fichiers document (iddocument) et commande (iddocument)
+document_iddocument_devis_iddocument_Inc		NWL	document (iddocument) et devis (iddocument)	Nouvelle liaison entre les fichiers document (iddocument) et devis (iddocument)
+client_idclient_document_idclient_association		NWL	client (idclient) et document (idclient)	Nouvelle liaison entre les fichiers client (idclient) et document (idclient)
+commande_idcommande_ligneCommande_idcommande_composition		NWL	commande (idcommande) et ligneCommande (idcommande)	Nouvelle liaison entre les fichiers commande (idcommande) et ligneCommande (idcommande)
+devis_iddevis_ligneDevis_iddevis_composition		NWL	devis (iddevis) et ligneDevis (iddevis)	Nouvelle liaison entre les fichiers devis (iddevis) et ligneDevis (iddevis)
+ligneCommande_idligneCommande_prestation_idligneCommande_aggregation		NWL	ligneCommande (idligneCommande) et prestation (idligneCommande)	Nouvelle liaison entre les fichiers ligneCommande (idligneCommande) et prestation (idligneCommande)
+ligneDevis_idligneDevis_prestation_idligneDevis_aggregation		NWL	ligneDevis (idligneDevis) et prestation (idligneDevis)	Nouvelle liaison entre les fichiers ligneDevis (idligneDevis) et prestation (idligneDevis)

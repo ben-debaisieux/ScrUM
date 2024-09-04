@@ -666,65 +666,55 @@ class :
       POUR nLigne_Ticket = 1 _À_ TableauOccurrence(aStTicket_p)
       	
       	// récupération IDGLPI
-      	sIDGlpi = ExtraitChaîneEntre(aStTicket_p[nLigne_Ticket].sSujet,1,"#"," ",DepuisDébut)
+      	sIDGlpi = ClTrello_req.sTrello_Est_Un_Ticket_GLPI(aStTicket_p[nLigne_Ticket].sSujet)
       	
-      	// Récupération commentaire trello dans le cas ou on a l'id du ticket GLPI
-      	SI sIDGlpi <> "" _ET_ sIDGlpi <> EOT ALORS
-      		SI PAS VérifieExpressionRégulière(sIDGlpi,"^[0-9]+$") ALORS
-      			SI VérifieExpressionRégulière(Gauche(sIDGlpi,sIDGlpi..Taille-1),"^[0-9]+$") ALORS
-      				sIDGlpi = Gauche(sIDGlpi,sIDGlpi..Taille-1)
-      			SINON
-      				sIDGlpi = ""
-      			FIN
-      		FIN
-      		SI sIDGlpi <> "" ALORS
-      			SI oGPLIMoteur.GetTicket(sIDGlpi,oGLPI_Ticket) ALORS
-      				oGPLIMoteur.m_opclEntite		= oGLPI_Ticket
-      				//oGLPIMoteur_Ticket est un ClGLPI_Moteur(oGLPI_Ticket)
+      	SI sIDGlpi <> ""  _ET_ sIDGlpi <> EOT ALORS
+      		SI oGPLIMoteur.GetTicket(sIDGlpi,oGLPI_Ticket) ALORS
+      			oGPLIMoteur.m_opclEntite		= oGLPI_Ticket
+      			//oGLPIMoteur_Ticket est un ClGLPI_Moteur(oGLPI_Ticket)
+      			
+      			// OK
+      			// tableau commentaire trello
+      			aStCommentaire_Ticket_Trello	= ClTrello_req.astRecup_Commentaire_Ticket(aStTicket_p[nLigne_Ticket].sID)
+      			
+      			// parcoure des ticket trello pour ne prendre que les tickets trello avec #glpi
+      			
+      			POUR nLigne = 1 _À_ aStCommentaire_Ticket_Trello..Occurrence
+      				SI ChaîneCommencePar(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,"\") ALORS
+      					aStCommentaire_Ticket_Trello[nLigne].sCommentaire = Droite(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,aStCommentaire_Ticket_Trello[nLigne].sCommentaire..Taille-1)
+      				FIN
       				
-      				// OK
-      				// tableau commentaire trello
-      				aStCommentaire_Ticket_Trello	= ClTrello_req.astRecup_Commentaire_Ticket(aStTicket_p[nLigne_Ticket].sID)
-      				
-      				// parcoure des ticket trello pour ne prendre que les tickets trello avec #glpi
-      				
-      				POUR nLigne = 1 _À_ aStCommentaire_Ticket_Trello..Occurrence
-      					SI ChaîneCommencePar(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,"\") ALORS
-      						aStCommentaire_Ticket_Trello[nLigne].sCommentaire = Droite(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,aStCommentaire_Ticket_Trello[nLigne].sCommentaire..Taille-1)
+      				// on vérifie qu'on veut envoyer le commentaire à GLPI
+      				SI ChaîneCommencePar(Majuscule(aStCommentaire_Ticket_Trello[nLigne].sCommentaire),Majuscule(ClTrello_req.cst_Trello_Hashtag_GLPI)) <> 0 _ET_ ChaîneCommencePar(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPIEnvoyé) = 0  ALORS
+      					// on veut envoyer le commentaire à GLPI
+      					
+      					// ON envoie le commentaire à GLPI
+      					
+      					sTexte_Commentaire_Glpi = SansEspace(ChaîneSupprime(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPI,SansCasse))
+      					
+      					SI PAS oGPLIMoteur.CreateFollowup(sTexte_Commentaire_Glpi) ALORS
+      						Trace("Erreur lors de l'ajout du commentaire GLPI [%sIDGlpi%]")
       					FIN
       					
-      					// on vérifie qu'on veut envoyer le commentaire à GLPI
-      					SI ChaîneCommencePar(Majuscule(aStCommentaire_Ticket_Trello[nLigne].sCommentaire),Majuscule(ClTrello_req.cst_Trello_Hashtag_GLPI)) <> 0 _ET_ ChaîneCommencePar(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPIEnvoyé) = 0  ALORS
-      						// on veut envoyer le commentaire à GLPI
-      						
-      						// ON envoie le commentaire à GLPI
-      						
-      						sTexte_Commentaire_Glpi = SansEspace(ChaîneSupprime(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPI,SansCasse))
-      						
-      						SI PAS oGPLIMoteur.CreateFollowup(sTexte_Commentaire_Glpi) ALORS
-      							Trace("Erreur lors de l'ajout du commentaire GLPI [%sIDGlpi%]")
-      						FIN
-      						
-      						
-      						// On modifie le commentaire dans trello pour ne pas le renvoyer.
-      						sNouveau_Commentaire_TRELLO					= ClTrello_req.cst_Trello_Hashtag_GLPIEnvoyé + " [%DateVersChaîne(DateSys())%] [%HeureVersChaîne(HeureSys())%] " + SansEspace(ChaîneSupprime(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPI))
-      						
-      						stCommentaire_A_Modifier.sCommentaire		= sNouveau_Commentaire_TRELLO
-      						stCommentaire_A_Modifier.sID_Commentaire	= aStCommentaire_Ticket_Trello[nLigne].sID_Commentaire
-      						stCommentaire_A_Modifier.sID_Ticket			= aStCommentaire_Ticket_Trello[nLigne].sID_Ticket
-      						
-      						SI PAS ClTrello_req.Modif_Commentaire(stCommentaire_A_Modifier) ALORS
-      							Trace("Erreur lors de la modification du commentaire Trello [%sIDGlpi%]")
-      						FIN
-      						
-      					SINON
-      						// on ne veut pas envoyé commentaire à GLPI
-      						
+      					
+      					// On modifie le commentaire dans trello pour ne pas le renvoyer.
+      					sNouveau_Commentaire_TRELLO					= ClTrello_req.cst_Trello_Hashtag_GLPIEnvoyé + " [%DateVersChaîne(DateSys())%] [%HeureVersChaîne(HeureSys())%] " + SansEspace(ChaîneSupprime(aStCommentaire_Ticket_Trello[nLigne].sCommentaire,ClTrello_req.cst_Trello_Hashtag_GLPI))
+      					
+      					stCommentaire_A_Modifier.sCommentaire		= sNouveau_Commentaire_TRELLO
+      					stCommentaire_A_Modifier.sID_Commentaire	= aStCommentaire_Ticket_Trello[nLigne].sID_Commentaire
+      					stCommentaire_A_Modifier.sID_Ticket			= aStCommentaire_Ticket_Trello[nLigne].sID_Ticket
+      					
+      					SI PAS ClTrello_req.Modif_Commentaire(stCommentaire_A_Modifier) ALORS
+      						Trace("Erreur lors de la modification du commentaire Trello [%sIDGlpi%]")
       					FIN
+      					
+      				SINON
+      					// on ne veut pas envoyé commentaire à GLPI
+      					
       				FIN
-      			SINON
-      				// KO
       			FIN
+      		SINON
+      			// KO
       		FIN
       	FIN
       FIN
@@ -849,6 +839,173 @@ class :
       	// récupère variant
       
       FIN
+     type : 458752
+   -
+     name : sTrello_Est_Un_Ticket_GLPI
+     procedure_id : 1637897959072053306
+     type_code : 12
+     code : |1-
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //sTrello_Est_Un_Ticket_GLPI (<sTitre_Ticket_p> est chaîne)
+      //
+      // Paramètres :
+      //	sTitre_Ticket_p (chaîne ANSI) : <indiquez ici le rôle de sIDGlpi_p>
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GLOBALE sTrello_Est_Un_Ticket_GLPI(LOCAL sTitre_Ticket_p est une chaine)<metier>:chaine
+      
+      sIDGlpi est une chaine
+      
+      // récupération IDGLPI
+      sIDGlpi = ExtraitChaîneEntre(sTitre_Ticket_p,1,"#"," ",DepuisDébut)
+      
+      SI PAS VérifieExpressionRégulière(sIDGlpi,"^[0-9]+$") ALORS
+      	SI VérifieExpressionRégulière(Gauche(sIDGlpi,sIDGlpi..Taille-1),"^[0-9]+$") ALORS
+      		sIDGlpi = Gauche(sIDGlpi,sIDGlpi..Taille-1)
+      	SINON
+      		sIDGlpi = ExtraitChaîneEntre(sTitre_Ticket_p,1,"#",")",DepuisDébut)
+      		
+      		SI PAS VérifieExpressionRégulière(sIDGlpi,"^[0-9]+$") ALORS
+      			sIDGlpi = ""
+      		FIN
+      	FIN
+      FIN
+      
+      RENVOYER sIDGlpi
+     type : 458752
+   -
+     name : Synchro_Commentaire_Glpi_Vers_Trello
+     procedure_id : 1637914554827451913
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      // Synchro_Commentaire_Glpi_Vers_Trello ()
+      //
+      // Paramètres :
+      //	Aucun
+      // Valeur de retour :
+      // 	Aucune
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GLOBALE Synchro_Commentaire_Glpi_Vers_Trello()<metier>:entier
+      
+      aStTicket_p						est un tableau de ClTrello_req.STR_TICKET_TRELLO
+      aStTicket_p	= ClTrello_Kanban.Recup_Liste_Ticket_Trello(ClTrello_Kanban.cst_StatutKanban_A_faire)
+      aStTicket_p	= ClTrello_Kanban.Recup_Liste_Ticket_Trello(ClTrello_Kanban.cst_StatutKanban_En_Attente,aStTicket_p)
+      aStTicket_p	= ClTrello_Kanban.Recup_Liste_Ticket_Trello(ClTrello_Kanban.cst_StatutKanban_Dev_En_Cours,aStTicket_p)
+      aStTicket_p	= ClTrello_Kanban.Recup_Liste_Ticket_Trello(ClTrello_Kanban.cst_StatutKanban_Pret_A_Livrer,aStTicket_p)
+      aStTicket_p	= ClTrello_SCRUM.Recup_Liste_Ticket_Trello(ClTrello_SCRUM.cst_List_ID_A_faire,aStTicket_p)
+      aStTicket_p	= ClTrello_SCRUM.Recup_Liste_Ticket_Trello(ClTrello_SCRUM.cst_List_ID_Dev_en_cours,aStTicket_p)
+      aStTicket_p	= ClTrello_SCRUM.Recup_Liste_Ticket_Trello(ClTrello_SCRUM.cst_List_ID_A_faire_tester_par_DEV2,aStTicket_p)
+      aStTicket_p	= ClTrello_SCRUM.Recup_Liste_Ticket_Trello(ClTrello_SCRUM.cst_List_ID_Test_unitaire,aStTicket_p)
+      aStTicket_p	= ClTrello_SCRUM.Recup_Liste_Ticket_Trello(ClTrello_SCRUM.cst_List_ID_A_livrer_en_pré_prod,aStTicket_p)
+      aStTicket_p	= ClTrello_SCRUM.Recup_Liste_Ticket_Trello(ClTrello_SCRUM.cst_List_ID_A_livrer_en_prod,aStTicket_p)
+      aStTicket_p	= ClTrello_SCRUM.Recup_Liste_Ticket_Trello(ClTrello_SCRUM.cst_List_ID_Test_fonctionnel,aStTicket_p)
+      aStTicket_p	= ClTrello_SCRUM.Recup_Liste_Ticket_Trello(ClTrello_SCRUM.cst_List_ID_Fini,aStTicket_p)
+      
+      
+      aCommentaire_Ticket_Trello		est un tableau de chaine
+      sIDGlpi							est une chaîne
+      oGLPI_Ticket					est un ClGLPI_Ticket
+      aoGLPI_Ticket					est un tableau de ClGLPI_Ticket
+      oGPLIMoteur						est un ClGLPI_Moteur(aoGLPI_Ticket)
+      nLigne_Ticket					est un entier
+      sCommentaire					est une chaine
+      stUnCommentaire					est un ClTrello_req.STR_Commentaire_Trello
+      aStCommentaire_A_Ajouter		est un tableau de ClTrello_req.STR_Commentaire_Trello
+      bContient						est un booleen
+      
+      POUR nLigne_Ticket = 1 _À_ TableauOccurrence(aStTicket_p)
+      	
+      	// récupération IDGLPI
+      	sIDGlpi = ClTrello_req.sTrello_Est_Un_Ticket_GLPI(aStTicket_p[nLigne_Ticket].sSujet)
+      	
+      	SI sIDGlpi <> ""  _ET_ sIDGlpi <> EOT ALORS
+      		TableauSupprimeTout(oGLPI_Ticket.m_astSuiviCom)
+      		TableauSupprimeTout(oGLPI_Ticket.m_astLinks)
+      		TableauSupprimeTout(oGLPI_Ticket.m_astDocument)
+      		VariableRAZ(oGLPI_Ticket)
+      		
+      		SI oGPLIMoteur.GetTicket(sIDGlpi,oGLPI_Ticket) ALORS
+      			oGPLIMoteur.m_opclEntite		= oGLPI_Ticket
+      			//oGLPIMoteur_Ticket est un ClGLPI_Moteur(oGLPI_Ticket)
+      			
+      			// OK
+      			// tableau commentaire trello
+      			aCommentaire_Ticket_Trello		= ClTrello_req.aRecup_Commentaire_Ticket(aStTicket_p[nLigne_Ticket].sID)
+      			
+      			stSuivi est un ClGLPI_Ticket.STR_Suivi_Commentaire
+      			
+      			VariableRAZ(stSuivi)
+      			
+      			POUR TOUT stSuivi DE oGLPI_Ticket.m_astSuiviCom
+      				bContient = Vrai
+      				POUR i = 1 _À_ aCommentaire_Ticket_Trello..Occurrence
+      					sCommentaire	= stSuivi.sUtilisateur + "(" + stSuivi.sDateAffichage + ")" // + " : "
+      					//sCommentaire	+= [RC] + stSuivi.buContent
+      					
+      					sCommentaire	= HTMLVersTexte(sCommentaire)
+      					
+      					bContient		= Contient(aCommentaire_Ticket_Trello[i],sCommentaire)
+      					
+      					sCommentaire	= ChaîneVersUTF8(sCommentaire)
+      					
+      					SI bContient = Faux ALORS
+      						sCommentaire_Temp est une chaine	= stSuivi.buContent
+      						
+      						sCommentaire_Temp	= HTMLVersTexte(sCommentaire_Temp)
+      						
+      						bContient			= Contient(aCommentaire_Ticket_Trello[i],sCommentaire_Temp)
+      						
+      						
+      						SI bContient = Faux ALORS
+      							sCommentaire	= stSuivi.sUtilisateur + "(" + stSuivi.sDateAffichage + ")" // + " : "
+      							sCommentaire	+= [RC] + stSuivi.buContent
+      							
+      							sCommentaire					= HTMLVersTexte(sCommentaire)				
+      							sCommentaire					= ChaîneVersUTF8(sCommentaire)
+      							
+      							stUnCommentaire.sCommentaire	= sCommentaire
+      							stUnCommentaire.sID_Ticket		= aStTicket_p[nLigne_Ticket].sID
+      							//TableauAjoute(aStCommentaire_A_Ajouter,stUnCommentaire)
+      						SINON
+      							SORTIR
+      						FIN
+      					SINON
+      						SORTIR
+      					FIN
+      				FIN
+      				
+      				SI bContient = Faux ALORS
+      					TableauAjoute(aStCommentaire_A_Ajouter,stUnCommentaire)
+      				FIN
+      			FIN
+      		FIN
+      	FIN
+      FIN
+      
+      //SI OuiNon(Non,"Voulez-vous ajouter les nouveaux commentaires sur les tickets trello déja créé ([%TableauOccurrence(aStCommentaire_A_Ajouter)%] nouveaux commentaires) ?") ALORS
+      	POUR nIndice_Com = 1 _À_ TableauOccurrence(aStCommentaire_A_Ajouter)
+      		ClTrello_req.ADD_Commentaire_Ticket(aStCommentaire_A_Ajouter[nIndice_Com].sCommentaire,aStCommentaire_A_Ajouter[nIndice_Com].sID_Ticket)
+      	FIN
+      //FIN
+      
+      libérer(oGPLIMoteur)
+      
+      FIN:
+      
+      trace("Ajout de [%TableauOccurrence(aStCommentaire_A_Ajouter)%] nouveaux commentaires sur les tickets trello déja créé.")
+      
+      // on renvoi le nombre de commentaire ajouter sur les tickets trello
+      RENVOYER TableauOccurrence(aStCommentaire_A_Ajouter)
      type : 458752
   procedure_templates : []
   property_templates : []

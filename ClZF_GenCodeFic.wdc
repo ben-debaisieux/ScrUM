@@ -14,7 +14,7 @@ class :
   type_code : 10
   p_codes :
    -
-     code : |1-
+     code : |1+
       STR_Rel est une Structure
       	sNomRel			est une chaîne
       	sTablePK		est une chaîne
@@ -104,6 +104,8 @@ class :
       public
       	mg_sPrefixeTable	est une chaîne ANSI
       	mg_aGenCodeFic		est un tableau associatif de ClZF_gencodefic dynamique
+      	
+      	gm_oExTypeRubNonPrisEnCharge est un ClZF_Exception dynamique
       fin
       
       constante
@@ -127,6 +129,8 @@ class :
       	cstTypeCleUnique	= 1
       	cstTypeCleDoublon	= 2
       fin
+      
+      ::gm_oExTypeRubNonPrisEnCharge = allouer un ClZF_Exception("Type de rubrique non pris en charge : %1")
      type : 131072
   procedures :
    -
@@ -278,14 +282,14 @@ class :
       	CAS hRubMonétaire : sRetour = "Monétaire"
       	CAS hRubRéel4 : sRetour = "Réel"
       	CAS hRubRéel8 : sRetour = "Réel sur 8 octets"
-      	CAS hRubTexte : sRetour = "chaîne"
+      	CAS hRubTexte/*, hRubCaractère*/ : sRetour = "chaîne"
       	CAS hRubTexteUnicode : sRetour = "chaîne UNICODE"
       	cas hRubImage, hRubMémoBinaire, hRubMémoBinaire4 : sRetour = "Buffer"
       	cas hRubHeure: sRetour = "Heure"
       	cas hRubNumérique: sRetour = "Numérique"
       	cas hRubBinaire: sRetour = "Binaire"
       	autre cas
-      		ClZF_App.mg_oExSelonCasNonTraite.ZF_Declenche([nTypeHF_p])
+      		::gm_oExTypeRubNonPrisEnCharge.ZF_Declenche([nTypeHF_p])
       FIN
       
       

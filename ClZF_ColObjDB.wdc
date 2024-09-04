@@ -966,6 +966,11 @@ class :
       
       si nPosActu <> nNouvPos alors
       	TableauSupprime(:m_aoObj,nPosActu)
+      	
+      	si nPosActu < nNouvPos ALORS
+      		nNouvPos--
+      	FIN
+      	
       	TableauInsèreRéférence(:m_aoObj,nNouvPos,oObjDb_p)
       FIN
      type : 458752
@@ -1037,7 +1042,13 @@ class :
      type_code : 12
      code : |1+
       procedure prive ZF_AppTri()<metier>:vide
-      TableauTrie(:m_aoObj, ttMembre, ":" + :m_sMembreTri)
+      
+      si :m_sMembreTri[[1]] = "-" ALORS
+      	TableauTrie(:m_aoObj, ttMembre, "-:" + :m_sMembreTri[[2 a ]])
+      sinon
+      	TableauTrie(:m_aoObj, ttMembre, ":" + :m_sMembreTri)
+      FIN
+      
      type : 458752
   properties :
    -

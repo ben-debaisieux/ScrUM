@@ -436,6 +436,45 @@ class :
       
       RENVOYER oColRetour
      type : 458752
+   -
+     name : oFromSprint
+     procedure_id : 1641283986545883538
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] oFromSprint (<oSprint_p> est ClDbSprint)
+      //
+      // Paramètres :
+      //	oSprint_p (ClDbSprint) : <indiquez ici le rôle de oPrj_p>
+      
+      // Valeur de retour :
+      // 	ClColUserStory : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // Indiquez ici un exemple d'utilisation.
+      //
+      //	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
+      //	bForceRecharge_P (booléen - valeur par défaut=0) : <indiquez ici le rôle de bForceRecharge_P>
+      FONCTION globale oFromSprint(oSprint_p est un ClDbSprint):ClColUserStory
+      
+      sReq	est une chaîne
+      oRetour	est un ClColUserStory()
+      
+      	
+      	sReq = [
+      		SELECT<§cs:3§>
+      			Scr_UserStory.*<§cs:3§>
+      		FROM Scr_UserStory<§cs:3§>
+      			INNER JOIN Scr_Tache ON (Scr_Tache.IDScr_UserStory = Scr_UserStory.IDScr_UserStory)<§cs:3§>
+      		WHERE Scr_Tache.Num_Sprint_Realisation = [%oSprint_p.ZF_Get_IdUnique()%]<§cs:3§>
+      	]
+      	
+      	oRetour.ZF_LoadSQL(sReq)
+      
+      RENVOYER oRetour
+      
+     type : 458752
   properties :
    -
      name : p_aoObj

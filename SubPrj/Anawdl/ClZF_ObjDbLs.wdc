@@ -265,7 +265,6 @@ class :
       //
       
       FONCTION ZF_Get_IdUnique()<métier>:entier
-      
       RENVOYER :m_ZF_nIdUnique
      type : 458752
    -
@@ -290,7 +289,7 @@ class :
       // 	sdSource_P (source de données - valeur par défaut=0) : <indiquez ici le rôle de sdSource_P>
       PROCEDURE globale ZF_GetObj(sClasse_P est une chaîne, local nIdUnique_P est un entier)<métier>:ClZF_ObjDBls
       
-      
+      oObjRecup est un ClZF_ObjDbLs dynamique
       
       si nIdUnique_P <= 0 ALORS
       	renvoyer ::mg_oApp.CreeObj(sClasse_P,nIdUnique_P)
@@ -298,24 +297,35 @@ class :
       	bObjEnCache	est un booléen
       	sCle		est une chaîne
       	
+      	//Construction de la clé de l'objet demandé
       	sCle = ::ZF_sCleOdb(sClasse_P, nIdUnique_P)
       	
+      	//Récupération de l'objet, s'il est instancié
+      	oObjRecup = ::ZF_RecupObjDeCle(sCle)
       	
-      	SI PAS ClZF_App.mg_aoInstances[sCle]..Vide _ET_ ClZF_App.mg_aoInstances[sCle].ZF_bEstExpire() ALORS
-      		TableauSupprime(ClZF_App.mg_aoInstances, sCle)
-      		ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbObjBd_Expire++
-      	FIN
-      	
-      	
-      	//A t on déjà instancié cet objet ?
-      	SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
-      		//Non
-      		ClZF_App.mg_aoInstances[sCle] <- ::mg_oApp.CreeObj(sClasse_P,nIdUnique_P)
+      	si oObjRecup = Null ALORS
+      		//Il n'est pas instancié : on le fait
+      		oObjRecup <- ::mg_oApp.CreeObj(sClasse_P,nIdUnique_P)
+      		ClZF_App.mg_aoInstances[sCle] <- oObjRecup
       	SINON
-      		bObjEnCache = Vrai
+      		bObjEnCache = vrai
       	FIN
       	
-      	SI ClZF_App.mg_aoInstances[sCle] = Null ALORS
+      //	SI PAS ClZF_App.mg_aoInstances[sCle]..Vide _ET_ ClZF_App.mg_aoInstances[sCle].ZF_bEstExpire() ALORS
+      //		TableauSupprime(ClZF_App.mg_aoInstances, sCle)
+      //		ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbObjBd_Expire++
+      //	FIN
+      //	
+      //	
+      //	//A t on déjà instancié cet objet ?
+      //	SI ClZF_App.mg_aoInstances[sCle]..Vide ALORS
+      //		//Non
+      //		ClZF_App.mg_aoInstances[sCle] <- ::mg_oApp.CreeObj(sClasse_P,nIdUnique_P)
+      //	SINON
+      //		bObjEnCache = Vrai
+      //	FIN
+      	
+      	SI oObjRecup = Null ALORS
       		::mg_oExRecipObjetImpossible.ZF_Declenche([sClasse_P, nIdUnique_P])
       	FIN
       	
@@ -330,10 +340,35 @@ class :
       	FIN
       	
       	
-      	RENVOYER ClZF_App.mg_aoInstances[sCle]
+      	RENVOYER oObjRecup
       	
       FIN
+     type : 458752
+   -
+     name : ZF_RecupObjDeCle
+     procedure_id : 1625863679764649064
+     type_code : 12
+     code : |1+
+      PROCÉDURE GLOBALE ZF_RecupObjDeCle(LOCAL sCle_P est une chaine)<métier>:ClZF_ObjDbLs
       
+      oRetour est un ClZF_ObjDbLs dynamique
+      
+      
+      SI PAS ClZF_App.mg_aoInstances[sCle_P]..Vide _ET_ ClZF_App.mg_aoInstances[sCle_P].ZF_bEstExpire() ALORS
+      	TableauSupprime(ClZF_App.mg_aoInstances, sCle_P)
+      	ClZF_ObjDbLs.mg_oApp.m_aMetriques[1].nNbObjBd_Expire++
+      FIN
+      
+      
+      //A t on déjà instancié cet objet ?
+      SI ClZF_App.mg_aoInstances[sCle_P]..Vide ALORS
+      	//Non
+      SINON
+      	oRetour = ClZF_App.mg_aoInstances[sCle_P]
+      FIN
+      
+      
+      renvoyer oRetour
      type : 458752
    -
      name : ZF_sCleOdb

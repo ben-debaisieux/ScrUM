@@ -10,7 +10,7 @@ info :
 window :
  name : FEN_Moulinette
  identifier : 0x2ca5c5a4013e2de9
- internal_properties : BwAAAAcAAADux7C2bQ8LmoU3dUYUbZKdwuGIoLFy4HUY0XXp/vCqxwoIRKcBUXG0sGJNsVP8KEeNT2f5OtfktxkOGHqh9dUvlqyufCtBiO1UEUCN1RY1jpEH3H87ve0Hic4u5Q3B8WWA9bbzZU+Jr49Y/GrGnWSrh8DjhJuV72ZuX+DSiQCZkhwh2cvcs6b+FbQPM4whNP1F/ewWx3vYGEnWhMpNsEk2T6Ma3ZmTdaDhVYf6GIEUV+ahzrFMVzV5ohM3bgyPzszTSgJesFQ9puNmlqhMS5SVyHyDq4oAlRJTPgBHENbde+8bKMg2v6XOYGjIpfmRRMgmqP17AHlGXu/3eXlN63Ne+sM58UxzzYyAN9B0VQXcGM9kOPgykNmhAzI4OBEDxDC/kJUVQJXS/jsvLHSO90CvPLl7+HJ2Kaxhp5DxTD1iJleMamymL39LF1KDSLWKyTbiuXD2wjHQ2sXJtLs8HJ2EhZv+RsbOVwfrbrceZeRbDbXGse0ZTZScL/b9Q6HKZDqjsFt9z+0oVae5VU+7N1CJAE4uxSwTf1/Cv/DvjM9X3+fSC6O5X0BsDJl6rCsAQK4nExIwIiqhZ3NwrVR7csgBrVCYKyICyYGXft8tmnbCm2LZoZ5MJ941l1VDPQw3TPyzFI+j+1QKSI9iSpLD7RT0YcX7+j5FMgU4K/eVDsJarrSQsfnsG9n3/cCJ60p52TCpslN/nHpt5eCWYI/810TvZarzxQSHZXwrjywmED6ihD1d7Da618YyZuG/RHkemynjc8SCil22aXWhgsrifuQodCn6kA4TSj46/31UMsBvy8NSg36Eio/+LYc9S7pU7ZWkEWvznHwb6J8HegRdOg==
+ internal_properties : BwAAAAcAAACfD5RTBeidJ8Y2F73B+tPm/XX/3IdTw9enqAJN2Rztvvrkhgvjr7jkPq0hxxSmLLXejEfbI7wfyUoxGKTWVwfmFL2G5mXH9ZfAjomcBhNVH2srL4ywrewLtcOUmsBxR/ohzBGOyoQm0SasaGqOmYr0NEbH7GZ+Cs/3yNO+JdZmRrY0PlLrnB5mHjmP5I1pnmZBQCEDMSfC5cQFoYkwYBffmiLguOlHDL0JbwMqFNT2pYb4ZVS9LuFqSXjBMonyc1WN7gvywaanqgLVXNFJpKVRRVvQNNVUkYDfVuDS4aQ+7550/ONJs2WSHYasGYadlWEkTASn1bd2Elm3gsTXESb+QL9QHsxTSljWA33PmojEAR5MbjmjC5LrgxYJ4lzYAYgbXOv1HdndP+gfCZtR1wlUn9NjnYtlr85Qf1ZXyCedfujxOWZEZ26/1MxE5Q98BrCdqGEK4ilHHFixA0a6JGIYUkQpDs4G6ivsVHSL0ZQAdfQBPi+bLw3QQLryQJOcr9R6uyB/r7uJUVfpESElalQz2/45Yfe0D1qLtbf7NeztCcg7OZQYMIG/QLIqXjQP/tpoHXc35LBjmW7fOmNGwK5VwjEGxXZvjvPSbPAC7P2CktyvYqlwt7hoEaLd5c3c5PlSz4yyVlg1fMq3B3uF6qIHJa8eZjiJ5b4k1B4bqCREqQdwxnhxoLWdA/+VMag3XXf2G2ob8ablhPONlbx3Ebv6UBiBY/Vl8Sfigxx7Jl84mzyWcFkjHuvoZTIhVEpu/fQ9fKHuS0q+6Ee1d/UfaYox1aL7CD75nHd+l657wL4QLQ2eZ5yA8e/mSrnq3PQItvXtkAHJQ6luIxck+Ij8
  properties :
   width : 972
   height : 789
@@ -548,6 +548,8 @@ window :
                ExécuteTraitement(BTN_Maj_etats,trtClic)
                
                
+               Jauge(nInc(),nPosMax)
+               ExécuteTraitement(BTN_Maj_ordre_dans_sprints,trtClic)
                
                jauge()
                
@@ -1003,7 +1005,7 @@ window :
                nCol_Poids		est un entier	= 5
                nCol_Réalisé	est un entier	= 6
                nColCommentaire	est un entier	= 7
-               nColDoc			est un entier	= 8
+               nColBV			est un entier	= 8
                nColGrp			est un entier	= 10
                nColUsr			est un entier	= 11
                
@@ -1074,10 +1076,12 @@ window :
                				//stMaTache.sRealise              = xlsDonnée(IdFichierXLS,i,nCol_Réalisé)
                				stMaTache.sCommentaire          = xlsDonnée(IdFichierXLS,i,nColCommentaire)
                				
-               				si xlsDonnée(IdFichierXLS,i,nColDoc) ~= "Oui" ALORS
-               					stMaTache.sCommentaire		+= rc + rc + "(Voir documentation)"
-               				FIN
-               				stMaTache.nOrdre = 1
+               				stMaTache.nOrdre				= max(1, xlsDonnée(IdFichierXLS,i,nColBV))
+               				
+               //				si xlsDonnée(IdFichierXLS,i,nColDoc) ~= "Oui" ALORS
+               //					stMaTache.sCommentaire		+= rc + rc + "(Voir documentation)"
+               //				FIN
+               //				stMaTache.nOrdre = 1
                				
                				SI xlsDonnée(IdFichierXLS,i,nCol_Réalisé) ~= "C" ou xlsDonnée(IdFichierXLS,i,nCol_Réalisé) ~= "x" OU xlsDonnée(IdFichierXLS,i,nCol_Réalisé) ~= "T" ALORS
                					stMaTache.bDemarree = Vrai
@@ -1159,6 +1163,7 @@ window :
                			FIN
                		fin
                		
+               		stMaUserStorie.nBusinessValue = stMaTache.nOrdre
                		
                		si stMaTache.sGroupement <> "" ALORS
                			oEpic <- ClDbEpic.Get_EpicDeNom(oPrj, stMaTache.sGroupement)
@@ -3744,64 +3749,64 @@ window :
            p_codes :
             -
               code : |1-
+               ////
+               //RechDoc("L:\Service informatique\Procedures\Dev_logiciel")
+               //RechDoc("P:\Informatique\Developpement")
                //
-               RechDoc("L:\Service informatique\Procedures\Dev_logiciel")
-               RechDoc("P:\Informatique\Developpement")
-               
-               procédure interne RechDoc(sChemin_P est une chaîne)
-               	
-               	
-               	sFic est une chaîne
-               	pour toute chaine sFic de fListeFichier(ComplèteRep(sChemin_P) + "*.*",frNonRécursif) separee par RC
-               		rechfic(sFic)
-               	FIN
-               	sRep est une chaîne
-               	pour toute chaine sRep de fListeRépertoire(ComplèteRep(sChemin_P),frNonRécursif ) separee par RC
-               		si pas sRep ~= "archive" alors
-               			RechDoc(sRep)
-               		FIN
-               	FIN
-               fin
-               
-               
-               PROCÉDURE INTERNE RechFic (sChemin_P est une chaîne)
-               
-               sCode est une chaîne
-               
-               si Position(sChemin_P, "-") = 0 alors retour
-               
-               sCode = fExtraitChemin(sChemin_P,fFichier)
-               sCode = ExtraitChaîne(sCode, 1, "-")
-               sCode = SansEspace(sCode)
-               si taille(sCode) <= 7 alors
-               
-               	HLitRecherche(Scr_UserStory,CodeUserStory,sCode,hIdentique+hLimiteParcours)
-               	SI HTrouve(Scr_UserStory) ALORS
-               		AddDoc(sChemin_P, Scr_UserStory.IDScr_UserStory)
-               	sinon
-               		HLitRecherche(Scr_Tache,CodeTache,sCode,hIdentique+hLimiteParcours)
-               		SI HTrouve(Scr_Tache) ALORS
-               			AddDoc(sChemin_P, Scr_Tache.IDScr_UserStory)
-               		sinon
-               			//trace(sChemin_P)
-               		FIN
-               	FIN
-               FIN
-               
-               
-               FIN
-               
-               procédure interne AddDoc(sChemin_P est une chaîne, nIdUS_P est un entier)
-               	oUsDoc est un ClDbUserStory_Doc(ClZF_ObjDbLs.cstModeCreation)
-               	oUsDoc.p_sChemin				= sChemin_P
-               	oUsDoc.p_nTypeChemin			= ClDbUserStory_Doc.cstTypeDocument_URL
-               	oUsDoc.p_oIDScr_UserStory_ID	= nIdUS_P
-               	oUsDoc.ZF_Enregistre()
-               //	hraz(Scr_UserStory_Doc)
-               //	Scr_UserStory_Doc.Chemin = sChemin_P
-               //	Scr_UserStory_Doc.IDScr_UserStory = nIdUS_P
-               //	HAjoute(Scr_UserStory_Doc)
-               fin
+               //procédure interne RechDoc(sChemin_P est une chaîne)
+               //	
+               //	
+               //	sFic est une chaîne
+               //	pour toute chaine sFic de fListeFichier(ComplèteRep(sChemin_P) + "*.*",frNonRécursif) separee par RC
+               //		rechfic(sFic)
+               //	FIN
+               //	sRep est une chaîne
+               //	pour toute chaine sRep de fListeRépertoire(ComplèteRep(sChemin_P),frNonRécursif ) separee par RC
+               //		si pas sRep ~= "archive" alors
+               //			RechDoc(sRep)
+               //		FIN
+               //	FIN
+               //fin
+               //
+               //
+               //PROCÉDURE INTERNE RechFic (sChemin_P est une chaîne)
+               //
+               //sCode est une chaîne
+               //
+               //si Position(sChemin_P, "-") = 0 alors retour
+               //
+               //sCode = fExtraitChemin(sChemin_P,fFichier)
+               //sCode = ExtraitChaîne(sCode, 1, "-")
+               //sCode = SansEspace(sCode)
+               //si taille(sCode) <= 7 alors
+               //
+               //	HLitRecherche(Scr_UserStory,CodeUserStory,sCode,hIdentique+hLimiteParcours)
+               //	SI HTrouve(Scr_UserStory) ALORS
+               //		AddDoc(sChemin_P, Scr_UserStory.IDScr_UserStory)
+               //	sinon
+               //		HLitRecherche(Scr_Tache,CodeTache,sCode,hIdentique+hLimiteParcours)
+               //		SI HTrouve(Scr_Tache) ALORS
+               //			AddDoc(sChemin_P, Scr_Tache.IDScr_UserStory)
+               //		sinon
+               //			//trace(sChemin_P)
+               //		FIN
+               //	FIN
+               //FIN
+               //
+               //
+               //FIN
+               //
+               //procédure interne AddDoc(sChemin_P est une chaîne, nIdUS_P est un entier)
+               //	oUsDoc est un ClDbUserStory_Doc(ClZF_ObjDbLs.cstModeCreation)
+               //	oUsDoc.p_sChemin				= sChemin_P
+               //	oUsDoc.p_nTypeChemin			= ClDbUserStory_Doc.cstTypeDocument_URL
+               //	oUsDoc.p_oIDScr_UserStory_ID	= nIdUS_P
+               //	oUsDoc.ZF_Enregistre()
+               ////	hraz(Scr_UserStory_Doc)
+               ////	Scr_UserStory_Doc.Chemin = sChemin_P
+               ////	Scr_UserStory_Doc.IDScr_UserStory = nIdUS_P
+               ////	HAjoute(Scr_UserStory_Doc)
+               //fin
               type : 18
             -
               type : 161
@@ -5290,54 +5295,9 @@ window :
               type : 161
               enabled : false
         -
-          name : BTN_Recalc_statut_sprints
-          identifier : 0x211d6afb1cd3d912
-          internal_properties : BwAAAAcAAACe9CGg5Jltnsfm09yK+JnusANxxQ7QNrGxa3zvUvJm5rn+3frzbW5RPLqNyz61zOl9FK8pX11ec8zSLeR5mdz2xyDU2yerpp/GYCXOyefNCqr1dOJHj4SGGAtIPUPvLOZ6OiElOrUWwL0FYlekrykjl11NFuZU3vZJdo1A0VDyyiobZHBf+Rn3eQ0/Lwpa8508lhmYG1gqjTrh9sslb4n2q6AAf1/O+SkzCSluEPc6Aoc+kuFa9+7NbyoAXh2CXmFfF3IVKy5UtrHi6nsEUVRYq6o5BWG13voq2rfWJPeJz00QTl7KxHvMl7NC0IZAFGtTJMPYSlQ+neNiE8KVP8GI3W/5rttUjDNWCzNag8HBx/MfBHiJ6WYStnmrO99IcxKcbLcRB1XL0CYtVLAyZ09kUKBNCcyt9E2ujR9JcVbkaA7+gY4mAuuJKneQ01ngDFMB+Cd/EwIJfVlWwfZy1PryHHSQLDoibs5UYyBhEXbDHNQObqljPqsNu6k6qDGYHoj/XjiM9EPogYAkzGzW7ken9pNSdhjrfVN53NDoRoQ4rZ3ZErC/snXZ8679YsrKs//pnDDd9Suk5QZpxa+eJb8Hl4AQtyfYfTRx0caQO2eGeBJGgV3zsBH6w00rF6BUP79mImgHL7o3t/O0DJtmA6a6SWEqlOrJdpoIZh+VpF3mnhKb4WsbD6urePdARCg+m9uNJjdWRit6GDts05N2+advZJvDKzNgA6IpbfVL31TpzZcLqKObvKi091tLVHV3crLTazXpx44IS9PCUhBg6aWIUHvEIoB9pa4e+ySjsZCx3BFJ/PW13qdkUKFjk0hYh8najC01MUUadUJpqGPtig==
-          properties :
-           x : 276
-           y : 565
-           width : 280
-           height : 24
-          type : 4
-          code_elements :
-           type_code : 4
-           p_codes :
-            -
-              code : |1-
-               //
-               //
-               //oPrj				est un ClDbProjet dynamique
-               //oUS					est un ClDbUserStory dynamique
-               //oTache				est un ClDbTache dynamique
-               //
-               //
-               //pour tout element oPrj de ClColProjet.aoListeProjets().aItems()
-               //	pour tout element oUS de ClColUserStory.oFromProjet(oPrj, Vrai).aitems()	//oPrj.aoListeUS(Vrai).aItems()
-               //		POUR TOUT ELÉMENT oTache DE ClColTache.aoFromUS(oUS).aItems()	//oUS.aoListeTaches().aItems()
-               //			si pas oTache.p_nStatut dans(ClDbTache.cstStatut_Suspendu) alors
-               //				oTache.p_nStatut = oTache.get_statut_tache()
-               //				oTache.ZF_Enregistre()
-               //			FIN
-               //		FIN
-               //	FIN
-               //FIN
-               //
-               //oSpr est un ClDbSprint dynamique
-               //
-               //pour tout element oSpr de ClColSprint.oListeSprint().aItems()
-               //	oSpr.Sprint_Points_Realise_Maj()
-               //	oSpr.ZF_Enregistre()
-               //FIN
-               //
-               //
-              type : 18
-            -
-              type : 161
-              enabled : false
-        -
           name : BTN_Importer_Client_Diffus
           identifier : 0x21a75e591ce61614
-          internal_properties : BwAAAAcAAAA6VofvtQ2MWGJ31tVmvp/f+DFKq3EUUmbghPUokG4XMPLlj30n1M5nlZH2IMGKLi4QxDby/4f/r7zo7V4q03RTbXfuuV7QNTDlVMsjj4+8IHIuO6rYVIzPZa4oiSEgXimxXYNIsDftLbwVtxRTX765+7ISWQJFcCM401NyWa7CVRyts+HjTT/XZtXzJTT0IxlkUGd0e8YPMhmJUJYZMFLqXWwDwKboH54fLRPUdCw09XUuHbikMo7p2LNiUL9g4+qgV7VT2vKd88sywZZb01giFk4XT0T7KzgqS16lDiCs2EJ+K1OVwHF1+YR1jwYjeOjwKx1/t5g56dlTipBez89vROJOpVDftoNrlgFe83nytAsMsgIS9siY4a8Y5y/kezOGKZoDBeTYlvKFuzCZH0J0dPpzf1kBmzRjKYbS93bA6r74IgvvDI+E0zh2ixuoeOvkQFl8ErzeFIKyTyH1xXF9ght1QFX0S1XhYYj5R/X1lagZ72L9F/WguBjzNP4z27bvoKU4CQmZ+AV1MD9OmCgYJhyOXYsln7hp3m/OtCPRT9Wkcq/3FMztz4pQsRyUZH/IVtLxojM2KAujy5ieqio1wXG/Ngz4nFH2mNp1xAQMW51ehJhgIndx3PzeAlqyGk8FKllwZfYWenl6mXH5oiJANsPd0Dsyt9NAkCKbK13/2gO49kBVA4XI1uTpUkQ/7k133NRLT/YAZXj9q+KH6KQmG6jHSwtB/KF/sn2wu9EDHa2/KDDU3OosHIP0F59LyWM2XaAZkvenHEOpht0=
+          internal_properties : BwAAAAcAAAA4VIH9RzPihogJxOOs9EUVlldcoUP64Iw+blOOdgRlloiLcVPhEoT2NlVajC3mJr7sgKZubwtnM9jcScoOzwSjYcNmjSbUrUSpsIc3+xssUIYqEw4gAFTTYcJsBTWUbrnFWdNEANMd2Yh5m2AXI+7pj64axeIBOO/EN9cmrVKS7QARk8XLYQcTQkl/qbjI0wnwNH/Ig+rP1oV9tHJ13DJKYWA7DIaEb9JLYS/AGIBEDVnynSzMhpbdvM++LJucs5L8MyVPcv4dF/eGXYKfX1ByguJ3e0w/w7RG7yIBwtT86D4KA39VRJkBtcgBiwrnoCgkR9VjNzwhNc0PloRi6y8f0E6WEQAjVn9/EmXKZ4XqjPcoct5aqpBMndOMQ/tYe9vSnQKfdfAaeJD7NYqXAXQi8rS9oc+TpR6BF7hETYAqUCSy5NU1/pGmiZbYFYEigrF6uiMuQI54noBg4UuzB7PDyP1fAqte3YfXf5rrdae/4wZ7odxr6b+Krj6dvqSdZXy1iucCl7vTYjMjUtEkAkI29F6wV2FXOeJH5Ckw0gWDRWt+tIlNPg7/RTiCe7p2BqVu+IRLuC2QgtHZ5Vp8TJyrR/sxYKpaFst8VlwHEla2Sau4zirmrHEbCsIoXFg0jMUbzHtao7B4jMcIO6s35FS2zCUfOuGUmRWGlvyFmc8RKDEaiDpjPUdqtDKLpOrpQNvlPt693WBy1+ZrzaRFqm50+Yr5tp33ttulaKNKHX/dewsdjlq+Kjz+IpmaqWmRAxlMa7ZzNBW5LlGnhN8=
           properties :
            x : 572
            y : 605
@@ -5506,7 +5466,7 @@ window :
         -
           name : BTN_Importer_Base_Lunel
           identifier : 0x21a75e5e1cf72844
-          internal_properties : BwAAAAcAAAD0OElAspUmahbwoYMzLGaTzZetE2TtiCNHpNlLF3zrsDngctKI/om3991hqZKAjBxgDEKPn1BmK5DKLQzh1gPXzO6p6Pmope2NVt5j/tiqZWeiJKbx56LlfLxuuAb0IiM7kqomL03swR0nvTwjpTJWfe6xhgxRI4xMpAk81jlo0Q+goSBYg2SN1XrKM1rrWxKt1N5WPE37UU0uN10Es5j725HSzeFiEb1OF9UvnxfwQY5kPCORHl+tuQGhNG+rDlyhabGittL/p1f0Xx6ZCI7jMqrPJ3B7tjZILR6sYemzs+S3xpQctZUVRci54GEdXUHD8LVtlSK/7TvLZ+r4TgJlUfMMka+QUEGaGojxscEujguahm8n/RDOOThKvY8wjeRa83SGwpRWRq7a9v+b/R0aAbr8XM18Wz5BfiUN/x6NHmcGJ04jd1sGT30hMrNwAeHXfNYn4JekjPwr2kI5gRgdo+m0008LzUkdygcaM2lqMfcbcEF5cmuI+PM45TiJKJC0qDR5XV4vuDduh7CWkMcQSdhjetk+2eTvVcx/9OPmM1AWTQQHW5aFx7czwJbK9Qc1/FmcuIyMKAtm4OdYABf5OpUC38CjpOPSz6eAZBRP8Uqs62UUFatnYKVlRdzAVTti4jLnm1kuvDv5dnAhqmGKUZv2IU/HZ82SZcVCKY+Q+IDQzYF3ysEqjA3IRwR/Je+kvFNW86HAP5Dq5q07RMMeSrr6Gwtqoq3tL1j/O6EMmUI3SHGqbyiBeHj3sWKnx6x8rJ2kqkLStlw=
+          internal_properties : BwAAAAcAAABUmCng0vWGSnbQQeOTzAZzbTfN80SNqMPnxLnrt1zL0JnAUvKo3umX170BCXIgrPwALOJvf3CGS7BqDawBNmN3LE4JCBmIhU3tNgYzfhgaNWeCxBZRB5KFjNx+GDYEAsMropqGf/2sUZ03nWxDheKGvU7RduwR8yzcJBmchslI8X/QUSDIc0T9NUpqYzqLa2JtFB7GHG1Lcb0Ox330Q7jby8HC7bFycc2Oh3Wf/3fA8e5EPDOxPi+ticFxVB/7DtxRWeEC5mL/t9dkX+6ZiN6zcmqvN1AbZlY4jU7s8Vlzc7Rn1rTspZVlRZg58OGdzfGDsDVdNaKP7QurF6pIPoLl4SM8sR8AcHE6KkgB8QG+Pos6Zp+H3aAuCbjanf+ArUTqI4SGSgyefoaiPqdD9XWS+XLk1FX0w3bZBs21Z3bl1l8+74brLyNeR6XJersIuRnPVH5/qE+MJBQTwkpBOdA1u+G861cDlWHVci8i+8FiKc9z2FlhyvPg0NugTWAhwCgMYHwxxTZXcO+Wr1h+SN+o4bALsqF2QRznnXSHPBveK4ju1ZxvM75dX397qH6CDX+ttMGUwAQ0QCOuqM9AWK+RUq0qt+j7zDuqNw8I7OwHqaIEc1387bOfeK1tTWS4DfNa2vq/45F2VLNh3vipghliqVN+GVf/DyUKDY2qkWfwWGAwraFXKiGKLG2op6TfRY/EXPM2E0FgX/CKBk2b5KN+KpraO+tKgo2Njzjf2wGsOeJXaFHKD8gh2BgXUcJHp4xcjP3EiqIyFvw=
           properties :
            x : 572
            y : 630
@@ -5526,7 +5486,7 @@ window :
         -
           name : BTN_Importer_Esm
           identifier : 0x21d5c1ca4c9a6a93
-          internal_properties : BwAAAAcAAAAJn8rJLkckrSGw5DaYiZeOylvzWyI1oWI6/9V32SoNVG81xKoNyoy5TsrUrviwgmD2AsCQbrztvP2OxbALPRBq0GDCI4Un6RxCYdvY73N9qVMoiDN/zJOvlFS1jQoJGilTNS++txxBQnUgM0FekdjnKdUt/a6uu636COSVUFnCI2mkTE1N0+STT03w8ywpLUBOt2q8q2k9xHG4mhkQe2wRSkLx0mjqugnswoCBSIGNJNqvDXS/pp5/v35eIVQtJlUMd5Z+nC6jjJMKMMJ1LD8wdAVGVhDNNx3i64RE6zNsTIqBhMjImA7QUT4Ah1wAMy2Nl7YhbsxSiLolSdcxiqAiXTKWaO3Lf4UmU79Zs1c8pn+znLDBfGVXHE6ZV7GjLRdMB6BIpd56d00Fte6WFQ/5aOt5DSKcadE4ofwo9mojjbQzeLuMy3W5IqRsuTaSfSS6mS8M8fEIdfMWoZuWN4xgGJrx1DwprSLAI0yftJOe9hwi2waCPpUlYSgBEhmNGjXbvTWoKCYpbfaBtmEDWOGVxEs6z2KCE5lexsE+j0UaTBWxjIW8myRgtNjwYQuKb/4GIRodTXx2JdIV+8oXtMWQqSLzLKHnkto5YNSzU4D1zEvh/AaJvWE8P+YChG8SRcbJo9+MLAPirZxQIUMwmBkH4CyjnuAxM+K3UpZ9RDlYN4H5ymCaivdflULZBP1748aPW1Yx8ieUnBOtTdAi0ImDy6PfiFVzl4F3hYrXL3iR6ZBYSixa9g/zC03YnJtj6wQF
+          internal_properties : BwAAAAcAAADp/2opjmfEjUHQhBb4KTcuavvTe8KVgYKa37WXeYrttE+V5ArtaiwZ7ur0jljQIoAWoqCwDhzN3F1uJVCrnXDKsECKwwXHSSxyEds4T1NdCfPYuIMvPOOvdBRFHTo5KlnD9Q8+F9zBsqVQ86F+0ZinSWW9rT7+K026qHTlQKnyc9lkDM2tU2Tjn50wEwzp7QDOR7qsu3ntpBF4KmkA6/yhOiKxEuhK2pl8ksCh6KENpJp/nSRPdk7fH94OkSQ9NsUcl7b+/G7j/ENaEMI1LL8wNHUWhqDdZx2iy7S0e4PcvLqBpGhI+K4gYQ7AJ3ygU+0Nh0Yx/lwCyPqFOYeBWvASjZK2iA2Lv5X249+Zs5fcxh/DrCBRjFU3PI6pp+Hz/acE3xjQ7UYSj7X9fdburQeBgIORVeqkgUmgGSRQLqIb9Wwr8MO0Uy1xilyUQa6K1YyycWdU+bkgLbsuSQPO7wQI8PJpfMRRxRroO5RHDKuWvjT6sy6qZo2d6aCJGjHlsh0zFQ1QcA4BRf6ZXqm7EHl9HMOyt8pqC5Fm3ukmh31SFO1JBC3Ew/w4fPCY6YMCxyae+fLFlcQOXRqtA9JvzF04gVqr1AlvivIBuLx7SzgNlKNZ9A5x5Zn05z4q7OeK/S5h2xc0NOv6xcQoSQvo0HHPGCSbpqg5C9q/Ct4F3JE4F+FZqgD6ate/NaK5ZB1bg2Yv+/aRkke0vHNN7XCCcGnjq4M/KLXT92EX5Wo3T1ixiTD46oz6Fi+T6234vPsDS+Rl
           properties :
            x : 572
            y : 530
@@ -5547,7 +5507,7 @@ window :
         -
           name : BTN_Importer_Test_Auto
           identifier : 0x2239cdc940e885b3
-          internal_properties : BwAAAAcAAADFCboRm2QF/VeHOHDwIcWqnzk+zGX4F8rwGQzelanqNAC5qVGppVDPCOjsIzMRsG1bw/LaEWh5yE0/40vyz6GgMOrN0K8fHGhueS1mFMjoRxcyYOJhG+pl9IAWRFbIgvcD+jZi76EM8UWLxQDLOQJiTV6F+lTtgxxMsKkgft1Q/WfQdSzYF7xtRfaiJ4JHUzaN1ArKNFmDkXWiF6Gsx7jHyylOkdluWV3mS11bvzvI5R5UYM+ZGk+NQXXROF9HzgB58X1GXq5XHw/4j9ohRBbnspJji4iPBrb46e7ICUWbxxzfGrD8Gd2dTRzpJLmBrZWr0AlZJZ5fRRv3P6ZoWnJhSYPIPZecGJHiLvgFoeWOSttS0hPHMUiOOfSaaX/U7RiK04DicCakQHDwjG1Jb++Q87DqykNGOTi7BMtbDRCfLCFknXzhMcEoQYMXOHGSE19RMlQFFtn6Xv7pGDh3E0pLTU9aSdWVOzPXkF340cuk7yEpzsf3fLEaEpHWC97DghY2NkLfC+DVKuGELd78KoluAy7J8GeoN04BOyItokXg0crUMyLlhdS/4f35LsxUPy3nWn+anh5CmhW0Pk3+mulH5DugHXZ1isUktZ2GooaJTyTikRtS35FJYsMDm2qiB3Ek2Dh1KUt8ZqV/DJZXlNsIKzlcB2VpRfeUJ2d3NKpBqfGLWl4JrV/RQD+R4nvyxQ0qeod5ZYnb3MGZrpeDAYLxLdKYC6nK0m3jlLnWonKPtPdEVejJqH/Lg528xL0MqBPlFXZL2ROhh20=
+          internal_properties : BwAAAAcAAACt4ZI5M8zdpZ9f4Mi4Wc0yN8EmJM0wP+KIQUSGzXGizMgRAfnBjahXcCAU+zvJeDUzK1pyOUDBAAVnO3OqVxnYuILlOAdHNDAWkXWY9MS4E6/SxN4pxxIlTNTuAN6UcsPr2kI231VEyaX3RTzznXru9Q5B7qQBkwxMTHm0nrl4oR+Y6eCYK/w13bryA6pTI9oVRH6etD2bMY1W98WMo+g7O5kKTRGqmZUGJ30vX58IKRZkjBvJLq8tCVnhrNcLTuzxYflCFhqH70/kV96JIDbbWroPrzgblqYIVf4kuUlj8xRPLuRM7d1NHQhhkLFFNel7cCVVbQIfjbsTJ4JgXvKVwSu0EW+o2IliquARgXk2NnP6lld/7bDeKdAqZWdgjWTKe6yGzogq0ioGogsnMZmejTYo8Bkg30qdOvF5a4IpQjNSM7Kvm09y+6nNfv+EDXWjqMLLbDu4iNgXRs6VhSShPwVA5zvvUYU5NuNGHx3WJfN3nGU1hp8ERI9UkaRtdORABFDNKQKzFOOaIywCNPO05bQPTuUiHbBbIRjbUEcilwxiSahTjyrRM0PPbEKOQcsBeBXAlGCQdBfSXBOEdKP9BuHeczy3eG/++1Pc8KiLJTbI98mgCZ9DHAFBsbikEd+OTm67552y2Mc1ojz9vm2+fYcS9Zurm4lOhcXVSoJpURmzcrah1Yf5uKcJasO6/cViMs+hTeEztOlx9k97Ocq5FTpwI4EyOtUbXPGearrHbA9cfTBxwJfj6zXE/PXEcFutXc7jMfuJ74U=
           properties :
            x : 572
            y : 502
@@ -5568,7 +5528,7 @@ window :
         -
           name : BTN_Importer_Pool_V3
           identifier : 0x22d138b801a79a3c
-          internal_properties : BwAAAAcAAAAZ/wIKrGVYaTvI99fboShqgt5h5GM5eLbouFot936OL2QlOOOJSWodeMGA8BpDw/sTC3UfFzRQQ48AZm0g4qjhufg7UOxjpcjb7B2spYrnxaceWkOsaMQkESR1Fc5tA7iMYwFFuwUQEUuT/dtNaj3veYt1wAaNT2VGp+Ay7egUSWmmwLz6lzmD6VUsp6f6YTPWxbcTQkf3t+3kr9K64eU0KQyskgeH9dyoua2MsOuY763Q7D4sMNqubryWniSIHJjPnYR5+MifWlJEfOIo00HSf7O1qBL56Bm7F9/iu5bpjHoB1IwMldZHe+aKb0I6NbwatZZ8LVfeDwQOgRxABcvOuEfXyWHo3q8yDWuEXHPReuozwnOpufmxto9pK03BGAodc4Mk5bKqQ9Okcl60tg/WXsXE0gYetULtGnjTZNjmJHcaI1Q2dUcu9YcS5V+cylHVjm66LSBgm+35ETff7M+5IixXDNJsS25q5EGIC5cTwfH/I7cJyFRiAAp1BBJQaK881ix9tS9iq/UCGGg1z11Vz6YEMb/xgvOk+vTuPfO34QaEtjAcr5610TUs3lqSrs3/B/cKGfIf5+3cTd4QuEuM153MEDC8euXLxFT0jiMQMQTCs4iEKXpbxyjIfOVsnkR85QMwkMqWQhyG+LlzDQPlYMdZIGejzOpod1xh2ggRGyJ8OMX9WFoDh6qso5QeGme1YgriYx6AZjn5K0biYL4RIXcLcrRs/JeXn0BAQqyKaKwR/yujmUrcQxm87bCQ0Vws6A==
+          internal_properties : BwAAAAcAAADJzzLa3BWomWs4Z6dLMbj6su5R9NOpCCaYqEo9547e/1R16LO5ObpNqDEwgEqTE0tD2+Wvh+Rgs7/wVv1QcjjxKYgrYNwTdNbX8uUEX9w/9fv8brfKRp7GTTqtVYhfowAc/VG1va+uG29R2bPHFIUPUVUpdOSb6Uua7ST2M478ueUsPMjoBUPVVUvI/xlkwXsuj2dj/LFF6fU+K4p0q7XEGa7cMmU99x6o22GEouUA1x3SmApuKuBc4hKeFr6aDHBHF3iNVk4h8PaCTE52oekaswlR7Oy7/g9T8U92seTl8EqD8BgCO3jJ81iGS8ggEdh6585M6+WQ7URQ4bBOA2dSCLGDxW/2MHXeC2u4olmFpgZZRldLI9+jbnGph1P3+Pq5KOq9VAthgHL51StHIxbXed7vJ7GrOMNsZ+tgj60JqTpT7onxshrfGJgBNp5djdZsU207vBGfDHR2vAyaATr2rSVCId0Zfh9FDXhR+thW7lhEmkBwqYOnQ+N8BQFxV5g7ywMGTFBxVEz3s92gdLxurssjgn4qmSj3axvPpLzqPj1x5YHDAD0S/O67DwnD/d6qYEIv9CdKiFgtdLd/KVpVUha3JRORRSoCia8R8cDzxrcL5tVfHmW8epFHhfQt3WVfJn7FA1fpT/fX//LKhoJuQwgU1bIQ39cD+Isx6hgBCzIMSDWNyMrzt5qcs+SuitcFMloSM06wFukp25YyMG5B8UdbooRc7IeHj7DQ0jx6WLwhj5szCbpM80lsPcBggYz8OA==
           properties :
            x : 780
            y : 7
@@ -5732,7 +5692,7 @@ window :
         -
           name : INT_SansNom1
           identifier : 0x22d1398b02edd468
-          internal_properties : BwAAAAcAAACAI/2C9fjh3rGyWUXc7zxRMOI1aJQav0o2ofBbiFdtf1mlfFW3o0yopgxHn6f3D16by6g0sug6X+02AQl3BL8d4LzgU3Pru2743RlL+joLnocaBg/mZcyat0YYcYvK5ATz/J+tSmhyZlAClbNEgF3ySZs6U+krxONCYA5xqxZBXJWisI5kCQZojWx8+/Y9pN2TMcQKOaf6jMD/epie6MFmSetP+5oWxRix76CNrwUxF6qG4fbu4d2iRNL9Lv2zYB2af4FLxCUqwubilJtF69mMNDC9UlFrUUoWnryaNXxo4vu3a2TJufmm3jr8y+aVUO4hSe8rqYj99LKojKuLT5WuOPo2r1Wehq6s79tyuYR0L7toXFa2h0ba7WFQcT+BEfc3Oxicuf2ZlsvARbrEpZBdr+Lf4IKtxfDhCta9OpuMVhcIpqcipncnRJr4JoPjeNfCGEiRKbwJOQScpm/B8bSsiQk13FgQ/+cNkpP4r174T60S0wp4BJSkgeI3kYerb60kHFT4dPrS0Sgdk6cZNxrFk3VigazrVXs8zZMzPpWdV6jOFQW3KhoxgCImjdJqolLaY+LGz5Cg2SlpHnN5Jyon83IWuqyqPIHOj+TTqLKTeVaEHhH8/oPmJsw/2zWPyx879Ibwmi8JQPhDnnzrYnWYvN9ByUvSkJfpxAtYKsKSus7+h0mP9J1iKyOmFyqwvEIAi4acf35Y100cJnkk3WHjnrY7/UJ/aLQgrZ47Z++7WKONmA12s1wDsbHcFXKYZS4UIKS5syR31zNd5MykEJN4uNf+5Nl7y9EOdxZwd2u83rYgdzov8Keybg70eqRGM3JjuEt42PiFgm6x/Xdf0tFhsueuptDqvH5bNF9eh0b9ZVXFaYAte1kRU/ZhAkYJMVHpqSnzF+rzE8Bk0VaK3N0t+eHLhQZ8BpVykbVtl0NwKv8JsNGV3d7Z91/hWVB7DAU/obsq1ZKR6XbElZvyrNwLc126qxIfThtcqufGDlKM2MBVwBgi0gYzfCQ38TK0dmtLna6FgMfeF134eLFvP+2ZhqZhb0NB7P8g9/GjMuohQzeYkcXbQl+g+xh7kMReb/pfTZwfF9N2HQuMVXCVlKyjUyepzr4LKfSmgkAGA4Xv
+          internal_properties : BwAAAAcAAACAI/2C9fjh3rGyWUXc7zxRMOI1aJQav0o2ofBbiFdtf1mlfFW3o0yopgxHn6f3D16by6g0sug6X+02AQl3BL8d4LzgU3Pr2y643ZnLOvoLnsdaxg8mJUyaNwbYMQvKpETz/J9tSmiyphACFTMEQN3yidt606nrRONCoE6xqxYBHBWiME7kiUYozex8ezb9JN3T8QSKeWf6jEC/utie6IGmyevPu5qWBVhx76CN78WxF2pGIXYuId0iRBK9bv0zIF2a/wGLxKVqAqbiFJuFq9kMdHD9UpGr0UoW3nxatXwoIvs36yRJOTlmnjp8SyZV0G7hiS8r6cj99DJoTGuLz1VuuPo2b1WeRu5s71vyecR0L/uoHNZ2R8Za7aGQsb+B0Tc3OxjcOX3Z1gtAxTqE5RDdb6KfYELtxXBhyhb9uhtMFhcIJueipjfnhBp4JsOjeNcC2AiRaXyJOQTcZi9B8XRsiQm1nFgQvyfNkpN47574T23SEwo4RBQkAaL30Qerr+2knNQ4dPoSkWidkyfZ9xrF07WiAeyrVXu8jVPzvhVdlyhOlUW3KtoR4ELGLXIKwrI6w4LmbzBAOYmJPpMZx0qH01K22kxK3GGur4RzSFIz2bZkvjEcniPGBmxf+9Wva/+bVKaQOk8pIFhjvhyLApV4HL/h6evysPfJ5Cv4yuIymi5eJ+kvFL1Ci0NGN8pQ3KLg6ya8nx74N628RhlEfQHD/hbbHeIfCBSAzb7bh49bOANtOC2WU/xjEVF8NRK4BQ50gETZU8QXN5N9hOxEMDPYGLeehHmb67FuF7aQF4vcvpYAl9rPEMcSTq4UmkRm01LDGGuY+Bil4k5RHRf/cnHBksfORvCKXN471P/+J2YdRbWlCaBNG/lxMxYBouap0bHJiUmTNwoTcyCE8faq/P2N2cHrJSacJnXSsVUNN2OQil/p0PE1fX651/8BefAbrOWfAVvKdbKxSVbktTuSzHzrU73aSzK/7vu8SgdmrvIsOKC14LjC8iaTXETXEdJUFkurfc6loGd+9134eLFvP+2ZhqZhb0NB7P8g9/GjMuohQzeYkcXbQl+g+xh7kMReb/pfTZwfF9N2HQuMVXCVlKyjUyepzr4LKfSmgkAGA4Xv
           properties :
            x : 305
            y : 34
@@ -5753,7 +5713,7 @@ window :
         -
           name : BTN_Importer_OP100ans
           identifier : 0x23184002023933f2
-          internal_properties : BwAAAAcAAADEIKzf0ZiNEYfhWY67li5tV6r3dZ85/7dQPWz/U6tK5zJ1v5xP+LKc3tsbfDALlgnlUbiiV5MBeq0CSVtPZj4E64EgJffB/QrjBKC9n0X5YG7B2FC9lEpMuXBTQlo7huukiXhFTAo+VZzrke6Fdzny7r7OX3+9kVVHoTdXpcrWe31toRIPMtERAB8gu5ejcyENO9t3mm9bkMs1urYR4XkVr9PKl/51IoBgAEYYOHpzg/FiBTcu7T3ItTlB9PaYwJXMIaYBkfzFopjI2QQiGtRjQ6ualM0WpqpzpDfwL0MRgLr0qb1Ul2rEQ2jyjV15c9aPoTTlF/XTNbZqzoweXK+GQTbBaGAYTMZReQZSbyIvc3MxOSA6BlRCZNZr/ZIJzOu6L2fLRZDzYRu9KhzaGa64V48MPoqpgK1dLs3fuBLu6IL+SR0e9F+plaLmPA5NedGdkSCscrlq4w1N3CpUXwWbRQh44LAEKQM1TWrPf4JZF175xQADIbCUy7e5VFjx5BAH4Lj9rUKbKzFSz/+Wc52/7IT1qkdSuq2sTeREKGvRb8NYldN48h9siGOwlCcmsiku4gQJLj0xT0XvtqikhdBEzN2gvGElOL2TGldZPUC+CTjQ0PzV4gximxOjPqT3Rbqdl2eav+y3jn4XUiae7SdLcv2W+qlRlg6am3BCxbqEo+bMSd2JiJrLph4Zsg9+Fmw8bS/wZsYz8EhtMkZ4/hr/REd1kMLx5ovf6M+PnmWZOVJ8fEdrcmZOCjizHoXF+0U/JkID85g=
+          internal_properties : BwAAAAcAAACoxHCrZVwxVUvVPWr38pp5Q4aDiat1S+MsOWjzV6+eS1YZE3jT7AbAkh/fOOynUlVR3TQm879dpnlOFR8DSjI475XEMevlAe6HqcYrOaFXcmbB0LCDqIj2dUw9UKQ/UKF8edhlJvp028CvL+T/YztgnhYKgzkNGyv34SW1xyYYDaH5xdY5suvPED+CJT0D1QvZb5v3QCMZlvvl1BAPWVOba0/aJxR53B6UxNiKxspRYVUWlZ+siYtqASV7rhzglkvUcZK1+9w78IAgX4K0zqJdD29WMB9m8ACn2OUifZsjOsYgWQ1qO/Ty09gQw7ed8dzfieztIZX5Y+IGqKYURIEIYZZpYDJQXjDtxeBoQUat8ZMR0bCoouZ8cNI1e9wFLk3uuwdcCm2sGMxWAz8zqvG1cKAXmxd28RzO12ZKyctZTZeL3NobuRhQTus/63PqpL6WqjflC3IvpioqSZVdOITcoo13gbUZ4srO7mv6jJeMBEPWLIGEsm3TBEg60zUe61FEpY920ic8WnITsI4bwMBcWbm8S2Sfa1xpyjFPSVQg8CDdLLzVF/AvWfTxi9iXjcbLB6Oqs2oCruZIHwfFRjPh6YJHLepObXBAdzSU1tnRXl3tj61StwXNIJDwOVFcOOd2yJ4j4LXULSucB6UTmuqID2INeyrKA/23eF3dWRYgPwLgVcGVhJ7PuuJddsuyWjBgCbN86nrvLLQZbgI8OmZLMKvRNC5NOl/j7MOTmpntjQaoEDN/ZlK6poQP+lkRNwF72o63T0Q=
           properties :
            x : 780
            y : 34
@@ -5917,7 +5877,7 @@ window :
         -
           name : BTN_Vérif_pres_trello
           identifier : 0x2376aaf0aa53cb01
-          internal_properties : BwAAAAcAAADolbqurT0X2IO32SPxEeHJdQVYijhlKWusyJe7FG9TbrrgxlPT9FOduBIdhyVmQ8OYreanQ9bb/YaIrDtTO8QC1BOlUlqljfvivlP9aGem/rBoKgOFmmAetEQFJVgwXexGSMmNrAXPVbyRCTehykLzPAn6EB9X7ToNLoxUIBdGbM4EVpajgNUFeqWmbPnFGrsSbCpXTTyGw63z6y1j2G8VK+beCLWWTOjmc525vGSmlYlWkM2VaPguWAe4HJhE17Fy59Nodcvu2UfSixrYTrPusiOM8OSIAPEwhv+q1E9rMjislh2xM3LReNmweFNz7lhNbdc9AG/mgQpR7nxc+wH15X/nKipuikJ8MzmboMz7pYsRNuo0B0QSkrRLQFgbEM8bbQobGHi46c6qcdB+gG22Tnd59eJ7IDRQXJ+g+OSsHbPjOeBAmyd8pQLp4oay2Ew+ReV/q5v/iMIfwr2bmDBx54dCEFAHXAsX5vtmhPB3n2WfTAX1Tamoesibr1qwZqHc82RGpPCeoo9zVSMj2DO6x+Rg+hTEDVLG2QPdkWjYfvK2Ijqx8ekgDnlyXUNwKyy+ITi7swyceg+yQOT5rSm46FkeO7URDf2QQP+HEPtWgQXxOUMHsyMdbpi0VgHKoVLJjaAdLaVN4CS1R2DJ7X5D/OTE6PDge0AUsi9lTrjNvCyFtryml3TDewqftSui/RQSm/O0XAI4x0Iz42tseI7oKfAPLZUt9TfXDBqWDl1Dto8LVphjxnhWaXpczT67eeIF5MWPR7PQXcHIdBeYbMIhNnFMWDQdW7StWkE22fG79p2T/caKNauIvR9nVjXU+qecc/GlmYnJWA==
+          internal_properties : BwAAAAcAAADolbqurT0X2IO32SPxEeHJdQVYijhlKWusyJe7FG9TbrrgxlPT9FOduBIdhyVmQ8OYreanQ9bb/YaIrDtTO8QC1BOlUlqljfvivlP9aGem/rBoKgOFmmAetEQFJVgwXexGSMmNrAXPVbyRCTehykLzPAn6EB9X7ToNLoxUIBdGbM4E9hajQJWFeuUmbDmFmnvSbOqXDbyGg23zq+1j2C+VKybeCDXWDOjms525fKSmVcnW0I1VaHjuGId43JjEF7HyJ9Po9YuuWccSCxoYjjOu8iNMMKQIALFwhr9qVM8rsrjsFh0x87LR+Bmw+BMz7pgNbZd9QG/mQUpRLjzce8H1ZT9nKiquSkJ8czmb4Iz7ZcuR9qr0h8TSUjSLgFibUE8bLQobmDh4ac7qcVA+QO32jnc5taL7IHSQ3N9gGIQM/VNDGYCgu4ecxWJJgiZSOCxeJcUfi7vfKGJ/ol27uJDRB2ciMDAnPKu3xtsGJJDXf4X/LCXV7QlIGih7z/rQRoH8U8TmBBD+Qi/TNUPDeBOa50RAmvTkbXJmOeP9MYg43pIWAtqRkUlArtnS/eOQi4xeARhbEyx8Gq8SIISZTQmYCLn+2xUx7R0wIN8nsBu2YaXRmePnUwO9DvgU9iFqATLp7YA9jUWtAMQVJwBpDV6jnMSkiNDge0AUsi9lTrjNvCyFtryml3TDewqftSui/RQSm/O0XAI4x0Iz42tseI7oKfAPLZUt9TfXDBqWDl1Dto8LVphjxnhWaXpczT67eeIF5MWPR7PQXcHIdBeYbMIhNnFMWDQdW7StWkE22fG79p2T/caKNauIvR9nVjXU+qecc/GlmYnJWA==
           properties :
            x : 67
            y : 589
@@ -5950,7 +5910,7 @@ window :
         -
           name : BTN_Créer_typres_divers
           identifier : 0x2396427e56bec582
-          internal_properties : BwAAAAcAAADLnMheWIc1NujCreiXE7NFmoR966HncuCPw3Li6XHWuMQ2qQzC6Rg8X0LkTHeFFeYX6HB0PE5SlAYygcbxtqzMj49wVev1MfQOTRA7/cRX7JAhCtK6SAsHgmFjiDWRBSMkcNqbYkQMKJiIO5XRn1NrSGQj7A0mdEB4k2+Jetl9wiJeFDRBYXg67LNGCyAKvAiH4NArhQIAc1aViEYr4KYUB5Pp06TPCppEXdnYvO05NlJJaajlXCFXLxlLh2tJnQLSIZkdlWCZgIQne7Lv45yD2tEAZZ/1TzdttQWPhyEIfDuDgq2vKJVgymT/MvWnCAOH8rIqZc8nrIV70kmnV1C5gWb7vIyGOKNSKZRmC5L2xmVsgQBSBHAWzeehmgZS3aDdDeCRJ5eZL6kKYvteABRUDg9t3bqzXhmyd5jjEvZNG2xDU2PsDj7701KVp4PqM4TFqy3Md8SMl/IZzPqI3qVf+Ic6lbRsDdQv7P+DWSQo92BJVrp7uoKFaNiffimsu4uD67RrYr0r45tlm7Q83ORCCphOLQiZal/WzxV8sFZ9cMOw9n3TiMjD7DWO7gxsxjxdMa5Gj59/qQPEAlGOWXRav2FwhIVEhJxiIJOc/eW3X0J99fI3IExUkCDKo6YMPNpMty4uPcTMKxjbXVvM/Xk/yXoie/8SI2adRU69Vp1RyyJCs8pL5SzBUHFoffMxHZmAYgJ+P6ZCyXGE8ehZmp1BxyZ17rV4uJjXX0Pq2jsWin6plVz9jDYd4tEiCgW8C7FFKSGS6QB4yiN4VoA99J0BHmwH2N0B1TtAm1peLsGbFRAUgMxRGlDTp+5FOmX+bOOFzyPSXfzBjZHCSg==
+          internal_properties : BwAAAAcAAADLnMheWIc1NujCreiXE7NFmoR966HncuCPw3Li6XHWuMQ2qQzC6Rg8X0LkTHeFFeYX6HB0PE5SlAYygcbxtqzMj49wVev1MfQOTRA7/cRX7JAhCtK6SAsHgmFjiDWRBSMkcNqbYkQMKJiIO5XRn1NrSGQj7A0mdEB4k2+Jetl9wiJeFDRBATh67POGCyDK/AhHYFDrhYKAc5aVCAbr4CbUB1Mp0+QPSlrEHZlYvC15tpJJ6ehlXKHXbxlLRytJnULS4VmdVaDZQATnOzJvo1yDGlGAJZ/1z7ctNQXPR6GIvDtDwi3v6FUgSqQ/svVnSIPH8rLqZU8nLEX7UolnV1D5gSY7PEzGeGPSadTmi1I2xqXsAUDSBPCWjWehWkZS3eDdTaCRZ1fZ76lKIvtewFRUTo9tHTozXpny9xgj0tYtO0yjM0NM7h5bszK1h6PKk6Qliw0sV6Rsd1L57NooPoV/WOeadZTMbbSPzB9jeQQIF8CpNprbmmJlSLi/3skMGytjy5TLwp0LQ3vFO5RcvERiavguDWh5Sr+2LzXcULZdEKOQ1l2z6CijzJUuzixMply9kQ4mb//fCeMkIjEuudT6n0FQ5GWk5HxCgLN8HcWX/6Jd1VKXACw0cABqA8bsHPosF46OHaSsi3i7fbtsXVlfKdqCW18SI2adRU69Vp1RyyJCs8pL5SzBUHFoffMxHZmAYgJ+P6ZCyXGE8ehZmp1BxyZ17rV4uJjXX0Pq2jsWin6plVz9jDYd4tEiCgW8C7FFKSGS6QB4yiN4VoA99J0BHmwH2N0B1TtAm1peLsGbFRAUgMxRGlDTp+5FOmX+bOOFzyPSXfzBjZHCSg==
           properties :
            x : 33
            y : 213
@@ -6075,7 +6035,7 @@ window :
         -
           name : BTN_Importer_EvolsTarif
           identifier : 0x241da9c30142b30f
-          internal_properties : BwAAAAcAAABjGoneNl/p+pbPCJ31fWmNK4AlQIsNbOxjbrcBeqiS24pR7OuuDXrYCujvIA0ndJhPPqOc9oVsj8p+V5NAdwwHPhDJuEWwjDK7QQW5/J5Q8AGSA5Dv1LmhcFK3vakALhjL1qN+r4VZsRUvpRE/xg3+O3Y/Ymb+Q8RDYSlrHqMynVyvBvUkiEv4PwRk9LDzXTeulF4RRAUqJ9DA3Hw4LbDIk6hDsIRGXBjr+w3D4SrVIF3UTSe3H3VUGpTD570j1nLzxFgZ9UZaqyrmU/KLYIgvXnogQApjJLpx8yCktKIyM+vjELIsYqHHGM4h27wnlwGVWggG/MkdPbmw98ZXWSmctvIrrQZh5RS6J/wWjt0TOIn1pyfnwK3Qqjd9UJZCLrUxtBM0dv2G6Ef/gKY41B71Qv4k14VqPKtszgopbQGBjeIyn50Hk4izHEXuQM8hpYJMQmBybu0DJ+HViYLL/kK4OpUkyhObVBCwFMaIl5KiZKiH8FKv+Bp78TX9EfbqtKmzPsYkk9TIpdJe/ES0Y5vptBBnbR84DOOoWTU12OKuhmnyvYvp7UmsoHd4tPiHXWKaDp//8Dib+0re3amYw2lifVozOj5zPphbWyKo+bKnKN1jLiJuIW1BgY66/k/ELo+Op6BK/SvJqm3IoRdAAlTUNx8m9jhNh+Znaz2fZmKkePb7b97zGuBALJhGFZ4nrRPC9YPoBP9v1sVu5pKtdwAAD/ugIueD5EgRLG61AHZsUDFGW8grb9Ub+mG841WYi+27QVSCagjF83XsTz97zMbizOt9/E3sOzZx0a9z7tU=
+          internal_properties : BwAAAAcAAADjmglett9pehZPiB11/ekNqwClwAuN7Gzj7jeB+igSWwrRbGsujfpYimhvoI2n9BjPviMcdgXsD0r+1xPA94yHvpjpWBUwDLLr0YUZ3P7QYIGis+DvhGmxMBLHTZlQnpjbloPeP8XZMeX/5dF/hk3O26aP8gaOk/RDQXk7LpMiHczPhlUUaOvYT3SElPCzXScu5O5BBPUad5CAjKyoPaDIY6iDcJRGfHh7a60DgcqVUL1EnRfXT0UE+vTzlw3TxhIjpJjZpeaaa1pW01JrQIi/3oow0EoTtOqxE3CU5LJiEzsj8BJcoiFH6J7B+5yHN9G1ShjWHHktbfnQJ3ZHKbn8RnKrbZZBBbTK1/yWDp3T6ImFd1enkD1AKpdNoEaSHjWBtJMUBv1miDfPwKa41F6N6uZM7/3SxPNU9qKBtflp5UraB3U/W1D7JE1m2Ff5rXpUCigqJhVL7yl9oZrT9opwYr2sgmtj/Pj43J6An2pqnHAPuMoHgKKDOR3VaT6ivEHb5k78K1wwzdoGFDxc2wNhHPhPZbegVKsQwa2t4NpWvtFapaNBtRH0yF/QLEBfZVqCdmeXiKCjQ3LGNUFgO1E6pcL7shZ7hiAjQ5oAQYqvICUrVnqGKbXJiZYydvdc1qdWLwgiNfORsvVwWa/ouvwM/2furvCVz65vczVXjjoM0F4j17YLAqjItAC+rSZ/NYuq3etgnAeX/u1W3sot94CAj3sgomcDZMiRrO41gPbs0LHG20ir71WbeuE8Y9UYC207wdQC6ohFc/Vsz7/7TEZiTGv9fM1su7bxUS/zblU=
           properties :
            x : 780
            y : 67
@@ -6095,7 +6055,7 @@ window :
         -
           name : BTN_Importer_EvolsTarif1
           identifier : 0x245b55b83aba0381
-          internal_properties : BwAAAAcAAADAFlrWr/DUk9SZemQ+jRS8cv+XyeEAc2HSU3g9KQ/gNNsDlOddxh0VICtmEocBIt6lcUpbIJ5kcPhhjPcTFZAw6b09af4lFdFtAXzYD69XiVfm7/X64aZNaaxp3Dl9DAXMkkkowCRNduvAxsckOIUvdZxLS9xzSJ1AmEEJlzCenGI7YMhLq2naf/fRZZov40fEY9QhN+BDa4aezd8xrCh7esYtqJi1/AKTrLSazRKhB75ZNP9rggTzrI+oah0y4yHCHWu3ScQrZDdCr3gFlmOMYjuAshdtxj/zgrD7FAFOTEnTc0GdtM2Jkpd7ptNIQqDAvurKjhfzARM2HRLqom7VW5s/ycNIvOo32T/Nva70oErwGusl15PJdUxpMJfbgzVZVB4AaSg7JMDSA1RQDafgRTJT+nUekewIDB2BKVOKw0NvGWsEoBreJtgF1NdlotpifNVGNrrKKrtAL6VZ1tIdl7yjVG9ZquFLIV+4f/LvlB27jsnQnox02UiqEMPlh1arrOLN32JKy9t3BKcDKw0ofWr0NMGGAOHt3azKcwWmY0WGYmUYNHKesKrmBcSqqI5Sd5zRU9UK6D7FhVlUrMaxVDwHe5wRqUEMNnwLqJMS5B6OWjl/Yufxu8L5cy2FcCNFh5M77Dcs0zDMP580dteqleVXQjEeOprAB5UfohRNVPYur1XNlxE9Bb0ZVgcNj/kYK9djQybGysai5Uy6Im30r65FklkTo5F2ndUMQ0lI1vA3aTgf+cvblXdjjUw9huOagj2Kbf2Js+omIhQlZmoN3rB+TBd9aohm
+          internal_properties : BwAAAAcAAAAyDDx4OXpSFVY73IbIB5Yy5CVZMztiUUO0tZofC6lymp3B1qEfgFMnWo0YZBkrNCz3d0ytIqACeorz/hk1P6LFOd95ZcovXS8tZYzyM/kdzb9kQykeExafXWSJLp1n5tWwAEXEuCLR5BdswmGgguPLUfKjC/hNEJvIELWP53b0mF7thIRLqTWM629JB9YhHe/QAeTJY2LD5W6CZT2hQpbvQqgtSLSH3JSHdFj4bbB/I+47UDMrmJhJtJ8QeN3ggQ0+1+NvERJP3i+C/3bNHKH4Dk0QkgNXLjHT0rDtEPtsuElJY2mRljVHcp+n1FPG4By8gGYW1kUn52cqTYh6EMRJs9nHAQ/6bDDnbaNbJQzCnIK6SvvJSXuHGYjxonPtcSE14kYoLcqLqjiSQ5Kl6IpDIFfA65YzrDV3ucrSQqolOuIg8mABIXmvhX1KvfhkreURpYYTe3OBZ+IlBJZK9ZF4EtGI1cgOxcoOQnC9jJWe5yho41phAw9FRAFThUBoDj2SlcPa3GtB9M5Y9YTYBlB7yBfprXrPd5qIRpU36DDprgjDP5YJuTUXf6fjBgUpe71lJDnCbHrFXXHWFtYRrwEQLyl89BUepLLz6xG02aJFd40P024Ekw6eaj9WJJa8u2oMcMRg2QALwNMtoGz5IZJl8FrEI0ILPe/b4P70N/9863F7vDbeiNCmENay49SgBsxfRDjwwKPp4xW093LgDHuGwbhfiFcdqZdIr+cyqfMmMKppG/Zdu4kZ1wn1Mypf5L30ZB+oQye/aVyopIpTSAivYDL4wq3n0G4Y
           properties :
            x : 780
            y : 96
@@ -6115,7 +6075,7 @@ window :
         -
           name : BTN_SansNom4
           identifier : 0x254be8fae5a93d6d
-          internal_properties : BwAAAAcAAACICDjf0ZglSy5IiqEP5qeEaOHtLpW/2YJRoTbIMdsGZQRSBVmLHITZgBX8thBfpEEIn0b0w/eV21DfyhwLnY2zmbK2fe1w+31a/+FSVasXs71m8mHtyW4kavP4kXSvxBnaUc7eNLQ5T0sU3HksrTscxc9DyQt4fciFmHstwB2QF8QwXdaomRYkO5bCm9kmNF5oVs0IJv2VSjwZbjf4KIFA8E3OleQYI4wAWd3N+jfUkRvrZ0PTeOOe9P+9Uadh1ORK2ksptwFvpHwbRH1v5XwzILvQYq0T50rIpWWgO/VySIJvrvfYhBu4kfZIWjdlJgXy6rKvCO1CkllujQJZBPANXvMuhrzZGw4UOxkXsuLyEHHJR953CCmi6RozNnYaszpE+tOLQUGqRmXda7BzX9QYup43AG9T9eBFmybS7LlSk0rVY0ZXWSI8U1MbESg/E5867akyRkEys1hIKOT4YT9j5SuSjfUb5eKNgF2Wrtnm9bOZWlnXICkCS9GSzHV5u3DemCB6/lxrmXGsbVe+u8fkBu8ULbDKdYV/uYOI797WLKx0Jxw/ImxD8C//BvgbekcKupqe9uiJoM7TnlbkDcyG/628Ie60jYxpdOVdB+ylYk5eichsk5hDwF3brW/SaqTSRhCJyCYdsWttVMMyIVUCbMlp5NLG26iNbIcBVTPpMCdvcR4Nrlex1otl6LMilzUy2rPpIWGRhhEf92+AKCsVFO7CGoCAqe4EPcRoIwFWB4ub1ERpxZlBZjo9ydY4G9b2kzkN/EzfSAr4ODxnoLX4HAbjok55mD2F0Qj0q1zLhE0IFpIu1BM=
+          internal_properties : BwAAAAcAAACICDjf0ZglSy5IiqEP5qeEaOHtLpW/2YJRoTbIMdsGZQRSBVmLHITZgBX8thBfpEEIn0b0w/eV21DfyhwLnY2zmbK2fe1w+31a/+FSVasXs71m8mHtyW4kavP4kXSvxBnaUc7eNLQ5T0sU3HksrTscxc9DyQt4XYjF2HutQJ0QV0RwXZbo2Vaku5YCWxnmdF4oVo0IJn2VCvxZbjd4qAEA8A1O1STY44yA2Z2NOveUkdtrJ8PTeGNeNL890SfhVCTKmstpd0EvpPybBD0vJTwz4LuQYi0TZwoI5eWgu3VyCAKvrjcYxNu4kXaImnclZgWy6vIviG3C0pkuDYLZhHBN3jMuxvwZ244Uu1nXciKykLHJh953iCniqdoztnaaM3pEutNLAQHqxmXdq3CzH5QY+p734M9z1QClOwbyjJlyc+r1A6a3eYLcM3N7Mcifs3/aDUmSJuGS0zhoiASYwV/DBcsy7dU7xYJtoD02TjkG1VM5+rk3wAkiq3Fy7BXZ21D+OEBa3nxLudFMzXfem+fEJo+0DZDqVaXfWWOoD772jMwUR3yfQkzj0E/fphj7Gieq2rr+VghpQK7z/vaEbWxmn03cAU7UbaxJlMX9J8xFQu5+qahMM/jjoH07zQ8yioTyZjDpKEb90csNtOPSgfXibMlp5NLG26iNbIcBVTPpMCdvcR4Nrlex1otl6LMilzUy2rPpIWGRhhEf92+AKCsVFO7CGoCAqe4EPcRoIwFWB4ub1ERpxZlBZjo9ydY4G9b2kzkN/EzfSAr4ODxnoLX4HAbjok55mD2F0Qj0q1zLhE0IFpIu1BM=
           properties :
            x : 834
            y : 385
@@ -6139,7 +6099,7 @@ window :
         -
           name : BTN_Importer_EvolsTarif2
           identifier : 0x25d8577344eb5b2a
-          internal_properties : BwAAAAcAAAA30HG8tBsn4R8tkO3LIarCfsXp8XTkYqWt405SEBpP6J4o4cvAOXKLanp7eWN4HxZ5vTQhmV+G8KAphnOAgGHDd26GVEb200qiQo9N9BJALM6B3pP6s6OPElf8pFMdV3YrsvLXd+K+iWZDGplijNvDUBCM2dgEU9s8fQRnmnrxBS7BFFOMv4Ed4WmiI7xNpsSWYPgmTG39TVovPgFuAG30Jww3GqmyA0oGn5hdDiNCeNHOa1H+g6s9mvl/3oPubY22t2591vcOU4SIysxpa8gT7skhtvOHGm3QOgXVYcv9m/GdI/uSzfHabEjBu7fQWa2NxjBheI7zx6BqA4k6Fd1KJvtTS/vfldt42wwat3XUhexvA+Hy4WBjZR201jQB2pFJ7Jgwm/wtxn6kfkMkEU2tpUic04qdxrQdvOr6lomC8H8ZKkD1AwvmxfiIUeiTqqVmvByXw1GfGrhCtDJCEGrKA4BOw9re2TuGB3R7LjSfsTnXJzJdvUmg2ljL1Tw/8+UfnB1cUkmvkZqxf2DQoXXjVQClj5gfU08gSXkZ9t8mHu1Qy8CXUSn02Z4nkn0e8tGuy9m0WkY9NEXvor4Vek62Hjy6/Bm4xnlxiq/svY/EXeCMLYwuXSiPPkCmpnRPQBC/I4CEuWwT5W3o3sBhGMOhibEUBYDDiRShzzBA77TvLfgGbky47ADJcGWOwd5Tv47IQ0zm8uHdvpPeLjFDjDWpl5IkIZQgEmnxUSzBLG0KP6jvBlsmmv7j0EFa4vUX1qMNCymIQ//muHMwXP2kshPEhJTCGd310A6F3hY=
+          internal_properties : BwAAAAcAAAA5xnO6thUp6yU/gr/9c0Q8gFtrd+5uVFfThWB0ciQZIii2e7FKs8Ql+OSV6/3ikZjzC76Hc8FQsvabyOUq8pNV8ZeiVgAwmwB0kqHHFOA+wOhNfh2wQRdNzLe6sufP6bYl7uJFgdwWn8C7TCfGBoVLPsgoOyo2S416Kdpt3sDD/XwROAEmcYEfl+W8DYQ3TND02DS4Hq991wBDwP8C1rPYJQRDVPPEe3i0+3onNhVQvDuCM7fwRXsvVNnZ7I+kpxXwU04/IOHmeTqEPLrlpdoDGGUBaNE1NjvWFs+/KRE3IzeFL6G8t4GoQtQ7dSf+y40faoSf7vQXiT7+fQem02/i7AMv6UVZTYGiu1Jw+5vScZ6bj8MYN2RhW2mS5DgH0G2n3OyyeQpJzNDUBL0MtODyQG1H8pEgMym+AWVNIQgNfeaGncd03tCrXolX4H/umWaR+c9u+sQsp9UrC7nZc9HzkhHFpuU1QiBzxG+mgdN2+uxssqHsqC79HynqNNOS7nJ+nQSnxViwklu+ytNDSBSM1IHM6jOetCyV8oBwDbqVz/RV3t92nJ5potOCXQCddeZNVLi3Rc22OWbE5RGwwUF7kSmNS/BTW4Kmi+7jtLrLRptBCAOlkJX8U1G1XaMyb/HyVE9vxGv0wt6dYVtUB9q6uA7HnL+ejiFyXItj+qu2VivTmftPn53etf59MH222stvAK/N2cS6HxBYqL/RHpsTYeT23+qKeM9r26ZPsveAsTp5mMm0FHRZWtvkGCP59L0nLctWcYlsPvWy3nPSZOEWdobMD+vnzgyH0Bg=
           properties :
            x : 780
            y : 125
@@ -6159,7 +6119,7 @@ window :
         -
           name : BTN_Verif_US
           identifier : 0x25e0ede9134c01d0
-          internal_properties : BwAAAAcAAADgDHDl9HsHDRwjWGInCn0nVx2X18bZ9lxu5n3t/VkZWOY4PA3PGlDSz7Mpa1iN5cRv9qOx9iRE0FczGWvA8K0XRQCkrfw2znvSaT+Fa5csNgt6Bd6/XMpcZ29o8ts9LVEbh3Um0PRFAeE/xAU1fj5V8KuapdiNiChCGfAz3C9Y/63TK1dg3JncTzA+alS6h8vbD/aVoVWrz/8lk4zzGDpNeWyTM/PJmxTCS4I8e4bmc0GRTBbpY05J/ZGVyife7fcvOyoxlJTJX+xPkZ6AXgyHnFul1a0rlgunnmsBnOXjIPWnxcrBqoMk5y1vzQbnbhTlhyYR79UPVjVU6cr7k/VTFTYY0cMz7Rv6y2Gu85wQugRNT6NB1nHP0V5kNXgtFpw9tB9IF6FM53bj4q6HVT24WkEvnlHbYIsLq8N41khQRAMuZOUNtnaE2xGIe1y+RtX8wtAksgS8VOQyJxD3/mQ04yZ/87kGvJkDz5UJ791IdkS8/LpZIIauMPDMnhhpm01zIWYXEsr+jZaLw/Wdnw6O9pk1yzF4DxzddUGH7N+tVqanZVaJxjQphqjpHCfbvyTZ7cHx81IDAdUwiMszuMjqCO4ss/RkQzQ6BTxPQsZ9tKuxtH7wdk54MfmndR7iouYc1IxWXD71O/R0kOi6Tipg1yQNDPhFKwah1PUF0nUeiDp/9/2ANiLCn+uR5woyw7S5s0cRCWpciHvt7bNni7+qggJRX6fTRblR0YGPpWPEwlJQeCeHeSmnifE5WWHSQdPfyKR7wXFMzDpOCZOVMsq307Ieip513sYdq5OOS5Klz/Vx
+          internal_properties : BwAAAAcAAADgDHDl9HsHDRwjWGInCn0nVx2X18bZ9lxu5n3t/VkZWOY4PA3PGlDSz7Mpa1iN5cRv9qOx9iRE0FczGWvA8K0XRQCkrfw2znvSaT+Fa5csNgt6Bd6/XMpcZ29o8ts9LVEbh3Um0PRFAeE/xAU1fj5V8KuapdgNiChCGfAz3C9Y/63TK1dg3JncTzA+alS6h8vbD/aVoVWrz/8lk4zzGDpNeWyTM/PJmxTCS4I8e4bmc0GRTBbpY05J/ZGVyife7fcvOyoxlJTJX+xPkZ6AXgyHnFul1a0rlgunnmsBnOXjIPWnxcrBqoMk5y1vzQbnbhTlhyYR79UPVjVU6cr7k/VTFTYY0cMz7Rv6y2Gu85wQugRNT6NB1nHP0V5kNXgtFpw9tB9IF6FM53bj4q6HVT24WsGvHtFb4AuLK0P4VsjQxIOu5GWNNvYEW5EI+9w+xlV8QlCkMoQ81GSyp5B3fuS0Y6b/czmGPBmDTxWJb13I9sQ8fDrZoAYusHBMHpjpG83zoeaXkkp+DRYLQ3UdH44Odhm1S7H4j5xd9cEHbF8t1iYn5dYJRrSpBihpnKdbP6RZbUFxc9KDgVWwCEuzOEhqiG6sM3Tkw7S6hbzPwkb9NCsxNP5w9s74sXkn9Z5iImacVAzW3L51u3T0EGi6Tipg1yQNDPhFKwah1PUF0nUeiDp/9/2ANiLCn+uR5woyw7S5s0cRCWpciHvt7bNni7+qggJRX6fTRblR0YGPpWPEwlJQeCeHeSmnifE5WWHSQdPfyKR7wXFMzDpOCZOVMsq307Ieip513sYdq5OOS5Klz/Vx
           properties :
            x : 11
            y : 381
@@ -6228,7 +6188,7 @@ window :
         -
           name : BTN_Plans_de_test
           identifier : 0x260ea320634f051d
-          internal_properties : BwAAAAcAAACHMMGtGUbhiW+QYU2ahBlIf74W4WAkTX6A/VWMW4Pi0V3/gDYfgavCK3f7LdBBpPUFTGMUJzpWNP05+zv2bLBtbStNV+yH9WSZhSrOLJyvRBVzw4rRyex4JQnwJn1+jMW2EDmwEox1kSRLd6qr2dLuHn6pCym2VYDwPen1twZ30Nc2uIEFLKPxKo6vVd33i/5XubDec2vByeqFaGwsTs7KudqSHWiopfT5SbZ0oTuM4zaEnE1YrfwVDLiG8bpsKjfHqaSXYW33k1GZ+6j+Fvuiz61vtSlBaZ6RlDPpJ+VVyia6DojsNMoBR1UrCJo3e3z0gs0jSlSCegHdOWsHokf+ujHSu7n8aNwt9NSgCbUlnKx4N1w/TwQA8DK/Gt7ewklHPy258lFtc4fnRFKPq2p3z0HkQ5GhKi8Q64NA7lBC+k2QaFGFPl48If+aaXx+/iW4BKzoCuSMeFqwGxxrmkYawRap2cfoYXHhlQTdYNqV/gFUU25qgAyiYtPmbK7arG70wuOnjX+Ztn/cGBjb2s8rFS+fi0ln/KqMWuA4GW7MNXqbxbcGzHRIZsDdIskMia0c1AESGn2hMlOZS5FJO6svdmZ7PmQqvg0atQq0pN3kNpuKRHgc9sZTki3xyQNee0+PkhN6dozkHGiiagU38WJqsv9lCZmvB4OpehU/MT/MnE0T5jxicw66wT8I1HUOH8P2xvx70d27DURQdlKoGuu+2KibecuVJuWJs30TPzw/wQn6T6TUhK7eqOJ0Lmi592ExSfRGfiyMigQuwkdIUa19Shqf3RUwAGok2WeDea8qI8XVafpTJAurZFqnoXJTYTuMlA==
+          internal_properties : BwAAAAcAAABHcIFtWQYhya/QoQ3axFkIv35WISBkDT5AvRXMG0OiER0/QPZfQesCa7c77RCB5LVFDKNU53oW9L35u3u2LHCtLWsNFyxHNaTZxWqObNzvBFUzA8qRCaw45cmwZj0+TAV2UPlwUky10WSLt2rrGRKuXj7pS+n2FUCw/ak114b3kNd2OIGFbCMx6k4vlR23S/4XOfAeM+uByeqFKGyszs4KuZoSHWhoJbS5Cba0YftM4/aE3I2YrTwVjDjGcTrsKvfH6aQX4S130xFZ+2g+Vruij60v9elBKR4RFHNpJ2VViqb6Dgjs9EpBBxUrSNr3u3y0Ag3jCtTCeoFd+WsHokc+uvFSu7m86JzttFTgyXVlHOz4d5x/T0SAcLL/Gl7ewglHf6258hHtM8cnRBJPayr3j0GkA1Gh6q8QyyMgDjBiWm3wiDGlHn6cQd86SRzenoXYZExIqsQs2HqQu3yLemZ64XbJuefIgVEBdSQ9gLq1XqE0884K4CwCgrOGzE46TM6UooMHLV+5lh88uPh7Ou+LNY+/6+lHnIqsOoAYOU5slZr7ZZcmrJSohqB9AmlsKQ28tCFyut3BEnN56/FpG8sPlkabHoQK3u26FSqURD2EljvqZNi8VuazMo2RqaO+m6+vcrPaFmwEfIiCiuVX0QLKUt+F6blvx8PpOlX/8X8MXI3TJnwis056gX/IFLXO3wO2Brw7EZ17TYQQthJoWit+GGjbuYvVZqVJ8z1Tf/z/Ack6D2QURG4e6KK07ij5NyFxCTSGPmzMSsRugoeIEW29ClpfnVXwwKpkmadDOe9q4wWVqToTZEtrJJpn4bITIXtM1A==
           properties :
            x : 276
            y : 595
@@ -6249,6 +6209,64 @@ window :
                
                pour TOUT sPlanTest de zaLstPlansDeTest
                	ImportPlanTest(sPlanTest.sChemin, sPlanTest.nNbOnglets, sPlanTest.oPrj)
+               FIN
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : BTN_Maj_ordre_dans_sprints
+          identifier : 0x26c700c9247ab8c3
+          internal_properties : BwAAAAcAAADNG7swImxWBnwLGvY5fSYTU2E/2hfENI+r5ElReDR7j7tnaPRfjPlaBrONZ9B7B3SNEobu6ZqHshzrFqkQoEz5v9AHvfbTl3TIXhhwkjiF9kOhBBlFplKhW1Ua+5l4Scz3FSnwnIsXVVrCICTJJnFT3HNo9/xEwlXhrLHGwDMg6yVm8XRRKmr+aC+IEwsmHeIVeIyKYgfhYv3S7VaE+y1WvbM0oPoFJzYmo1iSuJJKrus5bWNZEpTCGvs1xpTRu73yJAivPxG2nFvV0ak/YKQ6usE/lhDKW78qxwrIQqtVnLLqQACDncPIdjv51TCWzhGAXNNlESOMgDoct3jxtTYy4CxWst+H5egXpo5xVbWqsKcgDGUGPswPsFUJHtGh8oM7CaO+5Ma0Wwmd/fVBaVEA7JlhVL4lGTEAxJ/h7X0nhndrcGR89grVRecvCp3EtUvIe0Axz6iED+5+QqvYaIfCJ4NprBoM4Q6xS7kuAdAQHncN968DumbhaPmzyd0m3QqaPTlu1EV/J7vSySWynn4NIaIPDtgFusXcOpWdIh6JsTQcv1h92krRWogQeeCe6HecK7nNZVEJKWfVALbqpVRJJqvF/6FYzNpoHSnPG93jGmnJvnspRHwO6gcEfBiCUqOVLUFBo9b+X+h8k65cdW2u+FR7YD6fu+CPuiKEjmkZIDdUgB2pxQhLZa/h8ewSFiWWG1IIRCnr2MQIIX/j6p+tFzrEv1cckHzNtjMzotdesaXNgSO9qiXBIHdZ3XQCgVxP2LaJoTSI0MkddpUBNKliq9Q3fDRNA9cgYFJuEBinEewnyEU9tCmEYnDUWACOcjnO3YciehmzjmXf4JrO
+          properties :
+           x : 276
+           y : 564
+           width : 280
+           height : 24
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1-
+               //aoGLPI_Ticket	est un tableau de ClGLPI_Ticket
+               //oGPLIMoteur		est un ClGLPI_Moteur(aoGLPI_Ticket)
+               //oGLPI_Ticket	est un ClGLPI_Ticket
+               //
+               //
+               //SI oGPLIMoteur.GetTicket(SAI_IDTicket,oGLPI_Ticket) ALORS
+               
+               oSpr		est un ClDbSprint dynamique
+               oSprFutur	est un ClColSprint	<- ClColSprint.oListeSprint(goApp.p_nNumeroDuSprintActuel, goApp.p_nNumeroDuSprintActuel + 3)
+               
+               
+               pour TOUT oSpr de oSprFutur.aitems()
+               	oTache		est un ClDbTache dynamique
+               	oLstTaches	est un ClColTache		<- ClColTache.oFromSprint(oSpr,ClDbTache.Charge_réelle)
+               	
+               	oUs			est un ClDbUserStory dynamique
+               	oLstUS		est un ClColUserStory	<- ClColUserStory.oFromSprint(oSpr)
+               	oLstUS.ZF_Tri("-p_nValeurBusiness")
+               	
+               	oLstTaches.ZF_DefTri("p_nOrdreSprint")
+               	oLstTaches2	est un ClColTache 		<= oLstTaches
+               	
+               	pour tout oUs de oLstUS.aItems()
+               		
+               		si oUs.p_nValeurBusiness = 0 ALORS
+               			trace("Valeur business non définie pour l'US ""[%oUs.p_sCodeUserStory%]"" (Sprint [%oSpr.ZF_Get_IdUnique()%]).")
+               		FIN
+               		
+               		pour tout oTache de oLstTaches.aItems()
+               			si ClZF_ObjDbLs.ZF_bObjEgal(oTache.p_oUserStoryParent, oUs) ALORS
+               				oLstTaches2.ZF_MvPos(oTache, ClZF_ColObjDB.cstMvDer)
+               			FIN
+               		FIN
+               		
+               		oLstTaches2.ZF_EnrPos()
+               	FIN
+               	
+               	
                FIN
               type : 18
             -
@@ -6988,30 +7006,21 @@ window :
               code : |1+
                si CBO_SprintTacheACrer..ValeurMémorisée <> 0 ALORS
                	oTaches est un ClColTache <- ClColTache.oFromNumSprint(CBO_SprintTacheACrer..ValeurMémorisée, ClDbTache.Charge_réelle)
+               	oTachesAff est un ClColTache <- ClColTache.oFromNumSprint(CBO_SprintTacheACrer..ValeurMémorisée, ClDbTache.Charge_réelle)
                	oTache est un ClDbTache dynamique
                	nLigne est un entier
+               	
+               	oTachesAff.ZF_Join(oTaches.oFiltreEtat(ClDbTache.cstStatut_a_faire))
+               	oTachesAff.ZF_Join(oTaches.oFiltreEtat(ClDbTache.cstStatut_a_coter))
                	
                	oTaches.ZF_DefTri("p_nOrdreSprint")
                	
                	TableSupprimeTout(TBL_TachesAFaire)
-               	POUR TOUT ÉLÉMENT oTache DE oTaches.aItems()
+               	POUR TOUT ÉLÉMENT oTache DE oTachesAff.aItems()
                		nLigne = TableAjouteLigne(TBL_TachesAFaire)
                		TBL_TachesAFaire[nLigne].COL_Id		= oTache.Get_IdUnique()
                		TBL_TachesAFaire[nLigne].COL_aFaire	= oTache.p_sCodeTache + " - " + oTache.p_sDescription
                	FIN
-               //	oTaches est un ClColTache <- ClColTache.Taches_a_faire(ClColTache.Toutes)
-               //	oTache est un ClDbTache dynamique
-               //	nLigne est un entier
-               //	
-               //	TableSupprimeTout(TBL_TachesAFaire)
-               //	POUR TOUT ÉLÉMENT oTache DE oTaches.aItems()
-               //		SI oTache.p_nNum_Sprint_Realisation = CBO_SprintTacheACrer..ValeurMémorisée ALORS
-               //			
-               //			nLigne = TableAjouteLigne(TBL_TachesAFaire)
-               //			TBL_TachesAFaire[nLigne].COL_Id		= oTache.Get_IdUnique()
-               //			TBL_TachesAFaire[nLigne].COL_aFaire	= oTache.p_sCodeTache + " - " + oTache.p_sDescription
-               //		FIN
-               //	FIN
                FIN
                
                
@@ -8392,7 +8401,7 @@ window :
         -
           name : BTN_SansNom1
           identifier : 0x2245fe74602a5128
-          internal_properties : BwAAAAcAAABTbHglXKVpUXTMbDrCRVJc/ABx1s8OheDuLx7PqNtEWbJwWNbP1fujkf5VzbncxflD3hZ/6Bv2lxPIJimie5cxncFcX4PFQIHm1g72fFZx/D+WdS8l5pWf2EVZFszcv3EqXA4BZdJNKSzvC1/BkxM9M4WUi+ReUuQc/mqkCwwIqYqxzwDvzh/AmfEJLnaqaqAOSYA056MmfUNnaYJohtYXBKOA9Nqqk1JbYS6VqjUiDyhS7NWfbrVRyjiqv64gVGdLFW/rWULKSacmt9R9HMCJ5o2NsJQBUrSSMxmgkke0ZwdiGW4uT1Fmhc8FaTE4xJ16B13jh58zAZX8Pi79HWtlW3fl4jyeFAR4fF0mE2PylhcVG8E8uhWdFVUejTYjOLqUOeRAr+4+MbjBPV3L710JSsg3yfcZkTX+ya30iZOujn5wBAuBnYBp3K8I0ak3lerEMJpXDC3iSsMcVdDFY9kWmTz5zJ2ZXc0YFuycw+WquNV82/5JTIFtJuFTvmQh+4kuTe/rag4bEu5KokGvmQ8RCs7ZvDQ42560U1zQJliohWZdiql3oO6YRcsquncrMk6onSd7Dm4DTQtTl8yzjQwFxT5PqIa+YzNgVn7JtMD/SfQ3QOlWm4zez2UECUq+3OXyEfl0YDQDagCrYT91JwskeyoHTrqHbHfXx4Gfs33khS1QkRaM1FSVGyJ+tBglW0acnxAwaNfMbkhnv5biPZM9ZUPbVPX1hEd+cFJ/15VwoJOgyPFxi/jJhAdxdLBOP6HANu0sD8+NeLWK8hdxTNAH5BTbXH/yDXrXPfclKWscE6t9RiE=
+          internal_properties : BwAAAAcAAAAZKpO2iXahmcUb79tJCHcoSBqGQNMlYwMs6PU/1T/TsAakU9hMmvHXgS+CSTRlFXF+mxcUvbaEiTejIEBvNHXIn3oUYvfn0kpe9aFJZTR6yad9pfns5Zu4xUESIU4QQP0jBJ6VaOL9FcEv0nh/QJwMrg26CwJoy3BnMuf/MTVWuV2CZoHZxXgrINOUX9o8p/zMd4LnqD622pjshWcYasC/ZSlO8kO6KxEgOkIZTVf+BNmAy7994/OIuGGd3JYfmrjc+csKD8U7GcR3wb1py2y3Z2M+HscbI/aolNFGZn6q+vac/AHHmy3N3Ya89wUUG5tMZ43Q6ErNlu2ksg+BkqJu8RHddyq583UjNLWs170DcEPsxRb3xdbtj7dmr5uI9sQLjvbBlVdMGgXWXBFJ1I49HGHGUSXsH9brlE0237TyoVzt3335DMJYk7AOIdVk4WcO08u9yBaaIZ4BP/CTAltZ/1OWaFm4qyopLXBYp1DaLXf9gkrr+3/+G2SrxgoeTZye/BDjeDH3yY37mq8ZWinsMo8I2PSDbZWrqJAOfqswPBjgf69r/3y92obImHfetJ8mch6v7uc92CKkQTbFDAYwNe3wFhwb8xrfyxKVVvstNp6IB+cIVnSznCiQc/hzBs7gVrQ8kCMhoX90oTlJGr+kThsuvI5c9FiaAVHz954MvqkdLIrc8zIQMiN6GIBSM2Pm8IukMhDGkVsc3/IoSFuWuW4oQA1Upo7NOQwja56iq6vnjXPZRH46kXanfOyVGTqOTY6OvwKHi0wjYkVjywRKhO3KDLftVVXOEhiRvZCyyTpVmGqe
           properties :
            x : 159
            y : 84
@@ -8506,7 +8515,7 @@ window :
         -
           name : BTN_Commentaire_Trello_GLPI
           identifier : 0x26695470269b33dc
-          internal_properties : BwAAAAcAAAC2girhGQtXH6meJ2Oe3GH3hp5P4be/hAtGrko9msp+yeHvoWKKOw44fBQDgRAl9C+iGCXL8jb+kLIGR7d+bw6sMF4NUK7Xqh+ETKZEJKI4Ya8HBelxu9QELkARuOLR0i1G0M53LaIdxShSHIjVwf/9GnD5QI/NllDZLb8avxQXsVkYsVR8jPjeSwmHc6rbXdZAQOjWmSw7wTNjFLwEU+XoVifGkSyIeLDixrni7q9wjfGN4c6HElrTOsm1102O3V6uF+/HT7AMm2+6TQaI5G60RNaKyxCGc1wHfHcN3i8h7hQnNmLb2UhDCSPj1vA37fVEa2mudYhEimbiKlqJgIkuyBrEpTr7FjmnbuT/eWuTvsNlECLm0sb5kVngkI68ijNdwIrkuXnC9wl0ACdBvtQ17RVCRiS21NYdurAZNeZKxbZm8u7lIC1ncb5zJpertLG+sQeraIXslnbqjV23EjtIMW+tT7vHNki7KRPLFc1/5HfiFuvNNrTgzi9CAAZCulDGQj3NfU/5bqGGGl4XfiOflb2zd1PdNlxQhlqO7WrOM3SR16USsOBoWPJnGrU1JWNuWAA88B9P7wM6rBRsZO1Cccdxx7zPBfzquiaCpoLNlfHJCsVjqulnVIDeFlAeTmRmCIthH/vEgkVpABegcEE6+hHV+yMsMcGe+Axcv9CTqGzrPNkjnjI2kqYTnnL7Xmy9eUsIl51jrcjeb1xemMTBg0CQI2ex12tSrpYtI5tgQDHn30akFktzA3ekPygavuodk72b5d7fFDAkRYGMWMDjiv44NWyhn0CQqWuPg91NTChovDXAsZ1bLrO0DxGGyk4hCV068Zv9NUr5i4XTJ3x+uuvC+oBgMtqj4LLgS/zH0ascygUNXjoovO68ykQKBiXsGoRijmb4dU380lFC4qvdo6c=
+          internal_properties : BwAAAAcAAADSrkbNpbfjU53SC1eigBUj2kLDVVvT6GdiihaZNvZqPU1bDR7W1+ocEMjn5TQJiMumHCnP9iryjI4i80Oqu1pwbCq5rNqzxsNoENqYiIbMffMbqU0V3yhg2gzNVN4tflFifGpTSU75qfwW0MyZdWNp7uQNNJMhquwlSYvW+0CzVZXkjZA4yPTifw2bd77fUdKkJCyq3fB/fX+vYGhAT8HFOmxGAczQ4KBaZqGCDt+4DZnlGaYvcsqr6pElT9UmvRYuh08nb7g0Czd6lbZIlNbULH5yE0hGc+Q3VNfltochFuS3FjKL0UDjEUOLhtAXhSX8w4EGrYgEgkb6yuLxGJkWWFoU1RpzzsmP3qwfmfsbnmst2Aqu8paRwZGAqOY0agudEAqUCfFKVzFUGCdxrsxFxQ26/ox2FH6NItCx3R5KXdYmgo7FODV3ye5LttfLrKG2GY8jQIVsPqbO+SHz9uf8XaNZk2dbssynbd8PMcGLSIPWIl9ZqvC06gN+1OKWdlTCJrlB+cN18j36JhLDwl8zcYGPG7/xUlDs2lZC+Y4ax6CVE/nOBGy8tGYT7lF5YdfKbCzwTIM701/uiLhIqClGrbudK1hjwaBGTkL2IiYpSc0N5nnPTmX7IKSaSrySygjCnNel2z/gxvHd/MscxP0O1gWhr2+gXUUKjHhgO1QP7GivWC3vEh4q7novst6fqrA+xh8ki+GveYQaK5iSVIB93ySMJ2O9229Wopoh39+kBHWjA6JYWpc/35NAWwwGSnaJBykvUaqjWHT4qWWoPOSHLhrckQDVy2zMlUfrJznp6EQM2CncXUH/gkfYI21a/gJ15aFmxc8p4SYFh4HXI3h6tu/e3qw8Fj7HxJbEd6CbJR+IvhHxspaE2MqYNuh2krEYzjA2ujLMSREwhuXeRs+Bx0M=
           properties :
            x : 11
            y : 72
@@ -8535,7 +8544,7 @@ window :
         -
           name : BTN_Commentaire_Trello_GLPI1
           identifier : 0x266a9c3b6a5aa33d
-          internal_properties : BwAAAAcAAADusPD5kaZjdmTaStQ18P8XGDUkobHbqBbEIXzdqeSNv/rM5E4noY5AS2iBDOTlllOymDhU5+4eLf1s8xGRvBHkrhUXGC3EU5XamPk93XpPBnZxfhC8gPt50pRMrElXWsPcJ6S7F4Qp9b7JIJ+FwMXznloXQZteRNpPp/yk0ruHkgb0k4xMEIS3x92s9GEOPqllIN0p+oSz9IiBNqxjAqA9m70anssS7Hz4jxUuJsFxLQXMQYAQ04PvAgz3VEf32nBTKe6bzqjKF/rjXqkvvdlspEhqLXZQ698YB42mIwvkkQNp58sHeUa88NCLTHrjZ4ySVt2nVa/Lf3BRf/i7b17gWIlOp8m3lJgINkLI48fBj7ZLIARaSoFlBwTztaEsHFV0xO2q7dC93VyKyt9qrKizTVDuyjzeHuEr4Kx2osz+uPnSajHMUwdEc5nyx2yaR89PWnwwIyNPJ6xKgjAmXdIctBo/wMmImEvim5D9KivtbPEUeyjfx5/K81nCHr4KfY68v4WVtrETmaEsvXHjbsE2+IgjqBiHzcfNvwmUI+iJcXu2Z06kZIfmVk9s6g1LtVDNjOeecfgcAyDjt1raZ3SLAK3Em/1DXdSCdqYhGYFDyHMajyhMMeZ1jaWwPpAxOwggN2KsIAZ1yR9fV26zh4K0d9dweDaMggdaqEeiIoEGKFNfsL234BP6bl3uohlirbRCw9uCyUj0/PkMBg3pjFFJbdbjvG4+4j6mDxQQu96lfAzftceZihiS6Awn+qYZtF0kWcMk9lip8r/BoSOMqRqoZxyjjyDTep3Wf9nXuTKtmsLX0PWMLpFgSsJXpuBtp0GBRLPLVFljZNua6492/L36ZM2KApU2QOp2nTASlPvpIvNG0XYSPdWY+93V+jRBGZxgopWy981B50B6LZH1
+          internal_properties : BwAAAAcAAABYd6RfXLSthS8aeqdlRUo3L0s/83TpZ8d+wAaU+DcFiC4x1r1b+8IovNwl864AlAENw38AAPU8v3ZIJ5EBDOJNB5R/mNS56R5RmcguNUDL2W98gVAVkzY9fKahIC0IeLJQTJ2ztk69TgO/JqB8XifdRKjVJ8B/u3ZfbiOvJkY57lEE82rfa570gMLqMZMtcXyCQm3btrsuUyfuuVobwI84fI+brqZzouwcBT41ca5fo1VIP/dXkWSZ0Bdgqzq1+6eHi9bnI8eimXBLgt5oNWoDIM8Zfq33MQ/+XmjrRQiFQrpzO1oJGWVBFuGss1H5d7hPWzSzzm7Ho/X6HhunhuY+yU8d/8LlqDGgdxjWz4TcExqz5GQcvLzvd5JzIYuQPLp0quz57TDRUF72fQLoSXwFQzVmszcmdDhwwUslzlBSxjYTnp1HwtE2TG2c0NTFl84mIf04pDr2RgvM854HkoNOuBEd4hoJSxArBT9Bt2iC8M+H0eyCCMKNKq2VpMcn+lqqkqn77+x8khLu0h12FypeDnMfgONUjGgGEcwsZLsYzRVVpezPPVpTp8ExyNx2HGQTRdGmCks1NtO/oryltNU/hgZKJepeftkjtHvfGLZ4wsch8YiVRu16qhXRZn0wbmjK5Pg4ObM8fF5xHERkOm2yP3yGGkVbJ6pVOgZeQZrLML1G4M0W2R6PH6GbBD7NpL+Vy9lByGRP4rqdxturyE9f+U8c/a9zEL9+/IB0u+E6wshn86ip+/hkf3owQF0mAwmqo5LHRrao+MXmlZSFyEyD7pBDEuZrT44TfnVCwcZt/xr8bJfEK3rsQ2WEP7g2PXJ4QNhrETig46e+8E021q05z4vnrkiTL2MiyXtszugxk2PjhZl4dta4OzTd+2DEAab2+7cOwntBAehxuQ==
           properties :
            x : 11
            y : 142
@@ -8568,7 +8577,7 @@ window :
         -
           name : BTN_Commentaire_Trello_GLPI_Fini
           identifier : 0x267d7b83070bece0
-          internal_properties : BwAAAAcAAACPcvBa7LMIAmezJwroONQhnL4+YgqzL5O0tc8+NZ3m/+6PSZj9KVIzRjl6tuI3DYj9COjXLEPLVgL/6GioQvCJ8uGvSTCGojjSTC6o6ivQck/mNM2MKSx5GBOZjv5IZUlg7tKyC+SD89Q439WVl+pTOA9jLcZ3NPDhGcF2KtFXdK/r7d2j5SizhFvgYe2WLUR5qpVknKY3YpHnQGse8cMIoEX0YGvJ+ueBu4YRF6HvRVBfzhyacm7Mj6nkZf+2Jo67xdLVHkCxeP/02wdXSY4AsoQKWiA7fsItUoHriJ5OCm5WzXljnyZe0wnz7+ZVT8zdDUSN9fXswZ0cCKzrRiaydIC+oz3iJfmyjokL0053KfD1sTHC8tzOQxgCilbmwuS+3sHDjyV8vbjGtbHGB07mznL2QjiZCWRJmHsPWS/BOCNj87VUQ582ydlqKJFI4Dl6tfaihrA1i0zE7Vn57Mq38+8rZWVRqe/x4wezS9ti17ekbtc3sB8H6AeWSKD8R/Ew+qFFoz1ICf8S7GAnYkKus2eDixsZv5WqWuoaUVpF9rK9vesShBcrahJF4I05DAI4nKYizH/8RH3WiGR+hsbHGREtv+SzTlEUoig0vr78XOM14hlfuh4kFtRu4spAye8mYlXL9clzdafLoIMY3HZPWs83vbFCsJyIPu7OG0Aum2qBrjMFMGX5iMjdoDIn8R8IQhcQ3YuIDqTCvaoMtu3+wU6Axwc1+FiqAkKtzfVDQy/1MxbKDHikkrIHgN93RgAArAgirMt9zJ2H1lS/74Rl7AfB824Mx5t+mgpHW6FfZLAKxJr9WHdERTAVubHtdsy/cymzvPZtb+AD8TM/NSRejUsgqUIeKegdePTieYtmMI7dsVWHUApkcdP2he69PWBD+sbaOAULLGXd
+          internal_properties : BwAAAAcAAACFnDYcNu2ygMEGac3yO/ZxsEDrE7CBBv9l4oecHLEMy00DH6g5cV/E5uFIaiUn+xIY62bRZIWRDIpLmVTZ/jSlqSfZBO8IB8iaQiki7hEx2aV04FEeI+YKHVoJ0qS6NbPG9NkBgmifE7zwX/OyIVZiEGsQbBoisKF6yDOc3rA7XZZdwQ0JoP8crW6uJws3JG9sHBqaVKjC4aeDZMe6FZnuOqX0xP9VetsPy/YVnylBpzZjhmyamoJkgb1AXVPabOQN1YZtPmBNcK2Uf78/aWxeFKwC0mhjYi4DaoUvAKYEyEBO0fHD11KWrfXrH7KBRTKjWVhxYYEUjffgBMR/kvj80rRWz+VSQQ1cKs1bm74RY/5BRakSAjhWtRwSrqZ2eKqwzvHXW+HEnfr6DRVymwAQcPKayljhjZAjnBcTeQ/nZl3DJx2c2wsOiw16TGHYcrPQKYrqHo+UWAnH4lz6q7U4EKJ0ZHpkTEimbtTujFot3KTvzw5sa0p4Teqrc5Hjbq7RcTYwJJy/plz9OSOQCRX/gErceriUKkbT+euJ1t2ov1PkWk7LI6pMRxV6q0a4LztJi9tlBdZbPS7N8ePDQZ0o9hR+pjF+mSI5jc1Pl5VXeRzs78yooQVNj5vv4ddbFJhTfV7K8sT+xtz+leaRk2ngEy5sQKp5d431eUupDH/pzLtQ43ZG96QO1XMKwxNOSHjZ5RVfRFxDzCQ5AWPoZJk8apgtDwxQjQEv+IXqd8fPSQjz1BPkInumJDAGKzI50pSMSIyaaAY5B3JK/7HUBHkMGlKdJ26sqZMSos0HzUcHyxHjb1BLz8EK49duTPhVaJGSjPjkcy1I+KaIEIQiXXhoowVFswxkS2wNMwtLKPNQqmUtvYBkcy6DlAzRUHJ/GFM93MAo7k9R8j/n
           properties :
            x : 11
            y : 212
@@ -8584,6 +8593,76 @@ window :
                ClTrello_Kanban.Synchro_Ticket_Fini_Trello_Vers_GLPI()
                
                Info("traitement terminé")
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : BTN_SansNom5
+          identifier : 0x26b61ba71f853a1c
+          internal_properties : BwAAAAcAAABXcEXER7x/t/NgAo03ig3m5vzsnvn3KfWacqiS6IAY9akTzL+bcxRCnNzJtHc6ej5pNsj7uKub9BZEHwNWpQ6BCvH1SVKcEfwkCE4wlXRiQ3+5adEE8avk/cUi+SYQuIVTAKoHQKrdHZmHgjBfMExUthUqDsaGGd3zetPbHWHaVaEC5t2V9UxrnKuA69bYgxC4x6rzdFYCqjw0OeNcfpTjaTHmXsfih5FMchYlCctSKA0wc3Opi9/YXKnpeNpjVlRoYQOOw0U/qdgvjRH931jT8+NO+gM7Z5bU7M0S6nI2Rmoc9KXr02kdEb7IU4HoR4fI5+3kbMoBNikUJgMtvvbaZYE9M44Jl80/JKkgM6nv5P9khSobbUJ148fqY3e8GqhPXj7NUZdwwtme4A2lGCJhmNGEH29ejUDBauekWU6QP/qLFaOjBig68a5gf3c2X/W8AQGzqtDAw3TH+TYldPFvlWmMftNaSVxfU/puuUKoSxULeFD9DQ0I0Tr1PIyQ06KE0lYZMnO1C8PRhIUzNN+CeFUu/q6NY//J1lJMuEXWYm4+7W1l2dIPEFwSXgkASjVcKESFKEGTQlh6mwS33my2q1N+9I4tETx1YWyTcJXLxDwuBeUCGLJlAg6q+XJdXDQWDMpiwp03s0V6mw9DScaFlW/icNpoiPx2PQVfM4oQ0t3TEuimFdC6kCFU3kL8ieEUJvGCLKyS3Z8Ay0xC9n26XRRG8imy+ErJxTR9h2BYW+shbxmBPgRCkfYvcpzru97yJyi8VwyNi0Q7Yl1fy8SWcNkGhFNNpTmqrs/bx2Zkf3ADzqRQ
+          properties :
+           x : 567
+           y : 18
+           width : 80
+           height : 24
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1+
+               aoGLPI_Ticket	est un tableau de ClGLPI_Ticket
+               oGPLIMoteur		est un ClGLPI_Moteur(aoGLPI_Ticket)
+               alistTicket est un tableau d'entier = [12492,12685,13028]
+               oGPLIMoteur.getListTicket(alistTicket)
+              type : 18
+            -
+              type : 161
+              enabled : false
+        -
+          name : BTN_Analyse_Glpi_Clos1
+          identifier : 0x26c33a450c9303ed
+          internal_properties : BwAAAAcAAAA3UJkpwEyihpbzalLMctNNTHbAbUyXwoTzo0u1VuVBMjitrsC4ynZSCqo4Mw78/g05fXGzZfb6I0iG+DdfhtbXBdxJ0+3Cp/3+ZS+997GY78dptYl2kCiZf0gbl3wQUs+kDO+s3sXPDG0WI/3TFX89lTLdw2L4H05IFTAXbqHj256Q+LQ28HZckPZCqqiiyngcJFB4Rd/uJ2AMJY35uOCjAUXmzzw5pDb2mEDjT4urL2pDVZn9hmOipZW5dXitoCb+f/zvi+1eKMvNVhqHeZQ7m3UR6m3X0O1J2MDeKnHbB6z91scQ4HDy0n2kFXZlZ9s5pmnnWGPkFi6cVZY8IyeIeX1QUuMgq1OT8nFdkaSTdbHfmYwRi448mqZMGwKdc4KAH9F6pmlmrR0Opo0fXs69umEpLtE3TZGOORsv1B5LvnLLOESowTO4JF/TCH8ZWN2SJ5MeEtdPib3vD9wVVDHq1559brYQ3pulon/3vSxuiqCQgWRC6/myEtKT0vVRMArBLe3toRdX/07pakMM215s8SSRaMuxjVncMLLo6MWOFWRCRby3MB18jbBN4pbgEgC0LHFu8g7ErQVi5kgJGrdvQ6eQB/TJhfRdOVH7rEheijQ825KfD/Yd3qwvKB9Q3orXC9zgia6L39K09EYGrnmIAJWMcLPE9OnnSXgkz6zhMOJHovv8/Mkm9zxl6OIDtjxMqutvs0bpaAmXGyf9KwEOlMZJduvB5YhpvfQktzLHD6MCVQWPftnKkQmcxIp2E8cDaLUgh+djOkACEgf6jSqjYRvXil7CCknYw5RLqatCX6dDXDJ3oEDt68fJMKtKXp45mxywBRmJqGKcYokKGnX3YJjKrHuhiwheQfTAP4vW8FIgZ4HE47+xHyUFLNM9VMIT
+          properties :
+           x : 518
+           y : 397
+           width : 110
+           height : 48
+          type : 4
+          code_elements :
+           type_code : 4
+           p_codes :
+            -
+              code : |1+
+               oGLPI_Ticket	est un ClGLPI_Ticket
+               aoGLPI_Ticket	est un tableau de ClGLPI_Ticket
+               oGPLIMoteur		est un ClGLPI_Moteur(aoGLPI_Ticket)
+               
+               
+               
+               oTacheTmp est un ClDbTache dynamique
+               
+               oLstTaches est un ClColTache <- ClColTache.oFromStatut(ClDbTache.cstStatut_a_coter)
+               oLstTaches.ZF_Join(ClColTache.oFromStatut(ClDbTache.cstStatut_a_faire))
+               oLstTaches.ZF_Join(ClColTache.oFromStatut(ClDbTache.cstStatut_en_cours))
+               oLstTaches.ZF_Join(ClColTache.oFromStatut(ClDbTache.cstStatut_Annulee))
+               oLstTaches.ZF_Join(ClColTache.oFromStatut(ClDbTache.cstStatut_Suspendu))
+               
+               POUR tout oTacheTmp de oLstTaches.aItems()
+               	si oTacheTmp.p_nNumTicketIncident > 0 et oTacheTmp.p_nStatut <> ClDbTache.cstStatut_Annulee alors
+               		SI oGPLIMoteur.GetTicket(oTacheTmp.p_nNumTicketIncident,oGLPI_Ticket) ALORS
+               			
+               			SI oGLPI_Ticket.m_sStatut DANS ("Clos","Résolu","") ALORS
+               				Trace(oTacheTmp.p_nNumTicketIncident + " / " + oTacheTmp.p_sCodeTache + " / statut GLPI : "+ oGLPI_Ticket.m_sStatut)
+               			FIN
+               		FIN
+               	FIN
+               FIN
+               
+               libérer(oGPLIMoteur)
+               
+               FIN:
               type : 18
             -
               type : 161
@@ -8643,7 +8722,7 @@ window :
                //oPrj est un ClDbProjet dynamique
                oTache		est un ClDbTache dynamique
                oSpr		est un ClDbSprint dynamique
-               oColSpr		est un ClcolSprint dynamique	<- ClColSprint.oListeSprint(148, goapp.m_nNumeroDuSprintActuel)
+               oColSpr		est un ClcolSprint dynamique	<- ClColSprint.oListeSprint(167, goapp.m_nNumeroDuSprintActuel)
                oColTache	est un ClcolTache dynamique		<- ClColTache.oFromSprints(oColSpr,ClDbTache.Charge_Fin)
                
                
@@ -10051,25 +10130,28 @@ window :
       	Scr_Tache.Poids_Previsionnel = stTache.nPoids_Prevision
       fin
       
+      Scr_Tache.NumTicketIncident = ClTrello_req.sTrello_Est_Un_Ticket_GLPI(stTache.sDescription)
       
-      nPosDiez est un entier
-      sNumTicket est une chaîne
-      nPosDiez = Position(stTache.sDescription,"#")
-      si nPosDiez > 0 ALORS
-      	sNumTicket = stTache.sDescription[[nPosDiez + 1 sur 5]]
-      	SI VérifieExpressionRégulière(sNumTicket,"[0-9]{5}") ALORS
-      		Scr_Tache.NumTicketIncident = sNumTicket
-      	SINON
-      		si VérifieExpressionRégulière(sNumTicket,"[0-9]{4}") ALORS
-      			Scr_Tache.NumTicketIncident = sNumTicket
-      		sinon
-      			sNumTicket = stTache.sDescription[[nPosDiez + 1 SUR 3]]
-      			SI VérifieExpressionRégulière(sNumTicket,"[0-9]{3}") ALORS
-      				Scr_Tache.NumTicketIncident = sNumTicket
-      			FIN
-      		FIN
-      	FIN
-      FIN
+      //stop si Scr_Tache.CodeTache = "T0923"
+      //nPosDiez est un entier
+      //sNumTicket est une chaîne
+      //nPosDiez = Position(stTache.sDescription,"#")
+      //si nPosDiez > 0 ALORS
+      //	sNumTicket = stTache.sDescription[[nPosDiez + 1 sur 5]]
+      //	SI VérifieExpressionRégulière(sNumTicket,"[0-9]{5}") ALORS
+      //		Scr_Tache.NumTicketIncident = sNumTicket
+      //	SINON
+      //		sNumTicket = stTache.sDescription[[nPosDiez + 1 SUR 4]]
+      //		si VérifieExpressionRégulière(sNumTicket,"[0-9]{4}") ALORS
+      //			Scr_Tache.NumTicketIncident = sNumTicket
+      //		sinon
+      //			sNumTicket = stTache.sDescription[[nPosDiez + 1 SUR 3]]
+      //			SI VérifieExpressionRégulière(sNumTicket,"[0-9]{3}") ALORS
+      //				Scr_Tache.NumTicketIncident = sNumTicket
+      //			FIN
+      //		FIN
+      //	FIN
+      //FIN
       
       
       
@@ -10162,6 +10244,15 @@ window :
       //	Scr_UserStory.IDScr_Usr_Valideur	= stUserStorie.nIDResponsable
       //FIN
       
+      selon stUserStorie.eEtatUserStorie
+      	CAS ClDbUserStory.ECompteNbUS.Terminee
+      		Scr_UserStory.Top_Termine = vrai
+      	CAS ClDbUserStory.ECompteNbUS.Annulée
+      		Scr_UserStory.Top_Annule = Vrai
+      	AUTRE CAS
+      		
+      FIN
+      
       SI PAS HAjoute(Scr_UserStory) ALORS
       	Info("erreur dans l'ajout de l'US", ErreurInfo())
       FIN
@@ -10231,7 +10322,7 @@ window :
       nCol_numSprint			est un entier	= 7
       nCol_TesteurUS			est un entier	= 8
       nCol_Poids				est un entier	= 8
-      nCol_fin				est un entier	= 9
+      nCol_etat				est un entier	= 9
       nCol_Role				est un entier	= 2
       nCol_nom				est un entier	= 3
       nCol_Besoin				est un entier	= 3
@@ -10284,10 +10375,18 @@ window :
       						//stUS.sCmtrTest			= xlsDonnée(IdFichierXLS,i,nCol_commentaire_Test)
       						stUS.nIDProjet			= oPrj_P.ZF_Get_IdUnique()
       						
-      						SI xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "X" ALORS
+      						
+      						SI Majuscule(xlsDonnée(IdFichierXLS,i,nCol_etat)) ~= "X" ALORS
       							//stUS.bAtester = Vrai
       							stUS.eEtatUserStorie = ClDbUserStory.ECompteNbUS.Terminee
       						FIN
+      						
+      						
+      						SI Majuscule(xlsDonnée(IdFichierXLS,i,nCol_etat)) ~= "A" ALORS
+      							//stUS.bAtester = Vrai
+      							stUS.eEtatUserStorie = ClDbUserStory.ECompteNbUS.Annulée
+      						FIN
+      						
       						
       						sTesteur = xlsDonnée(IdFichierXLS,i,nCol_TesteurUS)
       						si SansEspace(sTesteur) <> "" ALORS
@@ -10341,7 +10440,7 @@ window :
       							//Si le poids n'est pas indiqué --> null
       							SI xlsDonnée(IdFichierXLS,i,nCol_Poids) <> "" ALORS
       								stTache.nPoids_Prevision		= xlsDonnée(IdFichierXLS,i,nCol_Poids)
-      								si xlsDonnée(IdFichierXLS,i,nCol_fin) ~= "P" ALORS
+      								si xlsDonnée(IdFichierXLS,i,nCol_etat) ~= "P" ALORS
       									stTache.nPoids				= 0
       								sinon
       									stTache.nPoids				= stTache.nPoids_Prevision
@@ -10352,15 +10451,15 @@ window :
       							FIN
       							
       							SELON Vrai
-      								CAS Majuscule(xlsDonnée(IdFichierXLS,i,nCol_fin)) ~= "X"
+      								CAS Majuscule(xlsDonnée(IdFichierXLS,i,nCol_etat)) ~= "X"
       									stTache.bDemarree			= Vrai
       									stTache.bAnnulee			= Faux
       									stTache.bTermine			= Vrai
       									stTache.nNumSprintFin		= stTache.nNumSprintRealisation 
       									stTache.nNumSprintDemarage	= stTache.nNumSprintRealisation
-      								CAS Majuscule(xlsDonnée(IdFichierXLS,i,nCol_fin)) ~= "T"
+      								CAS Majuscule(xlsDonnée(IdFichierXLS,i,nCol_etat)) ~= "T"
       									stTache.bTechnique			= Vrai
-      								CAS Majuscule(xlsDonnée(IdFichierXLS,i,nCol_fin)) ~= "A"
+      								CAS Majuscule(xlsDonnée(IdFichierXLS,i,nCol_etat)) ~= "A"
       									stTache.bAnnulee			= Vrai
       									stTache.bDemarree			= Faux
       									stTache.nNumSprintFin		= 0

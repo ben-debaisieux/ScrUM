@@ -823,9 +823,13 @@ class :
       //
       PROCEDURE sNommination_US()<métier>:chaîne 
       
-      renvoyer "En tant que : " + :m_sEntantQue + rc + ...
-      	"J'ai besoin de : " + :m_sJaiBesoinDe + rc + ...
-      	"Afin de : " + :m_sAfinDe
+      si :p_bTop_RepriseHisto ALORS
+      	RENVOYER :m_sJaiBesoinDe
+      SINON
+      	RENVOYER "En tant que : " + :m_sEntantQue + RC + ...
+      		"J'ai besoin de : " + :m_sJaiBesoinDe + RC + ...
+      		"Afin de : " + :m_sAfinDe
+      FIN
      type : 458752
    -
      name : GetObj

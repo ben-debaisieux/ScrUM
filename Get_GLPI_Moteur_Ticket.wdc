@@ -1,0 +1,100 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : Get_GLPI_Moteur_Ticket
+ major_version : 27
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x16c3487111e73bce
+ internal_properties : BwAAAAcAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      Get_GLPI_Moteur_Ticket est une Classe hérite de ClGLPI_Moteur
+      
+      fin
+     type : 131072
+  procedures :
+   -
+     name : Constructeur
+     procedure_id : 1640234339761929166
+     type_code : 27
+     code : |1+
+      procédure Constructeur (oGLPI_Entite est une ClGLPI_Entite dynamique)
+      
+      Ancêtre.Constructeur(oGLPI_Entite)
+      
+     type : 589824
+   -
+     name : Destructeur
+     procedure_id : 1640234339761994702
+     type_code : 28
+     code : |1+
+      procédure Destructeur()
+      
+     type : 655360
+   -
+     name : GetTicketStatutLibelle
+     procedure_id : 1640234928172586406
+     type_code : 12
+     code : |1+
+      // Résumé : <indiquez ici ce que fait la procédure>
+      // Syntaxe :
+      //[ <Résultat> = ] GetTicketStatutLibelle (<nIDStatut_p> est entier)
+      //
+      // Paramètres :
+      //	nIDStatut_p (entier) : <indiquez ici le rôle de nIDStatut_p>
+      // Valeur de retour :
+      // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
+      //
+      // Exemple :
+      // <Indiquez ici un exemple d'utilisation>
+      //
+      procédure GetTicketStatutLibelle(LOCAL nIDStatut_p est un entier)<metier>:chaine
+      
+      sLibelleStatut est une chaine
+      // on récupère la liste des statuts qu'une seul fois
+      SI ClGLPI_Ticket.gm_astLibellesDeIdStatut..Vide = Vrai ALORS
+      	vRetour			est un Variant
+      	sUrl est une chaine
+      	
+      	sUrl = cstGLPI_URL_Complet + "TicketStatus"
+      	InitRequete(sUrl)
+      	
+      	SI PAS Exec(vRetour,Faux) ALORS
+      		RENVOYER Faux
+      	SINON
+      		POUR i = 1 _À_ vRetour..Occurrence
+      			SI ClGLPI_Ticket.gm_astLibellesDeIdStatut[vRetour[i].id]..Vide ALORS
+      				ClGLPI_Ticket.gm_astLibellesDeIdStatut[vRetour[i].id] = allouer un ClGLPI_Ticket.STR_Statut
+      				ClGLPI_Ticket.gm_astLibellesDeIdStatut[vRetour[i].id].nID = vRetour[i].id
+      				ClGLPI_Ticket.gm_astLibellesDeIdStatut[vRetour[i].id].sLibelle = vRetour[i].status
+      			FIN
+      		FIN
+      	FIN
+      FIN
+      
+      // on cherche le libellé du status
+      sLibelleStatut = ClGLPI_Ticket.gm_astLibellesDeIdStatut[nIDStatut_p].sLibelle
+      
+      RENVOYER sLibelleStatut
+      
+      
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : BwAAAAcAAAA6ih3UbgNXHwTtiPSFUEj+2fi/m7v4QV2rqidAupM=
+  original_name : Classe1
+resources :
+ string_res :
+  identifier : 0x16c3484711e19a00
+  internal_properties : BwAAAAcAAAAnMYFQ1bL/vz9ehh7L22SNNSlIzGTOI8h5F/WtgDNP
+custom_note :
+ internal_properties : BwAAAAcAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

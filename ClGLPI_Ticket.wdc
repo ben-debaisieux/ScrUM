@@ -30,9 +30,15 @@ class :
       	m_astSuiviCom		est tableau de STR_Suivi_Commentaire
       	m_sType				est chaine
       	m_sCategorie		est chaine
+      	m_nIDUtilisateur est un entier
       	m_sUtilisateur		est chaine
       	m_astLinks			est tableau de STR_Links
       	m_astDocument		est tableau de STR_Documents
+      	m_stPluginFields_Info est un STR_PluginFields_Info
+      	m_astAffectation_Ticket est un tableau de STR_GLPI_USER_GROUP_Info
+      	m_astDemandeur_Ticket est un tableau de STR_GLPI_USER_GROUP_Info
+      GLOBAL
+      	gm_astLibellesDeIdStatut	est un tableau associatif de STR_Statut
       fin
       
       STR_Suivi_Commentaire est une structure
@@ -57,6 +63,21 @@ class :
       STR_Statut est une structure
       	sLibelle	est chaine
       	nID			est entier
+      fin
+      
+      STR_PluginFields_Info est une structure
+      	nCotation est un entier
+      	nValeurAjoute est un entier
+      	nSprint est un entier
+      	sTachesScrum est une chaine
+      	sExpertMetier est une chaine
+      	bRetourDeTest est un booléen
+      fin
+      
+      STR_GLPI_USER_GROUP_Info est une structure
+      	nType est un entier // group ou user
+      	nID est un entier
+      	sNom est une chaine
       fin
       
       constante
@@ -228,6 +249,7 @@ class :
       //
       // Paramètres :
       //	nIDStatut (entier) : <indiquez ici le rôle de nIDStatut>
+      
       // Valeur de retour :
       // 	chaîne ANSI : <indiquez ici le rôle de la valeur de retour>
       //
@@ -235,6 +257,8 @@ class :
       // <Indiquez ici un exemple d'utilisation>
       //
       procédure GetStatusName(nIDStatut est un entier) : chaine
+      
+      
       
       selon nIDStatut
       	CAS cst_Statut_Nouveau_ID
